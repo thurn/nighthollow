@@ -1,8 +1,15 @@
 use rustyline::Editor;
-use termion::style;
+use termion::{color, style};
 
 mod card;
 use card::Card;
+
+struct InterfaceState {
+    hand: Vec<Card>,
+    reserve: Vec<Card>,
+    defenders: Vec<Card>,
+    attackers: Vec<Card>,
+}
 
 fn main() {
     let mut rl = Editor::<()>::new();
@@ -11,9 +18,19 @@ fn main() {
     }
 
     println!("Welcome to the Magewatch shell. Input 'help' to see commands or 'quit' to quit\n");
+    let mut interface_state = InterfaceState {
+        hand: vec![
+            Card::new("Demon Wolf", "1F", 100),
+            Card::new("Cyclops", "FF", 200),
+            Card::new("Metalon", "2FF", 250),
+        ],
+        reserve: vec![],
+        defenders: vec![],
+        attackers: vec![],
+    };
 
     loop {
-        draw_game_state();
+        draw_interface_state(&interface_state);
 
         let readline = rl.readline(">> ");
         match readline {
@@ -22,7 +39,7 @@ fn main() {
                 if line.starts_with('q') {
                     break;
                 } else {
-                    handle_command(line);
+                    handle_command(line, &mut interface_state);
                 }
             }
             Err(_) => break,
@@ -31,64 +48,142 @@ fn main() {
     rl.save_history("history.txt").unwrap();
 }
 
-fn draw_game_state() {
-    println!("{}═══════════════════════════════════ Hand ═══════════════════════════════════{}",
-        style::Bold,
-        style::Reset);
-    render_card_row(vec![
-        Card::new("Demon Wolf", "1F", 100),
-        Card::new("Cyclops", "FF", 200),
-        Card::new("Metalon", "2FF", 250)
-    ])
+fn draw_interface_state(interface_state: &InterfaceState) {
+    if interface_state.attackers.len() > 0 {
+        println!(
+            "{}═════════════════════════════════ Attackers ═════════════════════════════════{}",
+            style::Bold,
+            style::Reset
+        );
+        render_card_row(&interface_state.attackers, false);
+    }
+    if interface_state.defenders.len() > 0 {
+        println!(
+            "{}═════════════════════════════════ Defenders ═════════════════════════════════{}",
+            style::Bold,
+            style::Reset
+        );
+        render_card_row(&interface_state.defenders, false);
+    }
+    if interface_state.reserve.len() > 0 {
+        println!(
+            "{}═════════════════════════════════ Reserves ═════════════════════════════════{}",
+            style::Bold,
+            style::Reset
+        );
+        render_card_row(&interface_state.reserve, false);
+    }
+    if interface_state.hand.len() > 0 {
+        println!(
+            "{}═══════════════════════════════════ Hand ═══════════════════════════════════{}",
+            style::Bold,
+            style::Reset
+        );
+        render_card_row(&interface_state.hand, true);
+    }
 }
 
-fn render_card_row(cards: Vec<Card>) {
-    for _ in &cards {
+fn render_card_row(cards: &Vec<Card>, include_cost: bool) {
+    for _ in cards.iter() {
         print!("┌────────┐");
     }
     println!();
 
-    for card in &cards {
-        print!("│{}{:<8.8}{}│",
-            card.foreground,
-            card.cost,
-            style::Reset)
-    }
-    println!();
-
-    for index in 0..2 {
-        for card in &cards {
-            print!("│{}{:<8.8}{}│",
-                card.foreground,
-                get_word_at_index(&card.name, index),
-                style::Reset);
+    if include_cost {
+        for card in cards.iter() {
+            print!("│{}{:<8.8}{}│", card.foreground, card.cost, style::Reset)
         }
         println!();
     }
 
-    for card in &cards {
-        print!("│{}{:<4}{:>4.4}{}│",
+    for index in 0..2 {
+        for card in cards.iter() {
+            print!(
+                "│{}{:<8.8}{}│",
+                card.foreground,
+                get_word_at_index(&card.name, index),
+                style::Reset
+            );
+        }
+        println!();
+    }
+
+    for card in cards.iter() {
+        print!(
+            "│{}{:<4}{:>4.4}{}│",
             card.foreground,
-            format!("{:.0}%", 100.0 * card.current_health as f64 / card.total_health as f64),
+            format!(
+                "{:.0}%",
+                100.0 * card.current_health as f64 / card.total_health as f64
+            ),
             card.identifier,
-            style::Reset)
+            style::Reset
+        )
     }
     println!();
 
-    for _ in &cards {
+    for _ in cards.iter() {
         print!("└────────┘");
     }
     println!();
 }
 
 fn get_word_at_index(string: &String, index: usize) -> String {
-  string.split(' ').nth(index).unwrap_or("").to_string()
+    string.split(' ').nth(index).unwrap_or("").to_string()
 }
 
-fn handle_command(command: String) {
+fn handle_command(command: String, interface_state: &mut InterfaceState) {
     if command.starts_with('h') {
         print_help();
+    } else if command.starts_with('p') {
+        handle_play_command(command, interface_state);
     }
+}
+
+fn handle_play_command(command: String, interface_state: &mut InterfaceState) {
+    let identifier = command.split(' ').nth(1);
+    if let Some(arg) = identifier {
+        move_card(
+            arg,
+            &mut interface_state.hand,
+            &mut interface_state.reserve,
+            0,
+        );
+    } else {
+        error("Expected argument to command");
+    }
+}
+
+fn move_card(identifier: &str, source: &mut Vec<Card>, destination: &mut Vec<Card>, index: usize) {
+    if let Some(card_position) = source
+        .iter()
+        .position(|x| x.identifier == identifier.to_uppercase())
+    {
+        destination.insert(index, source.remove(card_position));
+    } else {
+        error1("Identifier not found", identifier);
+    }
+}
+
+fn error(message: &str) {
+    eprintln!(
+        "{}{}ERROR: {}{}",
+        style::Bold,
+        color::Fg(color::Red),
+        message,
+        style::Reset
+    );
+}
+
+fn error1(message: &str, argument: &str) {
+    eprintln!(
+        "{}{}ERROR: {} '{}'{}",
+        style::Bold,
+        color::Fg(color::Red),
+        message,
+        argument,
+        style::Reset
+    );
 }
 
 fn print_help() {
@@ -97,6 +192,7 @@ fn print_help() {
 Commands for the Magewatch shell.
 
 Notes:
+    - Commands are case-insensitive
     - All commands can be invoked using only their first letter as a
       mnemonic.
     - Cards and creatures are identified by alphabetic identifiers.
@@ -119,23 +215,25 @@ Commands:
         Example: 'cast f s'
     Empty Input: Proceed to the next game phase
 
-The game takes place over a sequence of rounds, which are broken up into 5
+The game takes place over a sequence of rounds, which are broken up into
 phases. Each player proceeds through phases simultaneously, with their
-decisions being revealed concurrently at the end of each phase. After each
-phase, there is an opportunity for players to use "fast" effects before
-proceeding to the next phase.
+decisions being revealed concurrently at the end of each phase.
 
 Game Round Structure:
     1) Start of Round: During this phase, players gain mana from their
-       active mana crystals and each draw one card
+       active mana crystals and each draw one card. No actions are possible.
     2) Choose Attackers: Players can assign up to 5 creatures to positions on
-       their attacking line.
-    3) Choose Defenders: Opposing attackers are revealed. Players can assign
-       up to 5 creatures to positions on their defending line.
-    4) Combat Phase: Attackers and defenders in the same column fight each other,
+       their attacking line. They may use cards tagged as "fast".
+    3) Choose Defenders: Opposing attackers are revealed. Players can assign up
+       to 5 creatures to positions on their defending line. They may use cards
+       tagged as "fast".
+    4) Fast Effects 1: Defenders are revealed. Players may use cards tagged as
+       "fast".
+    5) Combat Phase: Attackers and defenders in the same column fight each other,
        dealing damage. Attackers with no assigned defender deal damage to
-       the opposing castle.
-    5) Main Phase: Players can place new creatures and cast spells
+       the opposing castle. No actions are possible.
+    6) Main Phase: Players can place new creatures and cast spells.
+    7) Fast Effects 2: Players may use cards tagged as "fast".
     "#
     );
 }
