@@ -1,11 +1,8 @@
 use rustyline::Editor;
-use termion::{color, style};
+use termion::style;
 
-struct Card {
-    name: String,
-    identifier: String,
-    foreground: String
-}
+mod card;
+use card::Card;
 
 fn main() {
     let mut rl = Editor::<()>::new();
@@ -39,21 +36,9 @@ fn draw_game_state() {
         style::Bold,
         style::Reset);
     render_card_row(vec![
-        Card {
-            name: "Demon Wolf".to_string(),
-            identifier: "#A".to_string(),
-            foreground: color::Green.fg_str().to_string()
-        },
-        Card {
-            name: "Cyclops".to_string(),
-            identifier: "#B".to_string(),
-            foreground: color::Blue.fg_str().to_string()
-        },
-        Card {
-            name: "Metalon".to_string(),
-            identifier: "#C".to_string(),
-            foreground: color::Red.fg_str().to_string()
-        }
+        Card::new("Demon Wolf", "1F", 100),
+        Card::new("Cyclops", "FF", 200),
+        Card::new("Metalon", "2FF", 250)
     ])
 }
 
@@ -63,9 +48,17 @@ fn render_card_row(cards: Vec<Card>) {
     }
     println!();
 
-    for index in 0..3 {
+    for card in &cards {
+        print!("│{}{:<8.8}{}│",
+            card.foreground,
+            card.cost,
+            style::Reset)
+    }
+    println!();
+
+    for index in 0..2 {
         for card in &cards {
-            print!("│{}{}{}│",
+            print!("│{}{:<8.8}{}│",
                 card.foreground,
                 get_word_at_index(&card.name, index),
                 style::Reset);
@@ -74,9 +67,10 @@ fn render_card_row(cards: Vec<Card>) {
     }
 
     for card in &cards {
-        print!("│{}{}{}│",
+        print!("│{}{:<2.2}%{:>5.5}{}│",
             card.foreground,
-            get_word_at_index(&card.identifier, 0),
+            format!("{}", card.total_health as f64 / card.current_health as f64 * 100.0),
+            card.identifier,
             style::Reset)
     }
     println!();
@@ -88,10 +82,7 @@ fn render_card_row(cards: Vec<Card>) {
 }
 
 fn get_word_at_index(string: &String, index: usize) -> String {
-    let mut word = string.split(' ').nth(index).unwrap_or("").to_string();
-    word.push_str("        ");
-    word.truncate(8);
-    return word;
+  string.split(' ').nth(index).unwrap_or("").to_string()
 }
 
 fn handle_command(command: String) {
