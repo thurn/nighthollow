@@ -137,29 +137,58 @@ fn handle_command(command: String, interface_state: &mut InterfaceState) {
         print_help();
     } else if command.starts_with('p') {
         handle_play_command(command, interface_state);
+    } else if command.starts_with('a') {
+        handle_attack_defend_command(command, interface_state, true);
+    } else if command.starts_with('d') {
+        handle_attack_defend_command(command, interface_state, false);
     }
 }
 
 fn handle_play_command(command: String, interface_state: &mut InterfaceState) {
-    let identifier = command.split(' ').nth(1);
-    if let Some(arg) = identifier {
+    if let Some(identifier) = command.split(' ').nth(1) {
         move_card(
-            arg,
+            identifier,
             &mut interface_state.hand,
             &mut interface_state.reserve,
-            0,
+            "0",
         );
     } else {
         error("Expected argument to command");
     }
 }
 
-fn move_card(identifier: &str, source: &mut Vec<Card>, destination: &mut Vec<Card>, index: usize) {
+fn handle_attack_defend_command(
+    command: String,
+    interface_state: &mut InterfaceState,
+    is_attack: bool,
+) {
+    if let [_, identifier, position] = command.split(' ').collect::<Vec<&str>>()[..] {
+        move_card(
+            identifier,
+            &mut interface_state.reserve,
+            if is_attack {
+                &mut interface_state.attackers
+            } else {
+                &mut interface_state.defenders
+            },
+            position,
+        );
+    } else {
+        error1("Invalid attack/defend command", &command);
+    }
+}
+
+fn move_card(identifier: &str, source: &mut Vec<Card>, destination: &mut Vec<Card>, index: &str) {
     if let Some(card_position) = source
         .iter()
         .position(|x| x.identifier == identifier.to_uppercase())
     {
-        destination.insert(index, source.remove(card_position));
+        match index.parse::<usize>() {
+            Ok(position) if position <= destination.len() => {
+                destination.insert(position, source.remove(card_position))
+            }
+            _ => error1("Invalid position", index),
+        }
     } else {
         error1("Identifier not found", identifier);
     }
