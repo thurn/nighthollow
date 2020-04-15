@@ -67,9 +67,9 @@ fn render_card_row(cards: Vec<Card>) {
     }
 
     for card in &cards {
-        print!("│{}{:<2.2}%{:>5.5}{}│",
+        print!("│{}{:<4}{:>4.4}{}│",
             card.foreground,
-            format!("{}", card.total_health as f64 / card.current_health as f64 * 100.0),
+            format!("{:.0}%", 100.0 * card.current_health as f64 / card.total_health as f64),
             card.identifier,
             style::Reset)
     }
