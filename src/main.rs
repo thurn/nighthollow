@@ -4,7 +4,17 @@ use termion::{color, style};
 mod card;
 use card::Card;
 
+#[derive(Debug, PartialEq, Eq)]
+enum GamePhase {
+    Attackers,
+    Defenders,
+    PreCombat,
+    Main,
+    End,
+}
+
 struct InterfaceState {
+    phase: GamePhase,
     hand: Vec<Card>,
     reserve: Vec<Card>,
     defenders: Vec<Card>,
@@ -19,6 +29,7 @@ fn main() {
 
     println!("Welcome to the Magewatch shell. Input 'help' to see commands or 'quit' to quit\n");
     let mut interface_state = InterfaceState {
+        phase: GamePhase::Attackers,
         hand: vec![
             Card::new("Demon Wolf", "1F", 100),
             Card::new("Cyclops", "FF", 200),
@@ -81,6 +92,17 @@ fn draw_interface_state(interface_state: &InterfaceState) {
         );
         render_card_row(&interface_state.hand, true);
     }
+
+    println!(
+        "{}",
+        match interface_state.phase {
+            GamePhase::Attackers => "Attackers Phase. Add units to your Attack Group.",
+            GamePhase::Defenders => "Defenders Phase. Add units to your Defense Group.",
+            GamePhase::PreCombat => "Pre-Combat Phase. You may use fast effects.",
+            GamePhase::Main => "Main Phase. Play units and cast spells.",
+            GamePhase::End => "End Phase. You may use fast effects.",
+        }
+    );
 }
 
 fn render_card_row(cards: &Vec<Card>, include_cost: bool) {
@@ -135,12 +157,16 @@ fn get_word_at_index(string: &String, index: usize) -> String {
 fn handle_command(command: String, interface_state: &mut InterfaceState) {
     if command.starts_with('h') {
         print_help();
-    } else if command.starts_with('p') {
+    } else if command.starts_with('p') && interface_state.phase == GamePhase::Main {
         handle_play_command(command, interface_state);
-    } else if command.starts_with('a') {
+    } else if command.starts_with('a') && interface_state.phase == GamePhase::Attackers {
         handle_attack_defend_command(command, interface_state, true);
-    } else if command.starts_with('d') {
+    } else if command.starts_with('d') && interface_state.phase == GamePhase::Defenders {
         handle_attack_defend_command(command, interface_state, false);
+    } else if command == "" {
+        handle_advance_command(interface_state);
+    } else {
+        error1("Invalid command", &command);
     }
 }
 
@@ -176,6 +202,17 @@ fn handle_attack_defend_command(
     } else {
         error1("Invalid attack/defend command", &command);
     }
+}
+
+fn handle_advance_command(interface_state: &mut InterfaceState) {
+    use GamePhase::*;
+    interface_state.phase = match interface_state.phase {
+        Attackers => Defenders,
+        Defenders => PreCombat,
+        PreCombat => Main,
+        Main => End,
+        End => Attackers,
+    };
 }
 
 fn move_card(identifier: &str, source: &mut Vec<Card>, destination: &mut Vec<Card>, index: &str) {
@@ -249,20 +286,19 @@ phases. Each player proceeds through phases simultaneously, with their
 decisions being revealed concurrently at the end of each phase.
 
 Game Round Structure:
-    1) Start of Round: During this phase, players gain mana from their
-       active mana crystals and each draw one card. No actions are possible.
-    2) Choose Attackers: Players can assign up to 5 creatures to positions on
+    1) Attackers Phase: Players gain mana for their active mana crystals and
+       draw one card. Each player can assign up to 5 creatures to positions on
        their attacking line. They may use cards tagged as "fast".
-    3) Choose Defenders: Opposing attackers are revealed. Players can assign up
+    2) Defenders Phase: Opposing attackers are revealed. Players can assign up
        to 5 creatures to positions on their defending line. They may use cards
        tagged as "fast".
-    4) Fast Effects 1: Defenders are revealed. Players may use cards tagged as
+    3) Pre-Combat Phase: Defenders are revealed. Players may use cards tagged as
        "fast".
-    5) Combat Phase: Attackers and defenders in the same column fight each other,
+    4) Main Phase: Attackers and defenders in the same column fight each other,
        dealing damage. Attackers with no assigned defender deal damage to
-       the opposing castle. No actions are possible.
-    6) Main Phase: Players can place new creatures and cast spells.
-    7) Fast Effects 2: Players may use cards tagged as "fast".
+       the opposing castle. Afterwards, players can place new creatures and
+       cast spells ("fast" or regular)
+    5) End Phase: Players may use cards tagged as "fast".
     "#
     );
 }
