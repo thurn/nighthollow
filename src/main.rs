@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+
+use std::error;
+use std::fmt;
 use std::fs::File;
 use std::io::BufReader;
 
@@ -9,13 +13,58 @@ use termion::{color, style};
 mod card;
 use card::Card;
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+enum PlayerName {
+    Player,
+    Enemy,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+enum Zone {
+    Hand,
+    Reserves,
+    Attackers,
+    Defenders,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 enum GamePhase {
     Attackers,
     Defenders,
     PreCombat,
     Main,
     End,
+}
+
+#[derive(Debug)]
+struct InterfaceError {
+    message: String,
+}
+
+impl InterfaceError {
+    fn new(message: String) -> Box<InterfaceError> {
+        Box::from(InterfaceError {
+            message: message.to_string(),
+        })
+    }
+
+    fn result(message: String) -> Result<()> {
+        Err(InterfaceError::new(message))
+    }
+}
+
+impl fmt::Display for InterfaceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.message)
+    }
+}
+
+impl error::Error for InterfaceError {
+    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+        None
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -34,6 +83,68 @@ struct InterfaceState {
     enemy: PlayerState,
 }
 
+impl InterfaceState {
+    fn get_mana(&self, player_name: PlayerName) -> i32 {
+        match player_name {
+            PlayerName::Player => self.player.mana,
+            PlayerName::Enemy => self.enemy.mana,
+        }
+    }
+
+    fn move_card(
+        &mut self,
+        identifier: &str,
+        index: usize,
+        from: Zone,
+        to: Zone,
+        player: PlayerName,
+    ) -> Result<()> {
+        let position = self.find_position(identifier, player, from)?;
+        let removed = self.cards_in_zone(from, player).remove(position);
+        let destination = self.cards_in_zone(to, player);
+        if index <= destination.len() {
+            destination.insert(index, removed);
+            Ok(())
+        } else {
+            InterfaceError::result(format!(
+                "Position {:?} is outside range for player {:?} zone {:?}",
+                index, player, to
+            ))
+        }
+    }
+
+    fn find_position(&mut self, identifier: &str, player: PlayerName, zone: Zone) -> Result<usize> {
+        self.cards_in_zone(zone, player)
+            .iter()
+            .position(|x| x.identifier == identifier.to_ascii_uppercase())
+            .ok_or(InterfaceError::new(format!(
+                "Identifier not found {:?} for player {:?} zone {:?}",
+                identifier, player, zone
+            )))
+    }
+
+    fn cards_in_zone(&mut self, zone: Zone, player: PlayerName) -> &mut Vec<Card> {
+        match zone {
+            Zone::Hand => match player {
+                PlayerName::Player => &mut self.player.hand,
+                PlayerName::Enemy => &mut self.enemy.hand,
+            },
+            Zone::Reserves => match player {
+                PlayerName::Player => &mut self.player.reserve,
+                PlayerName::Enemy => &mut self.enemy.reserve,
+            },
+            Zone::Attackers => match player {
+                PlayerName::Player => &mut self.player.attackers,
+                PlayerName::Enemy => &mut self.enemy.attackers,
+            },
+            Zone::Defenders => match player {
+                PlayerName::Player => &mut self.player.defenders,
+                PlayerName::Enemy => &mut self.enemy.defenders,
+            },
+        }
+    }
+}
+
 fn main() {
     let mut rl = Editor::<()>::new();
     if rl.load_history("history.txt").is_err() {
@@ -41,7 +152,40 @@ fn main() {
     }
 
     println!("Welcome to the Magewatch shell. Input 'help' to see commands or 'quit' to quit\n");
-    let mut interface_state = InterfaceState {
+    let mut interface_state = starting_game_state();
+
+    if let Ok(input_file) = File::open("state.json") {
+        if let Ok(state) = de::from_reader(BufReader::new(input_file)) {
+            interface_state = state;
+        }
+    }
+
+    loop {
+        let file = File::create("state.json").expect("Unable to open state.json!");
+        ser::to_writer_pretty(&file, &interface_state).expect("Error writing to state.json!");
+
+        draw_interface_state(&interface_state);
+
+        let readline = rl.readline(">> ");
+        match readline {
+            Ok(line) => {
+                rl.add_history_entry(line.as_str());
+                if line.starts_with('q') {
+                    break;
+                } else {
+                    if let Err(e) = handle_command(line, &mut interface_state, PlayerName::Player) {
+                        print_error(format!("{}", e))
+                    }
+                }
+            }
+            Err(_) => break,
+        }
+    }
+    rl.save_history("history.txt").unwrap();
+}
+
+fn starting_game_state() -> InterfaceState {
+    InterfaceState {
         phase: GamePhase::Main,
         player: PlayerState {
             mana: 0,
@@ -65,53 +209,46 @@ fn main() {
             defenders: vec![],
             attackers: vec![],
         },
-    };
-
-    if let Ok(input_file) = File::open("state.json") {
-        if let Ok(state) = de::from_reader(BufReader::new(input_file)) {
-            interface_state = state;
-        }
     }
-
-    loop {
-        let file = File::create("state.json").expect("Unable to open state.json!");
-        ser::to_writer_pretty(&file, &interface_state).expect("Error writing to state.json!");
-
-        draw_interface_state(&interface_state);
-
-        let readline = rl.readline(">> ");
-        match readline {
-            Ok(line) => {
-                rl.add_history_entry(line.as_str());
-                if line.starts_with('q') {
-                    break;
-                } else {
-                    handle_command(line, &mut interface_state);
-                }
-            }
-            Err(_) => break,
-        }
-    }
-    rl.save_history("history.txt").unwrap();
 }
 
 fn draw_interface_state(interface_state: &InterfaceState) {
+    if interface_state.enemy.hand.len() > 0 {
+        println!(
+            "{}═══════════════════════════════ Enemy Hand ═════════════════════════════════{}",
+            style::Bold,
+            style::Reset
+        );
+        render_card_row(&interface_state.enemy.hand, true);
+    }
+
+    if interface_state.enemy.reserve.len() > 0 {
+        println!(
+            "{}══════════════════════════════ Enemy Reserves ══════════════════════════════{}",
+            style::Bold,
+            style::Reset
+        );
+        render_card_row(&interface_state.enemy.reserve, false);
+    }
+
+    if interface_state.enemy.attackers.len() > 0 {
+        println!(
+            "{}═══════════════════════ Enemy Attackers & Defenders ═══════════════════════{}",
+            style::Bold,
+            style::Reset
+        );
+        render_card_row(&interface_state.enemy.attackers, false);
+    }
+
     if interface_state.player.attackers.len() > 0 {
         println!(
-            "{}═════════════════════════════════ Attackers ═════════════════════════════════{}",
+            "{}══════════════════════════ Attackers & Defenders ══════════════════════════{}",
             style::Bold,
             style::Reset
         );
         render_card_row(&interface_state.player.attackers, false);
     }
-    if interface_state.player.defenders.len() > 0 {
-        println!(
-            "{}═════════════════════════════════ Defenders ═════════════════════════════════{}",
-            style::Bold,
-            style::Reset
-        );
-        render_card_row(&interface_state.player.defenders, false);
-    }
+
     if interface_state.player.reserve.len() > 0 {
         println!(
             "{}═════════════════════════════════ Reserves ═════════════════════════════════{}",
@@ -120,6 +257,7 @@ fn draw_interface_state(interface_state: &InterfaceState) {
         );
         render_card_row(&interface_state.player.reserve, false);
     }
+
     if interface_state.player.hand.len() > 0 {
         println!(
             "{}═══════════════════════════════════ Hand ═══════════════════════════════════{}",
@@ -195,57 +333,74 @@ fn get_word_at_index(string: &String, index: usize) -> String {
     string.split(' ').nth(index).unwrap_or("").to_string()
 }
 
-fn handle_command(command: String, interface_state: &mut InterfaceState) {
-    if command.starts_with('h') {
-        print_help();
-    } else if command.starts_with('p') && interface_state.phase == GamePhase::Main {
-        handle_play_command(command, interface_state);
-    } else if command.starts_with('a') && interface_state.phase == GamePhase::Attackers {
-        handle_attack_defend_command(command, interface_state, true);
-    } else if command.starts_with('d') && interface_state.phase == GamePhase::Defenders {
-        handle_attack_defend_command(command, interface_state, false);
-    } else if command == "" {
-        handle_advance_command(interface_state);
-    } else {
-        error1("Invalid command", &command);
-    }
-}
-
-fn handle_play_command(command: String, interface_state: &mut InterfaceState) {
-    if let Some(identifier) = command.split(' ').nth(1) {
-        move_card(
-            identifier,
-            &mut interface_state.player.hand,
-            &mut interface_state.player.reserve,
-            "0",
-        );
-    } else {
-        error("Expected argument to command");
-    }
-}
-
-fn handle_attack_defend_command(
+fn handle_command(
     command: String,
     interface_state: &mut InterfaceState,
-    is_attack: bool,
-) {
-    if let [_, identifier, position] = command.split(' ').collect::<Vec<&str>>()[..] {
-        move_card(
-            identifier,
-            &mut interface_state.player.reserve,
-            if is_attack {
-                &mut interface_state.player.attackers
-            } else {
-                &mut interface_state.player.defenders
-            },
-            position,
-        );
+    player: PlayerName,
+) -> Result<()> {
+    if command.starts_with('h') {
+        print_help();
+        Ok(())
+    } else if command.starts_with('p') && interface_state.phase == GamePhase::Main {
+        handle_move_command(command, interface_state, Zone::Hand, Zone::Reserves, player)
+    } else if command.starts_with('a') && interface_state.phase == GamePhase::Attackers {
+        handle_move_command(
+            command,
+            interface_state,
+            Zone::Reserves,
+            Zone::Attackers,
+            player,
+        )
+    } else if command.starts_with('d') && interface_state.phase == GamePhase::Defenders {
+        handle_move_command(
+            command,
+            interface_state,
+            Zone::Reserves,
+            Zone::Defenders,
+            player,
+        )
+    } else if command == "" {
+        handle_advance_command(interface_state)
+    } else if command.starts_with('e') {
+        if let Some(index) = command.find(' ') {
+            handle_command(
+                command[index + 1..].to_string(),
+                interface_state,
+                PlayerName::Enemy,
+            )
+        } else {
+            InterfaceError::result(format!(
+                "Expected additional arguments to command {}",
+                command
+            ))
+        }
     } else {
-        error1("Invalid attack/defend command", &command);
+        InterfaceError::result(format!("Unknown command {}", command))
     }
 }
 
-fn handle_advance_command(interface_state: &mut InterfaceState) {
+fn handle_move_command(
+    command: String,
+    interface_state: &mut InterfaceState,
+    from: Zone,
+    to: Zone,
+    player: PlayerName,
+) -> Result<()> {
+    let parts = command.split(' ').collect::<Vec<&str>>();
+    if let [_, identifier, position] = *parts {
+        let p = position.parse::<usize>()?;
+        interface_state.move_card(identifier, p, from, to, player)
+    } else if let [_, identifier] = *parts {
+        interface_state.move_card(identifier, 0, from, to, player)
+    } else {
+        Err(InterfaceError::new(format!(
+            "Invalid move command: {}",
+            command
+        )))
+    }
+}
+
+fn handle_advance_command(interface_state: &mut InterfaceState) -> Result<()> {
     let has_fast_effect = interface_state.player.hand.iter().any(|x| x.fast);
     loop {
         match interface_state.phase {
@@ -279,41 +434,16 @@ fn handle_advance_command(interface_state: &mut InterfaceState) {
             }
         }
     }
+
+    Ok(())
 }
 
-fn move_card(identifier: &str, source: &mut Vec<Card>, destination: &mut Vec<Card>, index: &str) {
-    if let Some(card_position) = source
-        .iter()
-        .position(|x| x.identifier == identifier.to_uppercase())
-    {
-        match index.parse::<usize>() {
-            Ok(position) if position <= destination.len() => {
-                destination.insert(position, source.remove(card_position))
-            }
-            _ => error1("Invalid position", index),
-        }
-    } else {
-        error1("Identifier not found", identifier);
-    }
-}
-
-fn error(message: &str) {
+fn print_error(message: String) {
     eprintln!(
         "{}{}ERROR: {}{}",
         style::Bold,
         color::Fg(color::Red),
         message,
-        style::Reset
-    );
-}
-
-fn error1(message: &str, argument: &str) {
-    eprintln!(
-        "{}{}ERROR: {} '{}'{}",
-        style::Bold,
-        color::Fg(color::Red),
-        message,
-        argument,
         style::Reset
     );
 }
@@ -345,6 +475,8 @@ Commands:
     [c]ast x (y): Cast spell x, optionally targeting creature y.
         Example: 'cast f'
         Example: 'cast f s'
+    [e]nemy <command>: Invoke another command, but it apply it to the opponent
+    [r]eset: Reset saved state to default
     Empty Input: Proceed to the next game phase
 
 The game takes place over a sequence of rounds, which are broken up into
