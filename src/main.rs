@@ -1,10 +1,15 @@
+use std::fs::File;
+use std::io::BufReader;
+
 use rustyline::Editor;
+use serde::{Deserialize, Serialize};
+use serde_json::{de, ser};
 use termion::{color, style};
 
 mod card;
 use card::Card;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 enum GamePhase {
     Attackers,
     Defenders,
@@ -13,12 +18,20 @@ enum GamePhase {
     End,
 }
 
-struct InterfaceState {
-    phase: GamePhase,
+#[derive(Serialize, Deserialize, Debug)]
+struct PlayerState {
+    mana: i32,
     hand: Vec<Card>,
     reserve: Vec<Card>,
     defenders: Vec<Card>,
     attackers: Vec<Card>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct InterfaceState {
+    phase: GamePhase,
+    player: PlayerState,
+    enemy: PlayerState,
 }
 
 fn main() {
@@ -29,18 +42,41 @@ fn main() {
 
     println!("Welcome to the Magewatch shell. Input 'help' to see commands or 'quit' to quit\n");
     let mut interface_state = InterfaceState {
-        phase: GamePhase::Attackers,
-        hand: vec![
-            Card::new("Demon Wolf", "1F", 100),
-            Card::new("Cyclops", "FF", 200),
-            Card::new("Metalon", "2FF", 250),
-        ],
-        reserve: vec![],
-        defenders: vec![],
-        attackers: vec![],
+        phase: GamePhase::Main,
+        player: PlayerState {
+            mana: 0,
+            hand: vec![
+                Card::new("Demon Wolf", "1F", 100),
+                Card::new("Cyclops", "FF", 200),
+                Card::new("Metalon", "2FF", 250),
+            ],
+            reserve: vec![],
+            defenders: vec![],
+            attackers: vec![],
+        },
+        enemy: PlayerState {
+            mana: 0,
+            hand: vec![
+                Card::new("Demon Wolf", "1F", 100),
+                Card::new("Cyclops", "FF", 200),
+                Card::new("Metalon", "2FF", 250),
+            ],
+            reserve: vec![],
+            defenders: vec![],
+            attackers: vec![],
+        },
     };
 
+    if let Ok(input_file) = File::open("state.json") {
+        if let Ok(state) = de::from_reader(BufReader::new(input_file)) {
+            interface_state = state;
+        }
+    }
+
     loop {
+        let file = File::create("state.json").expect("Unable to open state.json!");
+        ser::to_writer_pretty(&file, &interface_state).expect("Error writing to state.json!");
+
         draw_interface_state(&interface_state);
 
         let readline = rl.readline(">> ");
@@ -60,37 +96,37 @@ fn main() {
 }
 
 fn draw_interface_state(interface_state: &InterfaceState) {
-    if interface_state.attackers.len() > 0 {
+    if interface_state.player.attackers.len() > 0 {
         println!(
             "{}═════════════════════════════════ Attackers ═════════════════════════════════{}",
             style::Bold,
             style::Reset
         );
-        render_card_row(&interface_state.attackers, false);
+        render_card_row(&interface_state.player.attackers, false);
     }
-    if interface_state.defenders.len() > 0 {
+    if interface_state.player.defenders.len() > 0 {
         println!(
             "{}═════════════════════════════════ Defenders ═════════════════════════════════{}",
             style::Bold,
             style::Reset
         );
-        render_card_row(&interface_state.defenders, false);
+        render_card_row(&interface_state.player.defenders, false);
     }
-    if interface_state.reserve.len() > 0 {
+    if interface_state.player.reserve.len() > 0 {
         println!(
             "{}═════════════════════════════════ Reserves ═════════════════════════════════{}",
             style::Bold,
             style::Reset
         );
-        render_card_row(&interface_state.reserve, false);
+        render_card_row(&interface_state.player.reserve, false);
     }
-    if interface_state.hand.len() > 0 {
+    if interface_state.player.hand.len() > 0 {
         println!(
             "{}═══════════════════════════════════ Hand ═══════════════════════════════════{}",
             style::Bold,
             style::Reset
         );
-        render_card_row(&interface_state.hand, true);
+        render_card_row(&interface_state.player.hand, true);
     }
 
     println!(
@@ -113,7 +149,12 @@ fn render_card_row(cards: &Vec<Card>, include_cost: bool) {
 
     if include_cost {
         for card in cards.iter() {
-            print!("│{}{:<8.8}{}│", card.foreground, card.cost, style::Reset)
+            print!(
+                "│{}{:<8.8}{}│",
+                card.foreground.to_terminal_color(),
+                card.cost,
+                style::Reset
+            )
         }
         println!();
     }
@@ -122,7 +163,7 @@ fn render_card_row(cards: &Vec<Card>, include_cost: bool) {
         for card in cards.iter() {
             print!(
                 "│{}{:<8.8}{}│",
-                card.foreground,
+                card.foreground.to_terminal_color(),
                 get_word_at_index(&card.name, index),
                 style::Reset
             );
@@ -133,7 +174,7 @@ fn render_card_row(cards: &Vec<Card>, include_cost: bool) {
     for card in cards.iter() {
         print!(
             "│{}{:<4}{:>4.4}{}│",
-            card.foreground,
+            card.foreground.to_terminal_color(),
             format!(
                 "{:.0}%",
                 100.0 * card.current_health as f64 / card.total_health as f64
@@ -174,8 +215,8 @@ fn handle_play_command(command: String, interface_state: &mut InterfaceState) {
     if let Some(identifier) = command.split(' ').nth(1) {
         move_card(
             identifier,
-            &mut interface_state.hand,
-            &mut interface_state.reserve,
+            &mut interface_state.player.hand,
+            &mut interface_state.player.reserve,
             "0",
         );
     } else {
@@ -191,11 +232,11 @@ fn handle_attack_defend_command(
     if let [_, identifier, position] = command.split(' ').collect::<Vec<&str>>()[..] {
         move_card(
             identifier,
-            &mut interface_state.reserve,
+            &mut interface_state.player.reserve,
             if is_attack {
-                &mut interface_state.attackers
+                &mut interface_state.player.attackers
             } else {
-                &mut interface_state.defenders
+                &mut interface_state.player.defenders
             },
             position,
         );
@@ -205,14 +246,39 @@ fn handle_attack_defend_command(
 }
 
 fn handle_advance_command(interface_state: &mut InterfaceState) {
-    use GamePhase::*;
-    interface_state.phase = match interface_state.phase {
-        Attackers => Defenders,
-        Defenders => PreCombat,
-        PreCombat => Main,
-        Main => End,
-        End => Attackers,
-    };
+    let has_fast_effect = interface_state.player.hand.iter().any(|x| x.fast);
+    loop {
+        match interface_state.phase {
+            GamePhase::Attackers => {
+                interface_state.phase = GamePhase::Defenders;
+                if interface_state.enemy.attackers.len() > 0 || has_fast_effect {
+                    break;
+                }
+            }
+            GamePhase::Defenders => {
+                interface_state.phase = GamePhase::PreCombat;
+                if has_fast_effect {
+                    break;
+                }
+            }
+            GamePhase::PreCombat => {
+                interface_state.phase = GamePhase::Main;
+                break;
+            }
+            GamePhase::Main => {
+                interface_state.phase = GamePhase::End;
+                if has_fast_effect {
+                    break;
+                }
+            }
+            GamePhase::End => {
+                interface_state.phase = GamePhase::Attackers;
+                if interface_state.player.reserve.len() > 0 || has_fast_effect {
+                    break;
+                }
+            }
+        }
+    }
 }
 
 fn move_card(identifier: &str, source: &mut Vec<Card>, destination: &mut Vec<Card>, index: &str) {

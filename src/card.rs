@@ -1,34 +1,56 @@
 use std::fmt::Display;
 use std::sync::atomic::{AtomicI32, Ordering};
+
 use termion::color;
+use serde::{Deserialize, Serialize};
 
 static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
 
+#[derive(Serialize, Deserialize, Debug)]
+pub enum ForegroundColor {
+    LightRed,
+    LightMagenta,
+    LightYellow,
+    LightGreen,
+    LightBlue,
+    Red,
+    Magenta,
+    Yellow,
+    Green,
+    Blue,
+}
+
+impl ForegroundColor {
+    pub fn to_terminal_color(&self) -> Box<dyn Display> {
+        match self {
+            ForegroundColor::LightRed => Box::from(color::Fg(color::LightRed)),
+            ForegroundColor::LightMagenta => Box::from(color::Fg(color::LightMagenta)),
+            ForegroundColor::LightYellow => Box::from(color::Fg(color::LightYellow)),
+            ForegroundColor::LightGreen => Box::from(color::Fg(color::LightGreen)),
+            ForegroundColor::LightBlue => Box::from(color::Fg(color::LightBlue)),
+            ForegroundColor::Red => Box::from(color::Fg(color::Red)),
+            ForegroundColor::Magenta => Box::from(color::Fg(color::Magenta)),
+            ForegroundColor::Yellow => Box::from(color::Fg(color::Yellow)),
+            ForegroundColor::Green => Box::from(color::Fg(color::Green)),
+            ForegroundColor::Blue => Box::from(color::Fg(color::Blue)),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Card {
     pub cost: String,
     pub name: String,
     pub identifier: String,
     pub total_health: i32,
     pub current_health: i32,
-    pub foreground: Box<dyn Display>,
+    pub fast: bool,
+    pub foreground: ForegroundColor,
 }
 
 impl Card {
     pub fn new(name: &str, cost: &str, health: i32) -> Card {
         let index = NEXT_IDENTIFIER_INDEX.fetch_add(1, Ordering::Relaxed);
-        let foreground: Box<dyn Display> = match index % 11 {
-            0 => Box::from(color::Fg(color::LightRed)),
-            1 => Box::from(color::Fg(color::Cyan)),
-            2 => Box::from(color::Fg(color::LightMagenta)),
-            3 => Box::from(color::Fg(color::LightYellow)),
-            4 => Box::from(color::Fg(color::LightCyan)),
-            5 => Box::from(color::Fg(color::LightGreen)),
-            6 => Box::from(color::Fg(color::Green)),
-            7 => Box::from(color::Fg(color::Blue)),
-            8 => Box::from(color::Fg(color::LightBlue)),
-            9 => Box::from(color::Fg(color::Magenta)),
-            _ => Box::from(color::Fg(color::Red)),
-        };
 
         Card {
             cost: cost.to_string(),
@@ -36,7 +58,19 @@ impl Card {
             current_health: health,
             name: name.to_string(),
             identifier: to_identifier(index),
-            foreground,
+            fast: false,
+            foreground: match index % 10 {
+                0 => ForegroundColor::LightRed,
+                1 => ForegroundColor::LightMagenta,
+                2 => ForegroundColor::LightYellow,
+                3 => ForegroundColor::LightGreen,
+                4 => ForegroundColor::LightBlue,
+                5 => ForegroundColor::Red,
+                6 => ForegroundColor::Magenta,
+                7 => ForegroundColor::Yellow,
+                8 => ForegroundColor::Green,
+                _ => ForegroundColor::Blue,
+            },
         }
     }
 }
