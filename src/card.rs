@@ -4,7 +4,19 @@ use std::sync::atomic::{AtomicI32, Ordering};
 use serde::{Deserialize, Serialize};
 use termion::color;
 
+use crate::primitives::ManaValue;
+use crate::unit::Unit;
+
 static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ManaCost {
+    mana: ManaValue,
+}
+
+pub enum Cost {
+    ManaCost(ManaCost),
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ForegroundColor {
@@ -38,24 +50,35 @@ impl ForegroundColor {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub enum Variant {
+    Unit(Unit),
+}
+
+impl Variant {
+    pub fn display_status(&self) -> String {
+        match self {
+            Variant::Unit(unit) => unit.display_health(),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Card {
     pub cost: String,
     pub name: String,
     pub identifier: String,
-    pub total_health: i32,
-    pub current_health: i32,
+    pub variant: Variant,
     pub fast: bool,
     pub foreground: ForegroundColor,
 }
 
 impl Card {
-    pub fn new(name: &str, cost: &str, health: i32) -> Card {
+    pub fn new_unit(name: &str, cost: &str, health: i32, attack: i32) -> Card {
         let index = NEXT_IDENTIFIER_INDEX.fetch_add(1, Ordering::Relaxed);
 
         Card {
             cost: cost.to_string(),
-            total_health: health,
-            current_health: health,
+            variant: Variant::Unit(Unit::new(health, attack)),
             name: name.to_string(),
             identifier: to_identifier(index),
             fast: false,

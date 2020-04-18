@@ -165,9 +165,9 @@ pub fn initial_state() -> InterfaceState {
         player: PlayerState {
             mana: 0,
             hand: vec![
-                Card::new("Demon Wolf", "1F", 100),
-                Card::new("Cyclops", "FF", 200),
-                Card::new("Metalon", "2FF", 250),
+                Card::new_unit("Demon Wolf", "1F", 100, 10),
+                Card::new_unit("Cyclops", "FF", 200, 10),
+                Card::new_unit("Metalon", "2FF", 250, 10),
             ],
             reserve: vec![],
             defenders: vec![],
@@ -176,9 +176,9 @@ pub fn initial_state() -> InterfaceState {
         enemy: PlayerState {
             mana: 0,
             hand: vec![
-                Card::new("Demon Wolf", "1F", 100),
-                Card::new("Cyclops", "FF", 200),
-                Card::new("Metalon", "2FF", 250),
+                Card::new_unit("Demon Wolf", "1F", 100, 10),
+                Card::new_unit("Cyclops", "FF", 200, 10),
+                Card::new_unit("Metalon", "2FF", 250, 10),
             ],
             reserve: vec![],
             defenders: vec![],

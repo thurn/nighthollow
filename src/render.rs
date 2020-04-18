@@ -126,10 +126,7 @@ fn render_card_row<'a>(cards: Vec<Option<&Card>>, include_cost: bool) {
             print!(
                 "│{}{:<4}{:>4.4}{}│",
                 c.foreground.to_terminal_color(),
-                format!(
-                    "{:.0}%",
-                    100.0 * c.current_health as f64 / c.total_health as f64
-                ),
+                c.variant.display_status(),
                 c.identifier,
                 style::Reset
             )

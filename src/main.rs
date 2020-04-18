@@ -1,4 +1,6 @@
+#![deny(warnings)]
 #![allow(dead_code)]
+
 use std::fs::File;
 use std::io::BufReader;
 
@@ -6,8 +8,10 @@ use rustyline::Editor;
 use serde_json::{de, ser};
 
 mod card;
+mod primitives;
 mod render;
 mod state;
+mod unit;
 
 use state::PlayerName;
 
