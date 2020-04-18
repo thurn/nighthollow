@@ -12,65 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::error;
-use std::fmt;
-
 use serde::{Deserialize, Serialize};
 
-use crate::card::Card;
-use crate::primitives::Result;
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
-pub enum PlayerName {
-    Player,
-    Enemy,
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
-pub enum Zone {
-    Hand,
-    Reserves,
-    Attackers,
-    Defenders,
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
-pub enum GamePhase {
-    Attackers,
-    Defenders,
-    PreCombat,
-    Main,
-    End,
-}
-
-#[derive(Debug)]
-pub struct InterfaceError {
-    pub message: String,
-}
-
-impl InterfaceError {
-    pub fn new(message: String) -> Box<InterfaceError> {
-        Box::from(InterfaceError {
-            message: message.to_string(),
-        })
-    }
-
-    pub fn result(message: String) -> Result<()> {
-        Err(InterfaceError::new(message))
-    }
-}
-
-impl fmt::Display for InterfaceError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.message)
-    }
-}
-
-impl error::Error for InterfaceError {
-    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
-        None
-    }
-}
+use crate::{
+    card::Card,
+    primitives::{GamePhase, InterfaceError, PlayerName, Result, ZoneName},
+};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PlayerState {
@@ -90,25 +37,25 @@ impl PlayerState {
         self.attackers.clear();
     }
 
-    fn cards_in_zone(&self, zone: Zone) -> &[Card] {
+    fn cards_in_zone(&self, zone: ZoneName) -> &[Card] {
         match zone {
-            Zone::Hand => &self.hand,
-            Zone::Reserves => &self.reserve,
-            Zone::Attackers => &self.attackers,
-            Zone::Defenders => &self.defenders,
+            ZoneName::Hand => &self.hand,
+            ZoneName::Reserves => &self.reserve,
+            ZoneName::Attackers => &self.attackers,
+            ZoneName::Defenders => &self.defenders,
         }
     }
 
-    fn cards_in_zone_mut(&mut self, zone: Zone) -> &mut Vec<Card> {
+    fn cards_in_zone_mut(&mut self, zone: ZoneName) -> &mut Vec<Card> {
         match zone {
-            Zone::Hand => &mut self.hand,
-            Zone::Reserves => &mut self.reserve,
-            Zone::Attackers => &mut self.attackers,
-            Zone::Defenders => &mut self.defenders,
+            ZoneName::Hand => &mut self.hand,
+            ZoneName::Reserves => &mut self.reserve,
+            ZoneName::Attackers => &mut self.attackers,
+            ZoneName::Defenders => &mut self.defenders,
         }
     }
 
-    fn find_card_position(&self, identifier: &str, zone: Zone) -> Result<usize> {
+    fn find_card_position(&self, identifier: &str, zone: ZoneName) -> Result<usize> {
         self.cards_in_zone(zone)
             .iter()
             .position(|x| x.identifier == identifier.to_uppercase())
@@ -182,8 +129,8 @@ impl InterfaceState {
         &mut self,
         identifier: &str,
         index: usize,
-        from: Zone,
-        to: Zone,
+        from: ZoneName,
+        to: ZoneName,
         player: PlayerName,
     ) -> Result<()> {
         let player = self.player_mut(player);

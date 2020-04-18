@@ -15,8 +15,8 @@
 use termion::{color, style};
 
 use crate::card::Card;
-use crate::primitives::Result;
-use crate::state::{GamePhase, InterfaceError, InterfaceState, PlayerName, PlayerState, Zone};
+use crate::primitives::{GamePhase, InterfaceError, PlayerName, Result, ZoneName};
+use crate::state::{InterfaceState, PlayerState};
 
 pub fn draw_interface_state(interface_state: &InterfaceState) {
     if interface_state.enemy.hand.len() > 0 {
@@ -172,21 +172,27 @@ pub fn handle_command(
         print_help();
         Ok(())
     } else if command.starts_with('p') && interface_state.phase == GamePhase::Main {
-        handle_move_command(command, interface_state, Zone::Hand, Zone::Reserves, player)
+        handle_move_command(
+            command,
+            interface_state,
+            ZoneName::Hand,
+            ZoneName::Reserves,
+            player,
+        )
     } else if command.starts_with('a') && interface_state.phase == GamePhase::Attackers {
         handle_move_command(
             command,
             interface_state,
-            Zone::Reserves,
-            Zone::Attackers,
+            ZoneName::Reserves,
+            ZoneName::Attackers,
             player,
         )
     } else if command.starts_with('d') && interface_state.phase == GamePhase::Defenders {
         handle_move_command(
             command,
             interface_state,
-            Zone::Reserves,
-            Zone::Defenders,
+            ZoneName::Reserves,
+            ZoneName::Defenders,
             player,
         )
     } else if command == "" {
@@ -212,8 +218,8 @@ pub fn handle_command(
 fn handle_move_command(
     command: String,
     interface_state: &mut InterfaceState,
-    from: Zone,
-    to: Zone,
+    from: ZoneName,
+    to: ZoneName,
     player: PlayerName,
 ) -> Result<()> {
     let parts = command.split(' ').collect::<Vec<&str>>();

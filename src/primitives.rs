@@ -13,6 +13,7 @@
 // limitations under the License.
 
 use std::error;
+use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
@@ -21,6 +22,35 @@ extern crate derive_more;
 use derive_more::{Add, Constructor, Display, From, Into};
 
 pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
+
+#[derive(Debug)]
+pub struct InterfaceError {
+    pub message: String,
+}
+
+impl InterfaceError {
+    pub fn new(message: String) -> Box<InterfaceError> {
+        Box::from(InterfaceError {
+            message: message.to_string(),
+        })
+    }
+
+    pub fn result(message: String) -> Result<()> {
+        Err(InterfaceError::new(message))
+    }
+}
+
+impl fmt::Display for InterfaceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.message)
+    }
+}
+
+impl error::Error for InterfaceError {
+    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+        None
+    }
+}
 
 #[derive(
     Copy, Clone, From, Into, Serialize, Deserialize, Debug, Display, PartialEq, Constructor, Add,
@@ -32,7 +62,30 @@ pub struct HealthValue(i32);
 )]
 pub struct ManaValue(i32);
 
-#[derive(PartialEq, Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+pub enum PlayerName {
+    Player,
+    Enemy,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+pub enum ZoneName {
+    Hand,
+    Reserves,
+    Attackers,
+    Defenders,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+pub enum GamePhase {
+    Attackers,
+    Defenders,
+    PreCombat,
+    Main,
+    End,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum School {
     Light,
     Sky,
@@ -40,6 +93,31 @@ pub enum School {
     Ice,
     Earth,
     Shadow,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+pub enum CombatPosition {
+    Position0,
+    Position1,
+    Position2,
+    Position3,
+    Position4,
+}
+
+impl CombatPosition {
+    pub fn parse(input: &str) -> Result<CombatPosition> {
+        match input.parse::<i32>()? {
+            0 => Ok(CombatPosition::Position0),
+            1 => Ok(CombatPosition::Position1),
+            2 => Ok(CombatPosition::Position2),
+            3 => Ok(CombatPosition::Position3),
+            4 => Ok(CombatPosition::Position4),
+            _ => Err(InterfaceError::new(format!(
+                "Invalid combat position: {}",
+                input
+            ))),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]

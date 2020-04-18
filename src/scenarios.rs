@@ -14,8 +14,8 @@
 
 use crate::{
     card::{Card, Cost},
-    primitives::{ManaValue, Result, School},
-    state::{GamePhase, InterfaceError, InterfaceOptions, InterfaceState, PlayerState},
+    primitives::{GamePhase, InterfaceError, ManaValue, Result, School},
+    state::{InterfaceOptions, InterfaceState, PlayerState},
 };
 
 pub fn load_scenario(state: &mut InterfaceState, name: String) -> Result<()> {

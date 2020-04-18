@@ -28,7 +28,8 @@ mod scenarios;
 mod state;
 mod unit;
 
-use state::{InterfaceState, PlayerName};
+use primitives::PlayerName;
+use state::InterfaceState;
 
 fn main() {
     let mut rl = Editor::<()>::new();
