@@ -3,7 +3,8 @@ use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
-use crate::card::Card;
+use crate::card::{Card, Cost};
+use crate::primitives::{ManaValue, School};
 
 pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
@@ -165,9 +166,24 @@ pub fn initial_state() -> InterfaceState {
         player: PlayerState {
             mana: 0,
             hand: vec![
-                Card::new_unit("Demon Wolf", "1F", 100, 10),
-                Card::new_unit("Cyclops", "FF", 200, 10),
-                Card::new_unit("Metalon", "2FF", 250, 10),
+                Card::new_unit(
+                    "Demon Wolf",
+                    Cost::mana_cost(School::Flame, ManaValue::new(2), 1),
+                    100,
+                    10,
+                ),
+                Card::new_unit(
+                    "Cyclops",
+                    Cost::mana_cost(School::Flame, ManaValue::new(4), 2),
+                    200,
+                    10,
+                ),
+                Card::new_unit(
+                    "Metalon",
+                    Cost::mana_cost(School::Flame, ManaValue::new(3), 1),
+                    250,
+                    10,
+                ),
             ],
             reserve: vec![],
             defenders: vec![],
@@ -176,9 +192,24 @@ pub fn initial_state() -> InterfaceState {
         enemy: PlayerState {
             mana: 0,
             hand: vec![
-                Card::new_unit("Demon Wolf", "1F", 100, 10),
-                Card::new_unit("Cyclops", "FF", 200, 10),
-                Card::new_unit("Metalon", "2FF", 250, 10),
+                Card::new_unit(
+                    "Demon Wolf",
+                    Cost::mana_cost(School::Flame, ManaValue::new(1), 1),
+                    100,
+                    10,
+                ),
+                Card::new_unit(
+                    "Cyclops",
+                    Cost::mana_cost(School::Flame, ManaValue::new(3), 1),
+                    200,
+                    10,
+                ),
+                Card::new_unit(
+                    "Metalon",
+                    Cost::mana_cost(School::Flame, ManaValue::new(2), 1),
+                    250,
+                    10,
+                ),
             ],
             reserve: vec![],
             defenders: vec![],

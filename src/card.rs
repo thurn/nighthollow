@@ -1,10 +1,10 @@
-use std::fmt::Display;
+use std::fmt::{Display, Formatter};
 use std::sync::atomic::{AtomicI32, Ordering};
 
 use serde::{Deserialize, Serialize};
 use termion::color;
 
-use crate::primitives::ManaValue;
+use crate::primitives::{Influence, ManaValue, School};
 use crate::unit::Unit;
 
 static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
@@ -12,10 +12,35 @@ static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ManaCost {
     mana: ManaValue,
+    influence: Influence,
 }
 
+impl Display for ManaCost {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{} {}", self.mana, self.influence)
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub enum Cost {
     ManaCost(ManaCost),
+}
+
+impl Cost {
+    pub fn mana_cost(school: School, mana: ManaValue, influence: i32) -> Cost {
+        Cost::ManaCost(ManaCost {
+            mana,
+            influence: Influence::new(school, influence),
+        })
+    }
+}
+
+impl Display for Cost {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Cost::ManaCost(mana_cost) => write!(f, "{}", mana_cost),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -64,7 +89,7 @@ impl Variant {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Card {
-    pub cost: String,
+    pub cost: Cost,
     pub name: String,
     pub identifier: String,
     pub variant: Variant,
@@ -73,11 +98,11 @@ pub struct Card {
 }
 
 impl Card {
-    pub fn new_unit(name: &str, cost: &str, health: i32, attack: i32) -> Card {
+    pub fn new_unit(name: &str, cost: Cost, health: i32, attack: i32) -> Card {
         let index = NEXT_IDENTIFIER_INDEX.fetch_add(1, Ordering::Relaxed);
 
         Card {
-            cost: cost.to_string(),
+            cost,
             variant: Variant::Unit(Unit::new(health, attack)),
             name: name.to_string(),
             identifier: to_identifier(index),

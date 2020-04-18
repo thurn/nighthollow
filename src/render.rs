@@ -95,7 +95,7 @@ fn render_card_row<'a>(cards: Vec<Option<&Card>>, include_cost: bool) {
                 print!(
                     "│{}{:<8.8}{}│",
                     c.foreground.to_terminal_color(),
-                    c.cost,
+                    format!("{}", c.cost),
                     style::Reset
                 )
             } else {
