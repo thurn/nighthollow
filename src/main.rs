@@ -76,8 +76,44 @@ struct PlayerState {
     attackers: Vec<Card>,
 }
 
+impl PlayerState {
+    fn cards_in_zone(&self, zone: Zone) -> &[Card] {
+        match zone {
+            Zone::Hand => &self.hand,
+            Zone::Reserves => &self.reserve,
+            Zone::Attackers => &self.attackers,
+            Zone::Defenders => &self.defenders,
+        }
+    }
+
+    fn cards_in_zone_mut(&mut self, zone: Zone) -> &mut Vec<Card> {
+        match zone {
+            Zone::Hand => &mut self.hand,
+            Zone::Reserves => &mut self.reserve,
+            Zone::Attackers => &mut self.attackers,
+            Zone::Defenders => &mut self.defenders,
+        }
+    }
+
+    fn find_card_position(&self, identifier: &str, zone: Zone) -> Result<usize> {
+        self.cards_in_zone(zone)
+            .iter()
+            .position(|x| x.identifier == identifier.to_uppercase())
+            .ok_or(InterfaceError::new(format!(
+                "Identifier not found {:?} for zone {:?} of player {:?}",
+                identifier, zone, self
+            )))
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct InterfaceOptions {
+    auto_advance: bool,
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 struct InterfaceState {
+    options: InterfaceOptions,
     phase: GamePhase,
     player: PlayerState,
     enemy: PlayerState,
@@ -99,11 +135,11 @@ impl InterfaceState {
         to: Zone,
         player: PlayerName,
     ) -> Result<()> {
-        let position = self.find_position(identifier, player, from)?;
-        let removed = self.cards_in_zone(from, player).remove(position);
-        let destination = self.cards_in_zone(to, player);
-        if index <= destination.len() {
-            destination.insert(index, removed);
+        let player = self.player_mut(player);
+        if index <= player.cards_in_zone(to).len() {
+            let position = player.find_card_position(identifier, from)?;
+            let removed = player.cards_in_zone_mut(from).remove(position);
+            player.cards_in_zone_mut(to).insert(index, removed);
             Ok(())
         } else {
             InterfaceError::result(format!(
@@ -113,34 +149,17 @@ impl InterfaceState {
         }
     }
 
-    fn find_position(&mut self, identifier: &str, player: PlayerName, zone: Zone) -> Result<usize> {
-        self.cards_in_zone(zone, player)
-            .iter()
-            .position(|x| x.identifier == identifier.to_ascii_uppercase())
-            .ok_or(InterfaceError::new(format!(
-                "Identifier not found {:?} for player {:?} zone {:?}",
-                identifier, player, zone
-            )))
+    fn player(&self, player: PlayerName) -> &PlayerState {
+        match player {
+            PlayerName::Player => &self.player,
+            PlayerName::Enemy => &self.enemy,
+        }
     }
 
-    fn cards_in_zone(&mut self, zone: Zone, player: PlayerName) -> &mut Vec<Card> {
-        match zone {
-            Zone::Hand => match player {
-                PlayerName::Player => &mut self.player.hand,
-                PlayerName::Enemy => &mut self.enemy.hand,
-            },
-            Zone::Reserves => match player {
-                PlayerName::Player => &mut self.player.reserve,
-                PlayerName::Enemy => &mut self.enemy.reserve,
-            },
-            Zone::Attackers => match player {
-                PlayerName::Player => &mut self.player.attackers,
-                PlayerName::Enemy => &mut self.enemy.attackers,
-            },
-            Zone::Defenders => match player {
-                PlayerName::Player => &mut self.player.defenders,
-                PlayerName::Enemy => &mut self.enemy.defenders,
-            },
+    fn player_mut(&mut self, player: PlayerName) -> &mut PlayerState {
+        match player {
+            PlayerName::Player => &mut self.player,
+            PlayerName::Enemy => &mut self.enemy,
         }
     }
 }
@@ -186,6 +205,9 @@ fn main() {
 
 fn starting_game_state() -> InterfaceState {
     InterfaceState {
+        options: InterfaceOptions {
+            auto_advance: false,
+        },
         phase: GamePhase::Main,
         player: PlayerState {
             mana: 0,
@@ -214,57 +236,44 @@ fn starting_game_state() -> InterfaceState {
 
 fn draw_interface_state(interface_state: &InterfaceState) {
     if interface_state.enemy.hand.len() > 0 {
-        println!(
-            "{}═══════════════════════════════ Enemy Hand ═════════════════════════════════{}",
-            style::Bold,
-            style::Reset
-        );
-        render_card_row(&interface_state.enemy.hand, true);
+        println!("{}{:═^80}{}", style::Bold, " Enemy Hand ", style::Reset);
+        render_card_row(interface_state.enemy.hand.iter().map(Some).collect(), true);
     }
 
     if interface_state.enemy.reserve.len() > 0 {
-        println!(
-            "{}══════════════════════════════ Enemy Reserves ══════════════════════════════{}",
-            style::Bold,
-            style::Reset
+        println!("{}{:═^80}{}", style::Bold, " Enemy Reserves ", style::Reset);
+        render_card_row(
+            interface_state.enemy.reserve.iter().map(Some).collect(),
+            false,
         );
-        render_card_row(&interface_state.enemy.reserve, false);
     }
 
-    if interface_state.enemy.attackers.len() > 0 {
+    if interface_state.enemy.attackers.len() > 0 || interface_state.enemy.defenders.len() > 0 {
         println!(
-            "{}═══════════════════════ Enemy Attackers & Defenders ═══════════════════════{}",
+            "{}{:═^80}{}",
             style::Bold,
+            " Enemy Combatants ",
             style::Reset
         );
-        render_card_row(&interface_state.enemy.attackers, false);
+        render_card_row(combatants_vector(&interface_state.enemy), false);
     }
 
-    if interface_state.player.attackers.len() > 0 {
-        println!(
-            "{}══════════════════════════ Attackers & Defenders ══════════════════════════{}",
-            style::Bold,
-            style::Reset
-        );
-        render_card_row(&interface_state.player.attackers, false);
+    if interface_state.player.attackers.len() > 0 || interface_state.player.defenders.len() > 0 {
+        println!("{}{:═^80}{}", style::Bold, " Combatants ", style::Reset);
+        render_card_row(combatants_vector(&interface_state.player), false);
     }
 
     if interface_state.player.reserve.len() > 0 {
-        println!(
-            "{}═════════════════════════════════ Reserves ═════════════════════════════════{}",
-            style::Bold,
-            style::Reset
+        println!("{}{:═^80}{}", style::Bold, " Reserves ", style::Reset);
+        render_card_row(
+            interface_state.player.reserve.iter().map(Some).collect(),
+            false,
         );
-        render_card_row(&interface_state.player.reserve, false);
     }
 
     if interface_state.player.hand.len() > 0 {
-        println!(
-            "{}═══════════════════════════════════ Hand ═══════════════════════════════════{}",
-            style::Bold,
-            style::Reset
-        );
-        render_card_row(&interface_state.player.hand, true);
+        println!("{}{:═^80}{}", style::Bold, " Hand ", style::Reset);
+        render_card_row(interface_state.player.hand.iter().map(Some).collect(), true);
     }
 
     println!(
@@ -279,52 +288,92 @@ fn draw_interface_state(interface_state: &InterfaceState) {
     );
 }
 
-fn render_card_row(cards: &Vec<Card>, include_cost: bool) {
-    for _ in cards.iter() {
-        print!("┌────────┐");
+fn combatants_vector(player: &PlayerState) -> Vec<Option<&Card>> {
+    let mut result = Vec::new();
+    for i in 0..5 {
+        result.push(if i < player.attackers.len() {
+            Some(&player.attackers[i])
+        } else {
+            None
+        });
+    }
+
+    for i in 0..5 {
+        result.push(if i < player.defenders.len() {
+            Some(&player.defenders[i])
+        } else {
+            None
+        });
+    }
+    result
+}
+
+fn render_card_row<'a>(cards: Vec<Option<&Card>>, include_cost: bool) {
+    for card in &cards {
+        if let Some(_) = card {
+            print!("┌────────┐");
+        } else {
+            print!("          ");
+        }
     }
     println!();
 
     if include_cost {
-        for card in cards.iter() {
-            print!(
-                "│{}{:<8.8}{}│",
-                card.foreground.to_terminal_color(),
-                card.cost,
-                style::Reset
-            )
+        for card in &cards {
+            if let Some(c) = card {
+                print!(
+                    "│{}{:<8.8}{}│",
+                    c.foreground.to_terminal_color(),
+                    c.cost,
+                    style::Reset
+                )
+            } else {
+                print!("          ");
+            }
         }
         println!();
     }
 
     for index in 0..2 {
-        for card in cards.iter() {
-            print!(
-                "│{}{:<8.8}{}│",
-                card.foreground.to_terminal_color(),
-                get_word_at_index(&card.name, index),
-                style::Reset
-            );
+        for card in &cards {
+            if let Some(c) = card {
+                print!(
+                    "│{}{:<8.8}{}│",
+                    c.foreground.to_terminal_color(),
+                    get_word_at_index(&c.name, index),
+                    style::Reset
+                );
+            } else {
+                print!("          ");
+            }
         }
         println!();
     }
 
-    for card in cards.iter() {
-        print!(
-            "│{}{:<4}{:>4.4}{}│",
-            card.foreground.to_terminal_color(),
-            format!(
-                "{:.0}%",
-                100.0 * card.current_health as f64 / card.total_health as f64
-            ),
-            card.identifier,
-            style::Reset
-        )
+    for card in &cards {
+        if let Some(c) = card {
+            print!(
+                "│{}{:<4}{:>4.4}{}│",
+                c.foreground.to_terminal_color(),
+                format!(
+                    "{:.0}%",
+                    100.0 * c.current_health as f64 / c.total_health as f64
+                ),
+                c.identifier,
+                style::Reset
+            )
+        } else {
+            print!("          ");
+        }
     }
     println!();
 
-    for _ in cards.iter() {
-        print!("└────────┘");
+    for card in &cards {
+        if let Some(_) = card {
+            print!("└────────┘");
+        } else {
+            print!("          ");
+        }
     }
     println!();
 }
@@ -432,6 +481,10 @@ fn handle_advance_command(interface_state: &mut InterfaceState) -> Result<()> {
                     break;
                 }
             }
+        }
+
+        if !interface_state.options.auto_advance {
+            break;
         }
     }
 
