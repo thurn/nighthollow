@@ -155,3 +155,34 @@ impl InterfaceState {
         }
     }
 }
+
+pub fn initial_state() -> InterfaceState {
+    InterfaceState {
+        options: InterfaceOptions {
+            auto_advance: false,
+        },
+        phase: GamePhase::Main,
+        player: PlayerState {
+            mana: 0,
+            hand: vec![
+                Card::new("Demon Wolf", "1F", 100),
+                Card::new("Cyclops", "FF", 200),
+                Card::new("Metalon", "2FF", 250),
+            ],
+            reserve: vec![],
+            defenders: vec![],
+            attackers: vec![],
+        },
+        enemy: PlayerState {
+            mana: 0,
+            hand: vec![
+                Card::new("Demon Wolf", "1F", 100),
+                Card::new("Cyclops", "FF", 200),
+                Card::new("Metalon", "2FF", 250),
+            ],
+            reserve: vec![],
+            defenders: vec![],
+            attackers: vec![],
+        },
+    }
+}

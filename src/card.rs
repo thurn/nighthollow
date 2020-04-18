@@ -1,8 +1,8 @@
 use std::fmt::Display;
 use std::sync::atomic::{AtomicI32, Ordering};
 
-use termion::color;
 use serde::{Deserialize, Serialize};
+use termion::color;
 
 static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
 
