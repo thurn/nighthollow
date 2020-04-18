@@ -10,10 +10,11 @@ use serde_json::{de, ser};
 mod card;
 mod primitives;
 mod render;
+mod scenarios;
 mod state;
 mod unit;
 
-use state::PlayerName;
+use state::{InterfaceState, PlayerName};
 
 fn main() {
     let mut rl = Editor::<()>::new();
@@ -22,7 +23,7 @@ fn main() {
     }
 
     println!("Welcome to the Magewatch shell. Input 'help' to see commands or 'quit' to quit\n");
-    let mut interface_state = state::initial_state();
+    let mut interface_state = InterfaceState::default();
 
     if let Ok(input_file) = File::open("state.json") {
         if let Ok(state) = de::from_reader(BufReader::new(input_file)) {

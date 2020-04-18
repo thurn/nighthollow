@@ -3,10 +3,8 @@ use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
-use crate::card::{Card, Cost};
-use crate::primitives::{ManaValue, School};
-
-pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
+use crate::card::Card;
+use crate::primitives::Result;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum PlayerName {
@@ -70,6 +68,14 @@ pub struct PlayerState {
 }
 
 impl PlayerState {
+    fn reset(&mut self) {
+        self.mana = 0;
+        self.hand.clear();
+        self.reserve.clear();
+        self.defenders.clear();
+        self.attackers.clear();
+    }
+
     fn cards_in_zone(&self, zone: Zone) -> &[Card] {
         match zone {
             Zone::Hand => &self.hand,
@@ -99,6 +105,18 @@ impl PlayerState {
     }
 }
 
+impl Default for PlayerState {
+    fn default() -> Self {
+        PlayerState {
+            mana: 0,
+            hand: Vec::new(),
+            reserve: Vec::new(),
+            defenders: Vec::new(),
+            attackers: Vec::new(),
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct InterfaceOptions {
     pub auto_advance: bool,
@@ -112,12 +130,38 @@ pub struct InterfaceState {
     pub enemy: PlayerState,
 }
 
+impl Default for InterfaceState {
+    fn default() -> Self {
+        InterfaceState {
+            options: InterfaceOptions {
+                auto_advance: false,
+            },
+            phase: GamePhase::Main,
+            player: PlayerState::default(),
+            enemy: PlayerState::default(),
+        }
+    }
+}
+
 impl InterfaceState {
     fn get_mana(&self, player_name: PlayerName) -> i32 {
         match player_name {
             PlayerName::Player => self.player.mana,
             PlayerName::Enemy => self.enemy.mana,
         }
+    }
+
+    pub fn reset(&mut self) {
+        self.phase = GamePhase::Main;
+        self.player.reset();
+        self.enemy.reset();
+    }
+
+    pub fn update(&mut self, other: InterfaceState) {
+        self.options = other.options;
+        self.phase = other.phase;
+        self.player = other.player;
+        self.enemy = other.enemy;
     }
 
     pub fn move_card(
@@ -154,66 +198,5 @@ impl InterfaceState {
             PlayerName::Player => &mut self.player,
             PlayerName::Enemy => &mut self.enemy,
         }
-    }
-}
-
-pub fn initial_state() -> InterfaceState {
-    InterfaceState {
-        options: InterfaceOptions {
-            auto_advance: false,
-        },
-        phase: GamePhase::Main,
-        player: PlayerState {
-            mana: 0,
-            hand: vec![
-                Card::new_unit(
-                    "Demon Wolf",
-                    Cost::mana_cost(School::Flame, ManaValue::new(2), 1),
-                    100,
-                    10,
-                ),
-                Card::new_unit(
-                    "Cyclops",
-                    Cost::mana_cost(School::Flame, ManaValue::new(4), 2),
-                    200,
-                    10,
-                ),
-                Card::new_unit(
-                    "Metalon",
-                    Cost::mana_cost(School::Flame, ManaValue::new(3), 1),
-                    250,
-                    10,
-                ),
-            ],
-            reserve: vec![],
-            defenders: vec![],
-            attackers: vec![],
-        },
-        enemy: PlayerState {
-            mana: 0,
-            hand: vec![
-                Card::new_unit(
-                    "Demon Wolf",
-                    Cost::mana_cost(School::Flame, ManaValue::new(1), 1),
-                    100,
-                    10,
-                ),
-                Card::new_unit(
-                    "Cyclops",
-                    Cost::mana_cost(School::Flame, ManaValue::new(3), 1),
-                    200,
-                    10,
-                ),
-                Card::new_unit(
-                    "Metalon",
-                    Cost::mana_cost(School::Flame, ManaValue::new(2), 1),
-                    250,
-                    10,
-                ),
-            ],
-            reserve: vec![],
-            defenders: vec![],
-            attackers: vec![],
-        },
     }
 }

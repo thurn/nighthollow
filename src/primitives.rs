@@ -1,8 +1,12 @@
+use std::error;
+
 use serde::{Deserialize, Serialize};
 
 extern crate derive_more;
 
 use derive_more::{Add, Constructor, Display, From, Into};
+
+pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
 #[derive(
     Copy, Clone, From, Into, Serialize, Deserialize, Debug, Display, PartialEq, Constructor, Add,

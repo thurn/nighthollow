@@ -1,9 +1,8 @@
 use termion::{color, style};
 
 use crate::card::Card;
-use crate::state::{
-    GamePhase, InterfaceError, InterfaceState, PlayerName, PlayerState, Result, Zone,
-};
+use crate::primitives::Result;
+use crate::state::{GamePhase, InterfaceError, InterfaceState, PlayerName, PlayerState, Zone};
 
 pub fn draw_interface_state(interface_state: &InterfaceState) {
     if interface_state.enemy.hand.len() > 0 {
@@ -297,7 +296,8 @@ Commands:
       Example: 'cast f'
       Example: 'cast f s'
   [e]nemy <command>: Invoke another command, but it apply it to the opponent
-  [r]eset: Reset saved state to default
+  [l]oad x: Load the scenario named 'x'
+      Example: 'load attackers'
   Empty Input: Proceed to the next game phase
 
 The game takes place over a sequence of rounds, which are broken up into
