@@ -39,12 +39,12 @@ pub fn draw_interface_state(game: &Game) {
             " Enemy Combatants ",
             style::Reset
         );
-        render_card_row(combatants_vector(&game.enemy), false);
+        render_card_row(combatants_vector(&game.enemy, PlayerName::Enemy), false);
     }
 
     if game.user.attackers.len() > 0 || game.user.defenders.len() > 0 {
         println!("{}{:═^80}{}", style::Bold, " Combatants ", style::Reset);
-        render_card_row(combatants_vector(&game.user), false);
+        render_card_row(combatants_vector(&game.user, PlayerName::User), false);
     }
 
     if game.user.reserve.len() > 0 {
@@ -69,24 +69,44 @@ pub fn draw_interface_state(game: &Game) {
     );
 }
 
-fn combatants_vector(player: &PlayerState) -> Vec<Option<&Card>> {
-    let mut result = Vec::new();
+fn combatants_vector(player: &PlayerState, player_name: PlayerName) -> Vec<Option<&Card>> {
+    let mut attackers: Vec<Option<&Card>> = Vec::new();
     for i in 0..5 {
-        result.push(if i < player.attackers.len() {
-            Some(&player.attackers[i])
-        } else {
-            None
-        });
+        attackers.push(
+            if let Some(card) = player
+                .attackers
+                .iter()
+                .find(|c| c.unit().position.map_or(false, |p| i == p as usize))
+            {
+                Some(card)
+            } else {
+                None
+            },
+        );
     }
 
+    let mut defenders: Vec<Option<&Card>> = Vec::new();
     for i in 0..5 {
-        result.push(if i < player.defenders.len() {
-            Some(&player.defenders[i])
-        } else {
-            None
-        });
+        defenders.push(
+            if let Some(card) = player
+                .defenders
+                .iter()
+                .find(|c| c.unit().position.map_or(false, |p| i == p as usize))
+            {
+                Some(card)
+            } else {
+                None
+            },
+        );
     }
-    result
+
+    if player_name == PlayerName::User {
+        attackers.append(&mut defenders);
+        attackers
+    } else {
+        defenders.append(&mut attackers);
+        defenders
+    }
 }
 
 fn render_card_row<'a>(cards: Vec<Option<&Card>>, include_cost: bool) {

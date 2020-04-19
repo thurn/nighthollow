@@ -18,7 +18,7 @@ use std::sync::atomic::{AtomicI32, Ordering};
 use serde::{Deserialize, Serialize};
 use termion::color;
 
-use crate::primitives::{Influence, ManaValue, School};
+use crate::primitives::{CombatPosition, Influence, ManaValue, School};
 use crate::unit::Unit;
 
 static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
@@ -114,12 +114,18 @@ pub struct Card {
 }
 
 impl Card {
-    pub fn new_unit(name: &str, cost: Cost, health: i32, attack: i32) -> Card {
+    pub fn new_unit(
+        name: &str,
+        cost: Cost,
+        health: i32,
+        attack: i32,
+        position: Option<CombatPosition>,
+    ) -> Card {
         let index = NEXT_IDENTIFIER_INDEX.fetch_add(1, Ordering::Relaxed);
 
         Card {
             cost,
-            variant: CardVariant::Unit(Unit::new(health, attack)),
+            variant: CardVariant::Unit(Unit::new(health, attack, position)),
             name: name.to_string(),
             identifier: to_identifier(index),
             fast: false,
@@ -135,6 +141,13 @@ impl Card {
                 8 => ForegroundColor::Green,
                 _ => ForegroundColor::Blue,
             },
+        }
+    }
+
+    pub fn unit(&self) -> &Unit {
+        match &self.variant {
+            CardVariant::Unit(u) => u,
+            CardVariant::Spell => panic!("Value was not a unit!"),
         }
     }
 }

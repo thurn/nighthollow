@@ -30,11 +30,11 @@ pub struct Unit {
 }
 
 impl Unit {
-    pub fn new(health: i32, attack: i32) -> Unit {
+    pub fn new(health: i32, attack: i32, position: Option<CombatPosition>) -> Unit {
         Unit {
             current_health: HealthValue::new(health),
             maximum_health: HealthValue::new(health),
-            position: None,
+            position,
             attacks: vec![Attack::BasicAttack(HealthValue::new(attack))],
         }
     }

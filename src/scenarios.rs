@@ -14,7 +14,7 @@
 
 use crate::{
     card::{Card, Cost},
-    primitives::{GamePhase, InterfaceError, ManaValue, Result, School},
+    primitives::{CombatPosition, GamePhase, InterfaceError, ManaValue, Result, School},
     state::{Game, GameState, PlayerState},
 };
 
@@ -27,39 +27,43 @@ pub fn load_scenario(state: &mut Game, name: String) -> Result<()> {
     }
 }
 
-fn demon_wolf() -> Card {
+fn demon_wolf(position: Option<CombatPosition>) -> Card {
     Card::new_unit(
         "Demon Wolf",
         Cost::mana_cost(School::Flame, ManaValue::new(2), 1),
         100,
         10,
+        position,
     )
 }
 
-fn cyclops() -> Card {
+fn cyclops(position: Option<CombatPosition>) -> Card {
     Card::new_unit(
         "Cyclops",
         Cost::mana_cost(School::Flame, ManaValue::new(4), 2),
         200,
         10,
+        position,
     )
 }
 
-fn metalon() -> Card {
+fn metalon(position: Option<CombatPosition>) -> Card {
     Card::new_unit(
         "Metalon",
         Cost::mana_cost(School::Flame, ManaValue::new(3), 1),
         250,
         10,
+        position,
     )
 }
 
-fn treant() -> Card {
+fn treant(position: Option<CombatPosition>) -> Card {
     Card::new_unit(
         "Treant",
         Cost::mana_cost(School::Flame, ManaValue::new(1), 1),
         60,
         10,
+        position,
     )
 }
 
@@ -70,12 +74,12 @@ fn opening_hands(state: &mut Game) {
             phase: GamePhase::Main,
         },
         user: PlayerState {
-            hand: vec![demon_wolf(), cyclops(), metalon()],
+            hand: vec![demon_wolf(None), cyclops(None), metalon(None)],
             ..PlayerState::default()
         },
         enemy: PlayerState {
             mana: 0,
-            hand: vec![demon_wolf(), cyclops(), metalon()],
+            hand: vec![demon_wolf(None), cyclops(None), metalon(None)],
             ..PlayerState::default()
         },
     });
@@ -88,18 +92,18 @@ fn combat(state: &mut Game) {
             phase: GamePhase::Attackers,
         },
         user: PlayerState {
-            attackers: vec![demon_wolf()],
-            defenders: vec![cyclops()],
-            reserve: vec![metalon()],
-            hand: vec![treant()],
+            attackers: vec![demon_wolf(Some(CombatPosition::Position2))],
+            defenders: vec![cyclops(Some(CombatPosition::Position1))],
+            reserve: vec![metalon(None)],
+            hand: vec![treant(None)],
             ..PlayerState::default()
         },
         enemy: PlayerState {
             mana: 0,
-            attackers: vec![cyclops()],
-            defenders: vec![metalon()],
-            reserve: vec![treant()],
-            hand: vec![demon_wolf()],
+            attackers: vec![cyclops(Some(CombatPosition::Position0))],
+            defenders: vec![metalon(Some(CombatPosition::Position2))],
+            reserve: vec![treant(None)],
+            hand: vec![demon_wolf(None)],
             ..PlayerState::default()
         },
     });
