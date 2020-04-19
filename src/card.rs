@@ -89,14 +89,16 @@ impl ForegroundColor {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub enum Variant {
+pub enum CardVariant {
     Unit(Unit),
+    Spell,
 }
 
-impl Variant {
+impl CardVariant {
     pub fn display_status(&self) -> String {
         match self {
-            Variant::Unit(unit) => unit.display_health(),
+            CardVariant::Unit(unit) => unit.display_health(),
+            CardVariant::Spell => "".to_string(),
         }
     }
 }
@@ -106,7 +108,7 @@ pub struct Card {
     pub cost: Cost,
     pub name: String,
     pub identifier: String,
-    pub variant: Variant,
+    pub variant: CardVariant,
     pub fast: bool,
     pub foreground: ForegroundColor,
 }
@@ -117,7 +119,7 @@ impl Card {
 
         Card {
             cost,
-            variant: Variant::Unit(Unit::new(health, attack)),
+            variant: CardVariant::Unit(Unit::new(health, attack)),
             name: name.to_string(),
             identifier: to_identifier(index),
             fast: false,

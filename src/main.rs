@@ -29,7 +29,7 @@ mod state;
 mod unit;
 
 use primitives::PlayerName;
-use state::InterfaceState;
+use state::Game;
 
 fn main() {
     let mut rl = Editor::<()>::new();
@@ -38,19 +38,19 @@ fn main() {
     }
 
     println!("Welcome to the Magewatch shell. Input 'help' to see commands or 'quit' to quit\n");
-    let mut interface_state = InterfaceState::default();
+    let mut game = Game::default();
 
     if let Ok(input_file) = File::open("state.json") {
-        if let Ok(state) = de::from_reader(BufReader::new(input_file)) {
-            interface_state = state;
+        if let Ok(read) = de::from_reader(BufReader::new(input_file)) {
+            game = read;
         }
     }
 
     loop {
         let file = File::create("state.json").expect("Unable to open state.json!");
-        ser::to_writer_pretty(&file, &interface_state).expect("Error writing to state.json!");
+        ser::to_writer_pretty(&file, &game).expect("Error writing to state.json!");
 
-        render::draw_interface_state(&interface_state);
+        render::draw_interface_state(&game);
 
         let readline = rl.readline(">> ");
         match readline {
@@ -59,9 +59,7 @@ fn main() {
                 if line.starts_with('q') {
                     break;
                 } else {
-                    if let Err(e) =
-                        render::handle_command(line, &mut interface_state, PlayerName::Player)
-                    {
+                    if let Err(e) = render::handle_command(line, &mut game, PlayerName::User) {
                         render::print_error(format!("{}", e))
                     }
                 }

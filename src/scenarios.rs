@@ -15,73 +15,92 @@
 use crate::{
     card::{Card, Cost},
     primitives::{GamePhase, InterfaceError, ManaValue, Result, School},
-    state::{InterfaceOptions, InterfaceState, PlayerState},
+    state::{Game, GameState, PlayerState},
 };
 
-pub fn load_scenario(state: &mut InterfaceState, name: String) -> Result<()> {
-    state.reset();
+pub fn load_scenario(state: &mut Game, name: String) -> Result<()> {
     match name.as_str() {
         "empty" => Ok(()),
         "opening" => Ok(opening_hands(state)),
+        "combat" => Ok(combat(state)),
         _ => InterfaceError::result(format!("Unknown scenario {}", name)),
     }
 }
 
-fn opening_hands(state: &mut InterfaceState) {
-    state.update(InterfaceState {
-        options: InterfaceOptions { auto_advance: true },
-        phase: GamePhase::Main,
-        player: PlayerState {
-            mana: 0,
-            hand: vec![
-                Card::new_unit(
-                    "Demon Wolf",
-                    Cost::mana_cost(School::Flame, ManaValue::new(2), 1),
-                    100,
-                    10,
-                ),
-                Card::new_unit(
-                    "Cyclops",
-                    Cost::mana_cost(School::Flame, ManaValue::new(4), 2),
-                    200,
-                    10,
-                ),
-                Card::new_unit(
-                    "Metalon",
-                    Cost::mana_cost(School::Flame, ManaValue::new(3), 1),
-                    250,
-                    10,
-                ),
-            ],
-            reserve: vec![],
-            defenders: vec![],
-            attackers: vec![],
+fn demon_wolf() -> Card {
+    Card::new_unit(
+        "Demon Wolf",
+        Cost::mana_cost(School::Flame, ManaValue::new(2), 1),
+        100,
+        10,
+    )
+}
+
+fn cyclops() -> Card {
+    Card::new_unit(
+        "Cyclops",
+        Cost::mana_cost(School::Flame, ManaValue::new(4), 2),
+        200,
+        10,
+    )
+}
+
+fn metalon() -> Card {
+    Card::new_unit(
+        "Metalon",
+        Cost::mana_cost(School::Flame, ManaValue::new(3), 1),
+        250,
+        10,
+    )
+}
+
+fn treant() -> Card {
+    Card::new_unit(
+        "Treant",
+        Cost::mana_cost(School::Flame, ManaValue::new(1), 1),
+        60,
+        10,
+    )
+}
+
+fn opening_hands(state: &mut Game) {
+    state.update(Game {
+        state: GameState {
+            auto_advance: true,
+            phase: GamePhase::Main,
+        },
+        user: PlayerState {
+            hand: vec![demon_wolf(), cyclops(), metalon()],
+            ..PlayerState::default()
         },
         enemy: PlayerState {
             mana: 0,
-            hand: vec![
-                Card::new_unit(
-                    "Demon Wolf",
-                    Cost::mana_cost(School::Flame, ManaValue::new(1), 1),
-                    100,
-                    10,
-                ),
-                Card::new_unit(
-                    "Cyclops",
-                    Cost::mana_cost(School::Flame, ManaValue::new(3), 1),
-                    200,
-                    10,
-                ),
-                Card::new_unit(
-                    "Metalon",
-                    Cost::mana_cost(School::Flame, ManaValue::new(2), 1),
-                    250,
-                    10,
-                ),
-            ],
-            reserve: vec![],
-            defenders: vec![],
-            attackers: vec![],
+            hand: vec![demon_wolf(), cyclops(), metalon()],
+            ..PlayerState::default()
+        },
+    });
+}
+
+fn combat(state: &mut Game) {
+    state.update(Game {
+        state: GameState {
+            auto_advance: true,
+            phase: GamePhase::Attackers,
+        },
+        user: PlayerState {
+            attackers: vec![demon_wolf()],
+            defenders: vec![cyclops()],
+            reserve: vec![metalon()],
+            hand: vec![treant()],
+            ..PlayerState::default()
+        },
+        enemy: PlayerState {
+            mana: 0,
+            attackers: vec![cyclops()],
+            defenders: vec![metalon()],
+            reserve: vec![treant()],
+            hand: vec![demon_wolf()],
+            ..PlayerState::default()
         },
     });
 }

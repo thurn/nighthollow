@@ -14,7 +14,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::primitives::HealthValue;
+use crate::primitives::{CombatPosition, HealthValue};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Attack {
@@ -23,9 +23,10 @@ pub enum Attack {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Unit {
-    current_health: HealthValue,
-    maximum_health: HealthValue,
-    attacks: Vec<Attack>,
+    pub current_health: HealthValue,
+    pub maximum_health: HealthValue,
+    pub position: Option<CombatPosition>,
+    pub attacks: Vec<Attack>,
 }
 
 impl Unit {
@@ -33,6 +34,7 @@ impl Unit {
         Unit {
             current_health: HealthValue::new(health),
             maximum_health: HealthValue::new(health),
+            position: None,
             attacks: vec![Attack::BasicAttack(HealthValue::new(attack))],
         }
     }

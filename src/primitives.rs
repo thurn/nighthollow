@@ -63,12 +63,6 @@ pub struct HealthValue(i32);
 pub struct ManaValue(i32);
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
-pub enum PlayerName {
-    Player,
-    Enemy,
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum GamePhase {
     Attackers,
     Defenders,
@@ -85,6 +79,12 @@ pub enum School {
     Ice,
     Earth,
     Shadow,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+pub enum PlayerName {
+    User,
+    Enemy,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]

@@ -39,6 +39,12 @@ impl PlayerState {
         self.attackers.clear();
     }
 
+    pub fn find_card<'a>(identifier: &str, zone: &'a mut Zone) -> &'a mut Card {
+        zone.into_iter()
+            .find(|x| x.identifier == identifier.to_uppercase())
+            .expect("msg")
+    }
+
     fn remove_card(identifier: &str, zone: &mut Zone) -> Result<Card> {
         if let Some(position) = zone
             .iter()
@@ -73,62 +79,61 @@ impl Default for PlayerState {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct InterfaceOptions {
+pub struct GameState {
     pub auto_advance: bool,
+    pub phase: GamePhase,
+}
+
+impl GameState {
+    fn reset(&mut self) {
+        self.auto_advance = false;
+        self.phase = GamePhase::Main;
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct InterfaceState {
-    pub options: InterfaceOptions,
-    pub phase: GamePhase,
-    pub player: PlayerState,
+pub struct Game {
+    pub state: GameState,
+    pub user: PlayerState,
     pub enemy: PlayerState,
 }
 
-impl Default for InterfaceState {
+impl Default for Game {
     fn default() -> Self {
-        InterfaceState {
-            options: InterfaceOptions {
+        Game {
+            state: GameState {
                 auto_advance: false,
+                phase: GamePhase::Main,
             },
-            phase: GamePhase::Main,
-            player: PlayerState::default(),
+            user: PlayerState::default(),
             enemy: PlayerState::default(),
         }
     }
 }
 
-impl InterfaceState {
-    fn get_mana(&self, player_name: PlayerName) -> i32 {
-        match player_name {
-            PlayerName::Player => self.player.mana,
-            PlayerName::Enemy => self.enemy.mana,
-        }
-    }
-
+impl Game {
     pub fn reset(&mut self) {
-        self.phase = GamePhase::Main;
-        self.player.reset();
+        self.state.reset();
+        self.user.reset();
         self.enemy.reset();
     }
 
-    pub fn update(&mut self, other: InterfaceState) {
-        self.options = other.options;
-        self.phase = other.phase;
-        self.player = other.player;
+    pub fn update(&mut self, other: Game) {
+        self.state = other.state;
+        self.user = other.user;
         self.enemy = other.enemy;
     }
 
-    pub fn player(&self, player: PlayerName) -> &PlayerState {
-        match player {
-            PlayerName::Player => &self.player,
+    pub fn player(&self, name: PlayerName) -> &PlayerState {
+        match name {
+            PlayerName::User => &self.user,
             PlayerName::Enemy => &self.enemy,
         }
     }
 
-    pub fn player_mut(&mut self, player: PlayerName) -> &mut PlayerState {
-        match player {
-            PlayerName::Player => &mut self.player,
+    pub fn player_mut(&mut self, name: PlayerName) -> &mut PlayerState {
+        match name {
+            PlayerName::User => &mut self.user,
             PlayerName::Enemy => &mut self.enemy,
         }
     }

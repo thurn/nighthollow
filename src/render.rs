@@ -14,55 +14,52 @@
 
 use termion::{color, style};
 
-use crate::card::Card;
-use crate::primitives::{GamePhase, InterfaceError, PlayerName, Result};
-use crate::state::{InterfaceState, PlayerState, Zone};
+use crate::card::{Card, CardVariant};
+use crate::primitives::{CombatPosition, GamePhase, InterfaceError, PlayerName, Result};
+use crate::{
+    scenarios,
+    state::{Game, PlayerState, Zone},
+};
 
-pub fn draw_interface_state(interface_state: &InterfaceState) {
-    if interface_state.enemy.hand.len() > 0 {
+pub fn draw_interface_state(game: &Game) {
+    if game.enemy.hand.len() > 0 {
         println!("{}{:═^80}{}", style::Bold, " Enemy Hand ", style::Reset);
-        render_card_row(interface_state.enemy.hand.iter().map(Some).collect(), true);
+        render_card_row(game.enemy.hand.iter().map(Some).collect(), true);
     }
 
-    if interface_state.enemy.reserve.len() > 0 {
+    if game.enemy.reserve.len() > 0 {
         println!("{}{:═^80}{}", style::Bold, " Enemy Reserves ", style::Reset);
-        render_card_row(
-            interface_state.enemy.reserve.iter().map(Some).collect(),
-            false,
-        );
+        render_card_row(game.enemy.reserve.iter().map(Some).collect(), false);
     }
 
-    if interface_state.enemy.attackers.len() > 0 || interface_state.enemy.defenders.len() > 0 {
+    if game.enemy.attackers.len() > 0 || game.enemy.defenders.len() > 0 {
         println!(
             "{}{:═^80}{}",
             style::Bold,
             " Enemy Combatants ",
             style::Reset
         );
-        render_card_row(combatants_vector(&interface_state.enemy), false);
+        render_card_row(combatants_vector(&game.enemy), false);
     }
 
-    if interface_state.player.attackers.len() > 0 || interface_state.player.defenders.len() > 0 {
+    if game.user.attackers.len() > 0 || game.user.defenders.len() > 0 {
         println!("{}{:═^80}{}", style::Bold, " Combatants ", style::Reset);
-        render_card_row(combatants_vector(&interface_state.player), false);
+        render_card_row(combatants_vector(&game.user), false);
     }
 
-    if interface_state.player.reserve.len() > 0 {
+    if game.user.reserve.len() > 0 {
         println!("{}{:═^80}{}", style::Bold, " Reserves ", style::Reset);
-        render_card_row(
-            interface_state.player.reserve.iter().map(Some).collect(),
-            false,
-        );
+        render_card_row(game.user.reserve.iter().map(Some).collect(), false);
     }
 
-    if interface_state.player.hand.len() > 0 {
+    if game.user.hand.len() > 0 {
         println!("{}{:═^80}{}", style::Bold, " Hand ", style::Reset);
-        render_card_row(interface_state.player.hand.iter().map(Some).collect(), true);
+        render_card_row(game.user.hand.iter().map(Some).collect(), true);
     }
 
     println!(
         "{}",
-        match interface_state.phase {
+        match game.state.phase {
             GamePhase::Attackers => "Attackers Phase. Add units to your Attack Group.",
             GamePhase::Defenders => "Defenders Phase. Add units to your Defense Group.",
             GamePhase::PreCombat => "Pre-Combat Phase. You may use fast effects.",
@@ -163,13 +160,9 @@ fn get_word_at_index(string: &String, index: usize) -> String {
     string.split(' ').nth(index).unwrap_or("").to_string()
 }
 
-pub fn handle_command(
-    command: String,
-    interface_state: &mut InterfaceState,
-    player: PlayerName,
-) -> Result<()> {
-    let phase = interface_state.phase;
-    let player = interface_state.player_mut(player);
+pub fn handle_command(command: String, game: &mut Game, player_name: PlayerName) -> Result<()> {
+    let phase = game.state.phase;
+    let player = game.player_mut(player_name);
     if command.starts_with('h') {
         print_help();
         Ok(())
@@ -181,19 +174,21 @@ pub fn handle_command(
         handle_move_command(command, &mut player.reserve, &mut player.defenders)
     } else if command.starts_with('e') {
         if let Some(index) = command.find(' ') {
-            handle_command(
-                command[index + 1..].to_string(),
-                interface_state,
-                PlayerName::Enemy,
-            )
+            handle_command(command[index + 1..].to_string(), game, PlayerName::Enemy)
         } else {
             InterfaceError::result(format!(
-                "Expected additional arguments to command {}",
+                "Expected additional arguments to enemy command {}",
                 command
             ))
         }
+    } else if command.starts_with('l') {
+        if let Some(index) = command.find(' ') {
+            scenarios::load_scenario(game, command[index + 1..].to_string())
+        } else {
+            InterfaceError::result(format!("Expected additional arguments to load {}", command))
+        }
     } else if command == "" {
-        handle_advance_command(interface_state)
+        handle_advance_command(game)
     } else {
         InterfaceError::result(format!("Unknown command {}", command))
     }
@@ -201,7 +196,16 @@ pub fn handle_command(
 
 fn handle_move_command(command: String, from: &mut Zone, to: &mut Zone) -> Result<()> {
     let parts = command.split(' ').collect::<Vec<&str>>();
-    if let [_, identifier, _] = *parts {
+    if let [_, identifier, position] = *parts {
+        let card = PlayerState::find_card(identifier, from);
+        let position = CombatPosition::parse(position)?;
+        match &mut card.variant {
+            CardVariant::Unit(u) => Ok(u.position = Some(position)),
+            CardVariant::Spell => InterfaceError::result(format!(
+                "Expected a unit card, but {} is a spell card",
+                identifier
+            )),
+        }?;
         PlayerState::move_card(identifier, from, to)
     } else if let [_, identifier] = *parts {
         PlayerState::move_card(identifier, from, to)
@@ -213,41 +217,41 @@ fn handle_move_command(command: String, from: &mut Zone, to: &mut Zone) -> Resul
     }
 }
 
-fn handle_advance_command(interface_state: &mut InterfaceState) -> Result<()> {
-    let has_fast_effect = interface_state.player.hand.iter().any(|x| x.fast);
+fn handle_advance_command(game: &mut Game) -> Result<()> {
+    let has_fast_effect = game.user.hand.iter().any(|x| x.fast);
     loop {
-        match interface_state.phase {
+        match game.state.phase {
             GamePhase::Attackers => {
-                interface_state.phase = GamePhase::Defenders;
-                if interface_state.enemy.attackers.len() > 0 || has_fast_effect {
+                game.state.phase = GamePhase::Defenders;
+                if game.enemy.attackers.len() > 0 || has_fast_effect {
                     break;
                 }
             }
             GamePhase::Defenders => {
-                interface_state.phase = GamePhase::PreCombat;
+                game.state.phase = GamePhase::PreCombat;
                 if has_fast_effect {
                     break;
                 }
             }
             GamePhase::PreCombat => {
-                interface_state.phase = GamePhase::Main;
+                game.state.phase = GamePhase::Main;
                 break;
             }
             GamePhase::Main => {
-                interface_state.phase = GamePhase::End;
+                game.state.phase = GamePhase::End;
                 if has_fast_effect {
                     break;
                 }
             }
             GamePhase::End => {
-                interface_state.phase = GamePhase::Attackers;
-                if interface_state.player.reserve.len() > 0 || has_fast_effect {
+                game.state.phase = GamePhase::Attackers;
+                if game.user.reserve.len() > 0 || has_fast_effect {
                     break;
                 }
             }
         }
 
-        if !interface_state.options.auto_advance {
+        if !game.state.auto_advance {
             break;
         }
     }
