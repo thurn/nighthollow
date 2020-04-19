@@ -15,8 +15,8 @@
 use termion::{color, style};
 
 use crate::card::Card;
-use crate::primitives::{GamePhase, InterfaceError, PlayerName, Result, ZoneName};
-use crate::state::{InterfaceState, PlayerState};
+use crate::primitives::{GamePhase, InterfaceError, PlayerName, Result};
+use crate::state::{InterfaceState, PlayerState, Zone};
 
 pub fn draw_interface_state(interface_state: &InterfaceState) {
     if interface_state.enemy.hand.len() > 0 {
@@ -168,35 +168,17 @@ pub fn handle_command(
     interface_state: &mut InterfaceState,
     player: PlayerName,
 ) -> Result<()> {
+    let phase = interface_state.phase;
+    let player = interface_state.player_mut(player);
     if command.starts_with('h') {
         print_help();
         Ok(())
-    } else if command.starts_with('p') && interface_state.phase == GamePhase::Main {
-        handle_move_command(
-            command,
-            interface_state,
-            ZoneName::Hand,
-            ZoneName::Reserves,
-            player,
-        )
-    } else if command.starts_with('a') && interface_state.phase == GamePhase::Attackers {
-        handle_move_command(
-            command,
-            interface_state,
-            ZoneName::Reserves,
-            ZoneName::Attackers,
-            player,
-        )
-    } else if command.starts_with('d') && interface_state.phase == GamePhase::Defenders {
-        handle_move_command(
-            command,
-            interface_state,
-            ZoneName::Reserves,
-            ZoneName::Defenders,
-            player,
-        )
-    } else if command == "" {
-        handle_advance_command(interface_state)
+    } else if command.starts_with('p') && phase == GamePhase::Main {
+        handle_move_command(command, &mut player.hand, &mut player.reserve)
+    } else if command.starts_with('a') && phase == GamePhase::Attackers {
+        handle_move_command(command, &mut player.reserve, &mut player.attackers)
+    } else if command.starts_with('d') && phase == GamePhase::Defenders {
+        handle_move_command(command, &mut player.reserve, &mut player.defenders)
     } else if command.starts_with('e') {
         if let Some(index) = command.find(' ') {
             handle_command(
@@ -210,24 +192,19 @@ pub fn handle_command(
                 command
             ))
         }
+    } else if command == "" {
+        handle_advance_command(interface_state)
     } else {
         InterfaceError::result(format!("Unknown command {}", command))
     }
 }
 
-fn handle_move_command(
-    command: String,
-    interface_state: &mut InterfaceState,
-    from: ZoneName,
-    to: ZoneName,
-    player: PlayerName,
-) -> Result<()> {
+fn handle_move_command(command: String, from: &mut Zone, to: &mut Zone) -> Result<()> {
     let parts = command.split(' ').collect::<Vec<&str>>();
-    if let [_, identifier, position] = *parts {
-        let p = position.parse::<usize>()?;
-        interface_state.move_card(identifier, p, from, to, player)
+    if let [_, identifier, _] = *parts {
+        PlayerState::move_card(identifier, from, to)
     } else if let [_, identifier] = *parts {
-        interface_state.move_card(identifier, 0, from, to, player)
+        PlayerState::move_card(identifier, from, to)
     } else {
         Err(InterfaceError::new(format!(
             "Invalid move command: {}",

@@ -16,16 +16,18 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     card::Card,
-    primitives::{GamePhase, InterfaceError, PlayerName, Result, ZoneName},
+    primitives::{GamePhase, InterfaceError, PlayerName, Result},
 };
+
+pub type Zone = Vec<Card>;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PlayerState {
     pub mana: i32,
-    pub hand: Vec<Card>,
-    pub reserve: Vec<Card>,
-    pub defenders: Vec<Card>,
-    pub attackers: Vec<Card>,
+    pub hand: Zone,
+    pub reserve: Zone,
+    pub defenders: Zone,
+    pub attackers: Zone,
 }
 
 impl PlayerState {
@@ -37,32 +39,24 @@ impl PlayerState {
         self.attackers.clear();
     }
 
-    fn cards_in_zone(&self, zone: ZoneName) -> &[Card] {
-        match zone {
-            ZoneName::Hand => &self.hand,
-            ZoneName::Reserves => &self.reserve,
-            ZoneName::Attackers => &self.attackers,
-            ZoneName::Defenders => &self.defenders,
-        }
-    }
-
-    fn cards_in_zone_mut(&mut self, zone: ZoneName) -> &mut Vec<Card> {
-        match zone {
-            ZoneName::Hand => &mut self.hand,
-            ZoneName::Reserves => &mut self.reserve,
-            ZoneName::Attackers => &mut self.attackers,
-            ZoneName::Defenders => &mut self.defenders,
-        }
-    }
-
-    fn find_card_position(&self, identifier: &str, zone: ZoneName) -> Result<usize> {
-        self.cards_in_zone(zone)
+    fn remove_card(identifier: &str, zone: &mut Zone) -> Result<Card> {
+        if let Some(position) = zone
             .iter()
             .position(|x| x.identifier == identifier.to_uppercase())
-            .ok_or(InterfaceError::new(format!(
-                "Identifier not found {:?} for zone {:?} of player {:?}",
-                identifier, zone, self
-            )))
+        {
+            Ok(zone.remove(position))
+        } else {
+            InterfaceError::result(format!(
+                "Identifier not found {:?} for zone {:?}",
+                identifier, zone
+            ))
+        }
+    }
+
+    pub fn move_card(identifier: &str, from: &mut Zone, to: &mut Zone) -> Result<()> {
+        let removed = PlayerState::remove_card(identifier, from)?;
+        to.push(removed);
+        Ok(())
     }
 }
 
@@ -125,36 +119,14 @@ impl InterfaceState {
         self.enemy = other.enemy;
     }
 
-    pub fn move_card(
-        &mut self,
-        identifier: &str,
-        index: usize,
-        from: ZoneName,
-        to: ZoneName,
-        player: PlayerName,
-    ) -> Result<()> {
-        let player = self.player_mut(player);
-        if index <= player.cards_in_zone(to).len() {
-            let position = player.find_card_position(identifier, from)?;
-            let removed = player.cards_in_zone_mut(from).remove(position);
-            player.cards_in_zone_mut(to).insert(index, removed);
-            Ok(())
-        } else {
-            InterfaceError::result(format!(
-                "Position {:?} is outside range for player {:?} zone {:?}",
-                index, player, to
-            ))
-        }
-    }
-
-    fn player(&self, player: PlayerName) -> &PlayerState {
+    pub fn player(&self, player: PlayerName) -> &PlayerState {
         match player {
             PlayerName::Player => &self.player,
             PlayerName::Enemy => &self.enemy,
         }
     }
 
-    fn player_mut(&mut self, player: PlayerName) -> &mut PlayerState {
+    pub fn player_mut(&mut self, player: PlayerName) -> &mut PlayerState {
         match player {
             PlayerName::Player => &mut self.player,
             PlayerName::Enemy => &mut self.enemy,

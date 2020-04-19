@@ -35,7 +35,7 @@ impl InterfaceError {
         })
     }
 
-    pub fn result(message: String) -> Result<()> {
+    pub fn result<T>(message: String) -> Result<T> {
         Err(InterfaceError::new(message))
     }
 }
@@ -66,14 +66,6 @@ pub struct ManaValue(i32);
 pub enum PlayerName {
     Player,
     Enemy,
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
-pub enum ZoneName {
-    Hand,
-    Reserves,
-    Attackers,
-    Defenders,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
