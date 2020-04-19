@@ -24,6 +24,7 @@ use serde_json::{de, ser};
 mod card;
 mod primitives;
 mod render;
+mod rules;
 mod scenarios;
 mod state;
 mod unit;
