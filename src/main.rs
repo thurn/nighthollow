@@ -14,6 +14,7 @@
 
 #![deny(warnings)]
 #![allow(dead_code)]
+#![allow(unused_variables)]
 
 use std::fs::File;
 use std::io::BufReader;
@@ -22,6 +23,7 @@ use rustyline::Editor;
 use serde_json::{de, ser};
 
 mod card;
+mod combat;
 mod primitives;
 mod render;
 mod rules;

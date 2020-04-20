@@ -19,7 +19,7 @@ use serde::{Deserialize, Serialize};
 
 extern crate derive_more;
 
-use derive_more::{Add, Constructor, Display, From, Into};
+use derive_more::{Add, AddAssign, Constructor, Display, From, Into, Neg};
 
 pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
@@ -53,12 +53,36 @@ impl error::Error for InterfaceError {
 }
 
 #[derive(
-    Copy, Clone, From, Into, Serialize, Deserialize, Debug, Display, PartialEq, Constructor, Add,
+    Copy,
+    Clone,
+    From,
+    Into,
+    Serialize,
+    Deserialize,
+    Debug,
+    Display,
+    PartialEq,
+    Constructor,
+    Add,
+    AddAssign,
+    Neg,
 )]
 pub struct HealthValue(i32);
 
 #[derive(
-    Copy, Clone, From, Into, Serialize, Deserialize, Debug, Display, PartialEq, Constructor, Add,
+    Copy,
+    Clone,
+    From,
+    Into,
+    Serialize,
+    Deserialize,
+    Debug,
+    Display,
+    PartialEq,
+    Constructor,
+    Add,
+    AddAssign,
+    Neg,
 )]
 pub struct ManaValue(i32);
 

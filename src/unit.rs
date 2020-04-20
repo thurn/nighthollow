@@ -45,4 +45,8 @@ impl Unit {
             100.0 * i32::from(self.current_health) as f64 / i32::from(self.maximum_health) as f64
         )
     }
+
+    pub fn apply_health_change(&mut self, value: HealthValue) {
+        self.current_health += value
+    }
 }

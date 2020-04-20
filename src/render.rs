@@ -14,9 +14,10 @@
 
 use termion::{color, style};
 
-use crate::card::{Card, CardVariant};
-use crate::primitives::{CombatPosition, GamePhase, InterfaceError, PlayerName, Result};
 use crate::{
+    card::{Card, CardVariant},
+    combat,
+    primitives::{CombatPosition, GamePhase, InterfaceError, PlayerName, Result},
     scenarios,
     state::{Game, PlayerState, Zone},
 };
@@ -254,6 +255,7 @@ fn handle_advance_command(game: &mut Game) -> Result<()> {
                 }
             }
             GamePhase::PreCombat => {
+                combat::apply_combat(game);
                 game.state.phase = GamePhase::Main;
                 break;
             }
