@@ -17,6 +17,12 @@ use serde::{Deserialize, Serialize};
 use crate::primitives::{CombatPosition, HealthValue};
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct Hero {
+    pub current_health: HealthValue,
+    pub maximum_health: HealthValue,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub enum Attack {
     BasicAttack(HealthValue),
 }
@@ -47,6 +53,22 @@ impl Unit {
     }
 
     pub fn apply_health_change(&mut self, value: HealthValue) {
+        self.current_health += value
+    }
+}
+
+pub trait Attackable {
+    fn apply_health_change(&mut self, value: HealthValue);
+}
+
+impl Attackable for Unit {
+    fn apply_health_change(&mut self, value: HealthValue) {
+        self.current_health += value
+    }
+}
+
+impl Attackable for Hero {
+    fn apply_health_change(&mut self, value: HealthValue) {
         self.current_health += value
     }
 }

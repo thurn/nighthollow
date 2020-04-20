@@ -23,6 +23,15 @@ use crate::{
 };
 
 pub fn draw_interface_state(game: &Game) {
+    let enemy = game.enemy.hero.expect_hero();
+    println!(
+        "{}Enemy: {}/{}{}",
+        color::Fg(color::Red),
+        enemy.current_health,
+        enemy.maximum_health,
+        style::Reset
+    );
+
     if game.enemy.hand.len() > 0 {
         println!("{}{:═^80}{}", style::Bold, " Enemy Hand ", style::Reset);
         render_card_row(game.enemy.hand.iter().map(Some).collect(), true);
@@ -58,6 +67,15 @@ pub fn draw_interface_state(game: &Game) {
         render_card_row(game.user.hand.iter().map(Some).collect(), true);
     }
 
+    let user = game.user.hero.expect_hero();
+    println!(
+        "{}User: {}/{}{}",
+        color::Fg(color::Green),
+        user.current_health,
+        user.maximum_health,
+        style::Reset
+    );
+
     println!(
         "{}",
         match game.state.phase {
@@ -77,7 +95,7 @@ fn combatants_vector(player: &PlayerState, player_name: PlayerName) -> Vec<Optio
             if let Some(card) = player
                 .attackers
                 .iter()
-                .find(|c| c.unit().position.map_or(false, |p| i == p as usize))
+                .find(|c| c.expect_unit().position.map_or(false, |p| i == p as usize))
             {
                 Some(card)
             } else {
@@ -92,7 +110,7 @@ fn combatants_vector(player: &PlayerState, player_name: PlayerName) -> Vec<Optio
             if let Some(card) = player
                 .defenders
                 .iter()
-                .find(|c| c.unit().position.map_or(false, |p| i == p as usize))
+                .find(|c| c.expect_unit().position.map_or(false, |p| i == p as usize))
             {
                 Some(card)
             } else {
@@ -222,10 +240,7 @@ fn handle_move_command(command: String, from: &mut Zone, to: &mut Zone) -> Resul
         let position = CombatPosition::parse(position)?;
         match &mut card.variant {
             CardVariant::Unit(u) => Ok(u.position = Some(position)),
-            CardVariant::Spell => InterfaceError::result(format!(
-                "Expected a unit card, but {} is a spell card",
-                identifier
-            )),
+            _ => InterfaceError::result(format!("Expected a unit card, but got {}", identifier)),
         }?;
         PlayerState::move_card(identifier, from, to)
     } else if let [_, identifier] = *parts {

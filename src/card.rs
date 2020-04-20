@@ -18,8 +18,8 @@ use std::sync::atomic::{AtomicI32, Ordering};
 use serde::{Deserialize, Serialize};
 use termion::color;
 
-use crate::primitives::{CombatPosition, Influence, ManaValue, School};
-use crate::unit::Unit;
+use crate::primitives::{CombatPosition, HealthValue, Influence, ManaValue, School};
+use crate::unit::{Hero, Unit};
 
 static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
 
@@ -37,6 +37,7 @@ impl Display for ManaCost {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Cost {
+    None,
     ManaCost(ManaCost),
 }
 
@@ -52,6 +53,7 @@ impl Cost {
 impl Display for Cost {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
+            Cost::None => Ok(()),
             Cost::ManaCost(mana_cost) => write!(f, "{}", mana_cost),
         }
     }
@@ -92,13 +94,17 @@ impl ForegroundColor {
 pub enum CardVariant {
     Unit(Unit),
     Spell,
+    Hero(Hero),
+    Crystal,
 }
 
 impl CardVariant {
     pub fn display_status(&self) -> String {
         match self {
             CardVariant::Unit(unit) => unit.display_health(),
-            CardVariant::Spell => "".to_string(),
+            CardVariant::Spell => String::from("spell"),
+            CardVariant::Hero(_) => String::from("hero"),
+            CardVariant::Crystal => String::from("crystal"),
         }
     }
 }
@@ -114,6 +120,20 @@ pub struct Card {
 }
 
 impl Card {
+    pub fn default_hero() -> Card {
+        Card {
+            cost: Cost::None,
+            name: String::from("Hero"),
+            identifier: String::from("@"),
+            variant: CardVariant::Hero(Hero {
+                current_health: HealthValue::from(100),
+                maximum_health: HealthValue::from(100),
+            }),
+            fast: false,
+            foreground: ForegroundColor::Green,
+        }
+    }
+
     pub fn new_unit(
         name: &str,
         cost: Cost,
@@ -144,10 +164,31 @@ impl Card {
         }
     }
 
-    pub fn unit(&self) -> &Unit {
+    pub fn expect_unit(&self) -> &Unit {
         match &self.variant {
             CardVariant::Unit(u) => u,
-            CardVariant::Spell => panic!("Value was not a unit!"),
+            _ => panic!("Expected a unit card but got {:?}", self),
+        }
+    }
+
+    pub fn expect_unit_mut(&mut self) -> &mut Unit {
+        match &mut self.variant {
+            CardVariant::Unit(u) => u,
+            variant => panic!("Expected a unit card but got {:?}", variant),
+        }
+    }
+
+    pub fn expect_hero(&self) -> &Hero {
+        match &self.variant {
+            CardVariant::Hero(h) => h,
+            variant => panic!("Expected a hero card but got {:?}", variant),
+        }
+    }
+
+    pub fn expect_hero_mut(&mut self) -> &mut Hero {
+        match &mut self.variant {
+            CardVariant::Hero(h) => h,
+            variant => panic!("Expected a hero card but got {:?}", variant),
         }
     }
 }

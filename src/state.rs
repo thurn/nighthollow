@@ -16,7 +16,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     card::Card,
-    primitives::{GamePhase, InterfaceError, PlayerName, Result},
+    primitives::{GamePhase, Influence, InterfaceError, PlayerName, Result},
 };
 
 pub type Zone = Vec<Card>;
@@ -24,6 +24,8 @@ pub type Zone = Vec<Card>;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PlayerState {
     pub mana: i32,
+    pub influence: Influence,
+    pub hero: Card,
     pub hand: Zone,
     pub reserve: Zone,
     pub defenders: Zone,
@@ -31,14 +33,6 @@ pub struct PlayerState {
 }
 
 impl PlayerState {
-    fn reset(&mut self) {
-        self.mana = 0;
-        self.hand.clear();
-        self.reserve.clear();
-        self.defenders.clear();
-        self.attackers.clear();
-    }
-
     pub fn find_card<'a>(identifier: &str, zone: &'a mut Zone) -> &'a mut Card {
         zone.into_iter()
             .find(|x| x.identifier == identifier.to_uppercase())
@@ -70,6 +64,8 @@ impl Default for PlayerState {
     fn default() -> Self {
         PlayerState {
             mana: 0,
+            influence: Influence::default(),
+            hero: Card::default_hero(),
             hand: Vec::new(),
             reserve: Vec::new(),
             defenders: Vec::new(),
@@ -112,12 +108,6 @@ impl Default for Game {
 }
 
 impl Game {
-    pub fn reset(&mut self) {
-        self.state.reset();
-        self.user.reset();
-        self.enemy.reset();
-    }
-
     pub fn update(&mut self, other: Game) {
         self.state = other.state;
         self.user = other.user;
