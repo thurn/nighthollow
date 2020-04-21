@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{card::Card, unit::Unit};
-use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
+
+use serde::{Deserialize, Serialize};
+
+use crate::{model::Card, unit::Unit};
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone, PartialOrd, Ord)]
 pub enum Trigger {

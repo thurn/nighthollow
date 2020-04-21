@@ -15,24 +15,26 @@
 #![deny(warnings)]
 #![allow(dead_code)]
 #![allow(unused_variables)]
+#![allow(unused_imports)]
 
 use std::fs::File;
 use std::io::BufReader;
 
 use rustyline::Editor;
 use serde_json::{de, ser};
+use termion::{color, style};
 
-mod card;
 mod combat;
+mod commands;
+mod model;
 mod primitives;
 mod render;
 mod rules;
 mod scenarios;
-mod state;
 mod unit;
 
+use model::Game;
 use primitives::PlayerName;
-use state::Game;
 
 fn main() {
     let mut rl = Editor::<()>::new();
@@ -62,8 +64,14 @@ fn main() {
                 if line.starts_with('q') {
                     break;
                 } else {
-                    if let Err(e) = render::handle_command(line, &mut game, PlayerName::User) {
-                        render::print_error(format!("{}", e))
+                    if let Err(e) = commands::handle_command(&line, &mut game, PlayerName::User) {
+                        eprintln!(
+                            "{}{}ERROR: {}{}",
+                            style::Bold,
+                            color::Fg(color::Red),
+                            e,
+                            style::Reset
+                        );
                     }
                 }
             }

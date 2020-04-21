@@ -12,57 +12,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{
-    card::{Card, CardVariant},
-    state::{Game, PlayerState},
-    unit::{Attack, Attackable, Unit},
+use crate::model::{
+    Attack, Attackable, AttackerMut, Card, CardVariant, Creature, CreatureState, Game, Player,
 };
 
 pub fn apply_combat(game: &mut Game) {
-    for attacker in &mut game.user.attackers {
-        apply_combat_for_card(attacker, &mut game.enemy)
+    for attacker in game.user.attackers_mut() {
+        apply_combat_for_attacker(attacker, &mut game.enemy);
     }
 
-    for attacker in &mut game.enemy.attackers {
-        apply_combat_for_card(attacker, &mut game.user)
+    for attacker in game.enemy.attackers_mut() {
+        apply_combat_for_attacker(attacker, &mut game.user);
     }
 
-    game.user.reserve.extend(game.user.attackers.drain(..));
-    game.user.reserve.extend(game.user.defenders.drain(..));
-    game.enemy.reserve.extend(game.enemy.attackers.drain(..));
-    game.enemy.reserve.extend(game.enemy.defenders.drain(..));
+    game.user
+        .creatures
+        .iter_mut()
+        .for_each(|c| c.state = CreatureState::Default);
+    game.enemy
+        .creatures
+        .iter_mut()
+        .for_each(|c| c.state = CreatureState::Default);
 }
 
-fn apply_combat_for_card(card: &mut Card, defending_player: &mut PlayerState) {
-    if let CardVariant::Unit(Unit {
-        position: Some(p1), ..
-    }) = card.variant
+fn apply_combat_for_attacker((attacker, position): AttackerMut, defending_player: &mut Player) {
+    if let Some((defender, _)) = defending_player
+        .defenders_mut()
+        .find(|(_, p)| position == *p)
     {
-        let attacker = card.expect_unit_mut();
-        let defenders = &mut defending_player.defenders;
-        if let Some(defender) = defenders.into_iter().find(|c| match c.variant {
-            CardVariant::Unit(Unit {
-                position: Some(p2), ..
-            }) => p1 == p2,
-            _ => false,
-        }) {
-            let defender = defender.expect_unit_mut();
-            for attack in &attacker.attacks {
-                apply_attack(attack, defender)
-            }
-            for attack in &defender.attacks {
-                apply_attack(attack, attacker)
-            }
-        } else {
-            for attack in &attacker.attacks {
-                apply_attack(attack, defending_player.hero.expect_hero_mut())
-            }
+        for attack in &attacker.attacks {
+            apply_attack(attack, defender)
         }
-    } else {
-        panic!(
-            "Expected an attacker with a combat position but got {:?}",
-            card
-        );
+        for attack in &defender.attacks {
+            apply_attack(attack, attacker)
+        }
+        return;
+    }
+
+    for attack in &attacker.attacks {
+        apply_attack(attack, &mut defending_player.status)
     }
 }
 

@@ -122,7 +122,11 @@ pub enum CombatPosition {
 
 impl CombatPosition {
     pub fn parse(input: &str) -> Result<CombatPosition> {
-        match input.parse::<i32>()? {
+        CombatPosition::from(input.parse::<i32>()?)
+    }
+
+    pub fn from(input: i32) -> Result<CombatPosition> {
+        match input {
             0 => Ok(CombatPosition::Position0),
             1 => Ok(CombatPosition::Position1),
             2 => Ok(CombatPosition::Position2),
