@@ -14,8 +14,8 @@
 
 use crate::{
     model::{
-        Attack, Card, CardVariant, Cost, Creature, CreatureState, Game, GameStatus, ManaCost,
-        Player, PlayerStatus,
+        Attack, Card, CardVariant, Cost, Creature, CreatureState, Crystal, Game, GameStatus,
+        ManaCost, Player, PlayerStatus,
     },
     primitives::{
         CombatPosition, GamePhase, HealthValue, Influence, InterfaceError, ManaValue, Result,
@@ -103,8 +103,28 @@ fn treant(state: CreatureState) -> Creature {
     }
 }
 
+fn flame_crystal() -> Crystal {
+    Crystal {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Flame Crystal"),
+            cost: Cost::None,
+            school: School::Flame,
+        },
+        mana_per_turn: ManaValue::from(100),
+        influence_per_turn: Influence {
+            flame: 2,
+            ..Influence::default()
+        },
+    }
+}
+
 fn in_hand(function: &impl Fn(CreatureState) -> Creature) -> CardVariant {
     CardVariant::Creature(function(CreatureState::Default))
+}
+
+fn mana_in_hand(function: &impl Fn() -> Crystal) -> CardVariant {
+    CardVariant::Crystal(function())
 }
 
 fn in_play(function: &impl Fn(CreatureState) -> Creature) -> Creature {
@@ -131,11 +151,39 @@ fn opening_hands(game: &mut Game) {
                 phase: GamePhase::Main,
             },
             user: Player {
-                hand: vec![in_hand(&demon_wolf), in_hand(&cyclops), in_hand(&metalon)],
+                status: PlayerStatus {
+                    mana: ManaValue::from(300),
+                    influence: Influence {
+                        flame: 6,
+                        ..Influence::default()
+                    },
+                    ..PlayerStatus::default()
+                },
+                hand: vec![
+                    in_hand(&demon_wolf),
+                    in_hand(&cyclops),
+                    in_hand(&metalon),
+                    mana_in_hand(&flame_crystal),
+                ],
+                crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
                 ..Player::default()
             },
             enemy: Player {
-                hand: vec![in_hand(&demon_wolf), in_hand(&cyclops), in_hand(&metalon)],
+                status: PlayerStatus {
+                    mana: ManaValue::from(300),
+                    influence: Influence {
+                        flame: 6,
+                        ..Influence::default()
+                    },
+                    ..PlayerStatus::default()
+                },
+                hand: vec![
+                    in_hand(&demon_wolf),
+                    in_hand(&cyclops),
+                    in_hand(&metalon),
+                    mana_in_hand(&flame_crystal),
+                ],
+                crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
                 ..Player::default()
             },
         },
@@ -150,17 +198,39 @@ fn combat(game: &mut Game) {
                 phase: GamePhase::PreCombat,
             },
             user: Player {
-                hand: vec![in_hand(&metalon)],
+                status: PlayerStatus {
+                    mana: ManaValue::from(300),
+                    influence: Influence {
+                        flame: 6,
+                        ..Influence::default()
+                    },
+                    ..PlayerStatus::default()
+                },
+                hand: vec![in_hand(&metalon), mana_in_hand(&flame_crystal)],
                 creatures: vec![
                     in_play(&demon_wolf),
                     attacker(0, &cyclops),
                     defender(0, &treant),
                 ],
+                crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
                 ..Player::default()
             },
             enemy: Player {
-                hand: vec![in_hand(&treant), in_hand(&cyclops)],
+                status: PlayerStatus {
+                    mana: ManaValue::from(300),
+                    influence: Influence {
+                        flame: 6,
+                        ..Influence::default()
+                    },
+                    ..PlayerStatus::default()
+                },
+                hand: vec![
+                    in_hand(&treant),
+                    in_hand(&cyclops),
+                    mana_in_hand(&flame_crystal),
+                ],
                 creatures: vec![attacker(0, &demon_wolf), defender(0, &metalon)],
+                crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
                 ..Player::default()
             },
         },

@@ -24,17 +24,11 @@ use std::{
 
 use crate::{
     model::{Card, CardVariant, Creature, CreatureState, Game, Player},
-    primitives::{GamePhase, PlayerName},
+    primitives::{self, GamePhase, ManaValue, PlayerName},
 };
 
 pub fn draw_interface_state(game: &Game) {
-    println!(
-        "{}Enemy: {}/{}{}",
-        color::Fg(color::Red),
-        game.enemy.status.current_health,
-        game.enemy.status.maximum_health,
-        style::Reset
-    );
+    print_player_status(&game.enemy, "Enemy");
 
     if game.enemy.hand.len() > 0 {
         println!("{}{:═^80}{}", style::Bold, " Enemy Hand ", style::Reset);
@@ -71,13 +65,7 @@ pub fn draw_interface_state(game: &Game) {
         render_card_row(game.user.hand.iter().map(Some).collect(), true);
     }
 
-    println!(
-        "{}User: {}/{}{}",
-        color::Fg(color::Red),
-        game.user.status.current_health,
-        game.user.status.maximum_health,
-        style::Reset
-    );
+    print_player_status(&game.user, "User");
 
     println!(
         "{}",
@@ -254,4 +242,52 @@ fn render_status(card: &impl CardRowElement) -> String {
         ),
         _ => String::from(""),
     }
+}
+
+fn print_player_status(player: &Player, name: &str) {
+    let status = &player.status;
+    let health = format!(
+        "Health: {}/{}",
+        status.current_health, status.maximum_health
+    );
+
+    let mana = format!(
+        "Mana: {}/{}",
+        status.mana,
+        player
+            .crystals
+            .iter()
+            .map(|c| c.mana_per_turn)
+            .into_iter()
+            .sum::<ManaValue>()
+    );
+
+    let mut influence = String::from("Influence: ");
+    for school in primitives::SCHOOLS.iter() {
+        let max = player
+            .crystals
+            .iter()
+            .map(|c| c.influence_per_turn.value(school))
+            .sum::<i32>();
+        if max > 0 {
+            influence.push_str(&format!(
+                "{current}/{max}{abbreviation} ",
+                current = player.status.influence.value(school),
+                max = max,
+                abbreviation = school.abbreviation()
+            ));
+        }
+    }
+
+    println!(
+        "{name}:  {green}{health}  {blue}{mana}  {magenta}{influence}{reset}",
+        name = name,
+        green = color::Fg(color::Green),
+        health = health,
+        blue = color::Fg(color::Blue),
+        mana = mana,
+        influence = influence,
+        magenta = color::Fg(color::Magenta),
+        reset = style::Reset
+    );
 }

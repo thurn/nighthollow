@@ -311,4 +311,6 @@ pub struct Structure {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Crystal {
     pub card: Card,
+    pub mana_per_turn: ManaValue,
+    pub influence_per_turn: Influence,
 }

@@ -24,6 +24,9 @@ use rustyline::Editor;
 use serde_json::{de, ser};
 use termion::{color, style};
 
+#[macro_use]
+extern crate lazy_static;
+
 mod combat;
 mod commands;
 mod model;

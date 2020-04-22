@@ -19,7 +19,7 @@ use serde::{Deserialize, Serialize};
 
 extern crate derive_more;
 
-use derive_more::{Add, AddAssign, Constructor, Display, From, Into, Neg};
+use derive_more::{Add, AddAssign, Constructor, Display, From, Into, Neg, Sum};
 
 pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
@@ -66,6 +66,7 @@ impl error::Error for InterfaceError {
     Add,
     AddAssign,
     Neg,
+    Sum,
 )]
 pub struct HealthValue(i32);
 
@@ -83,6 +84,7 @@ pub struct HealthValue(i32);
     Add,
     AddAssign,
     Neg,
+    Sum,
 )]
 pub struct ManaValue(i32);
 
@@ -95,6 +97,17 @@ pub enum GamePhase {
     End,
 }
 
+lazy_static! {
+    pub static ref SCHOOLS: Vec<School> = vec![
+        School::Light,
+        School::Sky,
+        School::Flame,
+        School::Ice,
+        School::Earth,
+        School::Shadow
+    ];
+}
+
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum School {
     Light,
@@ -103,6 +116,19 @@ pub enum School {
     Ice,
     Earth,
     Shadow,
+}
+
+impl School {
+    pub fn abbreviation(&self) -> &str {
+        match self {
+            School::Light => "L",
+            School::Sky => "S",
+            School::Flame => "F",
+            School::Ice => "I",
+            School::Earth => "E",
+            School::Shadow => "D",
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
@@ -142,12 +168,12 @@ impl CombatPosition {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Influence {
-    light: i32,
-    sky: i32,
-    flame: i32,
-    ice: i32,
-    earth: i32,
-    shadow: i32,
+    pub light: i32,
+    pub sky: i32,
+    pub flame: i32,
+    pub ice: i32,
+    pub earth: i32,
+    pub shadow: i32,
 }
 
 impl Influence {
@@ -162,7 +188,7 @@ impl Influence {
         }
     }
 
-    pub fn get(&self, school: School) -> i32 {
+    pub fn value(&self, school: &School) -> i32 {
         match school {
             School::Light => self.light,
             School::Sky => self.sky,
@@ -189,23 +215,10 @@ impl Default for Influence {
 
 impl std::fmt::Display for Influence {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if self.light > 0 {
-            write!(f, "{}L", self.light)?
-        }
-        if self.sky > 0 {
-            write!(f, "{}S", self.sky)?
-        }
-        if self.flame > 0 {
-            write!(f, "{}F", self.flame)?
-        }
-        if self.ice > 0 {
-            write!(f, "{}I", self.ice)?
-        }
-        if self.earth > 0 {
-            write!(f, "{}E", self.earth)?
-        }
-        if self.shadow > 0 {
-            write!(f, "{}D", self.shadow)?
+        for school in SCHOOLS.iter() {
+            if self.value(school) > 0 {
+                write!(f, "{}{}", self.value(school), school.abbreviation())?;
+            }
         }
         Ok(())
     }
