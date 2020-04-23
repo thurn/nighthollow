@@ -21,7 +21,7 @@ use crate::primitives::{
     Result, School,
 };
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Game {
     pub status: GameStatus,
     pub user: Player,
@@ -56,14 +56,30 @@ impl Default for Game {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GameStatus {
     pub phase: GamePhase,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Deck {
+    pub cards: Vec<CardVariant>,
+    pub weights: Vec<i32>,
+}
+
+impl Default for Deck {
+    fn default() -> Self {
+        Deck {
+            cards: vec![],
+            weights: vec![],
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Player {
     pub status: PlayerStatus,
+    pub deck: Deck,
     pub hand: Vec<CardVariant>,
     pub creatures: Vec<Creature>,
     pub crystals: Vec<Crystal>,
@@ -142,6 +158,7 @@ impl Default for Player {
     fn default() -> Self {
         Player {
             status: PlayerStatus::default(),
+            deck: Deck::default(),
             hand: vec![],
             creatures: vec![],
             crystals: vec![],
@@ -151,7 +168,7 @@ impl Default for Player {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayerStatus {
     pub mana: ManaValue,
     pub influence: Influence,
@@ -170,7 +187,7 @@ impl Default for PlayerStatus {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum CardVariant {
     Creature(Creature),
     Spell(Spell),
@@ -202,7 +219,7 @@ impl CardVariant {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Card {
     pub id: String,
     pub cost: Cost,
@@ -210,7 +227,7 @@ pub struct Card {
     pub school: School,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Cost {
     None,
     ManaCost(ManaCost),
@@ -225,7 +242,7 @@ impl Display for Cost {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ManaCost {
     pub mana: ManaValue,
     pub influence: Influence,
@@ -237,14 +254,14 @@ impl Display for ManaCost {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Target {
     None,
     EnemyCreature(String),
     UserCreature(String),
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Creature {
     pub card: Card,
     pub state: CreatureState,
@@ -269,7 +286,7 @@ impl Attackable for Creature {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum CreatureState {
     Default, // Can be in play, in hand, or in discard
     Stunned,
@@ -277,7 +294,7 @@ pub enum CreatureState {
     Defending(CombatPosition),
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Attack {
     BasicAttack(HealthValue),
 }
@@ -288,17 +305,17 @@ impl Derek for Structure {}
 
 impl Derek for Crystal {}
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Spell {
     pub card: Card,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Structure {
     pub card: Card,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Crystal {
     pub card: Card,
     pub mana_per_turn: ManaValue,

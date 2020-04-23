@@ -174,7 +174,7 @@ impl CombatPosition {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]
 pub struct Influence {
     pub light: i32,
     pub sky: i32,

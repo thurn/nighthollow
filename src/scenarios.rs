@@ -14,7 +14,7 @@
 
 use crate::{
     model::{
-        Attack, Card, CardVariant, Cost, Creature, CreatureState, Crystal, Game, GameStatus,
+        Attack, Card, CardVariant, Cost, Creature, CreatureState, Crystal, Deck, Game, GameStatus,
         ManaCost, Player, PlayerStatus,
     },
     primitives::{
@@ -119,11 +119,11 @@ fn flame_crystal() -> Crystal {
     }
 }
 
-fn in_hand(function: &impl Fn(CreatureState) -> Creature) -> CardVariant {
+fn creature_card(function: &impl Fn(CreatureState) -> Creature) -> CardVariant {
     CardVariant::Creature(function(CreatureState::Default))
 }
 
-fn mana_in_hand(function: &impl Fn() -> Crystal) -> CardVariant {
+fn crystal_card(function: &impl Fn() -> Crystal) -> CardVariant {
     CardVariant::Crystal(function())
 }
 
@@ -143,6 +143,19 @@ fn defender(position: i32, function: &impl Fn(CreatureState) -> Creature) -> Cre
     ))
 }
 
+fn deck() -> Deck {
+    Deck {
+        cards: vec![
+            creature_card(&demon_wolf),
+            creature_card(&cyclops),
+            creature_card(&metalon),
+            creature_card(&treant),
+            crystal_card(&flame_crystal),
+        ],
+        weights: vec![4000; 5],
+    }
+}
+
 fn opening_hands(game: &mut Game) {
     std::mem::replace(
         game,
@@ -159,11 +172,12 @@ fn opening_hands(game: &mut Game) {
                     },
                     ..PlayerStatus::default()
                 },
+                deck: deck(),
                 hand: vec![
-                    in_hand(&demon_wolf),
-                    in_hand(&cyclops),
-                    in_hand(&metalon),
-                    mana_in_hand(&flame_crystal),
+                    creature_card(&demon_wolf),
+                    creature_card(&cyclops),
+                    creature_card(&metalon),
+                    crystal_card(&flame_crystal),
                 ],
                 crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
                 ..Player::default()
@@ -177,11 +191,12 @@ fn opening_hands(game: &mut Game) {
                     },
                     ..PlayerStatus::default()
                 },
+                deck: deck(),
                 hand: vec![
-                    in_hand(&demon_wolf),
-                    in_hand(&cyclops),
-                    in_hand(&metalon),
-                    mana_in_hand(&flame_crystal),
+                    creature_card(&demon_wolf),
+                    creature_card(&cyclops),
+                    creature_card(&metalon),
+                    crystal_card(&flame_crystal),
                 ],
                 crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
                 ..Player::default()
@@ -206,7 +221,8 @@ fn combat(game: &mut Game) {
                     },
                     ..PlayerStatus::default()
                 },
-                hand: vec![in_hand(&metalon), mana_in_hand(&flame_crystal)],
+                deck: deck(),
+                hand: vec![creature_card(&metalon), crystal_card(&flame_crystal)],
                 creatures: vec![
                     in_play(&demon_wolf),
                     attacker(0, &cyclops),
@@ -224,10 +240,11 @@ fn combat(game: &mut Game) {
                     },
                     ..PlayerStatus::default()
                 },
+                deck: deck(),
                 hand: vec![
-                    in_hand(&treant),
-                    in_hand(&cyclops),
-                    mana_in_hand(&flame_crystal),
+                    creature_card(&treant),
+                    creature_card(&cyclops),
+                    crystal_card(&flame_crystal),
                 ],
                 creatures: vec![attacker(0, &demon_wolf), defender(0, &metalon)],
                 crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],

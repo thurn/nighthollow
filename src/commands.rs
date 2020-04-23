@@ -76,55 +76,14 @@ fn advance_game(game: &mut Game) -> Result<()> {
             game.status.phase = GamePhase::End;
         }
         GamePhase::End => {
+            zones::draw_card(&mut game.user)?;
+            zones::draw_card(&mut game.enemy)?;
             game.status.phase = GamePhase::Attackers;
         }
     }
 
     Ok(())
 }
-
-// fn handle_advance_command(game: &mut Game) -> Result<()> {
-//     let has_fast_effect = game.user.hand.iter().any(|x| x.fast);
-//     loop {
-//         match game.state.phase {
-//             GamePhase::Attackers => {
-//                 game.state.phase = GamePhase::Defenders;
-//                 if game.enemy.attackers.len() > 0 || has_fast_effect {
-//                     break;
-//                 }
-//             }
-//             GamePhase::Defenders => {
-//                 game.state.phase = GamePhase::PreCombat;
-//                 if has_fast_effect {
-//                     break;
-//                 }
-//             }
-//             GamePhase::PreCombat => {
-//                 combat::apply_combat(game);
-//                 game.state.phase = GamePhase::Main;
-//                 break;
-//             }
-//             GamePhase::Main => {
-//                 game.state.phase = GamePhase::End;
-//                 if has_fast_effect {
-//                     break;
-//                 }
-//             }
-//             GamePhase::End => {
-//                 game.state.phase = GamePhase::Attackers;
-//                 if game.user.reserve.len() > 0 || has_fast_effect {
-//                     break;
-//                 }
-//             }
-//         }
-
-//         if !game.state.auto_advance {
-//             break;
-//         }
-//     }
-
-//     Ok(())
-// }
 
 fn print_help() {
     println!(

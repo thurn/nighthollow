@@ -12,10 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::cmp;
+
+use rand::{
+    distributions::{Distribution, WeightedIndex},
+    prelude::thread_rng,
+};
+
 use crate::{
     model::{Card, CardVariant, Cost, Creature, Derek, ManaCost, Player, Spell, Target},
     primitives::{InterfaceError, Result},
 };
+
+pub fn draw_card(player: &mut Player) -> Result<()> {
+    let distribution = WeightedIndex::new(&player.deck.weights)?;
+    let mut rng = thread_rng();
+    let index = distribution.sample(&mut rng);
+    let card = player.deck.cards[index].clone();
+    player.hand.push(card);
+    let weight = player.deck.weights[index];
+    player.deck.weights[index] = match weight {
+        // Linear descent for the first 4 draws, then halves
+        4000 => 3000,
+        3000 => 2000,
+        2000 => 1000,
+        _ => cmp::max(1, weight / 2),
+    };
+    Ok(())
+}
 
 pub fn play_card(player: &mut Player, card_id: &str, target: &Target) -> Result<()> {
     if !can_pay_cost(player, card_id)? {
