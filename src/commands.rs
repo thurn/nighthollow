@@ -14,9 +14,9 @@
 
 use crate::{
     combat,
-    model::{CreatureState, Game},
+    model::{CreatureState, Game, Target},
     primitives::{CombatPosition, GamePhase, InterfaceError, PlayerName, Result},
-    scenarios,
+    scenarios, zones,
 };
 
 pub fn handle_command(command: &str, game: &mut Game, player_name: PlayerName) -> Result<()> {
@@ -27,19 +27,17 @@ pub fn handle_command(command: &str, game: &mut Game, player_name: PlayerName) -
         print_help();
         Ok(())
     } else if command.starts_with('p') && phase == GamePhase::Main {
-        player.play_permanent(&arg(&command, 1)?.to_uppercase())
+        zones::play_card(player, &arg(&command, 1)?.to_uppercase(), &Target::None)
     } else if command.starts_with('a') && phase == GamePhase::Attackers {
         let position = CombatPosition::parse(arg(&command, 2)?)?;
-        player.set_creature_state(
-            &arg(&command, 1)?.to_uppercase(),
-            CreatureState::Attacking(position),
-        )
+        let index = player.find_creature(&arg(&command, 1)?.to_uppercase())?;
+        player.creatures[index].state = CreatureState::Attacking(position);
+        Ok(())
     } else if command.starts_with('d') && phase == GamePhase::Defenders {
         let position = CombatPosition::parse(arg(&command, 2)?)?;
-        player.set_creature_state(
-            &arg(&command, 1)?.to_uppercase(),
-            CreatureState::Defending(position),
-        )
+        let index = player.find_creature(&arg(&command, 1)?.to_uppercase())?;
+        player.creatures[index].state = CreatureState::Defending(position);
+        Ok(())
     } else if command.starts_with('e') {
         let index = command.find(' ').ok_or(InterfaceError::new(format!(
             "Expected arguments: {}",

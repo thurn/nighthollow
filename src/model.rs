@@ -117,35 +117,24 @@ impl Player {
             .filter(|c| matches!(c.state, CreatureState::Default | CreatureState::Stunned))
     }
 
-    pub fn play_permanent(&mut self, identifier: &str) -> Result<()> {
-        let card_position = self
-            .hand
+    pub fn find_card_in_hand(&self, identifier: &str) -> Result<usize> {
+        self.hand
             .iter()
-            .position(|c| match c {
-                CardVariant::Spell(_) => false,
-                _ => c.card().id == identifier,
-            })
+            .position(|c| c.card().id == identifier)
             .ok_or(InterfaceError::new(format!(
-                "Permanent card not found with ID {}",
+                "Card with identifier {} not found",
                 identifier
-            )))?;
-        let card = self.hand.remove(card_position);
-        match card {
-            CardVariant::Creature(c) => Ok(self.creatures.push(c)),
-            CardVariant::Crystal(c) => Ok(self.crystals.push(c)),
-            CardVariant::Structure(s) => Ok(self.structures.push(s)),
-            CardVariant::Spell(s) => panic!("Value cannot be a spell here"),
-        }
+            )))
     }
 
-    pub fn set_creature_state(&mut self, identifier: &str, state: CreatureState) -> Result<()> {
+    pub fn find_creature(&self, identifier: &str) -> Result<usize> {
         self.creatures
-            .iter_mut()
-            .find(|x| x.card.id == identifier)
-            .map_or(
-                InterfaceError::result(format!("Creature not found: {}", identifier)),
-                |c| Ok(c.state = state),
-            )
+            .iter()
+            .position(|c| c.card.id == identifier)
+            .ok_or(InterfaceError::new(format!(
+                "Creature with identifier {} not found",
+                identifier
+            )))
     }
 }
 
@@ -207,6 +196,10 @@ impl CardVariant {
             CardVariant::Crystal(c) => &mut c.card,
         }
     }
+
+    pub fn is_permanent(&self) -> bool {
+        !matches!(self, CardVariant::Spell(_))
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -245,28 +238,19 @@ impl Display for ManaCost {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub enum Target {
+    None,
+    EnemyCreature(String),
+    UserCreature(String),
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Creature {
     pub card: Card,
     pub state: CreatureState,
     pub current_health: HealthValue,
     pub maximum_health: HealthValue,
     pub attacks: Vec<Attack>,
-}
-
-impl Creature {
-    pub fn expect_attacking(&self) -> CombatPosition {
-        match self.state {
-            CreatureState::Attacking(p) => p,
-            _ => panic!("Expected an attacking creature but got {:?}", self),
-        }
-    }
-
-    pub fn expect_defending(&self) -> CombatPosition {
-        match self.state {
-            CreatureState::Defending(p) => p,
-            _ => panic!("Expected a defending creature but got {:?}", self),
-        }
-    }
 }
 
 pub trait Attackable {
@@ -297,6 +281,12 @@ pub enum CreatureState {
 pub enum Attack {
     BasicAttack(HealthValue),
 }
+
+pub trait Derek {}
+
+impl Derek for Structure {}
+
+impl Derek for Crystal {}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Spell {

@@ -48,7 +48,7 @@ fn demon_wolf(state: CreatureState) -> Creature {
         card: Card {
             id: next_identifier(),
             name: String::from("Demon Wolf"),
-            cost: mana_cost(School::Flame, ManaValue::new(2), 1),
+            cost: mana_cost(School::Flame, ManaValue::new(200), 1),
             school: School::Flame,
         },
         state,
@@ -63,7 +63,7 @@ fn cyclops(state: CreatureState) -> Creature {
         card: Card {
             id: next_identifier(),
             name: String::from("Cyclops"),
-            cost: mana_cost(School::Flame, ManaValue::new(4), 2),
+            cost: mana_cost(School::Flame, ManaValue::new(400), 2),
             school: School::Flame,
         },
         state,
@@ -78,7 +78,7 @@ fn metalon(state: CreatureState) -> Creature {
         card: Card {
             id: next_identifier(),
             name: String::from("Metalon"),
-            cost: mana_cost(School::Flame, ManaValue::new(3), 1),
+            cost: mana_cost(School::Flame, ManaValue::new(100), 1),
             school: School::Flame,
         },
         state,
@@ -93,7 +93,7 @@ fn treant(state: CreatureState) -> Creature {
         card: Card {
             id: next_identifier(),
             name: String::from("Treant"),
-            cost: mana_cost(School::Flame, ManaValue::new(1), 1),
+            cost: mana_cost(School::Flame, ManaValue::new(50), 1),
             school: School::Flame,
         },
         state,

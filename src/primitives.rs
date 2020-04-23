@@ -19,7 +19,7 @@ use serde::{Deserialize, Serialize};
 
 extern crate derive_more;
 
-use derive_more::{Add, AddAssign, Constructor, Display, From, Into, Neg, Sum};
+use derive_more::{Add, AddAssign, Constructor, Display, From, Into, Neg, Sub, SubAssign, Sum};
 
 pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
@@ -61,10 +61,14 @@ impl error::Error for InterfaceError {
     Deserialize,
     Debug,
     Display,
+    Eq,
     PartialEq,
+    Ord,
+    PartialOrd,
     Constructor,
     Add,
     AddAssign,
+    SubAssign,
     Neg,
     Sum,
 )]
@@ -79,10 +83,14 @@ pub struct HealthValue(i32);
     Deserialize,
     Debug,
     Display,
+    Eq,
     PartialEq,
+    Ord,
+    PartialOrd,
     Constructor,
     Add,
     AddAssign,
+    SubAssign,
     Neg,
     Sum,
 )]
@@ -166,7 +174,7 @@ impl CombatPosition {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq)]
 pub struct Influence {
     pub light: i32,
     pub sky: i32,
@@ -197,6 +205,24 @@ impl Influence {
             School::Earth => self.earth,
             School::Shadow => self.shadow,
         }
+    }
+
+    pub fn add(&mut self, other: &Influence) {
+        self.light += other.light;
+        self.sky += other.sky;
+        self.flame += other.flame;
+        self.ice += other.ice;
+        self.earth += other.earth;
+        self.shadow += other.shadow;
+    }
+
+    pub fn subtract(&mut self, other: &Influence) {
+        self.light -= other.light;
+        self.sky -= other.sky;
+        self.flame -= other.flame;
+        self.ice -= other.ice;
+        self.earth -= other.earth;
+        self.shadow -= other.shadow;
     }
 }
 

@@ -35,6 +35,7 @@ mod render;
 mod rules;
 mod scenarios;
 mod unit;
+mod zones;
 
 use model::Game;
 use primitives::PlayerName;
