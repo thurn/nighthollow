@@ -21,7 +21,7 @@ use rand::{
 
 use crate::{
     model::{Card, CardVariant, Cost, Creature, Derek, ManaCost, Player, Spell, Target},
-    primitives::{InterfaceError, Result},
+    primitives::{Influence, InterfaceError, ManaValue, Result},
 };
 
 pub fn draw_card(player: &mut Player) -> Result<()> {
@@ -87,4 +87,14 @@ fn pay_costs(player: &mut Player, card_id: &str) -> Result<()> {
 
 fn resolve_spell(player: &mut Player, spell: Spell) {
     todo!("Implement this");
+}
+
+pub fn upkeep_mana(player: &mut Player) {
+    player.status.mana = ManaValue::from(0);
+    player.status.influence = Influence::default();
+
+    for crystal in player.crystals.iter() {
+        player.status.mana += crystal.mana_per_turn;
+        player.status.influence.add(&crystal.influence_per_turn);
+    }
 }

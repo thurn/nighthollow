@@ -76,8 +76,10 @@ fn advance_game(game: &mut Game) -> Result<()> {
             game.status.phase = GamePhase::End;
         }
         GamePhase::End => {
-            gameplay::draw_card(&mut game.user)?;
-            gameplay::draw_card(&mut game.enemy)?;
+            for player in vec![&mut game.user, &mut game.enemy] {
+                gameplay::draw_card(player)?;
+                gameplay::upkeep_mana(player);
+            }
             game.status.phase = GamePhase::Attackers;
         }
     }
