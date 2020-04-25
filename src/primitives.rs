@@ -249,3 +249,12 @@ impl std::fmt::Display for Influence {
         Ok(())
     }
 }
+
+#[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]
+pub struct Damage {
+    physical: i32,
+    fire: i32,
+    cold: i32,
+    lightning: i32,
+    necrotic: i32,
+}
