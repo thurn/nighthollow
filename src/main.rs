@@ -27,13 +27,14 @@ use termion::{color, style};
 #[macro_use]
 extern crate lazy_static;
 
+mod attributes;
 mod combat;
 mod commands;
+mod effects;
 mod gameplay;
 mod model;
 mod primitives;
 mod render;
-mod rules;
 mod scenarios;
 mod unit;
 

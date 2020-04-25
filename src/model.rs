@@ -16,9 +16,13 @@ use std::fmt::{Display, Formatter};
 
 use serde::{Deserialize, Serialize};
 
-use crate::primitives::{
-    CombatPosition, GamePhase, HealthValue, Influence, InterfaceError, ManaValue, PlayerName,
-    Result, School,
+use crate::{
+    attributes::Attribute,
+    effects::{Effect, Trigger},
+    primitives::{
+        CombatPosition, GamePhase, HealthValue, Influence, InterfaceError, ManaValue, PlayerName,
+        Result, School,
+    },
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -262,12 +266,28 @@ pub enum Target {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Abilities {
+    pub attributes: Vec<Attribute>,
+    pub triggers: Vec<Trigger>,
+}
+
+impl Default for Abilities {
+    fn default() -> Abilities {
+        Abilities {
+            attributes: vec![],
+            triggers: vec![],
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Creature {
     pub card: Card,
     pub state: CreatureState,
     pub current_health: HealthValue,
     pub maximum_health: HealthValue,
     pub attack: Attack,
+    pub abilities: Abilities,
 }
 
 pub trait Attackable {
@@ -299,15 +319,10 @@ pub enum Attack {
     BasicAttack(HealthValue),
 }
 
-pub trait Derek {}
-
-impl Derek for Structure {}
-
-impl Derek for Crystal {}
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Spell {
     pub card: Card,
+    pub effects: Vec<Effect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

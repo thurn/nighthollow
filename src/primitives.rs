@@ -252,9 +252,58 @@ impl std::fmt::Display for Influence {
 
 #[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]
 pub struct Damage {
-    physical: i32,
-    fire: i32,
-    cold: i32,
-    lightning: i32,
-    necrotic: i32,
+    pub physical: i32,
+    pub fire: i32,
+    pub cold: i32,
+    pub lightning: i32,
+    pub necrotic: i32,
+}
+
+impl Default for Damage {
+    fn default() -> Self {
+        Damage {
+            physical: 0,
+            fire: 0,
+            cold: 0,
+            lightning: 0,
+            necrotic: 0,
+        }
+    }
+}
+
+impl Damage {
+    pub fn physical(i: i32) -> Damage {
+        Damage {
+            physical: i,
+            ..Damage::default()
+        }
+    }
+
+    pub fn fire(i: i32) -> Damage {
+        Damage {
+            fire: i,
+            ..Damage::default()
+        }
+    }
+
+    pub fn cold(i: i32) -> Damage {
+        Damage {
+            cold: i,
+            ..Damage::default()
+        }
+    }
+
+    pub fn lightning(i: i32) -> Damage {
+        Damage {
+            lightning: i,
+            ..Damage::default()
+        }
+    }
+
+    pub fn necrotic(i: i32) -> Damage {
+        Damage {
+            necrotic: i,
+            ..Damage::default()
+        }
+    }
 }

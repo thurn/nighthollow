@@ -20,7 +20,7 @@ use rand::{
 };
 
 use crate::{
-    model::{Card, CardVariant, Cost, Creature, Derek, ManaCost, Player, Spell, Target},
+    model::{Card, CardVariant, Cost, Creature, ManaCost, Player, Spell, Target},
     primitives::{Influence, InterfaceError, ManaValue, Result},
 };
 

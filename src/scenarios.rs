@@ -12,16 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{
-    model::{
-        Attack, Card, CardVariant, Cost, Creature, CreatureState, Crystal, Deck, Game, GameStatus,
-        ManaCost, Player, PlayerStatus,
-    },
-    primitives::{
-        CombatPosition, GamePhase, HealthValue, Influence, InterfaceError, ManaValue, Result,
-        School,
-    },
-};
+use crate::{attributes::*, effects::*, model::*, primitives::*};
 use std::sync::atomic::{AtomicI32, Ordering};
 
 static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
@@ -55,6 +46,7 @@ fn demon_wolf(state: CreatureState) -> Creature {
         current_health: HealthValue::from(100),
         maximum_health: HealthValue::from(100),
         attack: Attack::BasicAttack(HealthValue::from(10)),
+        abilities: Abilities::default(),
     }
 }
 
@@ -70,6 +62,7 @@ fn cyclops(state: CreatureState) -> Creature {
         current_health: HealthValue::from(250),
         maximum_health: HealthValue::from(250),
         attack: Attack::BasicAttack(HealthValue::from(10)),
+        abilities: Abilities::default(),
     }
 }
 
@@ -85,6 +78,7 @@ fn metalon(state: CreatureState) -> Creature {
         current_health: HealthValue::from(200),
         maximum_health: HealthValue::from(200),
         attack: Attack::BasicAttack(HealthValue::from(10)),
+        abilities: Abilities::default(),
     }
 }
 
@@ -100,6 +94,7 @@ fn treant(state: CreatureState) -> Creature {
         current_health: HealthValue::from(75),
         maximum_health: HealthValue::from(75),
         attack: Attack::BasicAttack(HealthValue::from(15)),
+        abilities: Abilities::default(),
     }
 }
 
@@ -131,6 +126,7 @@ fn fire_elemental(state: CreatureState) -> Creature {
         current_health: HealthValue::from(400),
         maximum_health: HealthValue::from(400),
         attack: Attack::BasicAttack(HealthValue::from(500)),
+        abilities: Abilities::default(),
     }
 }
 
@@ -146,6 +142,7 @@ fn fearless_halberdier(state: CreatureState) -> Creature {
         current_health: HealthValue::from(200),
         maximum_health: HealthValue::from(200),
         attack: Attack::BasicAttack(HealthValue::from(300)),
+        abilities: Abilities::default(),
     }
 }
 
@@ -161,6 +158,143 @@ fn goblin_assailant(state: CreatureState) -> Creature {
         current_health: HealthValue::from(200),
         maximum_health: HealthValue::from(200),
         attack: Attack::BasicAttack(HealthValue::from(200)),
+        abilities: Abilities::default(),
+    }
+}
+
+fn shock() -> Spell {
+    Spell {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Shock"),
+            cost: mana_cost(School::Flame, ManaValue::new(100), 2),
+            school: School::Flame,
+        },
+        effects: vec![Effect::DamageCreatureOrPlayer(Damage::fire(200))],
+    }
+}
+
+fn infuriate() -> Spell {
+    Spell {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Infuriate"),
+            cost: mana_cost(School::Flame, ManaValue::new(100), 2),
+            school: School::Flame,
+        },
+        effects: vec![
+            Effect::BonusAttackThisTurn(HealthValue::from(300)),
+            Effect::BonusHealthThisTurn(HealthValue::from(200)),
+        ],
+    }
+}
+
+fn chandras_outrage() -> Spell {
+    Spell {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Chandra's Outrage"),
+            cost: mana_cost(School::Flame, ManaValue::new(400), 4),
+            school: School::Flame,
+        },
+        effects: vec![
+            Effect::DamageCreature(Damage::fire(400)),
+            Effect::DamagePlayer(Damage::fire(200)),
+        ],
+    }
+}
+
+fn hostile_minotaur(state: CreatureState) -> Creature {
+    Creature {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Hostile Minotaur"),
+            cost: mana_cost(School::Flame, ManaValue::new(400), 2),
+            school: School::Flame,
+        },
+        state,
+        current_health: HealthValue::from(300),
+        maximum_health: HealthValue::from(300),
+        attack: Attack::BasicAttack(HealthValue::from(300)),
+        abilities: Abilities {
+            attributes: vec![Attribute::Swift],
+            ..Abilities::default()
+        },
+    }
+}
+
+fn keldon_raider(state: CreatureState) -> Creature {
+    Creature {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Keldon Raider"),
+            cost: mana_cost(School::Flame, ManaValue::new(400), 4),
+            school: School::Flame,
+        },
+        state,
+        current_health: HealthValue::from(300),
+        maximum_health: HealthValue::from(300),
+        attack: Attack::BasicAttack(HealthValue::from(400)),
+        abilities: Abilities {
+            triggers: vec![Trigger(TriggerName::Play, vec![Effect::MayDiscardToDraw])],
+            ..Abilities::default()
+        },
+    }
+}
+
+fn lavakin_brawler(state: CreatureState) -> Creature {
+    Creature {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Lavakin Brawler"),
+            cost: mana_cost(School::Flame, ManaValue::new(400), 200),
+            school: School::Flame,
+        },
+        state,
+        current_health: HealthValue::from(400),
+        maximum_health: HealthValue::from(400),
+        attack: Attack::BasicAttack(HealthValue::from(200)),
+        abilities: Abilities {
+            triggers: vec![Trigger(
+                TriggerName::Attack,
+                vec![Effect::BonusAttackThisTurnForEachCreatureYouControlWithTag(
+                    HealthValue::from(1),
+                    CreatureTag::Elemental,
+                )],
+            )],
+            ..Abilities::default()
+        },
+    }
+}
+
+fn engulfing_eruption() -> Spell {
+    Spell {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Engulfing Eruption"),
+            cost: mana_cost(School::Flame, ManaValue::new(400), 4),
+            school: School::Flame,
+        },
+        effects: vec![Effect::DamageCreature(Damage::fire(500))],
+    }
+}
+
+fn rubblebelt_recluse(state: CreatureState) -> Creature {
+    Creature {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Rubblebelt Recluse"),
+            cost: mana_cost(School::Flame, ManaValue::new(500), 2),
+            school: School::Flame,
+        },
+        state,
+        current_health: HealthValue::from(500),
+        maximum_health: HealthValue::from(500),
+        attack: Attack::BasicAttack(HealthValue::from(600)),
+        abilities: Abilities {
+            attributes: vec![Attribute::MustAttack],
+            ..Abilities::default()
+        },
     }
 }
 
