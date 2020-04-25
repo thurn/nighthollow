@@ -267,7 +267,7 @@ pub struct Creature {
     pub state: CreatureState,
     pub current_health: HealthValue,
     pub maximum_health: HealthValue,
-    pub attacks: Vec<Attack>,
+    pub attack: Attack,
 }
 
 pub trait Attackable {

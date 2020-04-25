@@ -40,18 +40,11 @@ fn apply_combat_for_attacker((attacker, position): AttackerMut, defending_player
         .defenders_mut()
         .find(|(_, p)| position == *p)
     {
-        for attack in &attacker.attacks {
-            apply_attack(attack, defender)
-        }
-        for attack in &defender.attacks {
-            apply_attack(attack, attacker)
-        }
-        return;
+        apply_attack(&attacker.attack, defender);
+        apply_attack(&defender.attack, attacker);
     }
 
-    for attack in &attacker.attacks {
-        apply_attack(attack, &mut defending_player.status)
-    }
+    apply_attack(&attacker.attack, &mut defending_player.status);
 }
 
 fn apply_attack(attack: &Attack, defender: &mut impl Attackable) {

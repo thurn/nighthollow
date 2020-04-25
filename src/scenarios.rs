@@ -54,7 +54,7 @@ fn demon_wolf(state: CreatureState) -> Creature {
         state,
         current_health: HealthValue::from(100),
         maximum_health: HealthValue::from(100),
-        attacks: vec![Attack::BasicAttack(HealthValue::from(10))],
+        attack: Attack::BasicAttack(HealthValue::from(10)),
     }
 }
 
@@ -69,7 +69,7 @@ fn cyclops(state: CreatureState) -> Creature {
         state,
         current_health: HealthValue::from(250),
         maximum_health: HealthValue::from(250),
-        attacks: vec![Attack::BasicAttack(HealthValue::from(10))],
+        attack: Attack::BasicAttack(HealthValue::from(10)),
     }
 }
 
@@ -84,7 +84,7 @@ fn metalon(state: CreatureState) -> Creature {
         state,
         current_health: HealthValue::from(200),
         maximum_health: HealthValue::from(200),
-        attacks: vec![Attack::BasicAttack(HealthValue::from(10))],
+        attack: Attack::BasicAttack(HealthValue::from(10)),
     }
 }
 
@@ -99,7 +99,7 @@ fn treant(state: CreatureState) -> Creature {
         state,
         current_health: HealthValue::from(75),
         maximum_health: HealthValue::from(75),
-        attacks: vec![Attack::BasicAttack(HealthValue::from(15))],
+        attack: Attack::BasicAttack(HealthValue::from(15)),
     }
 }
 
@@ -116,6 +116,51 @@ fn flame_crystal() -> Crystal {
             flame: 2,
             ..Influence::default()
         },
+    }
+}
+
+fn fire_elemental(state: CreatureState) -> Creature {
+    Creature {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Fire Elemental"),
+            cost: mana_cost(School::Flame, ManaValue::new(500), 4),
+            school: School::Flame,
+        },
+        state,
+        current_health: HealthValue::from(400),
+        maximum_health: HealthValue::from(400),
+        attack: Attack::BasicAttack(HealthValue::from(500)),
+    }
+}
+
+fn fearless_halberdier(state: CreatureState) -> Creature {
+    Creature {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Fearless Halberdier"),
+            cost: mana_cost(School::Flame, ManaValue::new(300), 2),
+            school: School::Flame,
+        },
+        state,
+        current_health: HealthValue::from(200),
+        maximum_health: HealthValue::from(200),
+        attack: Attack::BasicAttack(HealthValue::from(300)),
+    }
+}
+
+fn goblin_assailant(state: CreatureState) -> Creature {
+    Creature {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Goblin Assailant"),
+            cost: mana_cost(School::Flame, ManaValue::new(200), 2),
+            school: School::Flame,
+        },
+        state,
+        current_health: HealthValue::from(200),
+        maximum_health: HealthValue::from(200),
+        attack: Attack::BasicAttack(HealthValue::from(200)),
     }
 }
 
