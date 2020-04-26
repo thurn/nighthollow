@@ -16,7 +16,7 @@ use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
 use crate::{
-    model::effect::{CreatureTag, Effect},
+    model::effect::{CreatureTag, Effect, Request, Response},
     model::primitives::{Damage, Influence, ManaValue},
 };
 
@@ -24,7 +24,11 @@ use crate::{
 pub struct ExhaustSoTargetWithAttackLessThanCantBeBlocked(pub Damage);
 
 #[typetag::serde]
-impl Effect for ExhaustSoTargetWithAttackLessThanCantBeBlocked {}
+impl Effect for ExhaustSoTargetWithAttackLessThanCantBeBlocked {
+    fn evaluate(&self, request: &Request) -> Response {
+        Response::default()
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ExhaustToAddManaOnlyForCreaturesWithTag {
@@ -34,4 +38,8 @@ pub struct ExhaustToAddManaOnlyForCreaturesWithTag {
 }
 
 #[typetag::serde]
-impl Effect for ExhaustToAddManaOnlyForCreaturesWithTag {}
+impl Effect for ExhaustToAddManaOnlyForCreaturesWithTag {
+    fn evaluate(&self, request: &Request) -> Response {
+        Response::default()
+    }
+}

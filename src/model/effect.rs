@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use super::{mutation::Mutation, types::Game};
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
@@ -23,6 +24,20 @@ pub enum TriggerName {
     PlayerDamaged,
 }
 
+pub struct Request<'a> {
+    game: &'a Game,
+}
+
+pub struct Response {
+    mutations: Vec<Mutation>,
+}
+
+impl Default for Response {
+    fn default() -> Self {
+        Response { mutations: vec![] }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Trigger(pub TriggerName, pub Vec<Box<dyn Effect>>);
 
@@ -32,7 +47,13 @@ pub enum CreatureTag {
 }
 
 #[typetag::serde(tag = "type")]
-pub trait Effect: EffectClone + Debug {}
+pub trait Effect: EffectClone + Debug {
+    fn evaluate(&self, request: &Request) -> Response;
+}
+
+pub struct Instant {
+    pub effects: Vec<Box<dyn Effect>>,
+}
 
 pub trait EffectClone {
     fn clone_box(&self) -> Box<dyn Effect>;

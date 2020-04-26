@@ -24,4 +24,7 @@ pub enum Attribute {
 
     // Not allowed to be declared as a defender
     CantDefend,
+
+    // Not allowed to be blocked
+    CantBeDefended,
 }

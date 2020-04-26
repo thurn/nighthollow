@@ -15,10 +15,14 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::model::effect::Effect;
+use crate::model::effect::{Effect, Request, Response};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MayDiscardToDraw();
 
 #[typetag::serde]
-impl Effect for MayDiscardToDraw {}
+impl Effect for MayDiscardToDraw {
+    fn evaluate(&self, request: &Request) -> Response {
+        Response::default()
+    }
+}

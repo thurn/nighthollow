@@ -15,34 +15,57 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::{model::effect::Effect, model::primitives::Damage};
+use crate::{
+    model::effect::{Effect, Request, Response},
+    model::primitives::Damage,
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DamageTargetCreature(pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageTargetCreature {}
+impl Effect for DamageTargetCreature {
+    fn evaluate(&self, request: &Request) -> Response {
+        Response::default()
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DamageOpponent(pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageOpponent {}
+impl Effect for DamageOpponent {
+    fn evaluate(&self, request: &Request) -> Response {
+        Response::default()
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DamageTargetCreatureAndItsOwner(pub Damage, pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageTargetCreatureAndItsOwner {}
+impl Effect for DamageTargetCreatureAndItsOwner {
+    fn evaluate(&self, request: &Request) -> Response {
+        Response::default()
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DamageTargetCreatureOrOpponent(pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageTargetCreatureOrOpponent {}
+impl Effect for DamageTargetCreatureOrOpponent {
+    fn evaluate(&self, request: &Request) -> Response {
+        Response::default()
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DamageTargetCreatureAndExileIfDies(pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageTargetCreatureAndExileIfDies {}
+impl Effect for DamageTargetCreatureAndExileIfDies {
+    fn evaluate(&self, request: &Request) -> Response {
+        Response::default()
+    }
+}
