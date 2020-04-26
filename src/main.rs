@@ -30,7 +30,7 @@ extern crate lazy_static;
 mod attributes;
 mod combat;
 mod commands;
-mod effects;
+mod effect;
 mod gameplay;
 mod model;
 mod primitives;

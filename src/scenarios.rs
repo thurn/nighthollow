@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{attributes::*, effects::*, model::*, primitives::*};
+use crate::{attributes::*, effect::*, model::*, primitives::*};
 use std::sync::atomic::{AtomicI32, Ordering};
 
 static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
@@ -162,6 +162,50 @@ fn goblin_assailant(state: CreatureState) -> Creature {
     }
 }
 
+async fn target_creature_or_player(game: &Game) -> &impl Attackable {
+    &game.user.status
+}
+
+async fn target_creature(game: &Game) -> &Creature {
+    &game.user.creatures[0]
+}
+
+fn apply_damage(target: &impl Attackable, damage: Damage) {}
+
+struct AttackModifier {}
+
+fn add_attack_modifier(target: &Creature, attack: HealthValue) -> AttackModifier {
+    AttackModifier {}
+}
+
+fn remove_attack_modifier(target: &Creature, modifier: AttackModifier) {}
+
+async fn end_of_turn(game: &Game) {}
+
+async fn shock_test(game: &Game) {
+    let target = target_creature_or_player(game).await;
+    apply_damage(target, Damage::fire(2));
+}
+
+async fn infuriate_test(game: &Game) {
+    let target = target_creature(game).await;
+    let modifier = add_attack_modifier(target, HealthValue::from(300));
+    end_of_turn(game).await;
+    remove_attack_modifier(target, modifier);
+}
+
+async fn player_dealt_damage_event(game: &Game) -> bool {
+    true
+}
+
+async fn alive(game: &Game) -> bool {
+    true
+}
+
+async fn wildfire_test(game: &Game) {
+    while alive(game).await && player_dealt_damage_event(game).await {}
+}
+
 fn shock() -> Spell {
     Spell {
         card: Card {
@@ -170,7 +214,7 @@ fn shock() -> Spell {
             cost: mana_cost(School::Flame, ManaValue::new(100), 2),
             school: School::Flame,
         },
-        effects: vec![Effect::DamageCreatureOrPlayer(Damage::fire(200))],
+        effects: vec![Box::new(DamageCreatureOrPlayerEffect(Damage::fire(200)))],
     }
 }
 
@@ -183,8 +227,8 @@ fn infuriate() -> Spell {
             school: School::Flame,
         },
         effects: vec![
-            Effect::BonusAttackThisTurn(HealthValue::from(300)),
-            Effect::BonusHealthThisTurn(HealthValue::from(200)),
+            Box::new(BonusAttackThisTurnEffect(HealthValue::from(300))),
+            Box::new(BonusHealthThisTurnEffect(HealthValue::from(200))),
         ],
     }
 }
@@ -198,8 +242,8 @@ fn chandras_outrage() -> Spell {
             school: School::Flame,
         },
         effects: vec![
-            Effect::DamageCreature(Damage::fire(400)),
-            Effect::DamagePlayer(Damage::fire(200)),
+            Box::new(DamageCreatureEffect(Damage::fire(400))),
+            Box::new(DamagePlayerEffect(Damage::fire(200))),
         ],
     }
 }
@@ -236,7 +280,10 @@ fn keldon_raider(state: CreatureState) -> Creature {
         maximum_health: HealthValue::from(300),
         attack: Attack::BasicAttack(HealthValue::from(400)),
         abilities: Abilities {
-            triggers: vec![Trigger(TriggerName::Play, vec![Effect::MayDiscardToDraw])],
+            triggers: vec![Trigger(
+                TriggerName::Play,
+                vec![Box::new(MayDiscardToDrawEffect())],
+            )],
             ..Abilities::default()
         },
     }
@@ -257,10 +304,10 @@ fn lavakin_brawler(state: CreatureState) -> Creature {
         abilities: Abilities {
             triggers: vec![Trigger(
                 TriggerName::Attack,
-                vec![Effect::BonusAttackThisTurnForEachCreatureYouControlWithTag(
-                    HealthValue::from(1),
-                    CreatureTag::Elemental,
-                )],
+                vec![Box::new(BrawlerEffect {
+                    tag: CreatureTag::Elemental,
+                    bonus: HealthValue::from(1),
+                })],
             )],
             ..Abilities::default()
         },
@@ -275,7 +322,7 @@ fn engulfing_eruption() -> Spell {
             cost: mana_cost(School::Flame, ManaValue::new(400), 4),
             school: School::Flame,
         },
-        effects: vec![Effect::DamageCreature(Damage::fire(500))],
+        effects: vec![Box::new(DamageCreatureEffect(Damage::fire(500)))],
     }
 }
 
@@ -295,6 +342,44 @@ fn rubblebelt_recluse(state: CreatureState) -> Creature {
             attributes: vec![Attribute::MustAttack],
             ..Abilities::default()
         },
+    }
+}
+
+fn scorch_spitter(state: CreatureState) -> Creature {
+    Creature {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Scorch Spitter"),
+            cost: mana_cost(School::Flame, ManaValue::new(100), 2),
+            school: School::Flame,
+        },
+        state,
+        current_health: HealthValue::from(100),
+        maximum_health: HealthValue::from(100),
+        attack: Attack::BasicAttack(HealthValue::from(100)),
+        abilities: Abilities {
+            triggers: vec![Trigger(
+                TriggerName::Attack,
+                vec![Box::new(DamagePlayerEffect(Damage::fire(1)))],
+            )],
+            ..Abilities::default()
+        },
+    }
+}
+
+fn maniacal_rage() -> Spell {
+    Spell {
+        card: Card {
+            id: next_identifier(),
+            name: String::from("Maniacal Rage"),
+            cost: mana_cost(School::Flame, ManaValue::new(200), 2),
+            school: School::Flame,
+        },
+        effects: vec![
+            Box::new(BonusAttackEffect(HealthValue::from(200))),
+            Box::new(BonusHealthEffect(HealthValue::from(200))),
+            Box::new(ApplyAttributeEffect(Attribute::CantDefend)),
+        ],
     }
 }
 

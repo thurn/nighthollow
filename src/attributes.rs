@@ -22,4 +22,7 @@ pub enum Attribute {
 
     // Must attack during combat if able
     MustAttack,
+
+    // Not allowed to be declared as a defender
+    CantDefend,
 }

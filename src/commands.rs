@@ -14,7 +14,7 @@
 
 use crate::{
     combat, gameplay,
-    model::{CreatureState, Game, Target},
+    model::{CreatureState, Game},
     primitives::{CombatPosition, GamePhase, InterfaceError, PlayerName, Result},
     scenarios,
 };
@@ -27,7 +27,7 @@ pub fn handle_command(command: &str, game: &mut Game, player_name: PlayerName) -
         print_help();
         Ok(())
     } else if command.starts_with('p') && phase == GamePhase::Main {
-        gameplay::play_card(player, &arg(&command, 1)?.to_uppercase(), &Target::None)
+        gameplay::play_card(player, &arg(&command, 1)?.to_uppercase())
     } else if command.starts_with('a') && phase == GamePhase::Attackers {
         let position = CombatPosition::parse(arg(&command, 2)?)?;
         let index = player.find_creature(&arg(&command, 1)?.to_uppercase())?;

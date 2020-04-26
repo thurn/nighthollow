@@ -18,7 +18,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     attributes::Attribute,
-    effects::{Effect, Trigger},
+    effect::{Effect, Trigger},
     primitives::{
         CombatPosition, GamePhase, HealthValue, Influence, InterfaceError, ManaValue, PlayerName,
         Result, School,
@@ -259,13 +259,6 @@ impl Display for ManaCost {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum Target {
-    None,
-    EnemyCreature(String),
-    UserCreature(String),
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Abilities {
     pub attributes: Vec<Attribute>,
     pub triggers: Vec<Trigger>,
@@ -322,7 +315,7 @@ pub enum Attack {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Spell {
     pub card: Card,
-    pub effects: Vec<Effect>,
+    pub effects: Vec<Box<dyn Effect>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

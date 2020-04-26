@@ -20,7 +20,7 @@ use rand::{
 };
 
 use crate::{
-    model::{Card, CardVariant, Cost, Creature, ManaCost, Player, Spell, Target},
+    model::{Card, CardVariant, Cost, Creature, ManaCost, Player, Spell},
     primitives::{Influence, InterfaceError, ManaValue, Result},
 };
 
@@ -41,13 +41,9 @@ pub fn draw_card(player: &mut Player) -> Result<()> {
     Ok(())
 }
 
-pub fn play_card(player: &mut Player, card_id: &str, target: &Target) -> Result<()> {
+pub fn play_card(player: &mut Player, card_id: &str) -> Result<()> {
     if !can_pay_cost(player, card_id)? {
         return InterfaceError::result(format!("Cannot pay cost for card {}", card_id));
-    }
-
-    if !valid_target(player, card_id, target) {
-        return InterfaceError::result(format!("Invalid target for card {}", card_id));
     }
 
     pay_costs(player, card_id)?;
@@ -68,10 +64,6 @@ pub fn can_pay_cost(player: &Player, card_id: &str) -> Result<bool> {
             Ok(c.influence <= player.status.influence && c.mana <= player.status.mana)
         }
     }
-}
-
-fn valid_target(player: &Player, card_id: &str, target: &Target) -> bool {
-    true
 }
 
 fn pay_costs(player: &mut Player, card_id: &str) -> Result<()> {
