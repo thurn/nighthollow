@@ -16,44 +16,10 @@ use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
 use crate::{
-    attributes::Attribute,
-    primitives::{Damage, HealthValue, Influence, ManaValue},
+    model::attributes::Attribute,
+    model::effect::{CreatureTag, Effect},
+    model::primitives::{Damage, HealthValue, Influence, ManaValue},
 };
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum TriggerName {
-    Play,
-    Death,
-    Attack,
-    PlayerDamaged,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Trigger(pub TriggerName, pub Vec<Box<dyn Effect>>);
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum CreatureTag {
-    Elemental,
-}
-
-#[typetag::serde(tag = "type")]
-pub trait Effect: EffectClone + Debug {}
-
-pub trait EffectClone {
-    fn clone_box(&self) -> Box<dyn Effect>;
-}
-
-impl<T: 'static + Effect + Clone> EffectClone for T {
-    fn clone_box(&self) -> Box<dyn Effect> {
-        Box::new(self.clone())
-    }
-}
-
-impl Clone for Box<dyn Effect> {
-    fn clone(&self) -> Box<dyn Effect> {
-        self.clone_box()
-    }
-}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BonusAttackAndHealthThisTurn(pub Damage, pub HealthValue);
@@ -79,12 +45,6 @@ pub struct AttackingDamageBonusPerTaggedAlly {
 impl Effect for AttackingDamageBonusPerTaggedAlly {}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct MayDiscardToDraw();
-
-#[typetag::serde]
-impl Effect for MayDiscardToDraw {}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CreatureDamageBonusOnOpponentNoncombatDamaged(pub Damage);
 
 #[typetag::serde]
@@ -95,19 +55,3 @@ pub struct EachCreatureWithSameNameBonusDamageThisTurn(pub Damage);
 
 #[typetag::serde]
 impl Effect for EachCreatureWithSameNameBonusDamageThisTurn {}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ExhaustSoTargetWithAttackLessThanCantBeBlocked(pub Damage);
-
-#[typetag::serde]
-impl Effect for ExhaustSoTargetWithAttackLessThanCantBeBlocked {}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ExhaustToAddManaOnlyForCreaturesWithTag {
-    pub mana: ManaValue,
-    pub influence: Influence,
-    pub tag: CreatureTag,
-}
-
-#[typetag::serde]
-impl Effect for ExhaustToAddManaOnlyForCreaturesWithTag {}

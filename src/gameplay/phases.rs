@@ -20,8 +20,8 @@ use rand::{
 };
 
 use crate::{
-    model::{Card, CardVariant, Cost, Creature, ManaCost, Player, Spell},
-    primitives::{Influence, InterfaceError, ManaValue, Result},
+    model::primitives::{Influence, InterfaceError, ManaValue, Result},
+    model::types::{Card, CardVariant, Cost, Creature, ManaCost, Player, Spell},
 };
 
 pub fn draw_card(player: &mut Player) -> Result<()> {

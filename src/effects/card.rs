@@ -12,7 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod activated;
-pub mod bonus;
-pub mod card;
-pub mod damage;
+use serde::{Deserialize, Serialize};
+use std::fmt::Debug;
+
+use crate::{
+    model::attributes::Attribute,
+    model::effect::Effect,
+    model::primitives::{Damage, HealthValue, Influence, ManaValue},
+};
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct MayDiscardToDraw();
+
+#[typetag::serde]
+impl Effect for MayDiscardToDraw {}

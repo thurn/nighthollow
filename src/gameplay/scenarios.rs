@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{attributes::*, effect::*, effects::damage::*, model::*, primitives::*};
+use crate::{
+    effects::activated::*, effects::bonus::*, effects::card::*, effects::damage::*,
+    model::attributes::*, model::effect::*, model::primitives::*, model::types::*,
+};
 use std::sync::atomic::{AtomicI32, Ordering};
 
 static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);

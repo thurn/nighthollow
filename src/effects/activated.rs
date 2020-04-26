@@ -17,36 +17,22 @@ use std::fmt::Debug;
 
 use crate::{
     model::attributes::Attribute,
-    model::effect::Effect,
+    model::effect::{CreatureTag, Effect},
     model::primitives::{Damage, HealthValue, Influence, ManaValue},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DamageTargetCreature(pub Damage);
+pub struct ExhaustSoTargetWithAttackLessThanCantBeBlocked(pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageTargetCreature {}
+impl Effect for ExhaustSoTargetWithAttackLessThanCantBeBlocked {}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DamageOpponent(pub Damage);
+pub struct ExhaustToAddManaOnlyForCreaturesWithTag {
+    pub mana: ManaValue,
+    pub influence: Influence,
+    pub tag: CreatureTag,
+}
 
 #[typetag::serde]
-impl Effect for DamageOpponent {}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DamageTargetCreatureAndItsOwner(pub Damage, pub Damage);
-
-#[typetag::serde]
-impl Effect for DamageTargetCreatureAndItsOwner {}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DamageTargetCreatureOrOpponent(pub Damage);
-
-#[typetag::serde]
-impl Effect for DamageTargetCreatureOrOpponent {}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DamageTargetCreatureAndExileIfDies(pub Damage);
-
-#[typetag::serde]
-impl Effect for DamageTargetCreatureAndExileIfDies {}
+impl Effect for ExhaustToAddManaOnlyForCreaturesWithTag {}

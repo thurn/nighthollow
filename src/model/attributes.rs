@@ -12,7 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod activated;
-pub mod bonus;
-pub mod card;
-pub mod damage;
+use crate::model::primitives::{Damage, HealthValue};
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum Attribute {
+    /// Can be played during the Attackers phase as well as during the Main phase
+    Swift,
+
+    // Must attack during combat if able
+    MustAttack,
+
+    // Not allowed to be declared as a defender
+    CantDefend,
+}

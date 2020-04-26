@@ -27,20 +27,12 @@ use termion::{color, style};
 #[macro_use]
 extern crate lazy_static;
 
-mod attributes;
-mod combat;
-mod commands;
-mod effect;
 mod effects;
 mod gameplay;
 mod model;
-mod primitives;
-mod render;
-mod scenarios;
-mod unit;
 
-use model::Game;
-use primitives::PlayerName;
+use model::primitives::PlayerName;
+use model::types::Game;
 
 fn main() {
     let mut rl = Editor::<()>::new();
@@ -61,7 +53,7 @@ fn main() {
         let file = File::create("state.json").expect("Unable to open state.json!");
         ser::to_writer_pretty(&file, &game).expect("Error writing to state.json!");
 
-        render::draw_interface_state(&game);
+        gameplay::render::draw_interface_state(&game);
 
         let readline = rl.readline(">> ");
         match readline {
@@ -70,7 +62,9 @@ fn main() {
                 if line.starts_with('q') {
                     break;
                 } else {
-                    if let Err(e) = commands::handle_command(&line, &mut game, PlayerName::User) {
+                    if let Err(e) =
+                        gameplay::commands::handle_command(&line, &mut game, PlayerName::User)
+                    {
                         eprintln!(
                             "{}{}ERROR: {}{}",
                             style::Bold,

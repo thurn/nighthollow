@@ -23,8 +23,8 @@ use std::{
 };
 
 use crate::{
-    model::{Card, CardVariant, Creature, CreatureState, Game, Player},
-    primitives::{self, GamePhase, ManaValue, PlayerName},
+    model::primitives::{self, GamePhase, ManaValue, PlayerName},
+    model::types::{Card, CardVariant, Creature, CreatureState, Game, Player},
 };
 
 pub fn draw_interface_state(game: &Game) {

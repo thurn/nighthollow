@@ -13,10 +13,11 @@
 // limitations under the License.
 
 use crate::{
-    combat, gameplay,
-    model::{CreatureState, Game},
-    primitives::{CombatPosition, GamePhase, InterfaceError, PlayerName, Result},
-    scenarios,
+    gameplay::combat,
+    gameplay::phases,
+    gameplay::scenarios,
+    model::primitives::{CombatPosition, GamePhase, InterfaceError, PlayerName, Result},
+    model::types::{CreatureState, Game},
 };
 
 pub fn handle_command(command: &str, game: &mut Game, player_name: PlayerName) -> Result<()> {
@@ -27,7 +28,7 @@ pub fn handle_command(command: &str, game: &mut Game, player_name: PlayerName) -
         print_help();
         Ok(())
     } else if command.starts_with('p') && phase == GamePhase::Main {
-        gameplay::play_card(player, &arg(&command, 1)?.to_uppercase())
+        phases::play_card(player, &arg(&command, 1)?.to_uppercase())
     } else if command.starts_with('a') && phase == GamePhase::Attackers {
         let position = CombatPosition::parse(arg(&command, 2)?)?;
         let index = player.find_creature(&arg(&command, 1)?.to_uppercase())?;
@@ -77,8 +78,8 @@ fn advance_game(game: &mut Game) -> Result<()> {
         }
         GamePhase::End => {
             for player in vec![&mut game.user, &mut game.enemy] {
-                gameplay::draw_card(player)?;
-                gameplay::upkeep_mana(player);
+                phases::draw_card(player)?;
+                phases::upkeep_mana(player);
             }
             game.status.phase = GamePhase::Attackers;
         }

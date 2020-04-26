@@ -16,7 +16,7 @@ use std::fmt::{Display, Formatter};
 
 use serde::{Deserialize, Serialize};
 
-use crate::{
+use crate::model::{
     attributes::Attribute,
     effect::{Effect, Trigger},
     primitives::{

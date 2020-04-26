@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod activated;
-pub mod bonus;
-pub mod card;
-pub mod damage;
+pub mod combat;
+pub mod commands;
+pub mod phases;
+pub mod render;
+pub mod scenarios;
