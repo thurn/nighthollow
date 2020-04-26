@@ -18,13 +18,11 @@ use std::{
     collections::hash_map::DefaultHasher,
     fmt::Display,
     hash::{Hash, Hasher},
-    iter::Filter,
-    slice::Iter,
 };
 
 use crate::{
     model::primitives::{self, GamePhase, ManaValue, PlayerName},
-    model::types::{Card, CardVariant, Creature, CreatureState, Game, Player},
+    model::types::{Card, CardVariant, Creature, Game, Player},
 };
 
 pub fn draw_interface_state(game: &Game) {

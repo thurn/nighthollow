@@ -15,11 +15,6 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::model::{
-    attributes::Attribute,
-    primitives::{Damage, HealthValue, Influence, ManaValue},
-};
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum TriggerName {
     Play,

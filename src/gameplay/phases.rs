@@ -21,7 +21,7 @@ use rand::{
 
 use crate::{
     model::primitives::{Influence, InterfaceError, ManaValue, Result},
-    model::types::{Card, CardVariant, Cost, Creature, ManaCost, Player, Spell},
+    model::types::{CardVariant, Cost, Player, Spell},
 };
 
 pub fn draw_card(player: &mut Player) -> Result<()> {

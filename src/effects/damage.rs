@@ -15,11 +15,7 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::{
-    model::attributes::Attribute,
-    model::effect::Effect,
-    model::primitives::{Damage, HealthValue, Influence, ManaValue},
-};
+use crate::{model::effect::Effect, model::primitives::Damage};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DamageTargetCreature(pub Damage);
