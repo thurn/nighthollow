@@ -49,6 +49,6 @@ fn apply_combat_for_attacker((attacker, position): AttackerMut, defending_player
 
 fn apply_attack(attack: &Attack, defender: &mut impl Attackable) {
     match attack {
-        Attack::BasicAttack(damage) => defender.apply_health_change(-*damage),
+        Attack::BasicAttack(damage) => defender.apply_damage(damage),
     }
 }

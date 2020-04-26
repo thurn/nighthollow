@@ -74,6 +74,12 @@ impl error::Error for InterfaceError {
 )]
 pub struct HealthValue(i32);
 
+impl HealthValue {
+    pub fn apply_damage(&mut self, damage: &Damage) {
+        self.0 = self.0 - damage.fire;
+    }
+}
+
 #[derive(
     Copy,
     Clone,
@@ -193,6 +199,27 @@ impl Influence {
             ice: if school == School::Ice { amount } else { 0 },
             earth: if school == School::Earth { amount } else { 0 },
             shadow: if school == School::Shadow { amount } else { 0 },
+        }
+    }
+
+    pub fn light(i: i32) -> Influence {
+        Influence {
+            light: i,
+            ..Influence::default()
+        }
+    }
+
+    pub fn sky(i: i32) -> Influence {
+        Influence {
+            sky: i,
+            ..Influence::default()
+        }
+    }
+
+    pub fn flame(i: i32) -> Influence {
+        Influence {
+            flame: i,
+            ..Influence::default()
         }
     }
 

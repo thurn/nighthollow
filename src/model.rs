@@ -20,8 +20,8 @@ use crate::{
     attributes::Attribute,
     effect::{Effect, Trigger},
     primitives::{
-        CombatPosition, GamePhase, HealthValue, Influence, InterfaceError, ManaValue, PlayerName,
-        Result, School,
+        CombatPosition, Damage, GamePhase, HealthValue, Influence, InterfaceError, ManaValue,
+        PlayerName, Result, School,
     },
 };
 
@@ -262,6 +262,7 @@ impl Display for ManaCost {
 pub struct Abilities {
     pub attributes: Vec<Attribute>,
     pub triggers: Vec<Trigger>,
+    pub spells: Vec<Spell>,
 }
 
 impl Default for Abilities {
@@ -269,6 +270,7 @@ impl Default for Abilities {
         Abilities {
             attributes: vec![],
             triggers: vec![],
+            spells: vec![],
         }
     }
 }
@@ -284,18 +286,18 @@ pub struct Creature {
 }
 
 pub trait Attackable {
-    fn apply_health_change(&mut self, value: HealthValue);
+    fn apply_damage(&mut self, value: &Damage);
 }
 
 impl Attackable for PlayerStatus {
-    fn apply_health_change(&mut self, value: HealthValue) {
-        self.current_health += value
+    fn apply_damage(&mut self, value: &Damage) {
+        self.current_health.apply_damage(value);
     }
 }
 
 impl Attackable for Creature {
-    fn apply_health_change(&mut self, value: HealthValue) {
-        self.current_health += value
+    fn apply_damage(&mut self, value: &Damage) {
+        self.current_health.apply_damage(value);
     }
 }
 
@@ -309,7 +311,7 @@ pub enum CreatureState {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Attack {
-    BasicAttack(HealthValue),
+    BasicAttack(Damage),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -31,6 +31,7 @@ mod attributes;
 mod combat;
 mod commands;
 mod effect;
+mod effects;
 mod gameplay;
 mod model;
 mod primitives;

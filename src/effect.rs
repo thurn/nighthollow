@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::fmt::Debug;
-
 use serde::{Deserialize, Serialize};
+use std::fmt::Debug;
 
 use crate::{
     attributes::Attribute,
-    primitives::{Damage, HealthValue},
+    primitives::{Damage, HealthValue, Influence, ManaValue},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -57,66 +56,58 @@ impl Clone for Box<dyn Effect> {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DamageCreatureEffect(pub Damage);
+pub struct BonusAttackAndHealthThisTurn(pub Damage, pub HealthValue);
 
 #[typetag::serde]
-impl Effect for DamageCreatureEffect {}
+impl Effect for BonusAttackAndHealthThisTurn {}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DamagePlayerEffect(pub Damage);
+pub struct BonusAttackAndHealthCantDefend(pub Damage, pub HealthValue);
 
 #[typetag::serde]
-impl Effect for DamagePlayerEffect {}
+impl Effect for BonusAttackAndHealthCantDefend {}
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DamageCreatureOrPlayerEffect(pub Damage);
-
-#[typetag::serde]
-impl Effect for DamageCreatureOrPlayerEffect {}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct BonusAttackEffect(pub HealthValue);
-
-#[typetag::serde]
-impl Effect for BonusAttackEffect {}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct BonusAttackThisTurnEffect(pub HealthValue);
-
-#[typetag::serde]
-impl Effect for BonusAttackThisTurnEffect {}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct BonusHealthEffect(pub HealthValue);
-
-#[typetag::serde]
-impl Effect for BonusHealthEffect {}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct BonusHealthThisTurnEffect(pub HealthValue);
-
-#[typetag::serde]
-impl Effect for BonusHealthThisTurnEffect {}
-
-/// Gains bonus attack while attacking for each other creature you control
+/// Gains bonus damage while attacking for each other creature you control
 /// with a given tag
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct BrawlerEffect {
+pub struct AttackingDamageBonusPerTaggedAlly {
     pub tag: CreatureTag,
-    pub bonus: HealthValue,
+    pub bonus: Damage,
 }
 
 #[typetag::serde]
-impl Effect for BrawlerEffect {}
+impl Effect for AttackingDamageBonusPerTaggedAlly {}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct MayDiscardToDrawEffect();
+pub struct MayDiscardToDraw();
 
 #[typetag::serde]
-impl Effect for MayDiscardToDrawEffect {}
+impl Effect for MayDiscardToDraw {}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ApplyAttributeEffect(pub Attribute);
+pub struct CreatureDamageBonusOnOpponentNoncombatDamaged(pub Damage);
 
 #[typetag::serde]
-impl Effect for ApplyAttributeEffect {}
+impl Effect for CreatureDamageBonusOnOpponentNoncombatDamaged {}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct EachCreatureWithSameNameBonusDamageThisTurn(pub Damage);
+
+#[typetag::serde]
+impl Effect for EachCreatureWithSameNameBonusDamageThisTurn {}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ExhaustSoTargetWithAttackLessThanCantBeBlocked(pub Damage);
+
+#[typetag::serde]
+impl Effect for ExhaustSoTargetWithAttackLessThanCantBeBlocked {}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ExhaustToAddManaOnlyForCreaturesWithTag {
+    pub mana: ManaValue,
+    pub influence: Influence,
+    pub tag: CreatureTag,
+}
+
+#[typetag::serde]
+impl Effect for ExhaustToAddManaOnlyForCreaturesWithTag {}
