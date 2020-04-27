@@ -16,8 +16,15 @@ use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
 use crate::{
-    model::effect::{Effect, Request, Response},
-    model::primitives::Damage,
+    model::{
+        effect::{CreatureId, Effect, Request, Response},
+        events::{EventResponse, EventResult, OnCreatureTargetSelected},
+    },
+    model::{
+        mutation::{CreaturePlayerSelectorType, Mutation, MutationType},
+        primitives::Damage,
+        types::Creature,
+    },
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

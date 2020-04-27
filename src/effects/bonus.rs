@@ -16,8 +16,8 @@ use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
 use crate::{
-    model::effect::{CreatureTag, Effect, Request, Response},
-    model::primitives::{Damage, HealthValue},
+    model::effect::{Effect, Request, Response},
+    model::primitives::{CreatureTag, Damage, HealthValue},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

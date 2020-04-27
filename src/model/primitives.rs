@@ -334,3 +334,8 @@ impl Damage {
         }
     }
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum CreatureTag {
+    Elemental,
+}

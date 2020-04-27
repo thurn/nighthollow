@@ -14,14 +14,11 @@
 
 use super::{
     attributes::Attribute,
-    primitives::{HealthValue, Influence, ManaValue, PlayerName},
-    types::{Attack, CardVariant, Creature},
+    effect::{CreatureId, DiscardCardId, HandCardId, Request},
+    primitives::{Damage, GamePhase, HealthValue, Influence, ManaValue, PlayerName},
+    types::Attack,
 };
 use std::marker::PhantomData;
-
-pub struct Id<T>(usize, PhantomData<*const T>);
-pub type HandCardId = Id<CardVariant>;
-pub type CreatureId = Id<Creature>;
 
 pub enum MutationType {
     SetBase,
@@ -31,28 +28,50 @@ pub enum MutationType {
     LessMultiplier,
 }
 
-pub enum SetMutationType {
+pub enum VectorMutationType {
     Overwrite,
     Add,
     Remove,
 }
 
+pub enum CardSelectorType {
+    MyCards,
+    OpponentCards,
+    MyDiscard,
+    OpponetDiscard,
+    SpecificCardInHand(Vec<HandCardId>),
+    SpecificCardInMyDiscard(Vec<DiscardCardId>),
+    SpecificCardInOpponentDiscard(Vec<DiscardCardId>),
+}
+
+pub enum CreaturePlayerSelectorType {
+    MyCreatures,
+    MyCreaturesOrMe,
+    OpponentCreatures,
+    OpponentCreaturesAndOpponent,
+    SpecificCreatures(Vec<CreatureId>),
+    SpecificCreaturesAndMe(Vec<CreatureId>),
+    SpecificCreaturesAndOpponent(Vec<CreatureId>),
+}
+
 pub enum Mutation {
     // UI Changes
-    DisplayHandCardSelector(Vec<HandCardId>),
-    DisplayCreatureSelector(Vec<CreatureId>),
+    DisplayHandCardSelector(CardSelectorType),
+    DisplayCreatureAndPlayerSelector(CreaturePlayerSelectorType),
 
     // Player Mutations
     DrawCard(PlayerName),
     DiscardCard(PlayerName, HandCardId),
+    DamagePlayer(PlayerName, MutationType, Damage),
     PlayerHealth(PlayerName, MutationType, HealthValue),
     PlayerMaxHealth(PlayerName, MutationType, HealthValue),
     PlayerMana(PlayerName, MutationType, ManaValue),
     PlayerInfluence(PlayerName, MutationType, Influence),
 
     // Creature Mutations
+    DamageCreature(CreatureId, MutationType, Damage),
     CreatureHealth(CreatureId, MutationType, HealthValue),
     CreatureMaxHealth(CreatureId, MutationType, HealthValue),
     CreatureAttack(CreatureId, MutationType, Attack),
-    CreatureAttributes(CreatureId, SetMutationType, Vec<Attribute>),
+    CreatureAttributes(CreatureId, VectorMutationType, Vec<Attribute>),
 }

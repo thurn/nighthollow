@@ -12,9 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use super::{mutation::Mutation, types::Game};
+use std::{fmt::Debug, marker::PhantomData};
+
 use serde::{Deserialize, Serialize};
-use std::fmt::Debug;
+
+use super::{
+    mutation::Mutation,
+    primitives::PlayerName,
+    types::{CardVariant, Creature, Game},
+};
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct HandCardId(usize);
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DiscardCardId(usize);
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CreatureId(usize);
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct EffectId(usize);
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum TriggerName {
@@ -25,11 +43,14 @@ pub enum TriggerName {
 }
 
 pub struct Request<'a> {
+    id: EffectId,
+    owner: PlayerName,
+    source: &'a CardVariant,
     game: &'a Game,
 }
 
 pub struct Response {
-    mutations: Vec<Mutation>,
+    pub mutations: Vec<Mutation>,
 }
 
 impl Default for Response {
@@ -40,11 +61,6 @@ impl Default for Response {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Trigger(pub TriggerName, pub Vec<Box<dyn Effect>>);
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum CreatureTag {
-    Elemental,
-}
 
 #[typetag::serde(tag = "type")]
 pub trait Effect: EffectClone + Debug {
