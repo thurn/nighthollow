@@ -27,9 +27,9 @@ use termion::{color, style};
 #[macro_use]
 extern crate lazy_static;
 
-mod effects;
 mod gameplay;
 mod model;
+mod rules;
 
 use model::primitives::PlayerName;
 use model::types::Game;

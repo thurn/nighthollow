@@ -14,8 +14,8 @@
 
 use super::{
     attributes::Attribute,
-    effect::{CreatureId, DiscardCardId, HandCardId, Request},
     primitives::{Damage, GamePhase, HealthValue, Influence, ManaValue, PlayerName},
+    rules::{CreatureId, DiscardCardId, HandCardId, Request},
     types::Attack,
 };
 use std::marker::PhantomData;

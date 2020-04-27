@@ -16,15 +16,15 @@ use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
 use crate::{
-    model::effect::{Effect, Request, Response},
     model::primitives::{CreatureTag, Damage, HealthValue},
+    model::rules::{Request, Response, Rule},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BonusAttackAndHealthThisTurn(pub Damage, pub HealthValue);
 
 #[typetag::serde]
-impl Effect for BonusAttackAndHealthThisTurn {
+impl Rule for BonusAttackAndHealthThisTurn {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }
@@ -34,7 +34,7 @@ impl Effect for BonusAttackAndHealthThisTurn {
 pub struct BonusAttackAndHealthCantDefend(pub Damage, pub HealthValue);
 
 #[typetag::serde]
-impl Effect for BonusAttackAndHealthCantDefend {
+impl Rule for BonusAttackAndHealthCantDefend {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }
@@ -49,7 +49,7 @@ pub struct AttackingDamageBonusPerTaggedAlly {
 }
 
 #[typetag::serde]
-impl Effect for AttackingDamageBonusPerTaggedAlly {
+impl Rule for AttackingDamageBonusPerTaggedAlly {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }
@@ -59,7 +59,7 @@ impl Effect for AttackingDamageBonusPerTaggedAlly {
 pub struct CreatureDamageBonusOnOpponentNoncombatDamaged(pub Damage);
 
 #[typetag::serde]
-impl Effect for CreatureDamageBonusOnOpponentNoncombatDamaged {
+impl Rule for CreatureDamageBonusOnOpponentNoncombatDamaged {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }
@@ -69,7 +69,7 @@ impl Effect for CreatureDamageBonusOnOpponentNoncombatDamaged {
 pub struct EachCreatureWithSameNameBonusDamageThisTurn(pub Damage);
 
 #[typetag::serde]
-impl Effect for EachCreatureWithSameNameBonusDamageThisTurn {
+impl Rule for EachCreatureWithSameNameBonusDamageThisTurn {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }

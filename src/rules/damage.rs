@@ -16,12 +16,9 @@ use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
 use crate::{
+    model::rules::{CreatureId, Request, Response, Rule},
     model::{
-        effect::{CreatureId, Effect, Request, Response},
-        events::{EventResponse, EventResult, OnCreatureTargetSelected},
-    },
-    model::{
-        mutation::{CreaturePlayerSelectorType, Mutation, MutationType},
+        mutations::{CreaturePlayerSelectorType, Mutation, MutationType},
         primitives::Damage,
         types::Creature,
     },
@@ -31,7 +28,7 @@ use crate::{
 pub struct DamageTargetCreature(pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageTargetCreature {
+impl Rule for DamageTargetCreature {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }
@@ -41,7 +38,7 @@ impl Effect for DamageTargetCreature {
 pub struct DamageOpponent(pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageOpponent {
+impl Rule for DamageOpponent {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }
@@ -51,7 +48,7 @@ impl Effect for DamageOpponent {
 pub struct DamageTargetCreatureAndItsOwner(pub Damage, pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageTargetCreatureAndItsOwner {
+impl Rule for DamageTargetCreatureAndItsOwner {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }
@@ -61,7 +58,7 @@ impl Effect for DamageTargetCreatureAndItsOwner {
 pub struct DamageTargetCreatureOrOpponent(pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageTargetCreatureOrOpponent {
+impl Rule for DamageTargetCreatureOrOpponent {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }
@@ -71,7 +68,7 @@ impl Effect for DamageTargetCreatureOrOpponent {
 pub struct DamageTargetCreatureAndExileIfDies(pub Damage);
 
 #[typetag::serde]
-impl Effect for DamageTargetCreatureAndExileIfDies {
+impl Rule for DamageTargetCreatureAndExileIfDies {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }

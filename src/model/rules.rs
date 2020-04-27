@@ -17,7 +17,7 @@ use std::{fmt::Debug, marker::PhantomData};
 use serde::{Deserialize, Serialize};
 
 use super::{
-    mutation::Mutation,
+    mutations::Mutation,
     primitives::PlayerName,
     types::{CardVariant, Creature, Game},
 };
@@ -32,7 +32,7 @@ pub struct DiscardCardId(usize);
 pub struct CreatureId(usize);
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct EffectId(usize);
+pub struct RuleId(usize);
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum TriggerName {
@@ -43,7 +43,7 @@ pub enum TriggerName {
 }
 
 pub struct Request<'a> {
-    id: EffectId,
+    id: RuleId,
     owner: PlayerName,
     source: &'a CardVariant,
     game: &'a Game,
@@ -60,29 +60,25 @@ impl Default for Response {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Trigger(pub TriggerName, pub Vec<Box<dyn Effect>>);
+pub struct Trigger(pub TriggerName, pub Vec<Box<dyn Rule>>);
 
 #[typetag::serde(tag = "type")]
-pub trait Effect: EffectClone + Debug {
+pub trait Rule: RuleClone + Debug {
     fn evaluate(&self, request: &Request) -> Response;
 }
 
-pub struct Instant {
-    pub effects: Vec<Box<dyn Effect>>,
+pub trait RuleClone {
+    fn clone_box(&self) -> Box<dyn Rule>;
 }
 
-pub trait EffectClone {
-    fn clone_box(&self) -> Box<dyn Effect>;
-}
-
-impl<T: 'static + Effect + Clone> EffectClone for T {
-    fn clone_box(&self) -> Box<dyn Effect> {
+impl<T: 'static + Rule + Clone> RuleClone for T {
+    fn clone_box(&self) -> Box<dyn Rule> {
         Box::new(self.clone())
     }
 }
 
-impl Clone for Box<dyn Effect> {
-    fn clone(&self) -> Box<dyn Effect> {
+impl Clone for Box<dyn Rule> {
+    fn clone(&self) -> Box<dyn Rule> {
         self.clone_box()
     }
 }

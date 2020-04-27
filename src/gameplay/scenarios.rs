@@ -13,8 +13,8 @@
 // limitations under the License.
 
 use crate::{
-    effects::activated::*, effects::bonus::*, effects::card::*, effects::damage::*,
-    model::attributes::*, model::effect::*, model::primitives::*, model::types::*,
+    model::attributes::*, model::primitives::*, model::rules::*, model::types::*,
+    rules::activated::*, rules::bonus::*, rules::card::*, rules::damage::*,
 };
 use std::sync::atomic::{AtomicI32, Ordering};
 
@@ -173,7 +173,7 @@ fn shock() -> Spell {
             cost: mana_cost(School::Flame, ManaValue::new(100), 2),
             school: School::Flame,
         },
-        effects: vec![Box::new(DamageTargetCreatureOrOpponent(Damage::fire(200)))],
+        rules: vec![Box::new(DamageTargetCreatureOrOpponent(Damage::fire(200)))],
     }
 }
 
@@ -185,7 +185,7 @@ fn infuriate() -> Spell {
             cost: mana_cost(School::Flame, ManaValue::new(100), 2),
             school: School::Flame,
         },
-        effects: vec![Box::new(BonusAttackAndHealthThisTurn(
+        rules: vec![Box::new(BonusAttackAndHealthThisTurn(
             Damage::fire(300),
             HealthValue::from(200),
         ))],
@@ -200,7 +200,7 @@ fn chandras_outrage() -> Spell {
             cost: mana_cost(School::Flame, ManaValue::new(400), 4),
             school: School::Flame,
         },
-        effects: vec![Box::new(DamageTargetCreatureAndItsOwner(
+        rules: vec![Box::new(DamageTargetCreatureAndItsOwner(
             Damage::fire(400),
             Damage::fire(200),
         ))],
@@ -281,7 +281,7 @@ fn engulfing_eruption() -> Spell {
             cost: mana_cost(School::Flame, ManaValue::new(400), 4),
             school: School::Flame,
         },
-        effects: vec![Box::new(DamageTargetCreature(Damage::fire(500)))],
+        rules: vec![Box::new(DamageTargetCreature(Damage::fire(500)))],
     }
 }
 
@@ -334,7 +334,7 @@ fn maniacal_rage() -> Spell {
             cost: mana_cost(School::Flame, ManaValue::new(200), 2),
             school: School::Flame,
         },
-        effects: vec![Box::new(BonusAttackAndHealthCantDefend(
+        rules: vec![Box::new(BonusAttackAndHealthCantDefend(
             Damage::fire(200),
             HealthValue::from(200),
         ))],
@@ -385,7 +385,7 @@ fn pack_mastiff() -> Creature {
                     cost: mana_cost(School::Flame, ManaValue::new(200), 2),
                     school: School::Flame,
                 },
-                effects: vec![Box::new(EachCreatureWithSameNameBonusDamageThisTurn(
+                rules: vec![Box::new(EachCreatureWithSameNameBonusDamageThisTurn(
                     Damage::fire(100),
                 ))],
             }],
@@ -402,7 +402,7 @@ fn reduce_to_ashes() -> Spell {
             cost: mana_cost(School::Flame, ManaValue::new(500), 2),
             school: School::Flame,
         },
-        effects: vec![Box::new(DamageTargetCreatureAndExileIfDies(Damage::fire(
+        rules: vec![Box::new(DamageTargetCreatureAndExileIfDies(Damage::fire(
             500,
         )))],
     }
@@ -429,7 +429,7 @@ fn goblin_smuggler() -> Creature {
                     cost: Cost::None,
                     school: School::Flame,
                 },
-                effects: vec![Box::new(ExhaustSoTargetWithAttackLessThanCantBeBlocked(
+                rules: vec![Box::new(ExhaustSoTargetWithAttackLessThanCantBeBlocked(
                     Damage::fire(200),
                 ))],
             }],
@@ -458,7 +458,7 @@ fn chandras_embercat() -> Creature {
                     cost: Cost::None,
                     school: School::Flame,
                 },
-                effects: vec![Box::new(ExhaustToAddManaOnlyForCreaturesWithTag {
+                rules: vec![Box::new(ExhaustToAddManaOnlyForCreaturesWithTag {
                     mana: ManaValue::from(100),
                     influence: Influence::flame(2),
                     tag: CreatureTag::Elemental,

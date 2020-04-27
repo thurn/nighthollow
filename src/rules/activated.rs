@@ -15,13 +15,30 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::model::effect::{Effect, Request, Response};
+use crate::{
+    model::primitives::{CreatureTag, Damage, Influence, ManaValue},
+    model::rules::{Request, Response, Rule},
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct MayDiscardToDraw();
+pub struct ExhaustSoTargetWithAttackLessThanCantBeBlocked(pub Damage);
 
 #[typetag::serde]
-impl Effect for MayDiscardToDraw {
+impl Rule for ExhaustSoTargetWithAttackLessThanCantBeBlocked {
+    fn evaluate(&self, request: &Request) -> Response {
+        Response::default()
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ExhaustToAddManaOnlyForCreaturesWithTag {
+    pub mana: ManaValue,
+    pub influence: Influence,
+    pub tag: CreatureTag,
+}
+
+#[typetag::serde]
+impl Rule for ExhaustToAddManaOnlyForCreaturesWithTag {
     fn evaluate(&self, request: &Request) -> Response {
         Response::default()
     }

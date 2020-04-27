@@ -18,11 +18,11 @@ use serde::{Deserialize, Serialize};
 
 use crate::model::{
     attributes::Attribute,
-    effect::{Effect, Trigger},
     primitives::{
         CombatPosition, Damage, GamePhase, HealthValue, Influence, InterfaceError, ManaValue,
         PlayerName, Result, School,
     },
+    rules::{Rule, Trigger},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -317,7 +317,7 @@ pub enum Attack {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Spell {
     pub card: Card,
-    pub effects: Vec<Box<dyn Effect>>,
+    pub rules: Vec<Box<dyn Rule>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
