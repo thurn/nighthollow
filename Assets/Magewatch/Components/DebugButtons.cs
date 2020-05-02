@@ -58,11 +58,11 @@ namespace Magewatch.Components
         new List<CombatAction> {MeleeEngage(1, 2), MeleeEngage(2, 1)},
       };
 
-      for (var i = 0; i < 19; ++i)
+      for (var i = 0; i < 9; ++i)
       {
         actions.Add(new List<CombatAction>
         {
-          i % 2 == 0 ? Attack(1, 2, 10, Skill.Skill2) : Attack(2, 1, 10, Skill.Skill3)
+          i % 2 == 0 ? Attack(1, 2, 20, Skill.Skill2) : Attack(2, 1, 20, Skill.Skill3)
         });
       }
 

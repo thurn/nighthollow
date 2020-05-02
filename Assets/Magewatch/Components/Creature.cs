@@ -120,6 +120,11 @@ namespace Magewatch.Components
       }
     }
 
+    public void OnDeathAnimationCompleted()
+    {
+      Destroy(gameObject);
+    }
+
     void ApplyAttack(Attack attack)
     {
       _healthBar.Value -= attack.DamagePercent;
