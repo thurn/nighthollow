@@ -51,6 +51,24 @@ namespace Magewatch.Components
       });
     }
 
+    public void Attack2()
+    {
+      var actions = new List<List<CombatAction>>
+      {
+        new List<CombatAction> {MeleeEngage(1, 2), MeleeEngage(2, 1)},
+      };
+
+      for (var i = 0; i < 19; ++i)
+      {
+        actions.Add(new List<CombatAction>
+        {
+          i % 2 == 0 ? Attack(1, 2, 10, Skill.Skill2) : Attack(2, 1, 10, Skill.Skill3)
+        });
+      }
+
+      RunCombat(actions.ToArray());
+    }
+
     static void RunCombat(params List<CombatAction>[] input)
     {
       Root.Instance.CommandService.HandleCommand(new Command

@@ -78,7 +78,7 @@ namespace Magewatch.Components
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();
-      // _healthBar.gameObject.SetActive(false);
+      _healthBar.gameObject.SetActive(false);
     }
 
     public int CreatureId => _creatureId;
@@ -122,11 +122,17 @@ namespace Magewatch.Components
 
     void ApplyAttack(Attack attack)
     {
+      _healthBar.Value -= attack.DamagePercent;
+      _healthBar.gameObject.SetActive(_healthBar.Value < 100);
+      if (_healthBar.Value <= 0)
+      {
+        _animator.SetTrigger(Death);
+        _healthBar.gameObject.SetActive(false);
+      }
     }
 
     void AttackStart()
     {
-      Debug.Log($"Creature::AttackStart>");
       _currentTarget.ApplyAttack(_currentAttack);
       _onComplete.OnComplete();
     }

@@ -21,9 +21,10 @@ namespace Magewatch.Components
   {
     [SerializeField] Slider _slider;
 
-    public void SetValue(int value)
+    public float Value
     {
-      _slider.value = value;
+      set => _slider.value = value;
+      get => _slider.value;
     }
   }
 }
