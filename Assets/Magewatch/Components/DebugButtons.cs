@@ -22,6 +22,11 @@ namespace Magewatch.Components
 {
   public sealed class DebugButtons : MonoBehaviour
   {
+    public void Slow()
+    {
+      Time.timeScale = 0.1f;
+    }
+
     public void Engage()
     {
       RunCombat(new List<CombatAction>
@@ -39,8 +44,10 @@ namespace Magewatch.Components
         MeleeEngage(2, 1)
       }, new List<CombatAction>
       {
-        Attack(1, 2, 10),
-        Attack(2, 1, 10)
+        Attack(1, 2, 10, Skill.Skill2),
+      }, new List<CombatAction>
+      {
+        Attack(2, 1, 10, Skill.Skill3)
       });
     }
 
@@ -67,7 +74,8 @@ namespace Magewatch.Components
       };
     }
 
-    static CombatAction Attack(int c1, int c2, int damage)
+    static CombatAction Attack(int c1, int c2, int damage, Skill skill = Skill.Skill1,
+      Reaction reaction = Reaction.Hit1, int hitCount = 1)
     {
       return new CombatAction
       {
@@ -75,9 +83,9 @@ namespace Magewatch.Components
         {
           CreatureId = c1,
           TargetCreatureId = c2,
-          SkillNumber = Skill.Skill1,
-          HitCount = 1,
-          HitReaction = Reaction.Hit1,
+          SkillNumber = skill,
+          HitCount = hitCount,
+          HitReaction = reaction,
           DamagePercent = damage
         }
       };

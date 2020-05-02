@@ -30,6 +30,7 @@ namespace Magewatch.Services
 
     void RunCombatStep()
     {
+      Debug.Log($"CombatService::RunCombatStep> Running combat step {_currentCombatStep}");
       _completionCount = 0;
       _expectedCompletions = 0;
 
@@ -56,18 +57,27 @@ namespace Magewatch.Services
 
     void HandleAttack(Attack attack)
     {
+      _expectedCompletions += attack.HitCount;
+      _creatureService.Get(attack.CreatureId).AttackTarget(_creatureService.Get(attack.TargetCreatureId), attack, this);
     }
 
     public void OnComplete()
     {
+      Debug.Log($"CombatService::OnComplete> expected {_expectedCompletions}");
       _completionCount++;
 
       if (_completionCount >= _expectedCompletions)
       {
+        Debug.Log($"CombatService::OnComplete> incrementing step");
         _currentCombatStep++;
         if (_currentCombatStep < _currentCommand.Steps.Count)
         {
+          Debug.Log($"CombatService::OnComplete> running");
           RunCombatStep();
+        }
+        else
+        {
+          Debug.Log($"CombatService::OnComplete> Done running combat");
         }
       }
     }
