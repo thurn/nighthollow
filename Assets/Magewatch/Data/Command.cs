@@ -14,10 +14,8 @@
 
 namespace Magewatch.Data
 {
-  public enum CreatureState
+  public sealed class Command
   {
-    Idle,
-    Walking,
-    Running
+    public RunCombatCommand RunCombatCommand;
   }
 }

@@ -12,82 +12,113 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using Magewatch.Data;
+using Magewatch.Services;
+using Magewatch.Utils;
 using UnityEngine;
 
 namespace Magewatch.Components
 {
+  enum CreatureState
+  {
+    Idle,
+    MeleeEngage,
+    Attack
+  }
+
+  enum AnimatorState
+  {
+    Idle = 1,
+    Walk = 2,
+    Run = 3,
+    Death = 4,
+    Hit1 = 5,
+    Hit2 = 6,
+    Skill1 = 7,
+    Skill2 = 8,
+    SKill3 = 9,
+    Skill4 = 10,
+    Skill5 = 11
+  }
+
   public sealed class Creature : MonoBehaviour
   {
-    [SerializeField] Animator _animator;
+    [SerializeField] bool _debugMode;
+    [SerializeField] int _debugCreatureId;
     [SerializeField] CreatureState _state;
-    [SerializeField] Vector2 _startPosition;
-    [SerializeField] Vector2? _targetPosition;
-    [SerializeField] float _percentageMoved;
-    [SerializeField] float _moveDuration;
+    [SerializeField] AnimatorState _animatorState;
+    [SerializeField] Animator _animator;
+    [SerializeField] Collider2D _collider;
+    [SerializeField] int _creatureId;
+    [SerializeField] bool _initialized;
+    [SerializeField] Creature _meleeTarget;
+    [SerializeField] float _speed = 5;
 
-    static readonly int Idle1 = Animator.StringToHash("idle_1");
-    static readonly int Walk = Animator.StringToHash("walk");
-    static readonly int Run = Animator.StringToHash("run");
+    IOnComplete _onComplete;
+
+    static readonly int State = Animator.StringToHash("State");
+
+    public void Initialize(int creatureId)
+    {
+      _creatureId = creatureId;
+      _initialized = true;
+    }
 
     void Start()
     {
+      if (!_initialized)
+      {
+        if (_debugMode)
+        {
+          Initialize(_debugCreatureId);
+          Root.Instance.CreatureService.Add(this);
+        }
+        else
+        {
+          throw Errors.MustInitialize(name);
+        }
+      }
+
       _animator = GetComponent<Animator>();
+      _collider = GetComponent<Collider2D>();
     }
 
-    public void MoveToPosition(Vector2 position, float duration, bool shouldWalk = false)
+    public int CreatureId => _creatureId;
+
+    public void MeleeEngageWithTarget(Creature target, IOnComplete onComplete)
     {
-      SetState(shouldWalk ? CreatureState.Walking : CreatureState.Running);
-      _startPosition = transform.position;
-      _targetPosition = position;
-      _percentageMoved = 0;
-      _moveDuration = duration;
+      _meleeTarget = target;
+      _onComplete = onComplete;
+      _state = CreatureState.MeleeEngage;
+      _animatorState = Vector2.Distance(transform.position, _meleeTarget.transform.position) > 2
+        ? AnimatorState.Run
+        : AnimatorState.Walk;
+    }
+
+    void AttackStart()
+    {
+      Debug.Log($"Creature::AttackStart>");
     }
 
     void Update()
     {
-      if (Input.GetMouseButtonDown(0))
+      if (_meleeTarget)
       {
-        MoveToPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition), 5);
-      }
-
-      if (_targetPosition.HasValue)
-      {
-        _percentageMoved += Time.deltaTime / _moveDuration;
-        if (_percentageMoved >= 1)
+        if (_collider.IsTouching(_meleeTarget._collider))
         {
-          SetState(CreatureState.Idle);
-          _targetPosition = null;
+          _animatorState = AnimatorState.Idle;
+          _state = CreatureState.Idle;
+          _onComplete.OnComplete();
         }
         else
         {
-          transform.position = Vector3.Lerp(_startPosition, _targetPosition.Value, _percentageMoved);
+          transform.position = Vector3.MoveTowards(
+            transform.position,
+            _meleeTarget.transform.position,
+            _speed * Time.deltaTime);
         }
       }
-    }
 
-    void SetState(CreatureState state)
-    {
-      if (_state != state)
-      {
-        switch (state)
-        {
-          case CreatureState.Idle:
-            _animator.SetTrigger(Idle1);
-            break;
-          case CreatureState.Walking:
-            _animator.SetTrigger(Walk);
-            break;
-          case CreatureState.Running:
-            _animator.SetTrigger(Run);
-            break;
-          default:
-            throw new ArgumentOutOfRangeException(nameof(state), state, null);
-        }
-
-        _state = state;
-      }
+      _animator.SetInteger(State, (int) _animatorState);
     }
   }
 }
