@@ -1,0 +1,3 @@
+[submodule "Assets/ThirdParty"]
+	path = Assets/ThirdParty
+	url = git@bitbucket.org:thurn/magewatch-private.git
