@@ -151,6 +151,15 @@ pub enum PlayerName {
     Enemy,
 }
 
+impl PlayerName {
+    pub fn opponent(&self) -> PlayerName {
+        match self {
+            PlayerName::User => PlayerName::Enemy,
+            PlayerName::Enemy => PlayerName::User
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum CombatPosition {
     Position0,

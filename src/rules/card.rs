@@ -15,14 +15,19 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::model::rules::{Request, Response, Rule};
+use crate::model::{
+    mutations::Mutation,
+    primitives::Result,
+    rules::{Request, Response, Rule},
+    types::Creature,
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MayDiscardToDraw();
 
 #[typetag::serde]
 impl Rule for MayDiscardToDraw {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        Ok(vec![])
     }
 }

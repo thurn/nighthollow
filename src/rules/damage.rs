@@ -15,13 +15,12 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::{
-    model::rules::{CreatureId, Request, Response, Rule},
-    model::{
-        mutations::{CreaturePlayerSelectorType, Mutation, MutationType},
-        primitives::Damage,
-        types::Creature,
-    },
+use crate::model::{
+    helpers,
+    mutations::{Mutation, MutationType, SelectorType},
+    primitives::{Damage, Result},
+    rules::{CreatureId, Request, Response, Rule},
+    types::Creature,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -29,8 +28,14 @@ pub struct DamageTargetCreature(pub Damage);
 
 #[typetag::serde]
 impl Rule for DamageTargetCreature {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        helpers::single_target_opponent_creature(r, |c| {
+            Ok(vec![Mutation::DamageCreature(
+                c,
+                MutationType::Apply,
+                self.0.clone(),
+            )])
+        })
     }
 }
 
@@ -39,8 +44,14 @@ pub struct DamageOpponent(pub Damage);
 
 #[typetag::serde]
 impl Rule for DamageOpponent {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        helpers::one_shot(r, || {
+            Ok(vec![Mutation::DamagePlayer(
+                r.context.owning_player.opponent(),
+                MutationType::Apply,
+                self.0.clone(),
+            )])
+        })
     }
 }
 
@@ -49,8 +60,8 @@ pub struct DamageTargetCreatureAndItsOwner(pub Damage, pub Damage);
 
 #[typetag::serde]
 impl Rule for DamageTargetCreatureAndItsOwner {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        Ok(vec![])
     }
 }
 
@@ -59,8 +70,8 @@ pub struct DamageTargetCreatureOrOpponent(pub Damage);
 
 #[typetag::serde]
 impl Rule for DamageTargetCreatureOrOpponent {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        Ok(vec![])
     }
 }
 
@@ -69,7 +80,7 @@ pub struct DamageTargetCreatureAndExileIfDies(pub Damage);
 
 #[typetag::serde]
 impl Rule for DamageTargetCreatureAndExileIfDies {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        Ok(vec![])
     }
 }

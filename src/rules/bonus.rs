@@ -15,9 +15,11 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::{
-    model::primitives::{CreatureTag, Damage, HealthValue},
-    model::rules::{Request, Response, Rule},
+use crate::model::{
+    mutations::Mutation,
+    primitives::{CreatureTag, Damage, HealthValue, Result},
+    rules::{Request, Response, Rule},
+    types::Creature,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -25,8 +27,8 @@ pub struct BonusAttackAndHealthThisTurn(pub Damage, pub HealthValue);
 
 #[typetag::serde]
 impl Rule for BonusAttackAndHealthThisTurn {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        Ok(vec![])
     }
 }
 
@@ -35,8 +37,8 @@ pub struct BonusAttackAndHealthCantDefend(pub Damage, pub HealthValue);
 
 #[typetag::serde]
 impl Rule for BonusAttackAndHealthCantDefend {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        Ok(vec![])
     }
 }
 
@@ -50,8 +52,8 @@ pub struct AttackingDamageBonusPerTaggedAlly {
 
 #[typetag::serde]
 impl Rule for AttackingDamageBonusPerTaggedAlly {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        Ok(vec![])
     }
 }
 
@@ -60,8 +62,8 @@ pub struct CreatureDamageBonusOnOpponentNoncombatDamaged(pub Damage);
 
 #[typetag::serde]
 impl Rule for CreatureDamageBonusOnOpponentNoncombatDamaged {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        Ok(vec![])
     }
 }
 
@@ -70,7 +72,7 @@ pub struct EachCreatureWithSameNameBonusDamageThisTurn(pub Damage);
 
 #[typetag::serde]
 impl Rule for EachCreatureWithSameNameBonusDamageThisTurn {
-    fn evaluate(&self, request: &Request) -> Response {
-        Response::default()
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        Ok(vec![])
     }
 }

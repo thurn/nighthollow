@@ -17,21 +17,25 @@ use std::{fmt::Debug, marker::PhantomData};
 use serde::{Deserialize, Serialize};
 
 use super::{
+    events::Event,
     mutations::Mutation,
-    primitives::PlayerName,
-    types::{CardVariant, Creature, Game},
+    primitives::{PlayerName, Result},
+    types::{Card, CardVariant, Creature, Game},
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct HandCardId(usize);
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct DiscardCardId(usize);
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct CreatureId(usize);
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub struct SpellId(usize);
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct RuleId(usize);
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -42,11 +46,16 @@ pub enum TriggerName {
     PlayerDamaged,
 }
 
+pub struct RuleContext<'a> {
+    pub id: RuleId,
+    pub owning_player: PlayerName,
+    pub source: &'a CardVariant,
+}
+
 pub struct Request<'a> {
-    id: RuleId,
-    owner: PlayerName,
-    source: &'a CardVariant,
-    game: &'a Game,
+    pub event: &'a Event<'a>,
+    pub context: RuleContext<'a>,
+    pub game: &'a Game,
 }
 
 pub struct Response {
@@ -64,7 +73,7 @@ pub struct Trigger(pub TriggerName, pub Vec<Box<dyn Rule>>);
 
 #[typetag::serde(tag = "type")]
 pub trait Rule: RuleClone + Debug {
-    fn evaluate(&self, request: &Request) -> Response;
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>>;
 }
 
 pub trait RuleClone {

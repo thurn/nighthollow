@@ -13,6 +13,8 @@
 // limitations under the License.
 
 pub mod attributes;
+pub mod events;
+pub mod helpers;
 pub mod mutations;
 pub mod primitives;
 pub mod rules;

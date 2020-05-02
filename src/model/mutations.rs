@@ -15,13 +15,13 @@
 use super::{
     attributes::Attribute,
     primitives::{Damage, GamePhase, HealthValue, Influence, ManaValue, PlayerName},
-    rules::{CreatureId, DiscardCardId, HandCardId, Request},
+    rules::{CreatureId, DiscardCardId, HandCardId, Request, SpellId},
     types::Attack,
 };
 use std::marker::PhantomData;
 
 pub enum MutationType {
-    SetBase,
+    Apply,
     Increase,
     Reduce,
     MoreMultiplier,
@@ -44,20 +44,33 @@ pub enum CardSelectorType {
     SpecificCardInOpponentDiscard(Vec<DiscardCardId>),
 }
 
-pub enum CreaturePlayerSelectorType {
+pub enum SelectorType {
+    Me,
+    Opponent,
+    Creatures(Vec<CreatureId>),
     MyCreatures,
-    MyCreaturesOrMe,
     OpponentCreatures,
-    OpponentCreaturesAndOpponent,
-    SpecificCreatures(Vec<CreatureId>),
-    SpecificCreaturesAndMe(Vec<CreatureId>),
-    SpecificCreaturesAndOpponent(Vec<CreatureId>),
+    Spells(Vec<SpellId>),
+    MySpells,
+    OpponentSpells,
+    CardsInHand(Vec<HandCardId>),
+    MyCardsInHand,
+    OpponentCardsInHand,
+    CardsInDiscard(Vec<DiscardCardId>),
+    MyCardsInDiscard,
+    OpponentCardsInDiscard,
+}
+
+pub struct AttackersSelector {
+    creatures: Vec<CreatureId>
 }
 
 pub enum Mutation {
+    AdvanceGamePhase,
+
     // UI Changes
-    DisplayHandCardSelector(CardSelectorType),
-    DisplayCreatureAndPlayerSelector(CreaturePlayerSelectorType),
+    DisplayTargetSelector(Vec<SelectorType>),
+    DisplayAttackersSelector(AttackersSelector),
 
     // Player Mutations
     DrawCard(PlayerName),
