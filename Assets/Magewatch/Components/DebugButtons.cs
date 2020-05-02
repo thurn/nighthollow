@@ -74,8 +74,7 @@ namespace Magewatch.Components
       };
     }
 
-    static CombatAction Attack(int c1, int c2, int damage, Skill skill = Skill.Skill1,
-      Reaction reaction = Reaction.Hit1, int hitCount = 1)
+    static CombatAction Attack(int c1, int c2, int damage, Skill skill = Skill.Skill1, int hitCount = 1)
     {
       return new CombatAction
       {
@@ -85,7 +84,6 @@ namespace Magewatch.Components
           TargetCreatureId = c2,
           SkillNumber = skill,
           HitCount = hitCount,
-          HitReaction = reaction,
           DamagePercent = damage
         }
       };

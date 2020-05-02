@@ -33,6 +33,8 @@ namespace Magewatch.Components
     [SerializeField] CreatureState _state;
     [SerializeField] Animator _animator;
     [SerializeField] Collider2D _collider;
+    [SerializeField] Transform _healthbarAnchor;
+    [SerializeField] HealthBar _healthBar;
     [SerializeField] int _creatureId;
     [SerializeField] bool _initialized;
     [SerializeField] Creature _currentTarget;
@@ -48,6 +50,9 @@ namespace Magewatch.Components
     static readonly int Skill3 = Animator.StringToHash("Skill3");
     static readonly int Skill4 = Animator.StringToHash("Skill4");
     static readonly int Skill5 = Animator.StringToHash("Skill5");
+    static readonly int Death = Animator.StringToHash("Death");
+    static readonly int Hit2 = Animator.StringToHash("Hit2");
+    static readonly int Hit1 = Animator.StringToHash("Hit1");
 
     public void Initialize(int creatureId)
     {
@@ -72,6 +77,8 @@ namespace Magewatch.Components
 
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
+      _healthBar = Root.Instance.Prefabs.CreateHealthBar();
+      // _healthBar.gameObject.SetActive(false);
     }
 
     public int CreatureId => _creatureId;
@@ -113,14 +120,23 @@ namespace Magewatch.Components
       }
     }
 
+    void ApplyAttack(Attack attack)
+    {
+    }
+
     void AttackStart()
     {
       Debug.Log($"Creature::AttackStart>");
+      _currentTarget.ApplyAttack(_currentAttack);
       _onComplete.OnComplete();
     }
 
     void Update()
     {
+      var screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, _healthbarAnchor.position);
+      var canvasTransform = Root.Instance.MainCanvas.GetComponent<RectTransform>();
+      _healthBar.GetComponent<RectTransform>().anchoredPosition = screenPoint - canvasTransform.sizeDelta / 2f;
+
       if (_state == CreatureState.MeleeEngage)
       {
         if (_collider.IsTouching(_currentTarget._collider))

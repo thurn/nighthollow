@@ -76,9 +76,6 @@ namespace Magewatch.Data
     /// <summary>How many times this skill is expected to raise the 'AttackStart' event</summary>
     public int HitCount;
 
-    /// <summary>How the target creature should react to being hit</summary>
-    public Reaction HitReaction;
-
     /// <summary>What percentage should be removed from the target's health bar for *each* attack hit</summary>
     public int DamagePercent;
   }

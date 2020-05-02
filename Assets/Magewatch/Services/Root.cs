@@ -28,6 +28,9 @@ namespace Magewatch.Services
     [SerializeField] Canvas _mainCanvas;
     public Canvas MainCanvas => _mainCanvas;
 
+    [SerializeField] Prefabs _prefabs;
+    public Prefabs Prefabs => _prefabs;
+
     [SerializeField] CommandService _commandService;
     public CommandService CommandService => _commandService;
 
@@ -54,6 +57,7 @@ namespace Magewatch.Services
     {
       Errors.CheckNotNull(_mainCamera);
       Errors.CheckNotNull(_mainCanvas);
+      Errors.CheckNotNull(_prefabs);
       Errors.CheckNotNull(_commandService);
       Errors.CheckNotNull(_creatureService);
       Errors.CheckNotNull(_combatService);

@@ -121,6 +121,36 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &2003758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2003759}
+  m_Layer: 0
+  m_Name: Healthbar Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2003759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2003758}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 33, y: 250, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4737075512270153}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5365776
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,8 +329,9 @@ Transform:
   - {fileID: 1051596830}
   - {fileID: 599575469}
   - {fileID: 1516757340}
+  - {fileID: 823486516}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!61 &14172846
 BoxCollider2D:
@@ -345,10 +376,12 @@ MonoBehaviour:
   _state: 0
   _animator: {fileID: 0}
   _collider: {fileID: 0}
+  _healthbarAnchor: {fileID: 823486516}
+  _healthBar: {fileID: 0}
   _creatureId: 0
   _initialized: 0
   _currentTarget: {fileID: 0}
-  _speed: 2
+  _speed: 3
   _touchedTarget: 0
 --- !u!50 &14172848
 Rigidbody2D:
@@ -618,6 +651,7 @@ GameObject:
   m_Component:
   - component: {fileID: 169299294}
   - component: {fileID: 169299297}
+  - component: {fileID: 169299299}
   - component: {fileID: 169299296}
   - component: {fileID: 169299295}
   - component: {fileID: 169299298}
@@ -640,7 +674,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &169299295
 MonoBehaviour:
@@ -680,6 +714,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mainCamera: {fileID: 1687258584}
   _mainCanvas: {fileID: 1736363419}
+  _prefabs: {fileID: 169299299}
   _commandService: {fileID: 169299296}
   _creatureService: {fileID: 169299295}
   _combatService: {fileID: 169299298}
@@ -699,6 +734,20 @@ MonoBehaviour:
   _currentCombatStep: 0
   _expectedCompletions: 0
   _completionCount: 0
+--- !u!114 &169299299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169299293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00874a7b8e524617b84cdde2a6fe1e46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthBarPrefab: {fileID: 6270086122036726230, guid: c458a949a299d4f2a9f20c2602bc62b2,
+    type: 3}
 --- !u!1 &216199888
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,7 +812,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &235936386
 GameObject:
@@ -1388,6 +1437,36 @@ Transform:
   m_Father: {fileID: 1294628033}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &823486515
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 823486516}
+  m_Layer: 0
+  m_Name: Healthbar Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &823486516
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823486515}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 51, y: 203, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 14172845}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &888158899
 GameObject:
   m_ObjectHideFlags: 0
@@ -1887,7 +1966,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1280987230
 GameObject:
@@ -3051,7 +3130,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1687258586
 MonoBehaviour:
@@ -3369,7 +3448,7 @@ RectTransform:
   m_Children:
   - {fileID: 1147349105}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4592,10 +4671,12 @@ MonoBehaviour:
   _state: 0
   _animator: {fileID: 0}
   _collider: {fileID: 0}
+  _healthbarAnchor: {fileID: 2003759}
+  _healthBar: {fileID: 0}
   _creatureId: 0
   _initialized: 0
   _currentTarget: {fileID: 0}
-  _speed: 2
+  _speed: 3
   _touchedTarget: 0
 --- !u!61 &1565543210804093
 BoxCollider2D:
@@ -6014,8 +6095,9 @@ Transform:
   - {fileID: 4549322884861597}
   - {fileID: 4870826739239651}
   - {fileID: 4979443391034277}
+  - {fileID: 2003759}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4743522046863733
 Transform:
