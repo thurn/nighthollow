@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Magewatch.Data;
@@ -28,7 +27,9 @@ namespace Magewatch.Components
   public sealed class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
   {
     [SerializeField] bool _debugMode;
-    [SerializeField] RectTransform _cardBack;
+    [SerializeField] float _debugCardScale = 0.65f;
+
+    [Header("Config")] [SerializeField] RectTransform _cardBack;
     [SerializeField] RectTransform _cardFront;
     [SerializeField] Image _cardImage;
     [SerializeField] TextMeshProUGUI _name;
@@ -36,20 +37,17 @@ namespace Magewatch.Components
     [SerializeField] TextMeshProUGUI _text;
     [SerializeField] List<Image> _influence;
     [SerializeField] Image _outline;
-    [SerializeField] CardData _cardData;
-    [SerializeField] Hand _hand;
 
-    bool _initialized;
-    bool _isFaceUp;
-    bool _isRevealed;
-    bool _canBePlayed;
-    bool _isDragging;
-    bool _isOverBoard;
-    int _initialDragSiblingIndex;
-    Vector3 _initialDragPosition;
-    Quaternion _initialDragRotation;
-    string _currentName;
-    string _currentText;
+    [Header("Internal")] [SerializeField] CardData _cardData;
+    [SerializeField] Hand _hand;
+    [SerializeField] bool _previewMode;
+    [SerializeField] bool _initialized;
+    [SerializeField] bool _isFaceUp;
+    [SerializeField] bool _isDragging;
+    [SerializeField] bool _isOverBoard;
+    [SerializeField] int _initialDragSiblingIndex;
+    [SerializeField] Vector3 _initialDragPosition;
+    [SerializeField] Quaternion _initialDragRotation;
 
     public void Initialize(CardData card)
     {
@@ -58,7 +56,7 @@ namespace Magewatch.Components
       _cardBack.gameObject.SetActive(true);
       _outline.enabled = false;
       _hand = Root.Instance.GetPlayer(card.Owner).Hand;
-      // Get(Keys.CardImage).RenderCardImage(_cardData, _cardImage);
+      // RenderCardImage(_cardData, _cardImage);
       _initialized = true;
     }
 
@@ -70,7 +68,7 @@ namespace Magewatch.Components
         {
           Initialize(_cardData);
           _isFaceUp = _cardData.Owner == PlayerName.User;
-          transform.localScale = Vector2.one * 0.65f;
+          transform.localScale = Vector2.one * _debugCardScale;
         }
         else
         {
@@ -84,29 +82,35 @@ namespace Magewatch.Components
       Errors.CheckNotNull(_cardFront);
       Errors.CheckNotNull(_cardImage);
 
-      UpdateCardDate(_cardData);
+      UpdateCardData(_cardData);
     }
 
-    public void OnPlayed()
+    public bool PreviewMode
+    {
+      get => _previewMode;
+      set => _previewMode = value;
+    }
+
+    void OnPlayed()
     {
       _hand.RemoveFromHand(this);
-      // Get(Keys.CardImage).DestroyCardImage(_cardData);
+      // DestroyCardImage(_cardData);
       Destroy(gameObject);
     }
 
-    public void ReturnToHand()
+    void ReturnToHand()
     {
       _isDragging = false;
       transform.SetSiblingIndex(_initialDragSiblingIndex);
       _hand.ReturnToHand(this);
     }
 
-    public bool CanBePlayed()
+    bool CanBePlayed()
     {
       return _cardData.CanBePlayed;
     }
 
-    public void UpdateCardDate(CardData newCardData)
+    void UpdateCardData(CardData newCardData)
     {
       if (!_isFaceUp && newCardData.IsRevealed)
       {
@@ -194,7 +198,7 @@ namespace Magewatch.Components
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-      if (_cardData.Owner == PlayerName.User)
+      if (_cardData.Owner == PlayerName.User && !_previewMode)
       {
         _isDragging = true;
         _initialDragPosition = transform.position;
@@ -213,7 +217,7 @@ namespace Magewatch.Components
             Physics.Raycast(
               Root.Instance.MainCamera.ScreenPointToRay(Input.mousePosition),
               out var hit,
-              maxDistance: 100) /*&& hit.collider.CompareTag(Tags.Board)*/)
+              maxDistance: 100) && hit.collider.CompareTag(Tags.Board))
         {
           _isOverBoard = true;
         }

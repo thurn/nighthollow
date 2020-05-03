@@ -155,7 +155,7 @@ impl PlayerName {
     pub fn opponent(&self) -> PlayerName {
         match self {
             PlayerName::User => PlayerName::Enemy,
-            PlayerName::Enemy => PlayerName::User
+            PlayerName::Enemy => PlayerName::User,
         }
     }
 }

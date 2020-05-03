@@ -62,7 +62,7 @@ pub enum SelectorType {
 }
 
 pub struct AttackersSelector {
-    creatures: Vec<CreatureId>
+    creatures: Vec<CreatureId>,
 }
 
 pub enum Mutation {

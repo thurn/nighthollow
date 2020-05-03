@@ -15,7 +15,7 @@
 use super::{
     mutations::Mutation,
     primitives::GamePhase,
-    rules::{RuleContext, RuleId, CreatureId, HandCardId, DiscardCardId},
+    rules::{CreatureId, DiscardCardId, HandCardId, RuleContext, RuleId},
 };
 
 pub enum Event<'a> {

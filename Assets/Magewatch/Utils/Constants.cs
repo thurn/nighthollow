@@ -12,21 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Magewatch.Data;
-using UnityEngine;
-
-namespace Magewatch.Components
+namespace Magewatch.Utils
 {
-  public sealed class Player : MonoBehaviour
+  public static class Constants
   {
-    [SerializeField] Hand _hand;
-
-    public Hand Hand => _hand;
-
-    public Card AddCardToHand(CardData cardData, bool animate = true)
-    {
-      var card = _hand.DrawCard(cardData, animate: animate);
-      return card;
-    }
+    public const int CardImageWidth = 160;
+    public const int CardImageHeight = 207;
   }
 }
