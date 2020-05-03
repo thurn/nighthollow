@@ -49,40 +49,26 @@ namespace Magewatch.Components
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
 
-    public void Initialize(CardData card)
+    public void Initialize(CardData cardData)
     {
-      name = card.Name;
       _cardFront.gameObject.SetActive(false);
       _cardBack.gameObject.SetActive(true);
-      _outline.enabled = false;
-      _hand = Root.Instance.GetPlayer(card.Owner).Hand;
-      // RenderCardImage(_cardData, _cardImage);
+      UpdateCardData(cardData);
       _initialized = true;
     }
 
     void Start()
     {
-      if (!_initialized)
+      if (!_initialized && _debugMode)
       {
-        if (_debugMode)
-        {
-          Initialize(_cardData);
-          _isFaceUp = _cardData.Owner == PlayerName.User;
-          transform.localScale = Vector2.one * _debugCardScale;
-        }
-        else
-        {
-          throw Errors.MustInitialize(name);
-        }
+        Initialize(_cardData);
+        _isFaceUp = _cardData.Owner == PlayerName.User;
+        transform.localScale = Vector2.one * _debugCardScale;
       }
 
-      Errors.CheckNotNull(_cardData);
-      Errors.CheckNotNull(_hand);
       Errors.CheckNotNull(_cardBack);
       Errors.CheckNotNull(_cardFront);
       Errors.CheckNotNull(_cardImage);
-
-      UpdateCardData(_cardData);
     }
 
     public bool PreviewMode
@@ -112,6 +98,15 @@ namespace Magewatch.Components
 
     void UpdateCardData(CardData newCardData)
     {
+      Errors.CheckNotNull(newCardData);
+
+      if (_cardData?.Owner != newCardData.Owner)
+      {
+        _hand = Root.Instance.GetPlayer(newCardData.Owner).Hand;
+      }
+
+      // RenderCardImage(_cardData, _cardImage);
+
       if (!_isFaceUp && newCardData.IsRevealed)
       {
         _isFaceUp = true;
@@ -143,6 +138,7 @@ namespace Magewatch.Components
 
       if (_cardData?.Name != newCardData.Name)
       {
+        name = newCardData.Name;
         _name.text = newCardData.Name;
       }
 

@@ -14,8 +14,9 @@
 
 namespace Magewatch.Data
 {
-  public class CardData
+  public sealed class CardData
   {
+    public string Prefab;
     public string Name;
     public int ManaCost;
     public Influence Influence;

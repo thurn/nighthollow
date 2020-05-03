@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Magewatch.Data;
+using Magewatch.Services;
 using UnityEngine;
 
 namespace Magewatch.Components
@@ -88,15 +89,16 @@ namespace Magewatch.Components
       }
     }
 
-    public Card DrawCard(CardData cardData, bool animate = true)
+    public void DrawCard(CardData cardData, bool animate = true)
     {
-      // var card = ComponentUtils.Instantiate(cardData.Get(Keys.CardPrefab), transform);
-      var card = _cards[0];
-      card.Initialize(cardData);
-      card.transform.position = _deckPosition.position;
-      card.transform.localScale = Vector2.one * _initialCardScale;
-      AddToHand(card, animate);
-      return card;
+      Root.Instance.AssetService.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas.transform, card =>
+      {
+        Debug.Log($"Got Card with data {cardData}");
+        card.Initialize(cardData);
+        card.transform.position = _deckPosition.position;
+        card.transform.localScale = Vector2.one * _initialCardScale;
+        AddToHand(card, animate);
+      });
     }
 
     void AnimateCardsToPosition(Action onComplete = null)

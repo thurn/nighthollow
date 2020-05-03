@@ -144,6 +144,24 @@ namespace Magewatch.Components
       RunCombat(actions.ToArray());
     }
 
+    public void DrawCard()
+    {
+      Root.Instance.User.Hand.DrawCard(new CardData
+      {
+        Prefab = "FireCard",
+        Name = "Mage",
+        ManaCost = 2,
+        Influence = new Influence
+        {
+          Flame = 1
+        },
+        Owner = PlayerName.User,
+        Text = "Whiz! Zoom!",
+        IsRevealed = true,
+        CanBePlayed = true
+      });
+    }
+
     static void RunCombat(params List<CombatAction>[] input)
     {
       Root.Instance.CommandService.HandleCommand(new Command

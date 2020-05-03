@@ -69,9 +69,6 @@ namespace Magewatch.Utils
     public static Exception UnknownIntEnumValue(int value, int minimum, int maximum)
       => new ArgumentException($"Int value '{value}' must be between '{minimum}' and '{maximum}' (inclusive)");
 
-    public static Exception MustInitialize(string name)
-      => new InvalidOperationException($"Must call Initialize() on {name} before Start()!");
-
     public static void CheckArgument(bool expression, string message)
     {
       if (!expression)

@@ -23,10 +23,9 @@ namespace Magewatch.Components
 
     public Hand Hand => _hand;
 
-    public Card AddCardToHand(CardData cardData, bool animate = true)
+    public void AddCardToHand(CardData cardData, bool animate = true)
     {
-      var card = _hand.DrawCard(cardData, animate: animate);
-      return card;
+      _hand.DrawCard(cardData, animate: animate);
     }
   }
 }

@@ -56,28 +56,20 @@ namespace Magewatch.Components
     public void Initialize(int creatureId)
     {
       _creatureId = creatureId;
+      _animator = GetComponent<Animator>();
+      _collider = GetComponent<Collider2D>();
+      _healthBar = Root.Instance.Prefabs.CreateHealthBar();
+      _healthBar.gameObject.SetActive(false);
       _initialized = true;
     }
 
     void Start()
     {
-      if (!_initialized)
+      if (!_initialized && _debugMode)
       {
-        if (_debugMode)
-        {
-          Initialize(_debugCreatureId);
-          Root.Instance.CreatureService.Add(this);
-        }
-        else
-        {
-          throw Errors.MustInitialize(name);
-        }
+        Initialize(_debugCreatureId);
+        Root.Instance.CreatureService.Add(this);
       }
-
-      _animator = GetComponent<Animator>();
-      _collider = GetComponent<Collider2D>();
-      _healthBar = Root.Instance.Prefabs.CreateHealthBar();
-      _healthBar.gameObject.SetActive(false);
     }
 
     public int CreatureId => _creatureId;
@@ -147,9 +139,12 @@ namespace Magewatch.Components
 
     void Update()
     {
-      var screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, _healthbarAnchor.position);
-      var canvasTransform = Root.Instance.MainCanvas.GetComponent<RectTransform>();
-      _healthBar.GetComponent<RectTransform>().anchoredPosition = screenPoint - canvasTransform.sizeDelta / 2f;
+      if (_healthBar.gameObject.activeInHierarchy)
+      {
+        var screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, _healthbarAnchor.position);
+        var canvasTransform = Root.Instance.MainCanvas.GetComponent<RectTransform>();
+        _healthBar.GetComponent<RectTransform>().anchoredPosition = screenPoint - canvasTransform.sizeDelta / 2f;
+      }
 
       if (_state == CreatureState.MeleeEngage)
       {

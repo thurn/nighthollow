@@ -33,6 +33,9 @@ namespace Magewatch.Services
     [SerializeField] Prefabs _prefabs;
     public Prefabs Prefabs => _prefabs;
 
+    [SerializeField] AssetService _assetService;
+    public AssetService AssetService => _assetService;
+
     [SerializeField] CommandService _commandService;
     public CommandService CommandService => _commandService;
 
@@ -76,9 +79,12 @@ namespace Magewatch.Services
       Errors.CheckNotNull(_mainCamera);
       Errors.CheckNotNull(_mainCanvas);
       Errors.CheckNotNull(_prefabs);
+      Errors.CheckNotNull(_assetService);
       Errors.CheckNotNull(_commandService);
       Errors.CheckNotNull(_creatureService);
       Errors.CheckNotNull(_combatService);
+      Errors.CheckNotNull(_user);
+      Errors.CheckNotNull(_enemy);
 
       _instance = this;
     }
