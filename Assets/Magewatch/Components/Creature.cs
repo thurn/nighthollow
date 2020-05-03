@@ -38,6 +38,7 @@ namespace Magewatch.Components
     [SerializeField] int _creatureId;
     [SerializeField] bool _initialized;
     [SerializeField] Creature _currentTarget;
+    [SerializeField] Transform _meleePosition;
     [SerializeField] float _speed = 2;
     [SerializeField] bool _touchedTarget;
     [SerializeField] Attack _currentAttack;
@@ -51,8 +52,6 @@ namespace Magewatch.Components
     static readonly int Skill4 = Animator.StringToHash("Skill4");
     static readonly int Skill5 = Animator.StringToHash("Skill5");
     static readonly int Death = Animator.StringToHash("Death");
-    static readonly int Hit2 = Animator.StringToHash("Hit2");
-    static readonly int Hit1 = Animator.StringToHash("Hit1");
 
     public void Initialize(int creatureId)
     {
@@ -142,6 +141,10 @@ namespace Magewatch.Components
       _onComplete.OnComplete();
     }
 
+    Transform MeleePosition => _meleePosition;
+
+    Creature CurrentTarget => _currentTarget;
+
     void Update()
     {
       var screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, _healthbarAnchor.position);
@@ -150,7 +153,16 @@ namespace Magewatch.Components
 
       if (_state == CreatureState.MeleeEngage)
       {
-        if (_collider.IsTouching(_currentTarget._collider))
+        // To prevent creatures from overlapping too much, in cases where a creature is *not* the primary target
+        // of its opponent, we add a small Y offset to its target position to stagger the creatures in a more visually
+        // pleasing way
+        var yOffset = Vector3.zero;
+        if (_currentTarget.CurrentTarget != this)
+        {
+          yOffset = new Vector3(0, new[] {0.5f, -0.5f, -0.3f, 0.3f}[CreatureId % 4], 0);
+        }
+
+        if (Vector2.Distance(MeleePosition.position, _currentTarget.MeleePosition.position + yOffset) < 0.05f)
         {
           _animator.SetInteger(Speed, 0);
           if (!_touchedTarget)
@@ -165,9 +177,14 @@ namespace Magewatch.Components
             Vector2.Distance(transform.position, _currentTarget.transform.position) > 2
               ? 2
               : 1);
+
+          // Each creature has a desired "melee position" in front of it indicating where attackers should be placed.
+          // We translate the creature's position until its own melee position matches its target's melee position.
+          var meleePositionOffset = transform.position - MeleePosition.position;
+
           transform.position = Vector3.MoveTowards(
             transform.position,
-            _currentTarget.transform.position,
+            _currentTarget.MeleePosition.position + meleePositionOffset + yOffset,
             _speed * Time.deltaTime);
         }
       }
