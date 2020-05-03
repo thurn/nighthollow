@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections;
+using Magewatch.Data;
 using Magewatch.Utils;
 using UnityEngine;
 
@@ -21,20 +22,21 @@ namespace Magewatch.Services
 {
   public sealed class AssetService : MonoBehaviour
   {
-    public void Instantiate<T>(string path, Transform parent, Action<T> callback) where T : Component
+    public void InstantiateCard(CardData cardData, Action callback)
     {
-      StartCoroutine(InstantiateAsync(path, parent, callback));
+      StartCoroutine(InstantiateCardAsync(cardData, callback));
     }
 
-    IEnumerator InstantiateAsync<T>(string path, Transform parent, Action<T> callback) where T : Component
+    IEnumerator InstantiateCardAsync(CardData cardData, Action callback)
     {
-      Debug.Log($"AssetService::InstantiateAsync> Loading {path}");
-      var request = Resources.LoadAsync<GameObject>(path);
-      yield return request;
-      Errors.CheckNotNull(request.asset);
-      Debug.Log($"AssetService::InstantiateAsync> Loaded {request.asset}");
-      var result = Instantiate(request.asset, parent) as GameObject;
-      callback(ComponentUtils.GetComponent<T>(result));
+      var prefabRequest = Resources.LoadAsync<GameObject>(cardData.Prefab.Address);
+      var imageRequest = Resources.LoadAsync<Sprite>(cardData.Image.Address);
+      yield return prefabRequest;
+      yield return imageRequest;
+      Errors.CheckNotNull(prefabRequest.asset);
+      cardData.Prefab.Value = Instantiate(prefabRequest.asset, Root.Instance.MainCanvas.transform) as GameObject;
+      cardData.Image.Value = Errors.CheckNotNull(imageRequest.asset as Sprite);
+      callback();
     }
   }
 }

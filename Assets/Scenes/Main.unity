@@ -325,7 +325,7 @@ PrefabInstance:
     - target: {fileID: 3533905804817151028, guid: 5053f7e26655a4397a6f2575ed6d45c0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1112496
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3533905804817151028, guid: 5053f7e26655a4397a6f2575ed6d45c0,
         type: 3}
@@ -414,7 +414,7 @@ PrefabInstance:
     - target: {fileID: 2225211046518890782, guid: 7d2a59c4476494313bdba85e4739408b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.5
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 2225211046518890782, guid: 7d2a59c4476494313bdba85e4739408b,
         type: 3}
@@ -885,7 +885,7 @@ PrefabInstance:
     - target: {fileID: 3533905804817151028, guid: 5053f7e26655a4397a6f2575ed6d45c0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3689901
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3533905804817151028, guid: 5053f7e26655a4397a6f2575ed6d45c0,
         type: 3}
@@ -2268,7 +2268,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -30, y: 0}
+  m_AnchoredPosition: {x: -30, y: -10}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &1841190611970440669
@@ -2302,7 +2302,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugMode: 0
   _initialCardScale: 0.3
-  _finalCardScale: 0.65
+  _finalCardScale: 0.8
+  _dragEndScale: 1.2
   _zRotationMultiplier: 1
   _deckPosition: {fileID: 1166200426}
   _controlPoint1: {fileID: 1841190612781940161}
@@ -2327,7 +2328,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -325, y: -20}
+  m_AnchoredPosition: {x: -525, y: -20}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1841190612781940190
@@ -2378,7 +2379,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 325, y: -20}
+  m_AnchoredPosition: {x: 525, y: -20}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &2225211046532015027
@@ -2411,7 +2412,7 @@ PrefabInstance:
     - target: {fileID: 2225211046518890782, guid: 7d2a59c4476494313bdba85e4739408b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 2225211046518890782, guid: 7d2a59c4476494313bdba85e4739408b,
         type: 3}
@@ -2585,6 +2586,7 @@ MonoBehaviour:
   _debugMode: 0
   _initialCardScale: 0.3
   _finalCardScale: 0.3
+  _dragEndScale: 0
   _zRotationMultiplier: 75
   _deckPosition: {fileID: 2010541013}
   _controlPoint1: {fileID: 3461275703351002294}

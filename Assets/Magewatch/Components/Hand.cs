@@ -17,7 +17,9 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Magewatch.Data;
 using Magewatch.Services;
+using Magewatch.Utils;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Magewatch.Components
 {
@@ -26,6 +28,7 @@ namespace Magewatch.Components
     [SerializeField] bool _debugMode;
     [Header("Config")] [SerializeField] float _initialCardScale;
     [SerializeField] float _finalCardScale;
+    [SerializeField] float _dragEndScale;
     [SerializeField] int _zRotationMultiplier;
     [SerializeField] Transform _deckPosition;
     [SerializeField] Transform _controlPoint1;
@@ -37,6 +40,9 @@ namespace Magewatch.Components
     [SerializeField] Hand _handOverridePosition;
 
     public List<Card> Cards => _cards;
+
+    public float FinalCardScale => _finalCardScale;
+    public float DragEndScale => _dragEndScale;
 
     void Start()
     {
@@ -91,9 +97,9 @@ namespace Magewatch.Components
 
     public void DrawCard(CardData cardData, bool animate = true)
     {
-      Root.Instance.AssetService.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas.transform, card =>
+      Root.Instance.AssetService.InstantiateCard(cardData, () =>
       {
-        Debug.Log($"Got Card with data {cardData}");
+        var card = ComponentUtils.GetComponent<Card>(cardData.Prefab.Value);
         card.Initialize(cardData);
         card.transform.position = _deckPosition.position;
         card.transform.localScale = Vector2.one * _initialCardScale;

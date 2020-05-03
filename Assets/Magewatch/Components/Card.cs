@@ -53,6 +53,7 @@ namespace Magewatch.Components
     {
       _cardFront.gameObject.SetActive(false);
       _cardBack.gameObject.SetActive(true);
+      _cardImage.sprite = cardData.Image.Value;
       UpdateCardData(cardData);
       _initialized = true;
     }
@@ -80,7 +81,6 @@ namespace Magewatch.Components
     void OnPlayed()
     {
       _hand.RemoveFromHand(this);
-      // DestroyCardImage(_cardData);
       Destroy(gameObject);
     }
 
@@ -223,7 +223,7 @@ namespace Magewatch.Components
           transform.position = Input.mousePosition;
 
           var t = Mathf.Clamp(distanceDragged / 200, min: 0f, max: 1f);
-          var scale = Mathf.Lerp(a: 0.75f, b: 0.85f, t);
+          var scale = Mathf.Lerp(a: _hand.FinalCardScale, b: _hand.DragEndScale, t);
           transform.localScale = new Vector3(scale, scale, z: 1);
 
           var rotation = Quaternion.Slerp(_initialDragRotation, Quaternion.identity, t);

@@ -12,20 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using UnityEngine;
-
 namespace Magewatch.Data
 {
-  public sealed class CardData
+  public sealed class Asset<T>
   {
-    public Asset<GameObject> Prefab;
-    public string Name;
-    public int ManaCost;
-    public Influence Influence;
-    public PlayerName Owner;
-    public Asset<Sprite> Image;
-    public string Text;
-    public bool IsRevealed;
-    public bool CanBePlayed;
+    public readonly string Address;
+    public T Value;
+
+    public Asset(string address)
+    {
+      Address = address;
+    }
   }
 }

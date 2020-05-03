@@ -148,7 +148,7 @@ namespace Magewatch.Components
     {
       Root.Instance.User.Hand.DrawCard(new CardData
       {
-        Prefab = "Cards/FireCard",
+        Prefab = new Asset<GameObject>("Cards/FireCard"),
         Name = "Mage",
         ManaCost = 2,
         Influence = new Influence
@@ -156,6 +156,7 @@ namespace Magewatch.Components
           Flame = 1
         },
         Owner = PlayerName.User,
+        Image = new Asset<Sprite>("CreatureImages/Mage"),
         Text = "Whiz! Zoom!",
         IsRevealed = true,
         CanBePlayed = true
