@@ -12,19 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Magewatch.Data;
-using UnityEngine;
-
-namespace Magewatch.Services
+namespace Magewatch.Data
 {
-  public sealed class CommandService : MonoBehaviour
+  public enum PlayerName
   {
-    public void HandleCommand(Command command)
-    {
-      if (command.RunCombatCommand != null)
-      {
-        Root.Instance.CombatService.RunCombat(command.RunCombatCommand);
-      }
-    }
+    User,
+    Enemy
   }
 }

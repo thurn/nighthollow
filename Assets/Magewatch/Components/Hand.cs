@@ -12,19 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Magewatch.Data;
 using UnityEngine;
 
-namespace Magewatch.Services
+namespace Magewatch.Components
 {
-  public sealed class CommandService : MonoBehaviour
+  public sealed class Hand : MonoBehaviour
   {
-    public void HandleCommand(Command command)
+    public void ReturnToHand(Card card)
     {
-      if (command.RunCombatCommand != null)
-      {
-        Root.Instance.CombatService.RunCombat(command.RunCombatCommand);
-      }
+
+    }
+
+    public void RemoveFromHand(Card card)
+    {
+
     }
   }
 }

@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System;
+using Magewatch.Components;
+using Magewatch.Data;
 using Magewatch.Utils;
 using UnityEngine;
 
@@ -40,6 +42,12 @@ namespace Magewatch.Services
     [SerializeField] CombatService _combatService;
     public CombatService CombatService => _combatService;
 
+    [SerializeField] Player _user;
+    public Player User => _user;
+
+    [SerializeField] Player _enemy;
+    public Player Enemy => _enemy;
+
     public static Root Instance
     {
       get
@@ -50,6 +58,16 @@ namespace Magewatch.Services
         }
 
         return _instance;
+      }
+    }
+
+    public Player GetPlayer(PlayerName playerName)
+    {
+      switch (playerName)
+      {
+        case PlayerName.User: return _user;
+        case PlayerName.Enemy: return _enemy;
+        default: throw Errors.UnknownEnumValue(playerName);
       }
     }
 
