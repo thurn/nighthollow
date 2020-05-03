@@ -87,11 +87,11 @@ namespace Magewatch.Components
       {
         if (i % 2 == 0)
         {
-           actions.Add(new List<CombatAction>
-           {
-             Attack(1, 2, 20, Skill.Skill2),
-             Attack(4, 5, 20, Skill.Skill2)
-           });
+          actions.Add(new List<CombatAction>
+          {
+            Attack(1, 2, 20, Skill.Skill2),
+            Attack(4, 5, 20, Skill.Skill2)
+          });
         }
         else
         {
@@ -113,6 +113,10 @@ namespace Magewatch.Components
       actions.Add(new List<CombatAction>
       {
         Attack(1, 3, 20, Skill.Skill2),
+      });
+
+      actions.Add(new List<CombatAction>
+      {
         Attack(3, 1, 10, Skill.Skill3)
       });
 
@@ -120,6 +124,21 @@ namespace Magewatch.Components
       {
         MeleeEngage(3, 4),
         MeleeEngage(4, 3)
+      });
+
+      actions.Add(new List<CombatAction>
+      {
+        Attack(3, 4, 10, Skill.Skill3),
+      });
+
+      actions.Add(new List<CombatAction>
+      {
+        Attack(4, 3, 20, Skill.Skill2)
+      });
+
+      actions.Add(new List<CombatAction>
+      {
+        Attack(3, 4, 10, Skill.Skill3),
       });
 
       RunCombat(actions.ToArray());
