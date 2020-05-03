@@ -1,3 +1,4 @@
+using System.Collections;
 using Magewatch.Data;
 using UnityEngine;
 
@@ -25,16 +26,18 @@ namespace Magewatch.Services
     {
       _currentCommand = runCombatCommand;
       _currentCombatStep = 0;
-      RunCombatStep();
+      StartCoroutine(RunCombatStep());
     }
 
-    void RunCombatStep()
+    IEnumerator RunCombatStep()
     {
       _completionCount = 0;
       _expectedCompletions = 0;
 
+      var actionCount = 0;
       foreach (var action in _currentCommand.Steps[_currentCombatStep].Actions)
       {
+        actionCount++;
         if (action.MeleeEngage != null)
         {
           HandleMeleeEngage(action.MeleeEngage);
@@ -43,6 +46,7 @@ namespace Magewatch.Services
         if (action.Attack != null)
         {
           HandleAttack(action.Attack);
+          yield return new WaitForSeconds(actionCount * 0.1f);
         }
       }
     }
@@ -69,7 +73,7 @@ namespace Magewatch.Services
         _currentCombatStep++;
         if (_currentCombatStep < _currentCommand.Steps.Count)
         {
-          RunCombatStep();
+          StartCoroutine(RunCombatStep());
         }
       }
     }
