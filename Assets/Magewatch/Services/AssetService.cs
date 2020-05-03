@@ -21,16 +21,6 @@ namespace Magewatch.Services
 {
   public sealed class AssetService : MonoBehaviour
   {
-    public void LoadAsset<T>(string path, Action<T> callback)
-    {
-      StartCoroutine(LoadAssetAsync(path, callback));
-    }
-
-    IEnumerator LoadAssetAsync<T>(string path, Action<T> callback)
-    {
-      return null;
-    }
-
     public void Instantiate<T>(string path, Transform parent, Action<T> callback) where T : Component
     {
       StartCoroutine(InstantiateAsync(path, parent, callback));
@@ -38,11 +28,13 @@ namespace Magewatch.Services
 
     IEnumerator InstantiateAsync<T>(string path, Transform parent, Action<T> callback) where T : Component
     {
-      return null;
-    }
-
-    public void Release(GameObject asset)
-    {
+      Debug.Log($"AssetService::InstantiateAsync> Loading {path}");
+      var request = Resources.LoadAsync<GameObject>(path);
+      yield return request;
+      Errors.CheckNotNull(request.asset);
+      Debug.Log($"AssetService::InstantiateAsync> Loaded {request.asset}");
+      var result = Instantiate(request.asset, parent) as GameObject;
+      callback(ComponentUtils.GetComponent<T>(result));
     }
   }
 }

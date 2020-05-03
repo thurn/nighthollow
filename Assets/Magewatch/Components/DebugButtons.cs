@@ -148,7 +148,7 @@ namespace Magewatch.Components
     {
       Root.Instance.User.Hand.DrawCard(new CardData
       {
-        Prefab = "FireCard",
+        Prefab = "Cards/FireCard",
         Name = "Mage",
         ManaCost = 2,
         Influence = new Influence

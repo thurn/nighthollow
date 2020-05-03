@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8762771020445010892}
+  - component: {fileID: 8954949609278149526}
   m_Layer: 5
-  m_Name: CardFire
+  m_Name: FireCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,6 +38,42 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8954949609278149526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367294645436598179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ab29a2f9dae48f1a7d15b160179a1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _debugMode: 0
+  _debugCardScale: 0.65
+  _cardBack: {fileID: 3422935168648590701}
+  _cardFront: {fileID: 3422935170716830397}
+  _cardImage: {fileID: 3877078278858366202}
+  _name: {fileID: 3560853329539104791}
+  _cost: {fileID: 4335890247283577373}
+  _text: {fileID: 1642552972138800255}
+  _influence:
+  - {fileID: 3470589743675506382}
+  - {fileID: 5100302184667440685}
+  - {fileID: 7508846760518694585}
+  - {fileID: 7170910077756811947}
+  - {fileID: 1354626846825411433}
+  _outline: {fileID: 5614621031374396764}
+  _hand: {fileID: 0}
+  _previewMode: 0
+  _initialized: 0
+  _isFaceUp: 0
+  _isDragging: 0
+  _isOverBoard: 0
+  _initialDragSiblingIndex: 0
+  _initialDragPosition: {x: 0, y: 0, z: 0}
+  _initialDragRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2734648601950954484
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,7 +381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3422935170030776218}
   - component: {fileID: 3422935170030776216}
-  - component: {fileID: 3803628441031383923}
+  - component: {fileID: 3877078278858366202}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -379,7 +416,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3422935170030776219}
   m_CullTransparentMesh: 0
---- !u!114 &3803628441031383923
+--- !u!114 &3877078278858366202
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -388,7 +425,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3422935170030776219}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -398,13 +435,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &3422935170067928775
 GameObject:
   m_ObjectHideFlags: 0
