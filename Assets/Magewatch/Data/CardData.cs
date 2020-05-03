@@ -21,6 +21,7 @@ namespace Magewatch.Data
     public Influence Influence;
     public PlayerName Owner;
     public string Text;
+    public bool IsRevealed;
     public bool CanBePlayed;
   }
 }

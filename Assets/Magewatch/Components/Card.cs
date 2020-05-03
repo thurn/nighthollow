@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using Magewatch.Data;
 using Magewatch.Services;
 using Magewatch.Utils;
@@ -61,25 +62,6 @@ namespace Magewatch.Components
       _initialized = true;
     }
 
-    public void OnPlayed()
-    {
-      _hand.RemoveFromHand(this);
-      // Get(Keys.CardImage).DestroyCardImage(_cardData);
-      Destroy(gameObject);
-    }
-
-    public void ReturnToHand()
-    {
-      _isDragging = false;
-      transform.SetSiblingIndex(_initialDragSiblingIndex);
-      _hand.ReturnToHand(this);
-    }
-
-    public bool CanBePlayed()
-    {
-      return _cardData.CanBePlayed;
-    }
-
     void Start()
     {
       if (!_initialized)
@@ -101,74 +83,103 @@ namespace Magewatch.Components
       Errors.CheckNotNull(_cardBack);
       Errors.CheckNotNull(_cardFront);
       Errors.CheckNotNull(_cardImage);
+
+      UpdateCardDate(_cardData);
     }
 
-    void Update()
+    public void OnPlayed()
     {
-      if (!_isFaceUp && _isRevealed)
+      _hand.RemoveFromHand(this);
+      // Get(Keys.CardImage).DestroyCardImage(_cardData);
+      Destroy(gameObject);
+    }
+
+    public void ReturnToHand()
+    {
+      _isDragging = false;
+      transform.SetSiblingIndex(_initialDragSiblingIndex);
+      _hand.ReturnToHand(this);
+    }
+
+    public bool CanBePlayed()
+    {
+      return _cardData.CanBePlayed;
+    }
+
+    public void UpdateCardDate(CardData newCardData)
+    {
+      if (!_isFaceUp && newCardData.IsRevealed)
       {
         _isFaceUp = true;
-        var cardName = _cardData.Name;
-        if (_currentName != cardName)
-        {
-          _name.text = cardName;
-          _currentName = cardName;
-        }
 
-        var cardText = _cardData.Text;
-        if (_currentText != cardText)
-        {
-          _text.text = cardText;
-          _currentText = cardText;
-        }
-
-        // DOTween.Sequence()
-        //   .Insert(atPosition: 0, _cardBack.transform.DOLocalRotate(new Vector3(x: 0, y: 90, z: 0), duration: 0.2f))
-        //   .InsertCallback(atPosition: 0.2f, () =>
-        //   {
-        //     _cardFront.gameObject.SetActive(value: true);
-        //     _cardFront.transform.localRotation = Quaternion.Euler(x: 0, y: 90, z: 0);
-        //     _cardBack.gameObject.SetActive(value: false);
-        //   })
-        //   .Insert(atPosition: 0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, duration: 0.3f));
-      }
-      else if (_isFaceUp && !_isRevealed)
-      {
-        throw new InvalidOperationException("Cannot hide revealed card");
-      }
-
-      _cost.text = _cardData.ManaCost.ToString();
-
-      var addIndex = 0;
-      AddInfluence(_cardData.Influence.Light, ref addIndex);
-      AddInfluence(_cardData.Influence.Sky, ref addIndex);
-      AddInfluence(_cardData.Influence.Flame, ref addIndex);
-      AddInfluence(_cardData.Influence.Ice, ref addIndex);
-      AddInfluence(_cardData.Influence.Earth, ref addIndex);
-      AddInfluence(_cardData.Influence.Shadow, ref addIndex);
-      while (addIndex < _influence.Count)
-      {
-        _influence[addIndex++].enabled = false;
-      }
-
-      if (_cardFront.gameObject.activeSelf)
-      {
-        var canBePlayed = CanBePlayed();
-
-        if (_canBePlayed != canBePlayed)
-        {
-          _outline.enabled = canBePlayed;
-          if (canBePlayed)
+        DOTween.Sequence()
+          .Insert(atPosition: 0, _cardBack.transform.DOLocalRotate(new Vector3(x: 0, y: 90, z: 0), duration: 0.2f))
+          .InsertCallback(atPosition: 0.2f, () =>
           {
-            var color = _outline.color;
-            color.a = 0;
-            _outline.color = color;
-            // _outline.DOFade(1.0f, 0.3f);
-          }
+            _cardFront.gameObject.SetActive(value: true);
+            _cardFront.transform.localRotation = Quaternion.Euler(x: 0, y: 90, z: 0);
+            _cardBack.gameObject.SetActive(value: false);
+          })
+          .Insert(atPosition: 0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, duration: 0.3f));
+      }
+      else if (_isFaceUp && !newCardData.IsRevealed)
+      {
+        _isFaceUp = false;
 
-          _canBePlayed = canBePlayed;
+        DOTween.Sequence()
+          .Insert(atPosition: 0, _cardBack.transform.DOLocalRotate(new Vector3(x: 0, y: 90, z: 0), duration: 0.2f))
+          .InsertCallback(atPosition: 0.2f, () =>
+          {
+            _cardBack.gameObject.SetActive(value: true);
+            _cardBack.transform.localRotation = Quaternion.Euler(x: 0, y: 90, z: 0);
+            _cardFront.gameObject.SetActive(value: false);
+          })
+          .Insert(atPosition: 0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, duration: 0.3f));
+      }
+
+      if (_cardData?.Name != newCardData.Name)
+      {
+        _name.text = newCardData.Name;
+      }
+
+      if (_cardData?.Text != newCardData.Text)
+      {
+        _text.text = newCardData.Text;
+      }
+
+      if (_cardData?.ManaCost != newCardData.ManaCost)
+      {
+        _cost.text = newCardData.ManaCost.ToString();
+      }
+
+      if (_cardData?.Influence != newCardData.Influence)
+      {
+        var addIndex = 0;
+        AddInfluence(newCardData.Influence.Light, ref addIndex);
+        AddInfluence(newCardData.Influence.Sky, ref addIndex);
+        AddInfluence(newCardData.Influence.Flame, ref addIndex);
+        AddInfluence(newCardData.Influence.Ice, ref addIndex);
+        AddInfluence(newCardData.Influence.Earth, ref addIndex);
+        AddInfluence(newCardData.Influence.Shadow, ref addIndex);
+        while (addIndex < _influence.Count)
+        {
+          _influence[addIndex++].enabled = false;
         }
       }
+
+      if (_cardData?.CanBePlayed != newCardData.CanBePlayed)
+      {
+        _outline.enabled = newCardData.CanBePlayed;
+        if (newCardData.CanBePlayed)
+        {
+          var color = _outline.color;
+          color.a = 0;
+          _outline.color = color;
+          _outline.DOFade(1.0f, 0.3f);
+        }
+      }
+
+      _cardData = newCardData;
     }
 
     void AddInfluence(int value, ref int addIndex)
