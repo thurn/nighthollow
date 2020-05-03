@@ -19,7 +19,6 @@ using Magewatch.Data;
 using Magewatch.Services;
 using Magewatch.Utils;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Magewatch.Components
 {
