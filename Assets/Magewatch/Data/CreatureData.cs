@@ -13,35 +13,14 @@
 // limitations under the License.
 
 using System;
-using Object = UnityEngine.Object;
+using UnityEngine;
 
 namespace Magewatch.Data
 {
-  public interface IAsset
-  {
-    string GetAddress();
-    Type GetAssetType();
-    void SetValueUnchecked(object value);
-  }
-
   [Serializable]
-  public sealed class Asset<T> : IAsset
+  public sealed class CreatureData
   {
-    public string Address;
-    public T Value;
-
-    public Asset(string address)
-    {
-      Address = address;
-    }
-
-    public string GetAddress() => Address;
-
-    public Type GetAssetType() => typeof(T);
-
-    public void SetValueUnchecked(object value)
-    {
-      Value = (T) value;
-    }
+    public int CreatureId;
+    public Asset<GameObject> Prefab;
   }
 }

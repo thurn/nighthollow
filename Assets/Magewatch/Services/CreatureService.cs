@@ -14,6 +14,8 @@
 
 using System.Collections.Generic;
 using Magewatch.Components;
+using Magewatch.Data;
+using Magewatch.Utils;
 using UnityEngine;
 
 namespace Magewatch.Services
@@ -22,7 +24,15 @@ namespace Magewatch.Services
   {
     readonly Dictionary<int, Creature> _creatures = new Dictionary<int, Creature>();
 
-    public void Add(Creature creature)
+    public Creature Create(CreatureData creatureData)
+    {
+      var result = ComponentUtils.Instantiate<Creature>(creatureData.Prefab.Value);
+      _creatures[creatureData.CreatureId] = result;
+      result.Initialize(creatureData);
+      return result;
+    }
+
+    public void DebugAdd(Creature creature)
     {
       _creatures[creature.CreatureId] = creature;
     }

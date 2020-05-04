@@ -32,6 +32,25 @@ namespace Magewatch.Utils
       return result;
     }
 
+    public static T Instantiate<T>(GameObject prefab, Transform parent = null) where T : Component
+    {
+      Errors.CheckNotNull(prefab);
+      var prefabObject = Object.Instantiate(prefab, parent);
+      var result = prefabObject.GetComponent<T>();
+      if (!result)
+      {
+        throw new NullReferenceException($"Expected a component of type {typeof(T).FullName}");
+      }
+
+      if (!parent)
+      {
+        // Instantiate things safely out of view if there's no parent specified :)
+        prefabObject.transform.position = 1000f * Vector3.one;
+      }
+
+      return result;
+    }
+
     public static T Instantiate<T>(T prefabComponent, Transform parent = null) where T : Component
     {
       Errors.CheckNotNull(prefabComponent);
@@ -59,6 +78,7 @@ namespace Magewatch.Utils
       {
         throw new NullReferenceException($"Expected a component of type {typeof(T).FullName}");
       }
+
       return result;
     }
 
@@ -70,6 +90,7 @@ namespace Magewatch.Utils
       {
         throw new NullReferenceException($"Expected a component of type {typeof(T).FullName}");
       }
+
       return result;
     }
   }

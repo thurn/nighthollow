@@ -377,6 +377,11 @@ PrefabInstance:
       propertyPath: _debugCreatureId
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3539740354515962369, guid: 5053f7e26655a4397a6f2575ed6d45c0,
+        type: 3}
+      propertyPath: _creatureData.CreatureId
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3539740354515962374, guid: 5053f7e26655a4397a6f2575ed6d45c0,
         type: 3}
       propertyPath: m_Name
@@ -399,6 +404,11 @@ PrefabInstance:
     - target: {fileID: 2225211046518890780, guid: 7d2a59c4476494313bdba85e4739408b,
         type: 3}
       propertyPath: _debugCreatureId
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2225211046518890780, guid: 7d2a59c4476494313bdba85e4739408b,
+        type: 3}
+      propertyPath: _creatureData.CreatureId
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2225211046518890781, guid: 7d2a59c4476494313bdba85e4739408b,
@@ -916,7 +926,7 @@ PrefabInstance:
     - target: {fileID: 3533905804817151028, guid: 5053f7e26655a4397a6f2575ed6d45c0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.1650505
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 3533905804817151028, guid: 5053f7e26655a4397a6f2575ed6d45c0,
         type: 3}
@@ -971,6 +981,11 @@ PrefabInstance:
     - target: {fileID: 3539740354515962369, guid: 5053f7e26655a4397a6f2575ed6d45c0,
         type: 3}
       propertyPath: _debugCreatureId
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3539740354515962369, guid: 5053f7e26655a4397a6f2575ed6d45c0,
+        type: 3}
+      propertyPath: _creatureData.CreatureId
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3539740354515962374, guid: 5053f7e26655a4397a6f2575ed6d45c0,
@@ -2471,6 +2486,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mage
       objectReference: {fileID: 0}
+    - target: {fileID: 2225211046518890780, guid: 7d2a59c4476494313bdba85e4739408b,
+        type: 3}
+      propertyPath: _creatureData.CreatureId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2225211046518890781, guid: 7d2a59c4476494313bdba85e4739408b,
         type: 3}
       propertyPath: m_Enabled
@@ -2803,6 +2823,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3539740354515962369, guid: 5053f7e26655a4397a6f2575ed6d45c0,
+        type: 3}
+      propertyPath: _creatureData.CreatureId
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3539740354515962374, guid: 5053f7e26655a4397a6f2575ed6d45c0,
         type: 3}

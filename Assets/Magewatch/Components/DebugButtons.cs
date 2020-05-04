@@ -159,7 +159,12 @@ namespace Magewatch.Components
         Image = new Asset<Sprite>("CreatureImages/Mage"),
         Text = "Whiz! Zoom!",
         IsRevealed = true,
-        CanBePlayed = true
+        CanBePlayed = true,
+        CreatureData = new CreatureData
+        {
+          CreatureId = 10,
+          Prefab = new Asset<GameObject>("Creatures/Mage")
+        }
       });
     }
 

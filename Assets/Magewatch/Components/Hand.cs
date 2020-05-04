@@ -57,6 +57,18 @@ namespace Magewatch.Components
       }
     }
 
+    public void DrawCard(CardData cardData, bool animate = true)
+    {
+      Root.Instance.AssetService.InstantiateCard(cardData, () =>
+      {
+        var card = ComponentUtils.Instantiate<Card>(cardData.Prefab.Value, Root.Instance.MainCanvas.transform);
+        card.Initialize(cardData);
+        card.transform.position = _deckPosition.position;
+        card.transform.localScale = Vector2.one * _initialCardScale;
+        AddToHand(card, animate);
+      });
+    }
+
     public void ReturnToHand(Card card)
     {
       AnimateCardsToPosition();
@@ -92,18 +104,6 @@ namespace Magewatch.Components
         _handOverridePosition = value;
         AnimateCardsToPosition();
       }
-    }
-
-    public void DrawCard(CardData cardData, bool animate = true)
-    {
-      Root.Instance.AssetService.InstantiateCard(cardData, () =>
-      {
-        var card = ComponentUtils.GetComponent<Card>(cardData.Prefab.Value);
-        card.Initialize(cardData);
-        card.transform.position = _deckPosition.position;
-        card.transform.localScale = Vector2.one * _initialCardScale;
-        AddToHand(card, animate);
-      });
     }
 
     void AnimateCardsToPosition(Action onComplete = null)

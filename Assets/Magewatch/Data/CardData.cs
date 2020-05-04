@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using UnityEngine;
 
 namespace Magewatch.Data
 {
+  [Serializable]
   public sealed class CardData
   {
+    public int CardId;
     public Asset<GameObject> Prefab;
     public string Name;
     public int ManaCost;
@@ -27,5 +30,6 @@ namespace Magewatch.Data
     public string Text;
     public bool IsRevealed;
     public bool CanBePlayed;
+    public CreatureData CreatureData;
   }
 }

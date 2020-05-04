@@ -1016,8 +1016,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2225211046518890777}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 4, y: -4, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.007, y: 0.007, z: 0.007}
   m_Children:
   - {fileID: 2225211045620677549}
@@ -1027,7 +1027,7 @@ Transform:
   - {fileID: 2225211046073280316}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2225211046518890780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1041,13 +1041,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debugMode: 1
-  _debugCreatureId: 2
   _state: 0
   _animator: {fileID: 0}
   _collider: {fileID: 0}
   _healthbarAnchor: {fileID: 2225211045742742407}
   _healthBar: {fileID: 0}
-  _creatureId: 0
+  _creatureData:
+    CreatureId: 0
   _initialized: 0
   _currentTarget: {fileID: 0}
   _meleePosition: {fileID: 2225211046073280316}

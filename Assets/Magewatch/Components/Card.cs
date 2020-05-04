@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using DG.Tweening;
 using Magewatch.Data;
 using Magewatch.Services;
@@ -98,14 +99,10 @@ namespace Magewatch.Components
 
     void UpdateCardData(CardData newCardData)
     {
+      Debug.Log($"Card::UpdateCardData> UCD");
       Errors.CheckNotNull(newCardData);
 
-      if (_cardData?.Owner != newCardData.Owner)
-      {
-        _hand = Root.Instance.GetPlayer(newCardData.Owner).Hand;
-      }
-
-      // RenderCardImage(_cardData, _cardImage);
+      _hand = Root.Instance.GetPlayer(newCardData.Owner).Hand;
 
       if (!_isFaceUp && newCardData.IsRevealed)
       {
@@ -208,14 +205,19 @@ namespace Magewatch.Components
     {
       if (_isDragging)
       {
+        var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         if (CanBePlayed() &&
             !_isOverBoard &&
-            Physics.Raycast(
-              Root.Instance.MainCamera.ScreenPointToRay(Input.mousePosition),
-              out var hit,
-              maxDistance: 100) && hit.collider.CompareTag(Tags.Board))
+            mousePosition.y >= Constants.IndicatorBottomY &&
+            mousePosition.x <= Constants.IndicatorRightX)
         {
           _isOverBoard = true;
+
+          if (_cardData.CreatureData != null)
+          {
+            var creature = Root.Instance.CreatureService.Create(_cardData.CreatureData);
+            creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(this, creature);
+          }
         }
         else
         {

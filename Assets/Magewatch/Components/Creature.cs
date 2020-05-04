@@ -29,13 +29,12 @@ namespace Magewatch.Components
   public sealed class Creature : MonoBehaviour
   {
     [SerializeField] bool _debugMode;
-    [SerializeField] int _debugCreatureId;
     [SerializeField] CreatureState _state;
     [SerializeField] Animator _animator;
     [SerializeField] Collider2D _collider;
     [SerializeField] Transform _healthbarAnchor;
     [SerializeField] HealthBar _healthBar;
-    [SerializeField] int _creatureId;
+    [SerializeField] CreatureData _creatureData;
     [SerializeField] bool _initialized;
     [SerializeField] Creature _currentTarget;
     [SerializeField] Transform _meleePosition;
@@ -53,9 +52,8 @@ namespace Magewatch.Components
     static readonly int Skill5 = Animator.StringToHash("Skill5");
     static readonly int Death = Animator.StringToHash("Death");
 
-    public void Initialize(int creatureId)
+    public void Initialize(CreatureData creatureData)
     {
-      _creatureId = creatureId;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();
@@ -67,12 +65,12 @@ namespace Magewatch.Components
     {
       if (!_initialized && _debugMode)
       {
-        Initialize(_debugCreatureId);
-        Root.Instance.CreatureService.Add(this);
+        Root.Instance.CreatureService.DebugAdd(this);
+        Initialize(_creatureData);
       }
     }
 
-    public int CreatureId => _creatureId;
+    public int CreatureId => _creatureData.CreatureId;
 
     public void MeleeEngageWithTarget(Creature target, IOnComplete onComplete)
     {
@@ -127,6 +125,8 @@ namespace Magewatch.Components
       }
     }
 
+    // Called by skill animations
+    // ReSharper disable once UnusedMember.Local
     void AttackStart()
     {
       _currentTarget.ApplyAttack(_currentAttack);

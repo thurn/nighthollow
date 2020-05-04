@@ -14,6 +14,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Magewatch.Data;
 using Magewatch.Utils;
 using UnityEngine;
@@ -22,21 +24,61 @@ namespace Magewatch.Services
 {
   public sealed class AssetService : MonoBehaviour
   {
-    public void InstantiateCard(CardData cardData, Action callback)
+    public void InstantiateCard(CardData cardData, Action onComplete)
     {
-      StartCoroutine(InstantiateCardAsync(cardData, callback));
+      StartCoroutine(PopulateAssets(new List<IAsset>
+      {
+        cardData.Prefab,
+        cardData.Image,
+        cardData.CreatureData?.Prefab
+      }, onComplete));
     }
 
-    IEnumerator InstantiateCardAsync(CardData cardData, Action callback)
+    IEnumerator InstantiateCardAsync2(CardData cardData, Action callback)
     {
       var prefabRequest = Resources.LoadAsync<GameObject>(cardData.Prefab.Address);
       var imageRequest = Resources.LoadAsync<Sprite>(cardData.Image.Address);
+
+      var creatureRequest = cardData.CreatureData == null
+        ? null
+        : Resources.LoadAsync<GameObject>(cardData.CreatureData.Prefab.Address);
+
       yield return prefabRequest;
       yield return imageRequest;
+      if (creatureRequest != null)
+      {
+        yield return creatureRequest;
+      }
+
       Errors.CheckNotNull(prefabRequest.asset);
       cardData.Prefab.Value = Instantiate(prefabRequest.asset, Root.Instance.MainCanvas.transform) as GameObject;
       cardData.Image.Value = Errors.CheckNotNull(imageRequest.asset as Sprite);
+
+      if (creatureRequest != null)
+      {
+        cardData.CreatureData.Prefab.Value = Instantiate(creatureRequest.asset as GameObject);
+      }
+
       callback();
+    }
+
+    IEnumerator PopulateAssets(List<IAsset> assets, Action onComplete)
+    {
+      assets.RemoveAll(x => x == null);
+      var requests = assets.Select(asset => Resources.LoadAsync(asset.GetAddress(), asset.GetAssetType())).ToList();
+
+      foreach (var request in requests)
+      {
+        yield return request;
+      }
+
+      for (var i = 0; i < requests.Count; ++i)
+      {
+        Errors.CheckNotNull(requests[i].asset);
+        assets[i].SetValueUnchecked(requests[i].asset);
+      }
+
+      onComplete();
     }
   }
 }
