@@ -139,12 +139,8 @@ namespace Magewatch.Components
 
     void Update()
     {
-      if (_healthBar.gameObject.activeInHierarchy)
-      {
-        var screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, _healthbarAnchor.position);
-        var canvasTransform = Root.Instance.MainCanvas.GetComponent<RectTransform>();
-        _healthBar.GetComponent<RectTransform>().anchoredPosition = screenPoint - canvasTransform.sizeDelta / 2f;
-      }
+      var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
+      _healthBar.transform.position = pos;
 
       if (_state == CreatureState.MeleeEngage)
       {
