@@ -92,11 +92,6 @@ namespace Magewatch.Components
       _hand.ReturnToHand(this);
     }
 
-    bool CanBePlayed()
-    {
-      return _cardData.CanBePlayed;
-    }
-
     void UpdateCardData(CardData newCardData)
     {
       Debug.Log($"Card::UpdateCardData> UCD");
@@ -194,7 +189,8 @@ namespace Magewatch.Components
       if (_cardData.Owner == PlayerName.User && !_previewMode)
       {
         _isDragging = true;
-        _initialDragPosition = transform.position;
+        // _initialDragPosition = transform.position;
+        _initialDragPosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         _initialDragRotation = transform.rotation;
         _initialDragSiblingIndex = transform.GetSiblingIndex();
         transform.SetAsLastSibling();
@@ -206,32 +202,13 @@ namespace Magewatch.Components
       if (_isDragging)
       {
         var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
-        if (CanBePlayed() &&
-            !_isOverBoard &&
-            mousePosition.y >= Constants.IndicatorBottomY &&
-            mousePosition.x <= Constants.IndicatorRightX)
-        {
-          _isOverBoard = true;
+        transform.position = Input.mousePosition;
 
-          if (_cardData.CreatureData != null)
-          {
-            var creature = Root.Instance.CreatureService.Create(_cardData.CreatureData);
-            creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(this, creature);
-          }
-        }
-        else
-        {
-          var distanceDragged = transform.position.y - _initialDragPosition.y;
-          transform.position = Input.mousePosition;
-
-          var t = Mathf.Clamp(distanceDragged / 200, min: 0f, max: 1f);
-          var scale = Mathf.Lerp(a: _hand.FinalCardScale, b: _hand.DragEndScale, t);
-          transform.localScale = new Vector3(scale, scale, z: 1);
-
-          var rotation = Quaternion.Slerp(_initialDragRotation, Quaternion.identity, t);
-          transform.rotation = rotation;
-          _isOverBoard = false;
-        }
+        var yDistance = mousePosition.y - _initialDragPosition.y;
+        var yTotalDistance = Constants.IndicatorBottomY - _initialDragPosition.y;
+        var yFraction = yDistance / yTotalDistance;
+        var scale = Mathf.Lerp(a: _hand.FinalCardScale, b: 0.25f, yFraction);
+        transform.localScale = new Vector3(scale, scale, z: 1);
       }
     }
 
@@ -239,7 +216,11 @@ namespace Magewatch.Components
     {
       if (_isDragging)
       {
-        if (_isOverBoard)
+        var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+
+        if (_cardData.CanBePlayed &&
+            mousePosition.y >= Constants.IndicatorBottomY &&
+            mousePosition.x <= Constants.IndicatorRightX)
         {
           OnPlayed();
         }

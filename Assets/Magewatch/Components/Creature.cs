@@ -72,6 +72,11 @@ namespace Magewatch.Components
 
     public int CreatureId => _creatureData.CreatureId;
 
+    public bool AnimationPaused
+    {
+      set => _animator.speed = value ? 0 : 1;
+    }
+
     public void MeleeEngageWithTarget(Creature target, IOnComplete onComplete)
     {
       _currentTarget = target;
@@ -111,7 +116,13 @@ namespace Magewatch.Components
 
     public void OnDeathAnimationCompleted()
     {
+      Destroy();
+    }
+
+    public void Destroy()
+    {
       Destroy(gameObject);
+      Destroy(_healthBar.gameObject);
     }
 
     void ApplyAttack(Attack attack)

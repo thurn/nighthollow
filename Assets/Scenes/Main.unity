@@ -2390,7 +2390,7 @@ MonoBehaviour:
   _debugMode: 0
   _initialCardScale: 0.5
   _finalCardScale: 0.8
-  _dragEndScale: 1
+  _dragEndScale: 1.5
   _zRotationMultiplier: 1
   _deckPosition: {fileID: 1976365984}
   _controlPoint1: {fileID: 1841190612781940161}
@@ -2833,6 +2833,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Berserker
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740705738666384940, guid: 5053f7e26655a4397a6f2575ed6d45c0,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740705738666384940, guid: 5053f7e26655a4397a6f2575ed6d45c0,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740705738666384940, guid: 5053f7e26655a4397a6f2575ed6d45c0,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740714718060521584, guid: 5053f7e26655a4397a6f2575ed6d45c0,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.976465
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740714718060521584, guid: 5053f7e26655a4397a6f2575ed6d45c0,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740714718060521584, guid: 5053f7e26655a4397a6f2575ed6d45c0,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5053f7e26655a4397a6f2575ed6d45c0, type: 3}

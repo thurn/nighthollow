@@ -21,11 +21,19 @@ namespace Magewatch.Components
   public sealed class CreaturePositionSelector : MonoBehaviour
   {
     [SerializeField] Card _card;
+    [SerializeField] Creature _creature;
 
     public void Initialize(Card card, Creature creature)
     {
       _card = Errors.CheckNotNull(card);
+      _creature = creature;
       _card.gameObject.SetActive(false);
+      _creature.AnimationPaused = true;
+
+      foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
+      {
+        spriteRenderer.color = Color.gray;
+      }
     }
 
     void Update()
@@ -34,7 +42,7 @@ namespace Magewatch.Components
       if (mousePosition.y >= Constants.IndicatorBottomY &&
           mousePosition.x <= Constants.IndicatorRightX)
       {
-        transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
+        transform.position = new Vector3(mousePosition.x, mousePosition.y - 0.5f, 0);
       }
       else
       {
@@ -46,9 +54,8 @@ namespace Magewatch.Components
     {
       _card.gameObject.SetActive(true);
       _card.transform.position = Input.mousePosition;
-      // _card.transform.localScale = new Vector3(0.9f, 0.9f, 1); // prevents size from jumping
 
-      Destroy(gameObject);
+      _creature.Destroy();
     }
   }
 }
