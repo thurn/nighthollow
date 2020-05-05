@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Magewatch.Data;
 using Magewatch.Services;
 using Magewatch.Utils;
 using UnityEngine;
@@ -22,13 +23,17 @@ namespace Magewatch.Components
   {
     [SerializeField] Card _card;
     [SerializeField] Creature _creature;
+    [SerializeField] RankValue _rank;
+    [SerializeField] FileValue _file;
+    [SerializeField] CreatureService _creatureService;
 
     public void Initialize(Card card, Creature creature)
     {
       _card = Errors.CheckNotNull(card);
-      _creature = creature;
       _card.gameObject.SetActive(false);
+      _creature = creature;
       _creature.AnimationPaused = true;
+      _creatureService = Root.Instance.CreatureService;
 
       foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
       {
@@ -42,7 +47,13 @@ namespace Magewatch.Components
       if (mousePosition.y >= Constants.IndicatorBottomY &&
           mousePosition.x <= Constants.IndicatorRightX)
       {
-        transform.position = new Vector3(mousePosition.x, mousePosition.y - 0.5f, 0);
+        var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x);
+        var file = _creatureService.GetClosestAvailableFile(BoardPositions.ClosestFileForYPosition(mousePosition.y));
+        if (rank != _rank || file != _file)
+        {
+          _creatureService.ShiftPositions(rank, file);
+          transform.position = new Vector3(rank.ToXPosition(), file.ToYPosition(), 0);
+        }
       }
       else
       {

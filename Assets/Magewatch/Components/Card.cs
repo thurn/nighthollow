@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
 using DG.Tweening;
 using Magewatch.Data;
 using Magewatch.Services;
@@ -45,7 +44,7 @@ namespace Magewatch.Components
     [SerializeField] bool _initialized;
     [SerializeField] bool _isFaceUp;
     [SerializeField] bool _isDragging;
-    [SerializeField] bool _isOverBoard;
+    [SerializeField] bool _overBoard;
     [SerializeField] int _initialDragSiblingIndex;
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
@@ -204,11 +203,35 @@ namespace Magewatch.Components
         var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         transform.position = Input.mousePosition;
 
-        var yDistance = mousePosition.y - _initialDragPosition.y;
-        var yTotalDistance = Constants.IndicatorBottomY - _initialDragPosition.y;
-        var yFraction = yDistance / yTotalDistance;
-        var scale = Mathf.Lerp(a: _hand.FinalCardScale, b: 0.25f, yFraction);
-        transform.localScale = new Vector3(scale, scale, z: 1);
+        if (mousePosition.x < Constants.IndicatorRightX && mousePosition.y > Constants.IndicatorBottomY)
+        {
+          transform.localScale = 0.25f * Vector3.one;
+          transform.rotation = Quaternion.identity;
+
+          if (!_overBoard)
+          {
+            if (_cardData.CreatureData != null)
+            {
+              var creature = Root.Instance.CreatureService.Create(_cardData.CreatureData);
+              creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(this, creature);
+            }
+          }
+
+          _overBoard = true;
+        }
+        else
+        {
+          var distanceDragged = Vector2.Distance(mousePosition, _initialDragPosition);
+
+          var t = Mathf.Clamp01(distanceDragged / 5);
+          var scale = Mathf.Lerp(_hand.FinalCardScale, 1.5f, t);
+          transform.localScale = scale * Vector3.one;
+
+          var rotation = Quaternion.Slerp(_initialDragRotation, Quaternion.identity, t);
+          transform.rotation = rotation;
+
+          _overBoard = false;
+        }
       }
     }
 
