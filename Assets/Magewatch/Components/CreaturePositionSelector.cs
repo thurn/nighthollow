@@ -26,6 +26,7 @@ namespace Magewatch.Components
     [SerializeField] RankValue _rank;
     [SerializeField] FileValue _file;
     [SerializeField] CreatureService _creatureService;
+    [SerializeField] GameObject _cursor;
 
     public void Initialize(Card card, Creature creature)
     {
@@ -34,6 +35,8 @@ namespace Magewatch.Components
       _creature = creature;
       _creature.AnimationPaused = true;
       _creatureService = Root.Instance.CreatureService;
+      _cursor = Root.Instance.Prefabs.CreateCursor().gameObject;
+      Cursor.visible = false;
 
       foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
       {
@@ -52,8 +55,13 @@ namespace Magewatch.Components
         if (rank != _rank || file != _file)
         {
           _creatureService.ShiftPositions(rank, file);
-          transform.position = new Vector3(rank.ToXPosition(), file.ToYPosition(), 0);
+          var position = new Vector3(rank.ToXPosition(), file.ToYPosition(), 0);
+          _cursor.transform.position = position;
+          _rank = rank;
+          _file = file;
         }
+
+        transform.position = Vector2.one * mousePosition;
       }
       else
       {
@@ -65,7 +73,9 @@ namespace Magewatch.Components
     {
       _card.gameObject.SetActive(true);
       _card.transform.position = Input.mousePosition;
+      Cursor.visible = true;
 
+      Destroy(_cursor);
       _creature.Destroy();
     }
   }

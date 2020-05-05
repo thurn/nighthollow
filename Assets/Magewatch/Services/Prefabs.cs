@@ -21,8 +21,11 @@ namespace Magewatch.Services
   public sealed class Prefabs : MonoBehaviour
   {
     [SerializeField] HealthBar _healthBarPrefab;
+    [SerializeField] SpriteRenderer _cursorPrefab;
 
     public HealthBar CreateHealthBar() => ComponentUtils.Instantiate(_healthBarPrefab,
       Root.Instance.MainCanvas.transform);
+
+    public SpriteRenderer CreateCursor() => ComponentUtils.Instantiate(_cursorPrefab);
   }
 }
