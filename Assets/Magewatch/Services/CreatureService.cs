@@ -122,8 +122,17 @@ namespace Magewatch.Services
 
     public void AddCreature(Creature creature, RankValue rank)
     {
-      _creatures = ComputeShiftsForIndex(rank.ToIndex());
-      _creatures[rank.ToIndex()] = creature;
+      Debug.Log($"CreatureService::Create> Added creature with ID {creature.CreatureId}");
+      if (_creatures[rank.ToIndex()])
+      {
+        _creatures = ComputeShiftsForIndex(rank.ToIndex());
+        _creatures[rank.ToIndex()] = creature;
+      }
+      else
+      {
+        _creatures[rank.ToIndex()] = creature;
+      }
+
     }
 
     public void ShiftPositions(RankValue rank)
@@ -136,9 +145,15 @@ namespace Magewatch.Services
 
       if (_creatures[index])
       {
-        AnimateToPositions(ComputeShiftsForIndex(rank.ToIndex()));
+        Debug.Log($"File::ShiftPositions> Shifting from {Display(_creatures)}");
+        var shifts = ComputeShiftsForIndex(rank.ToIndex());
+        Debug.Log($"File::ShiftPositions> To {Display(shifts)}");
+        AnimateToPositions(shifts);
       }
     }
+
+    string Display(IEnumerable<Creature> creatures) =>
+      "[" + string.Join(",", creatures.Select(c => c == null ? "null" : c.CreatureId.ToString())) + "]";
 
     List<Creature> ComputeShiftsForIndex(int index)
     {
@@ -183,6 +198,8 @@ namespace Magewatch.Services
           rightNullIndex--;
         }
       }
+
+      result[index] = null;
 
       return result;
     }

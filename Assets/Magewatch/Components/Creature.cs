@@ -54,6 +54,7 @@ namespace Magewatch.Components
 
     public void Initialize(CreatureData creatureData)
     {
+      _creatureData = creatureData;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();

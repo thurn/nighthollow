@@ -188,7 +188,6 @@ namespace Magewatch.Components
       if (_cardData.Owner == PlayerName.User && !_previewMode)
       {
         _isDragging = true;
-        // _initialDragPosition = transform.position;
         _initialDragPosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         _initialDragRotation = transform.rotation;
         _initialDragSiblingIndex = transform.GetSiblingIndex();

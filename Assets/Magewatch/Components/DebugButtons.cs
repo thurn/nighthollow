@@ -22,7 +22,12 @@ namespace Magewatch.Components
 {
   public sealed class DebugButtons : MonoBehaviour
   {
-    public static int _idCounter = 100;
+    [SerializeField] int _idCounter;
+
+    void Start()
+    {
+      _idCounter = 100;
+    }
 
     public void Slow()
     {
@@ -150,6 +155,7 @@ namespace Magewatch.Components
     {
       Root.Instance.User.Hand.DrawCard(new CardData
       {
+        CardId = _idCounter++,
         Prefab = new Asset<GameObject>("Cards/FireCard"),
         Name = "Mage",
         ManaCost = 2,
