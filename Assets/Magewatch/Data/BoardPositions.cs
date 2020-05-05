@@ -123,6 +123,20 @@ namespace Magewatch.Data
       }
     }
 
+    public static int ToIndex(this FileValue file)
+    {
+      switch (file)
+      {
+        case FileValue.File0: return 0;
+        case FileValue.File1: return 1;
+        case FileValue.File2: return 2;
+        case FileValue.File3: return 3;
+        case FileValue.File4: return 4;
+        case FileValue.File5: return 5;
+        default: throw Errors.UnknownEnumValue(file);
+      }
+    }
+
     public static FileValue ClosestFileForYPosition(float yPosition)
     {
       var rounded = Mathf.RoundToInt(yPosition);

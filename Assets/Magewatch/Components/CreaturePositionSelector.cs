@@ -69,6 +69,7 @@ namespace Magewatch.Components
           }
 
           transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), 0), 0.3f);
+          _creatureService.AddCreatureAtPosition(_creature, rank, file);
         }
         else
         {

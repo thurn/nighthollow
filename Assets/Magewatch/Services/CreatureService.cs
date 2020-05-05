@@ -27,14 +27,14 @@ namespace Magewatch.Services
   {
     readonly Dictionary<int, Creature> _creatures = new Dictionary<int, Creature>();
 
-    readonly Dictionary<FileValue, File> _files = new Dictionary<FileValue, File>
+    [SerializeField] List<File> _files = new List<File>
     {
-      {FileValue.File0, new File()},
-      {FileValue.File1, new File()},
-      {FileValue.File2, new File()},
-      {FileValue.File3, new File()},
-      {FileValue.File4, new File()},
-      {FileValue.File5, new File()}
+      new File(),
+      new File(),
+      new File(),
+      new File(),
+      new File(),
+      new File(),
     };
 
     public Creature Create(CreatureData creatureData)
@@ -54,7 +54,7 @@ namespace Magewatch.Services
 
     public void AddCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
     {
-      _files[file].AddCreature(creature, rank);
+      _files[file.ToIndex()].AddCreature(creature, rank);
       _creatures[creature.CreatureId] = creature;
     }
 
@@ -63,7 +63,7 @@ namespace Magewatch.Services
     {
       foreach (var f in Closest(filePosition))
       {
-        if (_files[f].Count() < 6)
+        if (_files[f.ToIndex()].Count() < 6)
         {
           return f;
         }
@@ -78,12 +78,12 @@ namespace Magewatch.Services
     /// </summary>
     public void ShiftPositions(RankValue rankValue, FileValue fileValue)
     {
-      foreach (var file in _files.Values)
+      foreach (var file in _files)
       {
         file.ToDefaultPositions();
       }
 
-      _files[fileValue].ShiftPositions(rankValue);
+      _files[fileValue.ToIndex()].ShiftPositions(rankValue);
     }
 
     static IEnumerable<FileValue> Closest(FileValue f)
@@ -113,9 +113,10 @@ namespace Magewatch.Services
     }
   }
 
+  [Serializable]
   sealed class File
   {
-    List<Creature> _creatures = new List<Creature> {null, null, null, null, null, null};
+    [SerializeField] List<Creature> _creatures = new List<Creature> {null, null, null, null, null, null};
 
     public int Count() => _creatures.Count(c => c != null);
 
@@ -156,6 +157,7 @@ namespace Magewatch.Services
             leftNullDistance = distance;
             leftNullIndex = i;
           }
+
           if (i > index && distance < rightNullDistance)
           {
             rightNullDistance = distance;
