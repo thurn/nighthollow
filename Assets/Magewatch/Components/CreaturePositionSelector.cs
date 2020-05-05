@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using DG.Tweening;
 using Magewatch.Data;
 using Magewatch.Services;
 using Magewatch.Utils;
@@ -27,6 +29,7 @@ namespace Magewatch.Components
     [SerializeField] FileValue _file;
     [SerializeField] CreatureService _creatureService;
     [SerializeField] GameObject _cursor;
+    [SerializeField] List<SpriteRenderer> _spriteRenderers;
 
     public void Initialize(Card card, Creature creature)
     {
@@ -36,11 +39,12 @@ namespace Magewatch.Components
       _creature.AnimationPaused = true;
       _creatureService = Root.Instance.CreatureService;
       _cursor = Root.Instance.Prefabs.CreateCursor().gameObject;
-      Cursor.visible = false;
 
+      _spriteRenderers = new List<SpriteRenderer>();
       foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
       {
         spriteRenderer.color = Color.gray;
+        _spriteRenderers.Add(spriteRenderer);
       }
     }
 
@@ -52,16 +56,33 @@ namespace Magewatch.Components
       {
         var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x);
         var file = _creatureService.GetClosestAvailableFile(BoardPositions.ClosestFileForYPosition(mousePosition.y));
-        if (rank != _rank || file != _file)
-        {
-          _creatureService.ShiftPositions(rank, file);
-          var position = new Vector3(rank.ToXPosition(), file.ToYPosition(), 0);
-          _cursor.transform.position = position;
-          _rank = rank;
-          _file = file;
-        }
 
-        transform.position = Vector2.one * mousePosition;
+        if (Input.GetMouseButtonUp(0))
+        {
+          _card.OnPlayed();
+          Destroy(_cursor);
+          Destroy(this);
+
+          foreach (var spriteRenderer in _spriteRenderers)
+          {
+            spriteRenderer.color = Color.white;
+          }
+
+          transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), 0), 0.3f);
+        }
+        else
+        {
+          if (rank != _rank || file != _file)
+          {
+            _creatureService.ShiftPositions(rank, file);
+            var position = new Vector3(rank.ToXPosition(), file.ToYPosition(), 0);
+            _cursor.transform.position = position;
+            _rank = rank;
+            _file = file;
+          }
+
+          transform.position = Vector2.one * mousePosition;
+        }
       }
       else
       {
@@ -73,7 +94,6 @@ namespace Magewatch.Components
     {
       _card.gameObject.SetActive(true);
       _card.transform.position = Input.mousePosition;
-      Cursor.visible = true;
 
       Destroy(_cursor);
       _creature.Destroy();

@@ -52,6 +52,12 @@ namespace Magewatch.Services
 
     public Creature Get(int creatureId) => _creatures[creatureId];
 
+    public void AddCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
+    {
+      _files[file].AddCreature(creature, rank);
+      _creatures[creature.CreatureId] = creature;
+    }
+
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
     public FileValue GetClosestAvailableFile(FileValue filePosition)
     {
@@ -109,9 +115,15 @@ namespace Magewatch.Services
 
   sealed class File
   {
-    readonly List<Creature> _creatures = new List<Creature> {null, null, null, null, null, null};
+    List<Creature> _creatures = new List<Creature> {null, null, null, null, null, null};
 
     public int Count() => _creatures.Count(c => c != null);
+
+    public void AddCreature(Creature creature, RankValue rank)
+    {
+      _creatures = ComputeShiftsForIndex(rank.ToIndex());
+      _creatures[rank.ToIndex()] = creature;
+    }
 
     public void ShiftPositions(RankValue rank)
     {

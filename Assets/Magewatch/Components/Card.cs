@@ -78,7 +78,7 @@ namespace Magewatch.Components
       set => _previewMode = value;
     }
 
-    void OnPlayed()
+    public void OnPlayed()
     {
       _hand.RemoveFromHand(this);
       Destroy(gameObject);

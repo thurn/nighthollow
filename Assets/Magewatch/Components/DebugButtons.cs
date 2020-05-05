@@ -22,6 +22,8 @@ namespace Magewatch.Components
 {
   public sealed class DebugButtons : MonoBehaviour
   {
+    public static int _idCounter = 100;
+
     public void Slow()
     {
       Time.timeScale = 0.1f;
@@ -162,7 +164,7 @@ namespace Magewatch.Components
         CanBePlayed = true,
         CreatureData = new CreatureData
         {
-          CreatureId = 10,
+          CreatureId = _idCounter++,
           Prefab = new Asset<GameObject>("Creatures/Mage")
         }
       });
