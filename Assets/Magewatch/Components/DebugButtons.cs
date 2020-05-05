@@ -36,7 +36,7 @@ namespace Magewatch.Components
 
     public void Engage()
     {
-      RunCombat(new List<CombatAction>
+      RunCommands(new List<Command>
       {
         MeleeEngage(1, 2),
         MeleeEngage(2, 1)
@@ -45,14 +45,14 @@ namespace Magewatch.Components
 
     public void Attack1()
     {
-      RunCombat(new List<CombatAction>
+      RunCommands(new List<Command>
       {
         MeleeEngage(1, 2),
         MeleeEngage(2, 1)
-      }, new List<CombatAction>
+      }, new List<Command>
       {
         Attack(1, 2, 10, Skill.Skill2),
-      }, new List<CombatAction>
+      }, new List<Command>
       {
         Attack(2, 1, 10, Skill.Skill3)
       });
@@ -60,27 +60,27 @@ namespace Magewatch.Components
 
     public void Attack2()
     {
-      var actions = new List<List<CombatAction>>
+      var actions = new List<List<Command>>
       {
-        new List<CombatAction> {MeleeEngage(1, 2), MeleeEngage(2, 1)},
+        new List<Command> {MeleeEngage(1, 2), MeleeEngage(2, 1)},
       };
 
       for (var i = 0; i < 9; ++i)
       {
-        actions.Add(new List<CombatAction>
+        actions.Add(new List<Command>
         {
           i % 2 == 0 ? Attack(1, 2, 20, Skill.Skill2) : Attack(2, 1, 20, Skill.Skill3)
         });
       }
 
-      RunCombat(actions.ToArray());
+      RunCommands(actions.ToArray());
     }
 
     public void Attack3()
     {
-      var actions = new List<List<CombatAction>>
+      var actions = new List<List<Command>>
       {
-        new List<CombatAction>
+        new List<Command>
         {
           MeleeEngage(1, 2),
           MeleeEngage(2, 1),
@@ -94,7 +94,7 @@ namespace Magewatch.Components
       {
         if (i % 2 == 0)
         {
-          actions.Add(new List<CombatAction>
+          actions.Add(new List<Command>
           {
             Attack(1, 2, 20, Skill.Skill2),
             Attack(4, 5, 20, Skill.Skill2)
@@ -102,7 +102,7 @@ namespace Magewatch.Components
         }
         else
         {
-          actions.Add(new List<CombatAction>
+          actions.Add(new List<Command>
           {
             Attack(2, 1, 10, Skill.Skill3),
             Attack(3, 1, 10, Skill.Skill3),
@@ -111,44 +111,44 @@ namespace Magewatch.Components
         }
       }
 
-      actions.Add(new List<CombatAction>
+      actions.Add(new List<Command>
       {
         MeleeEngage(1, 3),
         Attack(3, 1, 10, Skill.Skill3)
       });
 
-      actions.Add(new List<CombatAction>
+      actions.Add(new List<Command>
       {
         Attack(1, 3, 20, Skill.Skill2),
       });
 
-      actions.Add(new List<CombatAction>
+      actions.Add(new List<Command>
       {
         Attack(3, 1, 10, Skill.Skill3)
       });
 
-      actions.Add(new List<CombatAction>
+      actions.Add(new List<Command>
       {
         MeleeEngage(3, 4),
         MeleeEngage(4, 3)
       });
 
-      actions.Add(new List<CombatAction>
+      actions.Add(new List<Command>
       {
         Attack(3, 4, 10, Skill.Skill3),
       });
 
-      actions.Add(new List<CombatAction>
+      actions.Add(new List<Command>
       {
         Attack(4, 3, 20, Skill.Skill2)
       });
 
-      actions.Add(new List<CombatAction>
+      actions.Add(new List<Command>
       {
         Attack(3, 4, 10, Skill.Skill3),
       });
 
-      RunCombat(actions.ToArray());
+      RunCommands(actions.ToArray());
     }
 
     public void DrawCard()
@@ -176,22 +176,19 @@ namespace Magewatch.Components
       });
     }
 
-    static void RunCombat(params List<CombatAction>[] input)
+    static void RunCommands(params List<Command>[] input)
     {
-      Root.Instance.CommandService.HandleCommand(new Command
+      Root.Instance.CommandService.HandleCommands(new CommandList
       {
-        RunCombatCommand = new RunCombatCommand
-        {
-          Steps = input.Select(step => new CombatStep {Actions = step}).ToList()
-        }
+        Steps = input.Select(step => new CommandStep {Commands = step}).ToList()
       });
     }
 
-    static CombatAction MeleeEngage(int c1, int c2)
+    static Command MeleeEngage(int c1, int c2)
     {
-      return new CombatAction
+      return new Command
       {
-        MeleeEngage = new MeleeEngage
+        MeleeEngage = new MeleeEngageCommand
         {
           CreatureId = c1,
           TargetCreatureId = c2
@@ -199,11 +196,11 @@ namespace Magewatch.Components
       };
     }
 
-    static CombatAction Attack(int c1, int c2, int damage, Skill skill = Skill.Skill1, int hitCount = 1)
+    static Command Attack(int c1, int c2, int damage, Skill skill = Skill.Skill1, int hitCount = 1)
     {
-      return new CombatAction
+      return new Command
       {
-        Attack = new Attack
+        Attack = new AttackCommand
         {
           CreatureId = c1,
           TargetCreatureId = c2,

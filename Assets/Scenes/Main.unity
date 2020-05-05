@@ -133,9 +133,8 @@ GameObject:
   - component: {fileID: 169299297}
   - component: {fileID: 169299300}
   - component: {fileID: 169299299}
-  - component: {fileID: 169299296}
-  - component: {fileID: 169299295}
   - component: {fileID: 169299298}
+  - component: {fileID: 169299295}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -169,18 +168,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0263479984ae429283da82683facb9c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &169299296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 169299293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9570c8805837450d9a728851c01d902a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _files:
+  - _creatures:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - _creatures:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - _creatures:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - _creatures:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - _creatures:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - _creatures:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
 --- !u!114 &169299297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,9 +227,8 @@ MonoBehaviour:
   _mainCanvas: {fileID: 1736363419}
   _prefabs: {fileID: 169299299}
   _assetService: {fileID: 169299300}
-  _commandService: {fileID: 169299296}
+  _commandService: {fileID: 169299298}
   _creatureService: {fileID: 169299295}
-  _combatService: {fileID: 169299298}
   _user: {fileID: 2119711452}
   _enemy: {fileID: 1057079393}
 --- !u!114 &169299298
@@ -215,7 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _creatureService: {fileID: 0}
-  _currentCombatStep: 0
+  _currentStep: 0
   _expectedCompletions: 0
   _completionCount: 0
 --- !u!114 &169299299
@@ -384,6 +413,11 @@ PrefabInstance:
       propertyPath: _creatureData.CreatureId
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3539740354515962369, guid: 5053f7e26655a4397a6f2575ed6d45c0,
+        type: 3}
+      propertyPath: _debugIsEnemy
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3539740354515962374, guid: 5053f7e26655a4397a6f2575ed6d45c0,
         type: 3}
       propertyPath: m_Name
@@ -412,6 +446,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _creatureData.CreatureId
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2225211046518890780, guid: 7d2a59c4476494313bdba85e4739408b,
+        type: 3}
+      propertyPath: _debugIsEnemy
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2225211046518890781, guid: 7d2a59c4476494313bdba85e4739408b,
         type: 3}
@@ -843,6 +882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 500db499439547abb65cb8a1244ee569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _idCounter: 0
 --- !u!1 &1166200425
 GameObject:
   m_ObjectHideFlags: 0
@@ -2492,6 +2532,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _creatureData.CreatureId
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2225211046518890780, guid: 7d2a59c4476494313bdba85e4739408b,
+        type: 3}
+      propertyPath: _debugIsEnemy
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2225211046518890781, guid: 7d2a59c4476494313bdba85e4739408b,
         type: 3}

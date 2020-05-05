@@ -42,9 +42,6 @@ namespace Magewatch.Services
     [SerializeField] CreatureService _creatureService;
     public CreatureService CreatureService => _creatureService;
 
-    [SerializeField] CombatService _combatService;
-    public CombatService CombatService => _combatService;
-
     [SerializeField] Player _user;
     public Player User => _user;
 
@@ -82,7 +79,6 @@ namespace Magewatch.Services
       Errors.CheckNotNull(_assetService);
       Errors.CheckNotNull(_commandService);
       Errors.CheckNotNull(_creatureService);
-      Errors.CheckNotNull(_combatService);
       Errors.CheckNotNull(_user);
       Errors.CheckNotNull(_enemy);
 

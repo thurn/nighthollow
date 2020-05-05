@@ -25,35 +25,28 @@ namespace Magewatch.Data
     Skill5 = 5
   }
 
-  public enum Reaction
+  public sealed class CommandList
   {
-    Hit1 = 1,
-    Hit2 = 2,
-    Death = 3
-  }
-
-  public sealed class RunCombatCommand
-  {
-    public List<CombatStep> Steps;
+    public List<CommandStep> Steps;
   }
 
   /// <summary>
   /// Combat takes places over a series of finite rounds called "combat steps". All actions in an
   /// earlier combat step are completed before the next combat step.
   /// </summary>
-  public sealed class CombatStep
+  public sealed class CommandStep
   {
-    public List<CombatAction> Actions;
+    public List<Command> Commands;
   }
 
-  public sealed class CombatAction
+  public sealed class Command
   {
-    public MeleeEngage MeleeEngage;
+    public MeleeEngageCommand MeleeEngage;
 
-    public Attack Attack;
+    public AttackCommand Attack;
   }
 
-  public sealed class MeleeEngage
+  public sealed class MeleeEngageCommand
   {
     /// <summary>The creature which is moving to attack</summary>
     public int CreatureId;
@@ -62,7 +55,7 @@ namespace Magewatch.Data
     public int TargetCreatureId;
   }
 
-  public sealed  class Attack
+  public sealed  class AttackCommand
   {
     /// <summary>The creature performing the attack</summary>
     public int CreatureId;

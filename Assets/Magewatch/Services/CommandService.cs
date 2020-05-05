@@ -12,18 +12,83 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections;
 using Magewatch.Data;
 using UnityEngine;
 
 namespace Magewatch.Services
 {
-  public sealed class CommandService : MonoBehaviour
+  public interface IOnComplete
   {
-    public void HandleCommand(Command command)
+    void OnComplete();
+  }
+
+  public sealed class CommandService : MonoBehaviour, IOnComplete
+  {
+    [SerializeField] CreatureService _creatureService;
+    [SerializeField] CommandList _currentCommandList;
+    [SerializeField] int _currentStep;
+    [SerializeField] int _expectedCompletions;
+    [SerializeField] int _completionCount;
+
+    void Start()
     {
-      if (command.RunCombatCommand != null)
+      _creatureService = Root.Instance.CreatureService;
+    }
+
+    public void HandleCommands(CommandList commandList)
+    {
+      _currentCommandList = commandList;
+      _currentStep = 0;
+      StartCoroutine(RunCommandStep());
+    }
+
+    IEnumerator RunCommandStep()
+    {
+      _completionCount = 0;
+      _expectedCompletions = 0;
+
+      var actionCount = 0;
+      foreach (var command in _currentCommandList.Steps[_currentStep].Commands)
       {
-        Root.Instance.CombatService.RunCombat(command.RunCombatCommand);
+        actionCount++;
+        if (command.MeleeEngage != null)
+        {
+          HandleMeleeEngage(command.MeleeEngage);
+        }
+
+        if (command.Attack != null)
+        {
+          HandleAttack(command.Attack);
+          yield return new WaitForSeconds(actionCount * 0.1f);
+        }
+      }
+    }
+
+    void HandleMeleeEngage(MeleeEngageCommand meleeEngage)
+    {
+      _expectedCompletions++;
+      _creatureService.Get(meleeEngage.CreatureId)
+        .MeleeEngageWithTarget(_creatureService.Get(meleeEngage.TargetCreatureId), this);
+    }
+
+    void HandleAttack(AttackCommand attack)
+    {
+      _expectedCompletions += attack.HitCount;
+      _creatureService.Get(attack.CreatureId).AttackTarget(_creatureService.Get(attack.TargetCreatureId), attack, this);
+    }
+
+    public void OnComplete()
+    {
+      _completionCount++;
+
+      if (_completionCount >= _expectedCompletions)
+      {
+        _currentStep++;
+        if (_currentStep < _currentCommandList.Steps.Count)
+        {
+          StartCoroutine(RunCommandStep());
+        }
       }
     }
   }

@@ -29,6 +29,7 @@ namespace Magewatch.Components
   public sealed class Creature : MonoBehaviour
   {
     [SerializeField] bool _debugMode;
+    [SerializeField] bool _debugIsEnemy;
     [SerializeField] CreatureState _state;
     [SerializeField] Animator _animator;
     [SerializeField] Collider2D _collider;
@@ -40,7 +41,7 @@ namespace Magewatch.Components
     [SerializeField] Transform _meleePosition;
     [SerializeField] float _speed = 2;
     [SerializeField] bool _touchedTarget;
-    [SerializeField] Attack _currentAttack;
+    [SerializeField] AttackCommand _currentAttack;
 
     IOnComplete _onComplete;
 
@@ -66,7 +67,17 @@ namespace Magewatch.Components
     {
       if (!_initialized && _debugMode)
       {
-        Root.Instance.CreatureService.DebugAdd(this);
+        if (_debugIsEnemy)
+        {
+          Root.Instance.CreatureService.AddEnemyCreature(this);
+        }
+        else
+        {
+          Root.Instance.CreatureService.AddCreatureAtPosition(this,
+            BoardPositions.ClosestRankForXPosition(transform.position.x),
+            BoardPositions.ClosestFileForYPosition(transform.position.y));
+        }
+
         Initialize(_creatureData);
       }
     }
@@ -86,7 +97,7 @@ namespace Magewatch.Components
       _state = CreatureState.MeleeEngage;
     }
 
-    public void AttackTarget(Creature target, Attack attack, IOnComplete onComplete)
+    public void AttackTarget(Creature target, AttackCommand attack, IOnComplete onComplete)
     {
       _currentTarget = target;
       _currentAttack = attack;
@@ -126,7 +137,7 @@ namespace Magewatch.Components
       Destroy(_healthBar.gameObject);
     }
 
-    void ApplyAttack(Attack attack)
+    void ApplyAttack(AttackCommand attack)
     {
       _healthBar.Value -= attack.DamagePercent;
       _healthBar.gameObject.SetActive(_healthBar.Value < 100);

@@ -22,5 +22,6 @@ namespace Magewatch.Data
   {
     public int CreatureId;
     public Asset<GameObject> Prefab;
+    public bool CanBeRepositioned;
   }
 }

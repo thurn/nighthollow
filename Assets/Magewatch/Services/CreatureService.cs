@@ -45,7 +45,7 @@ namespace Magewatch.Services
       return result;
     }
 
-    public void DebugAdd(Creature creature)
+    public void AddEnemyCreature(Creature creature)
     {
       _creatures[creature.CreatureId] = creature;
     }
@@ -56,6 +56,10 @@ namespace Magewatch.Services
     {
       _files[file.ToIndex()].AddCreature(creature, rank);
       _creatures[creature.CreatureId] = creature;
+      foreach (var f in _files)
+      {
+        f.ToDefaultPositions();
+      }
     }
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
@@ -122,7 +126,6 @@ namespace Magewatch.Services
 
     public void AddCreature(Creature creature, RankValue rank)
     {
-      Debug.Log($"CreatureService::Create> Added creature with ID {creature.CreatureId}");
       if (_creatures[rank.ToIndex()])
       {
         _creatures = ComputeShiftsForIndex(rank.ToIndex());
@@ -132,7 +135,6 @@ namespace Magewatch.Services
       {
         _creatures[rank.ToIndex()] = creature;
       }
-
     }
 
     public void ShiftPositions(RankValue rank)
@@ -145,9 +147,7 @@ namespace Magewatch.Services
 
       if (_creatures[index])
       {
-        Debug.Log($"File::ShiftPositions> Shifting from {Display(_creatures)}");
         var shifts = ComputeShiftsForIndex(rank.ToIndex());
-        Debug.Log($"File::ShiftPositions> To {Display(shifts)}");
         AnimateToPositions(shifts);
       }
     }
