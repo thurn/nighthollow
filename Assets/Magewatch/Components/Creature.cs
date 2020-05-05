@@ -60,6 +60,11 @@ namespace Magewatch.Components
       _collider = GetComponent<Collider2D>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();
       _healthBar.gameObject.SetActive(false);
+      if (creatureData.Owner == PlayerName.Enemy)
+      {
+        transform.eulerAngles = new Vector3(0, 180, 0);
+      }
+
       _initialized = true;
     }
 
@@ -67,16 +72,9 @@ namespace Magewatch.Components
     {
       if (!_initialized && _debugMode)
       {
-        if (_debugIsEnemy)
-        {
-          Root.Instance.CreatureService.AddEnemyCreature(this);
-        }
-        else
-        {
-          Root.Instance.CreatureService.AddCreatureAtPosition(this,
-            BoardPositions.ClosestRankForXPosition(transform.position.x),
-            BoardPositions.ClosestFileForYPosition(transform.position.y));
-        }
+        Root.Instance.CreatureService.AddCreatureAtPosition(this,
+          BoardPositions.ClosestRankForXPosition(transform.position.x, _creatureData.Owner),
+          BoardPositions.ClosestFileForYPosition(transform.position.y));
 
         Initialize(_creatureData);
       }
@@ -84,9 +82,18 @@ namespace Magewatch.Components
 
     public int CreatureId => _creatureData.CreatureId;
 
+    public PlayerName Owner => _creatureData.Owner;
+
     public bool AnimationPaused
     {
       set => _animator.speed = value ? 0 : 1;
+    }
+
+    public void SetPosition(RankValue rankValue, FileValue fileValue)
+    {
+      _creatureData.RankPosition = rankValue;
+      _creatureData.FilePosition = fileValue;
+      transform.position = new Vector2(rankValue.ToXPosition(_creatureData.Owner), fileValue.ToYPosition());
     }
 
     public void MeleeEngageWithTarget(Creature target, IOnComplete onComplete)

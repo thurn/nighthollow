@@ -20,6 +20,7 @@ namespace Magewatch.Data
 {
   public enum RankValue
   {
+    Unknown,
     Rank0,
     Rank1,
     Rank2,
@@ -30,6 +31,7 @@ namespace Magewatch.Data
 
   public enum FileValue
   {
+    Unknown,
     File0,
     File1,
     File2,
@@ -52,17 +54,34 @@ namespace Magewatch.Data
 
   public static class BoardPositions
   {
-    public static int ToXPosition(this RankValue rank)
+    public static int ToXPosition(this RankValue rank, PlayerName owner)
     {
-      switch (rank)
+      switch (owner)
       {
-        case RankValue.Rank0: return -8;
-        case RankValue.Rank1: return -7;
-        case RankValue.Rank2: return -6;
-        case RankValue.Rank3: return -5;
-        case RankValue.Rank4: return -4;
-        case RankValue.Rank5: return -3;
-        default: throw Errors.UnknownEnumValue(rank);
+        case PlayerName.User:
+          switch (rank)
+          {
+            case RankValue.Rank0: return -8;
+            case RankValue.Rank1: return -7;
+            case RankValue.Rank2: return -6;
+            case RankValue.Rank3: return -5;
+            case RankValue.Rank4: return -4;
+            case RankValue.Rank5: return -3;
+            default: throw Errors.UnknownEnumValue(rank);
+          }
+        case PlayerName.Enemy:
+          switch (rank)
+          {
+            case RankValue.Rank0: return 8;
+            case RankValue.Rank1: return 7;
+            case RankValue.Rank2: return 6;
+            case RankValue.Rank3: return 5;
+            case RankValue.Rank4: return 4;
+            case RankValue.Rank5: return 3;
+            default: throw Errors.UnknownEnumValue(rank);
+          }
+        default:
+          throw Errors.UnknownEnumValue(owner);
       }
     }
 
@@ -80,18 +99,35 @@ namespace Magewatch.Data
       }
     }
 
-    public static RankValue ClosestRankForXPosition(float xPosition)
+    public static RankValue ClosestRankForXPosition(float xPosition, PlayerName owner)
     {
       var rounded = Mathf.RoundToInt(xPosition);
-      switch (rounded)
+      switch (owner)
       {
-        case -8: return RankValue.Rank0;
-        case -7: return RankValue.Rank1;
-        case -6: return RankValue.Rank2;
-        case -5: return RankValue.Rank3;
-        case -4: return RankValue.Rank4;
-        case -3: return RankValue.Rank5;
-        default: return rounded < -8 ? RankValue.Rank0 : RankValue.Rank5;
+        case PlayerName.User:
+          switch (rounded)
+          {
+            case -8: return RankValue.Rank0;
+            case -7: return RankValue.Rank1;
+            case -6: return RankValue.Rank2;
+            case -5: return RankValue.Rank3;
+            case -4: return RankValue.Rank4;
+            case -3: return RankValue.Rank5;
+            default: return rounded < -8 ? RankValue.Rank0 : RankValue.Rank5;
+          }
+        case PlayerName.Enemy:
+          switch (rounded)
+          {
+            case 8: return RankValue.Rank0;
+            case 7: return RankValue.Rank1;
+            case 6: return RankValue.Rank2;
+            case 5: return RankValue.Rank3;
+            case 4: return RankValue.Rank4;
+            case 3: return RankValue.Rank5;
+            default: return rounded > 8 ? RankValue.Rank0 : RankValue.Rank5;
+          }
+        default:
+          throw Errors.UnknownEnumValue(owner);
       }
     }
 

@@ -22,10 +22,5 @@ namespace Magewatch.Components
     [SerializeField] Hand _hand;
 
     public Hand Hand => _hand;
-
-    public void AddCardToHand(CardData cardData, bool animate = true)
-    {
-      _hand.DrawCard(cardData, animate: animate);
-    }
   }
 }

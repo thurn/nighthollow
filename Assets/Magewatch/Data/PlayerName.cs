@@ -16,6 +16,7 @@ namespace Magewatch.Data
 {
   public enum PlayerName
   {
+    Unknown,
     User,
     Enemy
   }

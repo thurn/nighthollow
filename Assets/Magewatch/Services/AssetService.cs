@@ -24,7 +24,7 @@ namespace Magewatch.Services
 {
   public sealed class AssetService : MonoBehaviour
   {
-    public void InstantiateCard(CardData cardData, Action onComplete)
+    public void FetchCardAssets(CardData cardData, Action onComplete)
     {
       StartCoroutine(PopulateAssets(new List<IAsset>
       {
@@ -34,32 +34,12 @@ namespace Magewatch.Services
       }, onComplete));
     }
 
-    IEnumerator InstantiateCardAsync2(CardData cardData, Action callback)
+    public void FetchCreatureAssets(CreatureData creatureData, Action onComplete)
     {
-      var prefabRequest = Resources.LoadAsync<GameObject>(cardData.Prefab.Address);
-      var imageRequest = Resources.LoadAsync<Sprite>(cardData.Image.Address);
-
-      var creatureRequest = cardData.CreatureData == null
-        ? null
-        : Resources.LoadAsync<GameObject>(cardData.CreatureData.Prefab.Address);
-
-      yield return prefabRequest;
-      yield return imageRequest;
-      if (creatureRequest != null)
+      StartCoroutine(PopulateAssets(new List<IAsset>
       {
-        yield return creatureRequest;
-      }
-
-      Errors.CheckNotNull(prefabRequest.asset);
-      cardData.Prefab.Value = Instantiate(prefabRequest.asset, Root.Instance.MainCanvas.transform) as GameObject;
-      cardData.Image.Value = Errors.CheckNotNull(imageRequest.asset as Sprite);
-
-      if (creatureRequest != null)
-      {
-        cardData.CreatureData.Prefab.Value = Instantiate(creatureRequest.asset as GameObject);
-      }
-
-      callback();
+        creatureData.Prefab
+      }, onComplete));
     }
 
     IEnumerator PopulateAssets(List<IAsset> assets, Action onComplete)

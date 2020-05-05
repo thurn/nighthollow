@@ -41,9 +41,23 @@ namespace Magewatch.Data
 
   public sealed class Command
   {
+    public DrawCardCommand DrawCard;
+
+    public CreateCreatureCommand CreateCreature;
+
     public MeleeEngageCommand MeleeEngage;
 
     public AttackCommand Attack;
+  }
+
+  public sealed class DrawCardCommand
+  {
+    public CardData Card;
+  }
+
+  public sealed class CreateCreatureCommand
+  {
+    public CreatureData Creature;
   }
 
   public sealed class MeleeEngageCommand

@@ -54,8 +54,9 @@ namespace Magewatch.Components
       if (mousePosition.y >= Constants.IndicatorBottomY &&
           mousePosition.x <= Constants.IndicatorRightX)
       {
-        var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x);
-        var file = _creatureService.GetClosestAvailableFile(BoardPositions.ClosestFileForYPosition(mousePosition.y));
+        var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x, _creature.Owner);
+        var file = _creatureService.GetClosestAvailableFile(
+          BoardPositions.ClosestFileForYPosition(mousePosition.y), _creature.Owner);
 
         if (Input.GetMouseButtonUp(0))
         {
@@ -68,7 +69,7 @@ namespace Magewatch.Components
             spriteRenderer.color = Color.white;
           }
 
-          transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), 0), 0.3f);
+          transform.DOMove(new Vector3(rank.ToXPosition(_creature.Owner), file.ToYPosition(), 0), 0.3f);
           _creature.AnimationPaused = false;
           _creatureService.AddCreatureAtPosition(_creature, rank, file);
         }
@@ -76,8 +77,8 @@ namespace Magewatch.Components
         {
           if (rank != _rank || file != _file)
           {
-            _creatureService.ShiftPositions(rank, file);
-            var position = new Vector3(rank.ToXPosition(), file.ToYPosition(), 0);
+            _creatureService.ShiftPositions(_creature.Owner, rank, file);
+            var position = new Vector3(rank.ToXPosition(_creature.Owner), file.ToYPosition(), 0);
             _cursor.transform.position = position;
             _rank = rank;
             _file = file;

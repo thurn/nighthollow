@@ -26,16 +26,17 @@ namespace Magewatch.Services
   public sealed class CreatureService : MonoBehaviour
   {
     readonly Dictionary<int, Creature> _creatures = new Dictionary<int, Creature>();
+    [SerializeField] List<File> _userFiles;
+    [SerializeField] List<File> _enemyFiles;
 
-    [SerializeField] List<File> _files = new List<File>
+    void Start()
     {
-      new File(),
-      new File(),
-      new File(),
-      new File(),
-      new File(),
-      new File(),
-    };
+      for (var i = 0; i < 6; ++i)
+      {
+        _userFiles.Add(new File(PlayerName.User));
+        _enemyFiles.Add(new File(PlayerName.Enemy));
+      }
+    }
 
     public Creature Create(CreatureData creatureData)
     {
@@ -45,29 +46,27 @@ namespace Magewatch.Services
       return result;
     }
 
-    public void AddEnemyCreature(Creature creature)
-    {
-      _creatures[creature.CreatureId] = creature;
-    }
-
     public Creature Get(int creatureId) => _creatures[creatureId];
 
     public void AddCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
     {
-      _files[file.ToIndex()].AddCreature(creature, rank);
+      var files = creature.Owner == PlayerName.User ? _userFiles : _enemyFiles;
+      creature.SetPosition(rank, file);
+      files[file.ToIndex()].AddCreature(creature, rank);
       _creatures[creature.CreatureId] = creature;
-      foreach (var f in _files)
+      foreach (var f in files)
       {
         f.ToDefaultPositions();
       }
     }
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
-    public FileValue GetClosestAvailableFile(FileValue filePosition)
+    public FileValue GetClosestAvailableFile(FileValue filePosition, PlayerName owner)
     {
+      var files = owner == PlayerName.User ? _userFiles : _enemyFiles;
       foreach (var f in Closest(filePosition))
       {
-        if (_files[f.ToIndex()].Count() < 6)
+        if (files[f.ToIndex()].Count() < 6)
         {
           return f;
         }
@@ -80,14 +79,15 @@ namespace Magewatch.Services
     /// Shifts the positions of creatures such that the provided 'rank,file' position is available. Only one position
     /// shift can be in effect at a time.
     /// </summary>
-    public void ShiftPositions(RankValue rankValue, FileValue fileValue)
+    public void ShiftPositions(PlayerName owner, RankValue rankValue, FileValue fileValue)
     {
-      foreach (var file in _files)
+      var files = owner == PlayerName.User ? _userFiles : _enemyFiles;
+      foreach (var file in files)
       {
         file.ToDefaultPositions();
       }
 
-      _files[fileValue.ToIndex()].ShiftPositions(rankValue);
+      files[fileValue.ToIndex()].ShiftPositions(rankValue);
     }
 
     static IEnumerable<FileValue> Closest(FileValue f)
@@ -120,7 +120,13 @@ namespace Magewatch.Services
   [Serializable]
   sealed class File
   {
+    [SerializeField] PlayerName _owner;
     [SerializeField] List<Creature> _creatures = new List<Creature> {null, null, null, null, null, null};
+
+    public File(PlayerName owner)
+    {
+      _owner = owner;
+    }
 
     public int Count() => _creatures.Count(c => c != null);
 
@@ -215,7 +221,7 @@ namespace Magewatch.Services
       {
         if (creatures[i])
         {
-          creatures[i].transform.DOMoveX(BoardPositions.RankForIndex(i).ToXPosition(), 0.2f);
+          creatures[i].transform.DOMoveX(BoardPositions.RankForIndex(i).ToXPosition(_owner), 0.2f);
         }
       }
     }

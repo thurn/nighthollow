@@ -26,6 +26,7 @@ namespace Magewatch.Services
   public sealed class CommandService : MonoBehaviour, IOnComplete
   {
     [SerializeField] CreatureService _creatureService;
+    [SerializeField] AssetService _assetService;
     [SerializeField] CommandList _currentCommandList;
     [SerializeField] int _currentStep;
     [SerializeField] int _expectedCompletions;
@@ -34,6 +35,7 @@ namespace Magewatch.Services
     void Start()
     {
       _creatureService = Root.Instance.CreatureService;
+      _assetService = Root.Instance.AssetService;
     }
 
     public void HandleCommands(CommandList commandList)
@@ -52,6 +54,24 @@ namespace Magewatch.Services
       foreach (var command in _currentCommandList.Steps[_currentStep].Commands)
       {
         actionCount++;
+        if (command.DrawCard != null)
+        {
+          _expectedCompletions++;
+          Root.Instance.User.Hand.DrawCard(command.DrawCard.Card, this);
+        }
+
+        if (command.CreateCreature != null)
+        {
+          _expectedCompletions++;
+          var data = command.CreateCreature.Creature;
+          _assetService.FetchCreatureAssets(data, () =>
+          {
+            var creature = _creatureService.Create(data);
+            _creatureService.AddCreatureAtPosition(creature, data.RankPosition, data.FilePosition);
+            OnComplete();
+          });
+        }
+
         if (command.MeleeEngage != null)
         {
           HandleMeleeEngage(command.MeleeEngage);
@@ -62,6 +82,11 @@ namespace Magewatch.Services
           HandleAttack(command.Attack);
           yield return new WaitForSeconds(actionCount * 0.1f);
         }
+      }
+
+      if (_expectedCompletions == 0)
+      {
+        OnComplete();
       }
     }
 

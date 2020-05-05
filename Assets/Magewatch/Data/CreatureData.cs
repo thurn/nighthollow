@@ -21,6 +21,9 @@ namespace Magewatch.Data
   public sealed class CreatureData
   {
     public int CreatureId;
+    public PlayerName Owner;
+    public RankValue RankPosition;
+    public FileValue FilePosition;
     public Asset<GameObject> Prefab;
     public bool CanBeRepositioned;
   }

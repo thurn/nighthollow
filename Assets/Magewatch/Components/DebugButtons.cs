@@ -18,6 +18,8 @@ using Magewatch.Data;
 using Magewatch.Services;
 using UnityEngine;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Magewatch.Components
 {
   public sealed class DebugButtons : MonoBehaviour
@@ -46,22 +48,32 @@ namespace Magewatch.Components
     public void Attack1()
     {
       RunCommands(new List<Command>
-      {
-        MeleeEngage(1, 2),
-        MeleeEngage(2, 1)
-      }, new List<Command>
-      {
-        Attack(1, 2, 10, Skill.Skill2),
-      }, new List<Command>
-      {
-        Attack(2, 1, 10, Skill.Skill3)
-      });
+        {
+          CreateCreature(1),
+          CreateCreature(2)
+        },
+        new List<Command>
+        {
+          MeleeEngage(1, 2),
+          MeleeEngage(2, 1)
+        }, new List<Command>
+        {
+          Attack(1, 2, 10, Skill.Skill2),
+        }, new List<Command>
+        {
+          Attack(2, 1, 10, Skill.Skill3)
+        });
     }
 
     public void Attack2()
     {
       var actions = new List<List<Command>>
       {
+        new List<Command>
+        {
+          CreateCreature(1),
+          CreateCreature(2)
+        },
         new List<Command> {MeleeEngage(1, 2), MeleeEngage(2, 1)},
       };
 
@@ -80,6 +92,14 @@ namespace Magewatch.Components
     {
       var actions = new List<List<Command>>
       {
+        new List<Command>
+        {
+          CreateCreature(1),
+          CreateCreature(2),
+          CreateCreature(3),
+          CreateCreature(4),
+          CreateCreature(5)
+        },
         new List<Command>
         {
           MeleeEngage(1, 2),
@@ -153,28 +173,58 @@ namespace Magewatch.Components
 
     public void DrawCard()
     {
-      Root.Instance.User.Hand.DrawCard(new CardData
+      RunCommand(new Command
       {
-        CardId = _idCounter++,
-        Prefab = new Asset<GameObject>("Cards/FireCard"),
-        Name = "Mage",
-        ManaCost = 2,
-        Influence = new Influence
+        DrawCard = new DrawCardCommand
         {
-          Flame = 1
-        },
-        Owner = PlayerName.User,
-        Image = new Asset<Sprite>("CreatureImages/Mage"),
-        Text = "Whiz! Zoom!",
-        IsRevealed = true,
-        CanBePlayed = true,
-        CreatureData = new CreatureData
-        {
-          CreatureId = _idCounter++,
-          Prefab = new Asset<GameObject>("Creatures/Mage")
+          Card = MageCard(_idCounter++)
         }
       });
     }
+
+    public void DrawHand()
+    {
+      RunCommands(
+        DrawCard(MageCard(_idCounter++)),
+        DrawCard(MageCard(_idCounter++)),
+        DrawCard(MageCard(_idCounter++)),
+        DrawCard(MageCard(_idCounter++)),
+        DrawCard(MageCard(_idCounter++)),
+        DrawCard(MageCard(_idCounter++))
+      );
+    }
+
+    static List<Command> DrawCard(CardData cardData)
+    {
+      return new List<Command>
+      {
+        new Command
+        {
+          DrawCard = new DrawCardCommand
+          {
+            Card = cardData
+          }
+        }
+      };
+    }
+
+    static void RunCommand(Command command)
+    {
+      Root.Instance.CommandService.HandleCommands(new CommandList
+      {
+        Steps = new List<CommandStep>
+        {
+          new CommandStep
+          {
+            Commands = new List<Command>
+            {
+              command
+            }
+          }
+        }
+      });
+    }
+
 
     static void RunCommands(params List<Command>[] input)
     {
@@ -182,6 +232,46 @@ namespace Magewatch.Components
       {
         Steps = input.Select(step => new CommandStep {Commands = step}).ToList()
       });
+    }
+
+    static Command CreateCreature(int id)
+    {
+      var create = new CreateCreatureCommand();
+      switch (id)
+      {
+        case 1:
+          create.Creature = NewCreature("Berserker", 1, PlayerName.User, -4, -3);
+          break;
+        case 2:
+          create.Creature = NewCreature("Mage", 2, PlayerName.Enemy, 4, -3);
+          break;
+        case 3:
+          create.Creature = NewCreature("Mage", 3, PlayerName.Enemy, 5, -3);
+          break;
+        case 4:
+          create.Creature = NewCreature("Berserker", 4, PlayerName.User, -3, 2);
+          break;
+        case 5:
+          create.Creature = NewCreature("Berserker", 5, PlayerName.Enemy, 4, 2);
+          break;
+      }
+
+      return new Command
+      {
+        CreateCreature = create
+      };
+    }
+
+    static CreatureData NewCreature(string name, int id, PlayerName owner, int x, int y)
+    {
+      return new CreatureData
+      {
+        CreatureId = id,
+        Prefab = new Asset<GameObject>($"Creatures/{name}"),
+        Owner = owner,
+        RankPosition = BoardPositions.ClosestRankForXPosition(x, owner),
+        FilePosition = BoardPositions.ClosestFileForYPosition(y)
+      };
     }
 
     static Command MeleeEngage(int c1, int c2)
@@ -208,6 +298,27 @@ namespace Magewatch.Components
           HitCount = hitCount,
           DamagePercent = damage
         }
+      };
+    }
+
+    static CardData MageCard(int id)
+    {
+      return new CardData
+      {
+        CardId = id,
+        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Name = "Mage",
+        ManaCost = 2,
+        Influence = new Influence
+        {
+          Flame = 1
+        },
+        Owner = PlayerName.User,
+        Image = new Asset<Sprite>("CreatureImages/Mage"),
+        Text = "Whiz! Zoom!",
+        IsRevealed = true,
+        CanBePlayed = true,
+        CreatureData = NewCreature("Mage", id, PlayerName.User, 0, 0)
       };
     }
   }
