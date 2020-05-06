@@ -74,7 +74,7 @@ namespace Magewatch.Services
           var data = command.CreateCreature.Creature;
           _assetService.FetchCreatureAssets(data, () =>
           {
-            var creature = _creatureService.Create(data);
+            var creature = CreatureService.Create(data);
             foreach (var spriteRenderer in creature.GetComponentsInChildren<SpriteRenderer>())
             {
               spriteRenderer.color = new Color(1, 1, 1, 0);
@@ -82,6 +82,23 @@ namespace Magewatch.Services
             }
 
             _creatureService.AddCreatureAtPosition(creature, data.RankPosition, data.FilePosition);
+            OnComplete();
+          });
+        }
+
+        if (command.RemoveCreature != null)
+        {
+          _expectedCompletions++;
+          var creature = _creatureService.Get(command.RemoveCreature.CreatureId);
+          var sequence = DOTween.Sequence();
+          foreach (var spriteRenderer in creature.GetComponentsInChildren<SpriteRenderer>())
+          {
+            sequence.Insert(0, spriteRenderer.DOFade(0.0f, 0.3f));
+          }
+
+          sequence.InsertCallback(0.4f, () =>
+          {
+            _creatureService.Destroy(command.RemoveCreature.CreatureId);
             OnComplete();
           });
         }

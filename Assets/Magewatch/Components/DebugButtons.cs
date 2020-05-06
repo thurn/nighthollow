@@ -181,12 +181,8 @@ namespace Magewatch.Components
 
       commands.Add(new List<Command>
       {
-        Attack(3, 4, 10, Skill.Skill3),
-      });
-
-      commands.Add(new List<Command>
-      {
-        UpdatePlayer(PlayerName.User, 24, 25, 1, 1)
+        UpdatePlayer(PlayerName.User, 24, 25, 1, 1),
+        RemoveCreature(3)
       });
 
       RunCommands(commands.ToArray());
@@ -312,6 +308,17 @@ namespace Magewatch.Components
       return new Command
       {
         CreateCreature = create
+      };
+    }
+
+    static Command RemoveCreature(int id)
+    {
+      return new Command
+      {
+        RemoveCreature = new RemoveCreatureCommand
+        {
+          CreatureId = id
+        }
       };
     }
 

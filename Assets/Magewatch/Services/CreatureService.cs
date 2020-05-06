@@ -67,19 +67,35 @@ namespace Magewatch.Services
       }
     }
 
-    public Creature Create(CreatureData creatureData)
+    public static Creature Create(CreatureData creatureData)
     {
       var result = ComponentUtils.Instantiate<Creature>(creatureData.Prefab.Value);
-      _creatures[creatureData.CreatureId] = result;
       result.Initialize(creatureData);
       return result;
     }
 
-    public Creature Get(int creatureId) => _creatures[creatureId];
+    public Creature Get(int creatureId)
+    {
+      if (!_creatures.ContainsKey(creatureId))
+      {
+        throw new ArgumentException($"Creature with ID {creatureId} not found!");
+      }
+
+      return _creatures[creatureId];
+    }
+
+    public void Destroy(int creatureId)
+    {
+      var creature = Get(creatureId);
+      var files = GetFiles(creature.Owner);
+      files[creature.FilePosition.ToIndex()].RemoveAtPosition(creature.RankPosition);
+      _creatures.Remove(creatureId);
+      creature.Destroy();
+    }
 
     public void AddCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
     {
-      var files = creature.Owner == PlayerName.User ? _userFiles : _enemyFiles;
+      var files = GetFiles(creature.Owner);
       creature.SetPosition(rank, file);
       files[file.ToIndex()].AddCreature(creature, rank);
       _creatures[creature.CreatureId] = creature;
@@ -92,7 +108,7 @@ namespace Magewatch.Services
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
     public FileValue GetClosestAvailableFile(FileValue filePosition, PlayerName owner)
     {
-      var files = owner == PlayerName.User ? _userFiles : _enemyFiles;
+      var files = GetFiles(owner);
       foreach (var f in Closest(filePosition))
       {
         if (files[f.ToIndex()].Count() < 6)
@@ -110,7 +126,7 @@ namespace Magewatch.Services
     /// </summary>
     public void ShiftPositions(PlayerName owner, RankValue rankValue, FileValue fileValue)
     {
-      var files = owner == PlayerName.User ? _userFiles : _enemyFiles;
+      var files = GetFiles(owner);
       foreach (var file in files)
       {
         file.ToDefaultPositions();
@@ -118,6 +134,8 @@ namespace Magewatch.Services
 
       files[fileValue.ToIndex()].ShiftPositions(rankValue);
     }
+
+    List<File> GetFiles(PlayerName owner) => owner ==PlayerName.User ? _userFiles : _enemyFiles;
 
     static IEnumerable<FileValue> Closest(FileValue f)
     {

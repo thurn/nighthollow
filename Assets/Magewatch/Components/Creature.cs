@@ -16,7 +16,6 @@ using Magewatch.Data;
 using Magewatch.Services;
 using Magewatch.Utils;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Magewatch.Components
 {
@@ -44,6 +43,7 @@ namespace Magewatch.Components
     [SerializeField] AttackCommand _currentAttack;
 
     IOnComplete _onComplete;
+    IOnComplete _onCompleteOnDeath;
 
     static readonly int Speed = Animator.StringToHash("Speed");
     static readonly int Skill1 = Animator.StringToHash("Skill1");
@@ -83,6 +83,10 @@ namespace Magewatch.Components
     public int CreatureId => _creatureData.CreatureId;
 
     public PlayerName Owner => _creatureData.Owner;
+
+    public RankValue RankPosition => _creatureData.RankPosition;
+
+    public FileValue FilePosition => _creatureData.FilePosition;
 
     public bool AnimationPaused
     {
@@ -137,7 +141,8 @@ namespace Magewatch.Components
 
     public void OnDeathAnimationCompleted()
     {
-      Destroy();
+      _onCompleteOnDeath?.OnComplete();
+      Root.Instance.CreatureService.Destroy(_creatureData.CreatureId);
     }
 
     public void Destroy()
@@ -146,7 +151,7 @@ namespace Magewatch.Components
       Destroy(_healthBar.gameObject);
     }
 
-    void ApplyAttack(AttackCommand attack)
+    void ApplyAttack(AttackCommand attack, IOnComplete onComplete)
     {
       _healthBar.Value -= attack.DamagePercent;
       _healthBar.gameObject.SetActive(_healthBar.Value < 100);
@@ -154,6 +159,11 @@ namespace Magewatch.Components
       {
         _animator.SetTrigger(Death);
         _healthBar.gameObject.SetActive(false);
+        _onCompleteOnDeath = onComplete;
+      }
+      else
+      {
+        onComplete.OnComplete();
       }
     }
 
@@ -161,8 +171,8 @@ namespace Magewatch.Components
     // ReSharper disable once UnusedMember.Local
     void AttackStart()
     {
-      _currentTarget.ApplyAttack(_currentAttack);
-      _onComplete.OnComplete();
+      _currentTarget.ApplyAttack(_currentAttack, _onComplete);
+      _onComplete = null;
     }
 
     Transform MeleePosition => _meleePosition;

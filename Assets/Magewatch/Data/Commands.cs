@@ -48,6 +48,8 @@ namespace Magewatch.Data
 
     public CreateCreatureCommand CreateCreature;
 
+    public RemoveCreatureCommand RemoveCreature;
+
     public MeleeEngageCommand MeleeEngage;
 
     public AttackCommand Attack;
@@ -66,6 +68,11 @@ namespace Magewatch.Data
   public sealed class CreateCreatureCommand
   {
     public CreatureData Creature;
+  }
+
+  public sealed class RemoveCreatureCommand
+  {
+    public int CreatureId;
   }
 
   public sealed class MeleeEngageCommand
