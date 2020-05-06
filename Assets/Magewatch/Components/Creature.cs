@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using DG.Tweening;
 using Magewatch.Data;
 using Magewatch.Services;
 using Magewatch.Utils;
@@ -41,6 +42,7 @@ namespace Magewatch.Components
     [SerializeField] float _speed = 2;
     [SerializeField] bool _touchedTarget;
     [SerializeField] AttackCommand _currentAttack;
+    [SerializeField] CreatureService _creatureService;
 
     IOnComplete _onComplete;
     IOnComplete _onCompleteOnDeath;
@@ -56,6 +58,7 @@ namespace Magewatch.Components
     public void Initialize(CreatureData creatureData)
     {
       _creatureData = creatureData;
+      _creatureService = Root.Instance.CreatureService;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();
@@ -72,11 +75,10 @@ namespace Magewatch.Components
     {
       if (!_initialized && _debugMode)
       {
-        Root.Instance.CreatureService.AddCreatureAtPosition(this,
+        Initialize(_creatureData);
+        _creatureService.AddCreatureAtPosition(this,
           BoardPositions.ClosestRankForXPosition(transform.position.x, _creatureData.Owner),
           BoardPositions.ClosestFileForYPosition(transform.position.y));
-
-        Initialize(_creatureData);
       }
     }
 
@@ -149,6 +151,38 @@ namespace Magewatch.Components
     {
       Destroy(gameObject);
       Destroy(_healthBar.gameObject);
+    }
+
+    public void FadeIn(IOnComplete onComplete)
+    {
+      var sequence = DOTween.Sequence();
+      foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
+      {
+        spriteRenderer.color = new Color(1, 1, 1, 0);
+        sequence.Insert(0, spriteRenderer.DOFade(1.0f, 0.3f));
+      }
+
+      sequence.InsertCallback(0.4f, () =>
+      {
+        _creatureService.AddCreatureAtPosition(this, RankPosition, FilePosition);
+        onComplete.OnComplete();
+      });
+    }
+
+    public void FadeOut(IOnComplete onComplete)
+    {
+      _healthBar.gameObject.SetActive(false);
+      var sequence = DOTween.Sequence();
+      foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
+      {
+        sequence.Insert(0, spriteRenderer.DOFade(0.0f, 0.3f));
+      }
+
+      sequence.InsertCallback(0.4f, () =>
+      {
+        _creatureService.Destroy(CreatureId);
+        onComplete.OnComplete();
+      });
     }
 
     void ApplyAttack(AttackCommand attack, IOnComplete onComplete)

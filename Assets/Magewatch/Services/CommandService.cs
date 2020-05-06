@@ -55,6 +55,13 @@ namespace Magewatch.Services
       foreach (var command in _currentCommandList.Steps[_currentStep].Commands)
       {
         actionCount++;
+        if (command.Wait != null)
+        {
+          _expectedCompletions++;
+          yield return new WaitForSeconds(command.Wait.WaitTimeMilliseconds / 1000f);
+          OnComplete();
+        }
+
         if (command.DrawCard != null)
         {
           _expectedCompletions++;
@@ -75,14 +82,7 @@ namespace Magewatch.Services
           _assetService.FetchCreatureAssets(data, () =>
           {
             var creature = CreatureService.Create(data);
-            foreach (var spriteRenderer in creature.GetComponentsInChildren<SpriteRenderer>())
-            {
-              spriteRenderer.color = new Color(1, 1, 1, 0);
-              spriteRenderer.DOFade(1.0f, 0.3f);
-            }
-
-            _creatureService.AddCreatureAtPosition(creature, data.RankPosition, data.FilePosition);
-            OnComplete();
+            creature.FadeIn(this);
           });
         }
 
@@ -90,17 +90,7 @@ namespace Magewatch.Services
         {
           _expectedCompletions++;
           var creature = _creatureService.Get(command.RemoveCreature.CreatureId);
-          var sequence = DOTween.Sequence();
-          foreach (var spriteRenderer in creature.GetComponentsInChildren<SpriteRenderer>())
-          {
-            sequence.Insert(0, spriteRenderer.DOFade(0.0f, 0.3f));
-          }
-
-          sequence.InsertCallback(0.4f, () =>
-          {
-            _creatureService.Destroy(command.RemoveCreature.CreatureId);
-            OnComplete();
-          });
+          creature.FadeOut(this);
         }
 
         if (command.MeleeEngage != null)

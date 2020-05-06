@@ -42,6 +42,8 @@ namespace Magewatch.Data
 
   public sealed class Command
   {
+    public WaitCommand Wait;
+
     public DrawCardCommand DrawCard;
 
     public UpdatePlayerCommand UpdatePlayer;
@@ -53,6 +55,11 @@ namespace Magewatch.Data
     public MeleeEngageCommand MeleeEngage;
 
     public AttackCommand Attack;
+  }
+
+  public sealed class WaitCommand
+  {
+    public int WaitTimeMilliseconds;
   }
 
   public sealed class DrawCardCommand

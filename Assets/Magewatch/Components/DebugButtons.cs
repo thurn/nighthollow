@@ -182,7 +182,21 @@ namespace Magewatch.Components
       commands.Add(new List<Command>
       {
         UpdatePlayer(PlayerName.User, 24, 25, 1, 1),
+        Wait(1000)
+      });
+
+      commands.Add(new List<Command>
+      {
         RemoveCreature(3)
+      });
+
+      commands.Add(new List<Command>
+      {
+        CreateCreature(1),
+        CreateCreature(2),
+        CreateCreature(3),
+        CreateCreature(4),
+        CreateCreature(5)
       });
 
       RunCommands(commands.ToArray());
@@ -209,39 +223,6 @@ namespace Magewatch.Components
         DrawCard(MageCard(_idCounter++)),
         DrawCard(MageCard(_idCounter++))
       );
-    }
-
-    static List<Command> DrawCard(CardData cardData)
-    {
-      return new List<Command>
-      {
-        new Command
-        {
-          DrawCard = new DrawCardCommand
-          {
-            Card = cardData
-          }
-        }
-      };
-    }
-
-    static Command UpdatePlayer(PlayerName playerName, int currentLife, int maximumLife, int currentMana,
-      int maximumMana)
-    {
-      return new Command
-      {
-        UpdatePlayer = new UpdatePlayerCommand
-        {
-          Player = new PlayerData
-          {
-            PlayerName = playerName,
-            CurrentLife = currentLife,
-            MaximumLife = maximumLife,
-            CurrentMana = currentMana,
-            MaximumMana = maximumMana
-          }
-        }
-      };
     }
 
     static void RunCommand(Command command)
@@ -281,6 +262,50 @@ namespace Magewatch.Components
       {
         Steps = input.Select(step => new CommandStep {Commands = step}).ToList()
       });
+    }
+
+    static Command Wait(int milliseconds)
+    {
+      return new Command
+      {
+        Wait = new WaitCommand
+        {
+          WaitTimeMilliseconds = milliseconds
+        }
+      };
+    }
+
+    static List<Command> DrawCard(CardData cardData)
+    {
+      return new List<Command>
+      {
+        new Command
+        {
+          DrawCard = new DrawCardCommand
+          {
+            Card = cardData
+          }
+        }
+      };
+    }
+
+    static Command UpdatePlayer(PlayerName playerName, int currentLife, int maximumLife, int currentMana,
+      int maximumMana)
+    {
+      return new Command
+      {
+        UpdatePlayer = new UpdatePlayerCommand
+        {
+          Player = new PlayerData
+          {
+            PlayerName = playerName,
+            CurrentLife = currentLife,
+            MaximumLife = maximumLife,
+            CurrentMana = currentMana,
+            MaximumMana = maximumMana
+          }
+        }
+      };
     }
 
     static Command CreateCreature(int id)
