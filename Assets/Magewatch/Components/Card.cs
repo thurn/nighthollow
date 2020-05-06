@@ -212,7 +212,8 @@ namespace Magewatch.Components
             if (_cardData.CreatureData != null)
             {
               var creature = Root.Instance.CreatureService.Create(_cardData.CreatureData);
-              creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(this, creature);
+              gameObject.SetActive(false);
+              creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
             }
           }
 

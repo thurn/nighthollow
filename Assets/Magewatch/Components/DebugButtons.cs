@@ -45,6 +45,17 @@ namespace Magewatch.Components
       });
     }
 
+    public void SetUp()
+    {
+      RunCommandList(
+        CreateCreature(1),
+        CreateCreature(2),
+        CreateCreature(3),
+        CreateCreature(4),
+        CreateCreature(5)
+      );
+    }
+
     public void Attack1()
     {
       RunCommands(new List<Command>
@@ -225,6 +236,19 @@ namespace Magewatch.Components
       });
     }
 
+    static void RunCommandList(params Command[] commands)
+    {
+      Root.Instance.CommandService.HandleCommands(new CommandList
+      {
+        Steps = new List<CommandStep>
+        {
+          new CommandStep
+          {
+            Commands = commands.ToList()
+          }
+        }
+      });
+    }
 
     static void RunCommands(params List<Command>[] input)
     {

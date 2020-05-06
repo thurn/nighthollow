@@ -38,6 +38,35 @@ namespace Magewatch.Services
       }
     }
 
+    void Update()
+    {
+      if (Input.GetMouseButtonDown(0))
+      {
+        var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+        if (mousePosition.y >= Constants.IndicatorBottomY &&
+            mousePosition.x <= Constants.IndicatorRightX)
+        {
+          // Clowntown version of a drag handler. Switch this to use proper collider detection or something.
+          var file = _userFiles[BoardPositions.ClosestFileForYPosition(mousePosition.y).ToIndex()];
+          var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x, PlayerName.User);
+          var draggingCreature =
+            file.GetAtPosition(rank);
+
+          if (!draggingCreature)
+          {
+            file = _userFiles[BoardPositions.ClosestFileForYPosition(mousePosition.y - 1).ToIndex()];
+            draggingCreature = file.GetAtPosition(rank);
+          }
+
+          if (draggingCreature)
+          {
+            file.RemoveAtPosition(rank);
+            draggingCreature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(draggingCreature);
+          }
+        }
+      }
+    }
+
     public Creature Create(CreatureData creatureData)
     {
       var result = ComponentUtils.Instantiate<Creature>(creatureData.Prefab.Value);
@@ -130,6 +159,8 @@ namespace Magewatch.Services
 
     public int Count() => _creatures.Count(c => c != null);
 
+    public Creature GetAtPosition(RankValue rankValue) => _creatures[rankValue.ToIndex()];
+
     public void AddCreature(Creature creature, RankValue rank)
     {
       if (_creatures[rank.ToIndex()])
@@ -142,6 +173,8 @@ namespace Magewatch.Services
         _creatures[rank.ToIndex()] = creature;
       }
     }
+
+    public void RemoveAtPosition(RankValue rankValue) => _creatures[rankValue.ToIndex()] = null;
 
     public void ShiftPositions(RankValue rank)
     {

@@ -16,6 +16,7 @@ using Magewatch.Data;
 using Magewatch.Services;
 using Magewatch.Utils;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Magewatch.Components
 {
@@ -29,7 +30,6 @@ namespace Magewatch.Components
   public sealed class Creature : MonoBehaviour
   {
     [SerializeField] bool _debugMode;
-    [SerializeField] bool _debugIsEnemy;
     [SerializeField] CreatureState _state;
     [SerializeField] Animator _animator;
     [SerializeField] Collider2D _collider;
@@ -88,6 +88,8 @@ namespace Magewatch.Components
     {
       set => _animator.speed = value ? 0 : 1;
     }
+
+    public bool ColliderContainsPoint(Vector2 point) => _collider.bounds.Contains(point);
 
     public void SetPosition(RankValue rankValue, FileValue fileValue)
     {

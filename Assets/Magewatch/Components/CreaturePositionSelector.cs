@@ -31,10 +31,9 @@ namespace Magewatch.Components
     [SerializeField] GameObject _cursor;
     [SerializeField] List<SpriteRenderer> _spriteRenderers;
 
-    public void Initialize(Card card, Creature creature)
+    public void Initialize(Creature creature, Card card = null)
     {
-      _card = Errors.CheckNotNull(card);
-      _card.gameObject.SetActive(false);
+      _card = card;
       _creature = creature;
       _creature.AnimationPaused = true;
       _creatureService = Root.Instance.CreatureService;
@@ -51,8 +50,8 @@ namespace Magewatch.Components
     void Update()
     {
       var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
-      if (mousePosition.y >= Constants.IndicatorBottomY &&
-          mousePosition.x <= Constants.IndicatorRightX)
+      if (!_card || (mousePosition.y >= Constants.IndicatorBottomY &&
+                     mousePosition.x <= Constants.IndicatorRightX))
       {
         var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x, _creature.Owner);
         var file = _creatureService.GetClosestAvailableFile(
@@ -60,7 +59,11 @@ namespace Magewatch.Components
 
         if (Input.GetMouseButtonUp(0))
         {
-          _card.OnPlayed();
+          if (_card)
+          {
+            _card.OnPlayed();
+          }
+
           Destroy(_cursor);
           Destroy(this);
 
@@ -87,7 +90,7 @@ namespace Magewatch.Components
           transform.position = Vector2.one * mousePosition;
         }
       }
-      else
+      else if (_card)
       {
         SwitchToCard();
       }
