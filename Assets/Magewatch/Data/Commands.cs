@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using Magewatch.Components;
 
 namespace Magewatch.Data
 {
@@ -43,6 +44,8 @@ namespace Magewatch.Data
   {
     public DrawCardCommand DrawCard;
 
+    public UpdatePlayerCommand UpdatePlayer;
+
     public CreateCreatureCommand CreateCreature;
 
     public MeleeEngageCommand MeleeEngage;
@@ -53,6 +56,11 @@ namespace Magewatch.Data
   public sealed class DrawCardCommand
   {
     public CardData Card;
+  }
+
+  public sealed class UpdatePlayerCommand
+  {
+    public PlayerData Player;
   }
 
   public sealed class CreateCreatureCommand

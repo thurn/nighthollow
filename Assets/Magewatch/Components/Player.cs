@@ -12,15 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using DG.Tweening;
 using Magewatch.Data;
+using Magewatch.Services;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Magewatch.Components
 {
   public sealed class Player : MonoBehaviour
   {
-    [SerializeField] Hand _hand;
+    [Header("Config")] [SerializeField] Hand _hand;
+    [SerializeField] Image _lifeBar;
+    [SerializeField] Text _lifeText;
+    [SerializeField] Image _manaBar;
+    [SerializeField] Text _manaText;
+    [SerializeField] RectTransform _influenceRow;
+    [Header("State")] [SerializeField] PlayerData _playerData;
 
     public Hand Hand => _hand;
+
+    public void UpdatePlayerData(PlayerData playerData, IOnComplete onComplete)
+    {
+      var firstUpdate = _playerData == null;
+      if (firstUpdate || _playerData.CurrentLife != playerData.CurrentLife)
+      {
+        _lifeBar.DOFillAmount(playerData.CurrentLife / (float) playerData.MaximumLife, 0.3f)
+          .OnComplete(onComplete.OnComplete);
+      }
+
+      if (firstUpdate || _playerData.CurrentMana != playerData.CurrentMana)
+      {
+        _manaBar.DOFillAmount(playerData.CurrentMana / (float) playerData.CurrentMana, 0.3f);
+      }
+
+      _lifeText.text = $"{playerData.CurrentLife} / {playerData.MaximumLife}";
+      _manaText.text = $"{playerData.CurrentMana} / {playerData.MaximumMana}";
+    }
   }
 }

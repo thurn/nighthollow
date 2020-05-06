@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections;
+using DG.Tweening;
 using Magewatch.Data;
 using UnityEngine;
 
@@ -60,6 +61,13 @@ namespace Magewatch.Services
           Root.Instance.User.Hand.DrawCard(command.DrawCard.Card, this);
         }
 
+        if (command.UpdatePlayer != null)
+        {
+          _expectedCompletions++;
+          Root.Instance.GetPlayer(command.UpdatePlayer.Player.PlayerName)
+            .UpdatePlayerData(command.UpdatePlayer.Player, this);
+        }
+
         if (command.CreateCreature != null)
         {
           _expectedCompletions++;
@@ -67,6 +75,12 @@ namespace Magewatch.Services
           _assetService.FetchCreatureAssets(data, () =>
           {
             var creature = _creatureService.Create(data);
+            foreach (var spriteRenderer in creature.GetComponentsInChildren<SpriteRenderer>())
+            {
+              spriteRenderer.color = new Color(1, 1, 1, 0);
+              spriteRenderer.DOFade(1.0f, 0.3f);
+            }
+
             _creatureService.AddCreatureAtPosition(creature, data.RankPosition, data.FilePosition);
             OnComplete();
           });

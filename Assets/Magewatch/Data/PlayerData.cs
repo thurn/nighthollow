@@ -14,13 +14,14 @@
 
 namespace Magewatch.Data
 {
-  public sealed class Influence
+  public sealed class PlayerData
   {
-    public int Light;
-    public int Sky;
-    public int Flame;
-    public int Ice;
-    public int Earth;
-    public int Shadow;
+    public PlayerName PlayerName;
+    public int CurrentLife;
+    public int MaximumLife;
+    public int CurrentMana;
+    public int MaximumMana;
+    public Influence CurrentInfluence;
+    public Influence MaximumInfluence;
   }
 }

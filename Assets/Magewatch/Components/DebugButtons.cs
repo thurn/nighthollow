@@ -101,7 +101,7 @@ namespace Magewatch.Components
 
     public void Attack3()
     {
-      var actions = new List<List<Command>>
+      var commands = new List<List<Command>>
       {
         new List<Command>
         {
@@ -125,7 +125,7 @@ namespace Magewatch.Components
       {
         if (i % 2 == 0)
         {
-          actions.Add(new List<Command>
+          commands.Add(new List<Command>
           {
             Attack(1, 2, 20, Skill.Skill2),
             Attack(4, 5, 20, Skill.Skill2)
@@ -133,7 +133,7 @@ namespace Magewatch.Components
         }
         else
         {
-          actions.Add(new List<Command>
+          commands.Add(new List<Command>
           {
             Attack(2, 1, 10, Skill.Skill3),
             Attack(3, 1, 10, Skill.Skill3),
@@ -142,44 +142,54 @@ namespace Magewatch.Components
         }
       }
 
-      actions.Add(new List<Command>
+      commands.Add(new List<Command>
       {
         MeleeEngage(1, 3),
         Attack(3, 1, 10, Skill.Skill3)
       });
 
-      actions.Add(new List<Command>
+      commands.Add(new List<Command>
       {
         Attack(1, 3, 20, Skill.Skill2),
       });
 
-      actions.Add(new List<Command>
+      commands.Add(new List<Command>
       {
         Attack(3, 1, 10, Skill.Skill3)
       });
 
-      actions.Add(new List<Command>
+      commands.Add(new List<Command>
       {
         MeleeEngage(3, 4),
         MeleeEngage(4, 3)
       });
 
-      actions.Add(new List<Command>
+      commands.Add(new List<Command>
       {
         Attack(3, 4, 10, Skill.Skill3),
       });
 
-      actions.Add(new List<Command>
+      commands.Add(new List<Command>
       {
         Attack(4, 3, 20, Skill.Skill2)
       });
 
-      actions.Add(new List<Command>
+      commands.Add(new List<Command>
       {
         Attack(3, 4, 10, Skill.Skill3),
       });
 
-      RunCommands(actions.ToArray());
+      commands.Add(new List<Command>
+      {
+        Attack(3, 4, 10, Skill.Skill3),
+      });
+
+      commands.Add(new List<Command>
+      {
+        UpdatePlayer(PlayerName.User, 24, 25, 1, 1)
+      });
+
+      RunCommands(commands.ToArray());
     }
 
     public void DrawCard()
@@ -214,6 +224,25 @@ namespace Magewatch.Components
           DrawCard = new DrawCardCommand
           {
             Card = cardData
+          }
+        }
+      };
+    }
+
+    static Command UpdatePlayer(PlayerName playerName, int currentLife, int maximumLife, int currentMana,
+      int maximumMana)
+    {
+      return new Command
+      {
+        UpdatePlayer = new UpdatePlayerCommand
+        {
+          Player = new PlayerData
+          {
+            PlayerName = playerName,
+            CurrentLife = currentLife,
+            MaximumLife = maximumLife,
+            CurrentMana = currentMana,
+            MaximumMana = maximumMana
           }
         }
       };
