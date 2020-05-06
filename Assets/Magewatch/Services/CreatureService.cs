@@ -29,7 +29,7 @@ namespace Magewatch.Services
     [SerializeField] List<File> _userFiles;
     [SerializeField] List<File> _enemyFiles;
 
-    void Start()
+    void Awake()
     {
       for (var i = 0; i < 6; ++i)
       {
