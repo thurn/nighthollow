@@ -49,8 +49,8 @@ namespace Magewatch.Components
         _manaBar.DOFillAmount(playerData.CurrentMana / (float) playerData.CurrentMana, 0.3f);
       }
 
-      _lifeText.text = $"{playerData.CurrentLife} / {playerData.MaximumLife}";
-      _manaText.text = $"{playerData.CurrentMana} / {playerData.MaximumMana}";
+      _lifeText.text = $"{playerData.CurrentLife}/{playerData.MaximumLife}";
+      _manaText.text = $"{playerData.CurrentMana}/{playerData.MaximumMana}";
     }
   }
 }

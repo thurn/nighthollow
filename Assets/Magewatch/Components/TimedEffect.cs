@@ -21,7 +21,7 @@ namespace Magewatch.Components
   {
     [SerializeField] float _duration;
 
-    void Start()
+    void OnEnable()
     {
       StartCoroutine(DisableAsync(_duration));
     }

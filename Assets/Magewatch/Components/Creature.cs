@@ -226,19 +226,18 @@ namespace Magewatch.Components
         var target = fireProjectile.AtOpponent
           ? Root.Instance.GetPlayer(Owner.GetOpponent()).Collider
           : _currentTarget._collider;
-        ComponentUtils.Instantiate<Projectile>(fireProjectile.Prefab.Value)
-          .Initialize(_meleePosition, target, () =>
+        Projectile.Instantiate(fireProjectile, _meleePosition, target, () =>
+        {
+          if (fireProjectile.AtOpponent)
           {
-            if (fireProjectile.AtOpponent)
-            {
-              _onComplete.OnComplete();
-            }
-            else
-            {
-              _currentTarget.ApplyAttack(fireProjectile.Damage, _onComplete);
-              _onComplete = null;
-            }
-          });
+            _onComplete.OnComplete();
+          }
+          else
+          {
+            _currentTarget.ApplyAttack(fireProjectile.Damage, _onComplete);
+            _onComplete = null;
+          }
+        });
       }
     }
 

@@ -13,6 +13,9 @@
 // limitations under the License.
 
 using System;
+using Magewatch.Data;
+using Magewatch.Services;
+using Magewatch.Utils;
 using UnityEngine;
 
 namespace Magewatch.Components
@@ -25,15 +28,21 @@ namespace Magewatch.Components
     [Header("State")] Collider2D _target;
     Action _onHit;
 
-    public void Initialize(Transform firingPoint, Collider2D target, Action onHit)
+    public static void Instantiate(FireProjectileEffect fireProjectile, Transform firingPoint, Collider2D target,
+      Action onHit)
+    {
+      var projectile = Root.Instance.ObjectPoolService.Instantiate(fireProjectile.Prefab.Value, firingPoint.position);
+      ComponentUtils.GetComponent<Projectile>(projectile).Initialize(firingPoint, target, onHit);
+    }
+
+    void Initialize(Transform firingPoint, Collider2D target, Action onHit)
     {
       _target = target;
       _onHit = onHit;
       transform.position = new Vector3(firingPoint.position.x, firingPoint.position.y, 0);
       transform.rotation = Quaternion.LookRotation(target.bounds.center - transform.position, Vector3.up);
 
-      var flash = Instantiate(_flashEffect);
-      flash.transform.position = transform.position;
+      var flash = Root.Instance.ObjectPoolService.Instantiate(_flashEffect.gameObject, transform.position);
       flash.transform.forward = transform.forward;
     }
 
@@ -54,8 +63,7 @@ namespace Magewatch.Components
     {
       if (other == _target)
       {
-        var hit = Instantiate(_hitEffect);
-        hit.transform.position = transform.position;
+        var hit = Root.Instance.ObjectPoolService.Instantiate(_hitEffect.gameObject, transform.position);
         hit.transform.forward = -transform.forward;
         _onHit?.Invoke();
         gameObject.SetActive(false);

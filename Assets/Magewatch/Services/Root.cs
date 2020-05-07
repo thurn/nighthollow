@@ -39,6 +39,9 @@ namespace Magewatch.Services
     [SerializeField] CommandService _commandService;
     public CommandService CommandService => _commandService;
 
+    [SerializeField] ObjectPoolService _objectPoolService;
+    public ObjectPoolService ObjectPoolService => _objectPoolService;
+
     [SerializeField] CreatureService _creatureService;
     public CreatureService CreatureService => _creatureService;
 
@@ -78,6 +81,7 @@ namespace Magewatch.Services
       Errors.CheckNotNull(_prefabs);
       Errors.CheckNotNull(_assetService);
       Errors.CheckNotNull(_commandService);
+      Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_creatureService);
       Errors.CheckNotNull(_user);
       Errors.CheckNotNull(_enemy);

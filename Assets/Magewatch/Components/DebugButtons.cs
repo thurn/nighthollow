@@ -228,7 +228,7 @@ namespace Magewatch.Components
       RunCommands(
         Cmd(CreateCreature(1)),
         Cmd(CreateCreature(2)),
-        new List<Command> {CastSpell1(2, 1, 50), MeleeEngage(1, 2)},
+        Cmds(CastSpell1(2, 1, 50), MeleeEngage(1, 2)),
         Cmd(Wait(1000)),
         Cmd(Attack(1, 2, 20, Skill.Skill2)),
         Cmd(Attack(2, 1, 20, Skill.Skill3)),
@@ -287,6 +287,8 @@ namespace Magewatch.Components
     }
 
     static List<Command> Cmd(Command command) => new List<Command> {command};
+
+    static List<Command> Cmds(params Command[] commands) => commands.ToList();
 
     static Command Wait(int milliseconds)
     {

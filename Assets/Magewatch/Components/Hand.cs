@@ -59,14 +59,11 @@ namespace Magewatch.Components
 
     public void DrawCard(CardData cardData, IOnComplete onComplete, bool animate = true)
     {
-      Root.Instance.AssetService.FetchCardAssets(cardData, () =>
-      {
-        var card = ComponentUtils.Instantiate<Card>(cardData.Prefab.Value, Root.Instance.MainCanvas.transform);
-        card.Initialize(cardData);
-        card.transform.position = _deckPosition.position;
-        card.transform.localScale = Vector2.one * _initialCardScale;
-        AddToHand(card, onComplete, animate);
-      });
+      var card = ComponentUtils.Instantiate<Card>(cardData.Prefab.Value, Root.Instance.MainCanvas.transform);
+      card.Initialize(cardData);
+      card.transform.position = _deckPosition.position;
+      card.transform.localScale = Vector2.one * _initialCardScale;
+      AddToHand(card, onComplete, animate);
     }
 
     public void ReturnToHand(Card card)

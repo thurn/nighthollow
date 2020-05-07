@@ -12,12 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using Magewatch.Utils;
 using UnityEngine;
 
 namespace Magewatch.Services
 {
   public sealed class ObjectPoolService : MonoBehaviour
   {
+    readonly Dictionary<int, List<GameObject>> _pools = new Dictionary<int, List<GameObject>>();
 
+    public GameObject Instantiate(GameObject prefab, Vector3 position)
+    {
+      var instanceId = prefab.GetInstanceID();
+      if (_pools.ContainsKey(instanceId))
+      {
+        var list = _pools[instanceId];
+        foreach (var pooledObject in list)
+        {
+          if (!pooledObject.activeSelf)
+          {
+            pooledObject.transform.parent = null;
+            pooledObject.transform.position = position;
+            pooledObject.SetActive(true);
+            return pooledObject;
+          }
+        }
+      }
+      else
+      {
+        _pools[instanceId] = new List<GameObject>();
+      }
+
+      var result = Instantiate(prefab);
+      result.transform.position = position;
+      _pools[instanceId].Add(result.gameObject);
+      return result;
+    }
   }
 }

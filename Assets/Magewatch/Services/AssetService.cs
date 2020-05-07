@@ -80,24 +80,6 @@ namespace Magewatch.Services
       }
     }
 
-    public void FetchCardAssets(CardData cardData, Action onComplete)
-    {
-      StartCoroutine(PopulateAssets(new List<IAsset>
-      {
-        cardData.Prefab,
-        cardData.Image,
-        cardData.CreatureData?.Prefab
-      }, onComplete));
-    }
-
-    public void FetchCreatureAssets(CreatureData creatureData, Action onComplete)
-    {
-      StartCoroutine(PopulateAssets(new List<IAsset>
-      {
-        creatureData.Prefab
-      }, onComplete));
-    }
-
     IEnumerator PopulateAssets(List<IAsset> assets, Action onComplete)
     {
       assets.RemoveAll(x => x == null);
