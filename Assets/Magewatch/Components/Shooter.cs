@@ -20,7 +20,7 @@ namespace Magewatch.Components
   public sealed class Shooter : MonoBehaviour
   {
     [SerializeField] Transform _firingPoint;
-    [SerializeField] Transform _target;
+    [SerializeField] Collider2D _target;
     [SerializeField] Projectile _prefab;
     [SerializeField] Projectile _prefab2;
     [SerializeField] Projectile _prefab3;

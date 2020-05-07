@@ -13,9 +13,7 @@
 // limitations under the License.
 
 using System;
-using Magewatch.Utils;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Magewatch.Components
 {
@@ -24,19 +22,31 @@ namespace Magewatch.Components
     [Header("Config")] [SerializeField] TimedEffect _flashEffect;
     [SerializeField] TimedEffect _hitEffect;
     [SerializeField] float _speed;
-    [Header("State")] Transform _target;
-    Action<Creature> _onHit;
+    [Header("State")] Collider2D _target;
+    Action _onHit;
 
-    public void Initialize(Transform firingPoint, Transform target, Action<Creature> onHit)
+    public void Initialize(Transform firingPoint, Collider2D target, Action onHit)
     {
       _target = target;
       _onHit = onHit;
-      transform.position = firingPoint.position;
-      transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up);
+      transform.position = new Vector3(firingPoint.position.x, firingPoint.position.y, 0);
+      transform.rotation = Quaternion.LookRotation(target.bounds.center - transform.position, Vector3.up);
 
       var flash = Instantiate(_flashEffect);
+      foreach (var ps in flash.GetComponentsInChildren<ParticleSystem>())
+      {
+        ps.GetComponent<Renderer>().sortingOrder = 500;
+      }
       flash.transform.position = transform.position;
       flash.transform.forward = transform.forward;
+    }
+
+    void OnValidate()
+    {
+      foreach (var ps in GetComponentsInChildren<ParticleSystem>())
+      {
+        ps.GetComponent<Renderer>().sortingOrder = 500;
+      }
     }
 
     void Update()
@@ -44,14 +54,18 @@ namespace Magewatch.Components
       transform.position += _speed * Time.deltaTime * transform.forward;
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-      if (other.transform == _target)
+      if (other.transform == _target.transform)
       {
         var hit = Instantiate(_hitEffect);
+        foreach (var ps in hit.GetComponentsInChildren<ParticleSystem>())
+        {
+          ps.GetComponent<Renderer>().sortingOrder = 500;
+        }
         hit.transform.position = transform.position;
         hit.transform.forward = -transform.forward;
-        // _onHit(ComponentUtils.GetComponent<Creature>(other.gameObject));
+        _onHit?.Invoke();
         gameObject.SetActive(false);
       }
       else

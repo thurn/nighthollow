@@ -43,6 +43,11 @@ namespace Magewatch.Components
           _duration = Mathf.Max(_duration, audioSource.clip.length);
         }
       }
+
+      foreach (var ps in GetComponentsInChildren<ParticleSystem>())
+      {
+        ps.GetComponent<Renderer>().sortingOrder = 500;
+      }
     }
 
     IEnumerator<YieldInstruction> DisableAsync(float duration)
