@@ -38,7 +38,7 @@ namespace Magewatch.Components
     [SerializeField] List<Image> _influence;
     [SerializeField] Image _outline;
 
-    [Header("Internal")] [SerializeField] CardData _cardData;
+    [Header("State")] [SerializeField] CardData _cardData;
     [SerializeField] Hand _hand;
     [SerializeField] bool _previewMode;
     [SerializeField] bool _initialized;
