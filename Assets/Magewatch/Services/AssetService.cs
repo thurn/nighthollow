@@ -24,6 +24,62 @@ namespace Magewatch.Services
 {
   public sealed class AssetService : MonoBehaviour
   {
+    public void FetchAssets(CommandList commandList, Action onComplete)
+    {
+      var assets = new List<IAsset>();
+      foreach (var step in commandList.Steps)
+      {
+        foreach (var command in step.Commands)
+        {
+          AddAssetsForCommand(command, assets);
+        }
+      }
+
+      StartCoroutine(PopulateAssets(assets, onComplete));
+    }
+
+    void AddAssetsForCommand(Command command, List<IAsset> assets)
+    {
+      if (command.DrawCard != null)
+      {
+        AddCardAssets(command.DrawCard.Card, assets);
+      }
+
+      if (command.CreateCreature != null)
+      {
+        AddCreatureAssets(command.CreateCreature.Creature, assets);
+      }
+
+      if (command.Attack != null)
+      {
+        AddAttackEffectAssets(command.Attack.AttackEffect, assets);
+      }
+    }
+
+    void AddCardAssets(CardData card, List<IAsset> assets)
+    {
+      assets.Add(card.Prefab);
+      assets.Add(card.Image);
+
+      if (card.CreatureData != null)
+      {
+        AddCreatureAssets(card.CreatureData, assets);;
+      }
+    }
+
+    void AddCreatureAssets(CreatureData creature, List<IAsset> assets)
+    {
+      assets.Add(creature.Prefab);
+    }
+
+    void AddAttackEffectAssets(AttackEffect attackEffect, List<IAsset> assets)
+    {
+      if (attackEffect.FireProjectile != null)
+      {
+        assets.Add(attackEffect.FireProjectile.Prefab);
+      }
+    }
+
     public void FetchCardAssets(CardData cardData, Action onComplete)
     {
       StartCoroutine(PopulateAssets(new List<IAsset>

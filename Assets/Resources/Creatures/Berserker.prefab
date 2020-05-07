@@ -3577,18 +3577,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debugMode: 1
-  _debugCreatureId: 1
   _state: 0
   _animator: {fileID: 0}
   _collider: {fileID: 0}
   _healthbarAnchor: {fileID: 3538176481071037010}
   _healthBar: {fileID: 0}
-  _creatureId: 0
+  _creatureData:
+    CreatureId: 0
+    Owner: 0
+    RankPosition: 0
+    FilePosition: 0
+    CanBeRepositioned: 0
   _initialized: 0
   _currentTarget: {fileID: 0}
   _meleePosition: {fileID: 3538176479443463364}
   _speed: 3
   _touchedTarget: 0
+  _creatureService: {fileID: 0}
 --- !u!95 &3480816785551142562
 Animator:
   serializedVersion: 3
@@ -3632,7 +3637,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 50, y: 150}
+  m_Offset: {x: 0, y: 150}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -3643,7 +3648,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 250, y: 300}
+  m_Size: {x: 100, y: 300}
   m_EdgeRadius: 0
 --- !u!50 &3539740354515962371
 Rigidbody2D:

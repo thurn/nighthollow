@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using Magewatch.Components;
+using UnityEngine;
 
 namespace Magewatch.Data
 {
@@ -91,7 +92,7 @@ namespace Magewatch.Data
     public int TargetCreatureId;
   }
 
-  public sealed  class AttackCommand
+  public sealed class AttackCommand
   {
     /// <summary>The creature performing the attack</summary>
     public int CreatureId;
@@ -105,7 +106,26 @@ namespace Magewatch.Data
     /// <summary>How many times this skill is expected to raise the 'AttackStart' event</summary>
     public int HitCount;
 
-    /// <summary>What percentage should be removed from the target's health bar for *each* attack hit</summary>
-    public int DamagePercent;
+    /// <summary>What effect should be applied to the target for *each* 'AttackStart'</summary>
+    public AttackEffect AttackEffect;
+  }
+
+  public sealed class AttackEffect
+  {
+    public ApplyDamageEffect ApplyDamage;
+
+    public FireProjectileEffect FireProjectile;
+  }
+
+  public sealed class ApplyDamageEffect
+  {
+    public int Damage;
+  }
+
+  public sealed class FireProjectileEffect
+  {
+    public Asset<GameObject> Prefab;
+
+    public int Damage;
   }
 }

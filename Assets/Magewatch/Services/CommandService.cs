@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Collections;
-using DG.Tweening;
 using Magewatch.Data;
 using UnityEngine;
 
@@ -33,7 +32,7 @@ namespace Magewatch.Services
     [SerializeField] int _expectedCompletions;
     [SerializeField] int _completionCount;
 
-    void Start()
+    void Awake()
     {
       _creatureService = Root.Instance.CreatureService;
       _assetService = Root.Instance.AssetService;
@@ -41,9 +40,12 @@ namespace Magewatch.Services
 
     public void HandleCommands(CommandList commandList)
     {
-      _currentCommandList = commandList;
-      _currentStep = 0;
-      StartCoroutine(RunCommandStep());
+      _assetService.FetchAssets(commandList, () =>
+      {
+        _currentCommandList = commandList;
+        _currentStep = 0;
+        StartCoroutine(RunCommandStep());
+      });
     }
 
     IEnumerator RunCommandStep()
@@ -79,11 +81,8 @@ namespace Magewatch.Services
         {
           _expectedCompletions++;
           var data = command.CreateCreature.Creature;
-          _assetService.FetchCreatureAssets(data, () =>
-          {
-            var creature = CreatureService.Create(data);
-            creature.FadeIn(this);
-          });
+          var creature = CreatureService.Create(data);
+          creature.FadeIn(this);
         }
 
         if (command.RemoveCreature != null)

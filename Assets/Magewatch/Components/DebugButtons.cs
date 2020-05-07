@@ -225,6 +225,17 @@ namespace Magewatch.Components
       );
     }
 
+    public void Cast()
+    {
+      RunSequentially(
+        CreateCreature(1),
+        CreateCreature(2),
+        CastSpell(2, 1, 50),
+        Wait(1000),
+        RemoveCreature(1),
+        RemoveCreature(2));
+    }
+
     static void RunCommand(Command command)
     {
       Root.Instance.CommandService.HandleCommands(new CommandList
@@ -253,6 +264,17 @@ namespace Magewatch.Components
             Commands = commands.ToList()
           }
         }
+      });
+    }
+
+    static void RunSequentially(params Command[] commands)
+    {
+      Root.Instance.CommandService.HandleCommands(new CommandList
+      {
+        Steps = commands.Select(c => new CommandStep
+        {
+          Commands = new List<Command> {c}
+        }).ToList()
       });
     }
 
@@ -381,7 +403,13 @@ namespace Magewatch.Components
           TargetCreatureId = c2,
           SkillNumber = skill,
           HitCount = hitCount,
-          DamagePercent = damage
+          AttackEffect = new AttackEffect
+          {
+            ApplyDamage = new ApplyDamageEffect
+            {
+              Damage = damage
+            }
+          }
         }
       };
     }
@@ -404,6 +432,28 @@ namespace Magewatch.Components
         IsRevealed = true,
         CanBePlayed = true,
         CreatureData = NewCreature("Mage", id, PlayerName.User, 0, 0)
+      };
+    }
+
+    static Command CastSpell(int c1, int c2, int damage, Skill skill = Skill.Skill1)
+    {
+      return new Command
+      {
+        Attack = new AttackCommand
+        {
+          CreatureId = c1,
+          TargetCreatureId = c2,
+          SkillNumber = skill,
+          HitCount = 1,
+          AttackEffect = new AttackEffect
+          {
+            FireProjectile = new FireProjectileEffect
+            {
+              Prefab = new Asset<GameObject>("Projectiles/Projectile 1"),
+              Damage = damage
+            }
+          }
+        }
       };
     }
   }

@@ -33,10 +33,6 @@ namespace Magewatch.Components
       transform.rotation = Quaternion.LookRotation(target.bounds.center - transform.position, Vector3.up);
 
       var flash = Instantiate(_flashEffect);
-      foreach (var ps in flash.GetComponentsInChildren<ParticleSystem>())
-      {
-        ps.GetComponent<Renderer>().sortingOrder = 500;
-      }
       flash.transform.position = transform.position;
       flash.transform.forward = transform.forward;
     }
@@ -59,10 +55,6 @@ namespace Magewatch.Components
       if (other.transform == _target.transform)
       {
         var hit = Instantiate(_hitEffect);
-        foreach (var ps in hit.GetComponentsInChildren<ParticleSystem>())
-        {
-          ps.GetComponent<Renderer>().sortingOrder = 500;
-        }
         hit.transform.position = transform.position;
         hit.transform.forward = -transform.forward;
         _onHit?.Invoke();

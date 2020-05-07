@@ -95,8 +95,6 @@ namespace Magewatch.Components
       set => _animator.speed = value ? 0 : 1;
     }
 
-    public bool ColliderContainsPoint(Vector2 point) => _collider.bounds.Contains(point);
-
     public void SetPosition(RankValue rankValue, FileValue fileValue)
     {
       _creatureData.RankPosition = rankValue;
@@ -185,9 +183,9 @@ namespace Magewatch.Components
       });
     }
 
-    void ApplyAttack(AttackCommand attack, IOnComplete onComplete)
+    void ApplyAttack(int damage, IOnComplete onComplete)
     {
-      _healthBar.Value -= attack.DamagePercent;
+      _healthBar.Value -= damage;
       _healthBar.gameObject.SetActive(_healthBar.Value < 100);
       if (_healthBar.Value <= 0)
       {
@@ -205,8 +203,22 @@ namespace Magewatch.Components
     // ReSharper disable once UnusedMember.Local
     void AttackStart()
     {
-      _currentTarget.ApplyAttack(_currentAttack, _onComplete);
-      _onComplete = null;
+      if (_currentAttack.AttackEffect.ApplyDamage != null)
+      {
+        _currentTarget.ApplyAttack(_currentAttack.AttackEffect.ApplyDamage.Damage, _onComplete);
+        _onComplete = null;
+      }
+
+      if (_currentAttack.AttackEffect.FireProjectile != null)
+      {
+        var fireProjectile = _currentAttack.AttackEffect.FireProjectile;
+        ComponentUtils.Instantiate<Projectile>(fireProjectile.Prefab.Value)
+          .Initialize(_meleePosition, _currentTarget._collider, () =>
+          {
+            _currentTarget.ApplyAttack(fireProjectile.Damage, _onComplete);
+            _onComplete = null;
+          });
+      }
     }
 
     Transform MeleePosition => _meleePosition;
