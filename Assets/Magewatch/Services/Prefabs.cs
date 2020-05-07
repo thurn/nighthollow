@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Magewatch.Components;
+using Magewatch.Data;
 using Magewatch.Utils;
 using UnityEngine;
 
@@ -22,10 +23,30 @@ namespace Magewatch.Services
   {
     [SerializeField] HealthBar _healthBarPrefab;
     [SerializeField] SpriteRenderer _cursorPrefab;
+    [SerializeField] Sprite _lightSymbol;
+    [SerializeField] Sprite _skySymbol;
+    [SerializeField] Sprite _flameSymbol;
+    [SerializeField] Sprite _iceSymbol;
+    [SerializeField] Sprite _earthSymbol;
+    [SerializeField] Sprite _shadowSymbol;
 
     public HealthBar CreateHealthBar() => ComponentUtils.Instantiate(_healthBarPrefab,
       Root.Instance.MainCanvas.transform);
 
     public SpriteRenderer CreateCursor() => ComponentUtils.Instantiate(_cursorPrefab);
+
+    public Sprite SpriteForInfluenceType(InfluenceType influenceType)
+    {
+      switch (influenceType)
+      {
+        case InfluenceType.Light: return Instantiate(_lightSymbol);
+        case InfluenceType.Sky: return Instantiate(_skySymbol);
+        case InfluenceType.Flame: return Instantiate(_flameSymbol);
+        case InfluenceType.Ice: return Instantiate(_iceSymbol);
+        case InfluenceType.Earth: return Instantiate(_earthSymbol);
+        case InfluenceType.Shadow: return Instantiate(_shadowSymbol);
+        default: throw Errors.UnknownEnumValue(influenceType);
+      }
+    }
   }
 }

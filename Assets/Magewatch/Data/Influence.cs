@@ -14,13 +14,20 @@
 
 namespace Magewatch.Data
 {
+  public enum InfluenceType
+  {
+    Unknown,
+    Light,
+    Sky,
+    Flame,
+    Ice,
+    Earth,
+    Shadow
+  }
+
   public sealed class Influence
   {
-    public int Light;
-    public int Sky;
-    public int Flame;
-    public int Ice;
-    public int Earth;
-    public int Shadow;
+    public InfluenceType Type;
+    public int Value;
   }
 }

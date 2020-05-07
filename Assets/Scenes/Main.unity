@@ -237,6 +237,12 @@ MonoBehaviour:
     type: 3}
   _cursorPrefab: {fileID: 8896755762909364303, guid: b0dae5e25b59343c4baa3bf593ff96e5,
     type: 3}
+  _lightSymbol: {fileID: 21300000, guid: a75a2b58d69e54b76bcf36701bc9775b, type: 3}
+  _skySymbol: {fileID: 21300000, guid: 4649f1fc8ee74471995fc468c4a1d335, type: 3}
+  _flameSymbol: {fileID: 21300000, guid: c64c9b32538284e7dba306eddac4bcdc, type: 3}
+  _iceSymbol: {fileID: 21300000, guid: 3d4bd11ca69e84228b8deb71ece3a92e, type: 3}
+  _earthSymbol: {fileID: 21300000, guid: c4a6fc28334ab402eaa8bc3880d706fe, type: 3}
+  _shadowSymbol: {fileID: 21300000, guid: 480787526a26e4336839f5dd6ae4399e, type: 3}
 --- !u!114 &169299300
 MonoBehaviour:
   m_ObjectHideFlags: 0

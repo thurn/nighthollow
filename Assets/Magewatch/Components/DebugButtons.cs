@@ -215,11 +215,11 @@ namespace Magewatch.Components
     {
       RunCommands(
         DrawCard(MageCard(_idCounter++)),
+        DrawCard(BerserkerCard(_idCounter++)),
         DrawCard(MageCard(_idCounter++)),
+        DrawCard(BerserkerCard(_idCounter++)),
         DrawCard(MageCard(_idCounter++)),
-        DrawCard(MageCard(_idCounter++)),
-        DrawCard(MageCard(_idCounter++)),
-        DrawCard(MageCard(_idCounter++))
+        DrawCard(BerserkerCard(_idCounter++))
       );
     }
 
@@ -426,16 +426,43 @@ namespace Magewatch.Components
         Prefab = new Asset<GameObject>("Cards/FireCard"),
         Name = "Mage",
         ManaCost = 2,
-        Influence = new Influence
-        {
-          Flame = 1
-        },
+        InfluenceCost = Flame(1),
         Owner = PlayerName.User,
         Image = new Asset<Sprite>("CreatureImages/Mage"),
         Text = "Whiz! Zoom!",
         IsRevealed = true,
         CanBePlayed = true,
         CreatureData = NewCreature("Mage", id, PlayerName.User, 0, 0)
+      };
+    }
+
+    static CardData BerserkerCard(int id)
+    {
+      return new CardData
+      {
+        CardId = id,
+        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Name = "Berserker",
+        ManaCost = 4,
+        InfluenceCost = Flame(2),
+        Owner = PlayerName.User,
+        Image = new Asset<Sprite>("CreatureImages/Berserker"),
+        Text = "RAGE!",
+        IsRevealed = true,
+        CanBePlayed = true,
+        CreatureData = NewCreature("Berserker", id, PlayerName.User, 0, 0)
+      };
+    }
+
+    static List<Influence> Flame(int value)
+    {
+      return new List<Influence>
+      {
+        new Influence
+        {
+         Type = InfluenceType.Flame,
+         Value = value
+        }
       };
     }
 

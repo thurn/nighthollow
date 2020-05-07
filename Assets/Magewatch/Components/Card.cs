@@ -143,15 +143,14 @@ namespace Magewatch.Components
         _cost.text = newCardData.ManaCost.ToString();
       }
 
-      if (_cardData?.Influence != newCardData.Influence)
+      if (_cardData?.InfluenceCost != newCardData.InfluenceCost)
       {
         var addIndex = 0;
-        AddInfluence(newCardData.Influence.Light, ref addIndex);
-        AddInfluence(newCardData.Influence.Sky, ref addIndex);
-        AddInfluence(newCardData.Influence.Flame, ref addIndex);
-        AddInfluence(newCardData.Influence.Ice, ref addIndex);
-        AddInfluence(newCardData.Influence.Earth, ref addIndex);
-        AddInfluence(newCardData.Influence.Shadow, ref addIndex);
+        foreach (var influence in newCardData.InfluenceCost)
+        {
+          AddInfluence(influence, ref addIndex);
+        }
+
         while (addIndex < _influence.Count)
         {
           _influence[addIndex++].enabled = false;
@@ -173,12 +172,12 @@ namespace Magewatch.Components
       _cardData = newCardData;
     }
 
-    void AddInfluence(int value, ref int addIndex)
+    void AddInfluence(Influence influence, ref int addIndex)
     {
-      for (var i = 0; i < value; ++i)
+      for (var i = 0; i < influence.Value; ++i)
       {
         _influence[addIndex].enabled = true;
-        // _influence[addIndex].sprite = Injector.Instance.Prefabs.SpriteForInfluenceType(key);
+        _influence[addIndex].sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.Type);
         addIndex++;
       }
     }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+
 namespace Magewatch.Data
 {
   public sealed class PlayerData
@@ -21,7 +23,7 @@ namespace Magewatch.Data
     public int MaximumLife;
     public int CurrentMana;
     public int MaximumMana;
-    public Influence CurrentInfluence;
-    public Influence MaximumInfluence;
+    public List<Influence> CurrentInfluence;
+    public List<Influence> MaximumInfluence;
   }
 }

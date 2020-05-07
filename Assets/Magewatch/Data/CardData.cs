@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Magewatch.Data
@@ -24,7 +25,7 @@ namespace Magewatch.Data
     public Asset<GameObject> Prefab;
     public string Name;
     public int ManaCost;
-    public Influence Influence;
+    public List<Influence> InfluenceCost;
     public PlayerName Owner;
     public Asset<Sprite> Image;
     public string Text;
