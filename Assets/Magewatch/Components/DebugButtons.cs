@@ -236,6 +236,26 @@ namespace Magewatch.Components
         Cmd(RemoveCreature(2)));
     }
 
+    public void AddMana()
+    {
+      RunCommand(new Command
+      {
+        UpdatePlayer = new UpdatePlayerCommand
+        {
+          Player = new PlayerData
+          {
+            PlayerName = PlayerName.User,
+            CurrentLife = 25,
+            MaximumLife = 25,
+            CurrentMana = 1,
+            MaximumMana = 1,
+            CurrentInfluence = Flame(1),
+            MaximumInfluence = Flame(1)
+          }
+        }
+      });
+    }
+
     static void RunCommand(Command command)
     {
       Root.Instance.CommandService.HandleCommands(new CommandList

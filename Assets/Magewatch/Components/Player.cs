@@ -51,6 +51,22 @@ namespace Magewatch.Components
 
       _lifeText.text = $"{playerData.CurrentLife}/{playerData.MaximumLife}";
       _manaText.text = $"{playerData.CurrentMana}/{playerData.MaximumMana}";
+
+      if (firstUpdate || _playerData.CurrentInfluence != playerData.CurrentInfluence ||
+          _playerData.MaximumInfluence != playerData.MaximumInfluence)
+      {
+        foreach (Transform child in _influenceRow)
+        {
+          Destroy(child);
+        }
+
+        foreach (var influence in playerData.MaximumInfluence)
+        {
+          var image = Root.Instance.Prefabs.CreateInfluence();
+          image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.Type);
+          image.transform.SetParent(_influenceRow);
+        }
+      }
     }
   }
 }

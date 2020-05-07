@@ -16,6 +16,7 @@ using Magewatch.Components;
 using Magewatch.Data;
 using Magewatch.Utils;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Magewatch.Services
 {
@@ -23,6 +24,7 @@ namespace Magewatch.Services
   {
     [SerializeField] HealthBar _healthBarPrefab;
     [SerializeField] SpriteRenderer _cursorPrefab;
+    [SerializeField] Image _influencePrefab;
     [SerializeField] Sprite _lightSymbol;
     [SerializeField] Sprite _skySymbol;
     [SerializeField] Sprite _flameSymbol;
@@ -34,6 +36,8 @@ namespace Magewatch.Services
       Root.Instance.MainCanvas.transform);
 
     public SpriteRenderer CreateCursor() => ComponentUtils.Instantiate(_cursorPrefab);
+
+    public Image CreateInfluence() => ComponentUtils.Instantiate(_influencePrefab);
 
     public Sprite SpriteForInfluenceType(InfluenceType influenceType)
     {
