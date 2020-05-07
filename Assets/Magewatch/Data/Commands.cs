@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Magewatch.Components;
 using UnityEngine;
 
 namespace Magewatch.Data
@@ -127,5 +126,7 @@ namespace Magewatch.Data
     public Asset<GameObject> Prefab;
 
     public int Damage;
+
+    public bool AtOpponent;
   }
 }

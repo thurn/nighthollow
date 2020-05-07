@@ -52,7 +52,7 @@ namespace Magewatch.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      if (other.transform == _target.transform)
+      if (other == _target)
       {
         var hit = Instantiate(_hitEffect);
         hit.transform.position = transform.position;

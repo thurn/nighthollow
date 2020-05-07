@@ -28,9 +28,12 @@ namespace Magewatch.Components
     [SerializeField] Image _manaBar;
     [SerializeField] Text _manaText;
     [SerializeField] RectTransform _influenceRow;
+    [SerializeField] Collider2D _projectileCollider;
     [Header("State")] [SerializeField] PlayerData _playerData;
 
     public Hand Hand => _hand;
+
+    public Collider2D Collider => _projectileCollider;
 
     public void UpdatePlayerData(PlayerData playerData, IOnComplete onComplete)
     {

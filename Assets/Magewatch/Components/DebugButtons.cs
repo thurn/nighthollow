@@ -111,6 +111,7 @@ namespace Magewatch.Components
           CreateCreature(4),
           CreateCreature(5)
         },
+        Cmd(Wait(500)),
         new List<Command>
         {
           MeleeEngage(1, 2),
@@ -179,16 +180,13 @@ namespace Magewatch.Components
         Attack(3, 4, 10, Skill.Skill3),
       });
 
-      commands.Add(new List<Command>
-      {
-        UpdatePlayer(PlayerName.User, 24, 25, 1, 1),
-        Wait(1000)
-      });
+      commands.Add(Cmd(CastAtOpponent(3)));
 
-      commands.Add(new List<Command>
-      {
-        RemoveCreature(3)
-      });
+      commands.Add(Cmd(RemoveCreature(3)));
+
+      commands.Add(Cmd(UpdatePlayer(PlayerName.User, 24, 25, 1, 1)));
+
+      commands.Add(Cmd(Wait(1000)));
 
       commands.Add(new List<Command>
       {
@@ -227,13 +225,15 @@ namespace Magewatch.Components
 
     public void Cast()
     {
-      RunSequentially(
-        CreateCreature(1),
-        CreateCreature(2),
-        CastSpell(2, 1, 50),
-        Wait(1000),
-        RemoveCreature(1),
-        RemoveCreature(2));
+      RunCommands(
+        Cmd(CreateCreature(1)),
+        Cmd(CreateCreature(2)),
+        new List<Command> {CastSpell1(2, 1, 50), MeleeEngage(1, 2)},
+        Cmd(Wait(1000)),
+        Cmd(Attack(1, 2, 20, Skill.Skill2)),
+        Cmd(Attack(2, 1, 20, Skill.Skill3)),
+        Cmd(RemoveCreature(1)),
+        Cmd(RemoveCreature(2)));
     }
 
     static void RunCommand(Command command)
@@ -285,6 +285,8 @@ namespace Magewatch.Components
         Steps = input.Select(step => new CommandStep {Commands = step}).ToList()
       });
     }
+
+    static List<Command> Cmd(Command command) => new List<Command> {command};
 
     static Command Wait(int milliseconds)
     {
@@ -435,7 +437,7 @@ namespace Magewatch.Components
       };
     }
 
-    static Command CastSpell(int c1, int c2, int damage, Skill skill = Skill.Skill1)
+    static Command CastSpell1(int c1, int c2, int damage, Skill skill = Skill.Skill1)
     {
       return new Command
       {
@@ -449,8 +451,31 @@ namespace Magewatch.Components
           {
             FireProjectile = new FireProjectileEffect
             {
-              Prefab = new Asset<GameObject>("Projectiles/Projectile 1"),
-              Damage = damage
+              Prefab = new Asset<GameObject>("Projectiles/Projectile 3"),
+              Damage = damage,
+            }
+          }
+        }
+      };
+    }
+
+    static Command CastAtOpponent(int c1, Skill skill = Skill.Skill1)
+    {
+      return new Command
+      {
+        Attack = new AttackCommand
+        {
+          CreatureId = c1,
+          TargetCreatureId = c1,
+          SkillNumber = skill,
+          HitCount = 1,
+          AttackEffect = new AttackEffect
+          {
+            FireProjectile = new FireProjectileEffect
+            {
+              Prefab = new Asset<GameObject>("Projectiles/Projectile 6"),
+              Damage = 0,
+              AtOpponent = true
             }
           }
         }

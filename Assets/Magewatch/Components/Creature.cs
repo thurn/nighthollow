@@ -12,11 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using Magewatch.Data;
 using Magewatch.Services;
 using Magewatch.Utils;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Magewatch.Components
 {
@@ -43,6 +46,8 @@ namespace Magewatch.Components
     [SerializeField] bool _touchedTarget;
     [SerializeField] AttackCommand _currentAttack;
     [SerializeField] CreatureService _creatureService;
+    [SerializeField] SpriteRenderer[] _renderers;
+    [SerializeField] SortingGroup _sortingGroup;
 
     IOnComplete _onComplete;
     IOnComplete _onCompleteOnDeath;
@@ -61,6 +66,7 @@ namespace Magewatch.Components
       _creatureService = Root.Instance.CreatureService;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
+      _sortingGroup = GetComponent<SortingGroup>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();
       _healthBar.gameObject.SetActive(false);
       if (creatureData.Owner == PlayerName.Enemy)
@@ -80,6 +86,11 @@ namespace Magewatch.Components
           BoardPositions.ClosestRankForXPosition(transform.position.x, _creatureData.Owner),
           BoardPositions.ClosestFileForYPosition(transform.position.y));
       }
+    }
+
+    void OnValidate()
+    {
+      _renderers = GetComponentsInChildren<SpriteRenderer>();
     }
 
     public int CreatureId => _creatureData.CreatureId;
@@ -154,7 +165,7 @@ namespace Magewatch.Components
     public void FadeIn(IOnComplete onComplete)
     {
       var sequence = DOTween.Sequence();
-      foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
+      foreach (var spriteRenderer in _renderers)
       {
         spriteRenderer.color = new Color(1, 1, 1, 0);
         sequence.Insert(0, spriteRenderer.DOFade(1.0f, 0.3f));
@@ -171,7 +182,7 @@ namespace Magewatch.Components
     {
       _healthBar.gameObject.SetActive(false);
       var sequence = DOTween.Sequence();
-      foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
+      foreach (var spriteRenderer in _renderers)
       {
         sequence.Insert(0, spriteRenderer.DOFade(0.0f, 0.3f));
       }
@@ -199,7 +210,7 @@ namespace Magewatch.Components
       }
     }
 
-    // Called by skill animations
+    // Called by skill animations on their 'start impact' frame
     // ReSharper disable once UnusedMember.Local
     void AttackStart()
     {
@@ -212,11 +223,21 @@ namespace Magewatch.Components
       if (_currentAttack.AttackEffect.FireProjectile != null)
       {
         var fireProjectile = _currentAttack.AttackEffect.FireProjectile;
+        var target = fireProjectile.AtOpponent
+          ? Root.Instance.GetPlayer(Owner.GetOpponent()).Collider
+          : _currentTarget._collider;
         ComponentUtils.Instantiate<Projectile>(fireProjectile.Prefab.Value)
-          .Initialize(_meleePosition, _currentTarget._collider, () =>
+          .Initialize(_meleePosition, target, () =>
           {
-            _currentTarget.ApplyAttack(fireProjectile.Damage, _onComplete);
-            _onComplete = null;
+            if (fireProjectile.AtOpponent)
+            {
+              _onComplete.OnComplete();
+            }
+            else
+            {
+              _currentTarget.ApplyAttack(fireProjectile.Damage, _onComplete);
+              _onComplete = null;
+            }
           });
       }
     }
@@ -229,6 +250,9 @@ namespace Magewatch.Components
     {
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _healthBar.transform.position = pos;
+
+      // Ensure lower Y creatures are always rendered on top of higher Y creatures
+      _sortingGroup.sortingOrder = 100 - Mathf.RoundToInt(transform.position.y * 10);
 
       if (_state == CreatureState.MeleeEngage)
       {

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Magewatch.Utils;
+
 namespace Magewatch.Data
 {
   public enum PlayerName
@@ -19,5 +21,18 @@ namespace Magewatch.Data
     Unknown,
     User,
     Enemy
+  }
+
+  public static class PlayerNames
+  {
+    public static PlayerName GetOpponent(this PlayerName playerName)
+    {
+      switch (playerName)
+      {
+        case PlayerName.User: return PlayerName.Enemy;
+        case PlayerName.Enemy: return PlayerName.User;
+        default: throw Errors.UnknownEnumValue(playerName);
+      }
+    }
   }
 }

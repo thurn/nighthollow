@@ -1205,6 +1205,53 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1320284884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1320284886}
+  - component: {fileID: 1320284885}
+  m_Layer: 0
+  m_Name: UserProjectileCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!58 &1320284885
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320284884}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.1
+--- !u!4 &1320284886
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320284884}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.5, y: 4, z: -9.611753}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1358439082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2678,6 +2725,7 @@ MonoBehaviour:
   _manaBar: {fileID: 3066537339054923027}
   _manaText: {fileID: 3066537338845320539}
   _influenceRow: {fileID: 3343174916804785856}
+  _projectileCollider: {fileID: 0}
 --- !u!114 &3066537337732379596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3280,7 +3328,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -28, y: -4.6}
-  m_SizeDelta: {x: 160, y: 50}
+  m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 1, y: 1}
 --- !u!1 &3066537338845320518
 GameObject:
@@ -3447,7 +3495,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -40, y: -7.6}
-  m_SizeDelta: {x: 160, y: 58}
+  m_SizeDelta: {x: 475, y: 58}
   m_Pivot: {x: 1, y: 1}
 --- !u!1 &3066537339235528241
 GameObject:
@@ -3912,7 +3960,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 28, y: -0.9}
-  m_SizeDelta: {x: 160, y: 56.37}
+  m_SizeDelta: {x: 400, y: 56.37}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &4588714310995349782
 GameObject:
@@ -4198,7 +4246,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 38.6, y: -4.3}
-  m_SizeDelta: {x: 160, y: 60}
+  m_SizeDelta: {x: 475, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &4588714312390859468
 RectTransform:
@@ -4659,6 +4707,7 @@ MonoBehaviour:
   _manaBar: {fileID: 4588714310884995547}
   _manaText: {fileID: 4588714310995349787}
   _influenceRow: {fileID: 6452207825707287506}
+  _projectileCollider: {fileID: 1320284885}
 --- !u!222 &4588714312742304337
 CanvasRenderer:
   m_ObjectHideFlags: 0
