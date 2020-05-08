@@ -247,10 +247,10 @@ namespace Magewatch.Components
             PlayerName = PlayerName.User,
             CurrentLife = 25,
             MaximumLife = 25,
-            CurrentMana = 1,
-            MaximumMana = 1,
-            CurrentInfluence = Flame(1),
-            MaximumInfluence = Flame(1)
+            CurrentMana = 3,
+            MaximumMana = 5,
+            CurrentInfluence = Flame(2),
+            MaximumInfluence = Flame(4)
           }
         }
       });

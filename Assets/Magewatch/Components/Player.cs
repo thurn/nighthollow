@@ -46,7 +46,7 @@ namespace Magewatch.Components
 
       if (firstUpdate || _playerData.CurrentMana != playerData.CurrentMana)
       {
-        _manaBar.DOFillAmount(playerData.CurrentMana / (float) playerData.CurrentMana, 0.3f);
+        _manaBar.DOFillAmount(playerData.CurrentMana / (float) playerData.MaximumMana, 0.3f);
       }
 
       _lifeText.text = $"{playerData.CurrentLife}/{playerData.MaximumLife}";
@@ -57,16 +57,27 @@ namespace Magewatch.Components
       {
         foreach (Transform child in _influenceRow)
         {
-          Destroy(child);
+          Destroy(child.gameObject);
         }
 
         foreach (var influence in playerData.MaximumInfluence)
         {
-          var image = Root.Instance.Prefabs.CreateInfluence();
-          image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.Type);
-          image.transform.SetParent(_influenceRow);
+          var currentInfluence = InfluenceCount(playerData, influence.Type);
+          for (var i = 0; i < influence.Value; ++i)
+          {
+            var image = Root.Instance.Prefabs.CreateInfluence();
+            image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.Type);
+            image.transform.SetParent(_influenceRow);
+            if (i >= currentInfluence)
+            {
+              image.color = Color.gray;
+            }
+          }
         }
       }
     }
+
+    int InfluenceCount(PlayerData playerData, InfluenceType influenceType) =>
+      playerData.CurrentInfluence.Find(i => i.Type == influenceType)?.Value ?? 0;
   }
 }
