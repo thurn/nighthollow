@@ -18,14 +18,14 @@ namespace Magewatch.Utils
 {
   public static class Errors
   {
-    public static T CheckNotNull<T>(T value) where T : class
+    public static T CheckNotNull<T>(T value, string message = "") where T : class
     {
       switch (value)
       {
         case null:
         case UnityEngine.Object c when !c:
           // UnityEngine.Object has weird null behavior
-          throw new NullReferenceException($"Expected a non-null object of type {typeof(T).FullName}");
+          throw new NullReferenceException($"Expected a non-null object of type {typeof(T).FullName}. {message}");
         default:
           return value;
       }

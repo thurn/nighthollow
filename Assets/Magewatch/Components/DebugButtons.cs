@@ -12,11 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DuloGames.UI;
 using Magewatch.Data;
 using Magewatch.Services;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 // ReSharper disable UnusedMember.Global
 
@@ -213,14 +216,22 @@ namespace Magewatch.Components
 
     public void DrawHand()
     {
+      // StartCoroutine(Derek());
       RunCommands(
         DrawCard(MageCard(_idCounter++)),
         DrawCard(BerserkerCard(_idCounter++)),
-        DrawCard(MageCard(_idCounter++)),
+        DrawCard(RageCard(_idCounter++)),
         DrawCard(BerserkerCard(_idCounter++)),
         DrawCard(MageCard(_idCounter++)),
         DrawCard(BerserkerCard(_idCounter++))
       );
+    }
+
+    IEnumerator Derek()
+    {
+      var request = Resources.LoadAsync<Sprite>("Spells/SpellBook01_01");
+      yield return request;
+      Debug.Log($"Got result: '{request.asset}'");
     }
 
     public void Cast()
@@ -467,10 +478,44 @@ namespace Magewatch.Components
         InfluenceCost = Flame(2),
         Owner = PlayerName.User,
         Image = new Asset<Sprite>("CreatureImages/Berserker"),
-        Text = "RAGE!",
+        Text = "Anger & Axes",
         IsRevealed = true,
         CanBePlayed = true,
         CreatureData = NewCreature("Berserker", id, PlayerName.User, 0, 0)
+      };
+    }
+
+    static CardData RageCard(int id)
+    {
+      return new CardData
+      {
+        CardId = id,
+        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Name = "Rage",
+        ManaCost = 3,
+        InfluenceCost = LightAndFlame(1, 1),
+        Owner = PlayerName.User,
+        Image = new Asset<Sprite>("Spells/SpellBook01_01"),
+        Text = "Adds Bonus Damage on Hits",
+        IsRevealed = true,
+        CanBePlayed = true
+      };
+    }
+
+    static List<Influence> LightAndFlame(int light, int flame)
+    {
+      return new List<Influence>
+      {
+        new Influence
+        {
+         Type = InfluenceType.Light,
+         Value = light
+        },
+        new Influence
+        {
+          Type = InfluenceType.Flame,
+          Value = flame
+        }
       };
     }
 
@@ -480,8 +525,8 @@ namespace Magewatch.Components
       {
         new Influence
         {
-         Type = InfluenceType.Flame,
-         Value = value
+          Type = InfluenceType.Flame,
+          Value = value
         }
       };
     }

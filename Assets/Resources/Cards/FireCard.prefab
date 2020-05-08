@@ -65,12 +65,26 @@ MonoBehaviour:
   - {fileID: 7170910077756811947}
   - {fileID: 1354626846825411433}
   _outline: {fileID: 5614621031374396764}
+  _cardData:
+    CardId: 0
+    Name: 
+    ManaCost: 0
+    Owner: 0
+    Text: 
+    IsRevealed: 0
+    CanBePlayed: 0
+    CreatureData:
+      CreatureId: 0
+      Owner: 0
+      RankPosition: 0
+      FilePosition: 0
+      CanBeRepositioned: 0
   _hand: {fileID: 0}
   _previewMode: 0
   _initialized: 0
   _isFaceUp: 0
   _isDragging: 0
-  _isOverBoard: 0
+  _overBoard: 0
   _initialDragSiblingIndex: 0
   _initialDragPosition: {x: 0, y: 0, z: 0}
   _initialDragRotation: {x: 0, y: 0, z: 0, w: 0}

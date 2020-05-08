@@ -92,7 +92,7 @@ namespace Magewatch.Services
 
       for (var i = 0; i < requests.Count; ++i)
       {
-        Errors.CheckNotNull(requests[i].asset);
+        Errors.CheckNotNull(requests[i].asset, $"For address {assets[i].GetAddress()}");
         assets[i].SetValueUnchecked(requests[i].asset);
       }
 
