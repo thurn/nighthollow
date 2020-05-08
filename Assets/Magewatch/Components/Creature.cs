@@ -48,6 +48,7 @@ namespace Magewatch.Components
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SpriteRenderer[] _renderers;
     [SerializeField] SortingGroup _sortingGroup;
+    [SerializeField] AttachmentDisplay _attachmentDisplay;
 
     IOnComplete _onComplete;
     IOnComplete _onCompleteOnDeath;
@@ -106,6 +107,8 @@ namespace Magewatch.Components
       set => _animator.speed = value ? 0 : 1;
     }
 
+    public AttachmentDisplay AttachmentDisplay => _attachmentDisplay;
+
     public void SetPosition(RankValue rankValue, FileValue fileValue)
     {
       _creatureData.RankPosition = rankValue;
@@ -160,6 +163,17 @@ namespace Magewatch.Components
     {
       Destroy(gameObject);
       Destroy(_healthBar.gameObject);
+    }
+
+    public bool Highlighted
+    {
+      set
+      {
+        foreach (var spriteRenderer in _renderers)
+        {
+          spriteRenderer.color = value ? Color.green : Color.white;
+        }
+      }
     }
 
     public void FadeIn(IOnComplete onComplete)
@@ -251,7 +265,8 @@ namespace Magewatch.Components
       _healthBar.transform.position = pos;
 
       // Ensure lower Y creatures are always rendered on top of higher Y creatures
-      _sortingGroup.sortingOrder = 100 - Mathf.RoundToInt(transform.position.y * 10);
+      _sortingGroup.sortingOrder =
+        100 - Mathf.RoundToInt(transform.position.y * 10) - Mathf.RoundToInt(transform.position.x);
 
       if (_state == CreatureState.MeleeEngage)
       {

@@ -3561,6 +3561,7 @@ Transform:
   - {fileID: 3534076681343965912}
   - {fileID: 3538176481071037010}
   - {fileID: 3538176479443463364}
+  - {fileID: 3804922136146275256}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3594,6 +3595,27 @@ MonoBehaviour:
   _speed: 3
   _touchedTarget: 0
   _creatureService: {fileID: 0}
+  _renderers:
+  - {fileID: 3741357817299641124}
+  - {fileID: 3741361088198949344}
+  - {fileID: 3740339085071330246}
+  - {fileID: 3741236064249708974}
+  - {fileID: 3740248057944301142}
+  - {fileID: 3740554288573897334}
+  - {fileID: 3740295025213119530}
+  - {fileID: 3740551451913190478}
+  - {fileID: 3741955430177211976}
+  - {fileID: 3740714718060521584}
+  - {fileID: 3740705738666384940}
+  - {fileID: 3741207685180331148}
+  - {fileID: 3741210961269503080}
+  - {fileID: 3740405942136023998}
+  - {fileID: 3742084759792189256}
+  - {fileID: 3740432718095744646}
+  - {fileID: 3741983926509175710}
+  - {fileID: 3740709719925803208}
+  _sortingGroup: {fileID: 0}
+  _attachmentDisplay: {fileID: 355921812451280883}
 --- !u!95 &3480816785551142562
 Animator:
   serializedVersion: 3
@@ -4232,3 +4254,46 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &6249656544447608559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3804922136146275256}
+  - component: {fileID: 355921812451280883}
+  m_Layer: 0
+  m_Name: AttachmentDisplay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3804922136146275256
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6249656544447608559}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3533905804817151028}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &355921812451280883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6249656544447608559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca6f61da2414439f8633654535b21824, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -216,22 +216,14 @@ namespace Magewatch.Components
 
     public void DrawHand()
     {
-      // StartCoroutine(Derek());
       RunCommands(
         DrawCard(MageCard(_idCounter++)),
         DrawCard(BerserkerCard(_idCounter++)),
         DrawCard(RageCard(_idCounter++)),
         DrawCard(BerserkerCard(_idCounter++)),
-        DrawCard(MageCard(_idCounter++)),
+        DrawCard(RageCard(_idCounter++)),
         DrawCard(BerserkerCard(_idCounter++))
       );
-    }
-
-    IEnumerator Derek()
-    {
-      var request = Resources.LoadAsync<Sprite>("Spells/SpellBook01_01");
-      yield return request;
-      Debug.Log($"Got result: '{request.asset}'");
     }
 
     public void Cast()
@@ -359,7 +351,9 @@ namespace Magewatch.Components
             CurrentLife = currentLife,
             MaximumLife = maximumLife,
             CurrentMana = currentMana,
-            MaximumMana = maximumMana
+            MaximumMana = maximumMana,
+            CurrentInfluence = new List<Influence>(),
+            MaximumInfluence = new List<Influence>()
           }
         }
       };
@@ -508,8 +502,8 @@ namespace Magewatch.Components
       {
         new Influence
         {
-         Type = InfluenceType.Light,
-         Value = light
+          Type = InfluenceType.Light,
+          Value = light
         },
         new Influence
         {

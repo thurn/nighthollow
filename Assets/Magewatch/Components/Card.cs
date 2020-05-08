@@ -93,7 +93,6 @@ namespace Magewatch.Components
 
     void UpdateCardData(CardData newCardData)
     {
-      Debug.Log($"Card::UpdateCardData> UCD");
       Errors.CheckNotNull(newCardData);
 
       _hand = Root.Instance.GetPlayer(newCardData.Owner).Hand;
@@ -208,11 +207,16 @@ namespace Magewatch.Components
 
           if (!_overBoard)
           {
+            gameObject.SetActive(false);
             if (_cardData.CreatureData != null)
             {
               var creature = CreatureService.Create(_cardData.CreatureData);
-              gameObject.SetActive(false);
               creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
+            }
+            else
+            {
+              var attachment = Root.Instance.Prefabs.CreateAttachment();
+              attachment.Initialize(_cardImage.sprite, this);
             }
           }
 

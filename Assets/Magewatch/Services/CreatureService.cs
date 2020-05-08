@@ -120,6 +120,24 @@ namespace Magewatch.Services
       throw new InvalidOperationException("Board is Full!");
     }
 
+    /// <summary>Get the closest creature owned by 'owner' to 'position'</summary>
+    public Creature GetClosestCreature(PlayerName owner, Vector2 position)
+    {
+      Creature result = null;
+      var closestDistance = float.MaxValue;
+      foreach (var creature in _creatures.Values)
+      {
+        var distance = Vector2.Distance(position, creature.transform.position);
+        if (distance < closestDistance)
+        {
+          closestDistance = distance;
+          result = creature;
+        }
+      }
+
+      return result;
+    }
+
     /// <summary>
     /// Shifts the positions of creatures such that the provided 'rank,file' position is available. Only one position
     /// shift can be in effect at a time.
