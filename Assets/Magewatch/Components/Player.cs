@@ -40,13 +40,27 @@ namespace Magewatch.Components
       var firstUpdate = _playerData == null;
       if (firstUpdate || _playerData.CurrentLife != playerData.CurrentLife)
       {
-        _lifeBar.DOFillAmount(playerData.CurrentLife / (float) playerData.MaximumLife, 0.3f)
-          .OnComplete(onComplete.OnComplete);
+        if (playerData.MaximumLife == 0)
+        {
+          _manaBar.DOFillAmount(0, 0.3f);
+        }
+        else
+        {
+          _lifeBar.DOFillAmount(playerData.CurrentLife / (float) playerData.MaximumLife, 0.3f)
+            .OnComplete(onComplete.OnComplete);
+        }
       }
 
       if (firstUpdate || _playerData.CurrentMana != playerData.CurrentMana)
       {
-        _manaBar.DOFillAmount(playerData.CurrentMana / (float) playerData.MaximumMana, 0.3f);
+        if (playerData.MaximumMana == 0)
+        {
+          _manaBar.DOFillAmount(1, 0.3f);
+        }
+        else
+        {
+          _manaBar.DOFillAmount(playerData.CurrentMana / (float) playerData.MaximumMana, 0.3f);
+        }
       }
 
       _lifeText.text = $"{playerData.CurrentLife}/{playerData.MaximumLife}";

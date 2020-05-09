@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Runtime.CompilerServices;
 using Magewatch.Utils;
 using UnityEngine;
 
@@ -40,21 +39,9 @@ namespace Magewatch.Data
     File5
   }
 
-  public sealed class BoardPosition
-  {
-    public readonly RankValue RankValue;
-    public readonly FileValue FileValue;
-
-    public BoardPosition(RankValue rankValue, FileValue fileValue)
-    {
-      RankValue = rankValue;
-      FileValue = fileValue;
-    }
-  }
-
   public static class BoardPositions
   {
-    public static int ToXPosition(this RankValue rank, PlayerName owner)
+    public static float ToXPosition(this RankValue rank, PlayerName owner)
     {
       switch (owner)
       {
@@ -145,7 +132,7 @@ namespace Magewatch.Data
       }
     }
 
-    public static int ToYPosition(this FileValue file)
+    public static float ToYPosition(this FileValue file)
     {
       switch (file)
       {

@@ -110,14 +110,14 @@ namespace Magewatch.Components
         var curvePosition = CalculateCurvePosition(i);
         var t = _cards[i].transform;
         t.SetSiblingIndex(i);
-        sequence.Insert(atPosition: 0, t.DOScale(endValue: _finalCardScale, duration: 0.3f));
-        sequence.Insert(atPosition: 0,
+        sequence.Insert(0, t.DOScale(endValue: _finalCardScale, duration: 0.3f));
+        sequence.Insert(0,
           t.DOMove(
             OverrideHandPosition
               ? OverrideHandPosition.CalculateBezierPosition(curvePosition)
               : CalculateBezierPosition(curvePosition), duration: 0.3f));
-        sequence.Insert(atPosition: 0,
-          t.DOLocalRotate(new Vector3(x: 0, y: 0,
+        sequence.Insert(0,
+          t.DOLocalRotate(new Vector3(0, 0,
             _zRotationMultiplier * CalculateZRotation(curvePosition)), duration: 0.3f));
       }
 

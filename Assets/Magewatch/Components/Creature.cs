@@ -20,6 +20,7 @@ using Magewatch.Services;
 using Magewatch.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.UI;
 
 namespace Magewatch.Components
 {
@@ -64,18 +65,14 @@ namespace Magewatch.Components
 
     public void Initialize(CreatureData creatureData)
     {
-      _creatureData = creatureData;
       _creatureService = Root.Instance.CreatureService;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
       _sortingGroup = GetComponent<SortingGroup>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();
       _healthBar.gameObject.SetActive(false);
-      if (creatureData.Owner == PlayerName.Enemy)
-      {
-        transform.eulerAngles = new Vector3(0, 180, 0);
-      }
 
+      UpdateCreatureData(creatureData);
       _initialized = true;
     }
 
@@ -108,13 +105,44 @@ namespace Magewatch.Components
       set => _animator.speed = value ? 0 : 1;
     }
 
-    public AttachmentDisplay AttachmentDisplay => _attachmentDisplay;
+    void UpdateCreatureData(CreatureData newData)
+    {
+      transform.eulerAngles = newData.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
+
+      if (newData.RankPosition != RankValue.Unknown && newData.FilePosition != FileValue.Unknown)
+      {
+        transform.position = new Vector2(
+          newData.RankPosition.ToXPosition(newData.Owner),
+          newData.FilePosition.ToYPosition());
+      }
+
+      if (_creatureData?.Attachments != newData.Attachments)
+      {
+        _attachmentDisplay.SetAttachments(newData.Attachments);
+      }
+
+      _creatureData = newData;
+    }
 
     public void SetPosition(RankValue rankValue, FileValue fileValue)
     {
       _creatureData.RankPosition = rankValue;
       _creatureData.FilePosition = fileValue;
-      transform.position = new Vector2(rankValue.ToXPosition(_creatureData.Owner), fileValue.ToYPosition());
+      UpdateCreatureData(_creatureData);
+    }
+
+    public void AddAttachment(AttachmentData attachmentData, Transform attachment = null)
+    {
+      _attachmentDisplay.AddAttachment(attachment, () =>
+      {
+        if (_creatureData.Attachments == null)
+        {
+          _creatureData.Attachments = new List<AttachmentData>();
+        }
+
+        _creatureData.Attachments.Add(attachmentData);
+        UpdateCreatureData(_creatureData);
+      });
     }
 
     public void MeleeEngageWithTarget(Creature target, IOnComplete onComplete)

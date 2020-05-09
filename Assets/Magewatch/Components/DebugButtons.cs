@@ -218,7 +218,7 @@ namespace Magewatch.Components
         DrawCard(BerserkerCard(_idCounter++)),
         DrawCard(RageCard(_idCounter++)),
         DrawCard(BerserkerCard(_idCounter++)),
-        DrawCard(RageCard(_idCounter++)),
+        DrawCard(KnowledgeCard(_idCounter++)),
         DrawCard(BerserkerCard(_idCounter++))
       );
     }
@@ -362,7 +362,7 @@ namespace Magewatch.Components
       switch (id)
       {
         case 1:
-          create.Creature = NewCreature("Berserker", 1, PlayerName.User, -4, -3);
+          create.Creature = NewCreature("Berserker", 1, PlayerName.User, -4, -3, hasAttachment: true);
           break;
         case 2:
           create.Creature = NewCreature("Mage", 2, PlayerName.Enemy, 4, -3);
@@ -395,15 +395,29 @@ namespace Magewatch.Components
       };
     }
 
-    static CreatureData NewCreature(string name, int id, PlayerName owner, int x, int y)
+    static CreatureData NewCreature(string name, int id, PlayerName owner, int? x = null, int? y = null,
+      bool hasAttachment = false)
     {
       return new CreatureData
       {
         CreatureId = id,
         Prefab = new Asset<GameObject>($"Creatures/{name}"),
         Owner = owner,
-        RankPosition = BoardPositions.ClosestRankForXPosition(x, owner),
-        FilePosition = BoardPositions.ClosestFileForYPosition(y)
+        RankPosition = x.HasValue ? BoardPositions.ClosestRankForXPosition(x.Value, owner) : RankValue.Unknown,
+        FilePosition = y.HasValue ? BoardPositions.ClosestFileForYPosition(y.Value) : FileValue.Unknown,
+        Attachments = hasAttachment
+          ? new List<AttachmentData>
+          {
+            new AttachmentData
+            {
+              Image = new Asset<Sprite>("Spells/SpellBook01_01")
+            },
+            new AttachmentData
+            {
+              Image = new Asset<Sprite>("Spells/SpellBook01_06")
+            }
+          }
+          : null
       };
     }
 
@@ -454,7 +468,7 @@ namespace Magewatch.Components
         Text = "Whiz! Zoom!",
         IsRevealed = true,
         CanBePlayed = true,
-        CreatureData = NewCreature("Mage", id, PlayerName.User, 0, 0)
+        CreatureData = NewCreature("Mage", id, PlayerName.User)
       };
     }
 
@@ -472,7 +486,7 @@ namespace Magewatch.Components
         Text = "Anger & Axes",
         IsRevealed = true,
         CanBePlayed = true,
-        CreatureData = NewCreature("Berserker", id, PlayerName.User, 0, 0)
+        CreatureData = NewCreature("Berserker", id, PlayerName.User)
       };
     }
 
@@ -489,7 +503,32 @@ namespace Magewatch.Components
         Image = new Asset<Sprite>("Spells/SpellBook01_01"),
         Text = "Adds Bonus Damage on Hits",
         IsRevealed = true,
-        CanBePlayed = true
+        CanBePlayed = true,
+        AttachmentData = new AttachmentData
+        {
+          Image = new Asset<Sprite>("Spells/SpellBook01_01")
+        }
+      };
+    }
+
+    static CardData KnowledgeCard(int id)
+    {
+      return new CardData
+      {
+        CardId = id,
+        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Name = "Knowledge",
+        ManaCost = 3,
+        InfluenceCost = Flame(3),
+        Owner = PlayerName.User,
+        Image = new Asset<Sprite>("Spells/SpellBook01_06"),
+        Text = "Extra Mana",
+        IsRevealed = true,
+        CanBePlayed = true,
+        AttachmentData = new AttachmentData
+        {
+          Image = new Asset<Sprite>("Spells/SpellBook01_06")
+        }
       };
     }
 

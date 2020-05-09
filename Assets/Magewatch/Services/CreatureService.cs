@@ -47,14 +47,14 @@ namespace Magewatch.Services
             mousePosition.x <= Constants.IndicatorRightX)
         {
           // Clowntown version of a drag handler. Switch this to use proper collider detection or something.
-          var file = _userFiles[BoardPositions.ClosestFileForYPosition(mousePosition.y).ToIndex()];
+          var file = _userFiles[BoardPositions.ClosestFileForYPosition(mousePosition.y - 0.5f).ToIndex()];
           var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x, PlayerName.User);
           var draggingCreature =
             file.GetAtPosition(rank);
 
           if (!draggingCreature)
           {
-            file = _userFiles[BoardPositions.ClosestFileForYPosition(mousePosition.y - 1).ToIndex()];
+            file = _userFiles[BoardPositions.ClosestFileForYPosition(mousePosition.y - 1.5f).ToIndex()];
             draggingCreature = file.GetAtPosition(rank);
           }
 

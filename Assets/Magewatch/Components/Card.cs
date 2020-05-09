@@ -71,25 +71,6 @@ namespace Magewatch.Components
       Errors.CheckNotNull(_cardImage);
     }
 
-    public bool PreviewMode
-    {
-      get => _previewMode;
-      set => _previewMode = value;
-    }
-
-    public void OnPlayed()
-    {
-      _hand.RemoveFromHand(this);
-      Destroy(gameObject);
-    }
-
-    void ReturnToHand()
-    {
-      _isDragging = false;
-      transform.SetSiblingIndex(_initialDragSiblingIndex);
-      _hand.ReturnToHand(this);
-    }
-
     void UpdateCardData(CardData newCardData)
     {
       Errors.CheckNotNull(newCardData);
@@ -170,6 +151,17 @@ namespace Magewatch.Components
       _cardData = newCardData;
     }
 
+    public bool PreviewMode
+    {
+      set => _previewMode = value;
+    }
+
+    public void OnPlayed()
+    {
+      _hand.RemoveFromHand(this);
+      Destroy(gameObject);
+    }
+
     void AddInfluence(Influence influence, ref int addIndex)
     {
       for (var i = 0; i < influence.Value; ++i)
@@ -212,10 +204,12 @@ namespace Magewatch.Components
               var creature = CreatureService.Create(_cardData.CreatureData);
               creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
             }
-            else
+            else if (_cardData.AttachmentData != null)
             {
               var attachment = Root.Instance.Prefabs.CreateAttachment();
-              attachment.Initialize(_cardImage.sprite, this);
+              attachment.Initialize(_cardData.AttachmentData);
+              attachment.gameObject.AddComponent<AttachmentPositionSelector>()
+                .Initialize(attachment, _cardData.AttachmentData, this);
             }
           }
 
@@ -251,7 +245,9 @@ namespace Magewatch.Components
         }
         else
         {
-          ReturnToHand();
+          _isDragging = false;
+          transform.SetSiblingIndex(_initialDragSiblingIndex);
+          _hand.ReturnToHand(this);
         }
       }
     }

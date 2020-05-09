@@ -12,21 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Magewatch.Data
 {
-  [Serializable]
-  public sealed class CreatureData
+  public sealed class AttachmentData
   {
-    public int CreatureId;
-    public PlayerName Owner;
-    public RankValue RankPosition;
-    public FileValue FilePosition;
-    public Asset<GameObject> Prefab;
-    public bool CanBeRepositioned;
-    public List<AttachmentData> Attachments;
+    public Asset<Sprite> Image;
   }
 }

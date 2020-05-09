@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
-using UnityEditor;
+using Magewatch.Data;
+using Magewatch.Services;
 using UnityEngine;
 
 namespace Magewatch.Components
@@ -23,7 +25,7 @@ namespace Magewatch.Components
   {
     [Header("State")] [SerializeField] List<Transform> _attachments;
 
-    public void AddAttachment(Transform attachment)
+    public void AddAttachment(Transform attachment, Action onComplete = null, bool animate = true)
     {
       attachment.SetParent(transform, worldPositionStays: true);
       foreach (var child in attachment.GetComponentsInChildren<SpriteRenderer>())
@@ -32,16 +34,45 @@ namespace Magewatch.Components
       }
 
       _attachments.Add(attachment.transform);
-      AnimateToPositions();
+      UpdatePositions(onComplete, animate);
     }
 
-    void AnimateToPositions()
+    public void SetAttachments(IEnumerable<AttachmentData> attachments)
     {
+      foreach (var attachment in _attachments)
+      {
+        Destroy(attachment.gameObject);
+      }
+
+      _attachments.Clear();
+
+      foreach (var attachment in attachments)
+      {
+        var newInstance = Root.Instance.Prefabs.CreateAttachment();
+        newInstance.Initialize(attachment);
+        AddAttachment(newInstance.transform, null, false);
+      }
+    }
+
+    void UpdatePositions(Action onComplete = null, bool animate = true)
+    {
+      var sequence = DOTween.Sequence();
       for (var i = 0; i < _attachments.Count; ++i)
       {
-        _attachments[i].transform.DOLocalMove(PositionForAttachment(i % 4), 0.2f);
-        _attachments[i].DOScale(new Vector2(ScaleForAttachmentCount(), ScaleForAttachmentCount()), 0.2f);
+        if (animate)
+        {
+          sequence.Insert(0, _attachments[i].transform.DOLocalMove(PositionForAttachment(i % 4), 0.2f));
+          sequence.Insert(0,
+            _attachments[i].DOScale(new Vector2(ScaleForAttachmentCount(), ScaleForAttachmentCount()), 0.2f));
+        }
+        else
+        {
+          _attachments[i].transform.localPosition = PositionForAttachment(i % 4);
+          _attachments[i].localScale = new Vector2(ScaleForAttachmentCount(), ScaleForAttachmentCount());
+        }
       }
+
+      sequence.AppendCallback(() => onComplete?.Invoke());
     }
 
     float ScaleForAttachmentCount()
@@ -80,7 +111,6 @@ namespace Magewatch.Components
               return new Vector2(0.2f, -0.2f);
             default:
               return new Vector2(-0.2f, 0.2f);
-
           }
         default:
           switch (index)

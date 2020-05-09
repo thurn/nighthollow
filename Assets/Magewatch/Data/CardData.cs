@@ -32,5 +32,6 @@ namespace Magewatch.Data
     public bool IsRevealed;
     public bool CanBePlayed;
     public CreatureData CreatureData;
+    public AttachmentData AttachmentData;
   }
 }

@@ -21,16 +21,17 @@ namespace Magewatch.Components
 {
   public sealed class AttachmentPositionSelector : MonoBehaviour
   {
-    [Header("Config")] [SerializeField] SpriteRenderer _spriteRenderer;
     [Header("State")] [SerializeField] Card _card;
+    [SerializeField] Attachment _attachment;
+    [SerializeField] AttachmentData _attachmentData;
     [SerializeField] Creature _target;
 
-    public void Initialize(Sprite sprite, Card card = null)
+    public void Initialize(Attachment attachment, AttachmentData attachmentData, Card card = null)
     {
-      _spriteRenderer.sprite = sprite;
-      _spriteRenderer.color = Color.gray;
+      _attachment = attachment;
+      _attachmentData = attachmentData;
+      attachment.SetColor(Color.gray);
       _card = card;
-      transform.localScale = 0.5f * Vector2.one;
     }
 
     void Update()
@@ -54,8 +55,8 @@ namespace Magewatch.Components
           }
 
           target.Highlighted = false;
-          _spriteRenderer.color = Color.white;
-          target.AttachmentDisplay.AddAttachment(transform);
+          _attachment.SetColor(Color.white);
+          target.AddAttachment(_attachmentData, transform);
           Destroy(this);
         }
         else

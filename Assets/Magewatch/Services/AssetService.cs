@@ -65,11 +65,29 @@ namespace Magewatch.Services
       {
         AddCreatureAssets(card.CreatureData, assets);;
       }
+
+      if (card.AttachmentData != null)
+      {
+        AddAttachmentAssets(card.AttachmentData, assets);
+      }
     }
 
     void AddCreatureAssets(CreatureData creature, List<IAsset> assets)
     {
       assets.Add(creature.Prefab);
+
+      if (creature.Attachments != null)
+      {
+        foreach (var attachment in creature.Attachments)
+        {
+          AddAttachmentAssets(attachment, assets);
+        }
+      }
+    }
+
+    void AddAttachmentAssets(AttachmentData attachmentData, List<IAsset> assets)
+    {
+      assets.Add(attachmentData.Image);
     }
 
     void AddAttackEffectAssets(AttackEffect attackEffect, List<IAsset> assets)

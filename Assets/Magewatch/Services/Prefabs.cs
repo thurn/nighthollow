@@ -25,7 +25,7 @@ namespace Magewatch.Services
     [SerializeField] HealthBar _healthBarPrefab;
     [SerializeField] SpriteRenderer _cursorPrefab;
     [SerializeField] Image _influencePrefab;
-    [SerializeField] AttachmentPositionSelector _attachmentPrefab;
+    [SerializeField] Attachment _attachmentPrefab;
     [SerializeField] Sprite _lightSymbol;
     [SerializeField] Sprite _skySymbol;
     [SerializeField] Sprite _flameSymbol;
@@ -40,7 +40,7 @@ namespace Magewatch.Services
 
     public Image CreateInfluence() => ComponentUtils.Instantiate(_influencePrefab);
 
-    public AttachmentPositionSelector CreateAttachment() => ComponentUtils.Instantiate(_attachmentPrefab);
+    public Attachment CreateAttachment() => ComponentUtils.Instantiate(_attachmentPrefab);
 
     public Sprite SpriteForInfluenceType(InfluenceType influenceType)
     {

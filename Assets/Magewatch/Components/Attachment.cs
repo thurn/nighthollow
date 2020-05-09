@@ -12,21 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
+using Magewatch.Data;
 using UnityEngine;
 
-namespace Magewatch.Data
+namespace Magewatch.Components
 {
-  [Serializable]
-  public sealed class CreatureData
+  public sealed class Attachment : MonoBehaviour
   {
-    public int CreatureId;
-    public PlayerName Owner;
-    public RankValue RankPosition;
-    public FileValue FilePosition;
-    public Asset<GameObject> Prefab;
-    public bool CanBeRepositioned;
-    public List<AttachmentData> Attachments;
+    [Header("Config")] [SerializeField] SpriteRenderer _spriteRenderer;
+
+    public void Initialize(AttachmentData attachmentData)
+    {
+      _spriteRenderer.sprite = attachmentData.Image.Value;
+      transform.localScale = 0.5f * Vector2.one;
+    }
+
+    public void SetColor(Color color)
+    {
+      _spriteRenderer.color = color;
+    }
   }
 }
