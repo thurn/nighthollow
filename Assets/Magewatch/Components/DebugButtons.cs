@@ -539,7 +539,7 @@ namespace Magewatch.Components
           {
             FireProjectile = new FireProjectileEffect
             {
-              Prefab = new Asset<GameObject>("Projectiles/Projectile 3"),
+              Prefab = new Asset<GameObject>("Projectiles/Projectile 2"),
               Damage = damage,
             }
           }
