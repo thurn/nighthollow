@@ -239,7 +239,7 @@ MonoBehaviour:
     type: 3}
   _influencePrefab: {fileID: 6704346161961549515, guid: f519e518132064449a42eef78c0c78d3,
     type: 3}
-  _attachmentPrefab: {fileID: 3386844576073181200, guid: 120d2374836fa42f59691ef88b463a18,
+  _attachmentPrefab: {fileID: 1403881407773679184, guid: 120d2374836fa42f59691ef88b463a18,
     type: 3}
   _lightSymbol: {fileID: 21300000, guid: a75a2b58d69e54b76bcf36701bc9775b, type: 3}
   _skySymbol: {fileID: 21300000, guid: 4649f1fc8ee74471995fc468c4a1d335, type: 3}
