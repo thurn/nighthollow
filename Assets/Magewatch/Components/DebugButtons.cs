@@ -48,11 +48,11 @@ namespace Magewatch.Components
     public void SetUp()
     {
       RunCommandList(
-        CreateCreature(1),
-        CreateCreature(2),
-        CreateCreature(3),
-        CreateCreature(4),
-        CreateCreature(5)
+        StockCreature(1),
+        StockCreature(2),
+        StockCreature(3),
+        StockCreature(4),
+        StockCreature(5)
       );
     }
 
@@ -60,8 +60,8 @@ namespace Magewatch.Components
     {
       RunCommands(new List<Command>
         {
-          CreateCreature(1),
-          CreateCreature(2)
+          StockCreature(1),
+          StockCreature(2)
         },
         new List<Command>
         {
@@ -93,8 +93,8 @@ namespace Magewatch.Components
       {
         new List<Command>
         {
-          CreateCreature(1),
-          CreateCreature(2)
+          StockCreature(1),
+          StockCreature(2)
         },
         new List<Command> {MeleeEngage(1, 2), MeleeEngage(2, 1)},
       };
@@ -116,11 +116,11 @@ namespace Magewatch.Components
       {
         new List<Command>
         {
-          CreateCreature(1),
-          CreateCreature(2),
-          CreateCreature(3),
-          CreateCreature(4),
-          CreateCreature(5)
+          StockCreature(1),
+          StockCreature(2),
+          StockCreature(3),
+          StockCreature(4),
+          StockCreature(5)
         },
         Cmd(Wait(500)),
         new List<Command>
@@ -179,11 +179,11 @@ namespace Magewatch.Components
 
       commands.Add(new List<Command>
       {
-        CreateCreature(1),
-        CreateCreature(2),
-        CreateCreature(3),
-        CreateCreature(4),
-        CreateCreature(5)
+        StockCreature(1),
+        StockCreature(2),
+        StockCreature(3),
+        StockCreature(4),
+        StockCreature(5)
       });
 
       RunCommands(commands.ToArray());
@@ -203,26 +203,26 @@ namespace Magewatch.Components
     public void DrawHands()
     {
       RunCommands(
-        DrawCard(MageCard(_idCounter++)),
-        DrawCard(OpponentCard(_idCounter++)),
-        DrawCard(BerserkerCard(_idCounter++)),
-        DrawCard(OpponentCard(_idCounter++)),
-        DrawCard(RageCard(_idCounter++)),
-        DrawCard(OpponentCard(_idCounter++)),
-        DrawCard(FlameScrollCard(_idCounter++)),
-        DrawCard(OpponentCard(_idCounter++)),
-        DrawCard(KnowledgeCard(_idCounter++)),
-        DrawCard(OpponentCard(_idCounter++)),
-        DrawCard(FlameScrollCard(_idCounter++)),
-        DrawCard(OpponentCard(_idCounter++))
+        DrawCard(MageCard(50)),
+        DrawCard(OpponentCard(51)),
+        DrawCard(BerserkerCard(52)),
+        DrawCard(OpponentCard(53)),
+        DrawCard(RageCard(54)),
+        DrawCard(OpponentCard(55)),
+        DrawCard(FlameScrollCard(56)),
+        DrawCard(OpponentCard(57)),
+        DrawCard(KnowledgeCard(58)),
+        DrawCard(OpponentCard(59)),
+        DrawCard(FlameScrollCard(60)),
+        DrawCard(OpponentCard(61))
       );
     }
 
     public void Cast()
     {
       RunCommands(
-        Cmd(CreateCreature(1)),
-        Cmd(CreateCreature(2)),
+        Cmd(StockCreature(1)),
+        Cmd(StockCreature(2)),
         Cmds(CastSpell1(2, 1, 50), MeleeEngage(1, 2)),
         Cmd(Wait(1000)),
         Cmd(Attack(1, 2, 20, Skill.Skill2)),
@@ -249,6 +249,20 @@ namespace Magewatch.Components
           }
         }
       });
+    }
+
+    public void OpponentTurn()
+    {
+      RunCommands(
+        PlayCard(MageCard(51, PlayerName.Enemy), RankValue.Rank2, FileValue.File2),
+        CreateCreature(NewCreature("Mage", 51, PlayerName.Enemy, 6, -1)),
+        PlayCard(BerserkerCard(53, PlayerName.Enemy), RankValue.Rank3, FileValue.File1),
+        CreateCreature(NewCreature("Berserker", 53, PlayerName.Enemy, 5, -2)),
+        PlayCard(RageCard(55, PlayerName.Enemy), RankValue.Rank3, FileValue.File1)
+        // PlayCard(FlameScrollCard(57, PlayerName.Enemy), RankValue.Unknown, FileValue.Unknown),
+        // PlayCard(KnowledgeCard(59, PlayerName.Enemy), RankValue.Rank3, FileValue.File1),
+        // PlayCard(FlameScrollCard(61, PlayerName.Enemy), RankValue.Unknown, FileValue.Unknown)
+      );
     }
 
     static void RunCommand(Command command)
@@ -319,6 +333,23 @@ namespace Magewatch.Components
       };
     }
 
+    static List<Command> PlayCard(CardData cardData, RankValue rank, FileValue file)
+    {
+      return new List<Command>
+      {
+        new Command
+        {
+          PlayCard = new PlayCardCommand
+          {
+            Card = cardData,
+            RankPosition = rank,
+            FilePosition = file
+          }
+        }
+      };
+    }
+
+
     static Command UpdatePlayer(PlayerName playerName, int currentLife, int maximumLife, int currentMana,
       int maximumMana)
     {
@@ -340,7 +371,21 @@ namespace Magewatch.Components
       };
     }
 
-    static Command CreateCreature(int id)
+    static List<Command> CreateCreature(CreatureData creatureData)
+    {
+      return new List<Command>
+      {
+        new Command
+        {
+          CreateCreature = new CreateCreatureCommand
+          {
+            Creature = creatureData
+          }
+        }
+      };
+    }
+
+    static Command StockCreature(int id)
     {
       var create = new CreateCreatureCommand();
       switch (id)
@@ -440,7 +485,7 @@ namespace Magewatch.Components
       };
     }
 
-    static CardData MageCard(int id)
+    static CardData MageCard(int id, PlayerName owner = PlayerName.User)
     {
       return new CardData
       {
@@ -449,16 +494,16 @@ namespace Magewatch.Components
         Name = "Mage",
         ManaCost = 2,
         InfluenceCost = Flame(1),
-        Owner = PlayerName.User,
+        Owner = owner,
         Image = new Asset<Sprite>("CreatureImages/Mage"),
         Text = "Whiz! Zoom!",
         IsRevealed = true,
-        CanBePlayed = true,
+        CanBePlayed = owner == PlayerName.User,
         CreatureData = NewCreature("Mage", id, PlayerName.User)
       };
     }
 
-    static CardData BerserkerCard(int id)
+    static CardData BerserkerCard(int id, PlayerName owner = PlayerName.User)
     {
       return new CardData
       {
@@ -467,16 +512,16 @@ namespace Magewatch.Components
         Name = "Berserker",
         ManaCost = 4,
         InfluenceCost = Flame(2),
-        Owner = PlayerName.User,
+        Owner = owner,
         Image = new Asset<Sprite>("CreatureImages/Berserker"),
         Text = "Anger & Axes",
         IsRevealed = true,
-        CanBePlayed = true,
+        CanBePlayed = owner == PlayerName.User,
         CreatureData = NewCreature("Berserker", id, PlayerName.User)
       };
     }
 
-    static CardData RageCard(int id)
+    static CardData RageCard(int id, PlayerName owner = PlayerName.User)
     {
       return new CardData
       {
@@ -485,11 +530,11 @@ namespace Magewatch.Components
         Name = "Rage",
         ManaCost = 3,
         InfluenceCost = LightAndFlame(1, 1),
-        Owner = PlayerName.User,
+        Owner = owner,
         Image = new Asset<Sprite>("Spells/SpellBook01_01"),
         Text = "Adds Bonus Damage on Hits",
         IsRevealed = true,
-        CanBePlayed = true,
+        CanBePlayed = owner == PlayerName.User,
         AttachmentData = new AttachmentData
         {
           Image = new Asset<Sprite>("Spells/SpellBook01_01")
@@ -497,7 +542,7 @@ namespace Magewatch.Components
       };
     }
 
-    static CardData KnowledgeCard(int id)
+    static CardData KnowledgeCard(int id, PlayerName owner = PlayerName.User)
     {
       return new CardData
       {
@@ -506,11 +551,11 @@ namespace Magewatch.Components
         Name = "Knowledge",
         ManaCost = 3,
         InfluenceCost = Flame(3),
-        Owner = PlayerName.User,
+        Owner = owner,
         Image = new Asset<Sprite>("Spells/SpellBook01_06"),
         Text = "Extra Mana",
         IsRevealed = true,
-        CanBePlayed = true,
+        CanBePlayed = owner == PlayerName.User,
         AttachmentData = new AttachmentData
         {
           Image = new Asset<Sprite>("Spells/SpellBook01_06")
@@ -518,7 +563,7 @@ namespace Magewatch.Components
       };
     }
 
-    static CardData FlameScrollCard(int id)
+    static CardData FlameScrollCard(int id, PlayerName owner = PlayerName.User)
     {
       return new CardData
       {
@@ -526,12 +571,12 @@ namespace Magewatch.Components
         Prefab = new Asset<GameObject>("Cards/FireCard"),
         Name = "Flame Scroll",
         NoCost = true,
-        Owner = PlayerName.User,
+        Owner = owner,
         Image = new Asset<Sprite>("Scrolls/ScrollsAndBooks_21_t"),
         Text = "Adds 1 mana and 1 flame influence",
         Untargeted = true,
         IsRevealed = true,
-        CanBePlayed = true
+        CanBePlayed = owner == PlayerName.User
       };
     }
 

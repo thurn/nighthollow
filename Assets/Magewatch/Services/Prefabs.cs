@@ -34,7 +34,7 @@ namespace Magewatch.Services
     [SerializeField] Sprite _shadowSymbol;
 
     public HealthBar CreateHealthBar() => ComponentUtils.Instantiate(_healthBarPrefab,
-      Root.Instance.MainCanvas.transform);
+      Root.Instance.MainCanvas);
 
     public SpriteRenderer CreateCursor() => ComponentUtils.Instantiate(_cursorPrefab);
 

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Magewatch.Data;
@@ -20,7 +19,6 @@ using Magewatch.Services;
 using Magewatch.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.UI;
 
 namespace Magewatch.Components
 {

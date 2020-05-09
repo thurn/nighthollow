@@ -27,8 +27,8 @@ namespace Magewatch.Services
     [SerializeField] Camera _mainCamera;
     public Camera MainCamera => _mainCamera;
 
-    [SerializeField] Canvas _mainCanvas;
-    public Canvas MainCanvas => _mainCanvas;
+    [SerializeField] RectTransform _mainCanvas;
+    public RectTransform MainCanvas => _mainCanvas;
 
     [SerializeField] Prefabs _prefabs;
     public Prefabs Prefabs => _prefabs;
@@ -46,10 +46,7 @@ namespace Magewatch.Services
     public CreatureService CreatureService => _creatureService;
 
     [SerializeField] Player _user;
-    public Player User => _user;
-
     [SerializeField] Player _enemy;
-    public Player Enemy => _enemy;
 
     public static Root Instance
     {

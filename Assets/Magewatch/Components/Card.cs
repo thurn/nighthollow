@@ -48,6 +48,8 @@ namespace Magewatch.Components
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
 
+    public int CardId => _cardData.CardId;
+
     public void Initialize(CardData cardData)
     {
       _cardFront.gameObject.SetActive(false);
@@ -70,7 +72,7 @@ namespace Magewatch.Components
       Errors.CheckNotNull(_cardImage);
     }
 
-    void UpdateCardData(CardData newCardData)
+    public void UpdateCardData(CardData newCardData)
     {
       Errors.CheckNotNull(newCardData);
 
@@ -107,35 +109,21 @@ namespace Magewatch.Components
 
       if (newCardData.IsRevealed)
       {
-        if (_cardData?.Name != newCardData.Name)
+        name = newCardData.Name;
+        _name.text = newCardData.Name;
+        _cardImage.sprite = newCardData.Image.Value;
+        _text.text = newCardData.Text;
+
+        if (newCardData.NoCost)
         {
-          name = newCardData.Name;
-          _name.text = newCardData.Name;
+          _cost.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+          _cost.text = newCardData.ManaCost.ToString();
         }
 
-        if (_cardData?.Image != newCardData.Image)
-        {
-          _cardImage.sprite = newCardData.Image.Value;
-        }
-
-        if (_cardData?.Text != newCardData.Text)
-        {
-          _text.text = newCardData.Text;
-        }
-
-        if (_cardData?.ManaCost != newCardData.ManaCost || _cardData?.NoCost != newCardData.NoCost)
-        {
-          if (newCardData.NoCost)
-          {
-            _cost.transform.parent.gameObject.SetActive(false);
-          }
-          else
-          {
-            _cost.text = newCardData.ManaCost.ToString();
-          }
-        }
-
-        if (_cardData?.InfluenceCost != newCardData.InfluenceCost)
+        if (newCardData.InfluenceCost != null)
         {
           var addIndex = 0;
           foreach (var influence in newCardData.InfluenceCost)
@@ -160,6 +148,10 @@ namespace Magewatch.Components
             _outline.DOFade(1.0f, 0.3f);
           }
         }
+      }
+      else
+      {
+        name = "HiddenCard";
       }
 
       _cardData = newCardData;

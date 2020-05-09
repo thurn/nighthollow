@@ -13,7 +13,9 @@
 // limitations under the License.
 
 using System.Collections;
+using DG.Tweening;
 using Magewatch.Data;
+using Magewatch.Utils;
 using UnityEngine;
 
 namespace Magewatch.Services
@@ -71,6 +73,11 @@ namespace Magewatch.Services
           player.Hand.DrawCard(command.DrawCard.Card, this);
         }
 
+        if (command.PlayCard != null)
+        {
+          HandlePlayCard(command);
+        }
+
         if (command.UpdatePlayer != null)
         {
           _expectedCompletions++;
@@ -109,6 +116,35 @@ namespace Magewatch.Services
       {
         OnComplete();
       }
+    }
+
+    void HandlePlayCard(Command command)
+    {
+      _expectedCompletions++;
+      var owner = command.PlayCard.Card.Owner;
+      var player = Root.Instance.GetPlayer(owner);
+      var rank = command.PlayCard.RankPosition;
+      var file = command.PlayCard.FilePosition;
+      var delay = 2.0f;
+      if (command.PlayCard.RevealDelayMilliseconds > 0)
+      {
+        delay = command.PlayCard.RevealDelayMilliseconds / 1000f;
+      }
+
+      player.Hand.RevealMatchingCard(command.PlayCard.Card, card =>
+      {
+        var sequence = DOTween.Sequence();
+        sequence.Insert(delay, card.transform.DOScale(0, 0.2f));
+        if (rank != RankValue.Unknown && file != FileValue.Unknown)
+        {
+          var canvasPosition =
+            ScreenUtils.WorldToCanvasPosition(new Vector2(rank.ToXPosition(owner), file.ToYPosition()));
+          sequence.Insert(delay,
+            card.transform.DOLocalMove(canvasPosition, 0.2f));
+        }
+
+        sequence.AppendCallback(OnComplete);
+      });
     }
 
     void HandleMeleeEngage(MeleeEngageCommand meleeEngage)

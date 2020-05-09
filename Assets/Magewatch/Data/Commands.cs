@@ -46,6 +46,8 @@ namespace Magewatch.Data
 
     public DrawCardCommand DrawCard;
 
+    public PlayCardCommand PlayCard;
+
     public UpdatePlayerCommand UpdatePlayer;
 
     public CreateCreatureCommand CreateCreature;
@@ -65,6 +67,20 @@ namespace Magewatch.Data
   public sealed class DrawCardCommand
   {
     public CardData Card;
+  }
+
+  /// <summary>Plays a card which already exists in the scene. The card is revealed and then animated to a display
+  /// position, and then animated away, optionally to the provided rank/file position.</summary>
+  public sealed class PlayCardCommand
+  {
+    public CardData Card;
+
+    /// <summary>How long to display the card to the user for before playing it. Defaults to 2000ms.</summary>
+    public float RevealDelayMilliseconds;
+
+    public RankValue RankPosition;
+
+    public FileValue FilePosition;
   }
 
   public sealed class UpdatePlayerCommand
