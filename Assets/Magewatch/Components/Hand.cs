@@ -24,18 +24,17 @@ namespace Magewatch.Components
 {
   public sealed class Hand : MonoBehaviour
   {
-    [SerializeField] bool _debugMode;
-    [Header("Config")] [SerializeField] float _initialCardScale;
+    [Header("Config")] [SerializeField] bool _debugMode;
+    [SerializeField] float _initialCardScale;
     [SerializeField] float _finalCardScale;
     [SerializeField] float _dragEndScale;
     [SerializeField] int _zRotationMultiplier;
-    [SerializeField] Transform _deckPosition;
+    [Header("State")] [SerializeField] Transform _deckPosition;
     [SerializeField] Transform _controlPoint1;
     [SerializeField] Transform _controlPoint2;
     [SerializeField] Transform _controlPoint3;
     [SerializeField] Transform _controlPoint4;
-
-    [Header("Internal")] [SerializeField] List<Card> _cards;
+    [SerializeField] List<Card> _cards;
     [SerializeField] Hand _handOverridePosition;
 
     public List<Card> Cards => _cards;

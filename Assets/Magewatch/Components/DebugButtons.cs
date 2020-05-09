@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DuloGames.UI;
 using Magewatch.Data;
 using Magewatch.Services;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 // ReSharper disable UnusedMember.Global
 
@@ -187,7 +184,7 @@ namespace Magewatch.Components
 
       commands.Add(Cmd(RemoveCreature(3)));
 
-      commands.Add(Cmd(UpdatePlayer(PlayerName.User, 24, 25, 1, 1)));
+      commands.Add(Cmd(UpdatePlayer(PlayerName.User, 24, 25, 0, 0)));
 
       commands.Add(Cmd(Wait(1000)));
 

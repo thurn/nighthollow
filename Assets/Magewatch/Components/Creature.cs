@@ -32,23 +32,24 @@ namespace Magewatch.Components
 
   public sealed class Creature : MonoBehaviour
   {
-    [SerializeField] bool _debugMode;
+    [Header("Config")] [SerializeField] bool _debugMode;
+    [SerializeField] float _speed = 2;
+    [SerializeField] Transform _meleePosition;
+    [SerializeField] AttachmentDisplay _attachmentDisplay;
+    [SerializeField] Transform _healthbarAnchor;
+
+    [Header("State")] [SerializeField] bool _initialized;
     [SerializeField] CreatureState _state;
     [SerializeField] Animator _animator;
     [SerializeField] Collider2D _collider;
-    [SerializeField] Transform _healthbarAnchor;
     [SerializeField] HealthBar _healthBar;
     [SerializeField] CreatureData _creatureData;
-    [SerializeField] bool _initialized;
     [SerializeField] Creature _currentTarget;
-    [SerializeField] Transform _meleePosition;
-    [SerializeField] float _speed = 2;
     [SerializeField] bool _touchedTarget;
     [SerializeField] AttackCommand _currentAttack;
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SpriteRenderer[] _renderers;
     [SerializeField] SortingGroup _sortingGroup;
-    [SerializeField] AttachmentDisplay _attachmentDisplay;
 
     IOnComplete _onComplete;
     IOnComplete _onCompleteOnDeath;

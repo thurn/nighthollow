@@ -41,6 +41,10 @@ namespace Magewatch.Components
       {
         transform.position = new Vector3(mousePosition.x, mousePosition.y + 0.25f, 0);
         var target = Root.Instance.CreatureService.GetClosestCreature(PlayerName.User, mousePosition);
+        if (!target)
+        {
+          return; // should not happen since you should not be able to play an attachment with no creatures
+        }
 
         if (Input.GetMouseButtonUp(0))
         {

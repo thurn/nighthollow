@@ -25,6 +25,7 @@ namespace Magewatch.Components
     [Header("Config")] [SerializeField] TimedEffect _flashEffect;
     [SerializeField] TimedEffect _hitEffect;
     [SerializeField] float _speed;
+
     [Header("State")] Collider2D _target;
     Action _onHit;
 

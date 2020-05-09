@@ -23,7 +23,7 @@ namespace Magewatch.Components
 {
   public sealed class CreaturePositionSelector : MonoBehaviour
   {
-    [SerializeField] Card _card;
+    [Header("State")] [SerializeField] Card _card;
     [SerializeField] Creature _creature;
     [SerializeField] RankValue _rank;
     [SerializeField] FileValue _file;

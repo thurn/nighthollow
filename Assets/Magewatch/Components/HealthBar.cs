@@ -19,7 +19,7 @@ namespace Magewatch.Components
 {
   public sealed class HealthBar : MonoBehaviour
   {
-    [SerializeField] Slider _slider;
+    [Header("Config")] [SerializeField] Slider _slider;
 
     public float Value
     {

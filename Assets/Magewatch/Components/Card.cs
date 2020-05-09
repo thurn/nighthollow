@@ -26,10 +26,9 @@ namespace Magewatch.Components
 {
   public sealed class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
   {
-    [SerializeField] bool _debugMode;
+    [Header("Config")] [SerializeField] bool _debugMode;
     [SerializeField] float _debugCardScale = 0.65f;
-
-    [Header("Config")] [SerializeField] RectTransform _cardBack;
+    [SerializeField] RectTransform _cardBack;
     [SerializeField] RectTransform _cardFront;
     [SerializeField] Image _cardImage;
     [SerializeField] TextMeshProUGUI _name;

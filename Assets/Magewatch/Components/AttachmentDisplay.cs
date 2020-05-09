@@ -19,9 +19,19 @@ namespace Magewatch.Components
 {
   public sealed class AttachmentDisplay : MonoBehaviour
   {
+    [Header("Config")] [SerializeField] int _orderInLayer;
+
     public void AddAttachment(GameObject attachment)
     {
+      attachment.transform.SetParent(transform, worldPositionStays: true);
+      foreach (var child in attachment.GetComponentsInChildren<SpriteRenderer>())
+      {
+        child.sortingOrder = _orderInLayer;
+      }
+
       attachment.transform.DOMove(transform.position, 0.2f);
+      attachment.transform.localScale = new Vector3(0.1f, 0.1f);
+      attachment.transform.DOScale(new Vector3(0.25f, 0.25f), 0.2f);
     }
   }
 }

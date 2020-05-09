@@ -19,7 +19,7 @@ namespace Magewatch.Components
 {
   public sealed class TimedEffect : MonoBehaviour
   {
-    [SerializeField] float _duration;
+    [Header("Config")] [SerializeField] float _duration;
 
     void OnEnable()
     {
