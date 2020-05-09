@@ -55,7 +55,7 @@ namespace Magewatch.Components
 
           target.Highlighted = false;
           _spriteRenderer.color = Color.white;
-          target.AttachmentDisplay.AddAttachment(gameObject);
+          target.AttachmentDisplay.AddAttachment(transform);
           Destroy(this);
         }
         else

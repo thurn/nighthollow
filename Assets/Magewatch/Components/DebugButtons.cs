@@ -206,7 +206,7 @@ namespace Magewatch.Components
       {
         DrawCard = new DrawCardCommand
         {
-          Card = MageCard(_idCounter++)
+          Card = RageCard(_idCounter++)
         }
       });
     }

@@ -12,26 +12,89 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 
 namespace Magewatch.Components
 {
   public sealed class AttachmentDisplay : MonoBehaviour
   {
-    [Header("Config")] [SerializeField] int _orderInLayer;
+    [Header("State")] [SerializeField] List<Transform> _attachments;
 
-    public void AddAttachment(GameObject attachment)
+    public void AddAttachment(Transform attachment)
     {
-      attachment.transform.SetParent(transform, worldPositionStays: true);
+      attachment.SetParent(transform, worldPositionStays: true);
       foreach (var child in attachment.GetComponentsInChildren<SpriteRenderer>())
       {
-        child.sortingOrder = _orderInLayer;
+        child.sortingOrder = 0;
       }
 
-      attachment.transform.DOMove(transform.position, 0.2f);
-      attachment.transform.localScale = new Vector3(0.1f, 0.1f);
-      attachment.transform.DOScale(new Vector3(0.25f, 0.25f), 0.2f);
+      _attachments.Add(attachment.transform);
+      AnimateToPositions();
+    }
+
+    void AnimateToPositions()
+    {
+      for (var i = 0; i < _attachments.Count; ++i)
+      {
+        _attachments[i].transform.DOLocalMove(PositionForAttachment(i % 4), 0.2f);
+        _attachments[i].DOScale(new Vector2(ScaleForAttachmentCount(), ScaleForAttachmentCount()), 0.2f);
+      }
+    }
+
+    float ScaleForAttachmentCount()
+    {
+      switch (_attachments.Count)
+      {
+        case 1:
+          return 0.45f;
+        case 2:
+          return 0.35f;
+        default:
+          return 0.25f;
+      }
+    }
+
+    Vector2 PositionForAttachment(int index)
+    {
+      switch (_attachments.Count)
+      {
+        case 1:
+          return Vector2.zero;
+        case 2:
+          switch (index)
+          {
+            case 1:
+              return new Vector2(-0.25f, 0f);
+            default:
+              return new Vector2(0.25f, 0f);
+          }
+        case 3:
+          switch (index)
+          {
+            case 1:
+              return new Vector2(-0.2f, -0.2f);
+            case 2:
+              return new Vector2(0.2f, -0.2f);
+            default:
+              return new Vector2(-0.2f, 0.2f);
+
+          }
+        default:
+          switch (index)
+          {
+            case 1:
+              return new Vector2(-0.2f, -0.2f);
+            case 2:
+              return new Vector2(0.2f, -0.2f);
+            case 3:
+              return new Vector2(-0.2f, 0.2f);
+            default:
+              return new Vector2(0.2f, 0.2f);
+          }
+      }
     }
   }
 }
