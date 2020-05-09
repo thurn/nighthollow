@@ -217,9 +217,9 @@ namespace Magewatch.Components
         DrawCard(MageCard(_idCounter++)),
         DrawCard(BerserkerCard(_idCounter++)),
         DrawCard(RageCard(_idCounter++)),
-        DrawCard(BerserkerCard(_idCounter++)),
+        DrawCard(FlameScrollCard(_idCounter++)),
         DrawCard(KnowledgeCard(_idCounter++)),
-        DrawCard(BerserkerCard(_idCounter++))
+        DrawCard(FlameScrollCard(_idCounter++))
       );
     }
 
@@ -529,6 +529,23 @@ namespace Magewatch.Components
         {
           Image = new Asset<Sprite>("Spells/SpellBook01_06")
         }
+      };
+    }
+
+    static CardData FlameScrollCard(int id)
+    {
+      return new CardData
+      {
+        CardId = id,
+        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Name = "Flame Scroll",
+        NoCost = true,
+        Owner = PlayerName.User,
+        Image = new Asset<Sprite>("Scrolls/ScrollsAndBooks_21_t"),
+        Text = "Adds 1 mana and 1 flame influence",
+        Untargeted = true,
+        IsRevealed = true,
+        CanBePlayed = true
       };
     }
 

@@ -23,13 +23,11 @@ namespace Magewatch.Components
   {
     [Header("State")] [SerializeField] Card _card;
     [SerializeField] Attachment _attachment;
-    [SerializeField] AttachmentData _attachmentData;
     [SerializeField] Creature _target;
 
-    public void Initialize(Attachment attachment, AttachmentData attachmentData, Card card = null)
+    public void Initialize(Attachment attachment, Card card = null)
     {
       _attachment = attachment;
-      _attachmentData = attachmentData;
       attachment.SetColor(Color.gray);
       _card = card;
     }
@@ -56,7 +54,7 @@ namespace Magewatch.Components
 
           target.Highlighted = false;
           _attachment.SetColor(Color.white);
-          target.AddAttachment(_attachmentData, transform);
+          target.AddAttachment(_attachment);
           Destroy(this);
         }
         else

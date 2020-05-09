@@ -24,6 +24,7 @@ namespace Magewatch.Data
     public int CardId;
     public Asset<GameObject> Prefab;
     public string Name;
+    public bool NoCost;
     public int ManaCost;
     public List<Influence> InfluenceCost;
     public PlayerName Owner;
@@ -31,6 +32,7 @@ namespace Magewatch.Data
     public string Text;
     public bool IsRevealed;
     public bool CanBePlayed;
+    public bool Untargeted;
     public CreatureData CreatureData;
     public AttachmentData AttachmentData;
   }

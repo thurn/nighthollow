@@ -131,7 +131,7 @@ namespace Magewatch.Components
       UpdateCreatureData(_creatureData);
     }
 
-    public void AddAttachment(AttachmentData attachmentData, Transform attachment = null)
+    public void AddAttachment(Attachment attachment)
     {
       _attachmentDisplay.AddAttachment(attachment, () =>
       {
@@ -140,7 +140,7 @@ namespace Magewatch.Components
           _creatureData.Attachments = new List<AttachmentData>();
         }
 
-        _creatureData.Attachments.Add(attachmentData);
+        _creatureData.Attachments.Add(attachment.AttachmentData);
         UpdateCreatureData(_creatureData);
       });
     }

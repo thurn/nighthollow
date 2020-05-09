@@ -20,12 +20,16 @@ namespace Magewatch.Components
   public sealed class Attachment : MonoBehaviour
   {
     [Header("Config")] [SerializeField] SpriteRenderer _spriteRenderer;
+    [Header("State")] [SerializeField] AttachmentData _attachmentData;
 
     public void Initialize(AttachmentData attachmentData)
     {
+      _attachmentData = attachmentData;
       _spriteRenderer.sprite = attachmentData.Image.Value;
       transform.localScale = 0.5f * Vector2.one;
     }
+
+    public AttachmentData AttachmentData => _attachmentData;
 
     public void SetColor(Color color)
     {

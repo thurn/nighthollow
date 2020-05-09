@@ -25,9 +25,9 @@ namespace Magewatch.Components
   {
     [Header("State")] [SerializeField] List<Transform> _attachments;
 
-    public void AddAttachment(Transform attachment, Action onComplete = null, bool animate = true)
+    public void AddAttachment(Attachment attachment, Action onComplete = null, bool animate = true)
     {
-      attachment.SetParent(transform, worldPositionStays: true);
+      attachment.transform.SetParent(transform, worldPositionStays: true);
       foreach (var child in attachment.GetComponentsInChildren<SpriteRenderer>())
       {
         child.sortingOrder = 0;
@@ -50,7 +50,7 @@ namespace Magewatch.Components
       {
         var newInstance = Root.Instance.Prefabs.CreateAttachment();
         newInstance.Initialize(attachment);
-        AddAttachment(newInstance.transform, null, false);
+        AddAttachment(newInstance, null, false);
       }
     }
 

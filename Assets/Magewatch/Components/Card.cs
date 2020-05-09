@@ -117,9 +117,16 @@ namespace Magewatch.Components
         _text.text = newCardData.Text;
       }
 
-      if (_cardData?.ManaCost != newCardData.ManaCost)
+      if (_cardData?.ManaCost != newCardData.ManaCost || _cardData?.NoCost != newCardData.NoCost)
       {
-        _cost.text = newCardData.ManaCost.ToString();
+        if (newCardData.NoCost)
+        {
+          _cost.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+          _cost.text = newCardData.ManaCost.ToString();
+        }
       }
 
       if (_cardData?.InfluenceCost != newCardData.InfluenceCost)
@@ -193,23 +200,21 @@ namespace Magewatch.Components
 
         if (mousePosition.x < Constants.IndicatorRightX && mousePosition.y > Constants.IndicatorBottomY)
         {
-          transform.localScale = 0.25f * Vector3.one;
-          transform.rotation = Quaternion.identity;
-
           if (!_overBoard)
           {
-            gameObject.SetActive(false);
             if (_cardData.CreatureData != null)
             {
+              gameObject.SetActive(false);
               var creature = CreatureService.Create(_cardData.CreatureData);
               creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
             }
             else if (_cardData.AttachmentData != null)
             {
+              gameObject.SetActive(false);
               var attachment = Root.Instance.Prefabs.CreateAttachment();
               attachment.Initialize(_cardData.AttachmentData);
               attachment.gameObject.AddComponent<AttachmentPositionSelector>()
-                .Initialize(attachment, _cardData.AttachmentData, this);
+                .Initialize(attachment, this);
             }
           }
 
@@ -220,7 +225,7 @@ namespace Magewatch.Components
           var distanceDragged = Vector2.Distance(mousePosition, _initialDragPosition);
 
           var t = Mathf.Clamp01(distanceDragged / 5);
-          var scale = Mathf.Lerp(_hand.FinalCardScale, 1.5f, t);
+          var scale = Mathf.Lerp(_hand.FinalCardScale, 1.2f, t);
           transform.localScale = scale * Vector3.one;
 
           var rotation = Quaternion.Slerp(_initialDragRotation, Quaternion.identity, t);
@@ -238,10 +243,13 @@ namespace Magewatch.Components
         var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
 
         if (_cardData.CanBePlayed &&
-            mousePosition.y >= Constants.IndicatorBottomY &&
-            mousePosition.x <= Constants.IndicatorRightX)
+            mousePosition.y >= 0 &&
+            _cardData.Untargeted)
         {
-          OnPlayed();
+          _isDragging = false;
+          _hand.RemoveFromHand(this);
+          DOTween.Sequence().Append(transform.DOScale(Vector3.zero, 0.2f))
+            .AppendCallback(() => { Destroy(gameObject); });
         }
         else
         {
