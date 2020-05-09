@@ -67,7 +67,8 @@ namespace Magewatch.Services
         if (command.DrawCard != null)
         {
           _expectedCompletions++;
-          Root.Instance.User.Hand.DrawCard(command.DrawCard.Card, this);
+          var player = Root.Instance.GetPlayer(command.DrawCard.Card.Owner);
+          player.Hand.DrawCard(command.DrawCard.Card, this);
         }
 
         if (command.UpdatePlayer != null)

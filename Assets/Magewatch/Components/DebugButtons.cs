@@ -70,8 +70,19 @@ namespace Magewatch.Components
         }, new List<Command>
         {
           Attack(1, 2, 10, Skill.Skill2),
+          Attack(2, 1, 10, Skill.Skill3)
         }, new List<Command>
         {
+          Attack(1, 2, 10, Skill.Skill2),
+          Attack(2, 1, 10, Skill.Skill3)
+        },
+        new List<Command>
+        {
+          Attack(1, 2, 10, Skill.Skill2),
+          Attack(2, 1, 10, Skill.Skill3)
+        }, new List<Command>
+        {
+          Attack(1, 2, 10, Skill.Skill2),
           Attack(2, 1, 10, Skill.Skill3)
         });
     }
@@ -122,41 +133,23 @@ namespace Magewatch.Components
         },
       };
 
-      for (var i = 0; i < 9; ++i)
+      for (var i = 0; i < 4; ++i)
       {
-        if (i % 2 == 0)
+        commands.Add(new List<Command>
         {
-          commands.Add(new List<Command>
-          {
-            Attack(1, 2, 20, Skill.Skill2),
-            Attack(4, 5, 20, Skill.Skill2)
-          });
-        }
-        else
-        {
-          commands.Add(new List<Command>
-          {
-            Attack(2, 1, 10, Skill.Skill3),
-            Attack(3, 1, 10, Skill.Skill3),
-            Attack(5, 4, 20, Skill.Skill2)
-          });
-        }
+          Attack(1, 2, 20, Skill.Skill2),
+          Attack(2, 1, 10, Skill.Skill3),
+          Attack(3, 1, 10, Skill.Skill3),
+          Attack(4, 5, 20, Skill.Skill2),
+          Attack(5, 4, 20, Skill.Skill2)
+        });
       }
 
       commands.Add(new List<Command>
       {
-        MeleeEngage(1, 3),
-        Attack(3, 1, 10, Skill.Skill3)
-      });
-
-      commands.Add(new List<Command>
-      {
-        Attack(1, 3, 20, Skill.Skill2),
-      });
-
-      commands.Add(new List<Command>
-      {
-        Attack(3, 1, 10, Skill.Skill3)
+        Attack(1, 2, 20, Skill.Skill2, killsTarget: true),
+        Attack(3, 1, 10, Skill.Skill3, killsTarget: true),
+        Attack(4, 5, 20, Skill.Skill2, killsTarget: true),
       });
 
       commands.Add(new List<Command>
@@ -168,16 +161,12 @@ namespace Magewatch.Components
       commands.Add(new List<Command>
       {
         Attack(3, 4, 10, Skill.Skill3),
-      });
-
-      commands.Add(new List<Command>
-      {
         Attack(4, 3, 20, Skill.Skill2)
       });
 
       commands.Add(new List<Command>
       {
-        Attack(3, 4, 10, Skill.Skill3),
+        Attack(3, 4, 10, Skill.Skill3, killsTarget: true)
       });
 
       commands.Add(Cmd(CastAtOpponent(3)));
@@ -211,15 +200,21 @@ namespace Magewatch.Components
       });
     }
 
-    public void DrawHand()
+    public void DrawHands()
     {
       RunCommands(
         DrawCard(MageCard(_idCounter++)),
+        DrawCard(OpponentCard(_idCounter++)),
         DrawCard(BerserkerCard(_idCounter++)),
+        DrawCard(OpponentCard(_idCounter++)),
         DrawCard(RageCard(_idCounter++)),
+        DrawCard(OpponentCard(_idCounter++)),
         DrawCard(FlameScrollCard(_idCounter++)),
+        DrawCard(OpponentCard(_idCounter++)),
         DrawCard(KnowledgeCard(_idCounter++)),
-        DrawCard(FlameScrollCard(_idCounter++))
+        DrawCard(OpponentCard(_idCounter++)),
+        DrawCard(FlameScrollCard(_idCounter++)),
+        DrawCard(OpponentCard(_idCounter++))
       );
     }
 
@@ -284,17 +279,6 @@ namespace Magewatch.Components
             Commands = commands.ToList()
           }
         }
-      });
-    }
-
-    static void RunSequentially(params Command[] commands)
-    {
-      Root.Instance.CommandService.HandleCommands(new CommandList
-      {
-        Steps = commands.Select(c => new CommandStep
-        {
-          Commands = new List<Command> {c}
-        }).ToList()
       });
     }
 
@@ -433,7 +417,8 @@ namespace Magewatch.Components
       };
     }
 
-    static Command Attack(int c1, int c2, int damage, Skill skill = Skill.Skill1, int hitCount = 1)
+    static Command Attack(int c1, int c2, int damage, Skill skill = Skill.Skill1, bool killsTarget = false,
+      int hitCount = 1)
     {
       return new Command
       {
@@ -447,7 +432,8 @@ namespace Magewatch.Components
           {
             ApplyDamage = new ApplyDamageEffect
             {
-              Damage = damage
+              Damage = damage,
+              KillsTarget = killsTarget
             }
           }
         }
@@ -549,6 +535,18 @@ namespace Magewatch.Components
       };
     }
 
+    static CardData OpponentCard(int id)
+    {
+      return new CardData
+      {
+        CardId = id,
+        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Owner = PlayerName.Enemy,
+        IsRevealed = false,
+        CanBePlayed = false
+      };
+    }
+
     static List<Influence> LightAndFlame(int light, int flame)
     {
       return new List<Influence>
@@ -578,7 +576,7 @@ namespace Magewatch.Components
       };
     }
 
-    static Command CastSpell1(int c1, int c2, int damage, Skill skill = Skill.Skill1)
+    static Command CastSpell1(int c1, int c2, int damage, bool killsTarget = false, Skill skill = Skill.Skill1)
     {
       return new Command
       {
@@ -593,7 +591,11 @@ namespace Magewatch.Components
             FireProjectile = new FireProjectileEffect
             {
               Prefab = new Asset<GameObject>("Projectiles/Projectile 2"),
-              Damage = damage,
+              ApplyDamage = new ApplyDamageEffect
+              {
+                Damage = damage,
+                KillsTarget = killsTarget
+              },
             }
           }
         }
@@ -615,7 +617,11 @@ namespace Magewatch.Components
             FireProjectile = new FireProjectileEffect
             {
               Prefab = new Asset<GameObject>("Projectiles/Projectile 6"),
-              Damage = 0,
+              ApplyDamage = new ApplyDamageEffect
+              {
+                Damage = 0,
+                KillsTarget = false
+              },
               AtOpponent = true
             }
           }

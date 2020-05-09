@@ -119,13 +119,15 @@ namespace Magewatch.Data
   public sealed class ApplyDamageEffect
   {
     public int Damage;
+
+    public bool KillsTarget;
   }
 
   public sealed class FireProjectileEffect
   {
     public Asset<GameObject> Prefab;
 
-    public int Damage;
+    public ApplyDamageEffect ApplyDamage;
 
     public bool AtOpponent;
   }

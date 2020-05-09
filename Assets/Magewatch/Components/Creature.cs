@@ -133,6 +133,8 @@ namespace Magewatch.Components
 
     public void AddAttachment(Attachment attachment)
     {
+      Errors.CheckNotNull(attachment);
+
       _attachmentDisplay.AddAttachment(attachment, () =>
       {
         if (_creatureData.Attachments == null)
@@ -147,6 +149,9 @@ namespace Magewatch.Components
 
     public void MeleeEngageWithTarget(Creature target, IOnComplete onComplete)
     {
+      Errors.CheckNotNull(target);
+      Errors.CheckNotNull(onComplete);
+
       _currentTarget = target;
       _onComplete = onComplete;
       _touchedTarget = false;
@@ -155,6 +160,10 @@ namespace Magewatch.Components
 
     public void AttackTarget(Creature target, AttackCommand attack, IOnComplete onComplete)
     {
+      Errors.CheckNotNull(target);
+      Errors.CheckNotNull(attack);
+      Errors.CheckNotNull(onComplete);
+
       _currentTarget = target;
       _currentAttack = attack;
       _onComplete = onComplete;
@@ -237,11 +246,11 @@ namespace Magewatch.Components
       });
     }
 
-    void ApplyAttack(int damage, IOnComplete onComplete)
+    void ApplyAttackDamage(ApplyDamageEffect damage, IOnComplete onComplete)
     {
-      _healthBar.Value -= damage;
+      _healthBar.Value -= damage.Damage;
       _healthBar.gameObject.SetActive(_healthBar.Value < 100);
-      if (_healthBar.Value <= 0)
+      if (damage.KillsTarget)
       {
         _animator.SetTrigger(Death);
         _healthBar.gameObject.SetActive(false);
@@ -257,9 +266,16 @@ namespace Magewatch.Components
     // ReSharper disable once UnusedMember.Local
     void AttackStart()
     {
+      Errors.CheckNotNull(_currentAttack);
+      Errors.CheckNotNull(_currentTarget);
+
       if (_currentAttack.AttackEffect.ApplyDamage != null)
       {
-        _currentTarget.ApplyAttack(_currentAttack.AttackEffect.ApplyDamage.Damage, _onComplete);
+        _currentTarget.ApplyAttackDamage(_currentAttack.AttackEffect.ApplyDamage, _onComplete);
+        if (_currentAttack.AttackEffect.ApplyDamage.KillsTarget)
+        {
+          _currentTarget = null;
+        }
         _onComplete = null;
       }
 
@@ -277,7 +293,11 @@ namespace Magewatch.Components
           }
           else
           {
-            _currentTarget.ApplyAttack(fireProjectile.Damage, _onComplete);
+            _currentTarget.ApplyAttackDamage(fireProjectile.ApplyDamage, _onComplete);
+            if (fireProjectile.ApplyDamage.KillsTarget)
+            {
+              _currentTarget = null;
+            }
             _onComplete = null;
           }
         });

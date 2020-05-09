@@ -52,7 +52,6 @@ namespace Magewatch.Components
     {
       _cardFront.gameObject.SetActive(false);
       _cardBack.gameObject.SetActive(true);
-      _cardImage.sprite = cardData.Image.Value;
       UpdateCardData(cardData);
       _initialized = true;
     }
@@ -106,52 +105,60 @@ namespace Magewatch.Components
           .Insert(atPosition: 0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, duration: 0.3f));
       }
 
-      if (_cardData?.Name != newCardData.Name)
+      if (newCardData.IsRevealed)
       {
-        name = newCardData.Name;
-        _name.text = newCardData.Name;
-      }
-
-      if (_cardData?.Text != newCardData.Text)
-      {
-        _text.text = newCardData.Text;
-      }
-
-      if (_cardData?.ManaCost != newCardData.ManaCost || _cardData?.NoCost != newCardData.NoCost)
-      {
-        if (newCardData.NoCost)
+        if (_cardData?.Name != newCardData.Name)
         {
-          _cost.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-          _cost.text = newCardData.ManaCost.ToString();
-        }
-      }
-
-      if (_cardData?.InfluenceCost != newCardData.InfluenceCost)
-      {
-        var addIndex = 0;
-        foreach (var influence in newCardData.InfluenceCost)
-        {
-          AddInfluence(influence, ref addIndex);
+          name = newCardData.Name;
+          _name.text = newCardData.Name;
         }
 
-        while (addIndex < _influence.Count)
+        if (_cardData?.Image != newCardData.Image)
         {
-          _influence[addIndex++].enabled = false;
+          _cardImage.sprite = newCardData.Image.Value;
         }
-      }
 
-      if (_cardData?.CanBePlayed != newCardData.CanBePlayed)
-      {
-        _outline.enabled = newCardData.CanBePlayed;
-        if (newCardData.CanBePlayed)
+        if (_cardData?.Text != newCardData.Text)
         {
-          var color = _outline.color;
-          color.a = 0;
-          _outline.color = color;
-          _outline.DOFade(1.0f, 0.3f);
+          _text.text = newCardData.Text;
+        }
+
+        if (_cardData?.ManaCost != newCardData.ManaCost || _cardData?.NoCost != newCardData.NoCost)
+        {
+          if (newCardData.NoCost)
+          {
+            _cost.transform.parent.gameObject.SetActive(false);
+          }
+          else
+          {
+            _cost.text = newCardData.ManaCost.ToString();
+          }
+        }
+
+        if (_cardData?.InfluenceCost != newCardData.InfluenceCost)
+        {
+          var addIndex = 0;
+          foreach (var influence in newCardData.InfluenceCost)
+          {
+            AddInfluence(influence, ref addIndex);
+          }
+
+          while (addIndex < _influence.Count)
+          {
+            _influence[addIndex++].enabled = false;
+          }
+        }
+
+        if (_cardData?.CanBePlayed != newCardData.CanBePlayed)
+        {
+          _outline.enabled = newCardData.CanBePlayed;
+          if (newCardData.CanBePlayed)
+          {
+            var color = _outline.color;
+            color.a = 0;
+            _outline.color = color;
+            _outline.DOFade(1.0f, 0.3f);
+          }
         }
       }
 
