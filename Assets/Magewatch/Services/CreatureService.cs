@@ -74,6 +74,8 @@ namespace Magewatch.Services
       return result;
     }
 
+    public bool HasCreature(int creatureId) => _creatures.ContainsKey(creatureId);
+
     public Creature Get(int creatureId)
     {
       if (!_creatures.ContainsKey(creatureId))

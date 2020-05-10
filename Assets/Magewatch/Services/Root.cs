@@ -45,6 +45,9 @@ namespace Magewatch.Services
     [SerializeField] CreatureService _creatureService;
     public CreatureService CreatureService => _creatureService;
 
+    [SerializeField] MainButton _mainButton;
+    public MainButton MainButton => _mainButton;
+
     [SerializeField] Player _user;
     [SerializeField] Player _enemy;
 

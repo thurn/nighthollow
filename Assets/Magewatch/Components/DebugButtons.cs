@@ -214,7 +214,8 @@ namespace Magewatch.Components
         DrawCard(KnowledgeCard(58)),
         DrawCard(OpponentCard(59)),
         DrawCard(FlameScrollCard(60)),
-        DrawCard(OpponentCard(61))
+        DrawCard(OpponentCard(61)),
+        Cmd(MainButton("End Turn"))
       );
     }
 
@@ -255,13 +256,12 @@ namespace Magewatch.Components
     {
       RunCommands(
         PlayCard(MageCard(51, PlayerName.Enemy), RankValue.Rank2, FileValue.File2),
-        CreateCreature(NewCreature("Mage", 51, PlayerName.Enemy, 6, -1)),
+        CreateOrUpdate(NewCreature("Mage", 51, PlayerName.Enemy, 6, -1)),
         PlayCard(BerserkerCard(53, PlayerName.Enemy), RankValue.Rank3, FileValue.File1),
-        CreateCreature(NewCreature("Berserker", 53, PlayerName.Enemy, 5, -2)),
-        PlayCard(RageCard(55, PlayerName.Enemy), RankValue.Rank3, FileValue.File1)
-        // PlayCard(FlameScrollCard(57, PlayerName.Enemy), RankValue.Unknown, FileValue.Unknown),
-        // PlayCard(KnowledgeCard(59, PlayerName.Enemy), RankValue.Rank3, FileValue.File1),
-        // PlayCard(FlameScrollCard(61, PlayerName.Enemy), RankValue.Unknown, FileValue.Unknown)
+        CreateOrUpdate(NewCreature("Berserker", 53, PlayerName.Enemy, 5, -2)),
+        PlayCard(RageCard(55, PlayerName.Enemy), RankValue.Rank3, FileValue.File1),
+        CreateOrUpdate(NewCreature("Berserker", 53, PlayerName.Enemy, 5, -2, hasAttachment: true)),
+        PlayCard(FlameScrollCard(57, PlayerName.Enemy), RankValue.Unknown, FileValue.Unknown, 1000)
       );
     }
 
@@ -319,6 +319,18 @@ namespace Magewatch.Components
       };
     }
 
+    static Command MainButton(string text)
+    {
+      return new Command
+      {
+        UpdateInterface = new UpdateInterfaceCommand
+        {
+          MainButtonEnabled = text != null,
+          MainButtonText = text
+        }
+      };
+    }
+
     static List<Command> DrawCard(CardData cardData)
     {
       return new List<Command>
@@ -333,7 +345,7 @@ namespace Magewatch.Components
       };
     }
 
-    static List<Command> PlayCard(CardData cardData, RankValue rank, FileValue file)
+    static List<Command> PlayCard(CardData cardData, RankValue rank, FileValue file, int delayMilliseconds = 2000)
     {
       return new List<Command>
       {
@@ -342,6 +354,7 @@ namespace Magewatch.Components
           PlayCard = new PlayCardCommand
           {
             Card = cardData,
+            RevealDelayMilliseconds = delayMilliseconds,
             RankPosition = rank,
             FilePosition = file
           }
@@ -371,13 +384,13 @@ namespace Magewatch.Components
       };
     }
 
-    static List<Command> CreateCreature(CreatureData creatureData)
+    static List<Command> CreateOrUpdate(CreatureData creatureData)
     {
       return new List<Command>
       {
         new Command
         {
-          CreateCreature = new CreateCreatureCommand
+          CreateOrUpdateCreature = new CreateOrUpdateCreatureCommand
           {
             Creature = creatureData
           }
@@ -387,7 +400,7 @@ namespace Magewatch.Components
 
     static Command StockCreature(int id)
     {
-      var create = new CreateCreatureCommand();
+      var create = new CreateOrUpdateCreatureCommand();
       switch (id)
       {
         case 1:
@@ -409,7 +422,7 @@ namespace Magewatch.Components
 
       return new Command
       {
-        CreateCreature = create
+        CreateOrUpdateCreature = create
       };
     }
 

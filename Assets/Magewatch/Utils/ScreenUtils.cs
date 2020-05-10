@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Magewatch.Services;
 using UnityEngine;
 
 namespace Magewatch.Utils
 {
-  public sealed class ScreenUtils
+  public static class ScreenUtils
   {
-    public const int ReferencePixelsPerUnit = 100;
-    public const int CanvasReferenceWidth = 1920;
-    public const int CanvasReferenceHeight = 1080;
+    const int ReferencePixelsPerUnit = 100;
 
     public static Vector2 WorldToCanvasPosition(Vector2 worldPosition)
     {

@@ -103,7 +103,7 @@ namespace Magewatch.Components
       set => _animator.speed = value ? 0 : 1;
     }
 
-    void UpdateCreatureData(CreatureData newData)
+    public void UpdateCreatureData(CreatureData newData, IOnComplete onComplete = null)
     {
       transform.eulerAngles = newData.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
@@ -120,6 +120,7 @@ namespace Magewatch.Components
       }
 
       _creatureData = newData;
+      onComplete?.OnComplete();
     }
 
     public void SetPosition(RankValue rankValue, FileValue fileValue)

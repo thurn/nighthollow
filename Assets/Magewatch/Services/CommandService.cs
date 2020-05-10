@@ -66,6 +66,13 @@ namespace Magewatch.Services
           OnComplete();
         }
 
+        if (command.UpdateInterface != null)
+        {
+          var button = Root.Instance.MainButton;
+          button.SetEnabled(command.UpdateInterface.MainButtonEnabled);
+          button.SetText(command.UpdateInterface.MainButtonText);
+        }
+
         if (command.DrawCard != null)
         {
           _expectedCompletions++;
@@ -85,12 +92,19 @@ namespace Magewatch.Services
             .UpdatePlayerData(command.UpdatePlayer.Player, this);
         }
 
-        if (command.CreateCreature != null)
+        if (command.CreateOrUpdateCreature != null)
         {
           _expectedCompletions++;
-          var data = command.CreateCreature.Creature;
-          var creature = CreatureService.Create(data);
-          creature.FadeIn(this);
+          var data = command.CreateOrUpdateCreature.Creature;
+          if (_creatureService.HasCreature(data.CreatureId))
+          {
+            _creatureService.Get(data.CreatureId).UpdateCreatureData(data, this);
+          }
+          else
+          {
+            var creature = CreatureService.Create(data);
+            creature.FadeIn(this);
+          }
         }
 
         if (command.RemoveCreature != null)

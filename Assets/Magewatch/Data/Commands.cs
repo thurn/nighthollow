@@ -44,13 +44,15 @@ namespace Magewatch.Data
   {
     public WaitCommand Wait;
 
+    public UpdateInterfaceCommand UpdateInterface;
+
     public DrawCardCommand DrawCard;
 
     public PlayCardCommand PlayCard;
 
     public UpdatePlayerCommand UpdatePlayer;
 
-    public CreateCreatureCommand CreateCreature;
+    public CreateOrUpdateCreatureCommand CreateOrUpdateCreature;
 
     public RemoveCreatureCommand RemoveCreature;
 
@@ -62,6 +64,13 @@ namespace Magewatch.Data
   public sealed class WaitCommand
   {
     public int WaitTimeMilliseconds;
+  }
+
+  public sealed class UpdateInterfaceCommand
+  {
+    public bool MainButtonEnabled;
+
+    public string MainButtonText;
   }
 
   public sealed class DrawCardCommand
@@ -88,7 +97,7 @@ namespace Magewatch.Data
     public PlayerData Player;
   }
 
-  public sealed class CreateCreatureCommand
+  public sealed class CreateOrUpdateCreatureCommand
   {
     public CreatureData Creature;
   }
