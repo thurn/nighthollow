@@ -131,7 +131,7 @@ namespace Magewatch.Services
       foreach (var creature in _creatures.Values)
       {
         var distance = Vector2.Distance(position, creature.transform.position);
-        if (distance < closestDistance)
+        if (creature.Owner == owner && distance < closestDistance)
         {
           closestDistance = distance;
           result = creature;

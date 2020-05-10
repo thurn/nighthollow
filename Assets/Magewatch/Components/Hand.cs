@@ -103,7 +103,7 @@ namespace Magewatch.Components
 
     public void RevealMatchingCard(CardData cardData, Action<Card> onComplete = null)
     {
-      var card = _cards.Find(c => c.CardId == cardData.CardId);
+      var card = _cards.Find(c => c.CardId.Value == cardData.CardId.Value);
 
       if (!card)
       {
