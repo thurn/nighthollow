@@ -27,85 +27,87 @@ namespace Magewatch.API {
             "CglhcGkucHJvdG8SA2FwaSIbCgpDcmVhdHVyZUlkEg0KBXZhbHVlGAEgASgF",
             "IhcKBkNhcmRJZBINCgV2YWx1ZRgBIAEoBSJGCglJbmZsdWVuY2USKgoOaW5m",
             "bHVlbmNlX3R5cGUYASABKA4yEi5hcGkuSW5mbHVlbmNlVHlwZRINCgV2YWx1",
-            "ZRgCIAEoBSIYCgVBc3NldBIPCgdhZGRyZXNzGAEgASgJIuABCgpQbGF5ZXJE",
-            "YXRhEiQKC3BsYXllcl9uYW1lGAEgASgOMg8uYXBpLlBsYXllck5hbWUSFAoM",
-            "Y3VycmVudF9saWZlGAIgASgFEhQKDG1heGltdW1fbGlmZRgDIAEoBRIUCgxj",
-            "dXJyZW50X21hbmEYBCABKAUSFAoMbWF4aW11bV9tYW5hGAUgASgFEikKEWN1",
-            "cnJlbnRfaW5mbHVlbmNlGAYgAygLMg4uYXBpLkluZmx1ZW5jZRIpChFtYXhp",
-            "bXVtX2luZmx1ZW5jZRgHIAMoCzIOLmFwaS5JbmZsdWVuY2UiCAoGTm9Db3N0",
-            "IkkKDFN0YW5kYXJkQ29zdBIRCgltYW5hX2Nvc3QYASABKAUSJgoOaW5mbHVl",
-            "bmNlX2Nvc3QYAiADKAsyDi5hcGkuSW5mbHVlbmNlIhQKBFRleHQSDAoEdGV4",
-            "dBgBIAEoCSIrCg5BdHRhY2htZW50RGF0YRIZCgVpbWFnZRgBIAEoCzIKLmFw",
-            "aS5Bc3NldCIQCg5VbnRhcmdldGVkRGF0YSK/AwoIQ2FyZERhdGESHAoHY2Fy",
-            "ZF9pZBgBIAEoCzILLmFwaS5DYXJkSWQSGgoGcHJlZmFiGAIgASgLMgouYXBp",
-            "LkFzc2V0EgwKBG5hbWUYAyABKAkSHgoHbm9fY29zdBgEIAEoCzILLmFwaS5O",
-            "b0Nvc3RIABIqCg1zdGFuZGFyZF9jb3N0GAUgASgLMhEuYXBpLlN0YW5kYXJk",
-            "Q29zdEgAEh4KBW93bmVyGAYgASgOMg8uYXBpLlBsYXllck5hbWUSGQoFaW1h",
-            "Z2UYByABKAsyCi5hcGkuQXNzZXQSFwoEdGV4dBgIIAEoCzIJLmFwaS5UZXh0",
-            "EhMKC2lzX3JldmVhbGVkGAkgASgIEhUKDWNhbl9iZV9wbGF5ZWQYCiABKAgS",
-            "KgoNY3JlYXR1cmVfY2FyZBgLIAEoCzIRLmFwaS5DcmVhdHVyZURhdGFIARIu",
-            "Cg9hdHRhY2htZW50X2NhcmQYDCABKAsyEy5hcGkuQXR0YWNobWVudERhdGFI",
-            "ARIuCg91bnRhcmdldGVkX2NhcmQYDSABKAsyEy5hcGkuVW50YXJnZXRlZERh",
-            "dGFIAUIGCgRjb3N0QgsKCWNhcmRfdHlwZSKdAgoMQ3JlYXR1cmVEYXRhEiQK",
-            "C2NyZWF0dXJlX2lkGAEgASgLMg8uYXBpLkNyZWF0dXJlSWQSGgoGcHJlZmFi",
-            "GAIgASgLMgouYXBpLkFzc2V0Eh4KBW93bmVyGAMgASgOMg8uYXBpLlBsYXll",
-            "ck5hbWUSJQoNcmFua19wb3NpdGlvbhgEIAEoDjIOLmFwaS5SYW5rVmFsdWUS",
-            "JQoNZmlsZV9wb3NpdGlvbhgFIAEoDjIOLmFwaS5GaWxlVmFsdWUSFgoObWF4",
-            "aW11bV9oZWFsdGgYBiABKAUSGwoTY2FuX2JlX3JlcG9zaXRpb25lZBgHIAEo",
-            "CBIoCgthdHRhY2htZW50cxgIIAMoCzITLmFwaS5BdHRhY2htZW50RGF0YSIt",
-            "CgtXYWl0Q29tbWFuZBIeChZ3YWl0X3RpbWVfbWlsbGlzZWNvbmRzGAEgASgF",
-            "Ik8KFlVwZGF0ZUludGVyZmFjZUNvbW1hbmQSGwoTbWFpbl9idXR0b25fZW5h",
-            "YmxlZBgBIAEoCBIYChBtYWluX2J1dHRvbl90ZXh0GAIgASgJIjYKE1VwZGF0",
-            "ZVBsYXllckNvbW1hbmQSHwoGcGxheWVyGAEgASgLMg8uYXBpLlBsYXllckRh",
-            "dGEiLgoPRHJhd0NhcmRDb21tYW5kEhsKBGNhcmQYASABKAsyDS5hcGkuQ2Fy",
-            "ZERhdGEiLgoPUGxheUNhcmRDb21tYW5kEhsKBGNhcmQYASABKAsyDS5hcGku",
-            "Q2FyZERhdGEiRAodQ3JlYXRlT3JVcGRhdGVDcmVhdHVyZUNvbW1hbmQSIwoI",
-            "Y3JlYXR1cmUYASABKAsyES5hcGkuQ3JlYXR1cmVEYXRhIj0KFVJlbW92ZUNy",
-            "ZWF0dXJlQ29tbWFuZBIkCgtjcmVhdHVyZV9pZBgBIAEoCzIPLmFwaS5DcmVh",
-            "dHVyZUlkImcKEk1lbGVlRW5nYWdlQ29tbWFuZBIkCgtjcmVhdHVyZV9pZBgB",
+            "ZRgCIAEoBSI8CgVBc3NldBIPCgdhZGRyZXNzGAEgASgJEiIKCmFzc2V0X3R5",
+            "cGUYAiABKA4yDi5hcGkuQXNzZXRUeXBlIuABCgpQbGF5ZXJEYXRhEiQKC3Bs",
+            "YXllcl9uYW1lGAEgASgOMg8uYXBpLlBsYXllck5hbWUSFAoMY3VycmVudF9s",
+            "aWZlGAIgASgFEhQKDG1heGltdW1fbGlmZRgDIAEoBRIUCgxjdXJyZW50X21h",
+            "bmEYBCABKAUSFAoMbWF4aW11bV9tYW5hGAUgASgFEikKEWN1cnJlbnRfaW5m",
+            "bHVlbmNlGAYgAygLMg4uYXBpLkluZmx1ZW5jZRIpChFtYXhpbXVtX2luZmx1",
+            "ZW5jZRgHIAMoCzIOLmFwaS5JbmZsdWVuY2UiCAoGTm9Db3N0IkkKDFN0YW5k",
+            "YXJkQ29zdBIRCgltYW5hX2Nvc3QYASABKAUSJgoOaW5mbHVlbmNlX2Nvc3QY",
+            "AiADKAsyDi5hcGkuSW5mbHVlbmNlIhQKBFRleHQSDAoEdGV4dBgBIAEoCSIr",
+            "Cg5BdHRhY2htZW50RGF0YRIZCgVpbWFnZRgBIAEoCzIKLmFwaS5Bc3NldCIQ",
+            "Cg5VbnRhcmdldGVkRGF0YSK/AwoIQ2FyZERhdGESHAoHY2FyZF9pZBgBIAEo",
+            "CzILLmFwaS5DYXJkSWQSGgoGcHJlZmFiGAIgASgLMgouYXBpLkFzc2V0EgwK",
+            "BG5hbWUYAyABKAkSHgoHbm9fY29zdBgEIAEoCzILLmFwaS5Ob0Nvc3RIABIq",
+            "Cg1zdGFuZGFyZF9jb3N0GAUgASgLMhEuYXBpLlN0YW5kYXJkQ29zdEgAEh4K",
+            "BW93bmVyGAYgASgOMg8uYXBpLlBsYXllck5hbWUSGQoFaW1hZ2UYByABKAsy",
+            "Ci5hcGkuQXNzZXQSFwoEdGV4dBgIIAEoCzIJLmFwaS5UZXh0EhMKC2lzX3Jl",
+            "dmVhbGVkGAkgASgIEhUKDWNhbl9iZV9wbGF5ZWQYCiABKAgSKgoNY3JlYXR1",
+            "cmVfY2FyZBgLIAEoCzIRLmFwaS5DcmVhdHVyZURhdGFIARIuCg9hdHRhY2ht",
+            "ZW50X2NhcmQYDCABKAsyEy5hcGkuQXR0YWNobWVudERhdGFIARIuCg91bnRh",
+            "cmdldGVkX2NhcmQYDSABKAsyEy5hcGkuVW50YXJnZXRlZERhdGFIAUIGCgRj",
+            "b3N0QgsKCWNhcmRfdHlwZSKdAgoMQ3JlYXR1cmVEYXRhEiQKC2NyZWF0dXJl",
+            "X2lkGAEgASgLMg8uYXBpLkNyZWF0dXJlSWQSGgoGcHJlZmFiGAIgASgLMgou",
+            "YXBpLkFzc2V0Eh4KBW93bmVyGAMgASgOMg8uYXBpLlBsYXllck5hbWUSJQoN",
+            "cmFua19wb3NpdGlvbhgEIAEoDjIOLmFwaS5SYW5rVmFsdWUSJQoNZmlsZV9w",
+            "b3NpdGlvbhgFIAEoDjIOLmFwaS5GaWxlVmFsdWUSFgoObWF4aW11bV9oZWFs",
+            "dGgYBiABKAUSGwoTY2FuX2JlX3JlcG9zaXRpb25lZBgHIAEoCBIoCgthdHRh",
+            "Y2htZW50cxgIIAMoCzITLmFwaS5BdHRhY2htZW50RGF0YSItCgtXYWl0Q29t",
+            "bWFuZBIeChZ3YWl0X3RpbWVfbWlsbGlzZWNvbmRzGAEgASgFIk8KFlVwZGF0",
+            "ZUludGVyZmFjZUNvbW1hbmQSGwoTbWFpbl9idXR0b25fZW5hYmxlZBgBIAEo",
+            "CBIYChBtYWluX2J1dHRvbl90ZXh0GAIgASgJIjYKE1VwZGF0ZVBsYXllckNv",
+            "bW1hbmQSHwoGcGxheWVyGAEgASgLMg8uYXBpLlBsYXllckRhdGEiLgoPRHJh",
+            "d0NhcmRDb21tYW5kEhsKBGNhcmQYASABKAsyDS5hcGkuQ2FyZERhdGEiLgoP",
+            "UGxheUNhcmRDb21tYW5kEhsKBGNhcmQYASABKAsyDS5hcGkuQ2FyZERhdGEi",
+            "RAodQ3JlYXRlT3JVcGRhdGVDcmVhdHVyZUNvbW1hbmQSIwoIY3JlYXR1cmUY",
+            "ASABKAsyES5hcGkuQ3JlYXR1cmVEYXRhIj0KFVJlbW92ZUNyZWF0dXJlQ29t",
+            "bWFuZBIkCgtjcmVhdHVyZV9pZBgBIAEoCzIPLmFwaS5DcmVhdHVyZUlkImcK",
+            "Ek1lbGVlRW5nYWdlQ29tbWFuZBIkCgtjcmVhdHVyZV9pZBgBIAEoCzIPLmFw",
+            "aS5DcmVhdHVyZUlkEisKEnRhcmdldF9jcmVhdHVyZV9pZBgCIAEoCzIPLmFw",
+            "aS5DcmVhdHVyZUlkIjkKEUFwcGx5RGFtYWdlRWZmZWN0Eg4KBmRhbWFnZRgB",
+            "IAEoBRIUCgxraWxsc190YXJnZXQYAiABKAgidQoURmlyZVByb2plY3RpbGVF",
+            "ZmZlY3QSGgoGcHJlZmFiGAEgASgLMgouYXBpLkFzc2V0EiwKDGFwcGx5X2Rh",
+            "bWFnZRgCIAEoCzIWLmFwaS5BcHBseURhbWFnZUVmZmVjdBITCgthdF9vcHBv",
+            "bmVudBgDIAEoCCKQAgoNQXR0YWNrQ29tbWFuZBIkCgtjcmVhdHVyZV9pZBgB",
             "IAEoCzIPLmFwaS5DcmVhdHVyZUlkEisKEnRhcmdldF9jcmVhdHVyZV9pZBgC",
-            "IAEoCzIPLmFwaS5DcmVhdHVyZUlkIjkKEUFwcGx5RGFtYWdlRWZmZWN0Eg4K",
-            "BmRhbWFnZRgBIAEoBRIUCgxraWxsc190YXJnZXQYAiABKAgidQoURmlyZVBy",
-            "b2plY3RpbGVFZmZlY3QSGgoGcHJlZmFiGAEgASgLMgouYXBpLkFzc2V0EiwK",
-            "DGFwcGx5X2RhbWFnZRgCIAEoCzIWLmFwaS5BcHBseURhbWFnZUVmZmVjdBIT",
-            "CgthdF9vcHBvbmVudBgDIAEoCCKQAgoNQXR0YWNrQ29tbWFuZBIkCgtjcmVh",
-            "dHVyZV9pZBgBIAEoCzIPLmFwaS5DcmVhdHVyZUlkEisKEnRhcmdldF9jcmVh",
-            "dHVyZV9pZBgCIAEoCzIPLmFwaS5DcmVhdHVyZUlkEiIKBXNraWxsGAMgASgO",
-            "MhMuYXBpLlNraWxsQW5pbWF0aW9uEhEKCWhpdF9jb3VudBgEIAEoBRIuCgxh",
-            "cHBseV9kYW1hZ2UYBSABKAsyFi5hcGkuQXBwbHlEYW1hZ2VFZmZlY3RIABI0",
-            "Cg9maXJlX3Byb2plY3RpbGUYBiABKAsyGS5hcGkuRmlyZVByb2plY3RpbGVF",
-            "ZmZlY3RIAEIPCg1hdHRhY2tfZWZmZWN0Is8DCgdDb21tYW5kEiAKBHdhaXQY",
-            "ASABKAsyEC5hcGkuV2FpdENvbW1hbmRIABI3ChB1cGRhdGVfaW50ZXJmYWNl",
-            "GAIgASgLMhsuYXBpLlVwZGF0ZUludGVyZmFjZUNvbW1hbmRIABIpCglkcmF3",
-            "X2NhcmQYAyABKAsyFC5hcGkuRHJhd0NhcmRDb21tYW5kSAASKQoJcGxheV9j",
-            "YXJkGAQgASgLMhQuYXBpLlBsYXlDYXJkQ29tbWFuZEgAEjEKDXVwZGF0ZV9w",
-            "bGF5ZXIYBSABKAsyGC5hcGkuVXBkYXRlUGxheWVyQ29tbWFuZEgAEkcKGWNy",
-            "ZWF0ZV9vcl91cGRhdGVfY3JlYXR1cmUYBiABKAsyIi5hcGkuQ3JlYXRlT3JV",
-            "cGRhdGVDcmVhdHVyZUNvbW1hbmRIABI1Cg9yZW1vdmVfY3JlYXR1cmUYByAB",
-            "KAsyGi5hcGkuUmVtb3ZlQ3JlYXR1cmVDb21tYW5kSAASLwoMbWVsZWVfZW5n",
-            "YWdlGAggASgLMhcuYXBpLk1lbGVlRW5nYWdlQ29tbWFuZEgAEiQKBmF0dGFj",
-            "axgJIAEoCzISLmFwaS5BdHRhY2tDb21tYW5kSABCCQoHY29tbWFuZCIuCgxD",
-            "b21tYW5kR3JvdXASHgoIY29tbWFuZHMYASADKAsyDC5hcGkuQ29tbWFuZCI4",
-            "CgtDb21tYW5kTGlzdBIpCg5jb21tYW5kX2dyb3VwcxgBIAMoCzIRLmFwaS5D",
-            "b21tYW5kR3JvdXAqOQoKUGxheWVyTmFtZRIWChJQTEFZRVJfVU5TUEVDSUZJ",
-            "RUQQABIICgRVU0VSEAESCQoFRU5FTVkQAippCglSYW5rVmFsdWUSFAoQUkFO",
-            "S19VTlNQRUNJRklFRBAAEgoKBlJBTktfMBABEgoKBlJBTktfMRACEgoKBlJB",
-            "TktfMhADEgoKBlJBTktfMxAEEgoKBlJBTktfNBAFEgoKBlJBTktfNRAGKmkK",
-            "CUZpbGVWYWx1ZRIUChBGSUxFX1VOU1BFQ0lGSUVEEAASCgoGRklMRV8wEAES",
-            "CgoGRklMRV8xEAISCgoGRklMRV8yEAMSCgoGRklMRV8zEAQSCgoGRklMRV80",
-            "EAUSCgoGRklMRV81EAYqbgoNSW5mbHVlbmNlVHlwZRIeChpJTkZMVUVOQ0Vf",
-            "VFlQRV9VTlNQRUNJRklFRBAAEgkKBUxJR0hUEAESBwoDU0tZEAISCQoFRkxB",
-            "TUUQAxIHCgNJQ0UQBBIJCgVFQVJUSBAFEgoKBlNIQURPVxAGKmgKDlNraWxs",
-            "QW5pbWF0aW9uEhUKEVNLSUxMX1VOU1BFQ0lGSUVEEAASCwoHU0tJTExfMRAB",
-            "EgsKB1NLSUxMXzIQAhILCgdTS0lMTF8zEAMSCwoHU0tJTExfNBAEEgsKB1NL",
-            "SUxMXzUQBUIQqgINTWFnZXdhdGNoLkFQSWIGcHJvdG8z"));
+            "IAEoCzIPLmFwaS5DcmVhdHVyZUlkEiIKBXNraWxsGAMgASgOMhMuYXBpLlNr",
+            "aWxsQW5pbWF0aW9uEhEKCWhpdF9jb3VudBgEIAEoBRIuCgxhcHBseV9kYW1h",
+            "Z2UYBSABKAsyFi5hcGkuQXBwbHlEYW1hZ2VFZmZlY3RIABI0Cg9maXJlX3By",
+            "b2plY3RpbGUYBiABKAsyGS5hcGkuRmlyZVByb2plY3RpbGVFZmZlY3RIAEIP",
+            "Cg1hdHRhY2tfZWZmZWN0Is8DCgdDb21tYW5kEiAKBHdhaXQYASABKAsyEC5h",
+            "cGkuV2FpdENvbW1hbmRIABI3ChB1cGRhdGVfaW50ZXJmYWNlGAIgASgLMhsu",
+            "YXBpLlVwZGF0ZUludGVyZmFjZUNvbW1hbmRIABIpCglkcmF3X2NhcmQYAyAB",
+            "KAsyFC5hcGkuRHJhd0NhcmRDb21tYW5kSAASKQoJcGxheV9jYXJkGAQgASgL",
+            "MhQuYXBpLlBsYXlDYXJkQ29tbWFuZEgAEjEKDXVwZGF0ZV9wbGF5ZXIYBSAB",
+            "KAsyGC5hcGkuVXBkYXRlUGxheWVyQ29tbWFuZEgAEkcKGWNyZWF0ZV9vcl91",
+            "cGRhdGVfY3JlYXR1cmUYBiABKAsyIi5hcGkuQ3JlYXRlT3JVcGRhdGVDcmVh",
+            "dHVyZUNvbW1hbmRIABI1Cg9yZW1vdmVfY3JlYXR1cmUYByABKAsyGi5hcGku",
+            "UmVtb3ZlQ3JlYXR1cmVDb21tYW5kSAASLwoMbWVsZWVfZW5nYWdlGAggASgL",
+            "MhcuYXBpLk1lbGVlRW5nYWdlQ29tbWFuZEgAEiQKBmF0dGFjaxgJIAEoCzIS",
+            "LmFwaS5BdHRhY2tDb21tYW5kSABCCQoHY29tbWFuZCIuCgxDb21tYW5kR3Jv",
+            "dXASHgoIY29tbWFuZHMYASADKAsyDC5hcGkuQ29tbWFuZCI4CgtDb21tYW5k",
+            "TGlzdBIpCg5jb21tYW5kX2dyb3VwcxgBIAMoCzIRLmFwaS5Db21tYW5kR3Jv",
+            "dXAqOQoKUGxheWVyTmFtZRIWChJQTEFZRVJfVU5TUEVDSUZJRUQQABIICgRV",
+            "U0VSEAESCQoFRU5FTVkQAippCglSYW5rVmFsdWUSFAoQUkFOS19VTlNQRUNJ",
+            "RklFRBAAEgoKBlJBTktfMBABEgoKBlJBTktfMRACEgoKBlJBTktfMhADEgoK",
+            "BlJBTktfMxAEEgoKBlJBTktfNBAFEgoKBlJBTktfNRAGKmkKCUZpbGVWYWx1",
+            "ZRIUChBGSUxFX1VOU1BFQ0lGSUVEEAASCgoGRklMRV8wEAESCgoGRklMRV8x",
+            "EAISCgoGRklMRV8yEAMSCgoGRklMRV8zEAQSCgoGRklMRV80EAUSCgoGRklM",
+            "RV81EAYqaQoNSW5mbHVlbmNlVHlwZRIZChVJTkZMVUVOQ0VfVU5TUEVDSUZJ",
+            "RUQQABIJCgVMSUdIVBABEgcKA1NLWRACEgkKBUZMQU1FEAMSBwoDSUNFEAQS",
+            "CQoFRUFSVEgQBRIKCgZTSEFET1cQBipoCg5Ta2lsbEFuaW1hdGlvbhIVChFT",
+            "S0lMTF9VTlNQRUNJRklFRBAAEgsKB1NLSUxMXzEQARILCgdTS0lMTF8yEAIS",
+            "CwoHU0tJTExfMxADEgsKB1NLSUxMXzQQBBILCgdTS0lMTF81EAUqOQoJQXNz",
+            "ZXRUeXBlEhQKEFRZUEVfVU5TUEVDSUZJRUQQABIKCgZQUkVGQUIQARIKCgZT",
+            "UFJJVEUQAkIQqgINTWFnZXdhdGNoLkFQSWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.SkillAnimation), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.SkillAnimation), typeof(global::Magewatch.API.AssetType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CreatureId), global::Magewatch.API.CreatureId.Parser, new[]{ "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CardId), global::Magewatch.API.CardId.Parser, new[]{ "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Influence), global::Magewatch.API.Influence.Parser, new[]{ "InfluenceType", "Value" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Asset), global::Magewatch.API.Asset.Parser, new[]{ "Address" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Asset), global::Magewatch.API.Asset.Parser, new[]{ "Address", "AssetType" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayerData), global::Magewatch.API.PlayerData.Parser, new[]{ "PlayerName", "CurrentLife", "MaximumLife", "CurrentMana", "MaximumMana", "CurrentInfluence", "MaximumInfluence" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.NoCost), global::Magewatch.API.NoCost.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.StandardCost), global::Magewatch.API.StandardCost.Parser, new[]{ "ManaCost", "InfluenceCost" }, null, null, null, null),
@@ -161,7 +163,7 @@ namespace Magewatch.API {
   }
 
   public enum InfluenceType {
-    [pbr::OriginalName("INFLUENCE_TYPE_UNSPECIFIED")] Unspecified = 0,
+    [pbr::OriginalName("INFLUENCE_UNSPECIFIED")] InfluenceUnspecified = 0,
     [pbr::OriginalName("LIGHT")] Light = 1,
     [pbr::OriginalName("SKY")] Sky = 2,
     [pbr::OriginalName("FLAME")] Flame = 3,
@@ -177,6 +179,12 @@ namespace Magewatch.API {
     [pbr::OriginalName("SKILL_3")] Skill3 = 3,
     [pbr::OriginalName("SKILL_4")] Skill4 = 4,
     [pbr::OriginalName("SKILL_5")] Skill5 = 5,
+  }
+
+  public enum AssetType {
+    [pbr::OriginalName("TYPE_UNSPECIFIED")] TypeUnspecified = 0,
+    [pbr::OriginalName("PREFAB")] Prefab = 1,
+    [pbr::OriginalName("SPRITE")] Sprite = 2,
   }
 
   #endregion
@@ -477,7 +485,7 @@ namespace Magewatch.API {
 
     /// <summary>Field number for the "influence_type" field.</summary>
     public const int InfluenceTypeFieldNumber = 1;
-    private global::Magewatch.API.InfluenceType influenceType_ = global::Magewatch.API.InfluenceType.Unspecified;
+    private global::Magewatch.API.InfluenceType influenceType_ = global::Magewatch.API.InfluenceType.InfluenceUnspecified;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Magewatch.API.InfluenceType InfluenceType {
       get { return influenceType_; }
@@ -518,7 +526,7 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (InfluenceType != global::Magewatch.API.InfluenceType.Unspecified) hash ^= InfluenceType.GetHashCode();
+      if (InfluenceType != global::Magewatch.API.InfluenceType.InfluenceUnspecified) hash ^= InfluenceType.GetHashCode();
       if (Value != 0) hash ^= Value.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -533,7 +541,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (InfluenceType != global::Magewatch.API.InfluenceType.Unspecified) {
+      if (InfluenceType != global::Magewatch.API.InfluenceType.InfluenceUnspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) InfluenceType);
       }
@@ -549,7 +557,7 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (InfluenceType != global::Magewatch.API.InfluenceType.Unspecified) {
+      if (InfluenceType != global::Magewatch.API.InfluenceType.InfluenceUnspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) InfluenceType);
       }
       if (Value != 0) {
@@ -566,7 +574,7 @@ namespace Magewatch.API {
       if (other == null) {
         return;
       }
-      if (other.InfluenceType != global::Magewatch.API.InfluenceType.Unspecified) {
+      if (other.InfluenceType != global::Magewatch.API.InfluenceType.InfluenceUnspecified) {
         InfluenceType = other.InfluenceType;
       }
       if (other.Value != 0) {
@@ -623,6 +631,7 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public Asset(Asset other) : this() {
       address_ = other.address_;
+      assetType_ = other.assetType_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -642,6 +651,17 @@ namespace Magewatch.API {
       }
     }
 
+    /// <summary>Field number for the "asset_type" field.</summary>
+    public const int AssetTypeFieldNumber = 2;
+    private global::Magewatch.API.AssetType assetType_ = global::Magewatch.API.AssetType.TypeUnspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.AssetType AssetType {
+      get { return assetType_; }
+      set {
+        assetType_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as Asset);
@@ -656,6 +676,7 @@ namespace Magewatch.API {
         return true;
       }
       if (Address != other.Address) return false;
+      if (AssetType != other.AssetType) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -663,6 +684,7 @@ namespace Magewatch.API {
     public override int GetHashCode() {
       int hash = 1;
       if (Address.Length != 0) hash ^= Address.GetHashCode();
+      if (AssetType != global::Magewatch.API.AssetType.TypeUnspecified) hash ^= AssetType.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -680,6 +702,10 @@ namespace Magewatch.API {
         output.WriteRawTag(10);
         output.WriteString(Address);
       }
+      if (AssetType != global::Magewatch.API.AssetType.TypeUnspecified) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) AssetType);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -690,6 +716,9 @@ namespace Magewatch.API {
       int size = 0;
       if (Address.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Address);
+      }
+      if (AssetType != global::Magewatch.API.AssetType.TypeUnspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) AssetType);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -705,6 +734,9 @@ namespace Magewatch.API {
       if (other.Address.Length != 0) {
         Address = other.Address;
       }
+      if (other.AssetType != global::Magewatch.API.AssetType.TypeUnspecified) {
+        AssetType = other.AssetType;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -718,6 +750,10 @@ namespace Magewatch.API {
             break;
           case 10: {
             Address = input.ReadString();
+            break;
+          }
+          case 16: {
+            AssetType = (global::Magewatch.API.AssetType) input.ReadEnum();
             break;
           }
         }

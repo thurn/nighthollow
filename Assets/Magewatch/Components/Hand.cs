@@ -39,10 +39,7 @@ namespace Magewatch.Components
     [SerializeField] List<Card> _cards;
     [SerializeField] Hand _handOverridePosition;
 
-    public List<Card> Cards => _cards;
-
     public float FinalCardScale => _finalCardScale;
-    public float DragEndScale => _dragEndScale;
 
     void Start()
     {
@@ -60,7 +57,7 @@ namespace Magewatch.Components
 
     public void DrawCard(CardData cardData, IOnComplete onComplete, bool animate = true)
     {
-      var card = ComponentUtils.Instantiate<Card>(cardData.Prefab.Value, Root.Instance.MainCanvas);
+      var card = ComponentUtils.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas);
       card.Initialize(cardData);
       card.transform.position = _deckPosition.position;
       card.transform.localScale = Vector2.one * _initialCardScale;

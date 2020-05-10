@@ -16,31 +16,18 @@ using System;
 
 namespace Magewatch.Data
 {
-  public interface IAsset
+  public enum AssetType
   {
-    string GetAddress();
-    Type GetAssetType();
-    void SetValueUnchecked(object value);
+    Unknown,
+    Prefab,
+    Sprite
   }
 
   [Serializable]
-  public sealed class Asset<T> : IAsset
+  public sealed class Asset
   {
     public string Address;
-    public T Value;
 
-    public Asset(string address)
-    {
-      Address = address;
-    }
-
-    public string GetAddress() => Address;
-
-    public Type GetAssetType() => typeof(T);
-
-    public void SetValueUnchecked(object value)
-    {
-      Value = (T) value;
-    }
+    public AssetType AssetType;
   }
 }

@@ -19,14 +19,19 @@ using System.Linq;
 using Magewatch.Data;
 using Magewatch.Utils;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Magewatch.Services
 {
   public sealed class AssetService : MonoBehaviour
   {
+    readonly Dictionary<string, Object> _assetCache = new Dictionary<string, Object>();
+
+    public T Get<T>(Asset asset) where T : Object => _assetCache[asset.Address] as T;
+
     public void FetchAssets(CommandList commandList, Action onComplete)
     {
-      var assets = new List<IAsset>();
+      var assets = new List<Asset>();
       foreach (var step in commandList.Steps)
       {
         foreach (var command in step.Commands)
@@ -38,7 +43,7 @@ namespace Magewatch.Services
       StartCoroutine(PopulateAssets(assets, onComplete));
     }
 
-    void AddAssetsForCommand(Command command, List<IAsset> assets)
+    void AddAssetsForCommand(Command command, List<Asset> assets)
     {
       if (command.DrawCard != null)
       {
@@ -61,14 +66,15 @@ namespace Magewatch.Services
       }
     }
 
-    void AddCardAssets(CardData card, List<IAsset> assets)
+    void AddCardAssets(CardData card, List<Asset> assets)
     {
       assets.Add(card.Prefab);
       assets.Add(card.Image);
 
       if (card.CreatureData != null)
       {
-        AddCreatureAssets(card.CreatureData, assets);;
+        AddCreatureAssets(card.CreatureData, assets);
+        ;
       }
 
       if (card.AttachmentData != null)
@@ -77,7 +83,7 @@ namespace Magewatch.Services
       }
     }
 
-    void AddCreatureAssets(CreatureData creature, List<IAsset> assets)
+    void AddCreatureAssets(CreatureData creature, List<Asset> assets)
     {
       assets.Add(creature.Prefab);
 
@@ -90,12 +96,12 @@ namespace Magewatch.Services
       }
     }
 
-    void AddAttachmentAssets(AttachmentData attachmentData, List<IAsset> assets)
+    void AddAttachmentAssets(AttachmentData attachmentData, List<Asset> assets)
     {
       assets.Add(attachmentData.Image);
     }
 
-    void AddAttackEffectAssets(AttackEffect attackEffect, List<IAsset> assets)
+    void AddAttackEffectAssets(AttackEffect attackEffect, List<Asset> assets)
     {
       if (attackEffect.FireProjectile != null)
       {
@@ -103,10 +109,10 @@ namespace Magewatch.Services
       }
     }
 
-    IEnumerator PopulateAssets(List<IAsset> assets, Action onComplete)
+    IEnumerator PopulateAssets(List<Asset> assets, Action onComplete)
     {
       assets.RemoveAll(x => x == null);
-      var requests = assets.Select(asset => Resources.LoadAsync(asset.GetAddress(), asset.GetAssetType())).ToList();
+      var requests = assets.Select(asset => Resources.LoadAsync(asset.Address, TypeForAsset(asset))).ToList();
 
       foreach (var request in requests)
       {
@@ -115,11 +121,23 @@ namespace Magewatch.Services
 
       for (var i = 0; i < requests.Count; ++i)
       {
-        Errors.CheckNotNull(requests[i].asset, $"For address {assets[i].GetAddress()}");
-        assets[i].SetValueUnchecked(requests[i].asset);
+        _assetCache[assets[i].Address] = requests[i].asset;
       }
 
       onComplete();
+    }
+
+    Type TypeForAsset(Asset asset)
+    {
+      switch (asset.AssetType)
+      {
+        case AssetType.Prefab:
+          return typeof(GameObject);
+        case AssetType.Sprite:
+          return typeof(Sprite);
+        default:
+          throw Errors.UnknownEnumValue(asset.AssetType);
+      }
     }
   }
 }

@@ -52,7 +52,7 @@ enum FileValue {
 }
 
 enum InfluenceType {
-  INFLUENCE_TYPE_UNSPECIFIED = 0;
+  INFLUENCE_UNSPECIFIED = 0;
   LIGHT = 1;
   SKY = 2;
   FLAME = 3;
@@ -70,6 +70,12 @@ enum SkillAnimation {
   SKILL_5 = 5;
 }
 
+enum AssetType {
+  TYPE_UNSPECIFIED = 0;
+  PREFAB = 1;
+  SPRITE = 2;
+}
+
 message Influence {
   InfluenceType influence_type = 1;
   int32 value = 2;
@@ -77,6 +83,7 @@ message Influence {
 
 message Asset {
   string address = 1;
+  AssetType asset_type = 2;
 }
 
 message PlayerData {

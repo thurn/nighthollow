@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Magewatch.Data;
+using Magewatch.Services;
 using UnityEngine;
 
 namespace Magewatch.Components
@@ -25,7 +26,7 @@ namespace Magewatch.Components
     public void Initialize(AttachmentData attachmentData)
     {
       _attachmentData = attachmentData;
-      _spriteRenderer.sprite = attachmentData.Image.Value;
+      _spriteRenderer.sprite = Root.Instance.AssetService.Get<Sprite>(attachmentData.Image);
       transform.localScale = 0.5f * Vector2.one;
     }
 

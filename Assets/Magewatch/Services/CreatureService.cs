@@ -69,7 +69,8 @@ namespace Magewatch.Services
 
     public static Creature Create(CreatureData creatureData)
     {
-      var result = ComponentUtils.Instantiate<Creature>(creatureData.Prefab.Value);
+      var result =
+        ComponentUtils.Instantiate<Creature>(creatureData.Prefab);
       result.Initialize(creatureData);
       return result;
     }
@@ -155,7 +156,7 @@ namespace Magewatch.Services
       files[fileValue.ToIndex()].ShiftPositions(rankValue);
     }
 
-    List<File> GetFiles(PlayerName owner) => owner ==PlayerName.User ? _userFiles : _enemyFiles;
+    List<File> GetFiles(PlayerName owner) => owner == PlayerName.User ? _userFiles : _enemyFiles;
 
     static IEnumerable<FileValue> Closest(FileValue f)
     {

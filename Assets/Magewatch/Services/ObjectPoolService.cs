@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Magewatch.Utils;
+using Magewatch.Data;
 using UnityEngine;
 
 namespace Magewatch.Services
@@ -21,6 +21,11 @@ namespace Magewatch.Services
   public sealed class ObjectPoolService : MonoBehaviour
   {
     readonly Dictionary<int, List<GameObject>> _pools = new Dictionary<int, List<GameObject>>();
+
+    public GameObject Instantiate(Asset prefab, Vector3 position)
+    {
+      return Instantiate(Root.Instance.AssetService.Get<GameObject>(prefab));
+    }
 
     public GameObject Instantiate(GameObject prefab, Vector3 position)
     {

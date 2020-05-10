@@ -32,7 +32,7 @@ namespace Magewatch.Components
     public static void Instantiate(FireProjectileEffect fireProjectile, Transform firingPoint, Collider2D target,
       Action onHit)
     {
-      var projectile = Root.Instance.ObjectPoolService.Instantiate(fireProjectile.Prefab.Value, firingPoint.position);
+      var projectile = Root.Instance.ObjectPoolService.Instantiate(fireProjectile.Prefab, firingPoint.position);
       ComponentUtils.GetComponent<Projectile>(projectile).Initialize(firingPoint, target, onHit);
     }
 

@@ -111,7 +111,7 @@ namespace Magewatch.Components
       {
         name = newCardData.Name;
         _name.text = newCardData.Name;
-        _cardImage.sprite = newCardData.Image.Value;
+        _cardImage.sprite = Root.Instance.AssetService.Get<Sprite>(newCardData.Image);
         _text.text = newCardData.Text;
 
         if (newCardData.NoCost)

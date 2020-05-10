@@ -13,8 +13,6 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using UnityEngine;
-using Google.Protobuf;
 
 namespace Magewatch.Data
 {
@@ -151,7 +149,7 @@ namespace Magewatch.Data
 
   public sealed class FireProjectileEffect
   {
-    public Asset<GameObject> Prefab;
+    public Asset Prefab;
 
     public ApplyDamageEffect ApplyDamage;
 

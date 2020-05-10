@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Magewatch.Data
 {
@@ -22,13 +21,13 @@ namespace Magewatch.Data
   public sealed class CardData
   {
     public int CardId;
-    public Asset<GameObject> Prefab;
+    public Asset Prefab;
     public string Name;
     public bool NoCost;
     public int ManaCost;
     public List<Influence> InfluenceCost;
     public PlayerName Owner;
-    public Asset<Sprite> Image;
+    public Asset Image;
     public string Text;
     public bool IsRevealed;
     public bool CanBePlayed;

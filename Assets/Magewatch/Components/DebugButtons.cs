@@ -40,10 +40,15 @@ namespace Magewatch.Components
     public void Engage()
     {
       RunCommands(new List<Command>
-      {
-        MeleeEngage(1, 2),
-        MeleeEngage(2, 1)
-      });
+        {
+          StockCreature(1),
+          StockCreature(2)
+        },
+        new List<Command>
+        {
+          MeleeEngage(1, 2),
+          MeleeEngage(2, 1)
+        });
     }
 
     public void SetUp()
@@ -204,7 +209,7 @@ namespace Magewatch.Components
     public void DrawHands()
     {
       RunCommands(
-        DrawCard(MageCard(50, PlayerName.User, new StringValue{Value = "Derek"})),
+        DrawCard(MageCard(50, PlayerName.User, new StringValue {Value = "Derek"})),
         DrawCard(OpponentCard(51)),
         DrawCard(BerserkerCard(52)),
         DrawCard(OpponentCard(53)),
@@ -444,7 +449,7 @@ namespace Magewatch.Components
       return new CreatureData
       {
         CreatureId = id,
-        Prefab = new Asset<GameObject>($"Creatures/{name}"),
+        Prefab = Prefab($"Creatures/{name}"),
         Owner = owner,
         RankPosition = x.HasValue ? BoardPositions.ClosestRankForXPosition(x.Value, owner) : RankValue.Unknown,
         FilePosition = y.HasValue ? BoardPositions.ClosestFileForYPosition(y.Value) : FileValue.Unknown,
@@ -453,11 +458,11 @@ namespace Magewatch.Components
           {
             new AttachmentData
             {
-              Image = new Asset<Sprite>("Spells/SpellBook01_01")
+              Image = Sprite("Spells/SpellBook01_01")
             },
             new AttachmentData
             {
-              Image = new Asset<Sprite>("Spells/SpellBook01_06")
+              Image = Sprite("Spells/SpellBook01_06")
             }
           }
           : null
@@ -504,12 +509,12 @@ namespace Magewatch.Components
       return new CardData
       {
         CardId = id,
-        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Prefab = Prefab("Cards/FireCard"),
         Name = name == null ? "Mage" : name.ToString(),
         ManaCost = 2,
         InfluenceCost = Flame(1),
         Owner = owner,
-        Image = new Asset<Sprite>("CreatureImages/Mage"),
+        Image = Sprite("CreatureImages/Mage"),
         Text = "Whiz! Zoom!",
         IsRevealed = true,
         CanBePlayed = owner == PlayerName.User,
@@ -522,12 +527,12 @@ namespace Magewatch.Components
       return new CardData
       {
         CardId = id,
-        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Prefab = Prefab("Cards/FireCard"),
         Name = "Berserker",
         ManaCost = 4,
         InfluenceCost = Flame(2),
         Owner = owner,
-        Image = new Asset<Sprite>("CreatureImages/Berserker"),
+        Image = Sprite("CreatureImages/Berserker"),
         Text = "Anger & Axes",
         IsRevealed = true,
         CanBePlayed = owner == PlayerName.User,
@@ -540,18 +545,18 @@ namespace Magewatch.Components
       return new CardData
       {
         CardId = id,
-        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Prefab = Prefab("Cards/FireCard"),
         Name = "Rage",
         ManaCost = 3,
         InfluenceCost = LightAndFlame(1, 1),
         Owner = owner,
-        Image = new Asset<Sprite>("Spells/SpellBook01_01"),
+        Image = Sprite("Spells/SpellBook01_01"),
         Text = "Adds Bonus Damage on Hits",
         IsRevealed = true,
         CanBePlayed = owner == PlayerName.User,
         AttachmentData = new AttachmentData
         {
-          Image = new Asset<Sprite>("Spells/SpellBook01_01")
+          Image = Sprite("Spells/SpellBook01_01")
         }
       };
     }
@@ -561,18 +566,18 @@ namespace Magewatch.Components
       return new CardData
       {
         CardId = id,
-        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Prefab = Prefab("Cards/FireCard"),
         Name = "Knowledge",
         ManaCost = 3,
         InfluenceCost = Flame(3),
         Owner = owner,
-        Image = new Asset<Sprite>("Spells/SpellBook01_06"),
+        Image = Sprite("Spells/SpellBook01_06"),
         Text = "Extra Mana",
         IsRevealed = true,
         CanBePlayed = owner == PlayerName.User,
         AttachmentData = new AttachmentData
         {
-          Image = new Asset<Sprite>("Spells/SpellBook01_06")
+          Image = Sprite("Spells/SpellBook01_06")
         }
       };
     }
@@ -582,11 +587,11 @@ namespace Magewatch.Components
       return new CardData
       {
         CardId = id,
-        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Prefab = Prefab("Cards/FireCard"),
         Name = "Flame Scroll",
         NoCost = true,
         Owner = owner,
-        Image = new Asset<Sprite>("Scrolls/ScrollsAndBooks_21_t"),
+        Image = Sprite("Scrolls/ScrollsAndBooks_21_t"),
         Text = "Adds 1 mana and 1 flame influence",
         Untargeted = true,
         IsRevealed = true,
@@ -599,7 +604,7 @@ namespace Magewatch.Components
       return new CardData
       {
         CardId = id,
-        Prefab = new Asset<GameObject>("Cards/FireCard"),
+        Prefab = Prefab("Cards/FireCard"),
         Owner = PlayerName.Enemy,
         IsRevealed = false,
         CanBePlayed = false
@@ -649,7 +654,7 @@ namespace Magewatch.Components
           {
             FireProjectile = new FireProjectileEffect
             {
-              Prefab = new Asset<GameObject>("Projectiles/Projectile 2"),
+              Prefab = Prefab("Projectiles/Projectile 2"),
               ApplyDamage = new ApplyDamageEffect
               {
                 Damage = damage,
@@ -675,7 +680,7 @@ namespace Magewatch.Components
           {
             FireProjectile = new FireProjectileEffect
             {
-              Prefab = new Asset<GameObject>("Projectiles/Projectile 6"),
+              Prefab = Prefab("Projectiles/Projectile 6"),
               ApplyDamage = new ApplyDamageEffect
               {
                 Damage = 0,
@@ -687,5 +692,19 @@ namespace Magewatch.Components
         }
       };
     }
+
+    static Asset Prefab(string address) =>
+      new Asset
+      {
+        Address = address,
+        AssetType = AssetType.Prefab
+      };
+
+    static Asset Sprite(string address) =>
+      new Asset
+      {
+        Address = address,
+        AssetType = AssetType.Sprite
+      };
   }
 }

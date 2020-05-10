@@ -25,7 +25,7 @@ namespace Magewatch.Data
     public PlayerName Owner;
     public RankValue RankPosition;
     public FileValue FilePosition;
-    public Asset<GameObject> Prefab;
+    public Asset Prefab;
     public bool CanBeRepositioned;
     public List<AttachmentData> Attachments;
   }

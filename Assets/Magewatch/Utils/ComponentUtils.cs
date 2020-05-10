@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System;
+using Magewatch.Data;
+using Magewatch.Services;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -20,22 +22,10 @@ namespace Magewatch.Utils
 {
   public static class ComponentUtils
   {
-    public static GameObject InstantiateGameObject(GameObject prefab, Transform parent = null)
-    {
-      var result = Object.Instantiate(Errors.CheckNotNull(prefab), parent);
-      if (parent == null)
-      {
-        // Instantiate things safely out of view if there's no parent specified :)
-        result.transform.position = 1000f * Vector3.one;
-      }
-
-      return result;
-    }
-
-    public static T Instantiate<T>(GameObject prefab, Transform parent = null) where T : Component
+    public static T Instantiate<T>(Asset prefab, Transform parent = null) where T : Component
     {
       Errors.CheckNotNull(prefab);
-      var prefabObject = Object.Instantiate(prefab, parent);
+      var prefabObject = Object.Instantiate(Root.Instance.AssetService.Get<GameObject>(prefab), parent);
       var result = prefabObject.GetComponent<T>();
       if (!result)
       {

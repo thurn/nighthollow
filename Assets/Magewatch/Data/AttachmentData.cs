@@ -18,6 +18,6 @@ namespace Magewatch.Data
 {
   public sealed class AttachmentData
   {
-    public Asset<Sprite> Image;
+    public Asset Image;
   }
 }
