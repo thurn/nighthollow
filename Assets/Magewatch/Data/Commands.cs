@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using Google.Protobuf;
 
 namespace Magewatch.Data
 {

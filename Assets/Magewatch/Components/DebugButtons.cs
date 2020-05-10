@@ -14,6 +14,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Magewatch.Data;
 using Magewatch.Services;
 using UnityEngine;
@@ -203,7 +205,7 @@ namespace Magewatch.Components
     public void DrawHands()
     {
       RunCommands(
-        DrawCard(MageCard(50)),
+        DrawCard(MageCard(50, PlayerName.User, new StringValue{Value = "Derek"})),
         DrawCard(OpponentCard(51)),
         DrawCard(BerserkerCard(52)),
         DrawCard(OpponentCard(53)),
@@ -339,7 +341,7 @@ namespace Magewatch.Components
         {
           DrawCard = new DrawCardCommand
           {
-            Card = cardData
+            Card = cardData,
           }
         }
       };
@@ -498,13 +500,13 @@ namespace Magewatch.Components
       };
     }
 
-    static CardData MageCard(int id, PlayerName owner = PlayerName.User)
+    static CardData MageCard(int id, PlayerName owner = PlayerName.User, StringValue name = null)
     {
       return new CardData
       {
         CardId = id,
         Prefab = new Asset<GameObject>("Cards/FireCard"),
-        Name = "Mage",
+        Name = name == null ? "Mage" : name.ToString(),
         ManaCost = 2,
         InfluenceCost = Flame(1),
         Owner = owner,
