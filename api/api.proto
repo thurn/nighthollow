@@ -1,0 +1,9 @@
+syntax = "proto3";
+package api;
+
+option csharp_namespace = "Magewatch.API";
+
+message Command {
+  string name = 1;
+  int32 id = 2;
+}

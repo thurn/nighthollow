@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using Object = UnityEngine.Object;
 
 namespace Magewatch.Data
 {
