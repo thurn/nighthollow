@@ -14,7 +14,7 @@
 
 using System.Collections.Generic;
 using DG.Tweening;
-using Magewatch.Data;
+using Magewatch.API;
 using Magewatch.Services;
 using Magewatch.Utils;
 using TMPro;
@@ -112,29 +112,29 @@ namespace Magewatch.Components
         name = newCardData.Name;
         _name.text = newCardData.Name;
         _cardImage.sprite = Root.Instance.AssetService.Get<Sprite>(newCardData.Image);
-        _text.text = newCardData.Text;
+        _text.text = newCardData.Text.Text;
 
-        if (newCardData.NoCost)
+        switch (newCardData.CostCase)
         {
-          _cost.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-          _cost.text = newCardData.ManaCost.ToString();
-        }
+          case CardData.CostOneofCase.NoCost:
+            _cost.transform.parent.gameObject.SetActive(false);
+            break;
+          case CardData.CostOneofCase.StandardCost:
+            _cost.text = newCardData.StandardCost.ManaCost.ToString();
+            var addIndex = 0;
+            foreach (var influence in newCardData.StandardCost.InfluenceCost)
+            {
+              AddInfluence(influence, ref addIndex);
+            }
 
-        if (newCardData.InfluenceCost != null)
-        {
-          var addIndex = 0;
-          foreach (var influence in newCardData.InfluenceCost)
-          {
-            AddInfluence(influence, ref addIndex);
-          }
+            while (addIndex < _influence.Count)
+            {
+              _influence[addIndex++].enabled = false;
+            }
 
-          while (addIndex < _influence.Count)
-          {
-            _influence[addIndex++].enabled = false;
-          }
+            break;
+          default:
+            throw Errors.UnknownEnumValue(newCardData.CostCase);
         }
 
         if (_cardData?.CanBePlayed != newCardData.CanBePlayed)
@@ -173,7 +173,7 @@ namespace Magewatch.Components
       for (var i = 0; i < influence.Value; ++i)
       {
         _influence[addIndex].enabled = true;
-        _influence[addIndex].sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.Type);
+        _influence[addIndex].sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.InfluenceType);
         addIndex++;
       }
     }
@@ -190,7 +190,7 @@ namespace Magewatch.Components
       }
     }
 
-    public void OnDrag(PointerEventData eventData)
+    public void OnDrag(PointerEventData pointEventData)
     {
       if (_isDragging)
       {
@@ -201,23 +201,28 @@ namespace Magewatch.Components
         {
           if (!_overBoard)
           {
-            if (_cardData.CreatureData != null)
+            switch (_cardData.CardTypeCase)
             {
-              gameObject.SetActive(false);
-              var creature = CreatureService.Create(_cardData.CreatureData);
-              creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
+              case CardData.CardTypeOneofCase.CreatureCard:
+                gameObject.SetActive(false);
+                var creature = CreatureService.Create(_cardData.CreatureCard);
+                creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
+                break;
+              case CardData.CardTypeOneofCase.AttachmentCard:
+                gameObject.SetActive(false);
+                var attachment = Root.Instance.Prefabs.CreateAttachment();
+                attachment.Initialize(_cardData.AttachmentCard);
+                attachment.gameObject.AddComponent<AttachmentPositionSelector>()
+                  .Initialize(attachment, this);
+                break;
+              case CardData.CardTypeOneofCase.UntargetedCard:
+                break;
+              default:
+                throw Errors.UnknownEnumValue(_cardData.CardTypeCase);
             }
-            else if (_cardData.AttachmentData != null)
-            {
-              gameObject.SetActive(false);
-              var attachment = Root.Instance.Prefabs.CreateAttachment();
-              attachment.Initialize(_cardData.AttachmentData);
-              attachment.gameObject.AddComponent<AttachmentPositionSelector>()
-                .Initialize(attachment, this);
-            }
-          }
 
-          _overBoard = true;
+            _overBoard = true;
+          }
         }
         else
         {
@@ -243,7 +248,7 @@ namespace Magewatch.Components
 
         if (_cardData.CanBePlayed &&
             mousePosition.y >= 0 &&
-            _cardData.Untargeted)
+            _cardData.CardTypeCase == CardData.CardTypeOneofCase.UntargetedCard)
         {
           _isDragging = false;
           _hand.RemoveFromHand(this);

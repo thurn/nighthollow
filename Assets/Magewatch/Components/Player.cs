@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Linq;
 using DG.Tweening;
-using Magewatch.Data;
+using Magewatch.API;
 using Magewatch.Services;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,32 +67,28 @@ namespace Magewatch.Components
       _lifeText.text = $"{playerData.CurrentLife}/{playerData.MaximumLife}";
       _manaText.text = $"{playerData.CurrentMana}/{playerData.MaximumMana}";
 
-      if (firstUpdate || _playerData.CurrentInfluence != playerData.CurrentInfluence ||
-          _playerData.MaximumInfluence != playerData.MaximumInfluence)
+      foreach (Transform child in _influenceRow)
       {
-        foreach (Transform child in _influenceRow)
-        {
-          Destroy(child.gameObject);
-        }
+        Destroy(child.gameObject);
+      }
 
-        foreach (var influence in playerData.MaximumInfluence)
+      foreach (var influence in playerData.MaximumInfluence)
+      {
+        var currentInfluence = InfluenceCount(playerData, influence.InfluenceType);
+        for (var i = 0; i < influence.Value; ++i)
         {
-          var currentInfluence = InfluenceCount(playerData, influence.Type);
-          for (var i = 0; i < influence.Value; ++i)
+          var image = Root.Instance.Prefabs.CreateInfluence();
+          image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.InfluenceType);
+          image.transform.SetParent(_influenceRow);
+          if (i >= currentInfluence)
           {
-            var image = Root.Instance.Prefabs.CreateInfluence();
-            image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.Type);
-            image.transform.SetParent(_influenceRow);
-            if (i >= currentInfluence)
-            {
-              image.color = Color.gray;
-            }
+            image.color = Color.gray;
           }
         }
       }
     }
 
     int InfluenceCount(PlayerData playerData, InfluenceType influenceType) =>
-      playerData.CurrentInfluence.Find(i => i.Type == influenceType)?.Value ?? 0;
+      playerData.CurrentInfluence.ToList().Find(i => i.InfluenceType == influenceType)?.Value ?? 0;
   }
 }

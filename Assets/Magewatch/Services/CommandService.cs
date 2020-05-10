@@ -14,7 +14,7 @@
 
 using System.Collections;
 using DG.Tweening;
-using Magewatch.Data;
+using Magewatch.API;
 using Magewatch.Utils;
 using UnityEngine;
 
@@ -56,7 +56,7 @@ namespace Magewatch.Services
       _expectedCompletions = 0;
 
       var actionCount = 0;
-      foreach (var command in _currentCommandList.Steps[_currentStep].Commands)
+      foreach (var command in _currentCommandList.CommandGroups[_currentStep].Commands)
       {
         actionCount++;
         if (command.Wait != null)
@@ -149,7 +149,7 @@ namespace Magewatch.Services
       {
         var sequence = DOTween.Sequence();
         sequence.Insert(delay, card.transform.DOScale(0, 0.2f));
-        if (rank != RankValue.Unknown && file != FileValue.Unknown)
+        if (rank != RankValue.RankUnspecified && file != FileValue.FileUnspecified)
         {
           var canvasPosition =
             ScreenUtils.WorldToCanvasPosition(new Vector2(rank.ToXPosition(owner), file.ToYPosition()));
@@ -181,7 +181,7 @@ namespace Magewatch.Services
       if (_completionCount >= _expectedCompletions)
       {
         _currentStep++;
-        if (_currentStep < _currentCommandList.Steps.Count)
+        if (_currentStep < _currentCommandList.CommandGroups.Count)
         {
           StartCoroutine(RunCommandStep());
         }

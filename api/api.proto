@@ -115,7 +115,7 @@ message StandardCost {
   repeated Influence influence_cost = 2;
 }
 
-message Text {
+message RichText {
   string text = 1;
 }
 
@@ -143,7 +143,7 @@ message CardData {
   // Sprite to display as the card image
   Asset image = 7;
 
-  Text text = 8;
+  RichText text = 8;
 
   // Should this card be shown face-up?
   bool is_revealed = 9;
@@ -196,8 +196,18 @@ message DrawCardCommand {
   CardData card = 1;
 }
 
+// Reveal an *existing* card and (optionally) animate it to a specific
+// rank/file position
 message PlayCardCommand {
   CardData card = 1;
+
+  // How long to show the card for before animating it away. 0 should be
+  // interpreted as allowing the client to pick its own default.
+  int32 reveal_delay_milliseconds = 2;
+
+  RankValue rank_position = 3;
+
+  FileValue file_position = 4;
 }
 
 message CreateOrUpdateCreatureCommand {

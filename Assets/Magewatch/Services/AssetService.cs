@@ -16,7 +16,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Magewatch.Data;
+using Magewatch.API;
 using Magewatch.Utils;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -32,7 +32,7 @@ namespace Magewatch.Services
     public void FetchAssets(CommandList commandList, Action onComplete)
     {
       var assets = new List<Asset>();
-      foreach (var step in commandList.Steps)
+      foreach (var step in commandList.CommandGroups)
       {
         foreach (var command in step.Commands)
         {
@@ -62,7 +62,7 @@ namespace Magewatch.Services
 
       if (command.Attack != null)
       {
-        AddAttackEffectAssets(command.Attack.AttackEffect, assets);
+        AddAttackAssets(command.Attack, assets);
       }
     }
 
@@ -71,15 +71,14 @@ namespace Magewatch.Services
       assets.Add(card.Prefab);
       assets.Add(card.Image);
 
-      if (card.CreatureData != null)
+      switch (card.CardTypeCase)
       {
-        AddCreatureAssets(card.CreatureData, assets);
-        ;
-      }
-
-      if (card.AttachmentData != null)
-      {
-        AddAttachmentAssets(card.AttachmentData, assets);
+        case CardData.CardTypeOneofCase.CreatureCard:
+          AddCreatureAssets(card.CreatureCard, assets);
+          break;
+        case CardData.CardTypeOneofCase.AttachmentCard:
+          AddAttachmentAssets(card.AttachmentCard, assets);
+          break;
       }
     }
 
@@ -101,11 +100,13 @@ namespace Magewatch.Services
       assets.Add(attachmentData.Image);
     }
 
-    void AddAttackEffectAssets(AttackEffect attackEffect, List<Asset> assets)
+    void AddAttackAssets(AttackCommand attack, List<Asset> assets)
     {
-      if (attackEffect.FireProjectile != null)
+      switch (attack.AttackEffectCase)
       {
-        assets.Add(attackEffect.FireProjectile.Prefab);
+        case AttackCommand.AttackEffectOneofCase.FireProjectile:
+          assets.Add(attack.FireProjectile.Prefab);
+          break;
       }
     }
 

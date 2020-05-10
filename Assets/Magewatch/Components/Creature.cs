@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using DG.Tweening;
-using Magewatch.Data;
+using Magewatch.API;
 using Magewatch.Services;
 using Magewatch.Utils;
 using UnityEngine;
@@ -107,17 +106,14 @@ namespace Magewatch.Components
     {
       transform.eulerAngles = newData.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
-      if (newData.RankPosition != RankValue.Unknown && newData.FilePosition != FileValue.Unknown)
+      if (newData.RankPosition != RankValue.RankUnspecified && newData.FilePosition != FileValue.FileUnspecified)
       {
         transform.position = new Vector2(
           newData.RankPosition.ToXPosition(newData.Owner),
           newData.FilePosition.ToYPosition());
       }
 
-      if (_creatureData?.Attachments != newData.Attachments)
-      {
-        _attachmentDisplay.SetAttachments(newData.Attachments);
-      }
+      _attachmentDisplay.SetAttachments(newData.Attachments);
 
       _creatureData = newData;
       onComplete?.OnComplete();
@@ -136,11 +132,6 @@ namespace Magewatch.Components
 
       _attachmentDisplay.AddAttachment(attachment, () =>
       {
-        if (_creatureData.Attachments == null)
-        {
-          _creatureData.Attachments = new List<AttachmentData>();
-        }
-
         _creatureData.Attachments.Add(attachment.AttachmentData);
         UpdateCreatureData(_creatureData);
       });
@@ -168,25 +159,25 @@ namespace Magewatch.Components
       _onComplete = onComplete;
       _state = CreatureState.Attack;
 
-      switch (attack.SkillNumber)
+      switch (attack.Skill)
       {
-        case Skill.Skill1:
+        case SkillAnimation.Skill1:
           _animator.SetTrigger(Skill1);
           break;
-        case Skill.Skill2:
+        case SkillAnimation.Skill2:
           _animator.SetTrigger(Skill2);
           break;
-        case Skill.Skill3:
+        case SkillAnimation.Skill3:
           _animator.SetTrigger(Skill3);
           break;
-        case Skill.Skill4:
+        case SkillAnimation.Skill4:
           _animator.SetTrigger(Skill4);
           break;
-        case Skill.Skill5:
+        case SkillAnimation.Skill5:
           _animator.SetTrigger(Skill5);
           break;
         default:
-          throw Errors.UnknownEnumValue(attack.SkillNumber);
+          throw Errors.UnknownEnumValue(attack.Skill);
       }
     }
 
@@ -268,38 +259,42 @@ namespace Magewatch.Components
       Errors.CheckNotNull(_currentAttack);
       Errors.CheckNotNull(_currentTarget);
 
-      if (_currentAttack.AttackEffect.ApplyDamage != null)
+      switch (_currentAttack.AttackEffectCase)
       {
-        _currentTarget.ApplyAttackDamage(_currentAttack.AttackEffect.ApplyDamage, _onComplete);
-        if (_currentAttack.AttackEffect.ApplyDamage.KillsTarget)
-        {
-          _currentTarget = null;
-        }
-        _onComplete = null;
-      }
+        case AttackCommand.AttackEffectOneofCase.ApplyDamage:
+          _currentTarget.ApplyAttackDamage(_currentAttack.ApplyDamage, _onComplete);
+          if (_currentAttack.ApplyDamage.KillsTarget)
+          {
+            _currentTarget = null;
+          }
 
-      if (_currentAttack.AttackEffect.FireProjectile != null)
-      {
-        var fireProjectile = _currentAttack.AttackEffect.FireProjectile;
-        var target = fireProjectile.AtOpponent
-          ? Root.Instance.GetPlayer(Owner.GetOpponent()).Collider
-          : _currentTarget._collider;
-        Projectile.Instantiate(fireProjectile, _meleePosition, target, () =>
-        {
-          if (fireProjectile.AtOpponent)
+          _onComplete = null;
+          break;
+        case AttackCommand.AttackEffectOneofCase.FireProjectile:
+          var fireProjectile = _currentAttack.FireProjectile;
+          var target = fireProjectile.AtOpponent
+            ? Root.Instance.GetPlayer(Owner.GetOpponent()).Collider
+            : _currentTarget._collider;
+          Projectile.Instantiate(fireProjectile, _meleePosition, target, () =>
           {
-            _onComplete.OnComplete();
-          }
-          else
-          {
-            _currentTarget.ApplyAttackDamage(fireProjectile.ApplyDamage, _onComplete);
-            if (fireProjectile.ApplyDamage.KillsTarget)
+            if (fireProjectile.AtOpponent)
             {
-              _currentTarget = null;
+              _onComplete.OnComplete();
             }
-            _onComplete = null;
-          }
-        });
+            else
+            {
+              _currentTarget.ApplyAttackDamage(fireProjectile.ApplyDamage, _onComplete);
+              if (fireProjectile.ApplyDamage.KillsTarget)
+              {
+                _currentTarget = null;
+              }
+
+              _onComplete = null;
+            }
+          });
+          break;
+        default:
+          throw Errors.UnknownEnumValue(_currentAttack.AttackEffectCase);
       }
     }
 
