@@ -24,18 +24,4339 @@ namespace Magewatch.API {
     static ApiReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CglhcGkucHJvdG8SA2FwaSIjCgdDb21tYW5kEgwKBG5hbWUYASABKAkSCgoC",
-            "aWQYAiABKAVCEKoCDU1hZ2V3YXRjaC5BUEliBnByb3RvMw=="));
+            "CglhcGkucHJvdG8SA2FwaSIbCgpDcmVhdHVyZUlkEg0KBXZhbHVlGAEgASgF",
+            "IhcKBkNhcmRJZBINCgV2YWx1ZRgBIAEoBSJGCglJbmZsdWVuY2USKgoOaW5m",
+            "bHVlbmNlX3R5cGUYASABKA4yEi5hcGkuSW5mbHVlbmNlVHlwZRINCgV2YWx1",
+            "ZRgCIAEoBSIYCgVBc3NldBIPCgdhZGRyZXNzGAEgASgJIuABCgpQbGF5ZXJE",
+            "YXRhEiQKC3BsYXllcl9uYW1lGAEgASgOMg8uYXBpLlBsYXllck5hbWUSFAoM",
+            "Y3VycmVudF9saWZlGAIgASgFEhQKDG1heGltdW1fbGlmZRgDIAEoBRIUCgxj",
+            "dXJyZW50X21hbmEYBCABKAUSFAoMbWF4aW11bV9tYW5hGAUgASgFEikKEWN1",
+            "cnJlbnRfaW5mbHVlbmNlGAYgAygLMg4uYXBpLkluZmx1ZW5jZRIpChFtYXhp",
+            "bXVtX2luZmx1ZW5jZRgHIAMoCzIOLmFwaS5JbmZsdWVuY2UiCAoGTm9Db3N0",
+            "IkkKDFN0YW5kYXJkQ29zdBIRCgltYW5hX2Nvc3QYASABKAUSJgoOaW5mbHVl",
+            "bmNlX2Nvc3QYAiADKAsyDi5hcGkuSW5mbHVlbmNlIhQKBFRleHQSDAoEdGV4",
+            "dBgBIAEoCSIrCg5BdHRhY2htZW50RGF0YRIZCgVpbWFnZRgBIAEoCzIKLmFw",
+            "aS5Bc3NldCIQCg5VbnRhcmdldGVkRGF0YSK/AwoIQ2FyZERhdGESHAoHY2Fy",
+            "ZF9pZBgBIAEoCzILLmFwaS5DYXJkSWQSGgoGcHJlZmFiGAIgASgLMgouYXBp",
+            "LkFzc2V0EgwKBG5hbWUYAyABKAkSHgoHbm9fY29zdBgEIAEoCzILLmFwaS5O",
+            "b0Nvc3RIABIqCg1zdGFuZGFyZF9jb3N0GAUgASgLMhEuYXBpLlN0YW5kYXJk",
+            "Q29zdEgAEh4KBW93bmVyGAYgASgOMg8uYXBpLlBsYXllck5hbWUSGQoFaW1h",
+            "Z2UYByABKAsyCi5hcGkuQXNzZXQSFwoEdGV4dBgIIAEoCzIJLmFwaS5UZXh0",
+            "EhMKC2lzX3JldmVhbGVkGAkgASgIEhUKDWNhbl9iZV9wbGF5ZWQYCiABKAgS",
+            "KgoNY3JlYXR1cmVfY2FyZBgLIAEoCzIRLmFwaS5DcmVhdHVyZURhdGFIARIu",
+            "Cg9hdHRhY2htZW50X2NhcmQYDCABKAsyEy5hcGkuQXR0YWNobWVudERhdGFI",
+            "ARIuCg91bnRhcmdldGVkX2NhcmQYDSABKAsyEy5hcGkuVW50YXJnZXRlZERh",
+            "dGFIAUIGCgRjb3N0QgsKCWNhcmRfdHlwZSKdAgoMQ3JlYXR1cmVEYXRhEiQK",
+            "C2NyZWF0dXJlX2lkGAEgASgLMg8uYXBpLkNyZWF0dXJlSWQSGgoGcHJlZmFi",
+            "GAIgASgLMgouYXBpLkFzc2V0Eh4KBW93bmVyGAMgASgOMg8uYXBpLlBsYXll",
+            "ck5hbWUSJQoNcmFua19wb3NpdGlvbhgEIAEoDjIOLmFwaS5SYW5rVmFsdWUS",
+            "JQoNZmlsZV9wb3NpdGlvbhgFIAEoDjIOLmFwaS5GaWxlVmFsdWUSFgoObWF4",
+            "aW11bV9oZWFsdGgYBiABKAUSGwoTY2FuX2JlX3JlcG9zaXRpb25lZBgHIAEo",
+            "CBIoCgthdHRhY2htZW50cxgIIAMoCzITLmFwaS5BdHRhY2htZW50RGF0YSIt",
+            "CgtXYWl0Q29tbWFuZBIeChZ3YWl0X3RpbWVfbWlsbGlzZWNvbmRzGAEgASgF",
+            "Ik8KFlVwZGF0ZUludGVyZmFjZUNvbW1hbmQSGwoTbWFpbl9idXR0b25fZW5h",
+            "YmxlZBgBIAEoCBIYChBtYWluX2J1dHRvbl90ZXh0GAIgASgJIjYKE1VwZGF0",
+            "ZVBsYXllckNvbW1hbmQSHwoGcGxheWVyGAEgASgLMg8uYXBpLlBsYXllckRh",
+            "dGEiLgoPRHJhd0NhcmRDb21tYW5kEhsKBGNhcmQYASABKAsyDS5hcGkuQ2Fy",
+            "ZERhdGEiLgoPUGxheUNhcmRDb21tYW5kEhsKBGNhcmQYASABKAsyDS5hcGku",
+            "Q2FyZERhdGEiRAodQ3JlYXRlT3JVcGRhdGVDcmVhdHVyZUNvbW1hbmQSIwoI",
+            "Y3JlYXR1cmUYASABKAsyES5hcGkuQ3JlYXR1cmVEYXRhIj0KFVJlbW92ZUNy",
+            "ZWF0dXJlQ29tbWFuZBIkCgtjcmVhdHVyZV9pZBgBIAEoCzIPLmFwaS5DcmVh",
+            "dHVyZUlkImcKEk1lbGVlRW5nYWdlQ29tbWFuZBIkCgtjcmVhdHVyZV9pZBgB",
+            "IAEoCzIPLmFwaS5DcmVhdHVyZUlkEisKEnRhcmdldF9jcmVhdHVyZV9pZBgC",
+            "IAEoCzIPLmFwaS5DcmVhdHVyZUlkIjkKEUFwcGx5RGFtYWdlRWZmZWN0Eg4K",
+            "BmRhbWFnZRgBIAEoBRIUCgxraWxsc190YXJnZXQYAiABKAgidQoURmlyZVBy",
+            "b2plY3RpbGVFZmZlY3QSGgoGcHJlZmFiGAEgASgLMgouYXBpLkFzc2V0EiwK",
+            "DGFwcGx5X2RhbWFnZRgCIAEoCzIWLmFwaS5BcHBseURhbWFnZUVmZmVjdBIT",
+            "CgthdF9vcHBvbmVudBgDIAEoCCKQAgoNQXR0YWNrQ29tbWFuZBIkCgtjcmVh",
+            "dHVyZV9pZBgBIAEoCzIPLmFwaS5DcmVhdHVyZUlkEisKEnRhcmdldF9jcmVh",
+            "dHVyZV9pZBgCIAEoCzIPLmFwaS5DcmVhdHVyZUlkEiIKBXNraWxsGAMgASgO",
+            "MhMuYXBpLlNraWxsQW5pbWF0aW9uEhEKCWhpdF9jb3VudBgEIAEoBRIuCgxh",
+            "cHBseV9kYW1hZ2UYBSABKAsyFi5hcGkuQXBwbHlEYW1hZ2VFZmZlY3RIABI0",
+            "Cg9maXJlX3Byb2plY3RpbGUYBiABKAsyGS5hcGkuRmlyZVByb2plY3RpbGVF",
+            "ZmZlY3RIAEIPCg1hdHRhY2tfZWZmZWN0Is8DCgdDb21tYW5kEiAKBHdhaXQY",
+            "ASABKAsyEC5hcGkuV2FpdENvbW1hbmRIABI3ChB1cGRhdGVfaW50ZXJmYWNl",
+            "GAIgASgLMhsuYXBpLlVwZGF0ZUludGVyZmFjZUNvbW1hbmRIABIpCglkcmF3",
+            "X2NhcmQYAyABKAsyFC5hcGkuRHJhd0NhcmRDb21tYW5kSAASKQoJcGxheV9j",
+            "YXJkGAQgASgLMhQuYXBpLlBsYXlDYXJkQ29tbWFuZEgAEjEKDXVwZGF0ZV9w",
+            "bGF5ZXIYBSABKAsyGC5hcGkuVXBkYXRlUGxheWVyQ29tbWFuZEgAEkcKGWNy",
+            "ZWF0ZV9vcl91cGRhdGVfY3JlYXR1cmUYBiABKAsyIi5hcGkuQ3JlYXRlT3JV",
+            "cGRhdGVDcmVhdHVyZUNvbW1hbmRIABI1Cg9yZW1vdmVfY3JlYXR1cmUYByAB",
+            "KAsyGi5hcGkuUmVtb3ZlQ3JlYXR1cmVDb21tYW5kSAASLwoMbWVsZWVfZW5n",
+            "YWdlGAggASgLMhcuYXBpLk1lbGVlRW5nYWdlQ29tbWFuZEgAEiQKBmF0dGFj",
+            "axgJIAEoCzISLmFwaS5BdHRhY2tDb21tYW5kSABCCQoHY29tbWFuZCIuCgxD",
+            "b21tYW5kR3JvdXASHgoIY29tbWFuZHMYASADKAsyDC5hcGkuQ29tbWFuZCI4",
+            "CgtDb21tYW5kTGlzdBIpCg5jb21tYW5kX2dyb3VwcxgBIAMoCzIRLmFwaS5D",
+            "b21tYW5kR3JvdXAqOQoKUGxheWVyTmFtZRIWChJQTEFZRVJfVU5TUEVDSUZJ",
+            "RUQQABIICgRVU0VSEAESCQoFRU5FTVkQAippCglSYW5rVmFsdWUSFAoQUkFO",
+            "S19VTlNQRUNJRklFRBAAEgoKBlJBTktfMBABEgoKBlJBTktfMRACEgoKBlJB",
+            "TktfMhADEgoKBlJBTktfMxAEEgoKBlJBTktfNBAFEgoKBlJBTktfNRAGKmkK",
+            "CUZpbGVWYWx1ZRIUChBGSUxFX1VOU1BFQ0lGSUVEEAASCgoGRklMRV8wEAES",
+            "CgoGRklMRV8xEAISCgoGRklMRV8yEAMSCgoGRklMRV8zEAQSCgoGRklMRV80",
+            "EAUSCgoGRklMRV81EAYqbgoNSW5mbHVlbmNlVHlwZRIeChpJTkZMVUVOQ0Vf",
+            "VFlQRV9VTlNQRUNJRklFRBAAEgkKBUxJR0hUEAESBwoDU0tZEAISCQoFRkxB",
+            "TUUQAxIHCgNJQ0UQBBIJCgVFQVJUSBAFEgoKBlNIQURPVxAGKmgKDlNraWxs",
+            "QW5pbWF0aW9uEhUKEVNLSUxMX1VOU1BFQ0lGSUVEEAASCwoHU0tJTExfMRAB",
+            "EgsKB1NLSUxMXzIQAhILCgdTS0lMTF8zEAMSCwoHU0tJTExfNBAEEgsKB1NL",
+            "SUxMXzUQBUIQqgINTWFnZXdhdGNoLkFQSWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Command), global::Magewatch.API.Command.Parser, new[]{ "Name", "Id" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.SkillAnimation), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CreatureId), global::Magewatch.API.CreatureId.Parser, new[]{ "Value" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CardId), global::Magewatch.API.CardId.Parser, new[]{ "Value" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Influence), global::Magewatch.API.Influence.Parser, new[]{ "InfluenceType", "Value" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Asset), global::Magewatch.API.Asset.Parser, new[]{ "Address" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayerData), global::Magewatch.API.PlayerData.Parser, new[]{ "PlayerName", "CurrentLife", "MaximumLife", "CurrentMana", "MaximumMana", "CurrentInfluence", "MaximumInfluence" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.NoCost), global::Magewatch.API.NoCost.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.StandardCost), global::Magewatch.API.StandardCost.Parser, new[]{ "ManaCost", "InfluenceCost" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Text), global::Magewatch.API.Text.Parser, new[]{ "Text_" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.AttachmentData), global::Magewatch.API.AttachmentData.Parser, new[]{ "Image" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.UntargetedData), global::Magewatch.API.UntargetedData.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CardData), global::Magewatch.API.CardData.Parser, new[]{ "CardId", "Prefab", "Name", "NoCost", "StandardCost", "Owner", "Image", "Text", "IsRevealed", "CanBePlayed", "CreatureCard", "AttachmentCard", "UntargetedCard" }, new[]{ "Cost", "CardType" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CreatureData), global::Magewatch.API.CreatureData.Parser, new[]{ "CreatureId", "Prefab", "Owner", "RankPosition", "FilePosition", "MaximumHealth", "CanBeRepositioned", "Attachments" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.WaitCommand), global::Magewatch.API.WaitCommand.Parser, new[]{ "WaitTimeMilliseconds" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.UpdateInterfaceCommand), global::Magewatch.API.UpdateInterfaceCommand.Parser, new[]{ "MainButtonEnabled", "MainButtonText" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.UpdatePlayerCommand), global::Magewatch.API.UpdatePlayerCommand.Parser, new[]{ "Player" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.DrawCardCommand), global::Magewatch.API.DrawCardCommand.Parser, new[]{ "Card" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayCardCommand), global::Magewatch.API.PlayCardCommand.Parser, new[]{ "Card" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CreateOrUpdateCreatureCommand), global::Magewatch.API.CreateOrUpdateCreatureCommand.Parser, new[]{ "Creature" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.RemoveCreatureCommand), global::Magewatch.API.RemoveCreatureCommand.Parser, new[]{ "CreatureId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MeleeEngageCommand), global::Magewatch.API.MeleeEngageCommand.Parser, new[]{ "CreatureId", "TargetCreatureId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.ApplyDamageEffect), global::Magewatch.API.ApplyDamageEffect.Parser, new[]{ "Damage", "KillsTarget" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.FireProjectileEffect), global::Magewatch.API.FireProjectileEffect.Parser, new[]{ "Prefab", "ApplyDamage", "AtOpponent" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.AttackCommand), global::Magewatch.API.AttackCommand.Parser, new[]{ "CreatureId", "TargetCreatureId", "Skill", "HitCount", "ApplyDamage", "FireProjectile" }, new[]{ "AttackEffect" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Command), global::Magewatch.API.Command.Parser, new[]{ "Wait", "UpdateInterface", "DrawCard", "PlayCard", "UpdatePlayer", "CreateOrUpdateCreature", "RemoveCreature", "MeleeEngage", "Attack" }, new[]{ "Command" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CommandGroup), global::Magewatch.API.CommandGroup.Parser, new[]{ "Commands" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CommandList), global::Magewatch.API.CommandList.Parser, new[]{ "CommandGroups" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
+  #region Enums
+  public enum PlayerName {
+    [pbr::OriginalName("PLAYER_UNSPECIFIED")] PlayerUnspecified = 0,
+    [pbr::OriginalName("USER")] User = 1,
+    [pbr::OriginalName("ENEMY")] Enemy = 2,
+  }
+
+  public enum RankValue {
+    [pbr::OriginalName("RANK_UNSPECIFIED")] RankUnspecified = 0,
+    [pbr::OriginalName("RANK_0")] Rank0 = 1,
+    [pbr::OriginalName("RANK_1")] Rank1 = 2,
+    [pbr::OriginalName("RANK_2")] Rank2 = 3,
+    [pbr::OriginalName("RANK_3")] Rank3 = 4,
+    [pbr::OriginalName("RANK_4")] Rank4 = 5,
+    [pbr::OriginalName("RANK_5")] Rank5 = 6,
+  }
+
+  public enum FileValue {
+    [pbr::OriginalName("FILE_UNSPECIFIED")] FileUnspecified = 0,
+    [pbr::OriginalName("FILE_0")] File0 = 1,
+    [pbr::OriginalName("FILE_1")] File1 = 2,
+    [pbr::OriginalName("FILE_2")] File2 = 3,
+    [pbr::OriginalName("FILE_3")] File3 = 4,
+    [pbr::OriginalName("FILE_4")] File4 = 5,
+    [pbr::OriginalName("FILE_5")] File5 = 6,
+  }
+
+  public enum InfluenceType {
+    [pbr::OriginalName("INFLUENCE_TYPE_UNSPECIFIED")] Unspecified = 0,
+    [pbr::OriginalName("LIGHT")] Light = 1,
+    [pbr::OriginalName("SKY")] Sky = 2,
+    [pbr::OriginalName("FLAME")] Flame = 3,
+    [pbr::OriginalName("ICE")] Ice = 4,
+    [pbr::OriginalName("EARTH")] Earth = 5,
+    [pbr::OriginalName("SHADOW")] Shadow = 6,
+  }
+
+  public enum SkillAnimation {
+    [pbr::OriginalName("SKILL_UNSPECIFIED")] SkillUnspecified = 0,
+    [pbr::OriginalName("SKILL_1")] Skill1 = 1,
+    [pbr::OriginalName("SKILL_2")] Skill2 = 2,
+    [pbr::OriginalName("SKILL_3")] Skill3 = 3,
+    [pbr::OriginalName("SKILL_4")] Skill4 = 4,
+    [pbr::OriginalName("SKILL_5")] Skill5 = 5,
+  }
+
+  #endregion
+
   #region Messages
+  public sealed partial class CreatureId : pb::IMessage<CreatureId> {
+    private static readonly pb::MessageParser<CreatureId> _parser = new pb::MessageParser<CreatureId>(() => new CreatureId());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CreatureId> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[0]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CreatureId() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CreatureId(CreatureId other) : this() {
+      value_ = other.value_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CreatureId Clone() {
+      return new CreatureId(this);
+    }
+
+    /// <summary>Field number for the "value" field.</summary>
+    public const int ValueFieldNumber = 1;
+    private int value_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Value {
+      get { return value_; }
+      set {
+        value_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CreatureId);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CreatureId other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Value != other.Value) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Value != 0) hash ^= Value.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Value != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Value);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Value != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Value);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CreatureId other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Value != 0) {
+        Value = other.Value;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Value = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class CardId : pb::IMessage<CardId> {
+    private static readonly pb::MessageParser<CardId> _parser = new pb::MessageParser<CardId>(() => new CardId());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CardId> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CardId() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CardId(CardId other) : this() {
+      value_ = other.value_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CardId Clone() {
+      return new CardId(this);
+    }
+
+    /// <summary>Field number for the "value" field.</summary>
+    public const int ValueFieldNumber = 1;
+    private int value_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Value {
+      get { return value_; }
+      set {
+        value_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CardId);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CardId other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Value != other.Value) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Value != 0) hash ^= Value.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Value != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Value);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Value != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Value);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CardId other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Value != 0) {
+        Value = other.Value;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Value = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class Influence : pb::IMessage<Influence> {
+    private static readonly pb::MessageParser<Influence> _parser = new pb::MessageParser<Influence>(() => new Influence());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<Influence> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Influence() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Influence(Influence other) : this() {
+      influenceType_ = other.influenceType_;
+      value_ = other.value_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Influence Clone() {
+      return new Influence(this);
+    }
+
+    /// <summary>Field number for the "influence_type" field.</summary>
+    public const int InfluenceTypeFieldNumber = 1;
+    private global::Magewatch.API.InfluenceType influenceType_ = global::Magewatch.API.InfluenceType.Unspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.InfluenceType InfluenceType {
+      get { return influenceType_; }
+      set {
+        influenceType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "value" field.</summary>
+    public const int ValueFieldNumber = 2;
+    private int value_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Value {
+      get { return value_; }
+      set {
+        value_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as Influence);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(Influence other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (InfluenceType != other.InfluenceType) return false;
+      if (Value != other.Value) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (InfluenceType != global::Magewatch.API.InfluenceType.Unspecified) hash ^= InfluenceType.GetHashCode();
+      if (Value != 0) hash ^= Value.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (InfluenceType != global::Magewatch.API.InfluenceType.Unspecified) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) InfluenceType);
+      }
+      if (Value != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Value);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (InfluenceType != global::Magewatch.API.InfluenceType.Unspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) InfluenceType);
+      }
+      if (Value != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Value);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(Influence other) {
+      if (other == null) {
+        return;
+      }
+      if (other.InfluenceType != global::Magewatch.API.InfluenceType.Unspecified) {
+        InfluenceType = other.InfluenceType;
+      }
+      if (other.Value != 0) {
+        Value = other.Value;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            InfluenceType = (global::Magewatch.API.InfluenceType) input.ReadEnum();
+            break;
+          }
+          case 16: {
+            Value = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class Asset : pb::IMessage<Asset> {
+    private static readonly pb::MessageParser<Asset> _parser = new pb::MessageParser<Asset>(() => new Asset());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<Asset> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Asset() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Asset(Asset other) : this() {
+      address_ = other.address_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Asset Clone() {
+      return new Asset(this);
+    }
+
+    /// <summary>Field number for the "address" field.</summary>
+    public const int AddressFieldNumber = 1;
+    private string address_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Address {
+      get { return address_; }
+      set {
+        address_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as Asset);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(Asset other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Address != other.Address) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Address.Length != 0) hash ^= Address.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Address.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Address);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Address.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Address);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(Asset other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Address.Length != 0) {
+        Address = other.Address;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Address = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class PlayerData : pb::IMessage<PlayerData> {
+    private static readonly pb::MessageParser<PlayerData> _parser = new pb::MessageParser<PlayerData>(() => new PlayerData());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<PlayerData> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerData() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerData(PlayerData other) : this() {
+      playerName_ = other.playerName_;
+      currentLife_ = other.currentLife_;
+      maximumLife_ = other.maximumLife_;
+      currentMana_ = other.currentMana_;
+      maximumMana_ = other.maximumMana_;
+      currentInfluence_ = other.currentInfluence_.Clone();
+      maximumInfluence_ = other.maximumInfluence_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerData Clone() {
+      return new PlayerData(this);
+    }
+
+    /// <summary>Field number for the "player_name" field.</summary>
+    public const int PlayerNameFieldNumber = 1;
+    private global::Magewatch.API.PlayerName playerName_ = global::Magewatch.API.PlayerName.PlayerUnspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.PlayerName PlayerName {
+      get { return playerName_; }
+      set {
+        playerName_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "current_life" field.</summary>
+    public const int CurrentLifeFieldNumber = 2;
+    private int currentLife_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CurrentLife {
+      get { return currentLife_; }
+      set {
+        currentLife_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "maximum_life" field.</summary>
+    public const int MaximumLifeFieldNumber = 3;
+    private int maximumLife_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MaximumLife {
+      get { return maximumLife_; }
+      set {
+        maximumLife_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "current_mana" field.</summary>
+    public const int CurrentManaFieldNumber = 4;
+    private int currentMana_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CurrentMana {
+      get { return currentMana_; }
+      set {
+        currentMana_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "maximum_mana" field.</summary>
+    public const int MaximumManaFieldNumber = 5;
+    private int maximumMana_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MaximumMana {
+      get { return maximumMana_; }
+      set {
+        maximumMana_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "current_influence" field.</summary>
+    public const int CurrentInfluenceFieldNumber = 6;
+    private static readonly pb::FieldCodec<global::Magewatch.API.Influence> _repeated_currentInfluence_codec
+        = pb::FieldCodec.ForMessage(50, global::Magewatch.API.Influence.Parser);
+    private readonly pbc::RepeatedField<global::Magewatch.API.Influence> currentInfluence_ = new pbc::RepeatedField<global::Magewatch.API.Influence>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Magewatch.API.Influence> CurrentInfluence {
+      get { return currentInfluence_; }
+    }
+
+    /// <summary>Field number for the "maximum_influence" field.</summary>
+    public const int MaximumInfluenceFieldNumber = 7;
+    private static readonly pb::FieldCodec<global::Magewatch.API.Influence> _repeated_maximumInfluence_codec
+        = pb::FieldCodec.ForMessage(58, global::Magewatch.API.Influence.Parser);
+    private readonly pbc::RepeatedField<global::Magewatch.API.Influence> maximumInfluence_ = new pbc::RepeatedField<global::Magewatch.API.Influence>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Magewatch.API.Influence> MaximumInfluence {
+      get { return maximumInfluence_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as PlayerData);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(PlayerData other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (PlayerName != other.PlayerName) return false;
+      if (CurrentLife != other.CurrentLife) return false;
+      if (MaximumLife != other.MaximumLife) return false;
+      if (CurrentMana != other.CurrentMana) return false;
+      if (MaximumMana != other.MaximumMana) return false;
+      if(!currentInfluence_.Equals(other.currentInfluence_)) return false;
+      if(!maximumInfluence_.Equals(other.maximumInfluence_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (PlayerName != global::Magewatch.API.PlayerName.PlayerUnspecified) hash ^= PlayerName.GetHashCode();
+      if (CurrentLife != 0) hash ^= CurrentLife.GetHashCode();
+      if (MaximumLife != 0) hash ^= MaximumLife.GetHashCode();
+      if (CurrentMana != 0) hash ^= CurrentMana.GetHashCode();
+      if (MaximumMana != 0) hash ^= MaximumMana.GetHashCode();
+      hash ^= currentInfluence_.GetHashCode();
+      hash ^= maximumInfluence_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (PlayerName != global::Magewatch.API.PlayerName.PlayerUnspecified) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) PlayerName);
+      }
+      if (CurrentLife != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(CurrentLife);
+      }
+      if (MaximumLife != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(MaximumLife);
+      }
+      if (CurrentMana != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(CurrentMana);
+      }
+      if (MaximumMana != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(MaximumMana);
+      }
+      currentInfluence_.WriteTo(output, _repeated_currentInfluence_codec);
+      maximumInfluence_.WriteTo(output, _repeated_maximumInfluence_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (PlayerName != global::Magewatch.API.PlayerName.PlayerUnspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) PlayerName);
+      }
+      if (CurrentLife != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CurrentLife);
+      }
+      if (MaximumLife != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaximumLife);
+      }
+      if (CurrentMana != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CurrentMana);
+      }
+      if (MaximumMana != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaximumMana);
+      }
+      size += currentInfluence_.CalculateSize(_repeated_currentInfluence_codec);
+      size += maximumInfluence_.CalculateSize(_repeated_maximumInfluence_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(PlayerData other) {
+      if (other == null) {
+        return;
+      }
+      if (other.PlayerName != global::Magewatch.API.PlayerName.PlayerUnspecified) {
+        PlayerName = other.PlayerName;
+      }
+      if (other.CurrentLife != 0) {
+        CurrentLife = other.CurrentLife;
+      }
+      if (other.MaximumLife != 0) {
+        MaximumLife = other.MaximumLife;
+      }
+      if (other.CurrentMana != 0) {
+        CurrentMana = other.CurrentMana;
+      }
+      if (other.MaximumMana != 0) {
+        MaximumMana = other.MaximumMana;
+      }
+      currentInfluence_.Add(other.currentInfluence_);
+      maximumInfluence_.Add(other.maximumInfluence_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            PlayerName = (global::Magewatch.API.PlayerName) input.ReadEnum();
+            break;
+          }
+          case 16: {
+            CurrentLife = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            MaximumLife = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            CurrentMana = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            MaximumMana = input.ReadInt32();
+            break;
+          }
+          case 50: {
+            currentInfluence_.AddEntriesFrom(input, _repeated_currentInfluence_codec);
+            break;
+          }
+          case 58: {
+            maximumInfluence_.AddEntriesFrom(input, _repeated_maximumInfluence_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class NoCost : pb::IMessage<NoCost> {
+    private static readonly pb::MessageParser<NoCost> _parser = new pb::MessageParser<NoCost>(() => new NoCost());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<NoCost> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public NoCost() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public NoCost(NoCost other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public NoCost Clone() {
+      return new NoCost(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as NoCost);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(NoCost other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(NoCost other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class StandardCost : pb::IMessage<StandardCost> {
+    private static readonly pb::MessageParser<StandardCost> _parser = new pb::MessageParser<StandardCost>(() => new StandardCost());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<StandardCost> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[6]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public StandardCost() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public StandardCost(StandardCost other) : this() {
+      manaCost_ = other.manaCost_;
+      influenceCost_ = other.influenceCost_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public StandardCost Clone() {
+      return new StandardCost(this);
+    }
+
+    /// <summary>Field number for the "mana_cost" field.</summary>
+    public const int ManaCostFieldNumber = 1;
+    private int manaCost_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ManaCost {
+      get { return manaCost_; }
+      set {
+        manaCost_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "influence_cost" field.</summary>
+    public const int InfluenceCostFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::Magewatch.API.Influence> _repeated_influenceCost_codec
+        = pb::FieldCodec.ForMessage(18, global::Magewatch.API.Influence.Parser);
+    private readonly pbc::RepeatedField<global::Magewatch.API.Influence> influenceCost_ = new pbc::RepeatedField<global::Magewatch.API.Influence>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Magewatch.API.Influence> InfluenceCost {
+      get { return influenceCost_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as StandardCost);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(StandardCost other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (ManaCost != other.ManaCost) return false;
+      if(!influenceCost_.Equals(other.influenceCost_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ManaCost != 0) hash ^= ManaCost.GetHashCode();
+      hash ^= influenceCost_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (ManaCost != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(ManaCost);
+      }
+      influenceCost_.WriteTo(output, _repeated_influenceCost_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (ManaCost != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ManaCost);
+      }
+      size += influenceCost_.CalculateSize(_repeated_influenceCost_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(StandardCost other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ManaCost != 0) {
+        ManaCost = other.ManaCost;
+      }
+      influenceCost_.Add(other.influenceCost_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            ManaCost = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            influenceCost_.AddEntriesFrom(input, _repeated_influenceCost_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class Text : pb::IMessage<Text> {
+    private static readonly pb::MessageParser<Text> _parser = new pb::MessageParser<Text>(() => new Text());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<Text> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[7]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Text() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Text(Text other) : this() {
+      text_ = other.text_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Text Clone() {
+      return new Text(this);
+    }
+
+    /// <summary>Field number for the "text" field.</summary>
+    public const int Text_FieldNumber = 1;
+    private string text_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Text_ {
+      get { return text_; }
+      set {
+        text_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as Text);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(Text other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Text_ != other.Text_) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Text_.Length != 0) hash ^= Text_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Text_.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Text_);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Text_.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Text_);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(Text other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Text_.Length != 0) {
+        Text_ = other.Text_;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Text_ = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class AttachmentData : pb::IMessage<AttachmentData> {
+    private static readonly pb::MessageParser<AttachmentData> _parser = new pb::MessageParser<AttachmentData>(() => new AttachmentData());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<AttachmentData> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[8]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AttachmentData() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AttachmentData(AttachmentData other) : this() {
+      image_ = other.image_ != null ? other.image_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AttachmentData Clone() {
+      return new AttachmentData(this);
+    }
+
+    /// <summary>Field number for the "image" field.</summary>
+    public const int ImageFieldNumber = 1;
+    private global::Magewatch.API.Asset image_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.Asset Image {
+      get { return image_; }
+      set {
+        image_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as AttachmentData);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(AttachmentData other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Image, other.Image)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (image_ != null) hash ^= Image.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (image_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Image);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (image_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Image);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(AttachmentData other) {
+      if (other == null) {
+        return;
+      }
+      if (other.image_ != null) {
+        if (image_ == null) {
+          Image = new global::Magewatch.API.Asset();
+        }
+        Image.MergeFrom(other.Image);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (image_ == null) {
+              Image = new global::Magewatch.API.Asset();
+            }
+            input.ReadMessage(Image);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class UntargetedData : pb::IMessage<UntargetedData> {
+    private static readonly pb::MessageParser<UntargetedData> _parser = new pb::MessageParser<UntargetedData>(() => new UntargetedData());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<UntargetedData> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[9]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UntargetedData() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UntargetedData(UntargetedData other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UntargetedData Clone() {
+      return new UntargetedData(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as UntargetedData);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(UntargetedData other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(UntargetedData other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class CardData : pb::IMessage<CardData> {
+    private static readonly pb::MessageParser<CardData> _parser = new pb::MessageParser<CardData>(() => new CardData());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CardData> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[10]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CardData() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CardData(CardData other) : this() {
+      cardId_ = other.cardId_ != null ? other.cardId_.Clone() : null;
+      prefab_ = other.prefab_ != null ? other.prefab_.Clone() : null;
+      name_ = other.name_;
+      owner_ = other.owner_;
+      image_ = other.image_ != null ? other.image_.Clone() : null;
+      text_ = other.text_ != null ? other.text_.Clone() : null;
+      isRevealed_ = other.isRevealed_;
+      canBePlayed_ = other.canBePlayed_;
+      switch (other.CostCase) {
+        case CostOneofCase.NoCost:
+          NoCost = other.NoCost.Clone();
+          break;
+        case CostOneofCase.StandardCost:
+          StandardCost = other.StandardCost.Clone();
+          break;
+      }
+
+      switch (other.CardTypeCase) {
+        case CardTypeOneofCase.CreatureCard:
+          CreatureCard = other.CreatureCard.Clone();
+          break;
+        case CardTypeOneofCase.AttachmentCard:
+          AttachmentCard = other.AttachmentCard.Clone();
+          break;
+        case CardTypeOneofCase.UntargetedCard:
+          UntargetedCard = other.UntargetedCard.Clone();
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CardData Clone() {
+      return new CardData(this);
+    }
+
+    /// <summary>Field number for the "card_id" field.</summary>
+    public const int CardIdFieldNumber = 1;
+    private global::Magewatch.API.CardId cardId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CardId CardId {
+      get { return cardId_; }
+      set {
+        cardId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "prefab" field.</summary>
+    public const int PrefabFieldNumber = 2;
+    private global::Magewatch.API.Asset prefab_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.Asset Prefab {
+      get { return prefab_; }
+      set {
+        prefab_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 3;
+    private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "no_cost" field.</summary>
+    public const int NoCostFieldNumber = 4;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.NoCost NoCost {
+      get { return costCase_ == CostOneofCase.NoCost ? (global::Magewatch.API.NoCost) cost_ : null; }
+      set {
+        cost_ = value;
+        costCase_ = value == null ? CostOneofCase.None : CostOneofCase.NoCost;
+      }
+    }
+
+    /// <summary>Field number for the "standard_cost" field.</summary>
+    public const int StandardCostFieldNumber = 5;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.StandardCost StandardCost {
+      get { return costCase_ == CostOneofCase.StandardCost ? (global::Magewatch.API.StandardCost) cost_ : null; }
+      set {
+        cost_ = value;
+        costCase_ = value == null ? CostOneofCase.None : CostOneofCase.StandardCost;
+      }
+    }
+
+    /// <summary>Field number for the "owner" field.</summary>
+    public const int OwnerFieldNumber = 6;
+    private global::Magewatch.API.PlayerName owner_ = global::Magewatch.API.PlayerName.PlayerUnspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.PlayerName Owner {
+      get { return owner_; }
+      set {
+        owner_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "image" field.</summary>
+    public const int ImageFieldNumber = 7;
+    private global::Magewatch.API.Asset image_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.Asset Image {
+      get { return image_; }
+      set {
+        image_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "text" field.</summary>
+    public const int TextFieldNumber = 8;
+    private global::Magewatch.API.Text text_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.Text Text {
+      get { return text_; }
+      set {
+        text_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "is_revealed" field.</summary>
+    public const int IsRevealedFieldNumber = 9;
+    private bool isRevealed_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsRevealed {
+      get { return isRevealed_; }
+      set {
+        isRevealed_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "can_be_played" field.</summary>
+    public const int CanBePlayedFieldNumber = 10;
+    private bool canBePlayed_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool CanBePlayed {
+      get { return canBePlayed_; }
+      set {
+        canBePlayed_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "creature_card" field.</summary>
+    public const int CreatureCardFieldNumber = 11;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CreatureData CreatureCard {
+      get { return cardTypeCase_ == CardTypeOneofCase.CreatureCard ? (global::Magewatch.API.CreatureData) cardType_ : null; }
+      set {
+        cardType_ = value;
+        cardTypeCase_ = value == null ? CardTypeOneofCase.None : CardTypeOneofCase.CreatureCard;
+      }
+    }
+
+    /// <summary>Field number for the "attachment_card" field.</summary>
+    public const int AttachmentCardFieldNumber = 12;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.AttachmentData AttachmentCard {
+      get { return cardTypeCase_ == CardTypeOneofCase.AttachmentCard ? (global::Magewatch.API.AttachmentData) cardType_ : null; }
+      set {
+        cardType_ = value;
+        cardTypeCase_ = value == null ? CardTypeOneofCase.None : CardTypeOneofCase.AttachmentCard;
+      }
+    }
+
+    /// <summary>Field number for the "untargeted_card" field.</summary>
+    public const int UntargetedCardFieldNumber = 13;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.UntargetedData UntargetedCard {
+      get { return cardTypeCase_ == CardTypeOneofCase.UntargetedCard ? (global::Magewatch.API.UntargetedData) cardType_ : null; }
+      set {
+        cardType_ = value;
+        cardTypeCase_ = value == null ? CardTypeOneofCase.None : CardTypeOneofCase.UntargetedCard;
+      }
+    }
+
+    private object cost_;
+    /// <summary>Enum of possible cases for the "cost" oneof.</summary>
+    public enum CostOneofCase {
+      None = 0,
+      NoCost = 4,
+      StandardCost = 5,
+    }
+    private CostOneofCase costCase_ = CostOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CostOneofCase CostCase {
+      get { return costCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void ClearCost() {
+      costCase_ = CostOneofCase.None;
+      cost_ = null;
+    }
+
+    private object cardType_;
+    /// <summary>Enum of possible cases for the "card_type" oneof.</summary>
+    public enum CardTypeOneofCase {
+      None = 0,
+      CreatureCard = 11,
+      AttachmentCard = 12,
+      UntargetedCard = 13,
+    }
+    private CardTypeOneofCase cardTypeCase_ = CardTypeOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CardTypeOneofCase CardTypeCase {
+      get { return cardTypeCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void ClearCardType() {
+      cardTypeCase_ = CardTypeOneofCase.None;
+      cardType_ = null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CardData);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CardData other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(CardId, other.CardId)) return false;
+      if (!object.Equals(Prefab, other.Prefab)) return false;
+      if (Name != other.Name) return false;
+      if (!object.Equals(NoCost, other.NoCost)) return false;
+      if (!object.Equals(StandardCost, other.StandardCost)) return false;
+      if (Owner != other.Owner) return false;
+      if (!object.Equals(Image, other.Image)) return false;
+      if (!object.Equals(Text, other.Text)) return false;
+      if (IsRevealed != other.IsRevealed) return false;
+      if (CanBePlayed != other.CanBePlayed) return false;
+      if (!object.Equals(CreatureCard, other.CreatureCard)) return false;
+      if (!object.Equals(AttachmentCard, other.AttachmentCard)) return false;
+      if (!object.Equals(UntargetedCard, other.UntargetedCard)) return false;
+      if (CostCase != other.CostCase) return false;
+      if (CardTypeCase != other.CardTypeCase) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (cardId_ != null) hash ^= CardId.GetHashCode();
+      if (prefab_ != null) hash ^= Prefab.GetHashCode();
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (costCase_ == CostOneofCase.NoCost) hash ^= NoCost.GetHashCode();
+      if (costCase_ == CostOneofCase.StandardCost) hash ^= StandardCost.GetHashCode();
+      if (Owner != global::Magewatch.API.PlayerName.PlayerUnspecified) hash ^= Owner.GetHashCode();
+      if (image_ != null) hash ^= Image.GetHashCode();
+      if (text_ != null) hash ^= Text.GetHashCode();
+      if (IsRevealed != false) hash ^= IsRevealed.GetHashCode();
+      if (CanBePlayed != false) hash ^= CanBePlayed.GetHashCode();
+      if (cardTypeCase_ == CardTypeOneofCase.CreatureCard) hash ^= CreatureCard.GetHashCode();
+      if (cardTypeCase_ == CardTypeOneofCase.AttachmentCard) hash ^= AttachmentCard.GetHashCode();
+      if (cardTypeCase_ == CardTypeOneofCase.UntargetedCard) hash ^= UntargetedCard.GetHashCode();
+      hash ^= (int) costCase_;
+      hash ^= (int) cardTypeCase_;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (cardId_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(CardId);
+      }
+      if (prefab_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Prefab);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Name);
+      }
+      if (costCase_ == CostOneofCase.NoCost) {
+        output.WriteRawTag(34);
+        output.WriteMessage(NoCost);
+      }
+      if (costCase_ == CostOneofCase.StandardCost) {
+        output.WriteRawTag(42);
+        output.WriteMessage(StandardCost);
+      }
+      if (Owner != global::Magewatch.API.PlayerName.PlayerUnspecified) {
+        output.WriteRawTag(48);
+        output.WriteEnum((int) Owner);
+      }
+      if (image_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(Image);
+      }
+      if (text_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(Text);
+      }
+      if (IsRevealed != false) {
+        output.WriteRawTag(72);
+        output.WriteBool(IsRevealed);
+      }
+      if (CanBePlayed != false) {
+        output.WriteRawTag(80);
+        output.WriteBool(CanBePlayed);
+      }
+      if (cardTypeCase_ == CardTypeOneofCase.CreatureCard) {
+        output.WriteRawTag(90);
+        output.WriteMessage(CreatureCard);
+      }
+      if (cardTypeCase_ == CardTypeOneofCase.AttachmentCard) {
+        output.WriteRawTag(98);
+        output.WriteMessage(AttachmentCard);
+      }
+      if (cardTypeCase_ == CardTypeOneofCase.UntargetedCard) {
+        output.WriteRawTag(106);
+        output.WriteMessage(UntargetedCard);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (cardId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CardId);
+      }
+      if (prefab_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Prefab);
+      }
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (costCase_ == CostOneofCase.NoCost) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(NoCost);
+      }
+      if (costCase_ == CostOneofCase.StandardCost) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(StandardCost);
+      }
+      if (Owner != global::Magewatch.API.PlayerName.PlayerUnspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Owner);
+      }
+      if (image_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Image);
+      }
+      if (text_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Text);
+      }
+      if (IsRevealed != false) {
+        size += 1 + 1;
+      }
+      if (CanBePlayed != false) {
+        size += 1 + 1;
+      }
+      if (cardTypeCase_ == CardTypeOneofCase.CreatureCard) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatureCard);
+      }
+      if (cardTypeCase_ == CardTypeOneofCase.AttachmentCard) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(AttachmentCard);
+      }
+      if (cardTypeCase_ == CardTypeOneofCase.UntargetedCard) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(UntargetedCard);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CardData other) {
+      if (other == null) {
+        return;
+      }
+      if (other.cardId_ != null) {
+        if (cardId_ == null) {
+          CardId = new global::Magewatch.API.CardId();
+        }
+        CardId.MergeFrom(other.CardId);
+      }
+      if (other.prefab_ != null) {
+        if (prefab_ == null) {
+          Prefab = new global::Magewatch.API.Asset();
+        }
+        Prefab.MergeFrom(other.Prefab);
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.Owner != global::Magewatch.API.PlayerName.PlayerUnspecified) {
+        Owner = other.Owner;
+      }
+      if (other.image_ != null) {
+        if (image_ == null) {
+          Image = new global::Magewatch.API.Asset();
+        }
+        Image.MergeFrom(other.Image);
+      }
+      if (other.text_ != null) {
+        if (text_ == null) {
+          Text = new global::Magewatch.API.Text();
+        }
+        Text.MergeFrom(other.Text);
+      }
+      if (other.IsRevealed != false) {
+        IsRevealed = other.IsRevealed;
+      }
+      if (other.CanBePlayed != false) {
+        CanBePlayed = other.CanBePlayed;
+      }
+      switch (other.CostCase) {
+        case CostOneofCase.NoCost:
+          if (NoCost == null) {
+            NoCost = new global::Magewatch.API.NoCost();
+          }
+          NoCost.MergeFrom(other.NoCost);
+          break;
+        case CostOneofCase.StandardCost:
+          if (StandardCost == null) {
+            StandardCost = new global::Magewatch.API.StandardCost();
+          }
+          StandardCost.MergeFrom(other.StandardCost);
+          break;
+      }
+
+      switch (other.CardTypeCase) {
+        case CardTypeOneofCase.CreatureCard:
+          if (CreatureCard == null) {
+            CreatureCard = new global::Magewatch.API.CreatureData();
+          }
+          CreatureCard.MergeFrom(other.CreatureCard);
+          break;
+        case CardTypeOneofCase.AttachmentCard:
+          if (AttachmentCard == null) {
+            AttachmentCard = new global::Magewatch.API.AttachmentData();
+          }
+          AttachmentCard.MergeFrom(other.AttachmentCard);
+          break;
+        case CardTypeOneofCase.UntargetedCard:
+          if (UntargetedCard == null) {
+            UntargetedCard = new global::Magewatch.API.UntargetedData();
+          }
+          UntargetedCard.MergeFrom(other.UntargetedCard);
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (cardId_ == null) {
+              CardId = new global::Magewatch.API.CardId();
+            }
+            input.ReadMessage(CardId);
+            break;
+          }
+          case 18: {
+            if (prefab_ == null) {
+              Prefab = new global::Magewatch.API.Asset();
+            }
+            input.ReadMessage(Prefab);
+            break;
+          }
+          case 26: {
+            Name = input.ReadString();
+            break;
+          }
+          case 34: {
+            global::Magewatch.API.NoCost subBuilder = new global::Magewatch.API.NoCost();
+            if (costCase_ == CostOneofCase.NoCost) {
+              subBuilder.MergeFrom(NoCost);
+            }
+            input.ReadMessage(subBuilder);
+            NoCost = subBuilder;
+            break;
+          }
+          case 42: {
+            global::Magewatch.API.StandardCost subBuilder = new global::Magewatch.API.StandardCost();
+            if (costCase_ == CostOneofCase.StandardCost) {
+              subBuilder.MergeFrom(StandardCost);
+            }
+            input.ReadMessage(subBuilder);
+            StandardCost = subBuilder;
+            break;
+          }
+          case 48: {
+            Owner = (global::Magewatch.API.PlayerName) input.ReadEnum();
+            break;
+          }
+          case 58: {
+            if (image_ == null) {
+              Image = new global::Magewatch.API.Asset();
+            }
+            input.ReadMessage(Image);
+            break;
+          }
+          case 66: {
+            if (text_ == null) {
+              Text = new global::Magewatch.API.Text();
+            }
+            input.ReadMessage(Text);
+            break;
+          }
+          case 72: {
+            IsRevealed = input.ReadBool();
+            break;
+          }
+          case 80: {
+            CanBePlayed = input.ReadBool();
+            break;
+          }
+          case 90: {
+            global::Magewatch.API.CreatureData subBuilder = new global::Magewatch.API.CreatureData();
+            if (cardTypeCase_ == CardTypeOneofCase.CreatureCard) {
+              subBuilder.MergeFrom(CreatureCard);
+            }
+            input.ReadMessage(subBuilder);
+            CreatureCard = subBuilder;
+            break;
+          }
+          case 98: {
+            global::Magewatch.API.AttachmentData subBuilder = new global::Magewatch.API.AttachmentData();
+            if (cardTypeCase_ == CardTypeOneofCase.AttachmentCard) {
+              subBuilder.MergeFrom(AttachmentCard);
+            }
+            input.ReadMessage(subBuilder);
+            AttachmentCard = subBuilder;
+            break;
+          }
+          case 106: {
+            global::Magewatch.API.UntargetedData subBuilder = new global::Magewatch.API.UntargetedData();
+            if (cardTypeCase_ == CardTypeOneofCase.UntargetedCard) {
+              subBuilder.MergeFrom(UntargetedCard);
+            }
+            input.ReadMessage(subBuilder);
+            UntargetedCard = subBuilder;
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class CreatureData : pb::IMessage<CreatureData> {
+    private static readonly pb::MessageParser<CreatureData> _parser = new pb::MessageParser<CreatureData>(() => new CreatureData());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CreatureData> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[11]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CreatureData() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CreatureData(CreatureData other) : this() {
+      creatureId_ = other.creatureId_ != null ? other.creatureId_.Clone() : null;
+      prefab_ = other.prefab_ != null ? other.prefab_.Clone() : null;
+      owner_ = other.owner_;
+      rankPosition_ = other.rankPosition_;
+      filePosition_ = other.filePosition_;
+      maximumHealth_ = other.maximumHealth_;
+      canBeRepositioned_ = other.canBeRepositioned_;
+      attachments_ = other.attachments_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CreatureData Clone() {
+      return new CreatureData(this);
+    }
+
+    /// <summary>Field number for the "creature_id" field.</summary>
+    public const int CreatureIdFieldNumber = 1;
+    private global::Magewatch.API.CreatureId creatureId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CreatureId CreatureId {
+      get { return creatureId_; }
+      set {
+        creatureId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "prefab" field.</summary>
+    public const int PrefabFieldNumber = 2;
+    private global::Magewatch.API.Asset prefab_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.Asset Prefab {
+      get { return prefab_; }
+      set {
+        prefab_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "owner" field.</summary>
+    public const int OwnerFieldNumber = 3;
+    private global::Magewatch.API.PlayerName owner_ = global::Magewatch.API.PlayerName.PlayerUnspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.PlayerName Owner {
+      get { return owner_; }
+      set {
+        owner_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "rank_position" field.</summary>
+    public const int RankPositionFieldNumber = 4;
+    private global::Magewatch.API.RankValue rankPosition_ = global::Magewatch.API.RankValue.RankUnspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.RankValue RankPosition {
+      get { return rankPosition_; }
+      set {
+        rankPosition_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "file_position" field.</summary>
+    public const int FilePositionFieldNumber = 5;
+    private global::Magewatch.API.FileValue filePosition_ = global::Magewatch.API.FileValue.FileUnspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.FileValue FilePosition {
+      get { return filePosition_; }
+      set {
+        filePosition_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "maximum_health" field.</summary>
+    public const int MaximumHealthFieldNumber = 6;
+    private int maximumHealth_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MaximumHealth {
+      get { return maximumHealth_; }
+      set {
+        maximumHealth_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "can_be_repositioned" field.</summary>
+    public const int CanBeRepositionedFieldNumber = 7;
+    private bool canBeRepositioned_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool CanBeRepositioned {
+      get { return canBeRepositioned_; }
+      set {
+        canBeRepositioned_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "attachments" field.</summary>
+    public const int AttachmentsFieldNumber = 8;
+    private static readonly pb::FieldCodec<global::Magewatch.API.AttachmentData> _repeated_attachments_codec
+        = pb::FieldCodec.ForMessage(66, global::Magewatch.API.AttachmentData.Parser);
+    private readonly pbc::RepeatedField<global::Magewatch.API.AttachmentData> attachments_ = new pbc::RepeatedField<global::Magewatch.API.AttachmentData>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Magewatch.API.AttachmentData> Attachments {
+      get { return attachments_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CreatureData);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CreatureData other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(CreatureId, other.CreatureId)) return false;
+      if (!object.Equals(Prefab, other.Prefab)) return false;
+      if (Owner != other.Owner) return false;
+      if (RankPosition != other.RankPosition) return false;
+      if (FilePosition != other.FilePosition) return false;
+      if (MaximumHealth != other.MaximumHealth) return false;
+      if (CanBeRepositioned != other.CanBeRepositioned) return false;
+      if(!attachments_.Equals(other.attachments_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (creatureId_ != null) hash ^= CreatureId.GetHashCode();
+      if (prefab_ != null) hash ^= Prefab.GetHashCode();
+      if (Owner != global::Magewatch.API.PlayerName.PlayerUnspecified) hash ^= Owner.GetHashCode();
+      if (RankPosition != global::Magewatch.API.RankValue.RankUnspecified) hash ^= RankPosition.GetHashCode();
+      if (FilePosition != global::Magewatch.API.FileValue.FileUnspecified) hash ^= FilePosition.GetHashCode();
+      if (MaximumHealth != 0) hash ^= MaximumHealth.GetHashCode();
+      if (CanBeRepositioned != false) hash ^= CanBeRepositioned.GetHashCode();
+      hash ^= attachments_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (creatureId_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(CreatureId);
+      }
+      if (prefab_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Prefab);
+      }
+      if (Owner != global::Magewatch.API.PlayerName.PlayerUnspecified) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) Owner);
+      }
+      if (RankPosition != global::Magewatch.API.RankValue.RankUnspecified) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) RankPosition);
+      }
+      if (FilePosition != global::Magewatch.API.FileValue.FileUnspecified) {
+        output.WriteRawTag(40);
+        output.WriteEnum((int) FilePosition);
+      }
+      if (MaximumHealth != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(MaximumHealth);
+      }
+      if (CanBeRepositioned != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(CanBeRepositioned);
+      }
+      attachments_.WriteTo(output, _repeated_attachments_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (creatureId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatureId);
+      }
+      if (prefab_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Prefab);
+      }
+      if (Owner != global::Magewatch.API.PlayerName.PlayerUnspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Owner);
+      }
+      if (RankPosition != global::Magewatch.API.RankValue.RankUnspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) RankPosition);
+      }
+      if (FilePosition != global::Magewatch.API.FileValue.FileUnspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) FilePosition);
+      }
+      if (MaximumHealth != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaximumHealth);
+      }
+      if (CanBeRepositioned != false) {
+        size += 1 + 1;
+      }
+      size += attachments_.CalculateSize(_repeated_attachments_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CreatureData other) {
+      if (other == null) {
+        return;
+      }
+      if (other.creatureId_ != null) {
+        if (creatureId_ == null) {
+          CreatureId = new global::Magewatch.API.CreatureId();
+        }
+        CreatureId.MergeFrom(other.CreatureId);
+      }
+      if (other.prefab_ != null) {
+        if (prefab_ == null) {
+          Prefab = new global::Magewatch.API.Asset();
+        }
+        Prefab.MergeFrom(other.Prefab);
+      }
+      if (other.Owner != global::Magewatch.API.PlayerName.PlayerUnspecified) {
+        Owner = other.Owner;
+      }
+      if (other.RankPosition != global::Magewatch.API.RankValue.RankUnspecified) {
+        RankPosition = other.RankPosition;
+      }
+      if (other.FilePosition != global::Magewatch.API.FileValue.FileUnspecified) {
+        FilePosition = other.FilePosition;
+      }
+      if (other.MaximumHealth != 0) {
+        MaximumHealth = other.MaximumHealth;
+      }
+      if (other.CanBeRepositioned != false) {
+        CanBeRepositioned = other.CanBeRepositioned;
+      }
+      attachments_.Add(other.attachments_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (creatureId_ == null) {
+              CreatureId = new global::Magewatch.API.CreatureId();
+            }
+            input.ReadMessage(CreatureId);
+            break;
+          }
+          case 18: {
+            if (prefab_ == null) {
+              Prefab = new global::Magewatch.API.Asset();
+            }
+            input.ReadMessage(Prefab);
+            break;
+          }
+          case 24: {
+            Owner = (global::Magewatch.API.PlayerName) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            RankPosition = (global::Magewatch.API.RankValue) input.ReadEnum();
+            break;
+          }
+          case 40: {
+            FilePosition = (global::Magewatch.API.FileValue) input.ReadEnum();
+            break;
+          }
+          case 48: {
+            MaximumHealth = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            CanBeRepositioned = input.ReadBool();
+            break;
+          }
+          case 66: {
+            attachments_.AddEntriesFrom(input, _repeated_attachments_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class WaitCommand : pb::IMessage<WaitCommand> {
+    private static readonly pb::MessageParser<WaitCommand> _parser = new pb::MessageParser<WaitCommand>(() => new WaitCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<WaitCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[12]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public WaitCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public WaitCommand(WaitCommand other) : this() {
+      waitTimeMilliseconds_ = other.waitTimeMilliseconds_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public WaitCommand Clone() {
+      return new WaitCommand(this);
+    }
+
+    /// <summary>Field number for the "wait_time_milliseconds" field.</summary>
+    public const int WaitTimeMillisecondsFieldNumber = 1;
+    private int waitTimeMilliseconds_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int WaitTimeMilliseconds {
+      get { return waitTimeMilliseconds_; }
+      set {
+        waitTimeMilliseconds_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as WaitCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(WaitCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (WaitTimeMilliseconds != other.WaitTimeMilliseconds) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (WaitTimeMilliseconds != 0) hash ^= WaitTimeMilliseconds.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (WaitTimeMilliseconds != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(WaitTimeMilliseconds);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (WaitTimeMilliseconds != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(WaitTimeMilliseconds);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(WaitCommand other) {
+      if (other == null) {
+        return;
+      }
+      if (other.WaitTimeMilliseconds != 0) {
+        WaitTimeMilliseconds = other.WaitTimeMilliseconds;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            WaitTimeMilliseconds = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class UpdateInterfaceCommand : pb::IMessage<UpdateInterfaceCommand> {
+    private static readonly pb::MessageParser<UpdateInterfaceCommand> _parser = new pb::MessageParser<UpdateInterfaceCommand>(() => new UpdateInterfaceCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<UpdateInterfaceCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[13]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateInterfaceCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateInterfaceCommand(UpdateInterfaceCommand other) : this() {
+      mainButtonEnabled_ = other.mainButtonEnabled_;
+      mainButtonText_ = other.mainButtonText_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateInterfaceCommand Clone() {
+      return new UpdateInterfaceCommand(this);
+    }
+
+    /// <summary>Field number for the "main_button_enabled" field.</summary>
+    public const int MainButtonEnabledFieldNumber = 1;
+    private bool mainButtonEnabled_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool MainButtonEnabled {
+      get { return mainButtonEnabled_; }
+      set {
+        mainButtonEnabled_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "main_button_text" field.</summary>
+    public const int MainButtonTextFieldNumber = 2;
+    private string mainButtonText_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string MainButtonText {
+      get { return mainButtonText_; }
+      set {
+        mainButtonText_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as UpdateInterfaceCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(UpdateInterfaceCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (MainButtonEnabled != other.MainButtonEnabled) return false;
+      if (MainButtonText != other.MainButtonText) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (MainButtonEnabled != false) hash ^= MainButtonEnabled.GetHashCode();
+      if (MainButtonText.Length != 0) hash ^= MainButtonText.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (MainButtonEnabled != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(MainButtonEnabled);
+      }
+      if (MainButtonText.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(MainButtonText);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (MainButtonEnabled != false) {
+        size += 1 + 1;
+      }
+      if (MainButtonText.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(MainButtonText);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(UpdateInterfaceCommand other) {
+      if (other == null) {
+        return;
+      }
+      if (other.MainButtonEnabled != false) {
+        MainButtonEnabled = other.MainButtonEnabled;
+      }
+      if (other.MainButtonText.Length != 0) {
+        MainButtonText = other.MainButtonText;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            MainButtonEnabled = input.ReadBool();
+            break;
+          }
+          case 18: {
+            MainButtonText = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class UpdatePlayerCommand : pb::IMessage<UpdatePlayerCommand> {
+    private static readonly pb::MessageParser<UpdatePlayerCommand> _parser = new pb::MessageParser<UpdatePlayerCommand>(() => new UpdatePlayerCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<UpdatePlayerCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[14]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdatePlayerCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdatePlayerCommand(UpdatePlayerCommand other) : this() {
+      player_ = other.player_ != null ? other.player_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdatePlayerCommand Clone() {
+      return new UpdatePlayerCommand(this);
+    }
+
+    /// <summary>Field number for the "player" field.</summary>
+    public const int PlayerFieldNumber = 1;
+    private global::Magewatch.API.PlayerData player_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.PlayerData Player {
+      get { return player_; }
+      set {
+        player_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as UpdatePlayerCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(UpdatePlayerCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Player, other.Player)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (player_ != null) hash ^= Player.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (player_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Player);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (player_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Player);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(UpdatePlayerCommand other) {
+      if (other == null) {
+        return;
+      }
+      if (other.player_ != null) {
+        if (player_ == null) {
+          Player = new global::Magewatch.API.PlayerData();
+        }
+        Player.MergeFrom(other.Player);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (player_ == null) {
+              Player = new global::Magewatch.API.PlayerData();
+            }
+            input.ReadMessage(Player);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class DrawCardCommand : pb::IMessage<DrawCardCommand> {
+    private static readonly pb::MessageParser<DrawCardCommand> _parser = new pb::MessageParser<DrawCardCommand>(() => new DrawCardCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<DrawCardCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[15]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DrawCardCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DrawCardCommand(DrawCardCommand other) : this() {
+      card_ = other.card_ != null ? other.card_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DrawCardCommand Clone() {
+      return new DrawCardCommand(this);
+    }
+
+    /// <summary>Field number for the "card" field.</summary>
+    public const int CardFieldNumber = 1;
+    private global::Magewatch.API.CardData card_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CardData Card {
+      get { return card_; }
+      set {
+        card_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as DrawCardCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(DrawCardCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Card, other.Card)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (card_ != null) hash ^= Card.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (card_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Card);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (card_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Card);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(DrawCardCommand other) {
+      if (other == null) {
+        return;
+      }
+      if (other.card_ != null) {
+        if (card_ == null) {
+          Card = new global::Magewatch.API.CardData();
+        }
+        Card.MergeFrom(other.Card);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (card_ == null) {
+              Card = new global::Magewatch.API.CardData();
+            }
+            input.ReadMessage(Card);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class PlayCardCommand : pb::IMessage<PlayCardCommand> {
+    private static readonly pb::MessageParser<PlayCardCommand> _parser = new pb::MessageParser<PlayCardCommand>(() => new PlayCardCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<PlayCardCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[16]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayCardCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayCardCommand(PlayCardCommand other) : this() {
+      card_ = other.card_ != null ? other.card_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayCardCommand Clone() {
+      return new PlayCardCommand(this);
+    }
+
+    /// <summary>Field number for the "card" field.</summary>
+    public const int CardFieldNumber = 1;
+    private global::Magewatch.API.CardData card_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CardData Card {
+      get { return card_; }
+      set {
+        card_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as PlayCardCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(PlayCardCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Card, other.Card)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (card_ != null) hash ^= Card.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (card_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Card);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (card_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Card);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(PlayCardCommand other) {
+      if (other == null) {
+        return;
+      }
+      if (other.card_ != null) {
+        if (card_ == null) {
+          Card = new global::Magewatch.API.CardData();
+        }
+        Card.MergeFrom(other.Card);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (card_ == null) {
+              Card = new global::Magewatch.API.CardData();
+            }
+            input.ReadMessage(Card);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class CreateOrUpdateCreatureCommand : pb::IMessage<CreateOrUpdateCreatureCommand> {
+    private static readonly pb::MessageParser<CreateOrUpdateCreatureCommand> _parser = new pb::MessageParser<CreateOrUpdateCreatureCommand>(() => new CreateOrUpdateCreatureCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CreateOrUpdateCreatureCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[17]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CreateOrUpdateCreatureCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CreateOrUpdateCreatureCommand(CreateOrUpdateCreatureCommand other) : this() {
+      creature_ = other.creature_ != null ? other.creature_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CreateOrUpdateCreatureCommand Clone() {
+      return new CreateOrUpdateCreatureCommand(this);
+    }
+
+    /// <summary>Field number for the "creature" field.</summary>
+    public const int CreatureFieldNumber = 1;
+    private global::Magewatch.API.CreatureData creature_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CreatureData Creature {
+      get { return creature_; }
+      set {
+        creature_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CreateOrUpdateCreatureCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CreateOrUpdateCreatureCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Creature, other.Creature)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (creature_ != null) hash ^= Creature.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (creature_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Creature);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (creature_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Creature);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CreateOrUpdateCreatureCommand other) {
+      if (other == null) {
+        return;
+      }
+      if (other.creature_ != null) {
+        if (creature_ == null) {
+          Creature = new global::Magewatch.API.CreatureData();
+        }
+        Creature.MergeFrom(other.Creature);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (creature_ == null) {
+              Creature = new global::Magewatch.API.CreatureData();
+            }
+            input.ReadMessage(Creature);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class RemoveCreatureCommand : pb::IMessage<RemoveCreatureCommand> {
+    private static readonly pb::MessageParser<RemoveCreatureCommand> _parser = new pb::MessageParser<RemoveCreatureCommand>(() => new RemoveCreatureCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<RemoveCreatureCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[18]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RemoveCreatureCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RemoveCreatureCommand(RemoveCreatureCommand other) : this() {
+      creatureId_ = other.creatureId_ != null ? other.creatureId_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RemoveCreatureCommand Clone() {
+      return new RemoveCreatureCommand(this);
+    }
+
+    /// <summary>Field number for the "creature_id" field.</summary>
+    public const int CreatureIdFieldNumber = 1;
+    private global::Magewatch.API.CreatureId creatureId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CreatureId CreatureId {
+      get { return creatureId_; }
+      set {
+        creatureId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as RemoveCreatureCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(RemoveCreatureCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(CreatureId, other.CreatureId)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (creatureId_ != null) hash ^= CreatureId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (creatureId_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(CreatureId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (creatureId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatureId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(RemoveCreatureCommand other) {
+      if (other == null) {
+        return;
+      }
+      if (other.creatureId_ != null) {
+        if (creatureId_ == null) {
+          CreatureId = new global::Magewatch.API.CreatureId();
+        }
+        CreatureId.MergeFrom(other.CreatureId);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (creatureId_ == null) {
+              CreatureId = new global::Magewatch.API.CreatureId();
+            }
+            input.ReadMessage(CreatureId);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class MeleeEngageCommand : pb::IMessage<MeleeEngageCommand> {
+    private static readonly pb::MessageParser<MeleeEngageCommand> _parser = new pb::MessageParser<MeleeEngageCommand>(() => new MeleeEngageCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<MeleeEngageCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[19]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MeleeEngageCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MeleeEngageCommand(MeleeEngageCommand other) : this() {
+      creatureId_ = other.creatureId_ != null ? other.creatureId_.Clone() : null;
+      targetCreatureId_ = other.targetCreatureId_ != null ? other.targetCreatureId_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MeleeEngageCommand Clone() {
+      return new MeleeEngageCommand(this);
+    }
+
+    /// <summary>Field number for the "creature_id" field.</summary>
+    public const int CreatureIdFieldNumber = 1;
+    private global::Magewatch.API.CreatureId creatureId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CreatureId CreatureId {
+      get { return creatureId_; }
+      set {
+        creatureId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "target_creature_id" field.</summary>
+    public const int TargetCreatureIdFieldNumber = 2;
+    private global::Magewatch.API.CreatureId targetCreatureId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CreatureId TargetCreatureId {
+      get { return targetCreatureId_; }
+      set {
+        targetCreatureId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as MeleeEngageCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(MeleeEngageCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(CreatureId, other.CreatureId)) return false;
+      if (!object.Equals(TargetCreatureId, other.TargetCreatureId)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (creatureId_ != null) hash ^= CreatureId.GetHashCode();
+      if (targetCreatureId_ != null) hash ^= TargetCreatureId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (creatureId_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(CreatureId);
+      }
+      if (targetCreatureId_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(TargetCreatureId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (creatureId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatureId);
+      }
+      if (targetCreatureId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(TargetCreatureId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(MeleeEngageCommand other) {
+      if (other == null) {
+        return;
+      }
+      if (other.creatureId_ != null) {
+        if (creatureId_ == null) {
+          CreatureId = new global::Magewatch.API.CreatureId();
+        }
+        CreatureId.MergeFrom(other.CreatureId);
+      }
+      if (other.targetCreatureId_ != null) {
+        if (targetCreatureId_ == null) {
+          TargetCreatureId = new global::Magewatch.API.CreatureId();
+        }
+        TargetCreatureId.MergeFrom(other.TargetCreatureId);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (creatureId_ == null) {
+              CreatureId = new global::Magewatch.API.CreatureId();
+            }
+            input.ReadMessage(CreatureId);
+            break;
+          }
+          case 18: {
+            if (targetCreatureId_ == null) {
+              TargetCreatureId = new global::Magewatch.API.CreatureId();
+            }
+            input.ReadMessage(TargetCreatureId);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ApplyDamageEffect : pb::IMessage<ApplyDamageEffect> {
+    private static readonly pb::MessageParser<ApplyDamageEffect> _parser = new pb::MessageParser<ApplyDamageEffect>(() => new ApplyDamageEffect());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ApplyDamageEffect> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[20]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ApplyDamageEffect() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ApplyDamageEffect(ApplyDamageEffect other) : this() {
+      damage_ = other.damage_;
+      killsTarget_ = other.killsTarget_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ApplyDamageEffect Clone() {
+      return new ApplyDamageEffect(this);
+    }
+
+    /// <summary>Field number for the "damage" field.</summary>
+    public const int DamageFieldNumber = 1;
+    private int damage_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Damage {
+      get { return damage_; }
+      set {
+        damage_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "kills_target" field.</summary>
+    public const int KillsTargetFieldNumber = 2;
+    private bool killsTarget_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool KillsTarget {
+      get { return killsTarget_; }
+      set {
+        killsTarget_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ApplyDamageEffect);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ApplyDamageEffect other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Damage != other.Damage) return false;
+      if (KillsTarget != other.KillsTarget) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Damage != 0) hash ^= Damage.GetHashCode();
+      if (KillsTarget != false) hash ^= KillsTarget.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Damage != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Damage);
+      }
+      if (KillsTarget != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(KillsTarget);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Damage != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Damage);
+      }
+      if (KillsTarget != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ApplyDamageEffect other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Damage != 0) {
+        Damage = other.Damage;
+      }
+      if (other.KillsTarget != false) {
+        KillsTarget = other.KillsTarget;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Damage = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            KillsTarget = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class FireProjectileEffect : pb::IMessage<FireProjectileEffect> {
+    private static readonly pb::MessageParser<FireProjectileEffect> _parser = new pb::MessageParser<FireProjectileEffect>(() => new FireProjectileEffect());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<FireProjectileEffect> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[21]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FireProjectileEffect() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FireProjectileEffect(FireProjectileEffect other) : this() {
+      prefab_ = other.prefab_ != null ? other.prefab_.Clone() : null;
+      applyDamage_ = other.applyDamage_ != null ? other.applyDamage_.Clone() : null;
+      atOpponent_ = other.atOpponent_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FireProjectileEffect Clone() {
+      return new FireProjectileEffect(this);
+    }
+
+    /// <summary>Field number for the "prefab" field.</summary>
+    public const int PrefabFieldNumber = 1;
+    private global::Magewatch.API.Asset prefab_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.Asset Prefab {
+      get { return prefab_; }
+      set {
+        prefab_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "apply_damage" field.</summary>
+    public const int ApplyDamageFieldNumber = 2;
+    private global::Magewatch.API.ApplyDamageEffect applyDamage_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.ApplyDamageEffect ApplyDamage {
+      get { return applyDamage_; }
+      set {
+        applyDamage_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "at_opponent" field.</summary>
+    public const int AtOpponentFieldNumber = 3;
+    private bool atOpponent_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool AtOpponent {
+      get { return atOpponent_; }
+      set {
+        atOpponent_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as FireProjectileEffect);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(FireProjectileEffect other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Prefab, other.Prefab)) return false;
+      if (!object.Equals(ApplyDamage, other.ApplyDamage)) return false;
+      if (AtOpponent != other.AtOpponent) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (prefab_ != null) hash ^= Prefab.GetHashCode();
+      if (applyDamage_ != null) hash ^= ApplyDamage.GetHashCode();
+      if (AtOpponent != false) hash ^= AtOpponent.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (prefab_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Prefab);
+      }
+      if (applyDamage_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(ApplyDamage);
+      }
+      if (AtOpponent != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(AtOpponent);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (prefab_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Prefab);
+      }
+      if (applyDamage_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ApplyDamage);
+      }
+      if (AtOpponent != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(FireProjectileEffect other) {
+      if (other == null) {
+        return;
+      }
+      if (other.prefab_ != null) {
+        if (prefab_ == null) {
+          Prefab = new global::Magewatch.API.Asset();
+        }
+        Prefab.MergeFrom(other.Prefab);
+      }
+      if (other.applyDamage_ != null) {
+        if (applyDamage_ == null) {
+          ApplyDamage = new global::Magewatch.API.ApplyDamageEffect();
+        }
+        ApplyDamage.MergeFrom(other.ApplyDamage);
+      }
+      if (other.AtOpponent != false) {
+        AtOpponent = other.AtOpponent;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (prefab_ == null) {
+              Prefab = new global::Magewatch.API.Asset();
+            }
+            input.ReadMessage(Prefab);
+            break;
+          }
+          case 18: {
+            if (applyDamage_ == null) {
+              ApplyDamage = new global::Magewatch.API.ApplyDamageEffect();
+            }
+            input.ReadMessage(ApplyDamage);
+            break;
+          }
+          case 24: {
+            AtOpponent = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class AttackCommand : pb::IMessage<AttackCommand> {
+    private static readonly pb::MessageParser<AttackCommand> _parser = new pb::MessageParser<AttackCommand>(() => new AttackCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<AttackCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[22]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AttackCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AttackCommand(AttackCommand other) : this() {
+      creatureId_ = other.creatureId_ != null ? other.creatureId_.Clone() : null;
+      targetCreatureId_ = other.targetCreatureId_ != null ? other.targetCreatureId_.Clone() : null;
+      skill_ = other.skill_;
+      hitCount_ = other.hitCount_;
+      switch (other.AttackEffectCase) {
+        case AttackEffectOneofCase.ApplyDamage:
+          ApplyDamage = other.ApplyDamage.Clone();
+          break;
+        case AttackEffectOneofCase.FireProjectile:
+          FireProjectile = other.FireProjectile.Clone();
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AttackCommand Clone() {
+      return new AttackCommand(this);
+    }
+
+    /// <summary>Field number for the "creature_id" field.</summary>
+    public const int CreatureIdFieldNumber = 1;
+    private global::Magewatch.API.CreatureId creatureId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CreatureId CreatureId {
+      get { return creatureId_; }
+      set {
+        creatureId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "target_creature_id" field.</summary>
+    public const int TargetCreatureIdFieldNumber = 2;
+    private global::Magewatch.API.CreatureId targetCreatureId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CreatureId TargetCreatureId {
+      get { return targetCreatureId_; }
+      set {
+        targetCreatureId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "skill" field.</summary>
+    public const int SkillFieldNumber = 3;
+    private global::Magewatch.API.SkillAnimation skill_ = global::Magewatch.API.SkillAnimation.SkillUnspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.SkillAnimation Skill {
+      get { return skill_; }
+      set {
+        skill_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "hit_count" field.</summary>
+    public const int HitCountFieldNumber = 4;
+    private int hitCount_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int HitCount {
+      get { return hitCount_; }
+      set {
+        hitCount_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "apply_damage" field.</summary>
+    public const int ApplyDamageFieldNumber = 5;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.ApplyDamageEffect ApplyDamage {
+      get { return attackEffectCase_ == AttackEffectOneofCase.ApplyDamage ? (global::Magewatch.API.ApplyDamageEffect) attackEffect_ : null; }
+      set {
+        attackEffect_ = value;
+        attackEffectCase_ = value == null ? AttackEffectOneofCase.None : AttackEffectOneofCase.ApplyDamage;
+      }
+    }
+
+    /// <summary>Field number for the "fire_projectile" field.</summary>
+    public const int FireProjectileFieldNumber = 6;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.FireProjectileEffect FireProjectile {
+      get { return attackEffectCase_ == AttackEffectOneofCase.FireProjectile ? (global::Magewatch.API.FireProjectileEffect) attackEffect_ : null; }
+      set {
+        attackEffect_ = value;
+        attackEffectCase_ = value == null ? AttackEffectOneofCase.None : AttackEffectOneofCase.FireProjectile;
+      }
+    }
+
+    private object attackEffect_;
+    /// <summary>Enum of possible cases for the "attack_effect" oneof.</summary>
+    public enum AttackEffectOneofCase {
+      None = 0,
+      ApplyDamage = 5,
+      FireProjectile = 6,
+    }
+    private AttackEffectOneofCase attackEffectCase_ = AttackEffectOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AttackEffectOneofCase AttackEffectCase {
+      get { return attackEffectCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void ClearAttackEffect() {
+      attackEffectCase_ = AttackEffectOneofCase.None;
+      attackEffect_ = null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as AttackCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(AttackCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(CreatureId, other.CreatureId)) return false;
+      if (!object.Equals(TargetCreatureId, other.TargetCreatureId)) return false;
+      if (Skill != other.Skill) return false;
+      if (HitCount != other.HitCount) return false;
+      if (!object.Equals(ApplyDamage, other.ApplyDamage)) return false;
+      if (!object.Equals(FireProjectile, other.FireProjectile)) return false;
+      if (AttackEffectCase != other.AttackEffectCase) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (creatureId_ != null) hash ^= CreatureId.GetHashCode();
+      if (targetCreatureId_ != null) hash ^= TargetCreatureId.GetHashCode();
+      if (Skill != global::Magewatch.API.SkillAnimation.SkillUnspecified) hash ^= Skill.GetHashCode();
+      if (HitCount != 0) hash ^= HitCount.GetHashCode();
+      if (attackEffectCase_ == AttackEffectOneofCase.ApplyDamage) hash ^= ApplyDamage.GetHashCode();
+      if (attackEffectCase_ == AttackEffectOneofCase.FireProjectile) hash ^= FireProjectile.GetHashCode();
+      hash ^= (int) attackEffectCase_;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (creatureId_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(CreatureId);
+      }
+      if (targetCreatureId_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(TargetCreatureId);
+      }
+      if (Skill != global::Magewatch.API.SkillAnimation.SkillUnspecified) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) Skill);
+      }
+      if (HitCount != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(HitCount);
+      }
+      if (attackEffectCase_ == AttackEffectOneofCase.ApplyDamage) {
+        output.WriteRawTag(42);
+        output.WriteMessage(ApplyDamage);
+      }
+      if (attackEffectCase_ == AttackEffectOneofCase.FireProjectile) {
+        output.WriteRawTag(50);
+        output.WriteMessage(FireProjectile);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (creatureId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatureId);
+      }
+      if (targetCreatureId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(TargetCreatureId);
+      }
+      if (Skill != global::Magewatch.API.SkillAnimation.SkillUnspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Skill);
+      }
+      if (HitCount != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitCount);
+      }
+      if (attackEffectCase_ == AttackEffectOneofCase.ApplyDamage) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ApplyDamage);
+      }
+      if (attackEffectCase_ == AttackEffectOneofCase.FireProjectile) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(FireProjectile);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(AttackCommand other) {
+      if (other == null) {
+        return;
+      }
+      if (other.creatureId_ != null) {
+        if (creatureId_ == null) {
+          CreatureId = new global::Magewatch.API.CreatureId();
+        }
+        CreatureId.MergeFrom(other.CreatureId);
+      }
+      if (other.targetCreatureId_ != null) {
+        if (targetCreatureId_ == null) {
+          TargetCreatureId = new global::Magewatch.API.CreatureId();
+        }
+        TargetCreatureId.MergeFrom(other.TargetCreatureId);
+      }
+      if (other.Skill != global::Magewatch.API.SkillAnimation.SkillUnspecified) {
+        Skill = other.Skill;
+      }
+      if (other.HitCount != 0) {
+        HitCount = other.HitCount;
+      }
+      switch (other.AttackEffectCase) {
+        case AttackEffectOneofCase.ApplyDamage:
+          if (ApplyDamage == null) {
+            ApplyDamage = new global::Magewatch.API.ApplyDamageEffect();
+          }
+          ApplyDamage.MergeFrom(other.ApplyDamage);
+          break;
+        case AttackEffectOneofCase.FireProjectile:
+          if (FireProjectile == null) {
+            FireProjectile = new global::Magewatch.API.FireProjectileEffect();
+          }
+          FireProjectile.MergeFrom(other.FireProjectile);
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (creatureId_ == null) {
+              CreatureId = new global::Magewatch.API.CreatureId();
+            }
+            input.ReadMessage(CreatureId);
+            break;
+          }
+          case 18: {
+            if (targetCreatureId_ == null) {
+              TargetCreatureId = new global::Magewatch.API.CreatureId();
+            }
+            input.ReadMessage(TargetCreatureId);
+            break;
+          }
+          case 24: {
+            Skill = (global::Magewatch.API.SkillAnimation) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            HitCount = input.ReadInt32();
+            break;
+          }
+          case 42: {
+            global::Magewatch.API.ApplyDamageEffect subBuilder = new global::Magewatch.API.ApplyDamageEffect();
+            if (attackEffectCase_ == AttackEffectOneofCase.ApplyDamage) {
+              subBuilder.MergeFrom(ApplyDamage);
+            }
+            input.ReadMessage(subBuilder);
+            ApplyDamage = subBuilder;
+            break;
+          }
+          case 50: {
+            global::Magewatch.API.FireProjectileEffect subBuilder = new global::Magewatch.API.FireProjectileEffect();
+            if (attackEffectCase_ == AttackEffectOneofCase.FireProjectile) {
+              subBuilder.MergeFrom(FireProjectile);
+            }
+            input.ReadMessage(subBuilder);
+            FireProjectile = subBuilder;
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   public sealed partial class Command : pb::IMessage<Command> {
     private static readonly pb::MessageParser<Command> _parser = new pb::MessageParser<Command>(() => new Command());
     private pb::UnknownFieldSet _unknownFields;
@@ -44,7 +4365,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[23]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -61,8 +4382,36 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public Command(Command other) : this() {
-      name_ = other.name_;
-      id_ = other.id_;
+      switch (other.CommandCase) {
+        case CommandOneofCase.Wait:
+          Wait = other.Wait.Clone();
+          break;
+        case CommandOneofCase.UpdateInterface:
+          UpdateInterface = other.UpdateInterface.Clone();
+          break;
+        case CommandOneofCase.DrawCard:
+          DrawCard = other.DrawCard.Clone();
+          break;
+        case CommandOneofCase.PlayCard:
+          PlayCard = other.PlayCard.Clone();
+          break;
+        case CommandOneofCase.UpdatePlayer:
+          UpdatePlayer = other.UpdatePlayer.Clone();
+          break;
+        case CommandOneofCase.CreateOrUpdateCreature:
+          CreateOrUpdateCreature = other.CreateOrUpdateCreature.Clone();
+          break;
+        case CommandOneofCase.RemoveCreature:
+          RemoveCreature = other.RemoveCreature.Clone();
+          break;
+        case CommandOneofCase.MeleeEngage:
+          MeleeEngage = other.MeleeEngage.Clone();
+          break;
+        case CommandOneofCase.Attack:
+          Attack = other.Attack.Clone();
+          break;
+      }
+
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -71,26 +4420,129 @@ namespace Magewatch.API {
       return new Command(this);
     }
 
-    /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 1;
-    private string name_ = "";
+    /// <summary>Field number for the "wait" field.</summary>
+    public const int WaitFieldNumber = 1;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Name {
-      get { return name_; }
+    public global::Magewatch.API.WaitCommand Wait {
+      get { return commandCase_ == CommandOneofCase.Wait ? (global::Magewatch.API.WaitCommand) command_ : null; }
       set {
-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.Wait;
       }
     }
 
-    /// <summary>Field number for the "id" field.</summary>
-    public const int IdFieldNumber = 2;
-    private int id_;
+    /// <summary>Field number for the "update_interface" field.</summary>
+    public const int UpdateInterfaceFieldNumber = 2;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Id {
-      get { return id_; }
+    public global::Magewatch.API.UpdateInterfaceCommand UpdateInterface {
+      get { return commandCase_ == CommandOneofCase.UpdateInterface ? (global::Magewatch.API.UpdateInterfaceCommand) command_ : null; }
       set {
-        id_ = value;
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.UpdateInterface;
       }
+    }
+
+    /// <summary>Field number for the "draw_card" field.</summary>
+    public const int DrawCardFieldNumber = 3;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.DrawCardCommand DrawCard {
+      get { return commandCase_ == CommandOneofCase.DrawCard ? (global::Magewatch.API.DrawCardCommand) command_ : null; }
+      set {
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.DrawCard;
+      }
+    }
+
+    /// <summary>Field number for the "play_card" field.</summary>
+    public const int PlayCardFieldNumber = 4;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.PlayCardCommand PlayCard {
+      get { return commandCase_ == CommandOneofCase.PlayCard ? (global::Magewatch.API.PlayCardCommand) command_ : null; }
+      set {
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.PlayCard;
+      }
+    }
+
+    /// <summary>Field number for the "update_player" field.</summary>
+    public const int UpdatePlayerFieldNumber = 5;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.UpdatePlayerCommand UpdatePlayer {
+      get { return commandCase_ == CommandOneofCase.UpdatePlayer ? (global::Magewatch.API.UpdatePlayerCommand) command_ : null; }
+      set {
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.UpdatePlayer;
+      }
+    }
+
+    /// <summary>Field number for the "create_or_update_creature" field.</summary>
+    public const int CreateOrUpdateCreatureFieldNumber = 6;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.CreateOrUpdateCreatureCommand CreateOrUpdateCreature {
+      get { return commandCase_ == CommandOneofCase.CreateOrUpdateCreature ? (global::Magewatch.API.CreateOrUpdateCreatureCommand) command_ : null; }
+      set {
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.CreateOrUpdateCreature;
+      }
+    }
+
+    /// <summary>Field number for the "remove_creature" field.</summary>
+    public const int RemoveCreatureFieldNumber = 7;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.RemoveCreatureCommand RemoveCreature {
+      get { return commandCase_ == CommandOneofCase.RemoveCreature ? (global::Magewatch.API.RemoveCreatureCommand) command_ : null; }
+      set {
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.RemoveCreature;
+      }
+    }
+
+    /// <summary>Field number for the "melee_engage" field.</summary>
+    public const int MeleeEngageFieldNumber = 8;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.MeleeEngageCommand MeleeEngage {
+      get { return commandCase_ == CommandOneofCase.MeleeEngage ? (global::Magewatch.API.MeleeEngageCommand) command_ : null; }
+      set {
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.MeleeEngage;
+      }
+    }
+
+    /// <summary>Field number for the "attack" field.</summary>
+    public const int AttackFieldNumber = 9;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.AttackCommand Attack {
+      get { return commandCase_ == CommandOneofCase.Attack ? (global::Magewatch.API.AttackCommand) command_ : null; }
+      set {
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.Attack;
+      }
+    }
+
+    private object command_;
+    /// <summary>Enum of possible cases for the "command" oneof.</summary>
+    public enum CommandOneofCase {
+      None = 0,
+      Wait = 1,
+      UpdateInterface = 2,
+      DrawCard = 3,
+      PlayCard = 4,
+      UpdatePlayer = 5,
+      CreateOrUpdateCreature = 6,
+      RemoveCreature = 7,
+      MeleeEngage = 8,
+      Attack = 9,
+    }
+    private CommandOneofCase commandCase_ = CommandOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CommandOneofCase CommandCase {
+      get { return commandCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void ClearCommand() {
+      commandCase_ = CommandOneofCase.None;
+      command_ = null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -106,16 +4558,32 @@ namespace Magewatch.API {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Name != other.Name) return false;
-      if (Id != other.Id) return false;
+      if (!object.Equals(Wait, other.Wait)) return false;
+      if (!object.Equals(UpdateInterface, other.UpdateInterface)) return false;
+      if (!object.Equals(DrawCard, other.DrawCard)) return false;
+      if (!object.Equals(PlayCard, other.PlayCard)) return false;
+      if (!object.Equals(UpdatePlayer, other.UpdatePlayer)) return false;
+      if (!object.Equals(CreateOrUpdateCreature, other.CreateOrUpdateCreature)) return false;
+      if (!object.Equals(RemoveCreature, other.RemoveCreature)) return false;
+      if (!object.Equals(MeleeEngage, other.MeleeEngage)) return false;
+      if (!object.Equals(Attack, other.Attack)) return false;
+      if (CommandCase != other.CommandCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
-      if (Id != 0) hash ^= Id.GetHashCode();
+      if (commandCase_ == CommandOneofCase.Wait) hash ^= Wait.GetHashCode();
+      if (commandCase_ == CommandOneofCase.UpdateInterface) hash ^= UpdateInterface.GetHashCode();
+      if (commandCase_ == CommandOneofCase.DrawCard) hash ^= DrawCard.GetHashCode();
+      if (commandCase_ == CommandOneofCase.PlayCard) hash ^= PlayCard.GetHashCode();
+      if (commandCase_ == CommandOneofCase.UpdatePlayer) hash ^= UpdatePlayer.GetHashCode();
+      if (commandCase_ == CommandOneofCase.CreateOrUpdateCreature) hash ^= CreateOrUpdateCreature.GetHashCode();
+      if (commandCase_ == CommandOneofCase.RemoveCreature) hash ^= RemoveCreature.GetHashCode();
+      if (commandCase_ == CommandOneofCase.MeleeEngage) hash ^= MeleeEngage.GetHashCode();
+      if (commandCase_ == CommandOneofCase.Attack) hash ^= Attack.GetHashCode();
+      hash ^= (int) commandCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -129,13 +4597,41 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Name.Length != 0) {
+      if (commandCase_ == CommandOneofCase.Wait) {
         output.WriteRawTag(10);
-        output.WriteString(Name);
+        output.WriteMessage(Wait);
       }
-      if (Id != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Id);
+      if (commandCase_ == CommandOneofCase.UpdateInterface) {
+        output.WriteRawTag(18);
+        output.WriteMessage(UpdateInterface);
+      }
+      if (commandCase_ == CommandOneofCase.DrawCard) {
+        output.WriteRawTag(26);
+        output.WriteMessage(DrawCard);
+      }
+      if (commandCase_ == CommandOneofCase.PlayCard) {
+        output.WriteRawTag(34);
+        output.WriteMessage(PlayCard);
+      }
+      if (commandCase_ == CommandOneofCase.UpdatePlayer) {
+        output.WriteRawTag(42);
+        output.WriteMessage(UpdatePlayer);
+      }
+      if (commandCase_ == CommandOneofCase.CreateOrUpdateCreature) {
+        output.WriteRawTag(50);
+        output.WriteMessage(CreateOrUpdateCreature);
+      }
+      if (commandCase_ == CommandOneofCase.RemoveCreature) {
+        output.WriteRawTag(58);
+        output.WriteMessage(RemoveCreature);
+      }
+      if (commandCase_ == CommandOneofCase.MeleeEngage) {
+        output.WriteRawTag(66);
+        output.WriteMessage(MeleeEngage);
+      }
+      if (commandCase_ == CommandOneofCase.Attack) {
+        output.WriteRawTag(74);
+        output.WriteMessage(Attack);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -145,11 +4641,32 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      if (commandCase_ == CommandOneofCase.Wait) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Wait);
       }
-      if (Id != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
+      if (commandCase_ == CommandOneofCase.UpdateInterface) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(UpdateInterface);
+      }
+      if (commandCase_ == CommandOneofCase.DrawCard) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(DrawCard);
+      }
+      if (commandCase_ == CommandOneofCase.PlayCard) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayCard);
+      }
+      if (commandCase_ == CommandOneofCase.UpdatePlayer) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(UpdatePlayer);
+      }
+      if (commandCase_ == CommandOneofCase.CreateOrUpdateCreature) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreateOrUpdateCreature);
+      }
+      if (commandCase_ == CommandOneofCase.RemoveCreature) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(RemoveCreature);
+      }
+      if (commandCase_ == CommandOneofCase.MeleeEngage) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MeleeEngage);
+      }
+      if (commandCase_ == CommandOneofCase.Attack) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Attack);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -162,12 +4679,63 @@ namespace Magewatch.API {
       if (other == null) {
         return;
       }
-      if (other.Name.Length != 0) {
-        Name = other.Name;
+      switch (other.CommandCase) {
+        case CommandOneofCase.Wait:
+          if (Wait == null) {
+            Wait = new global::Magewatch.API.WaitCommand();
+          }
+          Wait.MergeFrom(other.Wait);
+          break;
+        case CommandOneofCase.UpdateInterface:
+          if (UpdateInterface == null) {
+            UpdateInterface = new global::Magewatch.API.UpdateInterfaceCommand();
+          }
+          UpdateInterface.MergeFrom(other.UpdateInterface);
+          break;
+        case CommandOneofCase.DrawCard:
+          if (DrawCard == null) {
+            DrawCard = new global::Magewatch.API.DrawCardCommand();
+          }
+          DrawCard.MergeFrom(other.DrawCard);
+          break;
+        case CommandOneofCase.PlayCard:
+          if (PlayCard == null) {
+            PlayCard = new global::Magewatch.API.PlayCardCommand();
+          }
+          PlayCard.MergeFrom(other.PlayCard);
+          break;
+        case CommandOneofCase.UpdatePlayer:
+          if (UpdatePlayer == null) {
+            UpdatePlayer = new global::Magewatch.API.UpdatePlayerCommand();
+          }
+          UpdatePlayer.MergeFrom(other.UpdatePlayer);
+          break;
+        case CommandOneofCase.CreateOrUpdateCreature:
+          if (CreateOrUpdateCreature == null) {
+            CreateOrUpdateCreature = new global::Magewatch.API.CreateOrUpdateCreatureCommand();
+          }
+          CreateOrUpdateCreature.MergeFrom(other.CreateOrUpdateCreature);
+          break;
+        case CommandOneofCase.RemoveCreature:
+          if (RemoveCreature == null) {
+            RemoveCreature = new global::Magewatch.API.RemoveCreatureCommand();
+          }
+          RemoveCreature.MergeFrom(other.RemoveCreature);
+          break;
+        case CommandOneofCase.MeleeEngage:
+          if (MeleeEngage == null) {
+            MeleeEngage = new global::Magewatch.API.MeleeEngageCommand();
+          }
+          MeleeEngage.MergeFrom(other.MeleeEngage);
+          break;
+        case CommandOneofCase.Attack:
+          if (Attack == null) {
+            Attack = new global::Magewatch.API.AttackCommand();
+          }
+          Attack.MergeFrom(other.Attack);
+          break;
       }
-      if (other.Id != 0) {
-        Id = other.Id;
-      }
+
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -180,11 +4748,326 @@ namespace Magewatch.API {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            Name = input.ReadString();
+            global::Magewatch.API.WaitCommand subBuilder = new global::Magewatch.API.WaitCommand();
+            if (commandCase_ == CommandOneofCase.Wait) {
+              subBuilder.MergeFrom(Wait);
+            }
+            input.ReadMessage(subBuilder);
+            Wait = subBuilder;
             break;
           }
-          case 16: {
-            Id = input.ReadInt32();
+          case 18: {
+            global::Magewatch.API.UpdateInterfaceCommand subBuilder = new global::Magewatch.API.UpdateInterfaceCommand();
+            if (commandCase_ == CommandOneofCase.UpdateInterface) {
+              subBuilder.MergeFrom(UpdateInterface);
+            }
+            input.ReadMessage(subBuilder);
+            UpdateInterface = subBuilder;
+            break;
+          }
+          case 26: {
+            global::Magewatch.API.DrawCardCommand subBuilder = new global::Magewatch.API.DrawCardCommand();
+            if (commandCase_ == CommandOneofCase.DrawCard) {
+              subBuilder.MergeFrom(DrawCard);
+            }
+            input.ReadMessage(subBuilder);
+            DrawCard = subBuilder;
+            break;
+          }
+          case 34: {
+            global::Magewatch.API.PlayCardCommand subBuilder = new global::Magewatch.API.PlayCardCommand();
+            if (commandCase_ == CommandOneofCase.PlayCard) {
+              subBuilder.MergeFrom(PlayCard);
+            }
+            input.ReadMessage(subBuilder);
+            PlayCard = subBuilder;
+            break;
+          }
+          case 42: {
+            global::Magewatch.API.UpdatePlayerCommand subBuilder = new global::Magewatch.API.UpdatePlayerCommand();
+            if (commandCase_ == CommandOneofCase.UpdatePlayer) {
+              subBuilder.MergeFrom(UpdatePlayer);
+            }
+            input.ReadMessage(subBuilder);
+            UpdatePlayer = subBuilder;
+            break;
+          }
+          case 50: {
+            global::Magewatch.API.CreateOrUpdateCreatureCommand subBuilder = new global::Magewatch.API.CreateOrUpdateCreatureCommand();
+            if (commandCase_ == CommandOneofCase.CreateOrUpdateCreature) {
+              subBuilder.MergeFrom(CreateOrUpdateCreature);
+            }
+            input.ReadMessage(subBuilder);
+            CreateOrUpdateCreature = subBuilder;
+            break;
+          }
+          case 58: {
+            global::Magewatch.API.RemoveCreatureCommand subBuilder = new global::Magewatch.API.RemoveCreatureCommand();
+            if (commandCase_ == CommandOneofCase.RemoveCreature) {
+              subBuilder.MergeFrom(RemoveCreature);
+            }
+            input.ReadMessage(subBuilder);
+            RemoveCreature = subBuilder;
+            break;
+          }
+          case 66: {
+            global::Magewatch.API.MeleeEngageCommand subBuilder = new global::Magewatch.API.MeleeEngageCommand();
+            if (commandCase_ == CommandOneofCase.MeleeEngage) {
+              subBuilder.MergeFrom(MeleeEngage);
+            }
+            input.ReadMessage(subBuilder);
+            MeleeEngage = subBuilder;
+            break;
+          }
+          case 74: {
+            global::Magewatch.API.AttackCommand subBuilder = new global::Magewatch.API.AttackCommand();
+            if (commandCase_ == CommandOneofCase.Attack) {
+              subBuilder.MergeFrom(Attack);
+            }
+            input.ReadMessage(subBuilder);
+            Attack = subBuilder;
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class CommandGroup : pb::IMessage<CommandGroup> {
+    private static readonly pb::MessageParser<CommandGroup> _parser = new pb::MessageParser<CommandGroup>(() => new CommandGroup());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CommandGroup> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[24]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CommandGroup() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CommandGroup(CommandGroup other) : this() {
+      commands_ = other.commands_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CommandGroup Clone() {
+      return new CommandGroup(this);
+    }
+
+    /// <summary>Field number for the "commands" field.</summary>
+    public const int CommandsFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::Magewatch.API.Command> _repeated_commands_codec
+        = pb::FieldCodec.ForMessage(10, global::Magewatch.API.Command.Parser);
+    private readonly pbc::RepeatedField<global::Magewatch.API.Command> commands_ = new pbc::RepeatedField<global::Magewatch.API.Command>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Magewatch.API.Command> Commands {
+      get { return commands_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CommandGroup);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CommandGroup other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!commands_.Equals(other.commands_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= commands_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      commands_.WriteTo(output, _repeated_commands_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      size += commands_.CalculateSize(_repeated_commands_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CommandGroup other) {
+      if (other == null) {
+        return;
+      }
+      commands_.Add(other.commands_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            commands_.AddEntriesFrom(input, _repeated_commands_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class CommandList : pb::IMessage<CommandList> {
+    private static readonly pb::MessageParser<CommandList> _parser = new pb::MessageParser<CommandList>(() => new CommandList());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CommandList> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[25]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CommandList() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CommandList(CommandList other) : this() {
+      commandGroups_ = other.commandGroups_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CommandList Clone() {
+      return new CommandList(this);
+    }
+
+    /// <summary>Field number for the "command_groups" field.</summary>
+    public const int CommandGroupsFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::Magewatch.API.CommandGroup> _repeated_commandGroups_codec
+        = pb::FieldCodec.ForMessage(10, global::Magewatch.API.CommandGroup.Parser);
+    private readonly pbc::RepeatedField<global::Magewatch.API.CommandGroup> commandGroups_ = new pbc::RepeatedField<global::Magewatch.API.CommandGroup>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Magewatch.API.CommandGroup> CommandGroups {
+      get { return commandGroups_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CommandList);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CommandList other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!commandGroups_.Equals(other.commandGroups_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= commandGroups_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      commandGroups_.WriteTo(output, _repeated_commandGroups_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      size += commandGroups_.CalculateSize(_repeated_commandGroups_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CommandList other) {
+      if (other == null) {
+        return;
+      }
+      commandGroups_.Add(other.commandGroups_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            commandGroups_.AddEntriesFrom(input, _repeated_commandGroups_codec);
             break;
           }
         }

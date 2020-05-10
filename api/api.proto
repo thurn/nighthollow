@@ -1,9 +1,218 @@
+// Copyright The Magewatch Project
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//    https://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 syntax = "proto3";
 package api;
 
 option csharp_namespace = "Magewatch.API";
 
+message CreatureId {
+  int32 value = 1;
+}
+
+message CardId {
+  int32 value = 1;
+}
+
+enum PlayerName {
+  PLAYER_UNSPECIFIED = 0;
+  USER = 1;
+  ENEMY = 2;
+}
+
+enum RankValue {
+  RANK_UNSPECIFIED = 0;
+  RANK_0 = 1;
+  RANK_1 = 2;
+  RANK_2 = 3;
+  RANK_3 = 4;
+  RANK_4 = 5;
+  RANK_5 = 6;
+}
+
+enum FileValue {
+  FILE_UNSPECIFIED = 0;
+  FILE_0 = 1;
+  FILE_1 = 2;
+  FILE_2 = 3;
+  FILE_3 = 4;
+  FILE_4 = 5;
+  FILE_5 = 6;
+}
+
+enum InfluenceType {
+  INFLUENCE_TYPE_UNSPECIFIED = 0;
+  LIGHT = 1;
+  SKY = 2;
+  FLAME = 3;
+  ICE = 4;
+  EARTH = 5;
+  SHADOW = 6;
+}
+
+enum SkillAnimation {
+  SKILL_UNSPECIFIED = 0;
+  SKILL_1 = 1;
+  SKILL_2 = 2;
+  SKILL_3 = 3;
+  SKILL_4 = 4;
+  SKILL_5 = 5;
+}
+
+message Influence {
+  InfluenceType influence_type = 1;
+  int32 value = 2;
+}
+
+message Asset {
+  string address = 1;
+}
+
+message PlayerData {
+  PlayerName player_name = 1;
+  int32 current_life = 2;
+  int32 maximum_life = 3;
+  int32 current_mana = 4;
+  int32 maximum_mana = 5;
+  repeated Influence current_influence = 6;
+  repeated Influence maximum_influence = 7;
+}
+
+message NoCost {
+}
+
+message StandardCost {
+  int32 mana_cost = 1;
+  repeated Influence influence_cost = 2;
+}
+
+message Text {
+  string text = 1;
+}
+
+message AttachmentData {
+  Asset image = 1;
+}
+
+message UntargetedData {
+}
+
+message CardData {
+  CardId card_id = 1;
+  Asset prefab = 2;
+  string name = 3;
+  oneof cost {
+    NoCost no_cost = 4;
+    StandardCost standard_cost = 5;
+  }
+  PlayerName owner = 6;
+  Asset image = 7;
+  Text text = 8;
+  bool is_revealed = 9;
+  bool can_be_played = 10;
+  oneof card_type {
+    CreatureData creature_card = 11;
+    AttachmentData attachment_card = 12;
+    UntargetedData untargeted_card = 13;
+  }
+}
+
+message CreatureData {
+  CreatureId creature_id = 1;
+  Asset prefab = 2;
+  PlayerName owner = 3;
+  RankValue rank_position = 4;
+  FileValue file_position = 5;
+  int32 maximum_health = 6;
+  bool can_be_repositioned = 7;
+  repeated AttachmentData attachments = 8;
+}
+
+message WaitCommand {
+  int32 wait_time_milliseconds = 1;
+}
+
+message UpdateInterfaceCommand {
+  bool main_button_enabled = 1;
+  string main_button_text = 2;
+}
+
+message UpdatePlayerCommand {
+  PlayerData player = 1;
+}
+
+message DrawCardCommand {
+  CardData card = 1;
+}
+
+message PlayCardCommand {
+  CardData card = 1;
+}
+
+message CreateOrUpdateCreatureCommand {
+  CreatureData creature = 1;
+}
+
+message RemoveCreatureCommand {
+  CreatureId creature_id = 1;
+}
+
+message MeleeEngageCommand {
+  CreatureId creature_id = 1;
+  CreatureId target_creature_id = 2;
+}
+
+message ApplyDamageEffect {
+  int32 damage = 1;
+  bool kills_target = 2;
+}
+
+message FireProjectileEffect {
+  Asset prefab = 1;
+  ApplyDamageEffect apply_damage = 2;
+  bool at_opponent = 3;
+}
+
+message AttackCommand {
+  CreatureId creature_id = 1;
+  CreatureId target_creature_id = 2;
+  SkillAnimation skill = 3;
+  int32 hit_count = 4;
+  oneof attack_effect {
+    ApplyDamageEffect apply_damage = 5;
+    FireProjectileEffect fire_projectile = 6;
+  }
+}
+
 message Command {
-  string name = 1;
-  int32 id = 2;
+  oneof command {
+    WaitCommand wait = 1;
+    UpdateInterfaceCommand update_interface = 2;
+    DrawCardCommand draw_card = 3;
+    PlayCardCommand play_card = 4;
+    UpdatePlayerCommand update_player = 5;
+    CreateOrUpdateCreatureCommand create_or_update_creature = 6;
+    RemoveCreatureCommand remove_creature = 7;
+    MeleeEngageCommand melee_engage = 8;
+    AttackCommand attack = 9;
+  }
+}
+
+message CommandGroup {
+  repeated Command commands = 1;
+}
+
+message CommandList {
+  repeated CommandGroup command_groups = 1;
 }
