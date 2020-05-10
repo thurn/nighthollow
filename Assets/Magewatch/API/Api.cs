@@ -762,6 +762,10 @@ namespace Magewatch.API {
 
   }
 
+  /// <summary>
+  /// There are two players in a game named "user" and "enemy". The term
+  /// "opponent" can be used to contextually refer to either player
+  /// </summary>
   public sealed partial class PlayerData : pb::IMessage<PlayerData> {
     private static readonly pb::MessageParser<PlayerData> _parser = new pb::MessageParser<PlayerData>(() => new PlayerData());
     private pb::UnknownFieldSet _unknownFields;
@@ -1789,6 +1793,9 @@ namespace Magewatch.API {
     /// <summary>Field number for the "image" field.</summary>
     public const int ImageFieldNumber = 7;
     private global::Magewatch.API.Asset image_;
+    /// <summary>
+    /// Sprite to display as the card image
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Magewatch.API.Asset Image {
       get { return image_; }
@@ -1811,6 +1818,9 @@ namespace Magewatch.API {
     /// <summary>Field number for the "is_revealed" field.</summary>
     public const int IsRevealedFieldNumber = 9;
     private bool isRevealed_;
+    /// <summary>
+    /// Should this card be shown face-up?
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool IsRevealed {
       get { return isRevealed_; }
@@ -1822,6 +1832,10 @@ namespace Magewatch.API {
     /// <summary>Field number for the "can_be_played" field.</summary>
     public const int CanBePlayedFieldNumber = 10;
     private bool canBePlayed_;
+    /// <summary>
+    /// Can the user play this card? i.e. does it have a valid target and can the
+    /// user pay its costs?
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool CanBePlayed {
       get { return canBePlayed_; }
@@ -2362,6 +2376,9 @@ namespace Magewatch.API {
     /// <summary>Field number for the "can_be_repositioned" field.</summary>
     public const int CanBeRepositionedFieldNumber = 7;
     private bool canBeRepositioned_;
+    /// <summary>
+    /// Can the user change this creature's position?
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool CanBeRepositioned {
       get { return canBeRepositioned_; }
@@ -3929,6 +3946,10 @@ namespace Magewatch.API {
     /// <summary>Field number for the "at_opponent" field.</summary>
     public const int AtOpponentFieldNumber = 3;
     private bool atOpponent_;
+    /// <summary>
+    /// If true, the projectil is fired at the opposing player instead of at
+    /// a target creature.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool AtOpponent {
       get { return atOpponent_; }
@@ -4065,6 +4086,10 @@ namespace Magewatch.API {
 
   }
 
+  /// <summary>
+  /// Causes a creature to play a skill animation and optionally target an effect
+  /// at an opposing creature
+  /// </summary>
   public sealed partial class AttackCommand : pb::IMessage<AttackCommand> {
     private static readonly pb::MessageParser<AttackCommand> _parser = new pb::MessageParser<AttackCommand>(() => new AttackCommand());
     private pb::UnknownFieldSet _unknownFields;
@@ -4136,6 +4161,9 @@ namespace Magewatch.API {
     /// <summary>Field number for the "skill" field.</summary>
     public const int SkillFieldNumber = 3;
     private global::Magewatch.API.SkillAnimation skill_ = global::Magewatch.API.SkillAnimation.SkillUnspecified;
+    /// <summary>
+    /// Which skill animation to play
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Magewatch.API.SkillAnimation Skill {
       get { return skill_; }
@@ -4147,6 +4175,9 @@ namespace Magewatch.API {
     /// <summary>Field number for the "hit_count" field.</summary>
     public const int HitCountFieldNumber = 4;
     private int hitCount_;
+    /// <summary>
+    /// How many times this skill is expected to raise the "AttackStart" event
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int HitCount {
       get { return hitCount_; }
@@ -4393,6 +4424,9 @@ namespace Magewatch.API {
 
   }
 
+  /// <summary>
+  /// A single instruction to the client UI to perform some action.
+  /// </summary>
   public sealed partial class Command : pb::IMessage<Command> {
     private static readonly pb::MessageParser<Command> _parser = new pb::MessageParser<Command>(() => new Command());
     private pb::UnknownFieldSet _unknownFields;
@@ -4870,6 +4904,12 @@ namespace Magewatch.API {
 
   }
 
+  /// <summary>
+  /// Represents a set of commands which should be executed in parallel,
+  /// operating simultaneously. Position in the command list can be used
+  /// to indicate *visually* which actions start earlier, even though the
+  /// system considers them to all happen at the same time.
+  /// </summary>
   public sealed partial class CommandGroup : pb::IMessage<CommandGroup> {
     private static readonly pb::MessageParser<CommandGroup> _parser = new pb::MessageParser<CommandGroup>(() => new CommandGroup());
     private pb::UnknownFieldSet _unknownFields;
@@ -4991,6 +5031,11 @@ namespace Magewatch.API {
 
   }
 
+  /// <summary>
+  /// Represents a sequence of groups of commands which should be executed in
+  /// serial, one after another. Each group is completely executed before the
+  /// next group begins.
+  /// </summary>
   public sealed partial class CommandList : pb::IMessage<CommandList> {
     private static readonly pb::MessageParser<CommandList> _parser = new pb::MessageParser<CommandList>(() => new CommandList());
     private pb::UnknownFieldSet _unknownFields;

@@ -14,14 +14,18 @@
 
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Magewatch.Data
 {
+  public sealed class CreatureId
+  {
+    public int Value;
+  }
+
   [Serializable]
   public sealed class CreatureData
   {
-    public int CreatureId;
+    public CreatureId CreatureId;
     public PlayerName Owner;
     public RankValue RankPosition;
     public FileValue FilePosition;

@@ -48,7 +48,7 @@ namespace Magewatch.Components
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
 
-    public int CardId => _cardData.CardId;
+    public CardId CardId => _cardData.CardId;
 
     public void Initialize(CardData cardData)
     {

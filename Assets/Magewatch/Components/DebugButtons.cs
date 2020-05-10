@@ -432,13 +432,17 @@ namespace Magewatch.Components
       };
     }
 
+    static CreatureId CreatureId(int id) => new CreatureId {Value = id};
+
+    static CardId CardId(int id) => new CardId {Value = id};
+
     static Command RemoveCreature(int id)
     {
       return new Command
       {
         RemoveCreature = new RemoveCreatureCommand
         {
-          CreatureId = id
+          CreatureId = CreatureId(id)
         }
       };
     }
@@ -448,7 +452,7 @@ namespace Magewatch.Components
     {
       return new CreatureData
       {
-        CreatureId = id,
+        CreatureId = CreatureId(id),
         Prefab = Prefab($"Creatures/{name}"),
         Owner = owner,
         RankPosition = x.HasValue ? BoardPositions.ClosestRankForXPosition(x.Value, owner) : RankValue.Unknown,
@@ -475,8 +479,8 @@ namespace Magewatch.Components
       {
         MeleeEngage = new MeleeEngageCommand
         {
-          CreatureId = c1,
-          TargetCreatureId = c2
+          CreatureId = CreatureId(c1),
+          TargetCreatureId = CreatureId(c2)
         }
       };
     }
@@ -488,8 +492,8 @@ namespace Magewatch.Components
       {
         Attack = new AttackCommand
         {
-          CreatureId = c1,
-          TargetCreatureId = c2,
+          CreatureId = CreatureId(c1),
+          TargetCreatureId = CreatureId(c2),
           SkillNumber = skill,
           HitCount = hitCount,
           AttackEffect = new AttackEffect
@@ -508,7 +512,7 @@ namespace Magewatch.Components
     {
       return new CardData
       {
-        CardId = id,
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Name = name == null ? "Mage" : name.ToString(),
         ManaCost = 2,
@@ -526,7 +530,7 @@ namespace Magewatch.Components
     {
       return new CardData
       {
-        CardId = id,
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Name = "Berserker",
         ManaCost = 4,
@@ -544,7 +548,7 @@ namespace Magewatch.Components
     {
       return new CardData
       {
-        CardId = id,
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Name = "Rage",
         ManaCost = 3,
@@ -565,7 +569,7 @@ namespace Magewatch.Components
     {
       return new CardData
       {
-        CardId = id,
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Name = "Knowledge",
         ManaCost = 3,
@@ -586,7 +590,7 @@ namespace Magewatch.Components
     {
       return new CardData
       {
-        CardId = id,
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Name = "Flame Scroll",
         NoCost = true,
@@ -603,7 +607,7 @@ namespace Magewatch.Components
     {
       return new CardData
       {
-        CardId = id,
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Owner = PlayerName.Enemy,
         IsRevealed = false,
@@ -646,8 +650,8 @@ namespace Magewatch.Components
       {
         Attack = new AttackCommand
         {
-          CreatureId = c1,
-          TargetCreatureId = c2,
+          CreatureId = CreatureId(c1),
+          TargetCreatureId = CreatureId(c2),
           SkillNumber = skill,
           HitCount = 1,
           AttackEffect = new AttackEffect
@@ -672,8 +676,8 @@ namespace Magewatch.Components
       {
         Attack = new AttackCommand
         {
-          CreatureId = c1,
-          TargetCreatureId = c1,
+          CreatureId = CreatureId(c1),
+          TargetCreatureId = CreatureId(c1),
           SkillNumber = skill,
           HitCount = 1,
           AttackEffect = new AttackEffect

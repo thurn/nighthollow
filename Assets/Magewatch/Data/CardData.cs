@@ -17,10 +17,15 @@ using System.Collections.Generic;
 
 namespace Magewatch.Data
 {
+  public sealed class CardId
+  {
+    public int Value;
+  }
+
   [Serializable]
   public sealed class CardData
   {
-    public int CardId;
+    public CardId CardId;
     public Asset Prefab;
     public string Name;
     public bool NoCost;

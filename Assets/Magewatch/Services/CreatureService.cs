@@ -75,24 +75,24 @@ namespace Magewatch.Services
       return result;
     }
 
-    public bool HasCreature(int creatureId) => _creatures.ContainsKey(creatureId);
+    public bool HasCreature(CreatureId creatureId) => _creatures.ContainsKey(creatureId.Value);
 
-    public Creature Get(int creatureId)
+    public Creature Get(CreatureId creatureId)
     {
-      if (!_creatures.ContainsKey(creatureId))
+      if (!_creatures.ContainsKey(creatureId.Value))
       {
         throw new ArgumentException($"Creature with ID {creatureId} not found!");
       }
 
-      return _creatures[creatureId];
+      return _creatures[creatureId.Value];
     }
 
-    public void Destroy(int creatureId)
+    public void Destroy(CreatureId creatureId)
     {
       var creature = Get(creatureId);
       var files = GetFiles(creature.Owner);
       files[creature.FilePosition.ToIndex()].RemoveAtPosition(creature.RankPosition);
-      _creatures.Remove(creatureId);
+      _creatures.Remove(creatureId.Value);
       creature.Destroy();
     }
 
@@ -101,7 +101,7 @@ namespace Magewatch.Services
       var files = GetFiles(creature.Owner);
       creature.SetPosition(rank, file);
       files[file.ToIndex()].AddCreature(creature, rank);
-      _creatures[creature.CreatureId] = creature;
+      _creatures[creature.CreatureId.Value] = creature;
       foreach (var f in files)
       {
         f.ToDefaultPositions();

@@ -103,25 +103,25 @@ namespace Magewatch.Data
 
   public sealed class RemoveCreatureCommand
   {
-    public int CreatureId;
+    public CreatureId CreatureId;
   }
 
   public sealed class MeleeEngageCommand
   {
     /// <summary>The creature which is moving to attack</summary>
-    public int CreatureId;
+    public CreatureId CreatureId;
 
     /// <summary>The creature should move to within melee range of this enemy creature</summary>
-    public int TargetCreatureId;
+    public CreatureId TargetCreatureId;
   }
 
   public sealed class AttackCommand
   {
     /// <summary>The creature performing the attack</summary>
-    public int CreatureId;
+    public CreatureId CreatureId;
 
     /// <summary>The creature being attacked</summary>
-    public int TargetCreatureId;
+    public CreatureId TargetCreatureId;
 
     /// <summary>Which skill animation should be used</summary>
     public Skill SkillNumber;

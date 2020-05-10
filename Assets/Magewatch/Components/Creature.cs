@@ -90,7 +90,7 @@ namespace Magewatch.Components
       _renderers = GetComponentsInChildren<SpriteRenderer>();
     }
 
-    public int CreatureId => _creatureData.CreatureId;
+    public CreatureId CreatureId => _creatureData.CreatureId;
 
     public PlayerName Owner => _creatureData.Owner;
 
@@ -324,7 +324,7 @@ namespace Magewatch.Components
         var yOffset = Vector3.zero;
         if (_currentTarget.CurrentTarget != this)
         {
-          yOffset = new Vector3(0, new[] {0.5f, -0.5f, -0.3f, 0.3f}[CreatureId % 4], 0);
+          yOffset = new Vector3(0, new[] {0.5f, -0.5f, -0.3f, 0.3f}[CreatureId.Value % 4], 0);
         }
 
         if (Vector2.Distance(MeleePosition.position, _currentTarget.MeleePosition.position + yOffset) < 0.05f)
