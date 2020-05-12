@@ -12,20 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-mod api;
-mod old;
-
-#[macro_use]
-extern crate lazy_static;
+use prost_build;
 
 fn main() {
-    let asset = api::Asset {
-        address: String::from("Hello"),
-        asset_type: api::AssetType::Prefab.into(),
-    };
-    println!(
-        "Hello, {:?} with type {:?}!",
-        asset.address,
-        asset.asset_type()
-    );
+    prost_build::compile_protos(&["api/api.proto"], &["api/"]).unwrap();
 }
