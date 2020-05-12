@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::model::types::{Attack, Attackable, AttackerMut, CreatureState, Game, Player};
+use crate::old::model::types::{Attack, Attackable, AttackerMut, CreatureState, Game, Player};
 
 pub fn apply_combat(game: &mut Game) {
     for attacker in game.user.attackers_mut() {

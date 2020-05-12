@@ -15,18 +15,32 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::model::{
+use crate::old::model::{
     mutations::Mutation,
-    primitives::Result,
+    primitives::{CreatureTag, Damage, Influence, ManaValue, Result},
     rules::{Request, Response, Rule},
     types::Creature,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct MayDiscardToDraw();
+pub struct ExhaustSoTargetWithAttackLessThanCantBeBlocked(pub Damage);
 
 #[typetag::serde]
-impl Rule for MayDiscardToDraw {
+impl Rule for ExhaustSoTargetWithAttackLessThanCantBeBlocked {
+    fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
+        Ok(vec![])
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ExhaustToAddManaOnlyForCreaturesWithTag {
+    pub mana: ManaValue,
+    pub influence: Influence,
+    pub tag: CreatureTag,
+}
+
+#[typetag::serde]
+impl Rule for ExhaustToAddManaOnlyForCreaturesWithTag {
     fn update(&self, r: &Request) -> Result<Vec<Mutation>> {
         Ok(vec![])
     }

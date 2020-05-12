@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{
+use crate::old::{
     model::attributes::*, model::primitives::*, model::rules::*, model::types::*,
     rules::activated::*, rules::bonus::*, rules::card::*, rules::damage::*,
 };

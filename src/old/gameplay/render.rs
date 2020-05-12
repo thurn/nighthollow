@@ -20,7 +20,7 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use crate::{
+use crate::old::{
     model::primitives::{self, GamePhase, ManaValue, PlayerName},
     model::types::{Card, CardVariant, Creature, Game, Player},
 };

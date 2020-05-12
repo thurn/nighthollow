@@ -19,7 +19,7 @@ use rand::{
     prelude::thread_rng,
 };
 
-use crate::{
+use crate::old::{
     model::primitives::{Influence, InterfaceError, ManaValue, Result},
     model::types::{CardVariant, Cost, Player, Spell},
 };

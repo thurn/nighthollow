@@ -16,7 +16,7 @@ use std::fmt::{Display, Formatter};
 
 use serde::{Deserialize, Serialize};
 
-use crate::model::{
+use crate::old::model::{
     attributes::Attribute,
     primitives::{
         CombatPosition, Damage, GamePhase, HealthValue, Influence, InterfaceError, ManaValue,

@@ -15,7 +15,7 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::model::{
+use crate::old::model::{
     helpers,
     mutations::{Mutation, MutationType, SelectorType},
     primitives::{Damage, Result},

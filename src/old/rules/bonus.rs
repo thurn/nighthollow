@@ -15,7 +15,7 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::model::{
+use crate::old::model::{
     mutations::Mutation,
     primitives::{CreatureTag, Damage, HealthValue, Result},
     rules::{Request, Response, Rule},
