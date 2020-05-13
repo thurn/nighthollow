@@ -17,6 +17,10 @@ package api;
 
 option csharp_namespace = "Magewatch.API";
 
+message GameId {
+  int32 value = 1;
+}
+
 message CreatureId {
   int32 value = 1;
 }
@@ -51,6 +55,77 @@ enum FileValue {
   FILE_5 = 6;
 }
 
+// Requests to start a new game with a new game ID. The client should discard
+// all previous state when sending this action.
+message StartGameAction {
+}
+
+// Requests to load the current state of a game. The client should discard
+// all previous state when sending this action.
+message ConnectToGameAction {
+  GameId game_id = 1;
+}
+
+// Advance the game to the next phase
+message AdvancePhaseAction {
+  GameId game_id = 1;
+}
+
+// Play a creature card at a given position
+message PlayCreatureCard {
+  RankValue rank_position = 1;
+
+  FileValue file_position = 2;
+}
+
+// Play an attachment card on a given creature
+message PlayAttachmentCard {
+  CreatureId creature_id = 1;
+}
+
+// Play a card which does not require targeting
+message PlayUntargetedCard {
+}
+
+// Play a card from the user's hand
+message PlayCardAction {
+  GameId game_id = 1;
+
+  CardId card_id = 2;
+
+  oneof play_card {
+    PlayCreatureCard play_creature = 3;
+
+    PlayAttachmentCard play_attachment = 4;
+
+    PlayUntargetedCard play_untargeted = 5;
+  }
+}
+
+message CreaturePositionUpdate {
+  CreatureId creature_id = 1;
+
+  RankValue rank_position = 2;
+
+  FileValue file_position = 3;
+}
+
+message RepositionCreaturesAction {
+  repeated CreaturePositionUpdate position_updates = 1;
+}
+
+// Data sent to the server whenever the user does something in the game's user
+// interface
+message Action {
+  oneof action {
+    StartGameAction start_game = 1;
+    ConnectToGameAction connect_to_game = 2;
+    AdvancePhaseAction advance_phase = 3;
+    PlayCardAction play_card = 4;
+    RepositionCreaturesAction reposition_creatures = 5;
+  }
+}
+
 enum InfluenceType {
   INFLUENCE_UNSPECIFIED = 0;
   LIGHT = 1;
@@ -61,25 +136,16 @@ enum InfluenceType {
   SHADOW = 6;
 }
 
-enum SkillAnimation {
-  SKILL_UNSPECIFIED = 0;
-  SKILL_1 = 1;
-  SKILL_2 = 2;
-  SKILL_3 = 3;
-  SKILL_4 = 4;
-  SKILL_5 = 5;
+message Influence {
+  InfluenceType influence_type = 1;
+
+  int32 value = 2;
 }
 
 enum AssetType {
   TYPE_UNSPECIFIED = 0;
   PREFAB = 1;
   SPRITE = 2;
-}
-
-message Influence {
-  InfluenceType influence_type = 1;
-
-  int32 value = 2;
 }
 
 message Asset {
@@ -237,6 +303,15 @@ message FireProjectileEffect {
   // If true, the projectil is fired at the opposing player instead of at
   // a target creature.
   bool at_opponent = 3;
+}
+
+enum SkillAnimation {
+  SKILL_UNSPECIFIED = 0;
+  SKILL_1 = 1;
+  SKILL_2 = 2;
+  SKILL_3 = 3;
+  SKILL_4 = 4;
+  SKILL_5 = 5;
 }
 
 // Causes a creature to play a skill animation and optionally target an effect

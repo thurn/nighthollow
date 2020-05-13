@@ -1,6 +1,11 @@
 // Generated Code. Do not edit!
 
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GameId {
+    #[prost(int32, tag = "1")]
+    pub value: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreatureId {
     #[prost(int32, tag = "1")]
     pub value: i32,
@@ -9,6 +14,97 @@ pub struct CreatureId {
 pub struct CardId {
     #[prost(int32, tag = "1")]
     pub value: i32,
+}
+/// Requests to start a new game with a new game ID. The client should discard
+/// all previous state when sending this action.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct StartGameAction {}
+/// Requests to load the current state of a game. The client should discard
+/// all previous state when sending this action.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ConnectToGameAction {
+    #[prost(message, optional, tag = "1")]
+    pub game_id: ::std::option::Option<GameId>,
+}
+/// Advance the game to the next phase
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AdvancePhaseAction {
+    #[prost(message, optional, tag = "1")]
+    pub game_id: ::std::option::Option<GameId>,
+}
+/// Play a creature card at a given position
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PlayCreatureCard {
+    #[prost(enumeration = "RankValue", tag = "1")]
+    pub rank_position: i32,
+    #[prost(enumeration = "FileValue", tag = "2")]
+    pub file_position: i32,
+}
+/// Play an attachment card on a given creature
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PlayAttachmentCard {
+    #[prost(message, optional, tag = "1")]
+    pub creature_id: ::std::option::Option<CreatureId>,
+}
+/// Play a card which does not require targeting
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PlayUntargetedCard {}
+/// Play a card from the user's hand
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PlayCardAction {
+    #[prost(message, optional, tag = "1")]
+    pub game_id: ::std::option::Option<GameId>,
+    #[prost(message, optional, tag = "2")]
+    pub card_id: ::std::option::Option<CardId>,
+    #[prost(oneof = "play_card_action::PlayCard", tags = "3, 4, 5")]
+    pub play_card: ::std::option::Option<play_card_action::PlayCard>,
+}
+pub mod play_card_action {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum PlayCard {
+        #[prost(message, tag = "3")]
+        PlayCreature(super::PlayCreatureCard),
+        #[prost(message, tag = "4")]
+        PlayAttachment(super::PlayAttachmentCard),
+        #[prost(message, tag = "5")]
+        PlayUntargeted(super::PlayUntargetedCard),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreaturePositionUpdate {
+    #[prost(message, optional, tag = "1")]
+    pub creature_id: ::std::option::Option<CreatureId>,
+    #[prost(enumeration = "RankValue", tag = "2")]
+    pub rank_position: i32,
+    #[prost(enumeration = "FileValue", tag = "3")]
+    pub file_position: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RepositionCreaturesAction {
+    #[prost(message, repeated, tag = "1")]
+    pub position_updates: ::std::vec::Vec<CreaturePositionUpdate>,
+}
+/// Data sent to the server whenever the user does something in the game's user
+/// interface
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Action {
+    #[prost(oneof = "action::Action", tags = "1, 2, 3, 4, 5")]
+    pub action: ::std::option::Option<action::Action>,
+}
+pub mod action {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Action {
+        #[prost(message, tag = "1")]
+        StartGame(super::StartGameAction),
+        #[prost(message, tag = "2")]
+        ConnectToGame(super::ConnectToGameAction),
+        #[prost(message, tag = "3")]
+        AdvancePhase(super::AdvancePhaseAction),
+        #[prost(message, tag = "4")]
+        PlayCard(super::PlayCardAction),
+        #[prost(message, tag = "5")]
+        RepositionCreatures(super::RepositionCreaturesAction),
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Influence {
@@ -315,6 +411,13 @@ pub enum InfluenceType {
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
+pub enum AssetType {
+    TypeUnspecified = 0,
+    Prefab = 1,
+    Sprite = 2,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
 pub enum SkillAnimation {
     SkillUnspecified = 0,
     Skill1 = 1,
@@ -322,11 +425,4 @@ pub enum SkillAnimation {
     Skill3 = 3,
     Skill4 = 4,
     Skill5 = 5,
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum AssetType {
-    TypeUnspecified = 0,
-    Prefab = 1,
-    Sprite = 2,
 }
