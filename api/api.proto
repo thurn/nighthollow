@@ -17,6 +17,10 @@ package api;
 
 option csharp_namespace = "Magewatch.API";
 
+message UserId {
+  int32 value = 1;
+}
+
 message GameId {
   int32 value = 1;
 }
@@ -103,26 +107,33 @@ message PlayCardRequest {
 }
 
 message CreaturePositionUpdate {
-  CreatureId creature_id = 1;
+  GameId game_id = 1;
 
-  RankValue rank_position = 2;
+  CreatureId creature_id = 2;
 
-  FileValue file_position = 3;
+  RankValue rank_position = 3;
+
+  FileValue file_position = 4;
 }
 
 message RepositionCreaturesRequest {
-  repeated CreaturePositionUpdate position_updates = 1;
+  GameId game_id = 1;
+
+  repeated CreaturePositionUpdate position_updates = 2;
 }
 
 // Data sent to the server whenever the user does something in the game's user
 // interface
 message Request {
+  // Identifies the user making this request
+  UserId user_id = 1;
+
   oneof request {
-    StartGameRequest start_game = 1;
-    ConnectToGameRequest connect_to_game = 2;
-    AdvancePhaseRequest advance_phase = 3;
-    PlayCardRequest play_card = 4;
-    RepositionCreaturesRequest reposition_creatures = 5;
+    StartGameRequest start_game = 2;
+    ConnectToGameRequest connect_to_game = 3;
+    AdvancePhaseRequest advance_phase = 4;
+    PlayCardRequest play_card = 5;
+    RepositionCreaturesRequest reposition_creatures = 6;
   }
 }
 
@@ -244,6 +255,10 @@ message CreatureData {
   repeated AttachmentData attachments = 8;
 }
 
+message DisplayErrorCommand {
+  string error = 1;
+}
+
 message WaitCommand {
   int32 wait_time_milliseconds = 1;
 }
@@ -344,6 +359,7 @@ message Command {
     RemoveCreatureCommand remove_creature = 7;
     MeleeEngageCommand melee_engage = 8;
     AttackCommand attack = 9;
+    DisplayErrorCommand display_error = 10;
   }
 }
 

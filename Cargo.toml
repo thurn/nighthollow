@@ -23,6 +23,8 @@ warp = "0.2"
 warp-protobuf = "0.1"
 prost = "0.6"
 prost-build = "0.6"
+color-eyre = "0.3"
+eyre = "0.4"
 
 [dev-dependencies]
 quickcheck = "0.9"

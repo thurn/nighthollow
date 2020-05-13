@@ -13,19 +13,29 @@
 // limitations under the License.
 
 mod api;
+mod commands;
+mod interface;
 mod model;
 mod old;
-mod rules;
+mod requests;
+mod test_data;
 
-use api::{CommandList, Request};
+use api::{command, Command, CommandGroup, CommandList, DisplayErrorCommand, Request};
 use warp::Filter;
 
 #[macro_use]
 extern crate lazy_static;
+extern crate eyre;
 
-fn handle_request(request: Request) -> CommandList {
+fn error_command(message: String) -> CommandList {
     CommandList {
-        command_groups: vec![],
+        command_groups: vec![CommandGroup {
+            commands: vec![Command {
+                command: Some(command::Command::DisplayError(DisplayErrorCommand {
+                    error: message,
+                })),
+            }],
+        }],
     }
 }
 
@@ -37,9 +47,17 @@ async fn main() {
         .and(warp_protobuf::body::protobuf())
         .map(|request: Request| {
             println!("Got request: {:?}", request);
-            let response = handle_request(request);
-            println!("Sending response: {:?}", response);
-            warp_protobuf::reply::protobuf(&response)
+            match requests::handle_request(request) {
+                Ok(response) => {
+                    println!("Sending response: {:?}", response);
+                    warp_protobuf::reply::protobuf(&response)
+                }
+                Err(error) => {
+                    let error = format!("Error! {:?}", error);
+                    eprintln!("{}", error);
+                    warp_protobuf::reply::protobuf(&error_command(error))
+                }
+            }
         });
 
     let site = warp::any().and(warp::fs::dir("static"));

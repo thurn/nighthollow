@@ -1,6 +1,11 @@
 // Generated Code. Do not edit!
 
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UserId {
+    #[prost(int32, tag = "1")]
+    pub value: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GameId {
     #[prost(int32, tag = "1")]
     pub value: i32,
@@ -73,36 +78,43 @@ pub mod play_card_request {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreaturePositionUpdate {
     #[prost(message, optional, tag = "1")]
+    pub game_id: ::std::option::Option<GameId>,
+    #[prost(message, optional, tag = "2")]
     pub creature_id: ::std::option::Option<CreatureId>,
-    #[prost(enumeration = "RankValue", tag = "2")]
+    #[prost(enumeration = "RankValue", tag = "3")]
     pub rank_position: i32,
-    #[prost(enumeration = "FileValue", tag = "3")]
+    #[prost(enumeration = "FileValue", tag = "4")]
     pub file_position: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RepositionCreaturesRequest {
-    #[prost(message, repeated, tag = "1")]
+    #[prost(message, optional, tag = "1")]
+    pub game_id: ::std::option::Option<GameId>,
+    #[prost(message, repeated, tag = "2")]
     pub position_updates: ::std::vec::Vec<CreaturePositionUpdate>,
 }
 /// Data sent to the server whenever the user does something in the game's user
 /// interface
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Request {
-    #[prost(oneof = "request::Request", tags = "1, 2, 3, 4, 5")]
+    /// Identifies the user making this request
+    #[prost(message, optional, tag = "1")]
+    pub user_id: ::std::option::Option<UserId>,
+    #[prost(oneof = "request::Request", tags = "2, 3, 4, 5, 6")]
     pub request: ::std::option::Option<request::Request>,
 }
 pub mod request {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Request {
-        #[prost(message, tag = "1")]
-        StartGame(super::StartGameRequest),
         #[prost(message, tag = "2")]
-        ConnectToGame(super::ConnectToGameRequest),
+        StartGame(super::StartGameRequest),
         #[prost(message, tag = "3")]
-        AdvancePhase(super::AdvancePhaseRequest),
+        ConnectToGame(super::ConnectToGameRequest),
         #[prost(message, tag = "4")]
-        PlayCard(super::PlayCardRequest),
+        AdvancePhase(super::AdvancePhaseRequest),
         #[prost(message, tag = "5")]
+        PlayCard(super::PlayCardRequest),
+        #[prost(message, tag = "6")]
         RepositionCreatures(super::RepositionCreaturesRequest),
     }
 }
@@ -226,6 +238,11 @@ pub struct CreatureData {
     pub attachments: ::std::vec::Vec<AttachmentData>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DisplayErrorCommand {
+    #[prost(string, tag = "1")]
+    pub error: std::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct WaitCommand {
     #[prost(int32, tag = "1")]
     pub wait_time_milliseconds: i32,
@@ -326,7 +343,7 @@ pub mod attack_command {
 /// A single instruction to the client UI to perform some action.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Command {
-    #[prost(oneof = "command::Command", tags = "1, 2, 3, 4, 5, 6, 7, 8, 9")]
+    #[prost(oneof = "command::Command", tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10")]
     pub command: ::std::option::Option<command::Command>,
 }
 pub mod command {
@@ -350,6 +367,8 @@ pub mod command {
         MeleeEngage(super::MeleeEngageCommand),
         #[prost(message, tag = "9")]
         Attack(super::AttackCommand),
+        #[prost(message, tag = "10")]
+        DisplayError(super::DisplayErrorCommand),
     }
 }
 /// Represents a set of commands which should be executed in parallel,

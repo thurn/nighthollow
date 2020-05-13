@@ -15,7 +15,7 @@
 use super::primitives::*;
 
 pub struct ManaCost {
-    pub mana: ManaValue,
+    pub mana: i32,
     pub influence: Influence,
 }
 
@@ -25,11 +25,10 @@ pub enum Cost {
 }
 
 pub struct CardData {
-    pub id: i32,
     pub cost: Cost,
     pub name: String,
     pub school: School,
-    pub owner: PlayerName,
+    pub text: String,
 }
 
 pub trait HasCardData {
@@ -42,9 +41,16 @@ impl HasCardData for CardData {
     }
 }
 
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+pub enum CreatureType {
+    Berserker,
+    Mage,
+}
+
 pub struct CreatureArchetype {
     pub card_data: CardData,
-    pub health: HealthValue,
+    pub base_type: CreatureType,
+    pub health: i32,
 }
 
 impl HasCardData for CreatureArchetype {
@@ -65,8 +71,14 @@ impl HasCardData for Creature {
     }
 }
 
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+pub enum SpellType {
+    Rage,
+}
+
 pub struct Spell {
     pub card_data: CardData,
+    pub base_type: SpellType,
 }
 
 impl HasCardData for Spell {
@@ -75,8 +87,14 @@ impl HasCardData for Spell {
     }
 }
 
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+pub enum ScrollType {
+    FlameScroll,
+}
+
 pub struct Scroll {
     pub card_data: CardData,
+    pub base_type: ScrollType,
 }
 
 impl HasCardData for Scroll {
@@ -104,10 +122,23 @@ impl HasCardData for Card {
 pub struct PlayerState {
     pub current_life: i32,
     pub maximum_life: i32,
-    pub current_mana: ManaValue,
-    pub maximum_mana: ManaValue,
+    pub current_mana: i32,
+    pub maximum_mana: i32,
     pub current_influence: Influence,
     pub maximum_influence: Influence,
+}
+
+impl Default for PlayerState {
+    fn default() -> Self {
+        PlayerState {
+            current_life: 25,
+            maximum_life: 25,
+            current_mana: 0,
+            maximum_mana: 0,
+            current_influence: Influence::default(),
+            maximum_influence: Influence::default(),
+        }
+    }
 }
 
 pub struct Player {

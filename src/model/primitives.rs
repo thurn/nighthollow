@@ -12,95 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::error;
-use std::fmt;
-
 use serde::{Deserialize, Serialize};
 
 extern crate derive_more;
-
-use derive_more::{Add, AddAssign, Constructor, Display, From, Into, Neg, SubAssign, Sum};
-
-pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
-
-#[derive(Debug)]
-pub struct InterfaceError {
-    pub message: String,
-}
-
-impl InterfaceError {
-    pub fn new(message: String) -> Box<InterfaceError> {
-        Box::from(InterfaceError {
-            message: message.to_string(),
-        })
-    }
-
-    pub fn result<T>(message: String) -> Result<T> {
-        Err(InterfaceError::new(message))
-    }
-}
-
-impl fmt::Display for InterfaceError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.message)
-    }
-}
-
-impl error::Error for InterfaceError {
-    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
-        None
-    }
-}
-
-#[derive(
-    Copy,
-    Clone,
-    From,
-    Into,
-    Serialize,
-    Deserialize,
-    Debug,
-    Display,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    Constructor,
-    Add,
-    AddAssign,
-    SubAssign,
-    Neg,
-    Sum,
-)]
-pub struct HealthValue(i32);
-
-impl HealthValue {
-    pub fn apply_damage(&mut self, damage: &Damage) {
-        self.0 = self.0 - damage.fire;
-    }
-}
-
-#[derive(
-    Copy,
-    Clone,
-    From,
-    Into,
-    Serialize,
-    Deserialize,
-    Debug,
-    Display,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    Constructor,
-    Add,
-    AddAssign,
-    SubAssign,
-    Neg,
-    Sum,
-)]
-pub struct ManaValue(i32);
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum GamePhase {
