@@ -15,17 +15,30 @@
 mod api;
 mod old;
 
+use warp::Filter;
+
 #[macro_use]
 extern crate lazy_static;
 
-fn main() {
-    let asset = api::Asset {
-        address: String::from("Hello"),
-        asset_type: api::AssetType::Prefab.into(),
-    };
-    println!(
-        "Hello, {:?} with type {:?}!",
-        asset.address,
-        asset.asset_type()
-    );
+#[tokio::main]
+async fn main() {
+    let routes = warp::post()
+        .and(warp::path("api"))
+        .and(warp::body::content_length_limit(1024 * 16))
+        .and(warp_protobuf::body::protobuf())
+        .map(|influence: api::Influence| {
+            println!(
+                "Hello, influence {:?} of type {:?}",
+                influence.influence_type(),
+                influence.value
+            );
+            let response = api::Asset {
+                address: String::from("Hello, asset"),
+                asset_type: api::AssetType::Prefab.into(),
+            };
+            warp_protobuf::reply::protobuf(&response)
+        });
+
+    println!("Server started at http://localhost:3030");
+    warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
 }

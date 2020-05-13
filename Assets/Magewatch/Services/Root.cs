@@ -42,6 +42,9 @@ namespace Magewatch.Services
     [SerializeField] ObjectPoolService _objectPoolService;
     public ObjectPoolService ObjectPoolService => _objectPoolService;
 
+    [SerializeField] NetworkService _networkService;
+    public NetworkService NetworkService => _networkService;
+
     [SerializeField] CreatureService _creatureService;
     public CreatureService CreatureService => _creatureService;
 

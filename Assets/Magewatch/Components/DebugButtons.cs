@@ -31,6 +31,11 @@ namespace Magewatch.Components
       _idCounter = 100;
     }
 
+    public void StartGame()
+    {
+      Root.Instance.NetworkService.HandleAction();
+    }
+
     public void Slow()
     {
       Time.timeScale = 0.1f;
