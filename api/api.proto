@@ -56,18 +56,18 @@ enum FileValue {
 }
 
 // Requests to start a new game with a new game ID. The client should discard
-// all previous state when sending this action.
-message StartGameAction {
+// all previous state when sending this request.
+message StartGameRequest {
 }
 
 // Requests to load the current state of a game. The client should discard
-// all previous state when sending this action.
-message ConnectToGameAction {
+// all previous state when sending this request.
+message ConnectToGameRequest {
   GameId game_id = 1;
 }
 
 // Advance the game to the next phase
-message AdvancePhaseAction {
+message AdvancePhaseRequest {
   GameId game_id = 1;
 }
 
@@ -88,7 +88,7 @@ message PlayUntargetedCard {
 }
 
 // Play a card from the user's hand
-message PlayCardAction {
+message PlayCardRequest {
   GameId game_id = 1;
 
   CardId card_id = 2;
@@ -110,19 +110,19 @@ message CreaturePositionUpdate {
   FileValue file_position = 3;
 }
 
-message RepositionCreaturesAction {
+message RepositionCreaturesRequest {
   repeated CreaturePositionUpdate position_updates = 1;
 }
 
 // Data sent to the server whenever the user does something in the game's user
 // interface
-message Action {
-  oneof action {
-    StartGameAction start_game = 1;
-    ConnectToGameAction connect_to_game = 2;
-    AdvancePhaseAction advance_phase = 3;
-    PlayCardAction play_card = 4;
-    RepositionCreaturesAction reposition_creatures = 5;
+message Request {
+  oneof request {
+    StartGameRequest start_game = 1;
+    ConnectToGameRequest connect_to_game = 2;
+    AdvancePhaseRequest advance_phase = 3;
+    PlayCardRequest play_card = 4;
+    RepositionCreaturesRequest reposition_creatures = 5;
   }
 }
 

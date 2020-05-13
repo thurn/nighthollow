@@ -13,12 +13,21 @@
 // limitations under the License.
 
 mod api;
+mod model;
 mod old;
+mod rules;
 
+use api::{CommandList, Request};
 use warp::Filter;
 
 #[macro_use]
 extern crate lazy_static;
+
+fn handle_request(request: Request) -> CommandList {
+    CommandList {
+        command_groups: vec![],
+    }
+}
 
 #[tokio::main]
 async fn main() {
@@ -26,16 +35,10 @@ async fn main() {
         .and(warp::path("api"))
         .and(warp::body::content_length_limit(1024 * 16))
         .and(warp_protobuf::body::protobuf())
-        .map(|influence: api::Influence| {
-            println!(
-                "Hello, influence {:?} of type {:?}",
-                influence.influence_type(),
-                influence.value
-            );
-            let response = api::Asset {
-                address: String::from("Hello, asset"),
-                asset_type: api::AssetType::Prefab.into(),
-            };
+        .map(|request: Request| {
+            println!("Got request: {:?}", request);
+            let response = handle_request(request);
+            println!("Sending response: {:?}", response);
             warp_protobuf::reply::protobuf(&response)
         });
 

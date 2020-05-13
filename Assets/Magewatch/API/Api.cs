@@ -26,124 +26,124 @@ namespace Magewatch.API {
           string.Concat(
             "CglhcGkucHJvdG8SA2FwaSIXCgZHYW1lSWQSDQoFdmFsdWUYASABKAUiGwoK",
             "Q3JlYXR1cmVJZBINCgV2YWx1ZRgBIAEoBSIXCgZDYXJkSWQSDQoFdmFsdWUY",
-            "ASABKAUiEQoPU3RhcnRHYW1lQWN0aW9uIjMKE0Nvbm5lY3RUb0dhbWVBY3Rp",
-            "b24SHAoHZ2FtZV9pZBgBIAEoCzILLmFwaS5HYW1lSWQiMgoSQWR2YW5jZVBo",
-            "YXNlQWN0aW9uEhwKB2dhbWVfaWQYASABKAsyCy5hcGkuR2FtZUlkImAKEFBs",
-            "YXlDcmVhdHVyZUNhcmQSJQoNcmFua19wb3NpdGlvbhgBIAEoDjIOLmFwaS5S",
-            "YW5rVmFsdWUSJQoNZmlsZV9wb3NpdGlvbhgCIAEoDjIOLmFwaS5GaWxlVmFs",
-            "dWUiOgoSUGxheUF0dGFjaG1lbnRDYXJkEiQKC2NyZWF0dXJlX2lkGAEgASgL",
-            "Mg8uYXBpLkNyZWF0dXJlSWQiFAoSUGxheVVudGFyZ2V0ZWRDYXJkIvEBCg5Q",
-            "bGF5Q2FyZEFjdGlvbhIcCgdnYW1lX2lkGAEgASgLMgsuYXBpLkdhbWVJZBIc",
-            "CgdjYXJkX2lkGAIgASgLMgsuYXBpLkNhcmRJZBIuCg1wbGF5X2NyZWF0dXJl",
-            "GAMgASgLMhUuYXBpLlBsYXlDcmVhdHVyZUNhcmRIABIyCg9wbGF5X2F0dGFj",
-            "aG1lbnQYBCABKAsyFy5hcGkuUGxheUF0dGFjaG1lbnRDYXJkSAASMgoPcGxh",
-            "eV91bnRhcmdldGVkGAUgASgLMhcuYXBpLlBsYXlVbnRhcmdldGVkQ2FyZEgA",
-            "QgsKCXBsYXlfY2FyZCKMAQoWQ3JlYXR1cmVQb3NpdGlvblVwZGF0ZRIkCgtj",
-            "cmVhdHVyZV9pZBgBIAEoCzIPLmFwaS5DcmVhdHVyZUlkEiUKDXJhbmtfcG9z",
-            "aXRpb24YAiABKA4yDi5hcGkuUmFua1ZhbHVlEiUKDWZpbGVfcG9zaXRpb24Y",
-            "AyABKA4yDi5hcGkuRmlsZVZhbHVlIlIKGVJlcG9zaXRpb25DcmVhdHVyZXNB",
-            "Y3Rpb24SNQoQcG9zaXRpb25fdXBkYXRlcxgBIAMoCzIbLmFwaS5DcmVhdHVy",
-            "ZVBvc2l0aW9uVXBkYXRlIo8CCgZBY3Rpb24SKgoKc3RhcnRfZ2FtZRgBIAEo",
-            "CzIULmFwaS5TdGFydEdhbWVBY3Rpb25IABIzCg9jb25uZWN0X3RvX2dhbWUY",
-            "AiABKAsyGC5hcGkuQ29ubmVjdFRvR2FtZUFjdGlvbkgAEjAKDWFkdmFuY2Vf",
-            "cGhhc2UYAyABKAsyFy5hcGkuQWR2YW5jZVBoYXNlQWN0aW9uSAASKAoJcGxh",
-            "eV9jYXJkGAQgASgLMhMuYXBpLlBsYXlDYXJkQWN0aW9uSAASPgoUcmVwb3Np",
-            "dGlvbl9jcmVhdHVyZXMYBSABKAsyHi5hcGkuUmVwb3NpdGlvbkNyZWF0dXJl",
-            "c0FjdGlvbkgAQggKBmFjdGlvbiJGCglJbmZsdWVuY2USKgoOaW5mbHVlbmNl",
-            "X3R5cGUYASABKA4yEi5hcGkuSW5mbHVlbmNlVHlwZRINCgV2YWx1ZRgCIAEo",
-            "BSI8CgVBc3NldBIPCgdhZGRyZXNzGAEgASgJEiIKCmFzc2V0X3R5cGUYAiAB",
-            "KA4yDi5hcGkuQXNzZXRUeXBlIuABCgpQbGF5ZXJEYXRhEiQKC3BsYXllcl9u",
-            "YW1lGAEgASgOMg8uYXBpLlBsYXllck5hbWUSFAoMY3VycmVudF9saWZlGAIg",
-            "ASgFEhQKDG1heGltdW1fbGlmZRgDIAEoBRIUCgxjdXJyZW50X21hbmEYBCAB",
-            "KAUSFAoMbWF4aW11bV9tYW5hGAUgASgFEikKEWN1cnJlbnRfaW5mbHVlbmNl",
-            "GAYgAygLMg4uYXBpLkluZmx1ZW5jZRIpChFtYXhpbXVtX2luZmx1ZW5jZRgH",
-            "IAMoCzIOLmFwaS5JbmZsdWVuY2UiCAoGTm9Db3N0IkkKDFN0YW5kYXJkQ29z",
-            "dBIRCgltYW5hX2Nvc3QYASABKAUSJgoOaW5mbHVlbmNlX2Nvc3QYAiADKAsy",
-            "Di5hcGkuSW5mbHVlbmNlIhgKCFJpY2hUZXh0EgwKBHRleHQYASABKAkiKwoO",
-            "QXR0YWNobWVudERhdGESGQoFaW1hZ2UYASABKAsyCi5hcGkuQXNzZXQiEAoO",
-            "VW50YXJnZXRlZERhdGEiwwMKCENhcmREYXRhEhwKB2NhcmRfaWQYASABKAsy",
-            "Cy5hcGkuQ2FyZElkEhoKBnByZWZhYhgCIAEoCzIKLmFwaS5Bc3NldBIMCgRu",
-            "YW1lGAMgASgJEh4KB25vX2Nvc3QYBCABKAsyCy5hcGkuTm9Db3N0SAASKgoN",
-            "c3RhbmRhcmRfY29zdBgFIAEoCzIRLmFwaS5TdGFuZGFyZENvc3RIABIeCgVv",
-            "d25lchgGIAEoDjIPLmFwaS5QbGF5ZXJOYW1lEhkKBWltYWdlGAcgASgLMgou",
-            "YXBpLkFzc2V0EhsKBHRleHQYCCABKAsyDS5hcGkuUmljaFRleHQSEwoLaXNf",
-            "cmV2ZWFsZWQYCSABKAgSFQoNY2FuX2JlX3BsYXllZBgKIAEoCBIqCg1jcmVh",
-            "dHVyZV9jYXJkGAsgASgLMhEuYXBpLkNyZWF0dXJlRGF0YUgBEi4KD2F0dGFj",
-            "aG1lbnRfY2FyZBgMIAEoCzITLmFwaS5BdHRhY2htZW50RGF0YUgBEi4KD3Vu",
-            "dGFyZ2V0ZWRfY2FyZBgNIAEoCzITLmFwaS5VbnRhcmdldGVkRGF0YUgBQgYK",
-            "BGNvc3RCCwoJY2FyZF90eXBlIp0CCgxDcmVhdHVyZURhdGESJAoLY3JlYXR1",
-            "cmVfaWQYASABKAsyDy5hcGkuQ3JlYXR1cmVJZBIaCgZwcmVmYWIYAiABKAsy",
-            "Ci5hcGkuQXNzZXQSHgoFb3duZXIYAyABKA4yDy5hcGkuUGxheWVyTmFtZRIl",
-            "Cg1yYW5rX3Bvc2l0aW9uGAQgASgOMg4uYXBpLlJhbmtWYWx1ZRIlCg1maWxl",
-            "X3Bvc2l0aW9uGAUgASgOMg4uYXBpLkZpbGVWYWx1ZRIWCg5tYXhpbXVtX2hl",
-            "YWx0aBgGIAEoBRIbChNjYW5fYmVfcmVwb3NpdGlvbmVkGAcgASgIEigKC2F0",
-            "dGFjaG1lbnRzGAggAygLMhMuYXBpLkF0dGFjaG1lbnREYXRhIi0KC1dhaXRD",
-            "b21tYW5kEh4KFndhaXRfdGltZV9taWxsaXNlY29uZHMYASABKAUiTwoWVXBk",
-            "YXRlSW50ZXJmYWNlQ29tbWFuZBIbChNtYWluX2J1dHRvbl9lbmFibGVkGAEg",
-            "ASgIEhgKEG1haW5fYnV0dG9uX3RleHQYAiABKAkiNgoTVXBkYXRlUGxheWVy",
-            "Q29tbWFuZBIfCgZwbGF5ZXIYASABKAsyDy5hcGkuUGxheWVyRGF0YSIuCg9E",
-            "cmF3Q2FyZENvbW1hbmQSGwoEY2FyZBgBIAEoCzINLmFwaS5DYXJkRGF0YSKf",
-            "AQoPUGxheUNhcmRDb21tYW5kEhsKBGNhcmQYASABKAsyDS5hcGkuQ2FyZERh",
-            "dGESIQoZcmV2ZWFsX2RlbGF5X21pbGxpc2Vjb25kcxgCIAEoBRIlCg1yYW5r",
-            "X3Bvc2l0aW9uGAMgASgOMg4uYXBpLlJhbmtWYWx1ZRIlCg1maWxlX3Bvc2l0",
-            "aW9uGAQgASgOMg4uYXBpLkZpbGVWYWx1ZSJECh1DcmVhdGVPclVwZGF0ZUNy",
-            "ZWF0dXJlQ29tbWFuZBIjCghjcmVhdHVyZRgBIAEoCzIRLmFwaS5DcmVhdHVy",
-            "ZURhdGEiPQoVUmVtb3ZlQ3JlYXR1cmVDb21tYW5kEiQKC2NyZWF0dXJlX2lk",
-            "GAEgASgLMg8uYXBpLkNyZWF0dXJlSWQiZwoSTWVsZWVFbmdhZ2VDb21tYW5k",
-            "EiQKC2NyZWF0dXJlX2lkGAEgASgLMg8uYXBpLkNyZWF0dXJlSWQSKwoSdGFy",
-            "Z2V0X2NyZWF0dXJlX2lkGAIgASgLMg8uYXBpLkNyZWF0dXJlSWQiOQoRQXBw",
-            "bHlEYW1hZ2VFZmZlY3QSDgoGZGFtYWdlGAEgASgFEhQKDGtpbGxzX3Rhcmdl",
-            "dBgCIAEoCCJ1ChRGaXJlUHJvamVjdGlsZUVmZmVjdBIaCgZwcmVmYWIYASAB",
-            "KAsyCi5hcGkuQXNzZXQSLAoMYXBwbHlfZGFtYWdlGAIgASgLMhYuYXBpLkFw",
-            "cGx5RGFtYWdlRWZmZWN0EhMKC2F0X29wcG9uZW50GAMgASgIIpACCg1BdHRh",
-            "Y2tDb21tYW5kEiQKC2NyZWF0dXJlX2lkGAEgASgLMg8uYXBpLkNyZWF0dXJl",
-            "SWQSKwoSdGFyZ2V0X2NyZWF0dXJlX2lkGAIgASgLMg8uYXBpLkNyZWF0dXJl",
-            "SWQSIgoFc2tpbGwYAyABKA4yEy5hcGkuU2tpbGxBbmltYXRpb24SEQoJaGl0",
-            "X2NvdW50GAQgASgFEi4KDGFwcGx5X2RhbWFnZRgFIAEoCzIWLmFwaS5BcHBs",
-            "eURhbWFnZUVmZmVjdEgAEjQKD2ZpcmVfcHJvamVjdGlsZRgGIAEoCzIZLmFw",
-            "aS5GaXJlUHJvamVjdGlsZUVmZmVjdEgAQg8KDWF0dGFja19lZmZlY3QizwMK",
-            "B0NvbW1hbmQSIAoEd2FpdBgBIAEoCzIQLmFwaS5XYWl0Q29tbWFuZEgAEjcK",
-            "EHVwZGF0ZV9pbnRlcmZhY2UYAiABKAsyGy5hcGkuVXBkYXRlSW50ZXJmYWNl",
-            "Q29tbWFuZEgAEikKCWRyYXdfY2FyZBgDIAEoCzIULmFwaS5EcmF3Q2FyZENv",
-            "bW1hbmRIABIpCglwbGF5X2NhcmQYBCABKAsyFC5hcGkuUGxheUNhcmRDb21t",
-            "YW5kSAASMQoNdXBkYXRlX3BsYXllchgFIAEoCzIYLmFwaS5VcGRhdGVQbGF5",
-            "ZXJDb21tYW5kSAASRwoZY3JlYXRlX29yX3VwZGF0ZV9jcmVhdHVyZRgGIAEo",
-            "CzIiLmFwaS5DcmVhdGVPclVwZGF0ZUNyZWF0dXJlQ29tbWFuZEgAEjUKD3Jl",
-            "bW92ZV9jcmVhdHVyZRgHIAEoCzIaLmFwaS5SZW1vdmVDcmVhdHVyZUNvbW1h",
-            "bmRIABIvCgxtZWxlZV9lbmdhZ2UYCCABKAsyFy5hcGkuTWVsZWVFbmdhZ2VD",
-            "b21tYW5kSAASJAoGYXR0YWNrGAkgASgLMhIuYXBpLkF0dGFja0NvbW1hbmRI",
-            "AEIJCgdjb21tYW5kIi4KDENvbW1hbmRHcm91cBIeCghjb21tYW5kcxgBIAMo",
-            "CzIMLmFwaS5Db21tYW5kIjgKC0NvbW1hbmRMaXN0EikKDmNvbW1hbmRfZ3Jv",
-            "dXBzGAEgAygLMhEuYXBpLkNvbW1hbmRHcm91cCo5CgpQbGF5ZXJOYW1lEhYK",
-            "ElBMQVlFUl9VTlNQRUNJRklFRBAAEggKBFVTRVIQARIJCgVFTkVNWRACKmkK",
-            "CVJhbmtWYWx1ZRIUChBSQU5LX1VOU1BFQ0lGSUVEEAASCgoGUkFOS18wEAES",
-            "CgoGUkFOS18xEAISCgoGUkFOS18yEAMSCgoGUkFOS18zEAQSCgoGUkFOS180",
-            "EAUSCgoGUkFOS181EAYqaQoJRmlsZVZhbHVlEhQKEEZJTEVfVU5TUEVDSUZJ",
-            "RUQQABIKCgZGSUxFXzAQARIKCgZGSUxFXzEQAhIKCgZGSUxFXzIQAxIKCgZG",
-            "SUxFXzMQBBIKCgZGSUxFXzQQBRIKCgZGSUxFXzUQBippCg1JbmZsdWVuY2VU",
-            "eXBlEhkKFUlORkxVRU5DRV9VTlNQRUNJRklFRBAAEgkKBUxJR0hUEAESBwoD",
-            "U0tZEAISCQoFRkxBTUUQAxIHCgNJQ0UQBBIJCgVFQVJUSBAFEgoKBlNIQURP",
-            "VxAGKjkKCUFzc2V0VHlwZRIUChBUWVBFX1VOU1BFQ0lGSUVEEAASCgoGUFJF",
-            "RkFCEAESCgoGU1BSSVRFEAIqaAoOU2tpbGxBbmltYXRpb24SFQoRU0tJTExf",
-            "VU5TUEVDSUZJRUQQABILCgdTS0lMTF8xEAESCwoHU0tJTExfMhACEgsKB1NL",
-            "SUxMXzMQAxILCgdTS0lMTF80EAQSCwoHU0tJTExfNRAFQhCqAg1NYWdld2F0",
-            "Y2guQVBJYgZwcm90bzM="));
+            "ASABKAUiEgoQU3RhcnRHYW1lUmVxdWVzdCI0ChRDb25uZWN0VG9HYW1lUmVx",
+            "dWVzdBIcCgdnYW1lX2lkGAEgASgLMgsuYXBpLkdhbWVJZCIzChNBZHZhbmNl",
+            "UGhhc2VSZXF1ZXN0EhwKB2dhbWVfaWQYASABKAsyCy5hcGkuR2FtZUlkImAK",
+            "EFBsYXlDcmVhdHVyZUNhcmQSJQoNcmFua19wb3NpdGlvbhgBIAEoDjIOLmFw",
+            "aS5SYW5rVmFsdWUSJQoNZmlsZV9wb3NpdGlvbhgCIAEoDjIOLmFwaS5GaWxl",
+            "VmFsdWUiOgoSUGxheUF0dGFjaG1lbnRDYXJkEiQKC2NyZWF0dXJlX2lkGAEg",
+            "ASgLMg8uYXBpLkNyZWF0dXJlSWQiFAoSUGxheVVudGFyZ2V0ZWRDYXJkIvIB",
+            "Cg9QbGF5Q2FyZFJlcXVlc3QSHAoHZ2FtZV9pZBgBIAEoCzILLmFwaS5HYW1l",
+            "SWQSHAoHY2FyZF9pZBgCIAEoCzILLmFwaS5DYXJkSWQSLgoNcGxheV9jcmVh",
+            "dHVyZRgDIAEoCzIVLmFwaS5QbGF5Q3JlYXR1cmVDYXJkSAASMgoPcGxheV9h",
+            "dHRhY2htZW50GAQgASgLMhcuYXBpLlBsYXlBdHRhY2htZW50Q2FyZEgAEjIK",
+            "D3BsYXlfdW50YXJnZXRlZBgFIAEoCzIXLmFwaS5QbGF5VW50YXJnZXRlZENh",
+            "cmRIAEILCglwbGF5X2NhcmQijAEKFkNyZWF0dXJlUG9zaXRpb25VcGRhdGUS",
+            "JAoLY3JlYXR1cmVfaWQYASABKAsyDy5hcGkuQ3JlYXR1cmVJZBIlCg1yYW5r",
+            "X3Bvc2l0aW9uGAIgASgOMg4uYXBpLlJhbmtWYWx1ZRIlCg1maWxlX3Bvc2l0",
+            "aW9uGAMgASgOMg4uYXBpLkZpbGVWYWx1ZSJTChpSZXBvc2l0aW9uQ3JlYXR1",
+            "cmVzUmVxdWVzdBI1ChBwb3NpdGlvbl91cGRhdGVzGAEgAygLMhsuYXBpLkNy",
+            "ZWF0dXJlUG9zaXRpb25VcGRhdGUilgIKB1JlcXVlc3QSKwoKc3RhcnRfZ2Ft",
+            "ZRgBIAEoCzIVLmFwaS5TdGFydEdhbWVSZXF1ZXN0SAASNAoPY29ubmVjdF90",
+            "b19nYW1lGAIgASgLMhkuYXBpLkNvbm5lY3RUb0dhbWVSZXF1ZXN0SAASMQoN",
+            "YWR2YW5jZV9waGFzZRgDIAEoCzIYLmFwaS5BZHZhbmNlUGhhc2VSZXF1ZXN0",
+            "SAASKQoJcGxheV9jYXJkGAQgASgLMhQuYXBpLlBsYXlDYXJkUmVxdWVzdEgA",
+            "Ej8KFHJlcG9zaXRpb25fY3JlYXR1cmVzGAUgASgLMh8uYXBpLlJlcG9zaXRp",
+            "b25DcmVhdHVyZXNSZXF1ZXN0SABCCQoHcmVxdWVzdCJGCglJbmZsdWVuY2US",
+            "KgoOaW5mbHVlbmNlX3R5cGUYASABKA4yEi5hcGkuSW5mbHVlbmNlVHlwZRIN",
+            "CgV2YWx1ZRgCIAEoBSI8CgVBc3NldBIPCgdhZGRyZXNzGAEgASgJEiIKCmFz",
+            "c2V0X3R5cGUYAiABKA4yDi5hcGkuQXNzZXRUeXBlIuABCgpQbGF5ZXJEYXRh",
+            "EiQKC3BsYXllcl9uYW1lGAEgASgOMg8uYXBpLlBsYXllck5hbWUSFAoMY3Vy",
+            "cmVudF9saWZlGAIgASgFEhQKDG1heGltdW1fbGlmZRgDIAEoBRIUCgxjdXJy",
+            "ZW50X21hbmEYBCABKAUSFAoMbWF4aW11bV9tYW5hGAUgASgFEikKEWN1cnJl",
+            "bnRfaW5mbHVlbmNlGAYgAygLMg4uYXBpLkluZmx1ZW5jZRIpChFtYXhpbXVt",
+            "X2luZmx1ZW5jZRgHIAMoCzIOLmFwaS5JbmZsdWVuY2UiCAoGTm9Db3N0IkkK",
+            "DFN0YW5kYXJkQ29zdBIRCgltYW5hX2Nvc3QYASABKAUSJgoOaW5mbHVlbmNl",
+            "X2Nvc3QYAiADKAsyDi5hcGkuSW5mbHVlbmNlIhgKCFJpY2hUZXh0EgwKBHRl",
+            "eHQYASABKAkiKwoOQXR0YWNobWVudERhdGESGQoFaW1hZ2UYASABKAsyCi5h",
+            "cGkuQXNzZXQiEAoOVW50YXJnZXRlZERhdGEiwwMKCENhcmREYXRhEhwKB2Nh",
+            "cmRfaWQYASABKAsyCy5hcGkuQ2FyZElkEhoKBnByZWZhYhgCIAEoCzIKLmFw",
+            "aS5Bc3NldBIMCgRuYW1lGAMgASgJEh4KB25vX2Nvc3QYBCABKAsyCy5hcGku",
+            "Tm9Db3N0SAASKgoNc3RhbmRhcmRfY29zdBgFIAEoCzIRLmFwaS5TdGFuZGFy",
+            "ZENvc3RIABIeCgVvd25lchgGIAEoDjIPLmFwaS5QbGF5ZXJOYW1lEhkKBWlt",
+            "YWdlGAcgASgLMgouYXBpLkFzc2V0EhsKBHRleHQYCCABKAsyDS5hcGkuUmlj",
+            "aFRleHQSEwoLaXNfcmV2ZWFsZWQYCSABKAgSFQoNY2FuX2JlX3BsYXllZBgK",
+            "IAEoCBIqCg1jcmVhdHVyZV9jYXJkGAsgASgLMhEuYXBpLkNyZWF0dXJlRGF0",
+            "YUgBEi4KD2F0dGFjaG1lbnRfY2FyZBgMIAEoCzITLmFwaS5BdHRhY2htZW50",
+            "RGF0YUgBEi4KD3VudGFyZ2V0ZWRfY2FyZBgNIAEoCzITLmFwaS5VbnRhcmdl",
+            "dGVkRGF0YUgBQgYKBGNvc3RCCwoJY2FyZF90eXBlIp0CCgxDcmVhdHVyZURh",
+            "dGESJAoLY3JlYXR1cmVfaWQYASABKAsyDy5hcGkuQ3JlYXR1cmVJZBIaCgZw",
+            "cmVmYWIYAiABKAsyCi5hcGkuQXNzZXQSHgoFb3duZXIYAyABKA4yDy5hcGku",
+            "UGxheWVyTmFtZRIlCg1yYW5rX3Bvc2l0aW9uGAQgASgOMg4uYXBpLlJhbmtW",
+            "YWx1ZRIlCg1maWxlX3Bvc2l0aW9uGAUgASgOMg4uYXBpLkZpbGVWYWx1ZRIW",
+            "Cg5tYXhpbXVtX2hlYWx0aBgGIAEoBRIbChNjYW5fYmVfcmVwb3NpdGlvbmVk",
+            "GAcgASgIEigKC2F0dGFjaG1lbnRzGAggAygLMhMuYXBpLkF0dGFjaG1lbnRE",
+            "YXRhIi0KC1dhaXRDb21tYW5kEh4KFndhaXRfdGltZV9taWxsaXNlY29uZHMY",
+            "ASABKAUiTwoWVXBkYXRlSW50ZXJmYWNlQ29tbWFuZBIbChNtYWluX2J1dHRv",
+            "bl9lbmFibGVkGAEgASgIEhgKEG1haW5fYnV0dG9uX3RleHQYAiABKAkiNgoT",
+            "VXBkYXRlUGxheWVyQ29tbWFuZBIfCgZwbGF5ZXIYASABKAsyDy5hcGkuUGxh",
+            "eWVyRGF0YSIuCg9EcmF3Q2FyZENvbW1hbmQSGwoEY2FyZBgBIAEoCzINLmFw",
+            "aS5DYXJkRGF0YSKfAQoPUGxheUNhcmRDb21tYW5kEhsKBGNhcmQYASABKAsy",
+            "DS5hcGkuQ2FyZERhdGESIQoZcmV2ZWFsX2RlbGF5X21pbGxpc2Vjb25kcxgC",
+            "IAEoBRIlCg1yYW5rX3Bvc2l0aW9uGAMgASgOMg4uYXBpLlJhbmtWYWx1ZRIl",
+            "Cg1maWxlX3Bvc2l0aW9uGAQgASgOMg4uYXBpLkZpbGVWYWx1ZSJECh1DcmVh",
+            "dGVPclVwZGF0ZUNyZWF0dXJlQ29tbWFuZBIjCghjcmVhdHVyZRgBIAEoCzIR",
+            "LmFwaS5DcmVhdHVyZURhdGEiPQoVUmVtb3ZlQ3JlYXR1cmVDb21tYW5kEiQK",
+            "C2NyZWF0dXJlX2lkGAEgASgLMg8uYXBpLkNyZWF0dXJlSWQiZwoSTWVsZWVF",
+            "bmdhZ2VDb21tYW5kEiQKC2NyZWF0dXJlX2lkGAEgASgLMg8uYXBpLkNyZWF0",
+            "dXJlSWQSKwoSdGFyZ2V0X2NyZWF0dXJlX2lkGAIgASgLMg8uYXBpLkNyZWF0",
+            "dXJlSWQiOQoRQXBwbHlEYW1hZ2VFZmZlY3QSDgoGZGFtYWdlGAEgASgFEhQK",
+            "DGtpbGxzX3RhcmdldBgCIAEoCCJ1ChRGaXJlUHJvamVjdGlsZUVmZmVjdBIa",
+            "CgZwcmVmYWIYASABKAsyCi5hcGkuQXNzZXQSLAoMYXBwbHlfZGFtYWdlGAIg",
+            "ASgLMhYuYXBpLkFwcGx5RGFtYWdlRWZmZWN0EhMKC2F0X29wcG9uZW50GAMg",
+            "ASgIIpACCg1BdHRhY2tDb21tYW5kEiQKC2NyZWF0dXJlX2lkGAEgASgLMg8u",
+            "YXBpLkNyZWF0dXJlSWQSKwoSdGFyZ2V0X2NyZWF0dXJlX2lkGAIgASgLMg8u",
+            "YXBpLkNyZWF0dXJlSWQSIgoFc2tpbGwYAyABKA4yEy5hcGkuU2tpbGxBbmlt",
+            "YXRpb24SEQoJaGl0X2NvdW50GAQgASgFEi4KDGFwcGx5X2RhbWFnZRgFIAEo",
+            "CzIWLmFwaS5BcHBseURhbWFnZUVmZmVjdEgAEjQKD2ZpcmVfcHJvamVjdGls",
+            "ZRgGIAEoCzIZLmFwaS5GaXJlUHJvamVjdGlsZUVmZmVjdEgAQg8KDWF0dGFj",
+            "a19lZmZlY3QizwMKB0NvbW1hbmQSIAoEd2FpdBgBIAEoCzIQLmFwaS5XYWl0",
+            "Q29tbWFuZEgAEjcKEHVwZGF0ZV9pbnRlcmZhY2UYAiABKAsyGy5hcGkuVXBk",
+            "YXRlSW50ZXJmYWNlQ29tbWFuZEgAEikKCWRyYXdfY2FyZBgDIAEoCzIULmFw",
+            "aS5EcmF3Q2FyZENvbW1hbmRIABIpCglwbGF5X2NhcmQYBCABKAsyFC5hcGku",
+            "UGxheUNhcmRDb21tYW5kSAASMQoNdXBkYXRlX3BsYXllchgFIAEoCzIYLmFw",
+            "aS5VcGRhdGVQbGF5ZXJDb21tYW5kSAASRwoZY3JlYXRlX29yX3VwZGF0ZV9j",
+            "cmVhdHVyZRgGIAEoCzIiLmFwaS5DcmVhdGVPclVwZGF0ZUNyZWF0dXJlQ29t",
+            "bWFuZEgAEjUKD3JlbW92ZV9jcmVhdHVyZRgHIAEoCzIaLmFwaS5SZW1vdmVD",
+            "cmVhdHVyZUNvbW1hbmRIABIvCgxtZWxlZV9lbmdhZ2UYCCABKAsyFy5hcGku",
+            "TWVsZWVFbmdhZ2VDb21tYW5kSAASJAoGYXR0YWNrGAkgASgLMhIuYXBpLkF0",
+            "dGFja0NvbW1hbmRIAEIJCgdjb21tYW5kIi4KDENvbW1hbmRHcm91cBIeCghj",
+            "b21tYW5kcxgBIAMoCzIMLmFwaS5Db21tYW5kIjgKC0NvbW1hbmRMaXN0EikK",
+            "DmNvbW1hbmRfZ3JvdXBzGAEgAygLMhEuYXBpLkNvbW1hbmRHcm91cCo5CgpQ",
+            "bGF5ZXJOYW1lEhYKElBMQVlFUl9VTlNQRUNJRklFRBAAEggKBFVTRVIQARIJ",
+            "CgVFTkVNWRACKmkKCVJhbmtWYWx1ZRIUChBSQU5LX1VOU1BFQ0lGSUVEEAAS",
+            "CgoGUkFOS18wEAESCgoGUkFOS18xEAISCgoGUkFOS18yEAMSCgoGUkFOS18z",
+            "EAQSCgoGUkFOS180EAUSCgoGUkFOS181EAYqaQoJRmlsZVZhbHVlEhQKEEZJ",
+            "TEVfVU5TUEVDSUZJRUQQABIKCgZGSUxFXzAQARIKCgZGSUxFXzEQAhIKCgZG",
+            "SUxFXzIQAxIKCgZGSUxFXzMQBBIKCgZGSUxFXzQQBRIKCgZGSUxFXzUQBipp",
+            "Cg1JbmZsdWVuY2VUeXBlEhkKFUlORkxVRU5DRV9VTlNQRUNJRklFRBAAEgkK",
+            "BUxJR0hUEAESBwoDU0tZEAISCQoFRkxBTUUQAxIHCgNJQ0UQBBIJCgVFQVJU",
+            "SBAFEgoKBlNIQURPVxAGKjkKCUFzc2V0VHlwZRIUChBUWVBFX1VOU1BFQ0lG",
+            "SUVEEAASCgoGUFJFRkFCEAESCgoGU1BSSVRFEAIqaAoOU2tpbGxBbmltYXRp",
+            "b24SFQoRU0tJTExfVU5TUEVDSUZJRUQQABILCgdTS0lMTF8xEAESCwoHU0tJ",
+            "TExfMhACEgsKB1NLSUxMXzMQAxILCgdTS0lMTF80EAQSCwoHU0tJTExfNRAF",
+            "QhCqAg1NYWdld2F0Y2guQVBJYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.AssetType), typeof(global::Magewatch.API.SkillAnimation), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.GameId), global::Magewatch.API.GameId.Parser, new[]{ "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CreatureId), global::Magewatch.API.CreatureId.Parser, new[]{ "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CardId), global::Magewatch.API.CardId.Parser, new[]{ "Value" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.StartGameAction), global::Magewatch.API.StartGameAction.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.ConnectToGameAction), global::Magewatch.API.ConnectToGameAction.Parser, new[]{ "GameId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.AdvancePhaseAction), global::Magewatch.API.AdvancePhaseAction.Parser, new[]{ "GameId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.StartGameRequest), global::Magewatch.API.StartGameRequest.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.ConnectToGameRequest), global::Magewatch.API.ConnectToGameRequest.Parser, new[]{ "GameId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.AdvancePhaseRequest), global::Magewatch.API.AdvancePhaseRequest.Parser, new[]{ "GameId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayCreatureCard), global::Magewatch.API.PlayCreatureCard.Parser, new[]{ "RankPosition", "FilePosition" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayAttachmentCard), global::Magewatch.API.PlayAttachmentCard.Parser, new[]{ "CreatureId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayUntargetedCard), global::Magewatch.API.PlayUntargetedCard.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayCardAction), global::Magewatch.API.PlayCardAction.Parser, new[]{ "GameId", "CardId", "PlayCreature", "PlayAttachment", "PlayUntargeted" }, new[]{ "PlayCard" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayCardRequest), global::Magewatch.API.PlayCardRequest.Parser, new[]{ "GameId", "CardId", "PlayCreature", "PlayAttachment", "PlayUntargeted" }, new[]{ "PlayCard" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CreaturePositionUpdate), global::Magewatch.API.CreaturePositionUpdate.Parser, new[]{ "CreatureId", "RankPosition", "FilePosition" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.RepositionCreaturesAction), global::Magewatch.API.RepositionCreaturesAction.Parser, new[]{ "PositionUpdates" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Action), global::Magewatch.API.Action.Parser, new[]{ "StartGame", "ConnectToGame", "AdvancePhase", "PlayCard", "RepositionCreatures" }, new[]{ "Action" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.RepositionCreaturesRequest), global::Magewatch.API.RepositionCreaturesRequest.Parser, new[]{ "PositionUpdates" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Request), global::Magewatch.API.Request.Parser, new[]{ "StartGame", "ConnectToGame", "AdvancePhase", "PlayCard", "RepositionCreatures" }, new[]{ "Request" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Influence), global::Magewatch.API.Influence.Parser, new[]{ "InfluenceType", "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Asset), global::Magewatch.API.Asset.Parser, new[]{ "Address", "AssetType" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayerData), global::Magewatch.API.PlayerData.Parser, new[]{ "PlayerName", "CurrentLife", "MaximumLife", "CurrentMana", "MaximumMana", "CurrentInfluence", "MaximumInfluence" }, null, null, null, null),
@@ -617,13 +617,13 @@ namespace Magewatch.API {
 
   /// <summary>
   /// Requests to start a new game with a new game ID. The client should discard
-  /// all previous state when sending this action.
+  /// all previous state when sending this request.
   /// </summary>
-  public sealed partial class StartGameAction : pb::IMessage<StartGameAction> {
-    private static readonly pb::MessageParser<StartGameAction> _parser = new pb::MessageParser<StartGameAction>(() => new StartGameAction());
+  public sealed partial class StartGameRequest : pb::IMessage<StartGameRequest> {
+    private static readonly pb::MessageParser<StartGameRequest> _parser = new pb::MessageParser<StartGameRequest>(() => new StartGameRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<StartGameAction> Parser { get { return _parser; } }
+    public static pb::MessageParser<StartGameRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -636,29 +636,29 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public StartGameAction() {
+    public StartGameRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public StartGameAction(StartGameAction other) : this() {
+    public StartGameRequest(StartGameRequest other) : this() {
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public StartGameAction Clone() {
-      return new StartGameAction(this);
+    public StartGameRequest Clone() {
+      return new StartGameRequest(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as StartGameAction);
+      return Equals(other as StartGameRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(StartGameAction other) {
+    public bool Equals(StartGameRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -699,7 +699,7 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(StartGameAction other) {
+    public void MergeFrom(StartGameRequest other) {
       if (other == null) {
         return;
       }
@@ -722,13 +722,13 @@ namespace Magewatch.API {
 
   /// <summary>
   /// Requests to load the current state of a game. The client should discard
-  /// all previous state when sending this action.
+  /// all previous state when sending this request.
   /// </summary>
-  public sealed partial class ConnectToGameAction : pb::IMessage<ConnectToGameAction> {
-    private static readonly pb::MessageParser<ConnectToGameAction> _parser = new pb::MessageParser<ConnectToGameAction>(() => new ConnectToGameAction());
+  public sealed partial class ConnectToGameRequest : pb::IMessage<ConnectToGameRequest> {
+    private static readonly pb::MessageParser<ConnectToGameRequest> _parser = new pb::MessageParser<ConnectToGameRequest>(() => new ConnectToGameRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<ConnectToGameAction> Parser { get { return _parser; } }
+    public static pb::MessageParser<ConnectToGameRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -741,21 +741,21 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ConnectToGameAction() {
+    public ConnectToGameRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ConnectToGameAction(ConnectToGameAction other) : this() {
+    public ConnectToGameRequest(ConnectToGameRequest other) : this() {
       gameId_ = other.gameId_ != null ? other.gameId_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ConnectToGameAction Clone() {
-      return new ConnectToGameAction(this);
+    public ConnectToGameRequest Clone() {
+      return new ConnectToGameRequest(this);
     }
 
     /// <summary>Field number for the "game_id" field.</summary>
@@ -771,11 +771,11 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as ConnectToGameAction);
+      return Equals(other as ConnectToGameRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(ConnectToGameAction other) {
+    public bool Equals(ConnectToGameRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -825,7 +825,7 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(ConnectToGameAction other) {
+    public void MergeFrom(ConnectToGameRequest other) {
       if (other == null) {
         return;
       }
@@ -862,11 +862,11 @@ namespace Magewatch.API {
   /// <summary>
   /// Advance the game to the next phase
   /// </summary>
-  public sealed partial class AdvancePhaseAction : pb::IMessage<AdvancePhaseAction> {
-    private static readonly pb::MessageParser<AdvancePhaseAction> _parser = new pb::MessageParser<AdvancePhaseAction>(() => new AdvancePhaseAction());
+  public sealed partial class AdvancePhaseRequest : pb::IMessage<AdvancePhaseRequest> {
+    private static readonly pb::MessageParser<AdvancePhaseRequest> _parser = new pb::MessageParser<AdvancePhaseRequest>(() => new AdvancePhaseRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<AdvancePhaseAction> Parser { get { return _parser; } }
+    public static pb::MessageParser<AdvancePhaseRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -879,21 +879,21 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public AdvancePhaseAction() {
+    public AdvancePhaseRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public AdvancePhaseAction(AdvancePhaseAction other) : this() {
+    public AdvancePhaseRequest(AdvancePhaseRequest other) : this() {
       gameId_ = other.gameId_ != null ? other.gameId_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public AdvancePhaseAction Clone() {
-      return new AdvancePhaseAction(this);
+    public AdvancePhaseRequest Clone() {
+      return new AdvancePhaseRequest(this);
     }
 
     /// <summary>Field number for the "game_id" field.</summary>
@@ -909,11 +909,11 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as AdvancePhaseAction);
+      return Equals(other as AdvancePhaseRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(AdvancePhaseAction other) {
+    public bool Equals(AdvancePhaseRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -963,7 +963,7 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(AdvancePhaseAction other) {
+    public void MergeFrom(AdvancePhaseRequest other) {
       if (other == null) {
         return;
       }
@@ -1402,11 +1402,11 @@ namespace Magewatch.API {
   /// <summary>
   /// Play a card from the user's hand
   /// </summary>
-  public sealed partial class PlayCardAction : pb::IMessage<PlayCardAction> {
-    private static readonly pb::MessageParser<PlayCardAction> _parser = new pb::MessageParser<PlayCardAction>(() => new PlayCardAction());
+  public sealed partial class PlayCardRequest : pb::IMessage<PlayCardRequest> {
+    private static readonly pb::MessageParser<PlayCardRequest> _parser = new pb::MessageParser<PlayCardRequest>(() => new PlayCardRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<PlayCardAction> Parser { get { return _parser; } }
+    public static pb::MessageParser<PlayCardRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -1419,14 +1419,14 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public PlayCardAction() {
+    public PlayCardRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public PlayCardAction(PlayCardAction other) : this() {
+    public PlayCardRequest(PlayCardRequest other) : this() {
       gameId_ = other.gameId_ != null ? other.gameId_.Clone() : null;
       cardId_ = other.cardId_ != null ? other.cardId_.Clone() : null;
       switch (other.PlayCardCase) {
@@ -1445,8 +1445,8 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public PlayCardAction Clone() {
-      return new PlayCardAction(this);
+    public PlayCardRequest Clone() {
+      return new PlayCardRequest(this);
     }
 
     /// <summary>Field number for the "game_id" field.</summary>
@@ -1526,11 +1526,11 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as PlayCardAction);
+      return Equals(other as PlayCardRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(PlayCardAction other) {
+    public bool Equals(PlayCardRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -1618,7 +1618,7 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(PlayCardAction other) {
+    public void MergeFrom(PlayCardRequest other) {
       if (other == null) {
         return;
       }
@@ -1904,11 +1904,11 @@ namespace Magewatch.API {
 
   }
 
-  public sealed partial class RepositionCreaturesAction : pb::IMessage<RepositionCreaturesAction> {
-    private static readonly pb::MessageParser<RepositionCreaturesAction> _parser = new pb::MessageParser<RepositionCreaturesAction>(() => new RepositionCreaturesAction());
+  public sealed partial class RepositionCreaturesRequest : pb::IMessage<RepositionCreaturesRequest> {
+    private static readonly pb::MessageParser<RepositionCreaturesRequest> _parser = new pb::MessageParser<RepositionCreaturesRequest>(() => new RepositionCreaturesRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<RepositionCreaturesAction> Parser { get { return _parser; } }
+    public static pb::MessageParser<RepositionCreaturesRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -1921,21 +1921,21 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public RepositionCreaturesAction() {
+    public RepositionCreaturesRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public RepositionCreaturesAction(RepositionCreaturesAction other) : this() {
+    public RepositionCreaturesRequest(RepositionCreaturesRequest other) : this() {
       positionUpdates_ = other.positionUpdates_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public RepositionCreaturesAction Clone() {
-      return new RepositionCreaturesAction(this);
+    public RepositionCreaturesRequest Clone() {
+      return new RepositionCreaturesRequest(this);
     }
 
     /// <summary>Field number for the "position_updates" field.</summary>
@@ -1950,11 +1950,11 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as RepositionCreaturesAction);
+      return Equals(other as RepositionCreaturesRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(RepositionCreaturesAction other) {
+    public bool Equals(RepositionCreaturesRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -1999,7 +1999,7 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(RepositionCreaturesAction other) {
+    public void MergeFrom(RepositionCreaturesRequest other) {
       if (other == null) {
         return;
       }
@@ -2029,11 +2029,11 @@ namespace Magewatch.API {
   /// Data sent to the server whenever the user does something in the game's user
   /// interface
   /// </summary>
-  public sealed partial class Action : pb::IMessage<Action> {
-    private static readonly pb::MessageParser<Action> _parser = new pb::MessageParser<Action>(() => new Action());
+  public sealed partial class Request : pb::IMessage<Request> {
+    private static readonly pb::MessageParser<Request> _parser = new pb::MessageParser<Request>(() => new Request());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<Action> Parser { get { return _parser; } }
+    public static pb::MessageParser<Request> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -2046,28 +2046,28 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Action() {
+    public Request() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Action(Action other) : this() {
-      switch (other.ActionCase) {
-        case ActionOneofCase.StartGame:
+    public Request(Request other) : this() {
+      switch (other.RequestCase) {
+        case RequestOneofCase.StartGame:
           StartGame = other.StartGame.Clone();
           break;
-        case ActionOneofCase.ConnectToGame:
+        case RequestOneofCase.ConnectToGame:
           ConnectToGame = other.ConnectToGame.Clone();
           break;
-        case ActionOneofCase.AdvancePhase:
+        case RequestOneofCase.AdvancePhase:
           AdvancePhase = other.AdvancePhase.Clone();
           break;
-        case ActionOneofCase.PlayCard:
+        case RequestOneofCase.PlayCard:
           PlayCard = other.PlayCard.Clone();
           break;
-        case ActionOneofCase.RepositionCreatures:
+        case RequestOneofCase.RepositionCreatures:
           RepositionCreatures = other.RepositionCreatures.Clone();
           break;
       }
@@ -2076,68 +2076,68 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Action Clone() {
-      return new Action(this);
+    public Request Clone() {
+      return new Request(this);
     }
 
     /// <summary>Field number for the "start_game" field.</summary>
     public const int StartGameFieldNumber = 1;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.StartGameAction StartGame {
-      get { return actionCase_ == ActionOneofCase.StartGame ? (global::Magewatch.API.StartGameAction) action_ : null; }
+    public global::Magewatch.API.StartGameRequest StartGame {
+      get { return requestCase_ == RequestOneofCase.StartGame ? (global::Magewatch.API.StartGameRequest) request_ : null; }
       set {
-        action_ = value;
-        actionCase_ = value == null ? ActionOneofCase.None : ActionOneofCase.StartGame;
+        request_ = value;
+        requestCase_ = value == null ? RequestOneofCase.None : RequestOneofCase.StartGame;
       }
     }
 
     /// <summary>Field number for the "connect_to_game" field.</summary>
     public const int ConnectToGameFieldNumber = 2;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.ConnectToGameAction ConnectToGame {
-      get { return actionCase_ == ActionOneofCase.ConnectToGame ? (global::Magewatch.API.ConnectToGameAction) action_ : null; }
+    public global::Magewatch.API.ConnectToGameRequest ConnectToGame {
+      get { return requestCase_ == RequestOneofCase.ConnectToGame ? (global::Magewatch.API.ConnectToGameRequest) request_ : null; }
       set {
-        action_ = value;
-        actionCase_ = value == null ? ActionOneofCase.None : ActionOneofCase.ConnectToGame;
+        request_ = value;
+        requestCase_ = value == null ? RequestOneofCase.None : RequestOneofCase.ConnectToGame;
       }
     }
 
     /// <summary>Field number for the "advance_phase" field.</summary>
     public const int AdvancePhaseFieldNumber = 3;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.AdvancePhaseAction AdvancePhase {
-      get { return actionCase_ == ActionOneofCase.AdvancePhase ? (global::Magewatch.API.AdvancePhaseAction) action_ : null; }
+    public global::Magewatch.API.AdvancePhaseRequest AdvancePhase {
+      get { return requestCase_ == RequestOneofCase.AdvancePhase ? (global::Magewatch.API.AdvancePhaseRequest) request_ : null; }
       set {
-        action_ = value;
-        actionCase_ = value == null ? ActionOneofCase.None : ActionOneofCase.AdvancePhase;
+        request_ = value;
+        requestCase_ = value == null ? RequestOneofCase.None : RequestOneofCase.AdvancePhase;
       }
     }
 
     /// <summary>Field number for the "play_card" field.</summary>
     public const int PlayCardFieldNumber = 4;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.PlayCardAction PlayCard {
-      get { return actionCase_ == ActionOneofCase.PlayCard ? (global::Magewatch.API.PlayCardAction) action_ : null; }
+    public global::Magewatch.API.PlayCardRequest PlayCard {
+      get { return requestCase_ == RequestOneofCase.PlayCard ? (global::Magewatch.API.PlayCardRequest) request_ : null; }
       set {
-        action_ = value;
-        actionCase_ = value == null ? ActionOneofCase.None : ActionOneofCase.PlayCard;
+        request_ = value;
+        requestCase_ = value == null ? RequestOneofCase.None : RequestOneofCase.PlayCard;
       }
     }
 
     /// <summary>Field number for the "reposition_creatures" field.</summary>
     public const int RepositionCreaturesFieldNumber = 5;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.RepositionCreaturesAction RepositionCreatures {
-      get { return actionCase_ == ActionOneofCase.RepositionCreatures ? (global::Magewatch.API.RepositionCreaturesAction) action_ : null; }
+    public global::Magewatch.API.RepositionCreaturesRequest RepositionCreatures {
+      get { return requestCase_ == RequestOneofCase.RepositionCreatures ? (global::Magewatch.API.RepositionCreaturesRequest) request_ : null; }
       set {
-        action_ = value;
-        actionCase_ = value == null ? ActionOneofCase.None : ActionOneofCase.RepositionCreatures;
+        request_ = value;
+        requestCase_ = value == null ? RequestOneofCase.None : RequestOneofCase.RepositionCreatures;
       }
     }
 
-    private object action_;
-    /// <summary>Enum of possible cases for the "action" oneof.</summary>
-    public enum ActionOneofCase {
+    private object request_;
+    /// <summary>Enum of possible cases for the "request" oneof.</summary>
+    public enum RequestOneofCase {
       None = 0,
       StartGame = 1,
       ConnectToGame = 2,
@@ -2145,25 +2145,25 @@ namespace Magewatch.API {
       PlayCard = 4,
       RepositionCreatures = 5,
     }
-    private ActionOneofCase actionCase_ = ActionOneofCase.None;
+    private RequestOneofCase requestCase_ = RequestOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ActionOneofCase ActionCase {
-      get { return actionCase_; }
+    public RequestOneofCase RequestCase {
+      get { return requestCase_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void ClearAction() {
-      actionCase_ = ActionOneofCase.None;
-      action_ = null;
+    public void ClearRequest() {
+      requestCase_ = RequestOneofCase.None;
+      request_ = null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as Action);
+      return Equals(other as Request);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(Action other) {
+    public bool Equals(Request other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -2175,19 +2175,19 @@ namespace Magewatch.API {
       if (!object.Equals(AdvancePhase, other.AdvancePhase)) return false;
       if (!object.Equals(PlayCard, other.PlayCard)) return false;
       if (!object.Equals(RepositionCreatures, other.RepositionCreatures)) return false;
-      if (ActionCase != other.ActionCase) return false;
+      if (RequestCase != other.RequestCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (actionCase_ == ActionOneofCase.StartGame) hash ^= StartGame.GetHashCode();
-      if (actionCase_ == ActionOneofCase.ConnectToGame) hash ^= ConnectToGame.GetHashCode();
-      if (actionCase_ == ActionOneofCase.AdvancePhase) hash ^= AdvancePhase.GetHashCode();
-      if (actionCase_ == ActionOneofCase.PlayCard) hash ^= PlayCard.GetHashCode();
-      if (actionCase_ == ActionOneofCase.RepositionCreatures) hash ^= RepositionCreatures.GetHashCode();
-      hash ^= (int) actionCase_;
+      if (requestCase_ == RequestOneofCase.StartGame) hash ^= StartGame.GetHashCode();
+      if (requestCase_ == RequestOneofCase.ConnectToGame) hash ^= ConnectToGame.GetHashCode();
+      if (requestCase_ == RequestOneofCase.AdvancePhase) hash ^= AdvancePhase.GetHashCode();
+      if (requestCase_ == RequestOneofCase.PlayCard) hash ^= PlayCard.GetHashCode();
+      if (requestCase_ == RequestOneofCase.RepositionCreatures) hash ^= RepositionCreatures.GetHashCode();
+      hash ^= (int) requestCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2201,23 +2201,23 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (actionCase_ == ActionOneofCase.StartGame) {
+      if (requestCase_ == RequestOneofCase.StartGame) {
         output.WriteRawTag(10);
         output.WriteMessage(StartGame);
       }
-      if (actionCase_ == ActionOneofCase.ConnectToGame) {
+      if (requestCase_ == RequestOneofCase.ConnectToGame) {
         output.WriteRawTag(18);
         output.WriteMessage(ConnectToGame);
       }
-      if (actionCase_ == ActionOneofCase.AdvancePhase) {
+      if (requestCase_ == RequestOneofCase.AdvancePhase) {
         output.WriteRawTag(26);
         output.WriteMessage(AdvancePhase);
       }
-      if (actionCase_ == ActionOneofCase.PlayCard) {
+      if (requestCase_ == RequestOneofCase.PlayCard) {
         output.WriteRawTag(34);
         output.WriteMessage(PlayCard);
       }
-      if (actionCase_ == ActionOneofCase.RepositionCreatures) {
+      if (requestCase_ == RequestOneofCase.RepositionCreatures) {
         output.WriteRawTag(42);
         output.WriteMessage(RepositionCreatures);
       }
@@ -2229,19 +2229,19 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (actionCase_ == ActionOneofCase.StartGame) {
+      if (requestCase_ == RequestOneofCase.StartGame) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(StartGame);
       }
-      if (actionCase_ == ActionOneofCase.ConnectToGame) {
+      if (requestCase_ == RequestOneofCase.ConnectToGame) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(ConnectToGame);
       }
-      if (actionCase_ == ActionOneofCase.AdvancePhase) {
+      if (requestCase_ == RequestOneofCase.AdvancePhase) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(AdvancePhase);
       }
-      if (actionCase_ == ActionOneofCase.PlayCard) {
+      if (requestCase_ == RequestOneofCase.PlayCard) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayCard);
       }
-      if (actionCase_ == ActionOneofCase.RepositionCreatures) {
+      if (requestCase_ == RequestOneofCase.RepositionCreatures) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(RepositionCreatures);
       }
       if (_unknownFields != null) {
@@ -2251,38 +2251,38 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(Action other) {
+    public void MergeFrom(Request other) {
       if (other == null) {
         return;
       }
-      switch (other.ActionCase) {
-        case ActionOneofCase.StartGame:
+      switch (other.RequestCase) {
+        case RequestOneofCase.StartGame:
           if (StartGame == null) {
-            StartGame = new global::Magewatch.API.StartGameAction();
+            StartGame = new global::Magewatch.API.StartGameRequest();
           }
           StartGame.MergeFrom(other.StartGame);
           break;
-        case ActionOneofCase.ConnectToGame:
+        case RequestOneofCase.ConnectToGame:
           if (ConnectToGame == null) {
-            ConnectToGame = new global::Magewatch.API.ConnectToGameAction();
+            ConnectToGame = new global::Magewatch.API.ConnectToGameRequest();
           }
           ConnectToGame.MergeFrom(other.ConnectToGame);
           break;
-        case ActionOneofCase.AdvancePhase:
+        case RequestOneofCase.AdvancePhase:
           if (AdvancePhase == null) {
-            AdvancePhase = new global::Magewatch.API.AdvancePhaseAction();
+            AdvancePhase = new global::Magewatch.API.AdvancePhaseRequest();
           }
           AdvancePhase.MergeFrom(other.AdvancePhase);
           break;
-        case ActionOneofCase.PlayCard:
+        case RequestOneofCase.PlayCard:
           if (PlayCard == null) {
-            PlayCard = new global::Magewatch.API.PlayCardAction();
+            PlayCard = new global::Magewatch.API.PlayCardRequest();
           }
           PlayCard.MergeFrom(other.PlayCard);
           break;
-        case ActionOneofCase.RepositionCreatures:
+        case RequestOneofCase.RepositionCreatures:
           if (RepositionCreatures == null) {
-            RepositionCreatures = new global::Magewatch.API.RepositionCreaturesAction();
+            RepositionCreatures = new global::Magewatch.API.RepositionCreaturesRequest();
           }
           RepositionCreatures.MergeFrom(other.RepositionCreatures);
           break;
@@ -2300,8 +2300,8 @@ namespace Magewatch.API {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            global::Magewatch.API.StartGameAction subBuilder = new global::Magewatch.API.StartGameAction();
-            if (actionCase_ == ActionOneofCase.StartGame) {
+            global::Magewatch.API.StartGameRequest subBuilder = new global::Magewatch.API.StartGameRequest();
+            if (requestCase_ == RequestOneofCase.StartGame) {
               subBuilder.MergeFrom(StartGame);
             }
             input.ReadMessage(subBuilder);
@@ -2309,8 +2309,8 @@ namespace Magewatch.API {
             break;
           }
           case 18: {
-            global::Magewatch.API.ConnectToGameAction subBuilder = new global::Magewatch.API.ConnectToGameAction();
-            if (actionCase_ == ActionOneofCase.ConnectToGame) {
+            global::Magewatch.API.ConnectToGameRequest subBuilder = new global::Magewatch.API.ConnectToGameRequest();
+            if (requestCase_ == RequestOneofCase.ConnectToGame) {
               subBuilder.MergeFrom(ConnectToGame);
             }
             input.ReadMessage(subBuilder);
@@ -2318,8 +2318,8 @@ namespace Magewatch.API {
             break;
           }
           case 26: {
-            global::Magewatch.API.AdvancePhaseAction subBuilder = new global::Magewatch.API.AdvancePhaseAction();
-            if (actionCase_ == ActionOneofCase.AdvancePhase) {
+            global::Magewatch.API.AdvancePhaseRequest subBuilder = new global::Magewatch.API.AdvancePhaseRequest();
+            if (requestCase_ == RequestOneofCase.AdvancePhase) {
               subBuilder.MergeFrom(AdvancePhase);
             }
             input.ReadMessage(subBuilder);
@@ -2327,8 +2327,8 @@ namespace Magewatch.API {
             break;
           }
           case 34: {
-            global::Magewatch.API.PlayCardAction subBuilder = new global::Magewatch.API.PlayCardAction();
-            if (actionCase_ == ActionOneofCase.PlayCard) {
+            global::Magewatch.API.PlayCardRequest subBuilder = new global::Magewatch.API.PlayCardRequest();
+            if (requestCase_ == RequestOneofCase.PlayCard) {
               subBuilder.MergeFrom(PlayCard);
             }
             input.ReadMessage(subBuilder);
@@ -2336,8 +2336,8 @@ namespace Magewatch.API {
             break;
           }
           case 42: {
-            global::Magewatch.API.RepositionCreaturesAction subBuilder = new global::Magewatch.API.RepositionCreaturesAction();
-            if (actionCase_ == ActionOneofCase.RepositionCreatures) {
+            global::Magewatch.API.RepositionCreaturesRequest subBuilder = new global::Magewatch.API.RepositionCreaturesRequest();
+            if (requestCase_ == RequestOneofCase.RepositionCreatures) {
               subBuilder.MergeFrom(RepositionCreatures);
             }
             input.ReadMessage(subBuilder);

@@ -16,19 +16,19 @@ pub struct CardId {
     pub value: i32,
 }
 /// Requests to start a new game with a new game ID. The client should discard
-/// all previous state when sending this action.
+/// all previous state when sending this request.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StartGameAction {}
+pub struct StartGameRequest {}
 /// Requests to load the current state of a game. The client should discard
-/// all previous state when sending this action.
+/// all previous state when sending this request.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ConnectToGameAction {
+pub struct ConnectToGameRequest {
     #[prost(message, optional, tag = "1")]
     pub game_id: ::std::option::Option<GameId>,
 }
 /// Advance the game to the next phase
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AdvancePhaseAction {
+pub struct AdvancePhaseRequest {
     #[prost(message, optional, tag = "1")]
     pub game_id: ::std::option::Option<GameId>,
 }
@@ -51,15 +51,15 @@ pub struct PlayAttachmentCard {
 pub struct PlayUntargetedCard {}
 /// Play a card from the user's hand
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PlayCardAction {
+pub struct PlayCardRequest {
     #[prost(message, optional, tag = "1")]
     pub game_id: ::std::option::Option<GameId>,
     #[prost(message, optional, tag = "2")]
     pub card_id: ::std::option::Option<CardId>,
-    #[prost(oneof = "play_card_action::PlayCard", tags = "3, 4, 5")]
-    pub play_card: ::std::option::Option<play_card_action::PlayCard>,
+    #[prost(oneof = "play_card_request::PlayCard", tags = "3, 4, 5")]
+    pub play_card: ::std::option::Option<play_card_request::PlayCard>,
 }
-pub mod play_card_action {
+pub mod play_card_request {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum PlayCard {
         #[prost(message, tag = "3")]
@@ -80,30 +80,30 @@ pub struct CreaturePositionUpdate {
     pub file_position: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RepositionCreaturesAction {
+pub struct RepositionCreaturesRequest {
     #[prost(message, repeated, tag = "1")]
     pub position_updates: ::std::vec::Vec<CreaturePositionUpdate>,
 }
 /// Data sent to the server whenever the user does something in the game's user
 /// interface
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Action {
-    #[prost(oneof = "action::Action", tags = "1, 2, 3, 4, 5")]
-    pub action: ::std::option::Option<action::Action>,
+pub struct Request {
+    #[prost(oneof = "request::Request", tags = "1, 2, 3, 4, 5")]
+    pub request: ::std::option::Option<request::Request>,
 }
-pub mod action {
+pub mod request {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Action {
+    pub enum Request {
         #[prost(message, tag = "1")]
-        StartGame(super::StartGameAction),
+        StartGame(super::StartGameRequest),
         #[prost(message, tag = "2")]
-        ConnectToGame(super::ConnectToGameAction),
+        ConnectToGame(super::ConnectToGameRequest),
         #[prost(message, tag = "3")]
-        AdvancePhase(super::AdvancePhaseAction),
+        AdvancePhase(super::AdvancePhaseRequest),
         #[prost(message, tag = "4")]
-        PlayCard(super::PlayCardAction),
+        PlayCard(super::PlayCardRequest),
         #[prost(message, tag = "5")]
-        RepositionCreatures(super::RepositionCreaturesAction),
+        RepositionCreatures(super::RepositionCreaturesRequest),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
