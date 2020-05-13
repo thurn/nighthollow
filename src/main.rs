@@ -22,7 +22,7 @@ extern crate lazy_static;
 
 #[tokio::main]
 async fn main() {
-    let routes = warp::post()
+    let api = warp::post()
         .and(warp::path("api"))
         .and(warp::body::content_length_limit(1024 * 16))
         .and(warp_protobuf::body::protobuf())
@@ -38,6 +38,9 @@ async fn main() {
             };
             warp_protobuf::reply::protobuf(&response)
         });
+
+    let site = warp::any().and(warp::fs::dir("static"));
+    let routes = api.or(site);
 
     println!("Server started at http://localhost:3030");
     warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
