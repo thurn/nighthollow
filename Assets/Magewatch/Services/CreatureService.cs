@@ -25,7 +25,7 @@ namespace Magewatch.Services
 {
   public sealed class CreatureService : MonoBehaviour
   {
-    readonly Dictionary<int, Creature> _creatures = new Dictionary<int, Creature>();
+    readonly Dictionary<CreatureId, Creature> _creatures = new Dictionary<CreatureId, Creature>();
     [SerializeField] List<File> _userFiles;
     [SerializeField] List<File> _enemyFiles;
 
@@ -75,16 +75,16 @@ namespace Magewatch.Services
       return result;
     }
 
-    public bool HasCreature(CreatureId creatureId) => _creatures.ContainsKey(creatureId.Value);
+    public bool HasCreature(CreatureId creatureId) => _creatures.ContainsKey(creatureId);
 
     public Creature Get(CreatureId creatureId)
     {
-      if (!_creatures.ContainsKey(creatureId.Value))
+      if (!_creatures.ContainsKey(creatureId))
       {
         throw new ArgumentException($"Creature with ID {creatureId} not found!");
       }
 
-      return _creatures[creatureId.Value];
+      return _creatures[creatureId];
     }
 
     public void Destroy(CreatureId creatureId)
@@ -92,7 +92,7 @@ namespace Magewatch.Services
       var creature = Get(creatureId);
       var files = GetFiles(creature.Owner);
       files[creature.FilePosition.ToIndex()].RemoveAtPosition(creature.RankPosition);
-      _creatures.Remove(creatureId.Value);
+      _creatures.Remove(creatureId);
       creature.Destroy();
     }
 
@@ -101,7 +101,7 @@ namespace Magewatch.Services
       var files = GetFiles(creature.Owner);
       creature.SetPosition(rank, file);
       files[file.ToIndex()].AddCreature(creature, rank);
-      _creatures[creature.CreatureId.Value] = creature;
+      _creatures[creature.CreatureId] = creature;
       foreach (var f in files)
       {
         f.ToDefaultPositions();

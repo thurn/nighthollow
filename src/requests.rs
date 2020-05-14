@@ -17,6 +17,7 @@ use eyre::eyre;
 
 use crate::{
     api::{request, CommandGroup, CommandList, PlayCardRequest, Request, StartGameRequest},
+    commands,
     model::types::Game,
     test_data::basic,
 };
@@ -26,36 +27,34 @@ lazy_static! {
     static ref GAMES: Mutex<HashMap<String, Game>> = Mutex::new(HashMap::new());
 }
 
-fn commands(groups: Vec<CommandGroup>) -> CommandList {
-    CommandList {
-        command_groups: groups,
-    }
-}
-
 pub fn handle_request(request_message: Request) -> Result<CommandList> {
     let request = request_message.request.ok_or(eyre!("Request not found"))?;
     match request {
         request::Request::StartGame(_) => {
             let (game, commands) = start_game()?;
-            let mut games = GAMES.lock().expect("Could not lock game");
+            let mut games = GAMES.lock().expect("Could not lock");
             games.insert(String::from("game"), game);
             Ok(commands)
         }
         request::Request::PlayCard(message) => {
-            let mut games = GAMES.lock().expect("Could not lock game");
+            let mut games = GAMES.lock().expect("Could not lock");
             let mut game = games.remove("game").expect("Game not found");
             let result = play_card(message, &mut game);
             games.insert(String::from("game"), game);
             result
         }
-        _ => Ok(commands(vec![])),
+        _ => Ok(commands::empty()),
     }
 }
 
 pub fn start_game() -> Result<(Game, CommandList)> {
-    Ok((basic::opening_hands(), commands(vec![])))
+    let game = basic::opening_hands();
+    // let c = game.user.hand.iter().map(|card|
+    //     commands::draw_card(card)
+    // );
+    Ok((basic::opening_hands(), commands::empty()))
 }
 
 pub fn play_card(request: PlayCardRequest, game: &mut Game) -> Result<CommandList> {
-    Ok(commands(vec![]))
+    Ok(commands::empty())
 }

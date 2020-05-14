@@ -63,7 +63,7 @@ namespace Magewatch.Components
       if (!_initialized && _debugMode)
       {
         Initialize(_cardData);
-        _isFaceUp = _cardData.Owner == PlayerName.User;
+        _isFaceUp = CardId.Owner == PlayerName.User;
         transform.localScale = Vector2.one * _debugCardScale;
       }
 
@@ -76,7 +76,7 @@ namespace Magewatch.Components
     {
       Errors.CheckNotNull(newCardData);
 
-      _hand = Root.Instance.GetPlayer(newCardData.Owner).Hand;
+      _hand = Root.Instance.GetPlayer(newCardData.CardId.Owner).Hand;
 
       if (!_isFaceUp && newCardData.IsRevealed)
       {
@@ -180,7 +180,7 @@ namespace Magewatch.Components
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-      if (_cardData.Owner == PlayerName.User && !_previewMode)
+      if (CardId.Owner == PlayerName.User && !_previewMode)
       {
         _isDragging = true;
         _initialDragPosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);

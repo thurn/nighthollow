@@ -76,7 +76,7 @@ namespace Magewatch.Services
         if (command.DrawCard != null)
         {
           _expectedCompletions++;
-          var player = Root.Instance.GetPlayer(command.DrawCard.Card.Owner);
+          var player = Root.Instance.GetPlayer(command.DrawCard.Card.CardId.Owner);
           player.Hand.DrawCard(command.DrawCard.Card, this);
         }
 
@@ -135,7 +135,7 @@ namespace Magewatch.Services
     void HandlePlayCard(Command command)
     {
       _expectedCompletions++;
-      var owner = command.PlayCard.Card.Owner;
+      var owner = command.PlayCard.Card.CardId.Owner;
       var player = Root.Instance.GetPlayer(owner);
       var rank = command.PlayCard.RankPosition;
       var file = command.PlayCard.FilePosition;

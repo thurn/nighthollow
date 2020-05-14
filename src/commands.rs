@@ -19,14 +19,19 @@ use crate::{
         types::{Card, Cost, CreatureArchetype, HasCardData, ManaCost, Scroll, Spell},
     },
 };
-use api::RichText;
 
-pub fn card_id(id: i32) -> api::CardId {
-    api::CardId { value: id }
+pub fn card_id(index: i32, owner: PlayerName) -> api::CardId {
+    api::CardId {
+        index,
+        owner: player(owner).into(),
+    }
 }
 
-pub fn creature_id(id: i32) -> api::CreatureId {
-    api::CreatureId { value: id }
+pub fn creature_id(index: i32, owner: PlayerName) -> api::CreatureId {
+    api::CreatureId {
+        index,
+        owner: player(owner).into(),
+    }
 }
 
 pub fn prefab(address: &str) -> api::Asset {
@@ -50,8 +55,8 @@ pub fn player(name: PlayerName) -> api::PlayerName {
     }
 }
 
-pub fn text(text: &str) -> RichText {
-    RichText {
+pub fn text(text: &str) -> api::RichText {
+    api::RichText {
         text: text.to_string(),
     }
 }
@@ -99,12 +104,10 @@ pub fn creature_archetype(
     metadata: &CardMetadata,
 ) -> api::CreatureData {
     api::CreatureData {
-        creature_id: Some(creature_id(metadata.id)),
+        creature_id: Some(creature_id(metadata.index, metadata.owner)),
         prefab: Some(prefab(&interface::creature_address(creature.base_type))),
-        owner: player(metadata.owner).into(),
         rank_position: api::RankValue::RankUnspecified.into(),
         file_position: api::FileValue::FileUnspecified.into(),
-        maximum_health: creature.health,
         can_be_repositioned: metadata.can_resposition_creature,
         attachments: vec![],
     }
@@ -132,7 +135,7 @@ pub fn card_type(card: &Card, metadata: &CardMetadata) -> api::card_data::CardTy
 
 pub struct CardMetadata {
     pub owner: PlayerName,
-    pub id: i32,
+    pub index: i32,
     pub revealed: bool,
     pub can_play: bool,
     pub can_resposition_creature: bool,
@@ -140,10 +143,9 @@ pub struct CardMetadata {
 
 pub fn card_data(card: &Card, metadata: &CardMetadata) -> api::CardData {
     api::CardData {
-        card_id: Some(card_id(metadata.id)),
+        card_id: Some(card_id(metadata.index, metadata.owner)),
         prefab: Some(prefab(&format!("Cards/{:?}Card", card.card_data().school))),
         name: card.card_data().name.clone(),
-        owner: player(metadata.owner).into(),
         image: Some(sprite(&interface::card_image_address(card))),
         text: Some(text(&card.card_data().text)),
         is_revealed: metadata.revealed,
@@ -156,5 +158,11 @@ pub fn card_data(card: &Card, metadata: &CardMetadata) -> api::CardData {
 pub fn draw_card(card: &Card, metadata: &CardMetadata) -> api::DrawCardCommand {
     api::DrawCardCommand {
         card: Some(card_data(card, metadata)),
+    }
+}
+
+pub fn empty() -> api::CommandList {
+    api::CommandList {
+        command_groups: vec![],
     }
 }
