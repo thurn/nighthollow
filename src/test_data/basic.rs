@@ -12,12 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::sync::atomic::{AtomicI32, Ordering};
+
 use crate::model::primitives::*;
 use crate::model::types::*;
+
+static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
+
+fn next_id() -> i32 {
+    NEXT_IDENTIFIER_INDEX.fetch_add(1, Ordering::Relaxed)
+}
 
 pub fn berserker() -> CreatureArchetype {
     CreatureArchetype {
         card_data: CardData {
+            id: next_id(),
             cost: Cost::ManaCost(ManaCost {
                 mana: 2,
                 influence: Influence::flame(1),
@@ -34,6 +43,7 @@ pub fn berserker() -> CreatureArchetype {
 pub fn mage() -> CreatureArchetype {
     CreatureArchetype {
         card_data: CardData {
+            id: next_id(),
             cost: Cost::ManaCost(ManaCost {
                 mana: 3,
                 influence: Influence::flame(2),
@@ -50,6 +60,7 @@ pub fn mage() -> CreatureArchetype {
 pub fn rage() -> Spell {
     Spell {
         card_data: CardData {
+            id: next_id(),
             cost: Cost::ManaCost(ManaCost {
                 mana: 1,
                 influence: Influence::flame(1),
@@ -65,6 +76,7 @@ pub fn rage() -> Spell {
 pub fn flame_scroll() -> Scroll {
     Scroll {
         card_data: CardData {
+            id: next_id(),
             cost: Cost::None,
             name: String::from("Flame Scroll"),
             school: School::Flame,

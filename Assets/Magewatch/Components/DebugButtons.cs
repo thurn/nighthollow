@@ -33,7 +33,10 @@ namespace Magewatch.Components
 
     public void StartGame()
     {
-      Root.Instance.NetworkService.HandleAction();
+      Root.Instance.NetworkService.MakeRequest(new Request
+      {
+        StartGame = new StartGameRequest()
+      });
     }
 
     public void Slow()
@@ -379,7 +382,7 @@ namespace Magewatch.Components
       var result = new CardData
       {
         CardId = CardId(id),
-        Prefab = Prefab("Cards/FireCard"),
+        Prefab = Prefab("Cards/FlameCard"),
         Name = "Mage",
         StandardCost = new StandardCost
         {
@@ -404,7 +407,7 @@ namespace Magewatch.Components
       var result = new CardData
       {
         CardId = CardId(id),
-        Prefab = Prefab("Cards/FireCard"),
+        Prefab = Prefab("Cards/FlameCard"),
         Name = "Berserker",
         StandardCost = new StandardCost
         {
@@ -429,7 +432,7 @@ namespace Magewatch.Components
       var result = new CardData
       {
         CardId = CardId(id),
-        Prefab = Prefab("Cards/FireCard"),
+        Prefab = Prefab("Cards/FlameCard"),
         Name = "Rage",
         StandardCost = new StandardCost
         {
@@ -458,7 +461,7 @@ namespace Magewatch.Components
       var result = new CardData
       {
         CardId = CardId(id),
-        Prefab = Prefab("Cards/FireCard"),
+        Prefab = Prefab("Cards/FlameCard"),
         Name = "Knowledge",
         StandardCost = new StandardCost
         {
@@ -486,7 +489,7 @@ namespace Magewatch.Components
       return new CardData
       {
         CardId = CardId(id),
-        Prefab = Prefab("Cards/FireCard"),
+        Prefab = Prefab("Cards/FlameCard"),
         Name = "Flame Scroll",
         NoCost = new NoCost(),
         Owner = owner,
@@ -506,7 +509,7 @@ namespace Magewatch.Components
       return new CardData
       {
         CardId = CardId(id),
-        Prefab = Prefab("Cards/FireCard"),
+        Prefab = Prefab("Cards/FlameCard"),
         Owner = PlayerName.Enemy,
         IsRevealed = false,
         CanBePlayed = false
@@ -1050,7 +1053,7 @@ namespace Magewatch.Components
     //     return new CardData
     //     {
     //       CardId = CardId(id),
-    //       Prefab = Prefab("Cards/FireCard"),
+    //       Prefab = Prefab("Cards/FlameCard"),
     //       Name = name == null ? "Mage" : name.ToString(),
     //       ManaCost = 2,
     //       InfluenceCost = Flame(1),
@@ -1068,7 +1071,7 @@ namespace Magewatch.Components
     //     return new CardData
     //     {
     //       CardId = CardId(id),
-    //       Prefab = Prefab("Cards/FireCard"),
+    //       Prefab = Prefab("Cards/FlameCard"),
     //       Name = "Berserker",
     //       ManaCost = 4,
     //       InfluenceCost = Flame(2),
@@ -1086,7 +1089,7 @@ namespace Magewatch.Components
     //     return new CardData
     //     {
     //       CardId = CardId(id),
-    //       Prefab = Prefab("Cards/FireCard"),
+    //       Prefab = Prefab("Cards/FlameCard"),
     //       Name = "Rage",
     //       ManaCost = 3,
     //       InfluenceCost = LightAndFlame(1, 1),
@@ -1107,7 +1110,7 @@ namespace Magewatch.Components
     //     return new CardData
     //     {
     //       CardId = CardId(id),
-    //       Prefab = Prefab("Cards/FireCard"),
+    //       Prefab = Prefab("Cards/FlameCard"),
     //       Name = "Knowledge",
     //       ManaCost = 3,
     //       InfluenceCost = Flame(3),
@@ -1128,7 +1131,7 @@ namespace Magewatch.Components
     //     return new CardData
     //     {
     //       CardId = CardId(id),
-    //       Prefab = Prefab("Cards/FireCard"),
+    //       Prefab = Prefab("Cards/FlameCard"),
     //       Name = "Flame Scroll",
     //       NoCost = true,
     //       Owner = owner,
@@ -1145,7 +1148,7 @@ namespace Magewatch.Components
     //     return new CardData
     //     {
     //       CardId = CardId(id),
-    //       Prefab = Prefab("Cards/FireCard"),
+    //       Prefab = Prefab("Cards/FlameCard"),
     //       Owner = PlayerName.Enemy,
     //       IsRevealed = false,
     //       CanBePlayed = false

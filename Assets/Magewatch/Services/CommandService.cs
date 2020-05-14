@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections;
+using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using Magewatch.API;
 using Magewatch.Utils;
@@ -46,24 +47,24 @@ namespace Magewatch.Services
       {
         _currentCommandList = commandList;
         _currentStep = 0;
-        StartCoroutine(RunCommandStep());
+        RunCommandStep();
       });
     }
 
-    IEnumerator RunCommandStep()
+    void RunCommandStep()
     {
       _completionCount = 0;
       _expectedCompletions = 0;
+      var numUserCards = 0;
+      var numEnemyCards = 0;
+      var commandIndex = 0;
 
-      var actionCount = 0;
       foreach (var command in _currentCommandList.CommandGroups[_currentStep].Commands)
       {
-        actionCount++;
         if (command.Wait != null)
         {
           _expectedCompletions++;
-          yield return new WaitForSeconds(command.Wait.WaitTimeMilliseconds / 1000f);
-          OnComplete();
+          StartCoroutine(RunDelayed(command.Wait.WaitTimeMilliseconds / 1000f, OnComplete));
         }
 
         if (command.UpdateInterface != null)
@@ -76,8 +77,24 @@ namespace Magewatch.Services
         if (command.DrawCard != null)
         {
           _expectedCompletions++;
-          var player = Root.Instance.GetPlayer(command.DrawCard.Card.Owner);
-          player.Hand.DrawCard(command.DrawCard.Card, this);
+          var owner = command.DrawCard.Card.Owner;
+          StartCoroutine(RunDelayed(0.1f * (owner == PlayerName.User ? numUserCards : numEnemyCards), () =>
+          {
+            var player = Root.Instance.GetPlayer(owner);
+            player.Hand.DrawCard(command.DrawCard.Card, this);
+          }));
+
+          switch (owner)
+          {
+            case PlayerName.User:
+              numUserCards++;
+              break;
+            case PlayerName.Enemy:
+              numEnemyCards++;
+              break;
+            default:
+              throw Errors.UnknownEnumValue(owner);
+          }
         }
 
         if (command.PlayCard != null)
@@ -121,15 +138,26 @@ namespace Magewatch.Services
 
         if (command.Attack != null)
         {
-          HandleAttack(command.Attack);
-          yield return new WaitForSeconds(actionCount * 0.1f);
+          HandleAttack(commandIndex, command.Attack);
         }
+
+        commandIndex++;
       }
 
       if (_expectedCompletions == 0)
       {
         OnComplete();
       }
+    }
+
+    IEnumerator<YieldInstruction> RunDelayed(float seconds, Action action)
+    {
+      if (seconds > 0)
+      {
+        yield return new WaitForSeconds(seconds);
+      }
+
+      action();
     }
 
     void HandlePlayCard(Command command)
@@ -168,10 +196,15 @@ namespace Magewatch.Services
         .MeleeEngageWithTarget(_creatureService.Get(meleeEngage.TargetCreatureId), this);
     }
 
-    void HandleAttack(AttackCommand attack)
+    void HandleAttack(int commandNumber, AttackCommand attack)
     {
       _expectedCompletions += attack.HitCount;
-      _creatureService.Get(attack.CreatureId).AttackTarget(_creatureService.Get(attack.TargetCreatureId), attack, this);
+      StartCoroutine(RunDelayed(0.1f * commandNumber,
+        () =>
+        {
+          _creatureService.Get(attack.CreatureId)
+            .AttackTarget(_creatureService.Get(attack.TargetCreatureId), attack, this);
+        }));
     }
 
     public void OnComplete()
@@ -183,7 +216,7 @@ namespace Magewatch.Services
         _currentStep++;
         if (_currentStep < _currentCommandList.CommandGroups.Count)
         {
-          StartCoroutine(RunCommandStep());
+          RunCommandStep();
         }
       }
     }

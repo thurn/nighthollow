@@ -46,10 +46,18 @@ async fn main() {
         .and(warp::body::content_length_limit(1024 * 16))
         .and(warp_protobuf::body::protobuf())
         .map(|request: Request| {
-            println!("Got request: {:?}", request);
+            let mut description = format!("{:?}", request);
+            description.truncate(500);
+            println!("Got request: {}", description);
             match requests::handle_request(request) {
                 Ok(response) => {
-                    println!("Sending response: {:?}", response);
+                    let mut response_description = format!("{:?}", response);
+                    response_description.truncate(500);
+                    println!(
+                        "Sending {} commands in response: {}",
+                        response.command_groups.len(),
+                        response_description
+                    );
                     warp_protobuf::reply::protobuf(&response)
                 }
                 Err(error) => {

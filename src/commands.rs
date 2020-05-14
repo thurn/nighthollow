@@ -39,7 +39,7 @@ pub fn prefab(address: &str) -> api::Asset {
 pub fn sprite(address: &str) -> api::Asset {
     api::Asset {
         address: address.to_string(),
-        asset_type: api::AssetType::Prefab.into(),
+        asset_type: api::AssetType::Sprite.into(),
     }
 }
 

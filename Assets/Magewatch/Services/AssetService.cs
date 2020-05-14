@@ -122,7 +122,8 @@ namespace Magewatch.Services
 
       for (var i = 0; i < requests.Count; ++i)
       {
-        _assetCache[assets[i].Address] = requests[i].asset;
+        var asset = requests[i].asset;
+        _assetCache[assets[i].Address] = Errors.CheckNotNull(asset, $"For asset address: '{assets[i].Address}'");
       }
 
       onComplete();

@@ -22,26 +22,34 @@ namespace Magewatch.Services
 {
   public sealed class NetworkService : MonoBehaviour
   {
-    public void HandleAction()
+    public void MakeRequest(Request request)
     {
-      StartCoroutine(StartRequest());
+      StartCoroutine(StartRequest(request));
     }
 
-    IEnumerator<YieldInstruction> StartRequest()
+    IEnumerator<YieldInstruction> StartRequest(IMessage request)
     {
-      var influence = new Influence
-      {
-        InfluenceType = InfluenceType.Earth,
-        Value = 2
-      };
-      var request = new UnityWebRequest("http://localhost:3030/api", UnityWebRequest.kHttpVerbPOST);
-      var uploadeHandler = new UploadHandlerRaw(influence.ToByteArray())
+      Debug.Log($"Sending Request {request}");
+      var webRequest = new UnityWebRequest("http://localhost:3030/api", UnityWebRequest.kHttpVerbPOST);
+      var uploadeHandler = new UploadHandlerRaw(request.ToByteArray())
       {
         contentType = "application/octet-stream"
       };
-      request.uploadHandler = uploadeHandler;
-      yield return request.SendWebRequest();
-      Debug.Log("Got response: " + request.isDone);
+      var downloadHandler = new DownloadHandlerBuffer();
+      webRequest.uploadHandler = uploadeHandler;
+      webRequest.downloadHandler = downloadHandler;
+      yield return webRequest.SendWebRequest();
+      var data = downloadHandler.data;
+      if (webRequest.isNetworkError || webRequest.isHttpError || webRequest.error != null || data == null)
+      {
+        Debug.LogError($"Error making network request: {webRequest.error} for request {request}");
+      }
+      else
+      {
+        var response = CommandList.Parser.ParseFrom(webRequest.downloadHandler.data);
+        Debug.Log($"Got response: {response}");
+        Root.Instance.CommandService.HandleCommands(response);
+      }
     }
   }
 }

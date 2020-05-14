@@ -25,6 +25,7 @@ pub enum Cost {
 }
 
 pub struct CardData {
+    pub id: i32,
     pub cost: Cost,
     pub name: String,
     pub school: School,
