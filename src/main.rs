@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#![deny(warnings)]
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+
 mod api;
 mod commands;
 mod interface;
@@ -48,13 +53,13 @@ async fn main() {
         .map(|request: Request| {
             let mut description = format!("{:?}", request);
             description.truncate(500);
-            println!("Got request: {}", description);
+            println!("<----- Got request:\n{}", description);
             match requests::handle_request(request) {
                 Ok(response) => {
                     let mut response_description = format!("{:?}", response);
                     response_description.truncate(500);
                     println!(
-                        "Sending {} commands in response: {}",
+                        "-----> Sending {} command(s) in response:\n{}",
                         response.command_groups.len(),
                         response_description
                     );

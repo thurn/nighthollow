@@ -92,8 +92,8 @@ pub enum FileValue {
 }
 
 pub struct BoardPosition {
-    rank: RankValue,
-    file: FileValue,
+    pub rank: RankValue,
+    pub file: FileValue,
 }
 
 #[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]

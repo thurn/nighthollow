@@ -253,7 +253,19 @@ namespace Magewatch.Components
           _isDragging = false;
           _hand.RemoveFromHand(this);
           DOTween.Sequence().Append(transform.DOScale(Vector3.zero, 0.2f))
-            .AppendCallback(() => { Destroy(gameObject); });
+            .AppendCallback(() =>
+            {
+              Root.Instance.NetworkService.MakeRequest(new Request
+              {
+                PlayCard = new PlayCardRequest
+                {
+                  GameId = Root.Instance.CurrentGameId,
+                  CardId = CardId,
+                  PlayUntargeted = new PlayUntargetedCard()
+                }
+              });
+              Destroy(gameObject);
+            });
         }
         else
         {

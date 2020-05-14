@@ -158,3 +158,9 @@ pub fn draw_card(card: &Card, metadata: &CardMetadata) -> api::DrawCardCommand {
         card: Some(card_data(card, metadata)),
     }
 }
+
+pub fn empty() -> api::CommandList {
+    api::CommandList {
+        command_groups: vec![],
+    }
+}

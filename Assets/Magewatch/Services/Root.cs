@@ -67,6 +67,8 @@ namespace Magewatch.Services
       }
     }
 
+    public GameId CurrentGameId { get; } = new GameId {Value = 1};
+
     public Player GetPlayer(PlayerName playerName)
     {
       switch (playerName)

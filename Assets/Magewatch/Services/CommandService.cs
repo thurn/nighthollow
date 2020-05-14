@@ -43,12 +43,15 @@ namespace Magewatch.Services
 
     public void HandleCommands(CommandList commandList)
     {
-      _assetService.FetchAssets(commandList, () =>
+      if (commandList.CommandGroups.Count > 0)
       {
-        _currentCommandList = commandList;
-        _currentStep = 0;
-        RunCommandStep();
-      });
+        _assetService.FetchAssets(commandList, () =>
+        {
+          _currentCommandList = commandList;
+          _currentStep = 0;
+          RunCommandStep();
+        });
+      }
     }
 
     void RunCommandStep()

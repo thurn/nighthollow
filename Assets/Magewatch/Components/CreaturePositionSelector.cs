@@ -75,6 +75,19 @@ namespace Magewatch.Components
           transform.DOMove(new Vector3(rank.ToXPosition(_creature.Owner), file.ToYPosition(), 0), 0.3f);
           _creature.AnimationPaused = false;
           _creatureService.AddCreatureAtPosition(_creature, rank, file);
+          Root.Instance.NetworkService.MakeRequest(new Request
+          {
+            PlayCard = new PlayCardRequest
+            {
+              GameId = Root.Instance.CurrentGameId,
+              CardId = _card.CardId,
+              PlayCreature = new PlayCreatureCard
+              {
+                RankPosition = rank,
+                FilePosition = file
+              }
+            }
+          });
         }
         else
         {

@@ -55,6 +55,18 @@ namespace Magewatch.Components
           target.Highlighted = false;
           _attachment.SetColor(Color.white);
           target.AddAttachment(_attachment);
+          Root.Instance.NetworkService.MakeRequest(new Request
+          {
+            PlayCard = new PlayCardRequest
+            {
+              GameId = Root.Instance.CurrentGameId,
+              CardId = _card.CardId,
+              PlayAttachment = new PlayAttachmentCard
+              {
+                CreatureId = target.CreatureId
+              }
+            }
+          });
           Destroy(this);
         }
         else
