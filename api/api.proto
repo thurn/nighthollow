@@ -122,6 +122,18 @@ message RepositionCreaturesRequest {
   repeated CreaturePositionUpdate position_updates = 2;
 }
 
+message RunConsoleCommandRequest {
+  string command = 1;
+
+  GameId game_id = 2;
+
+  PlayerName player = 3;
+
+  CreatureId creature_id = 4;
+
+  CardId card_id = 5;
+}
+
 // Data sent to the server whenever the user does something in the game's user
 // interface
 message Request {
@@ -134,6 +146,7 @@ message Request {
     AdvancePhaseRequest advance_phase = 4;
     PlayCardRequest play_card = 5;
     RepositionCreaturesRequest reposition_creatures = 6;
+    RunConsoleCommandRequest run_console_command = 7;
   }
 }
 

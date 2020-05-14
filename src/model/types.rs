@@ -26,6 +26,7 @@ pub enum Cost {
 
 pub struct CardData {
     pub id: i32,
+    pub owner: PlayerName,
     pub cost: Cost,
     pub name: String,
     pub school: School,
@@ -39,6 +40,16 @@ pub trait HasCardData {
 impl HasCardData for CardData {
     fn card_data(&self) -> &CardData {
         self
+    }
+}
+
+pub trait HasOwner {
+    fn owner(&self) -> PlayerName;
+}
+
+impl<T: HasCardData> HasOwner for T {
+    fn owner(&self) -> PlayerName {
+        self.card_data().owner
     }
 }
 
@@ -143,10 +154,17 @@ impl Default for PlayerState {
 }
 
 pub struct Player {
+    pub name: PlayerName,
     pub state: PlayerState,
     pub hand: Vec<Card>,
     pub creatures: Vec<Creature>,
     pub scrolls: Vec<Scroll>,
+}
+
+impl HasOwner for Player {
+    fn owner(&self) -> PlayerName {
+        self.name
+    }
 }
 
 pub struct GameState {

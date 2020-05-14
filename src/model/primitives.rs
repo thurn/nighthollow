@@ -96,6 +96,12 @@ pub struct BoardPosition {
     pub file: FileValue,
 }
 
+impl BoardPosition {
+    pub fn new(rank: RankValue, file: FileValue) -> BoardPosition {
+        BoardPosition { rank, file }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]
 pub struct Influence {
     pub light: i32,
@@ -167,6 +173,15 @@ impl Influence {
         self.earth -= other.earth;
         self.shadow -= other.shadow;
     }
+
+    pub fn set_to(&mut self, other: &Influence) {
+        self.light = other.light;
+        self.sky = other.sky;
+        self.flame = other.flame;
+        self.ice = other.ice;
+        self.earth = other.earth;
+        self.shadow = other.shadow;
+    }
 }
 
 impl Default for Influence {
@@ -191,76 +206,4 @@ impl std::fmt::Display for Influence {
         }
         Ok(())
     }
-}
-
-#[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]
-pub struct Damage {
-    pub radiant: i32,
-    pub physical: i32,
-    pub fire: i32,
-    pub cold: i32,
-    pub lightning: i32,
-    pub necrotic: i32,
-}
-
-impl Default for Damage {
-    fn default() -> Self {
-        Damage {
-            radiant: 0,
-            physical: 0,
-            fire: 0,
-            cold: 0,
-            lightning: 0,
-            necrotic: 0,
-        }
-    }
-}
-
-impl Damage {
-    pub fn radiant(i: i32) -> Damage {
-        Damage {
-            radiant: i,
-            ..Default::default()
-        }
-    }
-
-    pub fn physical(i: i32) -> Damage {
-        Damage {
-            physical: i,
-            ..Damage::default()
-        }
-    }
-
-    pub fn fire(i: i32) -> Damage {
-        Damage {
-            fire: i,
-            ..Damage::default()
-        }
-    }
-
-    pub fn cold(i: i32) -> Damage {
-        Damage {
-            cold: i,
-            ..Damage::default()
-        }
-    }
-
-    pub fn lightning(i: i32) -> Damage {
-        Damage {
-            lightning: i,
-            ..Damage::default()
-        }
-    }
-
-    pub fn necrotic(i: i32) -> Damage {
-        Damage {
-            necrotic: i,
-            ..Damage::default()
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum CreatureTag {
-    Elemental,
 }

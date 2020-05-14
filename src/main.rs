@@ -19,6 +19,7 @@
 
 mod api;
 mod commands;
+mod console;
 mod interface;
 mod model;
 mod old;

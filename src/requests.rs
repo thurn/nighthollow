@@ -13,15 +13,15 @@
 // limitations under the License.
 
 use color_eyre::Result;
-use eyre::eyre;
+use eyre::{eyre, WrapErr};
 
 use crate::{
-    api, commands,
-    model::primitives::{BoardPosition, FileValue, PlayerName, RankValue},
-    model::types::{Card, Creature, Game, HasCardData},
+    api, commands, console,
+    model::primitives::{BoardPosition, FileValue, GamePhase, PlayerName, RankValue},
+    model::types::{Card, Creature, Game, HasCardData, Player},
     test_data::basic,
 };
-use commands::CardMetadata;
+use commands::{CardMetadata, CreatureMetadata};
 use std::{collections::HashMap, sync::Mutex};
 
 lazy_static! {
@@ -31,57 +31,68 @@ lazy_static! {
 pub fn handle_request(request_message: api::Request) -> Result<api::CommandList> {
     let request = request_message.request.ok_or(eyre!("Request not found"))?;
     match request {
-        api::request::Request::StartGame(_) => {
-            let (game, commands) = start_game()?;
-            let mut games = GAMES.lock().expect("Could not lock game");
-            games.insert(String::from("game"), game);
-            Ok(commands)
+        api::request::Request::RunConsoleCommand(message) => {
+            with_game(|game| console::run_console_command(message, game))
         }
-        api::request::Request::PlayCard(message) => with_game(|game| play_card(message, game)),
-        _ => Ok(commands::empty()),
+        api::request::Request::StartGame(_) => match &mut GAMES.lock() {
+            Ok(games) => {
+                let (game, commands) = start_game()?;
+                games.insert(String::from("game"), game);
+                Ok(commands)
+            }
+            Err(_) => Err(eyre!("Could not lock mutex")),
+        },
+        api::request::Request::PlayCard(message) => {
+            with_game(|game| play_card(message, &mut game.user))
+        }
+        api::request::Request::AdvancePhase(_) => with_game(|game| advance_game_phase(game)),
+        _ => commands::empty(),
     }
 }
 
 fn with_game(
     function: impl FnOnce(&mut Game) -> Result<api::CommandList>,
 ) -> Result<api::CommandList> {
-    let mut games = GAMES.lock().expect("Could not lock game");
-    let mut game = games.remove("game").expect("Game not found");
-    let result = function(&mut game);
-    games.insert(String::from("game"), game);
-    result
+    match &mut GAMES.lock() {
+        Ok(games) => {
+            let mut game = games.remove("game").ok_or(eyre!("Game not found"))?;
+            let result = function(&mut game);
+            games.insert(String::from("game"), game);
+            result
+        }
+        Err(_) => Err(eyre!("Could not lock mutex")),
+    }
 }
 
-fn metadata(card: &Card, is_user: bool) -> api::DrawCardCommand {
-    commands::draw_card(
-        card,
-        &CardMetadata {
-            owner: if is_user {
-                PlayerName::User
-            } else {
-                PlayerName::Enemy
-            },
+pub fn metadata(card: &Card, revealed: bool) -> CardMetadata {
+    let is_user = card.card_data().owner == PlayerName::User;
+    CardMetadata {
+        id: card.card_data().id,
+        revealed,
+        can_play: is_user,
+        creature: CreatureMetadata {
             id: card.card_data().id,
-            revealed: is_user,
-            can_play: is_user,
             can_resposition_creature: is_user,
         },
-    )
+    }
 }
 
 pub fn start_game() -> Result<(Game, api::CommandList)> {
     let game = basic::opening_hands();
-    let user = game.user.hand.iter().map(|c| metadata(c, true));
-    let enemy = game.enemy.hand.iter().map(|c| metadata(c, false));
+    let user = game
+        .user
+        .hand
+        .iter()
+        .map(|c| commands::draw_card_command(c, &metadata(c, true)));
+    let enemy = game
+        .enemy
+        .hand
+        .iter()
+        .map(|c| commands::draw_card_command(c, &metadata(c, false)));
 
     let list = api::CommandList {
         command_groups: vec![api::CommandGroup {
-            commands: user
-                .chain(enemy)
-                .map(|c| api::Command {
-                    command: Some(api::command::Command::DrawCard(c)),
-                })
-                .collect::<Vec<_>>(),
+            commands: user.chain(enemy).collect::<Vec<_>>(),
         }],
     };
 
@@ -123,7 +134,15 @@ fn remove_card(card_id: api::CardId, hand: &mut Vec<Card>) -> Result<Card> {
     Ok(hand.remove(position))
 }
 
-fn find_creature_mut(
+pub fn find_creature(creature_id: api::CreatureId, creatures: &Vec<Creature>) -> Result<&Creature> {
+    let result = creatures
+        .iter()
+        .find(|c| c.card_data().id == creature_id.value)
+        .ok_or(eyre!("Creature ID not found: {:?}", creature_id))?;
+    Ok(result)
+}
+
+pub fn find_creature_mut(
     creature_id: api::CreatureId,
     creatures: &mut Vec<Creature>,
 ) -> Result<&mut Creature> {
@@ -134,13 +153,13 @@ fn find_creature_mut(
     Ok(result)
 }
 
-pub fn play_card(request: api::PlayCardRequest, game: &mut Game) -> Result<api::CommandList> {
+pub fn play_card(request: api::PlayCardRequest, player: &mut Player) -> Result<api::CommandList> {
     let card_id = request.card_id.ok_or(eyre!("card_id is required"))?;
     let play_card = request.play_card.ok_or(eyre!("play_card is required!"))?;
-    let card = remove_card(card_id, &mut game.user.hand)?;
+    let card = remove_card(card_id, &mut player.hand)?;
     match (card, play_card) {
         (Card::Creature(c), api::play_card_request::PlayCard::PlayCreature(play)) => {
-            game.user.creatures.push(Creature {
+            player.creatures.push(Creature {
                 archetype: c,
                 position: BoardPosition {
                     rank: convert_rank(play.rank_position())?,
@@ -148,20 +167,47 @@ pub fn play_card(request: api::PlayCardRequest, game: &mut Game) -> Result<api::
                 },
                 spells: vec![],
             });
-            Ok(commands::empty())
+            commands::empty()
         }
         (Card::Spell(s), api::play_card_request::PlayCard::PlayAttachment(play)) => {
             let creature = find_creature_mut(
                 play.creature_id.ok_or(eyre!("creature_id is required"))?,
-                &mut game.user.creatures,
+                &mut player.creatures,
             )?;
             creature.spells.push(s);
-            Ok(commands::empty())
+            commands::empty()
         }
         (Card::Scroll(s), api::play_card_request::PlayCard::PlayUntargeted(_)) => {
-            game.user.scrolls.push(s);
-            Ok(commands::empty())
+            player.scrolls.push(s);
+            commands::empty()
         }
         _ => Err(eyre!("Target type does not match card type!")),
     }
+}
+
+pub fn advance_game_phase(game: &mut Game) -> Result<api::CommandList> {
+    match game.state.phase {
+        GamePhase::Preparation => to_main_phase(game),
+        GamePhase::Main => to_preparation_phase(game),
+    }
+}
+
+fn to_main_phase(game: &mut Game) -> Result<api::CommandList> {
+    todo!()
+}
+
+fn upkeep(player_name: PlayerName, player: &mut Player) -> api::Command {
+    player.state.current_mana = player.state.maximum_mana;
+    player
+        .state
+        .current_influence
+        .set_to(&player.state.maximum_influence);
+    commands::update_player_command(player)
+}
+
+fn to_preparation_phase(game: &mut Game) -> Result<api::CommandList> {
+    commands::group(vec![
+        upkeep(PlayerName::User, &mut game.user),
+        upkeep(PlayerName::Enemy, &mut game.enemy),
+    ])
 }

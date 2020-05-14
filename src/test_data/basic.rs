@@ -23,10 +23,11 @@ fn next_id() -> i32 {
     NEXT_IDENTIFIER_INDEX.fetch_add(1, Ordering::Relaxed)
 }
 
-pub fn berserker() -> CreatureArchetype {
+pub fn berserker(owner: PlayerName) -> CreatureArchetype {
     CreatureArchetype {
         card_data: CardData {
             id: next_id(),
+            owner,
             cost: Cost::ManaCost(ManaCost {
                 mana: 2,
                 influence: Influence::flame(1),
@@ -40,10 +41,11 @@ pub fn berserker() -> CreatureArchetype {
     }
 }
 
-pub fn mage() -> CreatureArchetype {
+pub fn mage(owner: PlayerName) -> CreatureArchetype {
     CreatureArchetype {
         card_data: CardData {
             id: next_id(),
+            owner,
             cost: Cost::ManaCost(ManaCost {
                 mana: 3,
                 influence: Influence::flame(2),
@@ -57,10 +59,11 @@ pub fn mage() -> CreatureArchetype {
     }
 }
 
-pub fn rage() -> Spell {
+pub fn rage(owner: PlayerName) -> Spell {
     Spell {
         card_data: CardData {
             id: next_id(),
+            owner,
             cost: Cost::ManaCost(ManaCost {
                 mana: 1,
                 influence: Influence::flame(1),
@@ -73,10 +76,11 @@ pub fn rage() -> Spell {
     }
 }
 
-pub fn flame_scroll() -> Scroll {
+pub fn flame_scroll(owner: PlayerName) -> Scroll {
     Scroll {
         card_data: CardData {
             id: next_id(),
+            owner,
             cost: Cost::None,
             name: String::from("Flame Scroll"),
             school: School::Flame,
@@ -86,16 +90,17 @@ pub fn flame_scroll() -> Scroll {
     }
 }
 
-pub fn new_player() -> Player {
+pub fn new_player(name: PlayerName) -> Player {
     Player {
+        name,
         state: PlayerState::default(),
         hand: vec![
-            Card::Creature(berserker()),
-            Card::Creature(berserker()),
-            Card::Creature(mage()),
-            Card::Spell(rage()),
-            Card::Scroll(flame_scroll()),
-            Card::Scroll(flame_scroll()),
+            Card::Creature(berserker(name)),
+            Card::Creature(berserker(name)),
+            Card::Creature(mage(name)),
+            Card::Spell(rage(name)),
+            Card::Scroll(flame_scroll(name)),
+            Card::Scroll(flame_scroll(name)),
         ],
         creatures: vec![],
         scrolls: vec![],
@@ -107,7 +112,7 @@ pub fn opening_hands() -> Game {
         state: GameState {
             phase: GamePhase::Main,
         },
-        user: new_player(),
-        enemy: new_player(),
+        user: new_player(PlayerName::User),
+        enemy: new_player(PlayerName::Enemy),
     }
 }
