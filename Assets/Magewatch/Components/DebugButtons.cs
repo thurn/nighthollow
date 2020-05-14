@@ -48,17 +48,17 @@ namespace Magewatch.Components
 
     public void Engage()
     {
-      Run(StockCreatures(), C(MeleeEngage(One, Two), MeleeEngage(Two, One)));
+      Run(StockCreatures(), C(MeleeEngage(1, 2), MeleeEngage(2, 1)));
     }
 
     public void SimpleCombat()
     {
       Run(
         StockCreatures(),
-        C(MeleeEngage(One, Two),
-          MeleeEngage(Two, One)),
-        C(Attack(One, Two, 10, SkillAnimation.Skill2),
-          Attack(Two, One, 10, SkillAnimation.Skill3)));
+        C(MeleeEngage(1, 2),
+          MeleeEngage(2, 1)),
+        C(Attack(1, 2, 10, SkillAnimation.Skill2),
+          Attack(2, 1, 10, SkillAnimation.Skill3)));
     }
 
     public void BigCombat()
@@ -70,14 +70,14 @@ namespace Magewatch.Components
         EveryoneAttack(),
         EveryoneAttack(),
         EveryoneAttack(),
-        C(Attack(One, Two, 20, SkillAnimation.Skill2, killsTarget: true),
-          Attack(Three, One, 10, SkillAnimation.Skill3, killsTarget: true),
-          Attack(Four, Five, 20, SkillAnimation.Skill2, killsTarget: true)),
-        C(MeleeEngage(Three, Four), MeleeEngage(Four, Three)),
-        C(Attack(Three, Four, 10, SkillAnimation.Skill3), Attack(Four, Three, 20, SkillAnimation.Skill2)),
-        C(Attack(Three, Four, 10, SkillAnimation.Skill3, killsTarget: true)),
-        C(CastAtOpponent(Three)),
-        C(RemoveCreature(Three)),
+        C(Attack(1, 2, 20, SkillAnimation.Skill2, killsTarget: true),
+          Attack(3, 1, 10, SkillAnimation.Skill3, killsTarget: true),
+          Attack(4, 5, 20, SkillAnimation.Skill2, killsTarget: true)),
+        C(MeleeEngage(3, 4), MeleeEngage(4, 3)),
+        C(Attack(3, 4, 10, SkillAnimation.Skill3), Attack(4, 3, 20, SkillAnimation.Skill2)),
+        C(Attack(3, 4, 10, SkillAnimation.Skill3, killsTarget: true)),
+        C(CastAtOpponent(3)),
+        C(RemoveCreature(3)),
         C(UpdatePlayer(PlayerName.User, 24, 25, 0, 0)),
         C(Wait(1000)),
         StockCreatures()
@@ -111,9 +111,9 @@ namespace Magewatch.Components
     public void Cast()
     {
       Run(
-        C(StockCreature(One), StockCreature(Two)),
-        C(CastSpell1(Two, One, 50), MeleeEngage(One, Two)),
-        C(Attack(One, Two, 20, SkillAnimation.Skill2), Attack(Two, One, 20, SkillAnimation.Skill3)));
+        C(StockCreature(1), StockCreature(2)),
+        C(CastSpell1(2, 1, 50), MeleeEngage(1, 2)),
+        C(Attack(1, 2, 20, SkillAnimation.Skill2), Attack(2, 1, 20, SkillAnimation.Skill3)));
     }
 
     public void AddMana()
@@ -169,23 +169,9 @@ namespace Magewatch.Components
       Root.Instance.CommandService.HandleCommands(list);
     }
 
-    static CreatureId CreatureId(int id, PlayerName owner) => new CreatureId
-    {
-      Index = id,
-      Owner = owner
-    };
+    static CreatureId CreatureId(int id) => new CreatureId {Value = id};
 
-    static CardId CardId(int id, PlayerName owner) => new CardId
-    {
-      Index = id,
-      Owner = owner
-    };
-
-    static readonly CreatureId One = CreatureId(1, PlayerName.User);
-    static readonly CreatureId Two =  CreatureId(2, PlayerName.Enemy);
-    static readonly CreatureId Three =  CreatureId(3, PlayerName.Enemy);
-    static readonly CreatureId Four =  CreatureId(4, PlayerName.User);
-    static readonly CreatureId Five =  CreatureId(5, PlayerName.Enemy);
+    static CardId CardId(int id) => new CardId {Value = id};
 
     static Asset Prefab(string address) =>
       new Asset
@@ -208,16 +194,16 @@ namespace Magewatch.Components
       };
 
     static CommandGroup StockCreatures() =>
-      C(StockCreature(One),
-        StockCreature(Two),
-        StockCreature(Three),
-        StockCreature(Four),
-        StockCreature(Five));
+      C(StockCreature(1),
+        StockCreature(2),
+        StockCreature(3),
+        StockCreature(4),
+        StockCreature(5));
 
-    static Command StockCreature(CreatureId id)
+    static Command StockCreature(int id)
     {
       var create = new CreateOrUpdateCreatureCommand();
-      switch (id.Index)
+      switch (id)
       {
         case 1:
           create.Creature = NewCreature("Berserker", 1, PlayerName.User, -4, -3, RageAttachment());
@@ -247,8 +233,9 @@ namespace Magewatch.Components
     {
       var result = new CreatureData
       {
-        CreatureId = CreatureId(id, owner),
+        CreatureId = CreatureId(id),
         Prefab = Prefab($"Creatures/{name}"),
+        Owner = owner,
         RankPosition = x.HasValue ? BoardPositions.ClosestRankForXPosition(x.Value, owner) : RankValue.RankUnspecified,
         FilePosition = y.HasValue ? BoardPositions.ClosestFileForYPosition(y.Value) : FileValue.FileUnspecified,
       };
@@ -262,40 +249,40 @@ namespace Magewatch.Components
     }
 
     static CommandGroup EveryoneEngage() =>
-      C(MeleeEngage(One, Two),
-        MeleeEngage(Two, One),
-        MeleeEngage(Three, One),
-        MeleeEngage(Four, Five),
-        MeleeEngage(Five, Four));
+      C(MeleeEngage(1, 2),
+        MeleeEngage(2, 1),
+        MeleeEngage(3, 1),
+        MeleeEngage(4, 5),
+        MeleeEngage(5, 4));
 
-    static Command MeleeEngage(CreatureId c1, CreatureId c2)
+    static Command MeleeEngage(int c1, int c2)
     {
       return new Command
       {
         MeleeEngage = new MeleeEngageCommand
         {
-          CreatureId = c1,
-          TargetCreatureId = c2
+          CreatureId = CreatureId(c1),
+          TargetCreatureId = CreatureId(c2)
         }
       };
     }
 
     static CommandGroup EveryoneAttack() =>
-      C(Attack(One, Two, 20, SkillAnimation.Skill2),
-        Attack(Two, One, 10, SkillAnimation.Skill3),
-        Attack(Three, One, 10, SkillAnimation.Skill3),
-        Attack(Four, Five, 20, SkillAnimation.Skill2),
-        Attack(Five, Four, 20, SkillAnimation.Skill2));
+      C(Attack(1, 2, 20, SkillAnimation.Skill2),
+        Attack(2, 1, 10, SkillAnimation.Skill3),
+        Attack(3, 1, 10, SkillAnimation.Skill3),
+        Attack(4, 5, 20, SkillAnimation.Skill2),
+        Attack(5, 4, 20, SkillAnimation.Skill2));
 
-    static Command Attack(CreatureId c1, CreatureId c2, int damage, SkillAnimation skill = SkillAnimation.Skill1,
+    static Command Attack(int c1, int c2, int damage, SkillAnimation skill = SkillAnimation.Skill1,
       bool killsTarget = false, int hitCount = 1)
     {
       return new Command
       {
         Attack = new AttackCommand
         {
-          CreatureId = c1,
-          TargetCreatureId = c2,
+          CreatureId = CreatureId(c1),
+          TargetCreatureId = CreatureId(c2),
           Skill = skill,
           HitCount = hitCount,
           ApplyDamage = new ApplyDamageEffect
@@ -307,13 +294,14 @@ namespace Magewatch.Components
       };
     }
 
-    static Command CastAtOpponent(CreatureId c1, SkillAnimation skill = SkillAnimation.Skill1)
+    static Command CastAtOpponent(int c1, SkillAnimation skill = SkillAnimation.Skill1)
     {
       return new Command
       {
         Attack = new AttackCommand
         {
-          CreatureId = c1,
+          CreatureId = CreatureId(c1),
+          TargetCreatureId = CreatureId(c1),
           Skill = skill,
           HitCount = 1,
           FireProjectile = new FireProjectileEffect
@@ -330,13 +318,13 @@ namespace Magewatch.Components
       };
     }
 
-    static Command RemoveCreature(CreatureId id)
+    static Command RemoveCreature(int id)
     {
       return new Command
       {
         RemoveCreature = new RemoveCreatureCommand
         {
-          CreatureId = id
+          CreatureId = CreatureId(id)
         }
       };
     }
@@ -390,13 +378,14 @@ namespace Magewatch.Components
     {
       var result = new CardData
       {
-        CardId = CardId(id, owner),
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Name = "Mage",
         StandardCost = new StandardCost
         {
           ManaCost = 2,
         },
+        Owner = owner,
         Image = Sprite("CreatureImages/Mage"),
         Text = new RichText
         {
@@ -414,13 +403,14 @@ namespace Magewatch.Components
     {
       var result = new CardData
       {
-        CardId = CardId(id, owner),
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Name = "Berserker",
         StandardCost = new StandardCost
         {
           ManaCost = 4,
         },
+        Owner = owner,
         Image = Sprite("CreatureImages/Berserker"),
         Text = new RichText
         {
@@ -438,13 +428,14 @@ namespace Magewatch.Components
     {
       var result = new CardData
       {
-        CardId = CardId(id, owner),
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Name = "Rage",
         StandardCost = new StandardCost
         {
           ManaCost = 3,
         },
+        Owner = owner,
         Image = Sprite("Spells/SpellBook01_01"),
         Text = new RichText
         {
@@ -466,13 +457,14 @@ namespace Magewatch.Components
     {
       var result = new CardData
       {
-        CardId = CardId(id, owner),
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Name = "Knowledge",
         StandardCost = new StandardCost
         {
           ManaCost = 3,
         },
+        Owner = owner,
         Image = Sprite("Spells/SpellBook01_06"),
         Text = new RichText
         {
@@ -493,10 +485,11 @@ namespace Magewatch.Components
     {
       return new CardData
       {
-        CardId = CardId(id, owner),
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
         Name = "Flame Scroll",
         NoCost = new NoCost(),
+        Owner = owner,
         Image = Sprite("Scrolls/ScrollsAndBooks_21_t"),
         Text = new RichText
         {
@@ -512,8 +505,9 @@ namespace Magewatch.Components
     {
       return new CardData
       {
-        CardId = CardId(id, PlayerName.Enemy),
+        CardId = CardId(id),
         Prefab = Prefab("Cards/FireCard"),
+        Owner = PlayerName.Enemy,
         IsRevealed = false,
         CanBePlayed = false
       };
@@ -531,15 +525,15 @@ namespace Magewatch.Components
       };
     }
 
-    static Command CastSpell1(CreatureId c1, CreatureId c2, int damage, bool killsTarget = false,
+    static Command CastSpell1(int c1, int c2, int damage, bool killsTarget = false,
       SkillAnimation skill = SkillAnimation.Skill1)
     {
       return new Command
       {
         Attack = new AttackCommand
         {
-          CreatureId = c1,
-          TargetCreatureId = c2,
+          CreatureId = CreatureId(c1),
+          TargetCreatureId = CreatureId(c2),
           Skill = skill,
           HitCount = 1,
           FireProjectile = new FireProjectileEffect

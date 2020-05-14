@@ -79,7 +79,7 @@ namespace Magewatch.Components
       {
         Initialize(_creatureData);
         _creatureService.AddCreatureAtPosition(this,
-          BoardPositions.ClosestRankForXPosition(transform.position.x, Owner),
+          BoardPositions.ClosestRankForXPosition(transform.position.x, _creatureData.Owner),
           BoardPositions.ClosestFileForYPosition(transform.position.y));
       }
     }
@@ -91,7 +91,7 @@ namespace Magewatch.Components
 
     public CreatureId CreatureId => _creatureData.CreatureId;
 
-    public PlayerName Owner => CreatureId.Owner;
+    public PlayerName Owner => _creatureData.Owner;
 
     public RankValue RankPosition => _creatureData.RankPosition;
 
@@ -104,12 +104,12 @@ namespace Magewatch.Components
 
     public void UpdateCreatureData(CreatureData newData, IOnComplete onComplete = null)
     {
-      transform.eulerAngles = newData.CreatureId.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
+      transform.eulerAngles = newData.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
       if (newData.RankPosition != RankValue.RankUnspecified && newData.FilePosition != FileValue.FileUnspecified)
       {
         transform.position = new Vector2(
-          newData.RankPosition.ToXPosition(newData.CreatureId.Owner),
+          newData.RankPosition.ToXPosition(newData.Owner),
           newData.FilePosition.ToYPosition());
       }
 
@@ -319,7 +319,7 @@ namespace Magewatch.Components
         var yOffset = Vector3.zero;
         if (_currentTarget.CurrentTarget != this)
         {
-          yOffset = new Vector3(0, new[] {0.5f, -0.5f, -0.3f, 0.3f}[CreatureId.Index % 4], 0);
+          yOffset = new Vector3(0, new[] {0.5f, -0.5f, -0.3f, 0.3f}[CreatureId.Value % 4], 0);
         }
 
         if (Vector2.Distance(MeleePosition.position, _currentTarget.MeleePosition.position + yOffset) < 0.05f)

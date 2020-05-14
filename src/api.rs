@@ -13,16 +13,12 @@ pub struct GameId {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreatureId {
     #[prost(int32, tag = "1")]
-    pub index: i32,
-    #[prost(enumeration = "PlayerName", tag = "2")]
-    pub owner: i32,
+    pub value: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CardId {
     #[prost(int32, tag = "1")]
-    pub index: i32,
-    #[prost(enumeration = "PlayerName", tag = "2")]
-    pub owner: i32,
+    pub value: i32,
 }
 /// Requests to start a new game with a new game ID. The client should discard
 /// all previous state when sending this request.
@@ -58,7 +54,7 @@ pub struct PlayAttachmentCard {
 /// Play a card which does not require targeting
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PlayUntargetedCard {}
-/// Play a card from a player's hand
+/// Play a card from the user's hand
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PlayCardRequest {
     #[prost(message, optional, tag = "1")]
@@ -184,21 +180,23 @@ pub struct CardData {
     pub prefab: ::std::option::Option<Asset>,
     #[prost(string, tag = "3")]
     pub name: std::string::String,
+    #[prost(enumeration = "PlayerName", tag = "6")]
+    pub owner: i32,
     /// Sprite to display as the card image
-    #[prost(message, optional, tag = "6")]
-    pub image: ::std::option::Option<Asset>,
     #[prost(message, optional, tag = "7")]
+    pub image: ::std::option::Option<Asset>,
+    #[prost(message, optional, tag = "8")]
     pub text: ::std::option::Option<RichText>,
     /// Should this card be shown face-up?
-    #[prost(bool, tag = "8")]
+    #[prost(bool, tag = "9")]
     pub is_revealed: bool,
     /// Can the user play this card? i.e. does it have a valid target and can the
     /// user pay its costs?
-    #[prost(bool, tag = "9")]
+    #[prost(bool, tag = "10")]
     pub can_be_played: bool,
     #[prost(oneof = "card_data::Cost", tags = "4, 5")]
     pub cost: ::std::option::Option<card_data::Cost>,
-    #[prost(oneof = "card_data::CardType", tags = "10, 11, 12")]
+    #[prost(oneof = "card_data::CardType", tags = "11, 12, 13")]
     pub card_type: ::std::option::Option<card_data::CardType>,
 }
 pub mod card_data {
@@ -211,11 +209,11 @@ pub mod card_data {
     }
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum CardType {
-        #[prost(message, tag = "10")]
-        CreatureCard(super::CreatureData),
         #[prost(message, tag = "11")]
-        AttachmentCard(super::AttachmentData),
+        CreatureCard(super::CreatureData),
         #[prost(message, tag = "12")]
+        AttachmentCard(super::AttachmentData),
+        #[prost(message, tag = "13")]
         UntargetedCard(super::UntargetedData),
     }
 }
@@ -225,14 +223,18 @@ pub struct CreatureData {
     pub creature_id: ::std::option::Option<CreatureId>,
     #[prost(message, optional, tag = "2")]
     pub prefab: ::std::option::Option<Asset>,
-    #[prost(enumeration = "RankValue", tag = "3")]
+    #[prost(enumeration = "PlayerName", tag = "3")]
+    pub owner: i32,
+    #[prost(enumeration = "RankValue", tag = "4")]
     pub rank_position: i32,
-    #[prost(enumeration = "FileValue", tag = "4")]
+    #[prost(enumeration = "FileValue", tag = "5")]
     pub file_position: i32,
+    #[prost(int32, tag = "6")]
+    pub maximum_health: i32,
     /// Can the user change this creature's position?
-    #[prost(bool, tag = "5")]
+    #[prost(bool, tag = "7")]
     pub can_be_repositioned: bool,
-    #[prost(message, repeated, tag = "6")]
+    #[prost(message, repeated, tag = "8")]
     pub attachments: ::std::vec::Vec<AttachmentData>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]

@@ -26,15 +26,11 @@ message GameId {
 }
 
 message CreatureId {
-  int32 index = 1;
-
-  PlayerName owner = 2;
+  int32 value = 1;
 }
 
 message CardId {
-  int32 index = 1;
-
-  PlayerName owner = 2;
+  int32 value = 1;
 }
 
 enum PlayerName {
@@ -95,7 +91,7 @@ message PlayAttachmentCard {
 message PlayUntargetedCard {
 }
 
-// Play a card from a player's hand
+// Play a card from the user's hand
 message PlayCardRequest {
   GameId game_id = 1;
 
@@ -219,22 +215,24 @@ message CardData {
     StandardCost standard_cost = 5;
   }
 
-  // Sprite to display as the card image
-  Asset image = 6;
+  PlayerName owner = 6;
 
-  RichText text = 7;
+  // Sprite to display as the card image
+  Asset image = 7;
+
+  RichText text = 8;
 
   // Should this card be shown face-up?
-  bool is_revealed = 8;
+  bool is_revealed = 9;
 
   // Can the user play this card? i.e. does it have a valid target and can the
   // user pay its costs?
-  bool can_be_played = 9;
+  bool can_be_played = 10;
 
   oneof card_type {
-    CreatureData creature_card = 10;
-    AttachmentData attachment_card = 11;
-    UntargetedData untargeted_card = 12;
+    CreatureData creature_card = 11;
+    AttachmentData attachment_card = 12;
+    UntargetedData untargeted_card = 13;
   }
 }
 
@@ -243,14 +241,18 @@ message CreatureData {
 
   Asset prefab = 2;
 
-  RankValue rank_position = 3;
+  PlayerName owner = 3;
 
-  FileValue file_position = 4;
+  RankValue rank_position = 4;
+
+  FileValue file_position = 5;
+
+  int32 maximum_health = 6;
 
   // Can the user change this creature's position?
-  bool can_be_repositioned = 5;
+  bool can_be_repositioned = 7;
 
-  repeated AttachmentData attachments = 6;
+  repeated AttachmentData attachments = 8;
 }
 
 message DisplayErrorCommand {
