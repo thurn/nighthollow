@@ -143,7 +143,6 @@ pub fn creature_archetype(
         owner: player_name(creature.owner()).into(),
         rank_position: api::RankValue::RankUnspecified.into(),
         file_position: api::FileValue::FileUnspecified.into(),
-        maximum_health: creature.health,
         can_be_repositioned: metadata.can_resposition_creature,
         attachments: vec![],
     }

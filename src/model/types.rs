@@ -12,18 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use super::primitives::*;
+use serde::{Deserialize, Serialize};
 
+use super::stats::Stat;
+use crate::model::primitives::*;
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ManaCost {
     pub mana: i32,
     pub influence: Influence,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub enum Cost {
     None,
     ManaCost(ManaCost),
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct CardData {
     pub id: i32,
     pub owner: PlayerName,
@@ -53,16 +59,54 @@ impl<T: HasCardData> HasOwner for T {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum CreatureType {
     Berserker,
     Mage,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct DamageStat {
+    pub value: Stat,
+    pub damage_type: DamageType,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CreatureStats {
+    pub health: Stat,
+    pub energy: Stat,
+    pub initiative: Stat,
+    pub crit_chance: Stat,
+    pub crit_multiplier: Stat,
+    pub accuracy: Stat,
+    pub evasion: Stat,
+    pub base_damage: Vec<DamageStat>,
+    pub damage_resistance: Vec<DamageStat>,
+    pub damage_reduction: Vec<DamageStat>,
+}
+
+impl Default for CreatureStats {
+    fn default() -> Self {
+        CreatureStats {
+            health: Stat::new(100),
+            energy: Stat::new(100),
+            initiative: Stat::new(100),
+            crit_chance: Stat::new(50),
+            crit_multiplier: Stat::new(1000),
+            accuracy: Stat::new(100),
+            evasion: Stat::new(100),
+            base_damage: vec![],
+            damage_resistance: vec![],
+            damage_reduction: vec![],
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct CreatureArchetype {
     pub card_data: CardData,
     pub base_type: CreatureType,
-    pub health: i32,
+    pub stats: CreatureStats,
 }
 
 impl HasCardData for CreatureArchetype {
@@ -71,6 +115,7 @@ impl HasCardData for CreatureArchetype {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Creature {
     pub archetype: CreatureArchetype,
     pub position: BoardPosition,
@@ -83,11 +128,12 @@ impl HasCardData for Creature {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum SpellType {
     Rage,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Spell {
     pub card_data: CardData,
     pub base_type: SpellType,
@@ -99,11 +145,12 @@ impl HasCardData for Spell {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum ScrollType {
     FlameScroll,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Scroll {
     pub card_data: CardData,
     pub base_type: ScrollType,
@@ -115,6 +162,7 @@ impl HasCardData for Scroll {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub enum Card {
     Creature(CreatureArchetype),
     Spell(Spell),
@@ -131,6 +179,7 @@ impl HasCardData for Card {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct PlayerState {
     pub current_life: i32,
     pub maximum_life: i32,
@@ -153,6 +202,7 @@ impl Default for PlayerState {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Player {
     pub name: PlayerName,
     pub state: PlayerState,
@@ -167,10 +217,12 @@ impl HasOwner for Player {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct GameState {
     pub phase: GamePhase,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Game {
     pub state: GameState,
     pub user: Player,

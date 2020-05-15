@@ -260,12 +260,10 @@ message CreatureData {
 
   FileValue file_position = 5;
 
-  int32 maximum_health = 6;
-
   // Can the user change this creature's position?
-  bool can_be_repositioned = 7;
+  bool can_be_repositioned = 6;
 
-  repeated AttachmentData attachments = 8;
+  repeated AttachmentData attachments = 7;
 }
 
 message DisplayErrorCommand {

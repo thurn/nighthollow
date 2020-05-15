@@ -91,6 +91,7 @@ pub enum FileValue {
     File5,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BoardPosition {
     pub rank: RankValue,
     pub file: FileValue,
@@ -206,4 +207,14 @@ impl std::fmt::Display for Influence {
         }
         Ok(())
     }
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+pub enum DamageType {
+    Radiant,
+    Electric,
+    Fire,
+    Cold,
+    Physical,
+    Necrotic,
 }

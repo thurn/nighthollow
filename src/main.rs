@@ -24,6 +24,7 @@ mod interface;
 mod model;
 mod old;
 mod requests;
+mod rules;
 mod test_data;
 
 use api::{command, Command, CommandGroup, CommandList, DisplayErrorCommand, Request};

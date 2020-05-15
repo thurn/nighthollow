@@ -37,7 +37,7 @@ pub fn berserker(owner: PlayerName) -> CreatureArchetype {
             text: "Anger & Axes".to_string(),
         },
         base_type: CreatureType::Berserker,
-        health: 200,
+        stats: CreatureStats::default(),
     }
 }
 
@@ -55,7 +55,7 @@ pub fn mage(owner: PlayerName) -> CreatureArchetype {
             text: "Whiz! Zoom!".to_string(),
         },
         base_type: CreatureType::Mage,
-        health: 100,
+        stats: CreatureStats::default(),
     }
 }
 
