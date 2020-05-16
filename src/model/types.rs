@@ -14,8 +14,8 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::stats::Stat;
-use crate::model::primitives::*;
+use super::stats::{Stat, StatName, Tag, TagName};
+use crate::{model::primitives::*, rules::rules::Rule};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ManaCost {
@@ -31,7 +31,7 @@ pub enum Cost {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CardData {
-    pub id: i32,
+    pub id: CardId,
     pub owner: PlayerName,
     pub cost: Cost,
     pub name: String,
@@ -66,6 +66,11 @@ pub enum CreatureType {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct Damage {
+    pub values: Vec<(i32, DamageType)>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct DamageStat {
     pub value: Stat,
     pub damage_type: DamageType,
@@ -74,7 +79,11 @@ pub struct DamageStat {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CreatureStats {
     pub health: Stat,
-    pub energy: Stat,
+    pub health_regeneration: Stat,
+    pub damage: HealthValue,
+    pub maximum_mana: Stat,
+    pub mana_regeneration: Stat,
+    pub mana: ManaValue,
     pub initiative: Stat,
     pub crit_chance: Stat,
     pub crit_multiplier: Stat,
@@ -83,13 +92,20 @@ pub struct CreatureStats {
     pub base_damage: Vec<DamageStat>,
     pub damage_resistance: Vec<DamageStat>,
     pub damage_reduction: Vec<DamageStat>,
+
+    tags: Vec<(TagName, Tag)>,
+    dynamic_stats: Vec<(StatName, Stat)>,
 }
 
 impl Default for CreatureStats {
     fn default() -> Self {
         CreatureStats {
             health: Stat::new(100),
-            energy: Stat::new(100),
+            health_regeneration: Stat::new(0),
+            damage: 0,
+            maximum_mana: Stat::new(100),
+            mana_regeneration: Stat::new(100),
+            mana: 0,
             initiative: Stat::new(100),
             crit_chance: Stat::new(50),
             crit_multiplier: Stat::new(1000),
@@ -98,7 +114,19 @@ impl Default for CreatureStats {
             base_damage: vec![],
             damage_resistance: vec![],
             damage_reduction: vec![],
+            tags: vec![],
+            dynamic_stats: vec![],
         }
+    }
+}
+
+impl CreatureStats {
+    pub fn tag(&self, name: TagName) -> bool {
+        todo!()
+    }
+
+    pub fn get(&self, name: StatName) -> i32 {
+        todo!()
     }
 }
 
@@ -107,6 +135,7 @@ pub struct CreatureArchetype {
     pub card_data: CardData,
     pub base_type: CreatureType,
     pub stats: CreatureStats,
+    pub rules: Vec<Box<dyn Rule>>,
 }
 
 impl HasCardData for CreatureArchetype {
@@ -120,6 +149,20 @@ pub struct Creature {
     pub archetype: CreatureArchetype,
     pub position: BoardPosition,
     pub spells: Vec<Spell>,
+}
+
+impl Creature {
+    pub fn creature_id(&self) -> CreatureId {
+        self.card_data().id
+    }
+
+    pub fn stats(&self) -> &CreatureStats {
+        &self.archetype.stats
+    }
+
+    pub fn is_alive(&self) -> bool {
+        self.stats().health.value() > self.stats().damage
+    }
 }
 
 impl HasCardData for Creature {
@@ -220,6 +263,7 @@ impl HasOwner for Player {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct GameState {
     pub phase: GamePhase,
+    pub turn: TurnNumber,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

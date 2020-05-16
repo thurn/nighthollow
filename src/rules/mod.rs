@@ -13,3 +13,4 @@
 // limitations under the License.
 
 pub mod combat;
+pub mod rules;

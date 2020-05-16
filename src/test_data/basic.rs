@@ -38,6 +38,7 @@ pub fn berserker(owner: PlayerName) -> CreatureArchetype {
         },
         base_type: CreatureType::Berserker,
         stats: CreatureStats::default(),
+        rules: vec![],
     }
 }
 
@@ -56,6 +57,7 @@ pub fn mage(owner: PlayerName) -> CreatureArchetype {
         },
         base_type: CreatureType::Mage,
         stats: CreatureStats::default(),
+        rules: vec![],
     }
 }
 
@@ -111,6 +113,7 @@ pub fn opening_hands() -> Game {
     Game {
         state: GameState {
             phase: GamePhase::Main,
+            turn: 1,
         },
         user: new_player(PlayerName::User),
         enemy: new_player(PlayerName::Enemy),
