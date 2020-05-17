@@ -15,12 +15,12 @@
 use color_eyre::Result;
 use eyre::eyre;
 
-use super::rules::{Effects, Rule, RuleContext};
+use super::rules::{Effect, Effects, Rule, RuleContext};
 use crate::{
     api,
     model::{
-        primitives::CreatureId,
-        types::{Creature, Game, Player},
+        primitives::{CreatureId, HealthValue, ManaValue},
+        types::{Creature, Damage, Game, Player},
     },
 };
 
@@ -28,20 +28,19 @@ use crate::{
 /// resulting Commands
 pub fn run_combat(game: &mut Game) -> Result<api::CommandList> {
     let mut round_number = 1;
-    run_all_rules(game, |rule, rc| rule.on_combat_start(rc));
+    run_all_rules(game, |rule, rc, e| rule.on_combat_start(rc, e));
 
     while has_living_creatures(&game.user) && has_living_creatures(&game.enemy) {
-        run_all_rules(game, |rule, rc| rule.on_round_start(rc, round_number));
-
+        run_all_rules(game, |rule, rc, e| rule.on_round_start(rc, e, round_number));
         for creature_id in initiative_order(game) {
-            run_creature_rules(game, creature_id, |rule, rc| rule.on_action_start(rc));
+            run_creature_rules(game, creature_id, |rule, rc, e| rule.on_action_start(rc, e));
         }
 
-        run_all_rules(game, |rule, rc| rule.on_round_end(rc, round_number));
+        run_all_rules(game, |rule, rc, e| rule.on_round_end(rc, e, round_number));
         round_number += 1;
     }
 
-    run_all_rules(game, |rule, rc| rule.on_combat_end(rc));
+    run_all_rules(game, |rule, rc, e| rule.on_combat_end(rc, e));
 
     Err(eyre!("Not implemented"))
 }
@@ -51,8 +50,8 @@ fn has_living_creatures(player: &Player) -> bool {
     player.creatures.iter().any(Creature::is_alive)
 }
 
-/// Get a refernece to a creature with the given ID
-fn get_creature(game: &Game, creature_id: CreatureId) -> Result<&Creature> {
+/// Get a reference to a creature with the given ID
+fn find_creature(game: &Game, creature_id: CreatureId) -> Result<&Creature> {
     game.user
         .creatures
         .iter()
@@ -89,25 +88,28 @@ fn all_creature_ids(game: &Game) -> impl Iterator<Item = CreatureId> {
 }
 
 /// Executes a given rule callback function on every rule in the game
-fn run_all_rules(game: &mut Game, function: impl Fn(&Box<dyn Rule>, &RuleContext) -> ()) {
+fn run_all_rules(
+    game: &mut Game,
+    function: impl Fn(&Box<dyn Rule>, &RuleContext, &mut Effects) -> (),
+) {
     let mut effects = Effects::new();
     for creature_id in all_creature_ids(game) {
-        populate_effects(game, creature_id, &mut effects, |rule, rc| {
-            function(rule, rc)
+        populate_effects(game, creature_id, &mut effects, |rule, rc, e| {
+            function(rule, rc, e)
         });
     }
-    resolve_effects(game, &effects);
+    resolve_effects(game, effects);
 }
 
 /// Executes a given rule callback function on the rules for a specific creature
 fn run_creature_rules(
     game: &mut Game,
     creature_id: CreatureId,
-    function: impl Fn(&Box<dyn Rule>, &RuleContext) -> (),
+    function: impl Fn(&Box<dyn Rule>, &RuleContext, &mut Effects) -> (),
 ) {
     let mut effects = Effects::new();
     populate_effects(game, creature_id, &mut effects, function);
-    resolve_effects(game, &effects);
+    resolve_effects(game, effects);
 }
 
 /// Runs a rule callback function to populate the "Effects" buffer with the
@@ -116,20 +118,60 @@ fn populate_effects(
     game: &Game,
     creature_id: CreatureId,
     effects: &mut Effects,
-    function: impl Fn(&Box<dyn Rule>, &RuleContext) -> (),
+    function: impl Fn(&Box<dyn Rule>, &RuleContext, &mut Effects) -> (),
 ) {
-    let creature = get_creature(game, creature_id).expect("");
+    let creature = find_creature(game, creature_id).expect("");
     for rule in creature.archetype.rules.iter() {
         let rule_context = RuleContext {
             rule_id: 17,
-            output: effects,
             owner: creature,
             game,
         };
-        function(rule, &rule_context);
+        function(rule, &rule_context, effects);
     }
 }
 
 /// Applies mutations to the game state based on the effects in the provided
 /// Effects buffer, recursivley triggering further rules
-fn resolve_effects(game: &mut Game, effects: &Effects) {}
+fn resolve_effects(game: &mut Game, effects: Effects) {
+    for effect in effects.into_iter() {
+        match effect {
+            Effect::ApplyDamage(creature_id, damage) => apply_damage(creature_id, damage),
+            Effect::ApplyDamageRef(creature, damage) => apply_damage_ref(creature, damage),
+            Effect::HealDamage(creature_id, healed) => heal_damage(creature_id, healed),
+            Effect::GainMana(creature_id, mana) => gain_mana(creature_id, mana),
+            Effect::SpendMana(creature_id, mana) => spend_mana(creature_id, mana),
+            Effect::SetModifier(creature_id, stat_name, modifier) => {
+                set_modifier(creature_id, stat_name, modifier)
+            }
+        }
+    }
+}
+
+fn apply_damage(creature_id: CreatureId, damage: Damage) {
+    todo!()
+}
+
+fn apply_damage_ref(creature: &Creature, damage: Damage) {
+    todo!()
+}
+
+fn heal_damage(creature_id: CreatureId, healed: HealthValue) {
+    todo!()
+}
+
+fn set_modifier(
+    creature_id: CreatureId,
+    stat_name: crate::model::stats::StatName,
+    modifier: crate::model::stats::Modifier,
+) {
+    todo!()
+}
+
+fn spend_mana(creature_id: CreatureId, mana: ManaValue) {
+    todo!()
+}
+
+fn gain_mana(creature_id: CreatureId, mana: ManaValue) {
+    todo!()
+}

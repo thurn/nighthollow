@@ -14,52 +14,66 @@
 
 use std::fmt::Debug;
 
-use crate::{
-    api::CreatureId,
-    model::{
-        primitives::{ActionNumber, HealthValue, ManaValue, RoundNumber, RuleId, TurnNumber},
-        stats::{Modifier, StatName},
-        types::{Creature, Damage, Game},
+use crate::model::{
+    primitives::{
+        ActionNumber, CreatureId, HealthValue, ManaValue, RoundNumber, RuleId, TurnNumber,
     },
+    stats::{Modifier, StatName},
+    types::{Creature, Damage, Game},
 };
 use serde::{Deserialize, Serialize};
 
 #[typetag::serde(tag = "type")]
 pub trait Rule: Debug + Send {
     /// Called a the start of a new game turn
-    fn on_turn_start(&self, c: &RuleContext) {}
+    fn on_turn_start(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called at end of turn
-    fn on_turn_end(&self, c: &RuleContext) {}
+    fn on_turn_end(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called when a new combat phase begins
-    fn on_combat_start(&self, c: &RuleContext) {}
+    fn on_combat_start(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called when a combat phase ends
-    fn on_combat_end(&self, c: &RuleContext) {}
+    fn on_combat_end(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called at the start of a combat round
-    fn on_round_start(&self, c: &RuleContext, round: RoundNumber) {}
+    fn on_round_start(&self, context: &RuleContext, effects: &mut Effects, round: RoundNumber) {}
 
     /// Called at the end of a combat round
-    fn on_round_end(&self, c: &RuleContext, round: RoundNumber) {}
+    fn on_round_end(&self, context: &RuleContext, effects: &mut Effects, round: RoundNumber) {}
 
     /// Called when it is time for this creature to take an action during
     /// combat. Only called if the creature is alive.
-    fn on_action_start(&self, c: &RuleContext) {}
+    fn on_action_start(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called when this creature applies damage to an opposing creature with
     /// the final damage value
-    fn on_applied_damage(&self, c: &RuleContext, damage: &Damage, creature: &Creature) {}
+    fn on_applied_damage(
+        &self,
+        context: &RuleContext,
+        effects: &mut Effects,
+        damage: &Damage,
+        creature: &Creature,
+    ) {
+    }
 
     /// Called when this creature is damaged by an opposing creature with the
     /// final damage value
-    fn on_took_damage(&self, c: &RuleContext, damage: &Damage, creature: &Creature) {}
+    fn on_took_damage(
+        &self,
+        context: &RuleContext,
+        effects: &mut Effects,
+        damage: &Damage,
+        creature: &Creature,
+    ) {
+    }
 
     /// Called whenever any creature is damaged
     fn on_any_creature_damaged(
         &self,
-        c: &RuleContext,
+        context: &RuleContext,
+        effects: &mut Effects,
         attacker: &Creature,
         defender: &Creature,
         damage: &Damage,
@@ -67,40 +81,63 @@ pub trait Rule: Debug + Send {
     }
 
     /// Called when this creature kills an enemy creature
-    fn on_killed_enemy(&self, c: &RuleContext, enemy: &Creature) {}
+    fn on_killed_enemy(&self, context: &RuleContext, effects: &mut Effects, enemy: &Creature) {}
 
     /// Called when this creature dies (its damage total exceeds its health value)
-    fn on_death(&self, c: &RuleContext, killed_by: &Creature) {}
+    fn on_death(&self, context: &RuleContext, effects: &mut Effects, killed_by: &Creature) {}
 
     /// Called whenever any creature on either side of combat dies
-    fn on_any_creature_killed(&self, c: &RuleContext, attacker: &Creature, defender: &Creature) {}
+    fn on_any_creature_killed(
+        &self,
+        context: &RuleContext,
+        effects: &mut Effects,
+        attacker: &Creature,
+        defender: &Creature,
+    ) {
+    }
 }
 
-pub enum Effect {
+#[derive(Serialize, Deserialize, Debug)]
+struct TestRule {
+    state: i32,
+}
+
+#[typetag::serde]
+impl Rule for TestRule {
+    fn on_action_start(&self, context: &RuleContext, effects: &mut Effects) {
+        effects.push_effect(Effect::ApplyDamage(12, Damage { values: vec![] }))
+    }
+}
+
+pub enum Effect<'a> {
     ApplyDamage(CreatureId, Damage),
+    ApplyDamageRef(&'a Creature, Damage),
     HealDamage(CreatureId, HealthValue),
     GainMana(CreatureId, ManaValue),
     SpendMana(CreatureId, ManaValue),
     SetModifier(CreatureId, StatName, Modifier),
 }
 
-pub struct Effects {
-    effects: Vec<Effect>,
+pub struct Effects<'a> {
+    effects: Vec<Effect<'a>>,
 }
 
-impl Effects {
-    pub fn new() -> Effects {
+impl<'a> Effects<'a> {
+    pub fn new() -> Effects<'a> {
         Effects { effects: vec![] }
     }
 
-    pub fn push_effect(&mut self, effect: Effect) {
+    pub fn push_effect(&mut self, effect: Effect<'a>) {
         self.effects.push(effect);
+    }
+
+    pub fn into_iter(self) -> impl IntoIterator<Item = Effect<'a>> {
+        self.effects.into_iter()
     }
 }
 
 pub struct RuleContext<'a> {
     pub rule_id: RuleId,
-    pub output: &'a mut Effects,
     pub owner: &'a Creature,
     pub game: &'a Game,
 }
