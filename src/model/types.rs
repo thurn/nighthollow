@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use color_eyre::Result;
+use eyre::eyre;
 use serde::{Deserialize, Serialize};
 
 use super::stats::{Stat, StatName, Tag, TagName};
 use crate::{model::primitives::*, rules::rules::Rule};
+use std::slice::IterMut;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ManaCost {
@@ -68,6 +71,14 @@ pub enum CreatureType {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Damage {
     pub values: Vec<(i32, DamageType)>,
+}
+
+impl Damage {
+    pub fn total(&self) -> i32 {
+        self.values
+            .iter()
+            .fold(0, |accum, (value, _)| accum + *value)
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -128,6 +139,10 @@ impl CreatureStats {
     pub fn get(&self, name: StatName) -> i32 {
         todo!()
     }
+
+    pub fn get_mut(&mut self, name: StatName) -> &mut Stat {
+        &mut self.maximum_mana
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -158,6 +173,10 @@ impl Creature {
 
     pub fn stats(&self) -> &CreatureStats {
         &self.archetype.stats
+    }
+
+    pub fn stats_mut(&mut self) -> &mut CreatureStats {
+        &mut self.archetype.stats
     }
 
     pub fn is_alive(&self) -> bool {
@@ -271,4 +290,28 @@ pub struct Game {
     pub state: GameState,
     pub user: Player,
     pub enemy: Player,
+}
+
+impl Game {
+    pub fn all_creatures(&self) -> impl Iterator<Item = &Creature> {
+        self.user
+            .creatures
+            .iter()
+            .chain(self.enemy.creatures.iter())
+    }
+
+    pub fn creature(&self, creature_id: CreatureId) -> Result<&Creature> {
+        self.all_creatures()
+            .find(|c| c.creature_id() == creature_id)
+            .ok_or(eyre!("Creature ID {} not found", creature_id))
+    }
+
+    pub fn creature_mut(&mut self, creature_id: CreatureId) -> Result<&mut Creature> {
+        self.user
+            .creatures
+            .iter_mut()
+            .chain(self.enemy.creatures.iter_mut())
+            .find(|c| c.creature_id() == creature_id)
+            .ok_or(eyre!("Creature ID {} not found", creature_id))
+    }
 }

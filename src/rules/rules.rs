@@ -18,7 +18,7 @@ use crate::model::{
     primitives::{
         ActionNumber, CreatureId, HealthValue, ManaValue, RoundNumber, RuleId, TurnNumber,
     },
-    stats::{Modifier, StatName},
+    stats::{Modifier, Operation, StatName},
     types::{Creature, Damage, Game},
 };
 use serde::{Deserialize, Serialize};
@@ -54,7 +54,7 @@ pub trait Rule: Debug + Send {
         context: &RuleContext,
         effects: &mut Effects,
         damage: &Damage,
-        creature: &Creature,
+        to_target: &Creature,
     ) {
     }
 
@@ -65,7 +65,7 @@ pub trait Rule: Debug + Send {
         context: &RuleContext,
         effects: &mut Effects,
         damage: &Damage,
-        creature: &Creature,
+        from_source: &Creature,
     ) {
     }
 
@@ -74,9 +74,9 @@ pub trait Rule: Debug + Send {
         &self,
         context: &RuleContext,
         effects: &mut Effects,
+        damage: &Damage,
         attacker: &Creature,
         defender: &Creature,
-        damage: &Damage,
     ) {
     }
 
@@ -105,39 +105,101 @@ struct TestRule {
 #[typetag::serde]
 impl Rule for TestRule {
     fn on_action_start(&self, context: &RuleContext, effects: &mut Effects) {
-        effects.push_effect(Effect::ApplyDamage(12, Damage { values: vec![] }))
+        effects.push_effect(
+            context,
+            Effect::ApplyDamage {
+                creature_id: 23,
+                damage: Damage { values: vec![] },
+            },
+        )
     }
 }
 
-pub enum Effect<'a> {
-    ApplyDamage(CreatureId, Damage),
-    ApplyDamageRef(&'a Creature, Damage),
-    HealDamage(CreatureId, HealthValue),
-    GainMana(CreatureId, ManaValue),
-    SpendMana(CreatureId, ManaValue),
-    SetModifier(CreatureId, StatName, Modifier),
+pub enum Effect {
+    ApplyDamage {
+        creature_id: CreatureId,
+        damage: Damage,
+    },
+    HealDamage {
+        creature_id: CreatureId,
+        amount: HealthValue,
+    },
+    GainMana {
+        creature_id: CreatureId,
+        amount: ManaValue,
+    },
+    SpendMana {
+        creature_id: CreatureId,
+        amount: ManaValue,
+    },
+    SetModifier {
+        creature_id: CreatureId,
+        stat: StatName,
+        value: i32,
+        operation: Operation,
+    },
 }
 
-pub struct Effects<'a> {
-    effects: Vec<Effect<'a>>,
+pub struct EffectData {
+    pub effect: Effect,
+    pub rule_id: RuleId,
+    pub source_creature_id: CreatureId,
 }
 
-impl<'a> Effects<'a> {
-    pub fn new() -> Effects<'a> {
+pub struct Effects {
+    effects: Vec<EffectData>,
+}
+
+impl Effects {
+    pub fn new() -> Effects {
         Effects { effects: vec![] }
     }
 
-    pub fn push_effect(&mut self, effect: Effect<'a>) {
-        self.effects.push(effect);
+    pub fn push_effect(&mut self, context: &RuleContext, effect: Effect) {
+        self.effects.push(EffectData {
+            effect,
+            rule_id: context.rule_id,
+            source_creature_id: context.owner.dead_or_alive().creature_id(),
+        });
     }
 
-    pub fn into_iter(self) -> impl IntoIterator<Item = Effect<'a>> {
-        self.effects.into_iter()
+    pub fn len(&self) -> usize {
+        self.effects.len()
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = &EffectData> {
+        self.effects.iter()
+    }
+}
+
+pub enum CreatureState<'a> {
+    Living(&'a Creature),
+    Dead(&'a Creature),
+}
+
+impl<'a> CreatureState<'a> {
+    pub fn new(creature: &'a Creature) -> CreatureState<'a> {
+        if creature.is_alive() {
+            CreatureState::Living(creature)
+        } else {
+            CreatureState::Dead(creature)
+        }
+    }
+
+    /// I'm a cowboy,
+    /// on a steel horse I ride.
+    /// And I'm wanted,
+    /// dead or alive.
+    pub fn dead_or_alive(&self) -> &Creature {
+        match self {
+            CreatureState::Living(c) => c,
+            CreatureState::Dead(c) => c,
+        }
     }
 }
 
 pub struct RuleContext<'a> {
     pub rule_id: RuleId,
-    pub owner: &'a Creature,
+    pub owner: CreatureState<'a>,
     pub game: &'a Game,
 }

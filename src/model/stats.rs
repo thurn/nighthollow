@@ -21,7 +21,7 @@ use super::{
     types::{Creature, Game, HasCardData, Player},
 };
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub enum StatName {}
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -55,9 +55,9 @@ impl Stat {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Modifier {
-    value: i32,
-    operation: Operation,
-    source: RuleId,
+    pub value: i32,
+    pub operation: Operation,
+    pub source: RuleId,
 }
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]
