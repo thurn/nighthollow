@@ -16,7 +16,7 @@ use std::fmt::Debug;
 
 use crate::model::{
     primitives::{
-        ActionNumber, CreatureId, HealthValue, ManaValue, RoundNumber, RuleId, TurnNumber,
+        ActionNumber, CardId, CreatureId, HealthValue, ManaValue, RoundNumber, RuleId, TurnNumber,
     },
     stats::{Modifier, Operation, StatName},
     types::{Creature, Damage, Game},
@@ -95,6 +95,47 @@ pub trait Rule: Debug + Send {
         defender: &Creature,
     ) {
     }
+
+    /// Called when this creature heals damage
+    fn on_healed(
+        &self,
+        context: &RuleContext,
+        effects: &mut Effects,
+        amount: HealthValue,
+        healed_by: &Creature,
+    ) {
+    }
+
+    /// Called when this creature's mana is increased
+    fn on_mana_gained(
+        &self,
+        context: &RuleContext,
+        effects: &mut Effects,
+        amount: ManaValue,
+        source: &Creature,
+    ) {
+    }
+
+    /// Called when this creature's mana is decreased
+    fn on_mana_lost(
+        &self,
+        context: &RuleContext,
+        effects: &mut Effects,
+        amount: ManaValue,
+        source: &Creature,
+    ) {
+    }
+
+    /// Called when a stat modifier is set on this creature
+    fn on_stat_modifier_set(
+        &self,
+        context: &RuleContext,
+        effects: &mut Effects,
+        stat: StatName,
+        modifier: Modifier,
+        source: &Creature,
+    ) {
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -128,14 +169,14 @@ pub enum Effect {
         creature_id: CreatureId,
         amount: ManaValue,
     },
-    SpendMana {
+    LoseMana {
         creature_id: CreatureId,
         amount: ManaValue,
     },
     SetModifier {
         creature_id: CreatureId,
         stat: StatName,
-        value: i32,
+        value: u32,
         operation: Operation,
     },
 }

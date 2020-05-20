@@ -26,7 +26,7 @@ pub enum StatName {}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Stat {
-    value: i32,
+    value: u32,
     set_base_modifiers: Vec<Modifier>,
     add_modifiers: Vec<Modifier>,
     increase_modifiers: Vec<Modifier>,
@@ -34,7 +34,7 @@ pub struct Stat {
 }
 
 impl Stat {
-    pub fn new(value: i32) -> Stat {
+    pub fn new(value: u32) -> Stat {
         Stat {
             value,
             set_base_modifiers: vec![],
@@ -44,18 +44,18 @@ impl Stat {
         }
     }
 
-    pub fn value(&self) -> i32 {
-        todo!()
+    pub fn value(&self) -> u32 {
+        self.value
     }
 
-    pub fn add_modifier(&mut self, modifier: Modifier) {
+    pub fn set_modifier(&mut self, modifier: Modifier) {
         todo!()
     }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Modifier {
-    pub value: i32,
+    pub value: u32,
     pub operation: Operation,
     pub source: RuleId,
 }

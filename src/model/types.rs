@@ -70,11 +70,11 @@ pub enum CreatureType {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Damage {
-    pub values: Vec<(i32, DamageType)>,
+    pub values: Vec<(u32, DamageType)>,
 }
 
 impl Damage {
-    pub fn total(&self) -> i32 {
+    pub fn total(&self) -> u32 {
         self.values
             .iter()
             .fold(0, |accum, (value, _)| accum + *value)
@@ -89,7 +89,7 @@ pub struct DamageStat {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CreatureStats {
-    pub health: Stat,
+    pub health_total: Stat,
     pub health_regeneration: Stat,
     pub damage: HealthValue,
     pub maximum_mana: Stat,
@@ -108,10 +108,24 @@ pub struct CreatureStats {
     dynamic_stats: Vec<(StatName, Stat)>,
 }
 
+impl CreatureStats {
+    pub fn tag(&self, name: TagName) -> bool {
+        todo!()
+    }
+
+    pub fn get(&self, name: StatName) -> i32 {
+        todo!()
+    }
+
+    pub fn get_mut(&mut self, name: StatName) -> &mut Stat {
+        &mut self.maximum_mana
+    }
+}
+
 impl Default for CreatureStats {
     fn default() -> Self {
         CreatureStats {
-            health: Stat::new(100),
+            health_total: Stat::new(100),
             health_regeneration: Stat::new(0),
             damage: 0,
             maximum_mana: Stat::new(100),
@@ -131,20 +145,6 @@ impl Default for CreatureStats {
     }
 }
 
-impl CreatureStats {
-    pub fn tag(&self, name: TagName) -> bool {
-        todo!()
-    }
-
-    pub fn get(&self, name: StatName) -> i32 {
-        todo!()
-    }
-
-    pub fn get_mut(&mut self, name: StatName) -> &mut Stat {
-        &mut self.maximum_mana
-    }
-}
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CreatureArchetype {
     pub card_data: CardData,
@@ -157,6 +157,12 @@ impl HasCardData for CreatureArchetype {
     fn card_data(&self) -> &CardData {
         &self.card_data
     }
+}
+
+pub enum DamageResult {
+    StillAlive,
+    AlreadyDead,
+    Killed,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -180,7 +186,44 @@ impl Creature {
     }
 
     pub fn is_alive(&self) -> bool {
-        self.stats().health.value() > self.stats().damage
+        self.stats().health_total.value() > self.stats().damage
+    }
+
+    pub fn apply_damage(&mut self, value: HealthValue) -> DamageResult {
+        let was_alive = self.is_alive();
+        self.stats_mut().damage += value;
+
+        if self.is_alive() {
+            return DamageResult::StillAlive;
+        } else if !was_alive {
+            return DamageResult::AlreadyDead;
+        } else {
+            return DamageResult::Killed;
+        }
+    }
+
+    pub fn heal(&mut self, value: HealthValue) {
+        if value > self.stats().damage {
+            self.stats_mut().damage = 0
+        } else {
+            self.stats_mut().damage -= value
+        }
+    }
+
+    pub fn lose_mana(&mut self, value: ManaValue) -> Result<()> {
+        if value < self.stats().mana {
+            Err(eyre!(
+                "Cannot lose {} mana, only {} available",
+                value,
+                self.stats().mana
+            ))
+        } else {
+            Ok(self.stats_mut().mana -= value)
+        }
+    }
+
+    pub fn gain_mana(&mut self, value: ManaValue) {
+        self.stats_mut().mana += value
     }
 }
 

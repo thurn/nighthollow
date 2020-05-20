@@ -16,15 +16,20 @@ use serde::{Deserialize, Serialize};
 
 extern crate derive_more;
 
-pub type RuleId = i32;
 pub type GameId = i32;
 pub type CardId = i32;
 pub type CreatureId = i32;
-pub type TurnNumber = i32;
-pub type RoundNumber = i32;
-pub type ActionNumber = i32;
-pub type HealthValue = i32;
-pub type ManaValue = i32;
+pub type TurnNumber = u32;
+pub type RoundNumber = u32;
+pub type ActionNumber = u32;
+pub type HealthValue = u32;
+pub type ManaValue = u32;
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+pub struct RuleId {
+    pub creature_id: CreatureId,
+    pub index: usize,
+}
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum GamePhase {

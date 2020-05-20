@@ -19,9 +19,9 @@ use super::rules::{CreatureState, Effect, EffectData, Effects, Rule, RuleContext
 use crate::{
     api,
     model::{
-        primitives::{CreatureId, HealthValue, ManaValue},
-        stats::Modifier,
-        types::{Creature, Damage, Game, Player},
+        primitives::{CreatureId, HealthValue, ManaValue, RuleId},
+        stats::{Modifier, Operation, StatName},
+        types::{Creature, Damage, DamageResult, Game, Player},
     },
 };
 use std::iter;
@@ -123,8 +123,13 @@ fn run_rule(
     evaluate_rule_function(game, scope, &mut effects, function)?;
 
     loop {
+        let mut events: Vec<MutationEvent> = vec![];
         for effect in effects.iter() {
-            apply_mutation(game, effect)?;
+            apply_mutation(game, effect, &mut events)?;
+        }
+
+        for event in events {
+            trigger_events(game, &event, &mut effects)?;
         }
 
         let mut triggered_effects = Effects::new();
@@ -161,9 +166,9 @@ fn evaluate_rule_function(
 ) -> Result<()> {
     for creature_id in scope.ids(game) {
         let creature = game.creature(creature_id)?;
-        for rule in creature.archetype.rules.iter() {
+        for (index, rule) in creature.archetype.rules.iter().enumerate() {
             let rule_context = RuleContext {
-                rule_id: 17,
+                rule_id: RuleId { creature_id, index },
                 owner: CreatureState::new(creature),
                 game,
             };
@@ -181,8 +186,72 @@ fn evaluate_rule_function(
     Ok(())
 }
 
-fn apply_mutation(game: &mut Game, effect_data: &EffectData) -> Result<()> {
+enum MutationEvent {
+    CreatureKilled {
+        attacker: CreatureId,
+        defender: CreatureId,
+    },
+}
+
+fn apply_mutation(
+    game: &mut Game,
+    effect_data: &EffectData,
+    events: &mut Vec<MutationEvent>,
+) -> Result<()> {
+    match &effect_data.effect {
+        Effect::ApplyDamage {
+            creature_id,
+            damage,
+        } => {
+            let creature = game.creature_mut(*creature_id)?;
+            match creature.apply_damage(damage.total()) {
+                DamageResult::Killed => events.push(MutationEvent::CreatureKilled {
+                    attacker: effect_data.source_creature_id,
+                    defender: *creature_id,
+                }),
+                _ => {}
+            }
+        }
+
+        Effect::HealDamage {
+            creature_id,
+            amount,
+        } => game.creature_mut(*creature_id)?.heal(*amount),
+
+        Effect::GainMana {
+            creature_id,
+            amount,
+        } => game.creature_mut(*creature_id)?.gain_mana(*amount),
+
+        Effect::LoseMana {
+            creature_id,
+            amount,
+        } => game.creature_mut(*creature_id)?.lose_mana(*amount)?,
+
+        Effect::SetModifier {
+            creature_id,
+            stat,
+            value,
+            operation,
+        } => game
+            .creature_mut(*creature_id)?
+            .stats_mut()
+            .get_mut(*stat)
+            .set_modifier(Modifier {
+                value: *value,
+                operation: *operation,
+                source: effect_data.rule_id,
+            }),
+    }
     Ok(())
+}
+
+fn trigger_events(game: &Game, event: &MutationEvent, effects: &mut Effects) -> Result<()> {
+    match event {
+        MutationEvent::CreatureKilled { attacker, defender } => {
+            trigger_on_death_events(game, effects, *attacker, *defender)
+        }
+    }
 }
 
 fn trigger_effect_events(
@@ -201,7 +270,85 @@ fn trigger_effect_events(
             *creature_id,
             damage,
         ),
-        _ => Ok(()),
+
+        Effect::HealDamage {
+            creature_id,
+            amount,
+        } => evaluate_rule_function(
+            game,
+            RuleScope::Creature(*creature_id),
+            effects,
+            |r, args| {
+                r.on_healed(
+                    args.rc,
+                    args.effects,
+                    *amount,
+                    args.rc.game.creature(effect_data.source_creature_id)?,
+                );
+                Ok(())
+            },
+        ),
+
+        Effect::GainMana {
+            creature_id,
+            amount,
+        } => evaluate_rule_function(
+            game,
+            RuleScope::Creature(*creature_id),
+            effects,
+            |r, args| {
+                r.on_mana_gained(
+                    args.rc,
+                    args.effects,
+                    *amount,
+                    args.rc.game.creature(effect_data.source_creature_id)?,
+                );
+                Ok(())
+            },
+        ),
+
+        Effect::LoseMana {
+            creature_id,
+            amount,
+        } => evaluate_rule_function(
+            game,
+            RuleScope::Creature(*creature_id),
+            effects,
+            |r, args| {
+                r.on_mana_lost(
+                    args.rc,
+                    args.effects,
+                    *amount,
+                    args.rc.game.creature(effect_data.source_creature_id)?,
+                );
+                Ok(())
+            },
+        ),
+
+        Effect::SetModifier {
+            creature_id,
+            stat,
+            value,
+            operation,
+        } => evaluate_rule_function(
+            game,
+            RuleScope::Creature(*creature_id),
+            effects,
+            |r, args| {
+                r.on_stat_modifier_set(
+                    args.rc,
+                    args.effects,
+                    *stat,
+                    Modifier {
+                        value: *value,
+                        operation: *operation,
+                        source: effect_data.rule_id,
+                    },
+                    args.rc.game.creature(effect_data.source_creature_id)?,
+                );
+                Ok(())
+            },
+        ),
     }
 }
 
@@ -255,144 +402,40 @@ fn trigger_apply_damage_events(
     Ok(())
 }
 
-// Executes a given rule callback function on every rule in the game
-// fn run_all_rules(
-//     game: &mut Game,
-//     function: impl Fn(&Box<dyn Rule>, &RuleContext, &mut Effects) -> (),
-// ) -> Result<()> {
-//     let mut effects = Effects::new();
-//     for creature_id in all_creature_ids(game) {
-//         populate_effects(game, creature_id, &mut effects, |rule, rc, e| {
-//             function(rule, rc, e)
-//         })?;
-//     }
-//     resolve_effects(game, effects)
-// }
+fn trigger_on_death_events(
+    game: &Game,
+    effects: &mut Effects,
+    attacker_id: CreatureId,
+    defender_id: CreatureId,
+) -> Result<()> {
+    evaluate_rule_function(
+        game,
+        RuleScope::Creature(attacker_id),
+        effects,
+        |r, args| {
+            r.on_killed_enemy(args.rc, args.effects, args.rc.game.creature(defender_id)?);
+            Ok(())
+        },
+    )?;
 
-// Executes a given rule callback function on the rules for a specific creature
-// fn run_creature_rules(
-//     game: &mut Game,
-//     creature_id: CreatureId,
-//     function: impl Fn(&Box<dyn Rule>, &RuleContext, &mut Effects),
-// ) -> Result<()> {
-//     let mut effects = Effects::new();
-//     populate_effects(game, creature_id, &mut effects, function)?;
-//     resolve_effects(game, effects)?;
-//     Ok(())
-// }
+    evaluate_rule_function(
+        game,
+        RuleScope::Creature(defender_id),
+        effects,
+        |r, args| {
+            r.on_death(args.rc, args.effects, args.rc.game.creature(attacker_id)?);
+            Ok(())
+        },
+    )?;
 
-// Runs a rule callback function to populate the "Effects" buffer with the
-// rule's effects
-// fn populate_effects(
-//     game: &Game,
-//     creature_id: CreatureId,
-//     effects: &mut Effects,
-//     function: impl Fn(&Box<dyn Rule>, &RuleContext, &mut Effects) -> (),
-// ) -> Result<()> {
-//     let creature = game.creature(creature_id)?;
-//     for rule in creature.archetype.rules.iter() {
-//         let rule_context = RuleContext {
-//             rule_id: 17,
-//             owner: CreatureState::new(creature),
-//             game,
-//             effects,
-//         };
-//         function(rule, &rule_context, effects);
-//     }
-//     Ok(())
-// }
-
-// Applies mutations to the game state based on the effects in the provided
-// Effects buffer, recursivley triggering further rules
-// fn resolve_effects(game: &mut Game, effects: Effects) -> Result<()> {
-//     for effect_data in effects.iter() {
-//         let effect = &effect_data.effect;
-//         match effect {
-//             Effect::ApplyDamage {
-//                 creature_id,
-//                 damage,
-//             } => game.creature_mut(*creature_id)?.stats_mut().damage += damage.total(),
-//             Effect::HealDamage {
-//                 creature_id,
-//                 amount,
-//             } => game.creature_mut(*creature_id)?.stats_mut().damage -= amount,
-//             Effect::GainMana {
-//                 creature_id,
-//                 amount,
-//             } => game.creature_mut(*creature_id)?.stats_mut().mana += amount,
-//             Effect::SpendMana {
-//                 creature_id,
-//                 amount,
-//             } => game.creature_mut(*creature_id)?.stats_mut().mana -= amount,
-//             Effect::SetModifier {
-//                 creature_id,
-//                 stat,
-//                 value,
-//                 operation,
-//             } => game
-//                 .creature_mut(*creature_id)?
-//                 .stats_mut()
-//                 .get_mut(*stat)
-//                 .add_modifier(Modifier {
-//                     value: *value,
-//                     operation: *operation,
-//                     source: effect_data.rule_id,
-//                 }),
-//         }
-//     }
-//     Ok(())
-// }
-
-// fn trigger_effect_rules(game: &mut Game, effects: Effects) -> Result<()> {
-//     let mut new_effects = Effects::new();
-//     for effect_data in effects.iter() {
-//         let effect = &effect_data.effect;
-//         match effect {
-//             Effect::ApplyDamage {
-//                 creature_id,
-//                 damage,
-//             } => {
-//                 populate_effects(
-//                     game,
-//                     effect_data.source_creature_id,
-//                     &mut new_effects,
-//                     |rule, rc, e| {
-//                         let target = rc.game.creature(*creature_id).expect("");
-//                         rule.on_applied_damage(rc, e, damage, target)
-//                     },
-//                 )?;
-//                 populate_effects(game, *creature_id, &mut new_effects, |rule, rc, e| {
-//                     let from = rc.game.creature(effect_data.source_creature_id).expect("");
-//                     rule.on_took_damage(rc, e, damage, from)
-//                 })?;
-//             }
-//             Effect::HealDamage {
-//                 creature_id,
-//                 amount,
-//             } => game.creature_mut(*creature_id)?.stats_mut().damage -= amount,
-//             Effect::GainMana {
-//                 creature_id,
-//                 amount,
-//             } => game.creature_mut(*creature_id)?.stats_mut().mana += amount,
-//             Effect::SpendMana {
-//                 creature_id,
-//                 amount,
-//             } => game.creature_mut(*creature_id)?.stats_mut().mana -= amount,
-//             Effect::SetModifier {
-//                 creature_id,
-//                 stat,
-//                 value,
-//                 operation,
-//             } => game
-//                 .creature_mut(*creature_id)?
-//                 .stats_mut()
-//                 .get_mut(*stat)
-//                 .add_modifier(Modifier {
-//                     value: *value,
-//                     operation: *operation,
-//                     source: effect_data.rule_id,
-//                 }),
-//         }
-//     }
-//     Ok(())
-// }
+    evaluate_rule_function(game, RuleScope::AllCreatures, effects, |r, args| {
+        r.on_any_creature_killed(
+            args.rc,
+            args.effects,
+            args.rc.game.creature(attacker_id)?,
+            args.rc.game.creature(defender_id)?,
+        );
+        Ok(())
+    })?;
+    Ok(())
+}

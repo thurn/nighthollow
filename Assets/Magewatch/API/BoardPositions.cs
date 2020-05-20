@@ -37,12 +37,12 @@ public static class BoardPositions
         case PlayerName.Enemy:
           switch (rank)
           {
-            case RankValue.Rank0: return 8;
-            case RankValue.Rank1: return 7;
-            case RankValue.Rank2: return 6;
-            case RankValue.Rank3: return 5;
-            case RankValue.Rank4: return 4;
-            case RankValue.Rank5: return 3;
+            case RankValue.Rank0: return 3;
+            case RankValue.Rank1: return 4;
+            case RankValue.Rank2: return 5;
+            case RankValue.Rank3: return 6;
+            case RankValue.Rank4: return 7;
+            case RankValue.Rank5: return 8;
             default: throw Errors.UnknownEnumValue(rank);
           }
         default:
