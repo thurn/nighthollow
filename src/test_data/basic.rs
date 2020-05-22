@@ -15,7 +15,7 @@
 use std::sync::atomic::{AtomicI32, Ordering};
 
 use crate::model::primitives::*;
-use crate::model::types::*;
+use crate::{model::types::*, rules::basic::BaseDamageAttack};
 
 static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
 
@@ -37,8 +37,11 @@ pub fn berserker(owner: PlayerName) -> CreatureArchetype {
             text: "Anger & Axes".to_string(),
         },
         base_type: CreatureType::Berserker,
-        stats: CreatureStats::default(),
-        rules: vec![],
+        stats: CreatureStats {
+            base_damage: vec![DamageStat::new(25, DamageType::Physical)],
+            ..CreatureStats::default()
+        },
+        rules: vec![BaseDamageAttack::new()],
     }
 }
 
@@ -56,8 +59,11 @@ pub fn mage(owner: PlayerName) -> CreatureArchetype {
             text: "Whiz! Zoom!".to_string(),
         },
         base_type: CreatureType::Mage,
-        stats: CreatureStats::default(),
-        rules: vec![],
+        stats: CreatureStats {
+            base_damage: vec![DamageStat::new(10, DamageType::Physical)],
+            ..CreatureStats::default()
+        },
+        rules: vec![BaseDamageAttack::new()],
     }
 }
 

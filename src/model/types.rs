@@ -69,15 +69,33 @@ pub enum CreatureType {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct DamageAmount {
+    pub value: u32,
+    pub damage_type: DamageType,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Damage {
-    pub values: Vec<(u32, DamageType)>,
+    pub values: Vec<DamageAmount>,
 }
 
 impl Damage {
+    pub fn new(stats: &Vec<DamageStat>) -> Self {
+        Damage {
+            values: stats
+                .iter()
+                .map(|stat| DamageAmount {
+                    value: stat.value.value(),
+                    damage_type: stat.damage_type,
+                })
+                .collect::<Vec<_>>(),
+        }
+    }
+
     pub fn total(&self) -> u32 {
         self.values
             .iter()
-            .fold(0, |accum, (value, _)| accum + *value)
+            .fold(0, |accum, amount| accum + amount.value)
     }
 }
 
@@ -85,6 +103,15 @@ impl Damage {
 pub struct DamageStat {
     pub value: Stat,
     pub damage_type: DamageType,
+}
+
+impl DamageStat {
+    pub fn new(amount: u32, damage_type: DamageType) -> Self {
+        DamageStat {
+            value: Stat::new(amount),
+            damage_type,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -104,8 +131,8 @@ pub struct CreatureStats {
     pub damage_resistance: Vec<DamageStat>,
     pub damage_reduction: Vec<DamageStat>,
 
-    tags: Vec<(TagName, Tag)>,
-    dynamic_stats: Vec<(StatName, Stat)>,
+    pub tags: Vec<(TagName, Tag)>,
+    pub dynamic_stats: Vec<(StatName, Stat)>,
 }
 
 impl CreatureStats {
@@ -341,6 +368,20 @@ impl Game {
             .creatures
             .iter()
             .chain(self.enemy.creatures.iter())
+    }
+
+    pub fn player(&self, player: PlayerName) -> &Player {
+        match player {
+            PlayerName::User => &self.user,
+            PlayerName::Enemy => &self.enemy,
+        }
+    }
+
+    pub fn player_mut(&mut self, player: PlayerName) -> &mut Player {
+        match player {
+            PlayerName::User => &mut self.user,
+            PlayerName::Enemy => &mut self.enemy,
+        }
     }
 
     pub fn creature(&self, creature_id: CreatureId) -> Result<&Creature> {

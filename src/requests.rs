@@ -19,6 +19,7 @@ use crate::{
     api, commands, console,
     model::primitives::{BoardPosition, FileValue, GamePhase, PlayerName, RankValue},
     model::types::{Card, Creature, Game, HasCardData, Player},
+    rules::combat,
     test_data::basic,
 };
 use commands::{CardMetadata, CreatureMetadata};
@@ -193,7 +194,7 @@ pub fn advance_game_phase(game: &mut Game) -> Result<api::CommandList> {
 }
 
 fn to_main_phase(game: &mut Game) -> Result<api::CommandList> {
-    todo!()
+    combat::run_combat(game)
 }
 
 fn upkeep(player_name: PlayerName, player: &mut Player) -> api::Command {

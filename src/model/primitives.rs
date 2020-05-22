@@ -86,7 +86,7 @@ impl PlayerName {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone, Ord, PartialOrd)]
 pub enum RankValue {
     Rank0,
     Rank1,
@@ -96,7 +96,7 @@ pub enum RankValue {
     Rank5,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone, Ord, PartialOrd)]
 pub enum FileValue {
     File0,
     File1,
