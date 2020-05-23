@@ -14,4 +14,5 @@
 
 pub mod basic;
 pub mod combat;
+pub mod effects;
 pub mod rules;

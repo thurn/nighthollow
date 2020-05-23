@@ -336,7 +336,7 @@ pub struct AttackCommand {
     #[prost(message, optional, tag = "2")]
     pub target_creature_id: ::std::option::Option<CreatureId>,
     /// Which skill animation to play
-    #[prost(enumeration = "SkillAnimation", tag = "3")]
+    #[prost(enumeration = "SkillAnimationNumber", tag = "3")]
     pub skill: i32,
     /// How many times this skill is expected to raise the "AttackStart" event
     #[prost(int32, tag = "4")]
@@ -353,10 +353,111 @@ pub mod attack_command {
         FireProjectile(super::FireProjectileEffect),
     }
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MSkillAnimation {
+    /// The animation to perform
+    #[prost(enumeration = "SkillAnimationNumber", tag = "1")]
+    pub skill: i32,
+    /// How many times this skill is expected to reach its impact frame
+    #[prost(int32, tag = "2")]
+    pub impact_count: i32,
+}
+/// An effect to apply when a skill's impact event fires for the nth time
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MOnImpactNumber {
+    /// Apply this effect when the skill has reached its impact frame
+    /// 'on_impact_number' times. A value of 0 should be interpreted the same
+    /// as 1.
+    #[prost(uint32, tag = "1")]
+    pub impact_number: u32,
+    /// What to do on impact
+    #[prost(message, optional, tag = "2")]
+    pub effect: ::std::option::Option<MOnImpact>,
+}
+/// What to do when a skill or projectile reaches impact
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MOnImpact {
+    #[prost(oneof = "m_on_impact::OnImpact", tags = "1, 2")]
+    pub on_impact: ::std::option::Option<m_on_impact::OnImpact>,
+}
+pub mod m_on_impact {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum OnImpact {
+        /// Apply an update
+        #[prost(message, tag = "1")]
+        Update(super::MCreatureUpdate),
+        /// Fire a projectile
+        #[prost(message, tag = "2")]
+        FireProjectile(super::MFireProjectile),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MFireProjectile {
+    /// Projectile Prefab to create
+    #[prost(message, optional, tag = "1")]
+    pub projectile: ::std::option::Option<Asset>,
+    /// What to do when the projectile hits
+    #[prost(message, repeated, tag = "2")]
+    pub on_hit: ::std::vec::Vec<MOnImpact>,
+    #[prost(oneof = "m_fire_projectile::Target", tags = "3")]
+    pub target: ::std::option::Option<m_fire_projectile::Target>,
+}
+pub mod m_fire_projectile {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Target {
+        #[prost(message, tag = "3")]
+        TargetCreature(super::CreatureId),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MCreatureUpdate {
+    #[prost(message, optional, tag = "1")]
+    pub creature_id: ::std::option::Option<CreatureId>,
+    /// Set this creature's health percentage to a specific value, given as a
+    /// number between 0 and 1.
+    #[prost(float, tag = "2")]
+    pub set_health_percentage: f32,
+    /// Mark this creature as dead and play its death animation
+    #[prost(bool, tag = "3")]
+    pub play_death_animation: bool,
+    /// Set this creature's mana percentage to a specific value, given as a
+    /// number between 0 and 1.
+    #[prost(float, tag = "4")]
+    pub set_mana_percentage: f32,
+    /// Play particle effects on this creature
+    #[prost(message, repeated, tag = "5")]
+    pub play_particle_effects: ::std::vec::Vec<Asset>,
+}
+/// Updates the state of a creature
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateCreatureCommand {
+    #[prost(message, optional, tag = "1")]
+    pub update: ::std::option::Option<MCreatureUpdate>,
+}
+/// Causes creatures to use skills
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UseCreatureSkillCommand {
+    /// Creature to apply these effects to
+    #[prost(message, optional, tag = "1")]
+    pub source_creature: ::std::option::Option<CreatureId>,
+    /// The skill animation to perform
+    #[prost(message, optional, tag = "2")]
+    pub animation: ::std::option::Option<MSkillAnimation>,
+    /// What to do when the skill animation reaches its impact frame
+    #[prost(message, repeated, tag = "3")]
+    pub on_impact: ::std::vec::Vec<MOnImpactNumber>,
+    /// Optionally a target for this skill. The creature will move into melee
+    /// range with this target before performing the skill animation.
+    #[prost(message, optional, tag = "4")]
+    pub melee_target: ::std::option::Option<CreatureId>,
+}
 /// A single instruction to the client UI to perform some action.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Command {
-    #[prost(oneof = "command::Command", tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10")]
+    #[prost(
+        oneof = "command::Command",
+        tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12"
+    )]
     pub command: ::std::option::Option<command::Command>,
 }
 pub mod command {
@@ -381,13 +482,16 @@ pub mod command {
         #[prost(message, tag = "9")]
         Attack(super::AttackCommand),
         #[prost(message, tag = "10")]
+        UpdateCreature(super::UpdateCreatureCommand),
+        #[prost(message, tag = "11")]
+        UseCreatureSkill(super::UseCreatureSkillCommand),
+        #[prost(message, tag = "12")]
         DisplayError(super::DisplayErrorCommand),
     }
 }
 /// Represents a set of commands which should be executed in parallel,
-/// operating simultaneously. Position in the command list can be used
-/// to indicate *visually* which actions start earlier, even though the
-/// system considers them to all happen at the same time.
+/// operating simultaneously. Position in the command list indicates visually
+/// which commands happen first
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CommandGroup {
     #[prost(message, repeated, tag = "1")]
@@ -450,7 +554,7 @@ pub enum AssetType {
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum SkillAnimation {
+pub enum SkillAnimationNumber {
     SkillUnspecified = 0,
     Skill1 = 1,
     Skill2 = 2,

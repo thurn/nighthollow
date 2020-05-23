@@ -16,14 +16,14 @@ use color_eyre::Result;
 use eyre::eyre;
 
 use crate::{
-    api, commands,
+    api,
+    commands::{self, CreatureMetadata},
     model::{
         primitives::{BoardPosition, FileValue, PlayerName, RankValue},
         types::{Card, Creature, Game, HasCardData, Player},
     },
     requests,
 };
-use commands::CreatureMetadata;
 
 pub fn run_console_command(
     request: api::RunConsoleCommandRequest,

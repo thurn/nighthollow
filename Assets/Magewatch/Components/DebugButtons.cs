@@ -47,6 +47,14 @@ namespace Magewatch.Components
       });
     }
 
+    public void Advance()
+    {
+      Root.Instance.NetworkService.MakeRequest(new Request
+      {
+        AdvancePhase = new AdvancePhaseRequest()
+      });
+    }
+
     public void Slow()
     {
       Time.timeScale = 0.1f;
@@ -68,8 +76,8 @@ namespace Magewatch.Components
         StockCreatures(),
         C(MeleeEngage(1, 2),
           MeleeEngage(2, 1)),
-        C(Attack(1, 2, 10, SkillAnimation.Skill2),
-          Attack(2, 1, 10, SkillAnimation.Skill3)));
+        C(Attack(1, 2, 10, SkillAnimationNumber.Skill2),
+          Attack(2, 1, 10, SkillAnimationNumber.Skill3)));
     }
 
     public void BigCombat()
@@ -81,12 +89,12 @@ namespace Magewatch.Components
         EveryoneAttack(),
         EveryoneAttack(),
         EveryoneAttack(),
-        C(Attack(1, 2, 20, SkillAnimation.Skill2, killsTarget: true),
-          Attack(3, 1, 10, SkillAnimation.Skill3, killsTarget: true),
-          Attack(4, 5, 20, SkillAnimation.Skill2, killsTarget: true)),
+        C(Attack(1, 2, 20, SkillAnimationNumber.Skill2, killsTarget: true),
+          Attack(3, 1, 10, SkillAnimationNumber.Skill3, killsTarget: true),
+          Attack(4, 5, 20, SkillAnimationNumber.Skill2, killsTarget: true)),
         C(MeleeEngage(3, 4), MeleeEngage(4, 3)),
-        C(Attack(3, 4, 10, SkillAnimation.Skill3), Attack(4, 3, 20, SkillAnimation.Skill2)),
-        C(Attack(3, 4, 10, SkillAnimation.Skill3, killsTarget: true)),
+        C(Attack(3, 4, 10, SkillAnimationNumber.Skill3), Attack(4, 3, 20, SkillAnimationNumber.Skill2)),
+        C(Attack(3, 4, 10, SkillAnimationNumber.Skill3, killsTarget: true)),
         C(CastAtOpponent(3)),
         C(RemoveCreature(3)),
         C(UpdatePlayer(PlayerName.User, 24, 25, 0, 0)),
@@ -124,7 +132,7 @@ namespace Magewatch.Components
       Run(
         C(StockCreature(1), StockCreature(2)),
         C(CastSpell1(2, 1, 50), MeleeEngage(1, 2)),
-        C(Attack(1, 2, 20, SkillAnimation.Skill2), Attack(2, 1, 20, SkillAnimation.Skill3)));
+        C(Attack(1, 2, 20, SkillAnimationNumber.Skill2), Attack(2, 1, 20, SkillAnimationNumber.Skill3)));
     }
 
     public void AddMana()
@@ -279,13 +287,13 @@ namespace Magewatch.Components
     }
 
     static CommandGroup EveryoneAttack() =>
-      C(Attack(1, 2, 20, SkillAnimation.Skill2),
-        Attack(2, 1, 10, SkillAnimation.Skill3),
-        Attack(3, 1, 10, SkillAnimation.Skill3),
-        Attack(4, 5, 20, SkillAnimation.Skill2),
-        Attack(5, 4, 20, SkillAnimation.Skill2));
+      C(Attack(1, 2, 20, SkillAnimationNumber.Skill2),
+        Attack(2, 1, 10, SkillAnimationNumber.Skill3),
+        Attack(3, 1, 10, SkillAnimationNumber.Skill3),
+        Attack(4, 5, 20, SkillAnimationNumber.Skill2),
+        Attack(5, 4, 20, SkillAnimationNumber.Skill2));
 
-    static Command Attack(int c1, int c2, int damage, SkillAnimation skill = SkillAnimation.Skill1,
+    static Command Attack(int c1, int c2, int damage, SkillAnimationNumber skill = SkillAnimationNumber.Skill1,
       bool killsTarget = false, int hitCount = 1)
     {
       return new Command
@@ -305,7 +313,7 @@ namespace Magewatch.Components
       };
     }
 
-    static Command CastAtOpponent(int c1, SkillAnimation skill = SkillAnimation.Skill1)
+    static Command CastAtOpponent(int c1, SkillAnimationNumber skill = SkillAnimationNumber.Skill1)
     {
       return new Command
       {
@@ -537,7 +545,7 @@ namespace Magewatch.Components
     }
 
     static Command CastSpell1(int c1, int c2, int damage, bool killsTarget = false,
-      SkillAnimation skill = SkillAnimation.Skill1)
+      SkillAnimationNumber skill = SkillAnimationNumber.Skill1)
     {
       return new Command
       {

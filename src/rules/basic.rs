@@ -14,23 +14,28 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::rules::{Effect, Effects, Rule, RuleContext};
+use super::{
+    effects::{CreatureMutation, CreatureSkill, Effect, Effects},
+    rules::{Rule, RuleContext},
+};
 use crate::model::{
-    primitives::FileValue,
+    primitives::{FileValue, SkillAnimation},
     types::{Creature, Damage, DamageAmount, Player},
 };
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct BaseDamageAttack {}
+pub struct BaseMeleeDamageAttack {
+    pub animation: SkillAnimation,
+}
 
-impl BaseDamageAttack {
-    pub fn new() -> Box<Self> {
-        Box::from(BaseDamageAttack {})
+impl BaseMeleeDamageAttack {
+    pub fn new(animation: SkillAnimation) -> Box<Self> {
+        Box::from(BaseMeleeDamageAttack { animation })
     }
 }
 
 #[typetag::serde]
-impl Rule for BaseDamageAttack {
+impl Rule for BaseMeleeDamageAttack {
     fn on_calculate_skill_priority(&self, context: &RuleContext) -> Option<u32> {
         Some(1)
     }
@@ -41,10 +46,15 @@ impl Rule for BaseDamageAttack {
         {
             effects.push_effect(
                 context,
-                Effect::ApplyDamage {
-                    creature_id: target.creature_id(),
-                    damage: Damage::new(&context.creature.stats().base_damage),
-                },
+                CreatureSkill::simple_melee(
+                    context.creature,
+                    self.animation,
+                    target.creature_id(),
+                    CreatureMutation {
+                        apply_damage: Some(Damage::from(&context.creature.stats().base_damage)),
+                        ..CreatureMutation::default()
+                    },
+                ),
             )
         }
     }
@@ -56,7 +66,7 @@ fn next_target_for_file(player: &Player, file: FileValue) -> Option<&Creature> {
     player
         .creatures
         .iter()
-        .filter(|c| c.is_alive())
+        .filter(|c| c.is_alive)
         .min_by_key(|c| (file_distance(c.position.file, file), c.position.rank))
 }
 

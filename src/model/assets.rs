@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod assets;
-pub mod primitives;
-pub mod stats;
-pub mod types;
+pub enum ProjectileName {}
+
+pub enum ParticleSystemName {}

@@ -161,19 +161,19 @@ namespace Magewatch.Components
 
       switch (attack.Skill)
       {
-        case SkillAnimation.Skill1:
+        case SkillAnimationNumber.Skill1:
           _animator.SetTrigger(Skill1);
           break;
-        case SkillAnimation.Skill2:
+        case SkillAnimationNumber.Skill2:
           _animator.SetTrigger(Skill2);
           break;
-        case SkillAnimation.Skill3:
+        case SkillAnimationNumber.Skill3:
           _animator.SetTrigger(Skill3);
           break;
-        case SkillAnimation.Skill4:
+        case SkillAnimationNumber.Skill4:
           _animator.SetTrigger(Skill4);
           break;
-        case SkillAnimation.Skill5:
+        case SkillAnimationNumber.Skill5:
           _animator.SetTrigger(Skill5);
           break;
         default:

@@ -18,7 +18,7 @@ use serde::{Deserialize, Serialize};
 
 use super::stats::{Stat, StatName, Tag, TagName};
 use crate::{model::primitives::*, rules::rules::Rule};
-use std::slice::IterMut;
+use std::{cmp, slice::IterMut};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ManaCost {
@@ -68,19 +68,19 @@ pub enum CreatureType {
     Mage,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub struct DamageAmount {
     pub value: u32,
     pub damage_type: DamageType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Damage {
     pub values: Vec<DamageAmount>,
 }
 
 impl Damage {
-    pub fn new(stats: &Vec<DamageStat>) -> Self {
+    pub fn from(stats: &Vec<DamageStat>) -> Self {
         Damage {
             values: stats
                 .iter()
@@ -117,10 +117,11 @@ impl DamageStat {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CreatureStats {
     pub health_total: Stat,
-    pub health_regeneration: Stat,
+    pub health_regeneration_per_round: Stat,
     pub damage: HealthValue,
+    pub starting_mana: Stat,
     pub maximum_mana: Stat,
-    pub mana_regeneration: Stat,
+    pub mana_regeneration_per_round: Stat,
     pub mana: ManaValue,
     pub initiative: Stat,
     pub crit_chance: Stat,
@@ -152,17 +153,18 @@ impl CreatureStats {
 impl Default for CreatureStats {
     fn default() -> Self {
         CreatureStats {
-            health_total: Stat::new(100),
-            health_regeneration: Stat::new(0),
+            health_total: Stat::new(0),
+            health_regeneration_per_round: Stat::new(0),
             damage: 0,
-            maximum_mana: Stat::new(100),
-            mana_regeneration: Stat::new(100),
+            starting_mana: Stat::new(0),
+            maximum_mana: Stat::new(0),
+            mana_regeneration_per_round: Stat::new(0),
             mana: 0,
-            initiative: Stat::new(100),
-            crit_chance: Stat::new(50),
-            crit_multiplier: Stat::new(1000),
-            accuracy: Stat::new(100),
-            evasion: Stat::new(100),
+            initiative: Stat::new(0),
+            crit_chance: Stat::new(0),
+            crit_multiplier: Stat::new(0),
+            accuracy: Stat::new(0),
+            evasion: Stat::new(0),
             base_damage: vec![],
             damage_resistance: vec![],
             damage_reduction: vec![],
@@ -188,14 +190,15 @@ impl HasCardData for CreatureArchetype {
 
 pub enum DamageResult {
     StillAlive,
-    AlreadyDead,
     Killed,
+    AlreadyDead,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Creature {
     pub archetype: CreatureArchetype,
     pub position: BoardPosition,
+    pub is_alive: bool,
     pub spells: Vec<Spell>,
 }
 
@@ -212,24 +215,26 @@ impl Creature {
         &mut self.archetype.stats
     }
 
-    pub fn is_alive(&self) -> bool {
-        self.stats().health_total.value() > self.stats().damage
-    }
-
     pub fn apply_damage(&mut self, value: HealthValue) -> DamageResult {
-        let was_alive = self.is_alive();
+        if !self.is_alive {
+            return DamageResult::AlreadyDead;
+        }
+
         self.stats_mut().damage += value;
 
-        if self.is_alive() {
+        if self.stats().health_total.value() > self.stats().damage {
             return DamageResult::StillAlive;
-        } else if !was_alive {
-            return DamageResult::AlreadyDead;
         } else {
+            self.is_alive = false;
             return DamageResult::Killed;
         }
     }
 
     pub fn heal(&mut self, value: HealthValue) {
+        if !self.is_alive {
+            return;
+        }
+
         if value > self.stats().damage {
             self.stats_mut().damage = 0
         } else {
@@ -238,6 +243,10 @@ impl Creature {
     }
 
     pub fn lose_mana(&mut self, value: ManaValue) -> Result<()> {
+        if !self.is_alive {
+            return Ok(());
+        }
+
         if value < self.stats().mana {
             Err(eyre!(
                 "Cannot lose {} mana, only {} available",
@@ -250,7 +259,19 @@ impl Creature {
     }
 
     pub fn gain_mana(&mut self, value: ManaValue) {
-        self.stats_mut().mana += value
+        if !self.is_alive {
+            return;
+        }
+
+        self.stats_mut().mana =
+            cmp::min(self.stats().maximum_mana.value(), self.stats().mana + value);
+    }
+
+    pub fn reset(&mut self) {
+        self.is_alive = true;
+        let mut stats = &mut self.archetype.stats;
+        stats.damage = 0;
+        stats.mana = stats.starting_mana.value();
     }
 }
 

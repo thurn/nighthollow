@@ -118,6 +118,15 @@ impl BoardPosition {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum SkillAnimation {
+    Skill1,
+    Skill2,
+    Skill3,
+    Skill4,
+    Skill5,
+}
+
 #[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]
 pub struct Influence {
     pub light: i32,

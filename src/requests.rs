@@ -20,7 +20,7 @@ use crate::{
     model::primitives::{BoardPosition, FileValue, GamePhase, PlayerName, RankValue},
     model::types::{Card, Creature, Game, HasCardData, Player},
     rules::combat,
-    test_data::basic,
+    test_data::scenarios,
 };
 use commands::{CardMetadata, CreatureMetadata};
 use std::{collections::HashMap, sync::Mutex};
@@ -79,7 +79,7 @@ pub fn metadata(card: &Card, revealed: bool) -> CardMetadata {
 }
 
 pub fn start_game() -> Result<(Game, api::CommandList)> {
-    let game = basic::opening_hands();
+    let game = scenarios::opening_hands();
     let user = game
         .user
         .hand
@@ -166,6 +166,7 @@ pub fn play_card(request: api::PlayCardRequest, player: &mut Player) -> Result<a
                     rank: convert_rank(play.rank_position())?,
                     file: convert_file(play.file_position())?,
                 },
+                is_alive: true,
                 spells: vec![],
             });
             commands::empty()
@@ -194,6 +195,7 @@ pub fn advance_game_phase(game: &mut Game) -> Result<api::CommandList> {
 }
 
 fn to_main_phase(game: &mut Game) -> Result<api::CommandList> {
+    game.state.phase = GamePhase::Main;
     combat::run_combat(game)
 }
 
@@ -207,6 +209,8 @@ fn upkeep(player_name: PlayerName, player: &mut Player) -> api::Command {
 }
 
 fn to_preparation_phase(game: &mut Game) -> Result<api::CommandList> {
+    game.state.phase = GamePhase::Preparation;
+
     commands::group(vec![
         upkeep(PlayerName::User, &mut game.user),
         upkeep(PlayerName::Enemy, &mut game.enemy),
