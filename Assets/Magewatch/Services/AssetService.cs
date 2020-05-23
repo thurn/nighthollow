@@ -64,6 +64,11 @@ namespace Magewatch.Services
       {
         AddAttackAssets(command.Attack, assets);
       }
+
+      if (command.UseCreatureSkill != null)
+      {
+        AddUseSkillAssets(command.UseCreatureSkill.OnImpact, assets);
+      }
     }
 
     void AddCardAssets(CardData card, List<Asset> assets)
@@ -107,6 +112,19 @@ namespace Magewatch.Services
         case AttackCommand.AttackEffectOneofCase.FireProjectile:
           assets.Add(attack.FireProjectile.Prefab);
           break;
+      }
+    }
+
+    void AddUseSkillAssets(IEnumerable<MOnImpactNumber> impactEffects, List<Asset> assets)
+    {
+      foreach (var onImpact in impactEffects)
+      {
+        switch (onImpact.Effect.OnImpactCase)
+        {
+          case MOnImpact.OnImpactOneofCase.FireProjectile:
+            assets.Add(onImpact.Effect.FireProjectile.Projectile);
+            break;
+        }
       }
     }
 

@@ -215,6 +215,14 @@ impl Creature {
         &mut self.archetype.stats
     }
 
+    pub fn current_health(&self) -> u32 {
+        if self.stats().damage > self.stats().health_total.value() {
+            0
+        } else {
+            self.stats().health_total.value() - self.stats().damage
+        }
+    }
+
     pub fn apply_damage(&mut self, value: HealthValue) -> DamageResult {
         if !self.is_alive {
             return DamageResult::AlreadyDead;

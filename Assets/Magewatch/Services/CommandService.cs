@@ -134,14 +134,19 @@ namespace Magewatch.Services
           creature.FadeOut(this);
         }
 
-        if (command.MeleeEngage != null)
-        {
-          HandleMeleeEngage(command.MeleeEngage);
-        }
+        // if (command.MeleeEngage != null)
+        // {
+        //   HandleMeleeEngage(command.MeleeEngage);
+        // }
+        //
+        // if (command.Attack != null)
+        // {
+        //   HandleAttack(commandIndex, command.Attack);
+        // }
 
-        if (command.Attack != null)
+        if (command.UseCreatureSkill != null)
         {
-          HandleAttack(commandIndex, command.Attack);
+          HandleUseCreatureSkill(commandIndex, command.UseCreatureSkill);
         }
 
         commandIndex++;
@@ -192,35 +197,56 @@ namespace Magewatch.Services
       });
     }
 
-    void HandleMeleeEngage(MeleeEngageCommand meleeEngage)
+    // void HandleMeleeEngage(MeleeEngageCommand meleeEngage)
+    // {
+    //   _expectedCompletions++;
+    //   _creatureService.Get(meleeEngage.CreatureId)
+    //     .MeleeEngageWithTarget(_creatureService.Get(meleeEngage.TargetCreatureId), this);
+    // }
+    //
+    // void HandleAttack(int commandNumber, AttackCommand attack)
+    // {
+    //   _expectedCompletions += attack.HitCount;
+    //   StartCoroutine(RunDelayed(0.1f * commandNumber,
+    //     () =>
+    //     {
+    //       _creatureService.Get(attack.CreatureId)
+    //         .AttackTarget(_creatureService.Get(attack.TargetCreatureId), attack, this);
+    //     }));
+    // }
+
+    void HandleUseCreatureSkill(int commandNumber, UseCreatureSkillCommand command)
     {
-      _expectedCompletions++;
-      _creatureService.Get(meleeEngage.CreatureId)
-        .MeleeEngageWithTarget(_creatureService.Get(meleeEngage.TargetCreatureId), this);
+      _expectedCompletions += command.Animation.ImpactCount;
+      StartCoroutine(RunDelayed(0.1f * commandNumber, () =>
+      {
+        _creatureService.Get(command.SourceCreature)
+          .UseSkill(command.Animation.Skill,
+            command.OnImpact,
+            command.MeleeTarget == null ? null : _creatureService.Get(command.MeleeTarget));
+      }));
     }
 
-    void HandleAttack(int commandNumber, AttackCommand attack)
+    public void AddExpectedCompletion()
     {
-      _expectedCompletions += attack.HitCount;
-      StartCoroutine(RunDelayed(0.1f * commandNumber,
-        () =>
-        {
-          _creatureService.Get(attack.CreatureId)
-            .AttackTarget(_creatureService.Get(attack.TargetCreatureId), attack, this);
-        }));
+      _expectedCompletions++;
     }
 
     public void OnComplete()
     {
       _completionCount++;
 
-      if (_completionCount >= _expectedCompletions)
+      if (_completionCount == _expectedCompletions)
       {
         _currentStep++;
         if (_currentStep < _currentCommandList.CommandGroups.Count)
         {
           RunCommandStep();
         }
+      }
+      else if (_completionCount > _expectedCompletions)
+      {
+        throw new InvalidOperationException("Unexpected OnComplete call");
       }
     }
   }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Magewatch.API;
 using Magewatch.Services;
@@ -25,7 +27,8 @@ namespace Magewatch.Components
   {
     Idle,
     MeleeEngage,
-    Attack
+    UseSkill,
+    Dying
   }
 
   public sealed class Creature : MonoBehaviour
@@ -42,15 +45,21 @@ namespace Magewatch.Components
     [SerializeField] Collider2D _collider;
     [SerializeField] HealthBar _healthBar;
     [SerializeField] CreatureData _creatureData;
-    [SerializeField] Creature _currentTarget;
     [SerializeField] bool _touchedTarget;
-    [SerializeField] AttackCommand _currentAttack;
+    [SerializeField] CommandService _commandService;
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SpriteRenderer[] _renderers;
     [SerializeField] SortingGroup _sortingGroup;
 
-    IOnComplete _onComplete;
-    IOnComplete _onCompleteOnDeath;
+    [Header("Use Skill State")] [SerializeField]
+    int _currentImpactCount;
+
+    [SerializeField] Creature _currentTarget;
+    [SerializeField] SkillAnimationNumber _currentSkill;
+    [SerializeField] List<MOnImpactNumber> _currentImpactEffects;
+
+    // IOnComplete _onComplete;
+    // IOnComplete _onCompleteOnDeath;
 
     static readonly int Speed = Animator.StringToHash("Speed");
     static readonly int Skill1 = Animator.StringToHash("Skill1");
@@ -62,6 +71,7 @@ namespace Magewatch.Components
 
     public void Initialize(CreatureData creatureData)
     {
+      _commandService = Root.Instance.CommandService;
       _creatureService = Root.Instance.CreatureService;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
@@ -137,29 +147,40 @@ namespace Magewatch.Components
       });
     }
 
-    public void MeleeEngageWithTarget(Creature target, IOnComplete onComplete)
-    {
-      Errors.CheckNotNull(target);
-      Errors.CheckNotNull(onComplete);
+    // void MeleeEngageWithTarget(Creature target, Action onComplete)
+    // {
+    //   Errors.CheckNotNull(target);
+    //   Errors.CheckNotNull(onComplete);
+    //
+    //   _currentTarget = target;
+    //   _touchedTarget = false;
+    //   _state = CreatureState.MeleeEngage;
+    // }
 
-      _currentTarget = target;
-      _onComplete = onComplete;
-      _touchedTarget = false;
-      _state = CreatureState.MeleeEngage;
+    public void UseSkill(SkillAnimationNumber number, IEnumerable<MOnImpactNumber> onImpact, Creature meleeTarget)
+    {
+      Errors.CheckNotNull(onImpact);
+      _currentSkill = number;
+      _currentImpactEffects = onImpact.ToList();
+
+      if (meleeTarget)
+      {
+        _currentTarget = meleeTarget;
+        _touchedTarget = false;
+        _state = CreatureState.MeleeEngage;
+      }
+      else
+      {
+        UseCurrentSkill();
+      }
     }
 
-    public void AttackTarget(Creature target, AttackCommand attack, IOnComplete onComplete)
+    void UseCurrentSkill()
     {
-      Errors.CheckNotNull(target);
-      Errors.CheckNotNull(attack);
-      Errors.CheckNotNull(onComplete);
+      _currentImpactCount = 0;
+      _state = CreatureState.UseSkill;
 
-      _currentTarget = target;
-      _currentAttack = attack;
-      _onComplete = onComplete;
-      _state = CreatureState.Attack;
-
-      switch (attack.Skill)
+      switch (_currentSkill)
       {
         case SkillAnimationNumber.Skill1:
           _animator.SetTrigger(Skill1);
@@ -177,13 +198,47 @@ namespace Magewatch.Components
           _animator.SetTrigger(Skill5);
           break;
         default:
-          throw Errors.UnknownEnumValue(attack.Skill);
+          throw Errors.UnknownEnumValue(_currentSkill);
       }
     }
 
+    // public void AttackTarget(Creature target, AttackCommand attack, IOnComplete onComplete)
+    // {
+    //   Errors.CheckNotNull(target);
+    //   Errors.CheckNotNull(attack);
+    //   Errors.CheckNotNull(onComplete);
+    //
+    //   _currentTarget = target;
+    //   _currentAttack = attack;
+    //   _onComplete = onComplete;
+    //   _state = CreatureState.Attack;
+    //
+    //   switch (attack.Skill)
+    //   {
+    //     case SkillAnimationNumber.Skill1:
+    //       _animator.SetTrigger(Skill1);
+    //       break;
+    //     case SkillAnimationNumber.Skill2:
+    //       _animator.SetTrigger(Skill2);
+    //       break;
+    //     case SkillAnimationNumber.Skill3:
+    //       _animator.SetTrigger(Skill3);
+    //       break;
+    //     case SkillAnimationNumber.Skill4:
+    //       _animator.SetTrigger(Skill4);
+    //       break;
+    //     case SkillAnimationNumber.Skill5:
+    //       _animator.SetTrigger(Skill5);
+    //       break;
+    //     default:
+    //       throw Errors.UnknownEnumValue(attack.Skill);
+    //   }
+    // }
+
     public void OnDeathAnimationCompleted()
     {
-      _onCompleteOnDeath?.OnComplete();
+      // _onCompleteOnDeath?.OnComplete();
+      _commandService.OnComplete();
       Root.Instance.CreatureService.Destroy(_creatureData.CreatureId);
     }
 
@@ -236,67 +291,133 @@ namespace Magewatch.Components
       });
     }
 
-    void ApplyAttackDamage(ApplyDamageEffect damage, IOnComplete onComplete)
-    {
-      _healthBar.Value -= damage.Damage;
-      _healthBar.gameObject.SetActive(_healthBar.Value < 100);
-      if (damage.KillsTarget)
-      {
-        _animator.SetTrigger(Death);
-        _healthBar.gameObject.SetActive(false);
-        _onCompleteOnDeath = onComplete;
-      }
-      else
-      {
-        onComplete.OnComplete();
-      }
-    }
+    // void ApplyAttackDamage(ApplyDamageEffect damage, IOnComplete onComplete)
+    // {
+    //   _healthBar.Value -= damage.Damage;
+    //   _healthBar.gameObject.SetActive(_healthBar.Value < 100);
+    //   if (damage.KillsTarget)
+    //   {
+    //     _animator.SetTrigger(Death);
+    //     _healthBar.gameObject.SetActive(false);
+    //     _onCompleteOnDeath = onComplete;
+    //   }
+    //   else
+    //   {
+    //     onComplete.OnComplete();
+    //   }
+    // }
 
     // Called by skill animations on their 'start impact' frame
     // ReSharper disable once UnusedMember.Local
     void AttackStart()
     {
-      Errors.CheckNotNull(_currentAttack);
-      Errors.CheckNotNull(_currentTarget);
+      Errors.CheckNotNull(_currentImpactEffects);
+      _currentImpactCount++;
 
-      switch (_currentAttack.AttackEffectCase)
+      foreach (var onImpact in _currentImpactEffects.Where(e => e.ImpactNumber == _currentImpactCount))
       {
-        case AttackCommand.AttackEffectOneofCase.ApplyDamage:
-          _currentTarget.ApplyAttackDamage(_currentAttack.ApplyDamage, _onComplete);
-          if (_currentAttack.ApplyDamage.KillsTarget)
+        HandleOnImpactEffect(onImpact.Effect);
+      }
+
+      _commandService.OnComplete();
+    }
+
+    void HandleOnImpactEffect(MOnImpact effect)
+    {
+      // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
+      switch (effect.OnImpactCase)
+      {
+        case MOnImpact.OnImpactOneofCase.Update:
+          if (effect.Update.CreatureId.Equals(CreatureId))
           {
-            _currentTarget = null;
+            ApplyCreatureUpdate(effect.Update);
+          }
+          else
+          {
+            _creatureService.Get(effect.Update.CreatureId).ApplyCreatureUpdate(effect.Update);
           }
 
-          _onComplete = null;
           break;
-        case AttackCommand.AttackEffectOneofCase.FireProjectile:
-          var fireProjectile = _currentAttack.FireProjectile;
-          var target = fireProjectile.AtOpponent
-            ? Root.Instance.GetPlayer(Owner.GetOpponent()).Collider
-            : _currentTarget._collider;
-          Projectile.Instantiate(fireProjectile, _meleePosition, target, () =>
-          {
-            if (fireProjectile.AtOpponent)
-            {
-              _onComplete.OnComplete();
-            }
-            else
-            {
-              _currentTarget.ApplyAttackDamage(fireProjectile.ApplyDamage, _onComplete);
-              if (fireProjectile.ApplyDamage.KillsTarget)
-              {
-                _currentTarget = null;
-              }
-
-              _onComplete = null;
-            }
-          });
+        case MOnImpact.OnImpactOneofCase.FireProjectile:
+          HandleFireProjectile(effect.FireProjectile);
           break;
-        default:
-          throw Errors.UnknownEnumValue(_currentAttack.AttackEffectCase);
       }
     }
+
+    void ApplyCreatureUpdate(MCreatureUpdate update)
+    {
+      Errors.CheckArgument(update.CreatureId.Equals(CreatureId), "Incorrect creature ID");
+      _healthBar.Value = update.SetHealthPercentage;
+      _healthBar.gameObject.SetActive(_healthBar.Value < 1);
+
+      if (update.PlayDeathAnimation)
+      {
+        _commandService.AddExpectedCompletion();
+        _animator.SetTrigger(Death);
+        _healthBar.gameObject.SetActive(false);
+        _state = CreatureState.Dying;
+      }
+    }
+
+    void HandleFireProjectile(MFireProjectile fireProjectile)
+    {
+      _commandService.AddExpectedCompletion();
+      var target = _creatureService.Get(fireProjectile.TargetCreature);
+      Projectile.Instantiate(fireProjectile, _meleePosition,
+        target._collider,
+        () =>
+        {
+          foreach (var onImpact in fireProjectile.OnHit)
+          {
+            target.HandleOnImpactEffect(onImpact);
+          }
+
+          _commandService.OnComplete();
+        });
+    }
+
+    // void AttackStart()
+    // {
+    //   Errors.CheckNotNull(_currentAttack);
+    //   Errors.CheckNotNull(_currentTarget);
+    //
+    //   switch (_currentAttack.AttackEffectCase)
+    //   {
+    //     case AttackCommand.AttackEffectOneofCase.ApplyDamage:
+    //       _currentTarget.ApplyAttackDamage(_currentAttack.ApplyDamage, _onComplete);
+    //       if (_currentAttack.ApplyDamage.KillsTarget)
+    //       {
+    //         _currentTarget = null;
+    //       }
+    //
+    //       _onComplete = null;
+    //       break;
+    //     case AttackCommand.AttackEffectOneofCase.FireProjectile:
+    //       var fireProjectile = _currentAttack.FireProjectile;
+    //       var target = fireProjectile.AtOpponent
+    //         ? Root.Instance.GetPlayer(Owner.GetOpponent()).Collider
+    //         : _currentTarget._collider;
+    //       Projectile.Instantiate(fireProjectile, _meleePosition, target, () =>
+    //       {
+    //         if (fireProjectile.AtOpponent)
+    //         {
+    //           _onComplete.OnComplete();
+    //         }
+    //         else
+    //         {
+    //           _currentTarget.ApplyAttackDamage(fireProjectile.ApplyDamage, _onComplete);
+    //           if (fireProjectile.ApplyDamage.KillsTarget)
+    //           {
+    //             _currentTarget = null;
+    //           }
+    //
+    //           _onComplete = null;
+    //         }
+    //       });
+    //       break;
+    //     default:
+    //       throw Errors.UnknownEnumValue(_currentAttack.AttackEffectCase);
+    //   }
 
     Transform MeleePosition => _meleePosition;
 
@@ -327,7 +448,7 @@ namespace Magewatch.Components
           _animator.SetInteger(Speed, 0);
           if (!_touchedTarget)
           {
-            _onComplete.OnComplete();
+            UseCurrentSkill();
             _touchedTarget = true;
           }
         }

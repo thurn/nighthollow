@@ -434,7 +434,7 @@ message UseCreatureSkillCommand {
   // What to do when the skill animation reaches its impact frame
   repeated MOnImpactNumber on_impact = 3;
 
-  // Optionally a target for this skill. The creature will move into melee
+  // Optionally, a target for this skill. The creature will move into melee
   // range with this target before performing the skill animation.
   CreatureId melee_target = 4;
 }
