@@ -16,7 +16,7 @@ use std::sync::atomic::{AtomicI32, Ordering};
 
 use crate::model::primitives::*;
 use crate::{
-    model::{stats::Stat, types::*},
+    model::{assets::CreatureType, creatures::*, stats::Stat, types::*},
     rules::basic::BaseMeleeDamageAttack,
 };
 
@@ -26,8 +26,8 @@ fn next_id() -> i32 {
     NEXT_IDENTIFIER_INDEX.fetch_add(1, Ordering::Relaxed)
 }
 
-pub fn berserker(owner: PlayerName) -> CreatureArchetype {
-    CreatureArchetype {
+pub fn berserker(owner: PlayerName) -> CreatureData {
+    CreatureData {
         card_data: CardData {
             id: next_id(),
             owner,
@@ -49,8 +49,8 @@ pub fn berserker(owner: PlayerName) -> CreatureArchetype {
     }
 }
 
-pub fn mage(owner: PlayerName) -> CreatureArchetype {
-    CreatureArchetype {
+pub fn mage(owner: PlayerName) -> CreatureData {
+    CreatureData {
         card_data: CardData {
             id: next_id(),
             owner,

@@ -17,18 +17,20 @@ use eyre::eyre;
 
 use super::rules::RuleContext;
 use crate::{
-    api, commands,
+    api::{
+        self, m_on_impact, MCreatureUpdate, MFireProjectile, MOnImpact, MOnImpactNumber,
+        MSkillAnimation, MSkillAnimationNumber, MUseCreatureSkillCommand,
+    },
+    commands,
     model::{
-        assets::{ParticleSystemName, ProjectileName},
+        assets::{CreatureType, ParticleSystemName, ProjectileName},
+        creatures::{Creature, Damage, DamageResult},
         primitives::{CreatureId, HealthValue, ManaValue, RuleId, SkillAnimation},
         stats::{Modifier, Operation, StatName},
-        types::{Creature, CreatureType, Damage, DamageResult, Game},
+        types::Game,
     },
 };
-use api::{
-    m_on_impact, MCreatureUpdate, MFireProjectile, MOnImpact, MOnImpactNumber, MSkillAnimation,
-    SkillAnimationNumber, UseCreatureSkillCommand,
-};
+
 use std::cmp;
 
 pub struct EffectData {
@@ -157,12 +159,15 @@ pub struct SetModifier {
     pub operation: Operation,
 }
 
+/// Represents a mutation which ocurred during effect application which should
+// be used to trigger further "on mutation x happened" rules
 pub struct MutationEvent {
     pub source_creature: CreatureId,
     pub target_creature: CreatureId,
     pub event_type: MutationEventType,
 }
 
+/// Possible types of mutation event
 pub enum MutationEventType {
     AppliedDamage(Damage),
     Killed(Damage),
@@ -172,6 +177,10 @@ pub enum MutationEventType {
     SetModifier(SetModifier),
 }
 
+/// Applies a specific Effect to the Game, mutating game state. The 'commands'
+/// buffer is populated with resulting commands which should be sent to the
+/// client. The 'events' buffer is populated with mutation events, used to
+/// trigger addtional rules as a result of this effect.
 pub fn apply_effect(
     game: &mut Game,
     effect_data: &EffectData,
@@ -198,7 +207,7 @@ fn use_creature_skill(
     effect_data: &EffectData,
     skill: &CreatureSkill,
     events: &mut Vec<MutationEvent>,
-) -> Result<UseCreatureSkillCommand> {
+) -> Result<MUseCreatureSkillCommand> {
     let mut on_impact = vec![];
     for on_impact_number in skill.on_impact.iter() {
         on_impact.push(adapt_on_impact_number(
@@ -209,11 +218,11 @@ fn use_creature_skill(
         )?)
     }
 
-    Ok(UseCreatureSkillCommand {
+    Ok(MUseCreatureSkillCommand {
         source_creature: Some(commands::creature_id(skill.source_creature)),
         animation: Some(adapt_skill_animation(
             skill.animation,
-            game.creature(skill.source_creature)?.archetype.base_type,
+            game.creature(skill.source_creature)?.data.base_type,
         )),
         on_impact,
         melee_target: skill.melee_target.map(|cid| commands::creature_id(cid)),
@@ -226,11 +235,11 @@ fn adapt_skill_animation(
 ) -> MSkillAnimation {
     MSkillAnimation {
         skill: match animation {
-            SkillAnimation::Skill1 => SkillAnimationNumber::Skill1,
-            SkillAnimation::Skill2 => SkillAnimationNumber::Skill2,
-            SkillAnimation::Skill3 => SkillAnimationNumber::Skill3,
-            SkillAnimation::Skill4 => SkillAnimationNumber::Skill4,
-            SkillAnimation::Skill5 => SkillAnimationNumber::Skill5,
+            SkillAnimation::Skill1 => MSkillAnimationNumber::Skill1,
+            SkillAnimation::Skill2 => MSkillAnimationNumber::Skill2,
+            SkillAnimation::Skill3 => MSkillAnimationNumber::Skill3,
+            SkillAnimation::Skill4 => MSkillAnimationNumber::Skill4,
+            SkillAnimation::Skill5 => MSkillAnimationNumber::Skill5,
         }
         .into(),
         impact_count: 1,

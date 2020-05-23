@@ -19,9 +19,10 @@ use super::rules::{self, Rule, RuleContext, RuleScope};
 use crate::{
     api, commands,
     model::{
+        creatures::{Creature, Damage, DamageResult},
         primitives::{CreatureId, HealthValue, ManaValue, RuleId},
         stats::{Modifier, Operation, StatName},
-        types::{Creature, Damage, DamageResult, Game, Player},
+        types::{Game, Player},
     },
 };
 use std::iter;
@@ -125,7 +126,7 @@ fn invoke_main_skill(
 ) -> Result<()> {
     let creature = game.creature(creature_id)?;
     let highest_priority = creature
-        .archetype
+        .data
         .rules
         .iter()
         .enumerate()

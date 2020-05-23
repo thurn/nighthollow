@@ -303,60 +303,9 @@ pub struct RemoveCreatureCommand {
     pub creature_id: ::std::option::Option<CreatureId>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MeleeEngageCommand {
-    #[prost(message, optional, tag = "1")]
-    pub creature_id: ::std::option::Option<CreatureId>,
-    #[prost(message, optional, tag = "2")]
-    pub target_creature_id: ::std::option::Option<CreatureId>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ApplyDamageEffect {
-    #[prost(int32, tag = "1")]
-    pub damage: i32,
-    #[prost(bool, tag = "2")]
-    pub kills_target: bool,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FireProjectileEffect {
-    #[prost(message, optional, tag = "1")]
-    pub prefab: ::std::option::Option<Asset>,
-    #[prost(message, optional, tag = "2")]
-    pub apply_damage: ::std::option::Option<ApplyDamageEffect>,
-    /// If true, the projectil is fired at the opposing player instead of at
-    /// a target creature.
-    #[prost(bool, tag = "3")]
-    pub at_opponent: bool,
-}
-/// Causes a creature to play a skill animation and optionally target an effect
-/// at an opposing creature
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AttackCommand {
-    #[prost(message, optional, tag = "1")]
-    pub creature_id: ::std::option::Option<CreatureId>,
-    #[prost(message, optional, tag = "2")]
-    pub target_creature_id: ::std::option::Option<CreatureId>,
-    /// Which skill animation to play
-    #[prost(enumeration = "SkillAnimationNumber", tag = "3")]
-    pub skill: i32,
-    /// How many times this skill is expected to raise the "AttackStart" event
-    #[prost(int32, tag = "4")]
-    pub hit_count: i32,
-    #[prost(oneof = "attack_command::AttackEffect", tags = "5, 6")]
-    pub attack_effect: ::std::option::Option<attack_command::AttackEffect>,
-}
-pub mod attack_command {
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum AttackEffect {
-        #[prost(message, tag = "5")]
-        ApplyDamage(super::ApplyDamageEffect),
-        #[prost(message, tag = "6")]
-        FireProjectile(super::FireProjectileEffect),
-    }
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MSkillAnimation {
     /// The animation to perform
-    #[prost(enumeration = "SkillAnimationNumber", tag = "1")]
+    #[prost(enumeration = "MSkillAnimationNumber", tag = "1")]
     pub skill: i32,
     /// How many times this skill is expected to reach its impact frame
     #[prost(int32, tag = "2")]
@@ -430,13 +379,13 @@ pub struct MCreatureUpdate {
 }
 /// Updates the state of a creature
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateCreatureCommand {
+pub struct MUpdateCreatureCommand {
     #[prost(message, optional, tag = "1")]
     pub update: ::std::option::Option<MCreatureUpdate>,
 }
 /// Causes creatures to use skills
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UseCreatureSkillCommand {
+pub struct MUseCreatureSkillCommand {
     /// Creature to apply these effects to
     #[prost(message, optional, tag = "1")]
     pub source_creature: ::std::option::Option<CreatureId>,
@@ -446,7 +395,7 @@ pub struct UseCreatureSkillCommand {
     /// What to do when the skill animation reaches its impact frame
     #[prost(message, repeated, tag = "3")]
     pub on_impact: ::std::vec::Vec<MOnImpactNumber>,
-    /// Optionally a target for this skill. The creature will move into melee
+    /// Optionally, a target for this skill. The creature will move into melee
     /// range with this target before performing the skill animation.
     #[prost(message, optional, tag = "4")]
     pub melee_target: ::std::option::Option<CreatureId>,
@@ -454,10 +403,7 @@ pub struct UseCreatureSkillCommand {
 /// A single instruction to the client UI to perform some action.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Command {
-    #[prost(
-        oneof = "command::Command",
-        tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12"
-    )]
+    #[prost(oneof = "command::Command", tags = "1, 2, 3, 4, 5, 6, 7, 10, 11, 12")]
     pub command: ::std::option::Option<command::Command>,
 }
 pub mod command {
@@ -477,14 +423,10 @@ pub mod command {
         CreateOrUpdateCreature(super::CreateOrUpdateCreatureCommand),
         #[prost(message, tag = "7")]
         RemoveCreature(super::RemoveCreatureCommand),
-        #[prost(message, tag = "8")]
-        MeleeEngage(super::MeleeEngageCommand),
-        #[prost(message, tag = "9")]
-        Attack(super::AttackCommand),
         #[prost(message, tag = "10")]
-        UpdateCreature(super::UpdateCreatureCommand),
+        UpdateCreature(super::MUpdateCreatureCommand),
         #[prost(message, tag = "11")]
-        UseCreatureSkill(super::UseCreatureSkillCommand),
+        UseCreatureSkill(super::MUseCreatureSkillCommand),
         #[prost(message, tag = "12")]
         DisplayError(super::DisplayErrorCommand),
     }
@@ -554,7 +496,7 @@ pub enum AssetType {
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum SkillAnimationNumber {
+pub enum MSkillAnimationNumber {
     SkillUnspecified = 0,
     Skill1 = 1,
     Skill2 = 2,

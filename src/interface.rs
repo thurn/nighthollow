@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::model::types::{Card, CreatureType, ScrollType, SpellType};
+use crate::model::{
+    assets::CreatureType,
+    types::{Card, ScrollType, SpellType},
+};
 
 pub fn creature_address(creature_type: CreatureType) -> String {
     format!("Creatures/{:?}", creature_type)

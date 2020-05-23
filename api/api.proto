@@ -310,28 +310,7 @@ message RemoveCreatureCommand {
   CreatureId creature_id = 1;
 }
 
-message MeleeEngageCommand {
-  CreatureId creature_id = 1;
-
-  CreatureId target_creature_id = 2;
-}
-
-message ApplyDamageEffect {
-  int32 damage = 1;
-  bool kills_target = 2;
-}
-
-message FireProjectileEffect {
-  Asset prefab = 1;
-
-  ApplyDamageEffect apply_damage = 2;
-
-  // If true, the projectil is fired at the opposing player instead of at
-  // a target creature.
-  bool at_opponent = 3;
-}
-
-enum SkillAnimationNumber {
+enum MSkillAnimationNumber {
   SKILL_UNSPECIFIED = 0;
   SKILL_1 = 1;
   SKILL_2 = 2;
@@ -340,27 +319,9 @@ enum SkillAnimationNumber {
   SKILL_5 = 5;
 }
 
-// Causes a creature to play a skill animation and optionally target an effect
-// at an opposing creature
-message AttackCommand {
-  CreatureId creature_id = 1;
-  CreatureId target_creature_id = 2;
-
-  // Which skill animation to play
-  SkillAnimationNumber skill = 3;
-
-  // How many times this skill is expected to raise the "AttackStart" event
-  int32 hit_count = 4;
-
-  oneof attack_effect {
-    ApplyDamageEffect apply_damage = 5;
-    FireProjectileEffect fire_projectile = 6;
-  }
-}
-
 message MSkillAnimation {
   // The animation to perform
-  SkillAnimationNumber skill = 1;
+  MSkillAnimationNumber skill = 1;
 
   // How many times this skill is expected to reach its impact frame
   int32 impact_count = 2;
@@ -419,12 +380,12 @@ message MCreatureUpdate {
 }
 
 // Updates the state of a creature
-message UpdateCreatureCommand {
+message MUpdateCreatureCommand {
   MCreatureUpdate update = 1;
 }
 
 // Causes creatures to use skills
-message UseCreatureSkillCommand {
+message MUseCreatureSkillCommand {
   // Creature to apply these effects to
   CreatureId source_creature = 1;
 
@@ -449,10 +410,8 @@ message Command {
     UpdatePlayerCommand update_player = 5;
     CreateOrUpdateCreatureCommand create_or_update_creature = 6;
     RemoveCreatureCommand remove_creature = 7;
-    MeleeEngageCommand melee_engage = 8;
-    AttackCommand attack = 9;
-    UpdateCreatureCommand update_creature = 10;
-    UseCreatureSkillCommand use_creature_skill = 11;
+    MUpdateCreatureCommand update_creature = 10;
+    MUseCreatureSkillCommand use_creature_skill = 11;
     DisplayErrorCommand display_error = 12;
   }
 }

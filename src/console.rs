@@ -19,8 +19,9 @@ use crate::{
     api,
     commands::{self, CreatureMetadata},
     model::{
+        creatures::Creature,
         primitives::{BoardPosition, FileValue, PlayerName, RankValue},
-        types::{Card, Creature, Game, HasCardData, Player},
+        types::{Card, Game, HasCardData, Player},
     },
     requests,
 };

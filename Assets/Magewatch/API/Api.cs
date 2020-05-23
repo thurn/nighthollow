@@ -97,71 +97,57 @@ namespace Magewatch.API {
             "a1ZhbHVlEiUKDWZpbGVfcG9zaXRpb24YBCABKA4yDi5hcGkuRmlsZVZhbHVl",
             "IkQKHUNyZWF0ZU9yVXBkYXRlQ3JlYXR1cmVDb21tYW5kEiMKCGNyZWF0dXJl",
             "GAEgASgLMhEuYXBpLkNyZWF0dXJlRGF0YSI9ChVSZW1vdmVDcmVhdHVyZUNv",
-            "bW1hbmQSJAoLY3JlYXR1cmVfaWQYASABKAsyDy5hcGkuQ3JlYXR1cmVJZCJn",
-            "ChJNZWxlZUVuZ2FnZUNvbW1hbmQSJAoLY3JlYXR1cmVfaWQYASABKAsyDy5h",
-            "cGkuQ3JlYXR1cmVJZBIrChJ0YXJnZXRfY3JlYXR1cmVfaWQYAiABKAsyDy5h",
-            "cGkuQ3JlYXR1cmVJZCI5ChFBcHBseURhbWFnZUVmZmVjdBIOCgZkYW1hZ2UY",
-            "ASABKAUSFAoMa2lsbHNfdGFyZ2V0GAIgASgIInUKFEZpcmVQcm9qZWN0aWxl",
-            "RWZmZWN0EhoKBnByZWZhYhgBIAEoCzIKLmFwaS5Bc3NldBIsCgxhcHBseV9k",
-            "YW1hZ2UYAiABKAsyFi5hcGkuQXBwbHlEYW1hZ2VFZmZlY3QSEwoLYXRfb3Bw",
-            "b25lbnQYAyABKAgilgIKDUF0dGFja0NvbW1hbmQSJAoLY3JlYXR1cmVfaWQY",
-            "ASABKAsyDy5hcGkuQ3JlYXR1cmVJZBIrChJ0YXJnZXRfY3JlYXR1cmVfaWQY",
-            "AiABKAsyDy5hcGkuQ3JlYXR1cmVJZBIoCgVza2lsbBgDIAEoDjIZLmFwaS5T",
-            "a2lsbEFuaW1hdGlvbk51bWJlchIRCgloaXRfY291bnQYBCABKAUSLgoMYXBw",
-            "bHlfZGFtYWdlGAUgASgLMhYuYXBpLkFwcGx5RGFtYWdlRWZmZWN0SAASNAoP",
-            "ZmlyZV9wcm9qZWN0aWxlGAYgASgLMhkuYXBpLkZpcmVQcm9qZWN0aWxlRWZm",
-            "ZWN0SABCDwoNYXR0YWNrX2VmZmVjdCJRCg9NU2tpbGxBbmltYXRpb24SKAoF",
-            "c2tpbGwYASABKA4yGS5hcGkuU2tpbGxBbmltYXRpb25OdW1iZXISFAoMaW1w",
-            "YWN0X2NvdW50GAIgASgFIkgKD01PbkltcGFjdE51bWJlchIVCg1pbXBhY3Rf",
-            "bnVtYmVyGAEgASgNEh4KBmVmZmVjdBgCIAEoCzIOLmFwaS5NT25JbXBhY3Qi",
-            "cQoJTU9uSW1wYWN0EiYKBnVwZGF0ZRgBIAEoCzIULmFwaS5NQ3JlYXR1cmVV",
-            "cGRhdGVIABIvCg9maXJlX3Byb2plY3RpbGUYAiABKAsyFC5hcGkuTUZpcmVQ",
-            "cm9qZWN0aWxlSABCCwoJb25faW1wYWN0IocBCg9NRmlyZVByb2plY3RpbGUS",
-            "HgoKcHJvamVjdGlsZRgBIAEoCzIKLmFwaS5Bc3NldBIeCgZvbl9oaXQYAiAD",
-            "KAsyDi5hcGkuTU9uSW1wYWN0EioKD3RhcmdldF9jcmVhdHVyZRgDIAEoCzIP",
-            "LmFwaS5DcmVhdHVyZUlkSABCCAoGdGFyZ2V0IrwBCg9NQ3JlYXR1cmVVcGRh",
-            "dGUSJAoLY3JlYXR1cmVfaWQYASABKAsyDy5hcGkuQ3JlYXR1cmVJZBIdChVz",
-            "ZXRfaGVhbHRoX3BlcmNlbnRhZ2UYAiABKAISHAoUcGxheV9kZWF0aF9hbmlt",
-            "YXRpb24YAyABKAgSGwoTc2V0X21hbmFfcGVyY2VudGFnZRgEIAEoAhIpChVw",
-            "bGF5X3BhcnRpY2xlX2VmZmVjdHMYBSADKAsyCi5hcGkuQXNzZXQiPQoVVXBk",
-            "YXRlQ3JlYXR1cmVDb21tYW5kEiQKBnVwZGF0ZRgBIAEoCzIULmFwaS5NQ3Jl",
-            "YXR1cmVVcGRhdGUivAEKF1VzZUNyZWF0dXJlU2tpbGxDb21tYW5kEigKD3Nv",
-            "dXJjZV9jcmVhdHVyZRgBIAEoCzIPLmFwaS5DcmVhdHVyZUlkEicKCWFuaW1h",
-            "dGlvbhgCIAEoCzIULmFwaS5NU2tpbGxBbmltYXRpb24SJwoJb25faW1wYWN0",
-            "GAMgAygLMhQuYXBpLk1PbkltcGFjdE51bWJlchIlCgxtZWxlZV90YXJnZXQY",
-            "BCABKAsyDy5hcGkuQ3JlYXR1cmVJZCL1BAoHQ29tbWFuZBIgCgR3YWl0GAEg",
-            "ASgLMhAuYXBpLldhaXRDb21tYW5kSAASNwoQdXBkYXRlX2ludGVyZmFjZRgC",
-            "IAEoCzIbLmFwaS5VcGRhdGVJbnRlcmZhY2VDb21tYW5kSAASKQoJZHJhd19j",
-            "YXJkGAMgASgLMhQuYXBpLkRyYXdDYXJkQ29tbWFuZEgAEikKCXBsYXlfY2Fy",
-            "ZBgEIAEoCzIULmFwaS5QbGF5Q2FyZENvbW1hbmRIABIxCg11cGRhdGVfcGxh",
-            "eWVyGAUgASgLMhguYXBpLlVwZGF0ZVBsYXllckNvbW1hbmRIABJHChljcmVh",
-            "dGVfb3JfdXBkYXRlX2NyZWF0dXJlGAYgASgLMiIuYXBpLkNyZWF0ZU9yVXBk",
-            "YXRlQ3JlYXR1cmVDb21tYW5kSAASNQoPcmVtb3ZlX2NyZWF0dXJlGAcgASgL",
-            "MhouYXBpLlJlbW92ZUNyZWF0dXJlQ29tbWFuZEgAEi8KDG1lbGVlX2VuZ2Fn",
-            "ZRgIIAEoCzIXLmFwaS5NZWxlZUVuZ2FnZUNvbW1hbmRIABIkCgZhdHRhY2sY",
-            "CSABKAsyEi5hcGkuQXR0YWNrQ29tbWFuZEgAEjUKD3VwZGF0ZV9jcmVhdHVy",
-            "ZRgKIAEoCzIaLmFwaS5VcGRhdGVDcmVhdHVyZUNvbW1hbmRIABI6ChJ1c2Vf",
-            "Y3JlYXR1cmVfc2tpbGwYCyABKAsyHC5hcGkuVXNlQ3JlYXR1cmVTa2lsbENv",
-            "bW1hbmRIABIxCg1kaXNwbGF5X2Vycm9yGAwgASgLMhguYXBpLkRpc3BsYXlF",
-            "cnJvckNvbW1hbmRIAEIJCgdjb21tYW5kIi4KDENvbW1hbmRHcm91cBIeCghj",
-            "b21tYW5kcxgBIAMoCzIMLmFwaS5Db21tYW5kIjgKC0NvbW1hbmRMaXN0EikK",
-            "DmNvbW1hbmRfZ3JvdXBzGAEgAygLMhEuYXBpLkNvbW1hbmRHcm91cCo5CgpQ",
-            "bGF5ZXJOYW1lEhYKElBMQVlFUl9VTlNQRUNJRklFRBAAEggKBFVTRVIQARIJ",
-            "CgVFTkVNWRACKmkKCVJhbmtWYWx1ZRIUChBSQU5LX1VOU1BFQ0lGSUVEEAAS",
-            "CgoGUkFOS18wEAESCgoGUkFOS18xEAISCgoGUkFOS18yEAMSCgoGUkFOS18z",
-            "EAQSCgoGUkFOS180EAUSCgoGUkFOS181EAYqaQoJRmlsZVZhbHVlEhQKEEZJ",
-            "TEVfVU5TUEVDSUZJRUQQABIKCgZGSUxFXzAQARIKCgZGSUxFXzEQAhIKCgZG",
-            "SUxFXzIQAxIKCgZGSUxFXzMQBBIKCgZGSUxFXzQQBRIKCgZGSUxFXzUQBipp",
-            "Cg1JbmZsdWVuY2VUeXBlEhkKFUlORkxVRU5DRV9VTlNQRUNJRklFRBAAEgkK",
-            "BUxJR0hUEAESBwoDU0tZEAISCQoFRkxBTUUQAxIHCgNJQ0UQBBIJCgVFQVJU",
-            "SBAFEgoKBlNIQURPVxAGKjkKCUFzc2V0VHlwZRIUChBUWVBFX1VOU1BFQ0lG",
-            "SUVEEAASCgoGUFJFRkFCEAESCgoGU1BSSVRFEAIqbgoUU2tpbGxBbmltYXRp",
-            "b25OdW1iZXISFQoRU0tJTExfVU5TUEVDSUZJRUQQABILCgdTS0lMTF8xEAES",
-            "CwoHU0tJTExfMhACEgsKB1NLSUxMXzMQAxILCgdTS0lMTF80EAQSCwoHU0tJ",
-            "TExfNRAFQhCqAg1NYWdld2F0Y2guQVBJYgZwcm90bzM="));
+            "bW1hbmQSJAoLY3JlYXR1cmVfaWQYASABKAsyDy5hcGkuQ3JlYXR1cmVJZCJS",
+            "Cg9NU2tpbGxBbmltYXRpb24SKQoFc2tpbGwYASABKA4yGi5hcGkuTVNraWxs",
+            "QW5pbWF0aW9uTnVtYmVyEhQKDGltcGFjdF9jb3VudBgCIAEoBSJICg9NT25J",
+            "bXBhY3ROdW1iZXISFQoNaW1wYWN0X251bWJlchgBIAEoDRIeCgZlZmZlY3QY",
+            "AiABKAsyDi5hcGkuTU9uSW1wYWN0InEKCU1PbkltcGFjdBImCgZ1cGRhdGUY",
+            "ASABKAsyFC5hcGkuTUNyZWF0dXJlVXBkYXRlSAASLwoPZmlyZV9wcm9qZWN0",
+            "aWxlGAIgASgLMhQuYXBpLk1GaXJlUHJvamVjdGlsZUgAQgsKCW9uX2ltcGFj",
+            "dCKHAQoPTUZpcmVQcm9qZWN0aWxlEh4KCnByb2plY3RpbGUYASABKAsyCi5h",
+            "cGkuQXNzZXQSHgoGb25faGl0GAIgAygLMg4uYXBpLk1PbkltcGFjdBIqCg90",
+            "YXJnZXRfY3JlYXR1cmUYAyABKAsyDy5hcGkuQ3JlYXR1cmVJZEgAQggKBnRh",
+            "cmdldCK8AQoPTUNyZWF0dXJlVXBkYXRlEiQKC2NyZWF0dXJlX2lkGAEgASgL",
+            "Mg8uYXBpLkNyZWF0dXJlSWQSHQoVc2V0X2hlYWx0aF9wZXJjZW50YWdlGAIg",
+            "ASgCEhwKFHBsYXlfZGVhdGhfYW5pbWF0aW9uGAMgASgIEhsKE3NldF9tYW5h",
+            "X3BlcmNlbnRhZ2UYBCABKAISKQoVcGxheV9wYXJ0aWNsZV9lZmZlY3RzGAUg",
+            "AygLMgouYXBpLkFzc2V0Ij4KFk1VcGRhdGVDcmVhdHVyZUNvbW1hbmQSJAoG",
+            "dXBkYXRlGAEgASgLMhQuYXBpLk1DcmVhdHVyZVVwZGF0ZSK9AQoYTVVzZUNy",
+            "ZWF0dXJlU2tpbGxDb21tYW5kEigKD3NvdXJjZV9jcmVhdHVyZRgBIAEoCzIP",
+            "LmFwaS5DcmVhdHVyZUlkEicKCWFuaW1hdGlvbhgCIAEoCzIULmFwaS5NU2tp",
+            "bGxBbmltYXRpb24SJwoJb25faW1wYWN0GAMgAygLMhQuYXBpLk1PbkltcGFj",
+            "dE51bWJlchIlCgxtZWxlZV90YXJnZXQYBCABKAsyDy5hcGkuQ3JlYXR1cmVJ",
+            "ZCKgBAoHQ29tbWFuZBIgCgR3YWl0GAEgASgLMhAuYXBpLldhaXRDb21tYW5k",
+            "SAASNwoQdXBkYXRlX2ludGVyZmFjZRgCIAEoCzIbLmFwaS5VcGRhdGVJbnRl",
+            "cmZhY2VDb21tYW5kSAASKQoJZHJhd19jYXJkGAMgASgLMhQuYXBpLkRyYXdD",
+            "YXJkQ29tbWFuZEgAEikKCXBsYXlfY2FyZBgEIAEoCzIULmFwaS5QbGF5Q2Fy",
+            "ZENvbW1hbmRIABIxCg11cGRhdGVfcGxheWVyGAUgASgLMhguYXBpLlVwZGF0",
+            "ZVBsYXllckNvbW1hbmRIABJHChljcmVhdGVfb3JfdXBkYXRlX2NyZWF0dXJl",
+            "GAYgASgLMiIuYXBpLkNyZWF0ZU9yVXBkYXRlQ3JlYXR1cmVDb21tYW5kSAAS",
+            "NQoPcmVtb3ZlX2NyZWF0dXJlGAcgASgLMhouYXBpLlJlbW92ZUNyZWF0dXJl",
+            "Q29tbWFuZEgAEjYKD3VwZGF0ZV9jcmVhdHVyZRgKIAEoCzIbLmFwaS5NVXBk",
+            "YXRlQ3JlYXR1cmVDb21tYW5kSAASOwoSdXNlX2NyZWF0dXJlX3NraWxsGAsg",
+            "ASgLMh0uYXBpLk1Vc2VDcmVhdHVyZVNraWxsQ29tbWFuZEgAEjEKDWRpc3Bs",
+            "YXlfZXJyb3IYDCABKAsyGC5hcGkuRGlzcGxheUVycm9yQ29tbWFuZEgAQgkK",
+            "B2NvbW1hbmQiLgoMQ29tbWFuZEdyb3VwEh4KCGNvbW1hbmRzGAEgAygLMgwu",
+            "YXBpLkNvbW1hbmQiOAoLQ29tbWFuZExpc3QSKQoOY29tbWFuZF9ncm91cHMY",
+            "ASADKAsyES5hcGkuQ29tbWFuZEdyb3VwKjkKClBsYXllck5hbWUSFgoSUExB",
+            "WUVSX1VOU1BFQ0lGSUVEEAASCAoEVVNFUhABEgkKBUVORU1ZEAIqaQoJUmFu",
+            "a1ZhbHVlEhQKEFJBTktfVU5TUEVDSUZJRUQQABIKCgZSQU5LXzAQARIKCgZS",
+            "QU5LXzEQAhIKCgZSQU5LXzIQAxIKCgZSQU5LXzMQBBIKCgZSQU5LXzQQBRIK",
+            "CgZSQU5LXzUQBippCglGaWxlVmFsdWUSFAoQRklMRV9VTlNQRUNJRklFRBAA",
+            "EgoKBkZJTEVfMBABEgoKBkZJTEVfMRACEgoKBkZJTEVfMhADEgoKBkZJTEVf",
+            "MxAEEgoKBkZJTEVfNBAFEgoKBkZJTEVfNRAGKmkKDUluZmx1ZW5jZVR5cGUS",
+            "GQoVSU5GTFVFTkNFX1VOU1BFQ0lGSUVEEAASCQoFTElHSFQQARIHCgNTS1kQ",
+            "AhIJCgVGTEFNRRADEgcKA0lDRRAEEgkKBUVBUlRIEAUSCgoGU0hBRE9XEAYq",
+            "OQoJQXNzZXRUeXBlEhQKEFRZUEVfVU5TUEVDSUZJRUQQABIKCgZQUkVGQUIQ",
+            "ARIKCgZTUFJJVEUQAipvChVNU2tpbGxBbmltYXRpb25OdW1iZXISFQoRU0tJ",
+            "TExfVU5TUEVDSUZJRUQQABILCgdTS0lMTF8xEAESCwoHU0tJTExfMhACEgsK",
+            "B1NLSUxMXzMQAxILCgdTS0lMTF80EAQSCwoHU0tJTExfNRAFQhCqAg1NYWdl",
+            "d2F0Y2guQVBJYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.AssetType), typeof(global::Magewatch.API.SkillAnimationNumber), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.AssetType), typeof(global::Magewatch.API.MSkillAnimationNumber), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.UserId), global::Magewatch.API.UserId.Parser, new[]{ "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.GameId), global::Magewatch.API.GameId.Parser, new[]{ "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CreatureId), global::Magewatch.API.CreatureId.Parser, new[]{ "Value" }, null, null, null, null),
@@ -195,18 +181,14 @@ namespace Magewatch.API {
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayCardCommand), global::Magewatch.API.PlayCardCommand.Parser, new[]{ "Card", "RevealDelayMilliseconds", "RankPosition", "FilePosition" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CreateOrUpdateCreatureCommand), global::Magewatch.API.CreateOrUpdateCreatureCommand.Parser, new[]{ "Creature" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.RemoveCreatureCommand), global::Magewatch.API.RemoveCreatureCommand.Parser, new[]{ "CreatureId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MeleeEngageCommand), global::Magewatch.API.MeleeEngageCommand.Parser, new[]{ "CreatureId", "TargetCreatureId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.ApplyDamageEffect), global::Magewatch.API.ApplyDamageEffect.Parser, new[]{ "Damage", "KillsTarget" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.FireProjectileEffect), global::Magewatch.API.FireProjectileEffect.Parser, new[]{ "Prefab", "ApplyDamage", "AtOpponent" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.AttackCommand), global::Magewatch.API.AttackCommand.Parser, new[]{ "CreatureId", "TargetCreatureId", "Skill", "HitCount", "ApplyDamage", "FireProjectile" }, new[]{ "AttackEffect" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MSkillAnimation), global::Magewatch.API.MSkillAnimation.Parser, new[]{ "Skill", "ImpactCount" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MOnImpactNumber), global::Magewatch.API.MOnImpactNumber.Parser, new[]{ "ImpactNumber", "Effect" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MOnImpact), global::Magewatch.API.MOnImpact.Parser, new[]{ "Update", "FireProjectile" }, new[]{ "OnImpact" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MFireProjectile), global::Magewatch.API.MFireProjectile.Parser, new[]{ "Projectile", "OnHit", "TargetCreature" }, new[]{ "Target" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MCreatureUpdate), global::Magewatch.API.MCreatureUpdate.Parser, new[]{ "CreatureId", "SetHealthPercentage", "PlayDeathAnimation", "SetManaPercentage", "PlayParticleEffects" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.UpdateCreatureCommand), global::Magewatch.API.UpdateCreatureCommand.Parser, new[]{ "Update" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.UseCreatureSkillCommand), global::Magewatch.API.UseCreatureSkillCommand.Parser, new[]{ "SourceCreature", "Animation", "OnImpact", "MeleeTarget" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Command), global::Magewatch.API.Command.Parser, new[]{ "Wait", "UpdateInterface", "DrawCard", "PlayCard", "UpdatePlayer", "CreateOrUpdateCreature", "RemoveCreature", "MeleeEngage", "Attack", "UpdateCreature", "UseCreatureSkill", "DisplayError" }, new[]{ "Command" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUpdateCreatureCommand), global::Magewatch.API.MUpdateCreatureCommand.Parser, new[]{ "Update" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUseCreatureSkillCommand), global::Magewatch.API.MUseCreatureSkillCommand.Parser, new[]{ "SourceCreature", "Animation", "OnImpact", "MeleeTarget" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Command), global::Magewatch.API.Command.Parser, new[]{ "Wait", "UpdateInterface", "DrawCard", "PlayCard", "UpdatePlayer", "CreateOrUpdateCreature", "RemoveCreature", "UpdateCreature", "UseCreatureSkill", "DisplayError" }, new[]{ "Command" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CommandGroup), global::Magewatch.API.CommandGroup.Parser, new[]{ "Commands" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CommandList), global::Magewatch.API.CommandList.Parser, new[]{ "CommandGroups" }, null, null, null, null)
           }));
@@ -257,7 +239,7 @@ namespace Magewatch.API {
     [pbr::OriginalName("SPRITE")] Sprite = 2,
   }
 
-  public enum SkillAnimationNumber {
+  public enum MSkillAnimationNumber {
     [pbr::OriginalName("SKILL_UNSPECIFIED")] SkillUnspecified = 0,
     [pbr::OriginalName("SKILL_1")] Skill1 = 1,
     [pbr::OriginalName("SKILL_2")] Skill2 = 2,
@@ -6227,871 +6209,6 @@ namespace Magewatch.API {
 
   }
 
-  public sealed partial class MeleeEngageCommand : pb::IMessage<MeleeEngageCommand> {
-    private static readonly pb::MessageParser<MeleeEngageCommand> _parser = new pb::MessageParser<MeleeEngageCommand>(() => new MeleeEngageCommand());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<MeleeEngageCommand> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[33]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public MeleeEngageCommand() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public MeleeEngageCommand(MeleeEngageCommand other) : this() {
-      creatureId_ = other.creatureId_ != null ? other.creatureId_.Clone() : null;
-      targetCreatureId_ = other.targetCreatureId_ != null ? other.targetCreatureId_.Clone() : null;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public MeleeEngageCommand Clone() {
-      return new MeleeEngageCommand(this);
-    }
-
-    /// <summary>Field number for the "creature_id" field.</summary>
-    public const int CreatureIdFieldNumber = 1;
-    private global::Magewatch.API.CreatureId creatureId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.CreatureId CreatureId {
-      get { return creatureId_; }
-      set {
-        creatureId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "target_creature_id" field.</summary>
-    public const int TargetCreatureIdFieldNumber = 2;
-    private global::Magewatch.API.CreatureId targetCreatureId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.CreatureId TargetCreatureId {
-      get { return targetCreatureId_; }
-      set {
-        targetCreatureId_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as MeleeEngageCommand);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(MeleeEngageCommand other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!object.Equals(CreatureId, other.CreatureId)) return false;
-      if (!object.Equals(TargetCreatureId, other.TargetCreatureId)) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (creatureId_ != null) hash ^= CreatureId.GetHashCode();
-      if (targetCreatureId_ != null) hash ^= TargetCreatureId.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (creatureId_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(CreatureId);
-      }
-      if (targetCreatureId_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(TargetCreatureId);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (creatureId_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatureId);
-      }
-      if (targetCreatureId_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(TargetCreatureId);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(MeleeEngageCommand other) {
-      if (other == null) {
-        return;
-      }
-      if (other.creatureId_ != null) {
-        if (creatureId_ == null) {
-          CreatureId = new global::Magewatch.API.CreatureId();
-        }
-        CreatureId.MergeFrom(other.CreatureId);
-      }
-      if (other.targetCreatureId_ != null) {
-        if (targetCreatureId_ == null) {
-          TargetCreatureId = new global::Magewatch.API.CreatureId();
-        }
-        TargetCreatureId.MergeFrom(other.TargetCreatureId);
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            if (creatureId_ == null) {
-              CreatureId = new global::Magewatch.API.CreatureId();
-            }
-            input.ReadMessage(CreatureId);
-            break;
-          }
-          case 18: {
-            if (targetCreatureId_ == null) {
-              TargetCreatureId = new global::Magewatch.API.CreatureId();
-            }
-            input.ReadMessage(TargetCreatureId);
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  public sealed partial class ApplyDamageEffect : pb::IMessage<ApplyDamageEffect> {
-    private static readonly pb::MessageParser<ApplyDamageEffect> _parser = new pb::MessageParser<ApplyDamageEffect>(() => new ApplyDamageEffect());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<ApplyDamageEffect> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[34]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ApplyDamageEffect() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ApplyDamageEffect(ApplyDamageEffect other) : this() {
-      damage_ = other.damage_;
-      killsTarget_ = other.killsTarget_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ApplyDamageEffect Clone() {
-      return new ApplyDamageEffect(this);
-    }
-
-    /// <summary>Field number for the "damage" field.</summary>
-    public const int DamageFieldNumber = 1;
-    private int damage_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Damage {
-      get { return damage_; }
-      set {
-        damage_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "kills_target" field.</summary>
-    public const int KillsTargetFieldNumber = 2;
-    private bool killsTarget_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool KillsTarget {
-      get { return killsTarget_; }
-      set {
-        killsTarget_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as ApplyDamageEffect);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(ApplyDamageEffect other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (Damage != other.Damage) return false;
-      if (KillsTarget != other.KillsTarget) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (Damage != 0) hash ^= Damage.GetHashCode();
-      if (KillsTarget != false) hash ^= KillsTarget.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (Damage != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(Damage);
-      }
-      if (KillsTarget != false) {
-        output.WriteRawTag(16);
-        output.WriteBool(KillsTarget);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (Damage != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Damage);
-      }
-      if (KillsTarget != false) {
-        size += 1 + 1;
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(ApplyDamageEffect other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Damage != 0) {
-        Damage = other.Damage;
-      }
-      if (other.KillsTarget != false) {
-        KillsTarget = other.KillsTarget;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            Damage = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            KillsTarget = input.ReadBool();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  public sealed partial class FireProjectileEffect : pb::IMessage<FireProjectileEffect> {
-    private static readonly pb::MessageParser<FireProjectileEffect> _parser = new pb::MessageParser<FireProjectileEffect>(() => new FireProjectileEffect());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<FireProjectileEffect> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[35]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FireProjectileEffect() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FireProjectileEffect(FireProjectileEffect other) : this() {
-      prefab_ = other.prefab_ != null ? other.prefab_.Clone() : null;
-      applyDamage_ = other.applyDamage_ != null ? other.applyDamage_.Clone() : null;
-      atOpponent_ = other.atOpponent_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FireProjectileEffect Clone() {
-      return new FireProjectileEffect(this);
-    }
-
-    /// <summary>Field number for the "prefab" field.</summary>
-    public const int PrefabFieldNumber = 1;
-    private global::Magewatch.API.Asset prefab_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.Asset Prefab {
-      get { return prefab_; }
-      set {
-        prefab_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "apply_damage" field.</summary>
-    public const int ApplyDamageFieldNumber = 2;
-    private global::Magewatch.API.ApplyDamageEffect applyDamage_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.ApplyDamageEffect ApplyDamage {
-      get { return applyDamage_; }
-      set {
-        applyDamage_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "at_opponent" field.</summary>
-    public const int AtOpponentFieldNumber = 3;
-    private bool atOpponent_;
-    /// <summary>
-    /// If true, the projectil is fired at the opposing player instead of at
-    /// a target creature.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool AtOpponent {
-      get { return atOpponent_; }
-      set {
-        atOpponent_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as FireProjectileEffect);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(FireProjectileEffect other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!object.Equals(Prefab, other.Prefab)) return false;
-      if (!object.Equals(ApplyDamage, other.ApplyDamage)) return false;
-      if (AtOpponent != other.AtOpponent) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (prefab_ != null) hash ^= Prefab.GetHashCode();
-      if (applyDamage_ != null) hash ^= ApplyDamage.GetHashCode();
-      if (AtOpponent != false) hash ^= AtOpponent.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (prefab_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Prefab);
-      }
-      if (applyDamage_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(ApplyDamage);
-      }
-      if (AtOpponent != false) {
-        output.WriteRawTag(24);
-        output.WriteBool(AtOpponent);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (prefab_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Prefab);
-      }
-      if (applyDamage_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ApplyDamage);
-      }
-      if (AtOpponent != false) {
-        size += 1 + 1;
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(FireProjectileEffect other) {
-      if (other == null) {
-        return;
-      }
-      if (other.prefab_ != null) {
-        if (prefab_ == null) {
-          Prefab = new global::Magewatch.API.Asset();
-        }
-        Prefab.MergeFrom(other.Prefab);
-      }
-      if (other.applyDamage_ != null) {
-        if (applyDamage_ == null) {
-          ApplyDamage = new global::Magewatch.API.ApplyDamageEffect();
-        }
-        ApplyDamage.MergeFrom(other.ApplyDamage);
-      }
-      if (other.AtOpponent != false) {
-        AtOpponent = other.AtOpponent;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            if (prefab_ == null) {
-              Prefab = new global::Magewatch.API.Asset();
-            }
-            input.ReadMessage(Prefab);
-            break;
-          }
-          case 18: {
-            if (applyDamage_ == null) {
-              ApplyDamage = new global::Magewatch.API.ApplyDamageEffect();
-            }
-            input.ReadMessage(ApplyDamage);
-            break;
-          }
-          case 24: {
-            AtOpponent = input.ReadBool();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  /// <summary>
-  /// Causes a creature to play a skill animation and optionally target an effect
-  /// at an opposing creature
-  /// </summary>
-  public sealed partial class AttackCommand : pb::IMessage<AttackCommand> {
-    private static readonly pb::MessageParser<AttackCommand> _parser = new pb::MessageParser<AttackCommand>(() => new AttackCommand());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<AttackCommand> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[36]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public AttackCommand() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public AttackCommand(AttackCommand other) : this() {
-      creatureId_ = other.creatureId_ != null ? other.creatureId_.Clone() : null;
-      targetCreatureId_ = other.targetCreatureId_ != null ? other.targetCreatureId_.Clone() : null;
-      skill_ = other.skill_;
-      hitCount_ = other.hitCount_;
-      switch (other.AttackEffectCase) {
-        case AttackEffectOneofCase.ApplyDamage:
-          ApplyDamage = other.ApplyDamage.Clone();
-          break;
-        case AttackEffectOneofCase.FireProjectile:
-          FireProjectile = other.FireProjectile.Clone();
-          break;
-      }
-
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public AttackCommand Clone() {
-      return new AttackCommand(this);
-    }
-
-    /// <summary>Field number for the "creature_id" field.</summary>
-    public const int CreatureIdFieldNumber = 1;
-    private global::Magewatch.API.CreatureId creatureId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.CreatureId CreatureId {
-      get { return creatureId_; }
-      set {
-        creatureId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "target_creature_id" field.</summary>
-    public const int TargetCreatureIdFieldNumber = 2;
-    private global::Magewatch.API.CreatureId targetCreatureId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.CreatureId TargetCreatureId {
-      get { return targetCreatureId_; }
-      set {
-        targetCreatureId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "skill" field.</summary>
-    public const int SkillFieldNumber = 3;
-    private global::Magewatch.API.SkillAnimationNumber skill_ = global::Magewatch.API.SkillAnimationNumber.SkillUnspecified;
-    /// <summary>
-    /// Which skill animation to play
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.SkillAnimationNumber Skill {
-      get { return skill_; }
-      set {
-        skill_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "hit_count" field.</summary>
-    public const int HitCountFieldNumber = 4;
-    private int hitCount_;
-    /// <summary>
-    /// How many times this skill is expected to raise the "AttackStart" event
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int HitCount {
-      get { return hitCount_; }
-      set {
-        hitCount_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "apply_damage" field.</summary>
-    public const int ApplyDamageFieldNumber = 5;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.ApplyDamageEffect ApplyDamage {
-      get { return attackEffectCase_ == AttackEffectOneofCase.ApplyDamage ? (global::Magewatch.API.ApplyDamageEffect) attackEffect_ : null; }
-      set {
-        attackEffect_ = value;
-        attackEffectCase_ = value == null ? AttackEffectOneofCase.None : AttackEffectOneofCase.ApplyDamage;
-      }
-    }
-
-    /// <summary>Field number for the "fire_projectile" field.</summary>
-    public const int FireProjectileFieldNumber = 6;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.FireProjectileEffect FireProjectile {
-      get { return attackEffectCase_ == AttackEffectOneofCase.FireProjectile ? (global::Magewatch.API.FireProjectileEffect) attackEffect_ : null; }
-      set {
-        attackEffect_ = value;
-        attackEffectCase_ = value == null ? AttackEffectOneofCase.None : AttackEffectOneofCase.FireProjectile;
-      }
-    }
-
-    private object attackEffect_;
-    /// <summary>Enum of possible cases for the "attack_effect" oneof.</summary>
-    public enum AttackEffectOneofCase {
-      None = 0,
-      ApplyDamage = 5,
-      FireProjectile = 6,
-    }
-    private AttackEffectOneofCase attackEffectCase_ = AttackEffectOneofCase.None;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public AttackEffectOneofCase AttackEffectCase {
-      get { return attackEffectCase_; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void ClearAttackEffect() {
-      attackEffectCase_ = AttackEffectOneofCase.None;
-      attackEffect_ = null;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as AttackCommand);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(AttackCommand other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!object.Equals(CreatureId, other.CreatureId)) return false;
-      if (!object.Equals(TargetCreatureId, other.TargetCreatureId)) return false;
-      if (Skill != other.Skill) return false;
-      if (HitCount != other.HitCount) return false;
-      if (!object.Equals(ApplyDamage, other.ApplyDamage)) return false;
-      if (!object.Equals(FireProjectile, other.FireProjectile)) return false;
-      if (AttackEffectCase != other.AttackEffectCase) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (creatureId_ != null) hash ^= CreatureId.GetHashCode();
-      if (targetCreatureId_ != null) hash ^= TargetCreatureId.GetHashCode();
-      if (Skill != global::Magewatch.API.SkillAnimationNumber.SkillUnspecified) hash ^= Skill.GetHashCode();
-      if (HitCount != 0) hash ^= HitCount.GetHashCode();
-      if (attackEffectCase_ == AttackEffectOneofCase.ApplyDamage) hash ^= ApplyDamage.GetHashCode();
-      if (attackEffectCase_ == AttackEffectOneofCase.FireProjectile) hash ^= FireProjectile.GetHashCode();
-      hash ^= (int) attackEffectCase_;
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (creatureId_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(CreatureId);
-      }
-      if (targetCreatureId_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(TargetCreatureId);
-      }
-      if (Skill != global::Magewatch.API.SkillAnimationNumber.SkillUnspecified) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) Skill);
-      }
-      if (HitCount != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(HitCount);
-      }
-      if (attackEffectCase_ == AttackEffectOneofCase.ApplyDamage) {
-        output.WriteRawTag(42);
-        output.WriteMessage(ApplyDamage);
-      }
-      if (attackEffectCase_ == AttackEffectOneofCase.FireProjectile) {
-        output.WriteRawTag(50);
-        output.WriteMessage(FireProjectile);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (creatureId_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatureId);
-      }
-      if (targetCreatureId_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(TargetCreatureId);
-      }
-      if (Skill != global::Magewatch.API.SkillAnimationNumber.SkillUnspecified) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Skill);
-      }
-      if (HitCount != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitCount);
-      }
-      if (attackEffectCase_ == AttackEffectOneofCase.ApplyDamage) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ApplyDamage);
-      }
-      if (attackEffectCase_ == AttackEffectOneofCase.FireProjectile) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(FireProjectile);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(AttackCommand other) {
-      if (other == null) {
-        return;
-      }
-      if (other.creatureId_ != null) {
-        if (creatureId_ == null) {
-          CreatureId = new global::Magewatch.API.CreatureId();
-        }
-        CreatureId.MergeFrom(other.CreatureId);
-      }
-      if (other.targetCreatureId_ != null) {
-        if (targetCreatureId_ == null) {
-          TargetCreatureId = new global::Magewatch.API.CreatureId();
-        }
-        TargetCreatureId.MergeFrom(other.TargetCreatureId);
-      }
-      if (other.Skill != global::Magewatch.API.SkillAnimationNumber.SkillUnspecified) {
-        Skill = other.Skill;
-      }
-      if (other.HitCount != 0) {
-        HitCount = other.HitCount;
-      }
-      switch (other.AttackEffectCase) {
-        case AttackEffectOneofCase.ApplyDamage:
-          if (ApplyDamage == null) {
-            ApplyDamage = new global::Magewatch.API.ApplyDamageEffect();
-          }
-          ApplyDamage.MergeFrom(other.ApplyDamage);
-          break;
-        case AttackEffectOneofCase.FireProjectile:
-          if (FireProjectile == null) {
-            FireProjectile = new global::Magewatch.API.FireProjectileEffect();
-          }
-          FireProjectile.MergeFrom(other.FireProjectile);
-          break;
-      }
-
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            if (creatureId_ == null) {
-              CreatureId = new global::Magewatch.API.CreatureId();
-            }
-            input.ReadMessage(CreatureId);
-            break;
-          }
-          case 18: {
-            if (targetCreatureId_ == null) {
-              TargetCreatureId = new global::Magewatch.API.CreatureId();
-            }
-            input.ReadMessage(TargetCreatureId);
-            break;
-          }
-          case 24: {
-            Skill = (global::Magewatch.API.SkillAnimationNumber) input.ReadEnum();
-            break;
-          }
-          case 32: {
-            HitCount = input.ReadInt32();
-            break;
-          }
-          case 42: {
-            global::Magewatch.API.ApplyDamageEffect subBuilder = new global::Magewatch.API.ApplyDamageEffect();
-            if (attackEffectCase_ == AttackEffectOneofCase.ApplyDamage) {
-              subBuilder.MergeFrom(ApplyDamage);
-            }
-            input.ReadMessage(subBuilder);
-            ApplyDamage = subBuilder;
-            break;
-          }
-          case 50: {
-            global::Magewatch.API.FireProjectileEffect subBuilder = new global::Magewatch.API.FireProjectileEffect();
-            if (attackEffectCase_ == AttackEffectOneofCase.FireProjectile) {
-              subBuilder.MergeFrom(FireProjectile);
-            }
-            input.ReadMessage(subBuilder);
-            FireProjectile = subBuilder;
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
   public sealed partial class MSkillAnimation : pb::IMessage<MSkillAnimation> {
     private static readonly pb::MessageParser<MSkillAnimation> _parser = new pb::MessageParser<MSkillAnimation>(() => new MSkillAnimation());
     private pb::UnknownFieldSet _unknownFields;
@@ -7100,7 +6217,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[37]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[33]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7129,12 +6246,12 @@ namespace Magewatch.API {
 
     /// <summary>Field number for the "skill" field.</summary>
     public const int SkillFieldNumber = 1;
-    private global::Magewatch.API.SkillAnimationNumber skill_ = global::Magewatch.API.SkillAnimationNumber.SkillUnspecified;
+    private global::Magewatch.API.MSkillAnimationNumber skill_ = global::Magewatch.API.MSkillAnimationNumber.SkillUnspecified;
     /// <summary>
     /// The animation to perform
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.SkillAnimationNumber Skill {
+    public global::Magewatch.API.MSkillAnimationNumber Skill {
       get { return skill_; }
       set {
         skill_ = value;
@@ -7176,7 +6293,7 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Skill != global::Magewatch.API.SkillAnimationNumber.SkillUnspecified) hash ^= Skill.GetHashCode();
+      if (Skill != global::Magewatch.API.MSkillAnimationNumber.SkillUnspecified) hash ^= Skill.GetHashCode();
       if (ImpactCount != 0) hash ^= ImpactCount.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -7191,7 +6308,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Skill != global::Magewatch.API.SkillAnimationNumber.SkillUnspecified) {
+      if (Skill != global::Magewatch.API.MSkillAnimationNumber.SkillUnspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Skill);
       }
@@ -7207,7 +6324,7 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Skill != global::Magewatch.API.SkillAnimationNumber.SkillUnspecified) {
+      if (Skill != global::Magewatch.API.MSkillAnimationNumber.SkillUnspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Skill);
       }
       if (ImpactCount != 0) {
@@ -7224,7 +6341,7 @@ namespace Magewatch.API {
       if (other == null) {
         return;
       }
-      if (other.Skill != global::Magewatch.API.SkillAnimationNumber.SkillUnspecified) {
+      if (other.Skill != global::Magewatch.API.MSkillAnimationNumber.SkillUnspecified) {
         Skill = other.Skill;
       }
       if (other.ImpactCount != 0) {
@@ -7242,7 +6359,7 @@ namespace Magewatch.API {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            Skill = (global::Magewatch.API.SkillAnimationNumber) input.ReadEnum();
+            Skill = (global::Magewatch.API.MSkillAnimationNumber) input.ReadEnum();
             break;
           }
           case 16: {
@@ -7266,7 +6383,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[38]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[34]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7440,7 +6557,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[39]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[35]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7650,7 +6767,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[40]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[36]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7875,7 +6992,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[41]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[37]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8123,15 +7240,15 @@ namespace Magewatch.API {
   /// <summary>
   /// Updates the state of a creature
   /// </summary>
-  public sealed partial class UpdateCreatureCommand : pb::IMessage<UpdateCreatureCommand> {
-    private static readonly pb::MessageParser<UpdateCreatureCommand> _parser = new pb::MessageParser<UpdateCreatureCommand>(() => new UpdateCreatureCommand());
+  public sealed partial class MUpdateCreatureCommand : pb::IMessage<MUpdateCreatureCommand> {
+    private static readonly pb::MessageParser<MUpdateCreatureCommand> _parser = new pb::MessageParser<MUpdateCreatureCommand>(() => new MUpdateCreatureCommand());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<UpdateCreatureCommand> Parser { get { return _parser; } }
+    public static pb::MessageParser<MUpdateCreatureCommand> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[42]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[38]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8140,21 +7257,21 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public UpdateCreatureCommand() {
+    public MUpdateCreatureCommand() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public UpdateCreatureCommand(UpdateCreatureCommand other) : this() {
+    public MUpdateCreatureCommand(MUpdateCreatureCommand other) : this() {
       update_ = other.update_ != null ? other.update_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public UpdateCreatureCommand Clone() {
-      return new UpdateCreatureCommand(this);
+    public MUpdateCreatureCommand Clone() {
+      return new MUpdateCreatureCommand(this);
     }
 
     /// <summary>Field number for the "update" field.</summary>
@@ -8170,11 +7287,11 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as UpdateCreatureCommand);
+      return Equals(other as MUpdateCreatureCommand);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(UpdateCreatureCommand other) {
+    public bool Equals(MUpdateCreatureCommand other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -8224,7 +7341,7 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(UpdateCreatureCommand other) {
+    public void MergeFrom(MUpdateCreatureCommand other) {
       if (other == null) {
         return;
       }
@@ -8261,15 +7378,15 @@ namespace Magewatch.API {
   /// <summary>
   /// Causes creatures to use skills
   /// </summary>
-  public sealed partial class UseCreatureSkillCommand : pb::IMessage<UseCreatureSkillCommand> {
-    private static readonly pb::MessageParser<UseCreatureSkillCommand> _parser = new pb::MessageParser<UseCreatureSkillCommand>(() => new UseCreatureSkillCommand());
+  public sealed partial class MUseCreatureSkillCommand : pb::IMessage<MUseCreatureSkillCommand> {
+    private static readonly pb::MessageParser<MUseCreatureSkillCommand> _parser = new pb::MessageParser<MUseCreatureSkillCommand>(() => new MUseCreatureSkillCommand());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<UseCreatureSkillCommand> Parser { get { return _parser; } }
+    public static pb::MessageParser<MUseCreatureSkillCommand> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[43]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[39]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8278,14 +7395,14 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public UseCreatureSkillCommand() {
+    public MUseCreatureSkillCommand() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public UseCreatureSkillCommand(UseCreatureSkillCommand other) : this() {
+    public MUseCreatureSkillCommand(MUseCreatureSkillCommand other) : this() {
       sourceCreature_ = other.sourceCreature_ != null ? other.sourceCreature_.Clone() : null;
       animation_ = other.animation_ != null ? other.animation_.Clone() : null;
       onImpact_ = other.onImpact_.Clone();
@@ -8294,8 +7411,8 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public UseCreatureSkillCommand Clone() {
-      return new UseCreatureSkillCommand(this);
+    public MUseCreatureSkillCommand Clone() {
+      return new MUseCreatureSkillCommand(this);
     }
 
     /// <summary>Field number for the "source_creature" field.</summary>
@@ -8343,7 +7460,7 @@ namespace Magewatch.API {
     public const int MeleeTargetFieldNumber = 4;
     private global::Magewatch.API.CreatureId meleeTarget_;
     /// <summary>
-    /// Optionally a target for this skill. The creature will move into melee
+    /// Optionally, a target for this skill. The creature will move into melee
     /// range with this target before performing the skill animation.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8356,11 +7473,11 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as UseCreatureSkillCommand);
+      return Equals(other as MUseCreatureSkillCommand);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(UseCreatureSkillCommand other) {
+    public bool Equals(MUseCreatureSkillCommand other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -8432,7 +7549,7 @@ namespace Magewatch.API {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(UseCreatureSkillCommand other) {
+    public void MergeFrom(MUseCreatureSkillCommand other) {
       if (other == null) {
         return;
       }
@@ -8508,7 +7625,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[44]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[40]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8546,12 +7663,6 @@ namespace Magewatch.API {
           break;
         case CommandOneofCase.RemoveCreature:
           RemoveCreature = other.RemoveCreature.Clone();
-          break;
-        case CommandOneofCase.MeleeEngage:
-          MeleeEngage = other.MeleeEngage.Clone();
-          break;
-        case CommandOneofCase.Attack:
-          Attack = other.Attack.Clone();
           break;
         case CommandOneofCase.UpdateCreature:
           UpdateCreature = other.UpdateCreature.Clone();
@@ -8649,33 +7760,11 @@ namespace Magewatch.API {
       }
     }
 
-    /// <summary>Field number for the "melee_engage" field.</summary>
-    public const int MeleeEngageFieldNumber = 8;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.MeleeEngageCommand MeleeEngage {
-      get { return commandCase_ == CommandOneofCase.MeleeEngage ? (global::Magewatch.API.MeleeEngageCommand) command_ : null; }
-      set {
-        command_ = value;
-        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.MeleeEngage;
-      }
-    }
-
-    /// <summary>Field number for the "attack" field.</summary>
-    public const int AttackFieldNumber = 9;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.AttackCommand Attack {
-      get { return commandCase_ == CommandOneofCase.Attack ? (global::Magewatch.API.AttackCommand) command_ : null; }
-      set {
-        command_ = value;
-        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.Attack;
-      }
-    }
-
     /// <summary>Field number for the "update_creature" field.</summary>
     public const int UpdateCreatureFieldNumber = 10;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.UpdateCreatureCommand UpdateCreature {
-      get { return commandCase_ == CommandOneofCase.UpdateCreature ? (global::Magewatch.API.UpdateCreatureCommand) command_ : null; }
+    public global::Magewatch.API.MUpdateCreatureCommand UpdateCreature {
+      get { return commandCase_ == CommandOneofCase.UpdateCreature ? (global::Magewatch.API.MUpdateCreatureCommand) command_ : null; }
       set {
         command_ = value;
         commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.UpdateCreature;
@@ -8685,8 +7774,8 @@ namespace Magewatch.API {
     /// <summary>Field number for the "use_creature_skill" field.</summary>
     public const int UseCreatureSkillFieldNumber = 11;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.UseCreatureSkillCommand UseCreatureSkill {
-      get { return commandCase_ == CommandOneofCase.UseCreatureSkill ? (global::Magewatch.API.UseCreatureSkillCommand) command_ : null; }
+    public global::Magewatch.API.MUseCreatureSkillCommand UseCreatureSkill {
+      get { return commandCase_ == CommandOneofCase.UseCreatureSkill ? (global::Magewatch.API.MUseCreatureSkillCommand) command_ : null; }
       set {
         command_ = value;
         commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.UseCreatureSkill;
@@ -8715,8 +7804,6 @@ namespace Magewatch.API {
       UpdatePlayer = 5,
       CreateOrUpdateCreature = 6,
       RemoveCreature = 7,
-      MeleeEngage = 8,
-      Attack = 9,
       UpdateCreature = 10,
       UseCreatureSkill = 11,
       DisplayError = 12,
@@ -8753,8 +7840,6 @@ namespace Magewatch.API {
       if (!object.Equals(UpdatePlayer, other.UpdatePlayer)) return false;
       if (!object.Equals(CreateOrUpdateCreature, other.CreateOrUpdateCreature)) return false;
       if (!object.Equals(RemoveCreature, other.RemoveCreature)) return false;
-      if (!object.Equals(MeleeEngage, other.MeleeEngage)) return false;
-      if (!object.Equals(Attack, other.Attack)) return false;
       if (!object.Equals(UpdateCreature, other.UpdateCreature)) return false;
       if (!object.Equals(UseCreatureSkill, other.UseCreatureSkill)) return false;
       if (!object.Equals(DisplayError, other.DisplayError)) return false;
@@ -8772,8 +7857,6 @@ namespace Magewatch.API {
       if (commandCase_ == CommandOneofCase.UpdatePlayer) hash ^= UpdatePlayer.GetHashCode();
       if (commandCase_ == CommandOneofCase.CreateOrUpdateCreature) hash ^= CreateOrUpdateCreature.GetHashCode();
       if (commandCase_ == CommandOneofCase.RemoveCreature) hash ^= RemoveCreature.GetHashCode();
-      if (commandCase_ == CommandOneofCase.MeleeEngage) hash ^= MeleeEngage.GetHashCode();
-      if (commandCase_ == CommandOneofCase.Attack) hash ^= Attack.GetHashCode();
       if (commandCase_ == CommandOneofCase.UpdateCreature) hash ^= UpdateCreature.GetHashCode();
       if (commandCase_ == CommandOneofCase.UseCreatureSkill) hash ^= UseCreatureSkill.GetHashCode();
       if (commandCase_ == CommandOneofCase.DisplayError) hash ^= DisplayError.GetHashCode();
@@ -8819,14 +7902,6 @@ namespace Magewatch.API {
         output.WriteRawTag(58);
         output.WriteMessage(RemoveCreature);
       }
-      if (commandCase_ == CommandOneofCase.MeleeEngage) {
-        output.WriteRawTag(66);
-        output.WriteMessage(MeleeEngage);
-      }
-      if (commandCase_ == CommandOneofCase.Attack) {
-        output.WriteRawTag(74);
-        output.WriteMessage(Attack);
-      }
       if (commandCase_ == CommandOneofCase.UpdateCreature) {
         output.WriteRawTag(82);
         output.WriteMessage(UpdateCreature);
@@ -8867,12 +7942,6 @@ namespace Magewatch.API {
       }
       if (commandCase_ == CommandOneofCase.RemoveCreature) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(RemoveCreature);
-      }
-      if (commandCase_ == CommandOneofCase.MeleeEngage) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MeleeEngage);
-      }
-      if (commandCase_ == CommandOneofCase.Attack) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Attack);
       }
       if (commandCase_ == CommandOneofCase.UpdateCreature) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(UpdateCreature);
@@ -8937,27 +8006,15 @@ namespace Magewatch.API {
           }
           RemoveCreature.MergeFrom(other.RemoveCreature);
           break;
-        case CommandOneofCase.MeleeEngage:
-          if (MeleeEngage == null) {
-            MeleeEngage = new global::Magewatch.API.MeleeEngageCommand();
-          }
-          MeleeEngage.MergeFrom(other.MeleeEngage);
-          break;
-        case CommandOneofCase.Attack:
-          if (Attack == null) {
-            Attack = new global::Magewatch.API.AttackCommand();
-          }
-          Attack.MergeFrom(other.Attack);
-          break;
         case CommandOneofCase.UpdateCreature:
           if (UpdateCreature == null) {
-            UpdateCreature = new global::Magewatch.API.UpdateCreatureCommand();
+            UpdateCreature = new global::Magewatch.API.MUpdateCreatureCommand();
           }
           UpdateCreature.MergeFrom(other.UpdateCreature);
           break;
         case CommandOneofCase.UseCreatureSkill:
           if (UseCreatureSkill == null) {
-            UseCreatureSkill = new global::Magewatch.API.UseCreatureSkillCommand();
+            UseCreatureSkill = new global::Magewatch.API.MUseCreatureSkillCommand();
           }
           UseCreatureSkill.MergeFrom(other.UseCreatureSkill);
           break;
@@ -9043,26 +8100,8 @@ namespace Magewatch.API {
             RemoveCreature = subBuilder;
             break;
           }
-          case 66: {
-            global::Magewatch.API.MeleeEngageCommand subBuilder = new global::Magewatch.API.MeleeEngageCommand();
-            if (commandCase_ == CommandOneofCase.MeleeEngage) {
-              subBuilder.MergeFrom(MeleeEngage);
-            }
-            input.ReadMessage(subBuilder);
-            MeleeEngage = subBuilder;
-            break;
-          }
-          case 74: {
-            global::Magewatch.API.AttackCommand subBuilder = new global::Magewatch.API.AttackCommand();
-            if (commandCase_ == CommandOneofCase.Attack) {
-              subBuilder.MergeFrom(Attack);
-            }
-            input.ReadMessage(subBuilder);
-            Attack = subBuilder;
-            break;
-          }
           case 82: {
-            global::Magewatch.API.UpdateCreatureCommand subBuilder = new global::Magewatch.API.UpdateCreatureCommand();
+            global::Magewatch.API.MUpdateCreatureCommand subBuilder = new global::Magewatch.API.MUpdateCreatureCommand();
             if (commandCase_ == CommandOneofCase.UpdateCreature) {
               subBuilder.MergeFrom(UpdateCreature);
             }
@@ -9071,7 +8110,7 @@ namespace Magewatch.API {
             break;
           }
           case 90: {
-            global::Magewatch.API.UseCreatureSkillCommand subBuilder = new global::Magewatch.API.UseCreatureSkillCommand();
+            global::Magewatch.API.MUseCreatureSkillCommand subBuilder = new global::Magewatch.API.MUseCreatureSkillCommand();
             if (commandCase_ == CommandOneofCase.UseCreatureSkill) {
               subBuilder.MergeFrom(UseCreatureSkill);
             }
@@ -9107,7 +8146,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[45]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[41]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9233,7 +8272,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[46]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[42]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

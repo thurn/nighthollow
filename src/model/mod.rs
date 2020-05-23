@@ -13,6 +13,7 @@
 // limitations under the License.
 
 pub mod assets;
+pub mod creatures;
 pub mod primitives;
 pub mod stats;
 pub mod types;

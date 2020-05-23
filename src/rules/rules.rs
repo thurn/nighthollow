@@ -22,12 +22,13 @@ use super::effects::{self, Effects, MutationEvent, MutationEventType, SetModifie
 use crate::{
     api,
     model::{
+        creatures::{Creature, Damage, DamageResult},
         primitives::{
             ActionNumber, CardId, CreatureId, HealthValue, ManaValue, RoundNumber, RuleId,
             TurnNumber,
         },
         stats::{Modifier, Operation, StatName},
-        types::{Creature, Damage, DamageResult, Game, HasCardData, Player},
+        types::{Game, HasCardData, Player},
     },
 };
 
@@ -390,7 +391,7 @@ fn evaluate_rule_function(
             continue;
         }
 
-        for (index, rule) in creature.archetype.rules.iter().enumerate() {
+        for (index, rule) in creature.data.rules.iter().enumerate() {
             if scope.should_process_rule(index) {
                 let rule_context = RuleContext {
                     rule_id: RuleId { creature_id, index },

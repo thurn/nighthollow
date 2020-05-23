@@ -16,10 +16,7 @@ use std::fmt::Debug;
 
 use serde::{Deserialize, Serialize};
 
-use super::{
-    primitives::{PlayerName, RuleId},
-    types::{Creature, Game, HasCardData, Player},
-};
+use super::primitives::{PlayerName, RuleId};
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub enum StatName {}

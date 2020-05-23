@@ -19,8 +19,9 @@ use super::{
     rules::{Rule, RuleContext},
 };
 use crate::model::{
+    creatures::{Creature, Damage, DamageAmount},
     primitives::{FileValue, SkillAnimation},
-    types::{Creature, Damage, DamageAmount, Player},
+    types::Player,
 };
 
 #[derive(Serialize, Deserialize, Debug)]

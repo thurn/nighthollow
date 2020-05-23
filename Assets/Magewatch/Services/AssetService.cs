@@ -20,6 +20,7 @@ using Magewatch.API;
 using Magewatch.Utils;
 using UnityEngine;
 using Object = UnityEngine.Object;
+// ReSharper disable SwitchStatementMissingSomeEnumCasesNoDefault
 
 namespace Magewatch.Services
 {
@@ -60,14 +61,9 @@ namespace Magewatch.Services
         AddCreatureAssets(command.CreateOrUpdateCreature.Creature, assets);
       }
 
-      if (command.Attack != null)
-      {
-        AddAttackAssets(command.Attack, assets);
-      }
-
       if (command.UseCreatureSkill != null)
       {
-        AddUseSkillAssets(command.UseCreatureSkill.OnImpact, assets);
+        AddOnImpactNumberAssets(command.UseCreatureSkill.OnImpact, assets);
       }
     }
 
@@ -105,17 +101,7 @@ namespace Magewatch.Services
       assets.Add(attachmentData.Image);
     }
 
-    void AddAttackAssets(AttackCommand attack, List<Asset> assets)
-    {
-      switch (attack.AttackEffectCase)
-      {
-        case AttackCommand.AttackEffectOneofCase.FireProjectile:
-          assets.Add(attack.FireProjectile.Prefab);
-          break;
-      }
-    }
-
-    void AddUseSkillAssets(IEnumerable<MOnImpactNumber> impactEffects, List<Asset> assets)
+    void AddOnImpactNumberAssets(IEnumerable<MOnImpactNumber> impactEffects, List<Asset> assets)
     {
       foreach (var onImpact in impactEffects)
       {

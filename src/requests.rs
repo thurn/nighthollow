@@ -17,8 +17,9 @@ use eyre::{eyre, WrapErr};
 
 use crate::{
     api, commands, console,
+    model::creatures::Creature,
     model::primitives::{BoardPosition, FileValue, GamePhase, PlayerName, RankValue},
-    model::types::{Card, Creature, Game, HasCardData, Player},
+    model::types::{Card, Game, HasCardData, Player},
     rules::combat,
     test_data::scenarios,
 };
@@ -161,7 +162,7 @@ pub fn play_card(request: api::PlayCardRequest, player: &mut Player) -> Result<a
     match (card, play_card) {
         (Card::Creature(c), api::play_card_request::PlayCard::PlayCreature(play)) => {
             player.creatures.push(Creature {
-                archetype: c,
+                data: c,
                 position: BoardPosition {
                     rank: convert_rank(play.rank_position())?,
                     file: convert_file(play.file_position())?,

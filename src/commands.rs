@@ -18,11 +18,9 @@ use eyre::eyre;
 use crate::{
     api, interface,
     model::{
+        creatures::{Creature, CreatureData},
         primitives::{FileValue, Influence, PlayerName, RankValue, School, SCHOOLS},
-        types::{
-            Card, Cost, Creature, CreatureArchetype, HasCardData, HasOwner, ManaCost, Player,
-            Scroll, Spell,
-        },
+        types::{Card, Cost, HasCardData, HasOwner, ManaCost, Player, Scroll, Spell},
     },
 };
 
@@ -134,7 +132,7 @@ pub fn cost(cost: &Cost) -> api::card_data::Cost {
 }
 
 pub fn creature_archetype(
-    creature: &CreatureArchetype,
+    creature: &CreatureData,
     metadata: &CreatureMetadata,
 ) -> api::CreatureData {
     api::CreatureData {
@@ -153,7 +151,7 @@ pub fn creature_data(creature: &Creature, metadata: &CreatureMetadata) -> api::C
         rank_position: rank_value(creature.position.rank).into(),
         file_position: file_value(creature.position.file).into(),
         attachments: creature.spells.iter().map(spell).collect(),
-        ..creature_archetype(&creature.archetype, metadata)
+        ..creature_archetype(&creature.data, metadata)
     }
 }
 

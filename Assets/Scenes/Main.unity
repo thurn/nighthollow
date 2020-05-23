@@ -4124,49 +4124,6 @@ MonoBehaviour:
   _manaText: {fileID: 3066537338845320539}
   _influenceRow: {fileID: 3343174916804785856}
   _projectileCollider: {fileID: 2127014917}
---- !u!114 &3066537337732379596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3066537337732379599}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 373415518a0b7b947977a3d9880aca41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Type: 0
-  m_TargetImage: {fileID: 3066537338001364411}
-  m_Sprites: []
-  m_TargetTransform: {fileID: 0}
-  m_FillSizing: 0
-  m_MinWidth: 0
-  m_MaxWidth: 100
-  m_FillAmount: 1
-  m_Steps: 0
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &3066537337732379597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3066537337732379599}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f26b3c3d951056e4588467998e6dbcfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bar: {fileID: 3066537337732379596}
-  Duration: 5
-  Easing: 13
-  m_Text: {fileID: 3066537339235528246}
-  m_TextVariant: 0
-  m_TextValue: 100
-  m_TextValueFormat: 0
 --- !u!224 &3066537337732379598
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4197,8 +4154,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3066537337732379598}
-  - component: {fileID: 3066537337732379596}
-  - component: {fileID: 3066537337732379597}
   m_Layer: 5
   m_Name: LifeBar
   m_TagString: Untagged
@@ -4561,8 +4516,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3066537338641112223}
-  - component: {fileID: 3066537338641112221}
-  - component: {fileID: 3066537338641112222}
   m_Layer: 5
   m_Name: ManaBar
   m_TagString: Untagged
@@ -4570,49 +4523,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &3066537338641112221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3066537338641112216}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 373415518a0b7b947977a3d9880aca41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Type: 0
-  m_TargetImage: {fileID: 3066537339054923027}
-  m_Sprites: []
-  m_TargetTransform: {fileID: 0}
-  m_FillSizing: 0
-  m_MinWidth: 0
-  m_MaxWidth: 100
-  m_FillAmount: 1
-  m_Steps: 0
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &3066537338641112222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3066537338641112216}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f26b3c3d951056e4588467998e6dbcfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bar: {fileID: 3066537338641112221}
-  Duration: 5
-  Easing: 13
-  m_Text: {fileID: 3066537338845320539}
-  m_TextVariant: 0
-  m_TextValue: 100
-  m_TextValueFormat: 0
 --- !u!224 &3066537338641112223
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4833,7 +4743,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 1
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -5289,7 +5199,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 1
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -5931,49 +5841,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -12.5}
   m_SizeDelta: {x: 0, y: 35.27}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &4588714312652452417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4588714312652452476}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 373415518a0b7b947977a3d9880aca41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Type: 0
-  m_TargetImage: {fileID: 4588714310884995547}
-  m_Sprites: []
-  m_TargetTransform: {fileID: 0}
-  m_FillSizing: 0
-  m_MinWidth: 0
-  m_MaxWidth: 100
-  m_FillAmount: 1
-  m_Steps: 0
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &4588714312652452418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4588714312652452476}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f26b3c3d951056e4588467998e6dbcfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bar: {fileID: 4588714312652452417}
-  Duration: 5
-  Easing: 13
-  m_Text: {fileID: 4588714310995349787}
-  m_TextVariant: 0
-  m_TextValue: 100
-  m_TextValueFormat: 0
 --- !u!224 &4588714312652452419
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6004,8 +5871,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4588714312652452419}
-  - component: {fileID: 4588714312652452417}
-  - component: {fileID: 4588714312652452418}
   m_Layer: 5
   m_Name: ManaBar
   m_TagString: Untagged
@@ -6013,30 +5878,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &4588714312735512088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4588714312735512090}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 373415518a0b7b947977a3d9880aca41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Type: 0
-  m_TargetImage: {fileID: 4588714311478836258}
-  m_Sprites: []
-  m_TargetTransform: {fileID: 0}
-  m_FillSizing: 0
-  m_MinWidth: 0
-  m_MaxWidth: 100
-  m_FillAmount: 1
-  m_Steps: 0
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!224 &4588714312735512089
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6067,8 +5908,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4588714312735512089}
-  - component: {fileID: 4588714312735512088}
-  - component: {fileID: 4588714312735512095}
   m_Layer: 5
   m_Name: LifeBar
   m_TagString: Untagged
@@ -6076,25 +5915,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &4588714312735512095
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4588714312735512090}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f26b3c3d951056e4588467998e6dbcfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bar: {fileID: 4588714312735512088}
-  Duration: 5
-  Easing: 13
-  m_Text: {fileID: 4588714312123632494}
-  m_TextVariant: 0
-  m_TextValue: 100
-  m_TextValueFormat: 0
 --- !u!1 &4588714312742304332
 GameObject:
   m_ObjectHideFlags: 0

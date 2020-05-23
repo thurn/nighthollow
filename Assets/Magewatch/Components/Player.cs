@@ -56,7 +56,7 @@ namespace Magewatch.Components
       {
         if (playerData.MaximumMana == 0)
         {
-          _manaBar.DOFillAmount(1, 0.3f);
+          _manaBar.DOFillAmount(0, 0.3f);
         }
         else
         {

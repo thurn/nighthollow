@@ -215,7 +215,7 @@ namespace Magewatch.Services
     //     }));
     // }
 
-    void HandleUseCreatureSkill(int commandNumber, UseCreatureSkillCommand command)
+    void HandleUseCreatureSkill(int commandNumber, MUseCreatureSkillCommand command)
     {
       _expectedCompletions += command.Animation.ImpactCount;
       StartCoroutine(RunDelayed(0.1f * commandNumber, () =>

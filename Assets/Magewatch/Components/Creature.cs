@@ -50,16 +50,10 @@ namespace Magewatch.Components
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SpriteRenderer[] _renderers;
     [SerializeField] SortingGroup _sortingGroup;
-
-    [Header("Use Skill State")] [SerializeField]
-    int _currentImpactCount;
-
+    [SerializeField] int _currentImpactCount;
     [SerializeField] Creature _currentTarget;
-    [SerializeField] SkillAnimationNumber _currentSkill;
+    [SerializeField] MSkillAnimationNumber _currentSkill;
     [SerializeField] List<MOnImpactNumber> _currentImpactEffects;
-
-    // IOnComplete _onComplete;
-    // IOnComplete _onCompleteOnDeath;
 
     static readonly int Speed = Animator.StringToHash("Speed");
     static readonly int Skill1 = Animator.StringToHash("Skill1");
@@ -147,17 +141,7 @@ namespace Magewatch.Components
       });
     }
 
-    // void MeleeEngageWithTarget(Creature target, Action onComplete)
-    // {
-    //   Errors.CheckNotNull(target);
-    //   Errors.CheckNotNull(onComplete);
-    //
-    //   _currentTarget = target;
-    //   _touchedTarget = false;
-    //   _state = CreatureState.MeleeEngage;
-    // }
-
-    public void UseSkill(SkillAnimationNumber number, IEnumerable<MOnImpactNumber> onImpact, Creature meleeTarget)
+    public void UseSkill(MSkillAnimationNumber number, IEnumerable<MOnImpactNumber> onImpact, Creature meleeTarget)
     {
       Errors.CheckNotNull(onImpact);
       _currentSkill = number;
@@ -182,19 +166,19 @@ namespace Magewatch.Components
 
       switch (_currentSkill)
       {
-        case SkillAnimationNumber.Skill1:
+        case MSkillAnimationNumber.Skill1:
           _animator.SetTrigger(Skill1);
           break;
-        case SkillAnimationNumber.Skill2:
+        case MSkillAnimationNumber.Skill2:
           _animator.SetTrigger(Skill2);
           break;
-        case SkillAnimationNumber.Skill3:
+        case MSkillAnimationNumber.Skill3:
           _animator.SetTrigger(Skill3);
           break;
-        case SkillAnimationNumber.Skill4:
+        case MSkillAnimationNumber.Skill4:
           _animator.SetTrigger(Skill4);
           break;
-        case SkillAnimationNumber.Skill5:
+        case MSkillAnimationNumber.Skill5:
           _animator.SetTrigger(Skill5);
           break;
         default:
@@ -202,42 +186,8 @@ namespace Magewatch.Components
       }
     }
 
-    // public void AttackTarget(Creature target, AttackCommand attack, IOnComplete onComplete)
-    // {
-    //   Errors.CheckNotNull(target);
-    //   Errors.CheckNotNull(attack);
-    //   Errors.CheckNotNull(onComplete);
-    //
-    //   _currentTarget = target;
-    //   _currentAttack = attack;
-    //   _onComplete = onComplete;
-    //   _state = CreatureState.Attack;
-    //
-    //   switch (attack.Skill)
-    //   {
-    //     case SkillAnimationNumber.Skill1:
-    //       _animator.SetTrigger(Skill1);
-    //       break;
-    //     case SkillAnimationNumber.Skill2:
-    //       _animator.SetTrigger(Skill2);
-    //       break;
-    //     case SkillAnimationNumber.Skill3:
-    //       _animator.SetTrigger(Skill3);
-    //       break;
-    //     case SkillAnimationNumber.Skill4:
-    //       _animator.SetTrigger(Skill4);
-    //       break;
-    //     case SkillAnimationNumber.Skill5:
-    //       _animator.SetTrigger(Skill5);
-    //       break;
-    //     default:
-    //       throw Errors.UnknownEnumValue(attack.Skill);
-    //   }
-    // }
-
     public void OnDeathAnimationCompleted()
     {
-      // _onCompleteOnDeath?.OnComplete();
       _commandService.OnComplete();
       Root.Instance.CreatureService.Destroy(_creatureData.CreatureId);
     }
@@ -290,22 +240,6 @@ namespace Magewatch.Components
         onComplete.OnComplete();
       });
     }
-
-    // void ApplyAttackDamage(ApplyDamageEffect damage, IOnComplete onComplete)
-    // {
-    //   _healthBar.Value -= damage.Damage;
-    //   _healthBar.gameObject.SetActive(_healthBar.Value < 100);
-    //   if (damage.KillsTarget)
-    //   {
-    //     _animator.SetTrigger(Death);
-    //     _healthBar.gameObject.SetActive(false);
-    //     _onCompleteOnDeath = onComplete;
-    //   }
-    //   else
-    //   {
-    //     onComplete.OnComplete();
-    //   }
-    // }
 
     // Called by skill animations on their 'start impact' frame
     // ReSharper disable once UnusedMember.Local
@@ -375,49 +309,6 @@ namespace Magewatch.Components
           _commandService.OnComplete();
         });
     }
-
-    // void AttackStart()
-    // {
-    //   Errors.CheckNotNull(_currentAttack);
-    //   Errors.CheckNotNull(_currentTarget);
-    //
-    //   switch (_currentAttack.AttackEffectCase)
-    //   {
-    //     case AttackCommand.AttackEffectOneofCase.ApplyDamage:
-    //       _currentTarget.ApplyAttackDamage(_currentAttack.ApplyDamage, _onComplete);
-    //       if (_currentAttack.ApplyDamage.KillsTarget)
-    //       {
-    //         _currentTarget = null;
-    //       }
-    //
-    //       _onComplete = null;
-    //       break;
-    //     case AttackCommand.AttackEffectOneofCase.FireProjectile:
-    //       var fireProjectile = _currentAttack.FireProjectile;
-    //       var target = fireProjectile.AtOpponent
-    //         ? Root.Instance.GetPlayer(Owner.GetOpponent()).Collider
-    //         : _currentTarget._collider;
-    //       Projectile.Instantiate(fireProjectile, _meleePosition, target, () =>
-    //       {
-    //         if (fireProjectile.AtOpponent)
-    //         {
-    //           _onComplete.OnComplete();
-    //         }
-    //         else
-    //         {
-    //           _currentTarget.ApplyAttackDamage(fireProjectile.ApplyDamage, _onComplete);
-    //           if (fireProjectile.ApplyDamage.KillsTarget)
-    //           {
-    //             _currentTarget = null;
-    //           }
-    //
-    //           _onComplete = null;
-    //         }
-    //       });
-    //       break;
-    //     default:
-    //       throw Errors.UnknownEnumValue(_currentAttack.AttackEffectCase);
-    //   }
 
     Transform MeleePosition => _meleePosition;
 
