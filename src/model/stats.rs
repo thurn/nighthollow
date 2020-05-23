@@ -16,12 +16,12 @@ use std::fmt::Debug;
 
 use serde::{Deserialize, Serialize};
 
-use super::primitives::{PlayerName, RuleId};
+use super::primitives::{RuleId};
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub enum StatName {}
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Stat {
     value: u32,
     set_base_modifiers: Vec<Modifier>,
@@ -45,12 +45,12 @@ impl Stat {
         self.value
     }
 
-    pub fn set_modifier(&mut self, modifier: Modifier) {
+    pub fn set_modifier(&mut self, _modifier: Modifier) {
         todo!()
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Modifier {
     pub value: u32,
     pub operation: Operation,
@@ -65,16 +65,16 @@ pub enum Operation {
     MultiplyByPercent,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum TagName {}
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Tag {
     value: bool,
     modifiers: Vec<TagModifier>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TagModifier {
     value: bool,
     source: RuleId,

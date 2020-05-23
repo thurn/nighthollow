@@ -16,7 +16,7 @@ use std::sync::atomic::{AtomicI32, Ordering};
 
 use crate::model::primitives::*;
 use crate::{
-    model::{assets::CreatureType, creatures::*, stats::Stat, types::*},
+    model::{assets::*, creatures::*, stats::*, games::*, cards::*},
     rules::basic::BaseMeleeDamageAttack,
 };
 

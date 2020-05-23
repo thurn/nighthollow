@@ -15,16 +15,16 @@
 use serde::{Deserialize, Serialize};
 
 use super::{
-    effects::{CreatureMutation, CreatureSkill, Effect, Effects},
+    effects::{CreatureMutation, CreatureSkill, Effects},
     rules::{Rule, RuleContext},
 };
 use crate::model::{
-    creatures::{Creature, Damage, DamageAmount},
+    creatures::{Creature, Damage},
     primitives::{FileValue, SkillAnimation},
-    types::Player,
+    games::Player,
 };
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseMeleeDamageAttack {
     pub animation: SkillAnimation,
 }
@@ -37,7 +37,7 @@ impl BaseMeleeDamageAttack {
 
 #[typetag::serde]
 impl Rule for BaseMeleeDamageAttack {
-    fn on_calculate_skill_priority(&self, context: &RuleContext) -> Option<u32> {
+    fn on_calculate_skill_priority(&self, _context: &RuleContext) -> Option<u32> {
         Some(1)
     }
 

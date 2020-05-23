@@ -19,15 +19,16 @@ use crate::{
     api,
     commands::{self, CreatureMetadata},
     model::{
+        cards::{Card, HasCardData},
         creatures::Creature,
+        games::{Game, Player},
         primitives::{BoardPosition, FileValue, PlayerName, RankValue},
-        types::{Card, Game, HasCardData, Player},
     },
     requests,
 };
 
 pub fn run_console_command(
-    request: api::RunConsoleCommandRequest,
+    _request: api::RunConsoleCommandRequest,
     game: &mut Game,
 ) -> Result<api::CommandList> {
     let mut result: Vec<api::CommandGroup> = Vec::new();
@@ -72,7 +73,7 @@ fn play_first_card(player: &mut Player, target: &CardTarget) -> Result<Vec<api::
         .id;
     {
         let card = &player.hand.get(0).ok_or(eyre!("Card not found"))?;
-        if let Card::Creature(c) = card {
+        if let Card::Creature(_c) = card {
             let position = target.position()?;
 
             result.push(api::CommandGroup {

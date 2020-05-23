@@ -13,14 +13,15 @@
 // limitations under the License.
 
 use color_eyre::Result;
-use eyre::eyre;
+
 
 use crate::{
     api, interface,
     model::{
+        cards::{Card, Cost, HasCardData, ManaCost, Scroll, Spell},
         creatures::{Creature, CreatureData},
+        games::{HasOwner, Player},
         primitives::{FileValue, Influence, PlayerName, RankValue, School, SCHOOLS},
-        types::{Card, Cost, HasCardData, HasOwner, ManaCost, Player, Scroll, Spell},
     },
 };
 
@@ -161,7 +162,7 @@ pub fn spell(spell: &Spell) -> api::AttachmentData {
     }
 }
 
-pub fn scroll(scroll: &Scroll) -> api::UntargetedData {
+pub fn scroll(_scroll: &Scroll) -> api::UntargetedData {
     api::UntargetedData {}
 }
 

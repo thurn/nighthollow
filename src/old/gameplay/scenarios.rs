@@ -507,101 +507,101 @@ fn deck() -> Deck {
 }
 
 fn opening_hands(game: &mut Game) {
-    std::mem::replace(
-        game,
-        Game {
-            status: GameStatus {
-                phase: GamePhase::Main,
-            },
-            user: Player {
-                status: PlayerStatus {
-                    mana: ManaValue::from(300),
-                    influence: Influence {
-                        flame: 6,
-                        ..Influence::default()
-                    },
-                    ..PlayerStatus::default()
-                },
-                deck: deck(),
-                hand: vec![
-                    creature_card(&demon_wolf),
-                    creature_card(&cyclops),
-                    creature_card(&metalon),
-                    crystal_card(&flame_crystal),
-                ],
-                crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
-                ..Player::default()
-            },
-            enemy: Player {
-                status: PlayerStatus {
-                    mana: ManaValue::from(300),
-                    influence: Influence {
-                        flame: 6,
-                        ..Influence::default()
-                    },
-                    ..PlayerStatus::default()
-                },
-                deck: deck(),
-                hand: vec![
-                    creature_card(&demon_wolf),
-                    creature_card(&cyclops),
-                    creature_card(&metalon),
-                    crystal_card(&flame_crystal),
-                ],
-                crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
-                ..Player::default()
-            },
-        },
-    );
+    // std::mem::replace(
+    //     game,
+    //     Game {
+    //         status: GameStatus {
+    //             phase: GamePhase::Main,
+    //         },
+    //         user: Player {
+    //             status: PlayerStatus {
+    //                 mana: ManaValue::from(300),
+    //                 influence: Influence {
+    //                     flame: 6,
+    //                     ..Influence::default()
+    //                 },
+    //                 ..PlayerStatus::default()
+    //             },
+    //             deck: deck(),
+    //             hand: vec![
+    //                 creature_card(&demon_wolf),
+    //                 creature_card(&cyclops),
+    //                 creature_card(&metalon),
+    //                 crystal_card(&flame_crystal),
+    //             ],
+    //             crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
+    //             ..Player::default()
+    //         },
+    //         enemy: Player {
+    //             status: PlayerStatus {
+    //                 mana: ManaValue::from(300),
+    //                 influence: Influence {
+    //                     flame: 6,
+    //                     ..Influence::default()
+    //                 },
+    //                 ..PlayerStatus::default()
+    //             },
+    //             deck: deck(),
+    //             hand: vec![
+    //                 creature_card(&demon_wolf),
+    //                 creature_card(&cyclops),
+    //                 creature_card(&metalon),
+    //                 crystal_card(&flame_crystal),
+    //             ],
+    //             crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
+    //             ..Player::default()
+    //         },
+    //     },
+    // );
 }
 
 fn combat(game: &mut Game) {
-    std::mem::replace(
-        game,
-        Game {
-            status: GameStatus {
-                phase: GamePhase::PreCombat,
-            },
-            user: Player {
-                status: PlayerStatus {
-                    mana: ManaValue::from(300),
-                    influence: Influence {
-                        flame: 6,
-                        ..Influence::default()
-                    },
-                    ..PlayerStatus::default()
-                },
-                deck: deck(),
-                hand: vec![creature_card(&metalon), crystal_card(&flame_crystal)],
-                creatures: vec![
-                    in_play(&demon_wolf),
-                    attacker(0, &cyclops),
-                    defender(0, &treant),
-                ],
-                crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
-                ..Player::default()
-            },
-            enemy: Player {
-                status: PlayerStatus {
-                    mana: ManaValue::from(300),
-                    influence: Influence {
-                        flame: 6,
-                        ..Influence::default()
-                    },
-                    ..PlayerStatus::default()
-                },
-                deck: deck(),
-                hand: vec![
-                    creature_card(&treant),
-                    creature_card(&cyclops),
-                    crystal_card(&flame_crystal),
-                ],
-                creatures: vec![attacker(0, &demon_wolf), defender(0, &metalon)],
-                crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
-                ..Player::default()
-            },
-        },
-    );
+    // std::mem::replace(
+    //     game,
+    //     Game {
+    //         status: GameStatus {
+    //             phase: GamePhase::PreCombat,
+    //         },
+    //         user: Player {
+    //             status: PlayerStatus {
+    //                 mana: ManaValue::from(300),
+    //                 influence: Influence {
+    //                     flame: 6,
+    //                     ..Influence::default()
+    //                 },
+    //                 ..PlayerStatus::default()
+    //             },
+    //             deck: deck(),
+    //             hand: vec![creature_card(&metalon), crystal_card(&flame_crystal)],
+    //             creatures: vec![
+    //                 in_play(&demon_wolf),
+    //                 attacker(0, &cyclops),
+    //                 defender(0, &treant),
+    //             ],
+    //             crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
+    //             ..Player::default()
+    //         },
+    //         enemy: Player {
+    //             status: PlayerStatus {
+    //                 mana: ManaValue::from(300),
+    //                 influence: Influence {
+    //                     flame: 6,
+    //                     ..Influence::default()
+    //                 },
+    //                 ..PlayerStatus::default()
+    //             },
+    //             deck: deck(),
+    //             hand: vec![
+    //                 creature_card(&treant),
+    //                 creature_card(&cyclops),
+    //                 crystal_card(&flame_crystal),
+    //             ],
+    //             creatures: vec![attacker(0, &demon_wolf), defender(0, &metalon)],
+    //             crystals: vec![flame_crystal(), flame_crystal(), flame_crystal()],
+    //             ..Player::default()
+    //         },
+    //     },
+    // );
 }
 
 fn next_identifier() -> String {

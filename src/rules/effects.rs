@@ -13,7 +13,6 @@
 // limitations under the License.
 
 use color_eyre::Result;
-use eyre::eyre;
 
 use super::rules::RuleContext;
 use crate::{
@@ -27,11 +26,11 @@ use crate::{
         creatures::{Creature, Damage, DamageResult},
         primitives::{CreatureId, HealthValue, ManaValue, RuleId, SkillAnimation},
         stats::{Modifier, Operation, StatName},
-        types::Game,
+        games::Game,
     },
 };
 
-use std::cmp;
+
 
 pub struct EffectData {
     pub effect: Effect,
@@ -231,7 +230,7 @@ fn use_creature_skill(
 
 fn adapt_skill_animation(
     animation: SkillAnimation,
-    creature_type: CreatureType,
+    _creature_type: CreatureType,
 ) -> MSkillAnimation {
     MSkillAnimation {
         skill: match animation {
@@ -304,15 +303,7 @@ fn ratio(a: u32, b: u32) -> f32 {
     if b == 0 {
         0.0
     } else {
-        clamp01(a as f32 / b as f32)
-    }
-}
-
-fn clamp01(a: f32) -> f32 {
-    match a {
-        _ if a < 0.0 => 0.0,
-        _ if a > 1.0 => 1.0,
-        _ => a,
+        (a as f32 / b as f32).clamp(0.0, 1.0)
     }
 }
 
@@ -399,10 +390,10 @@ fn apply_mutation(
 }
 
 fn adapt_fire_projectile(
-    game: &mut Game,
-    effect_data: &EffectData,
-    fire_projectile: &FireProjectile,
-    events: &mut Vec<MutationEvent>,
+    _game: &mut Game,
+    _effect_data: &EffectData,
+    _fire_projectile: &FireProjectile,
+    _events: &mut Vec<MutationEvent>,
 ) -> Result<MFireProjectile> {
     todo!()
 }

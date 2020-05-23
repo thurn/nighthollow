@@ -13,8 +13,8 @@
 // limitations under the License.
 
 use crate::model::{
-    assets::CreatureType,
-    types::{Card, ScrollType, SpellType},
+    assets::{CreatureType, SpellType},
+    cards::{Card, ScrollType},
 };
 
 pub fn creature_address(creature_type: CreatureType) -> String {

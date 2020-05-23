@@ -13,13 +13,14 @@
 // limitations under the License.
 
 use color_eyre::Result;
-use eyre::{eyre, WrapErr};
+use eyre::{eyre};
 
 use crate::{
     api, commands, console,
+    model::cards::{Card, HasCardData},
     model::creatures::Creature,
+    model::games::{Game, Player},
     model::primitives::{BoardPosition, FileValue, GamePhase, PlayerName, RankValue},
-    model::types::{Card, Game, HasCardData, Player},
     rules::combat,
     test_data::scenarios,
 };
@@ -200,7 +201,7 @@ fn to_main_phase(game: &mut Game) -> Result<api::CommandList> {
     combat::run_combat(game)
 }
 
-fn upkeep(player_name: PlayerName, player: &mut Player) -> api::Command {
+fn upkeep(_player_name: PlayerName, player: &mut Player) -> api::Command {
     player.state.current_mana = player.state.maximum_mana;
     player
         .state

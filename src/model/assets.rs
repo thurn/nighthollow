@@ -25,3 +25,8 @@ pub enum CreatureType {
     Berserker,
     Mage,
 }
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+pub enum SpellType {
+    Rage,
+}

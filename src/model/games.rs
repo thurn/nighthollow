@@ -18,105 +18,16 @@ use serde::{Deserialize, Serialize};
 
 use super::{
     creatures::{Creature, CreatureData},
-    stats::{Stat, StatName, Tag, TagName},
+    stats::{Stat, StatName, Tag, TagName}, cards::{Scroll, Card},
 };
-use crate::{model::primitives::*, rules::rules::Rule};
-use std::{cmp, slice::IterMut};
+use crate::{model::primitives::*};
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ManaCost {
-    pub mana: i32,
-    pub influence: Influence,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub enum Cost {
-    None,
-    ManaCost(ManaCost),
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct CardData {
-    pub id: CardId,
-    pub owner: PlayerName,
-    pub cost: Cost,
-    pub name: String,
-    pub school: School,
-    pub text: String,
-}
-
-pub trait HasCardData {
-    fn card_data(&self) -> &CardData;
-}
-
-impl HasCardData for CardData {
-    fn card_data(&self) -> &CardData {
-        self
-    }
-}
 
 pub trait HasOwner {
     fn owner(&self) -> PlayerName;
 }
 
-impl<T: HasCardData> HasOwner for T {
-    fn owner(&self) -> PlayerName {
-        self.card_data().owner
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
-pub enum SpellType {
-    Rage,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Spell {
-    pub card_data: CardData,
-    pub base_type: SpellType,
-}
-
-impl HasCardData for Spell {
-    fn card_data(&self) -> &CardData {
-        &self.card_data
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
-pub enum ScrollType {
-    FlameScroll,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Scroll {
-    pub card_data: CardData,
-    pub base_type: ScrollType,
-}
-
-impl HasCardData for Scroll {
-    fn card_data(&self) -> &CardData {
-        &self.card_data
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub enum Card {
-    Creature(CreatureData),
-    Spell(Spell),
-    Scroll(Scroll),
-}
-
-impl HasCardData for Card {
-    fn card_data(&self) -> &CardData {
-        match self {
-            Card::Creature(c) => c.card_data(),
-            Card::Spell(s) => s.card_data(),
-            Card::Scroll(s) => s.card_data(),
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayerState {
     pub current_life: i32,
     pub maximum_life: i32,
@@ -139,7 +50,7 @@ impl Default for PlayerState {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Player {
     pub name: PlayerName,
     pub state: PlayerState,
@@ -154,13 +65,13 @@ impl HasOwner for Player {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GameState {
     pub phase: GamePhase,
     pub turn: TurnNumber,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Game {
     pub state: GameState,
     pub user: Player,

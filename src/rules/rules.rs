@@ -15,8 +15,8 @@
 use std::fmt::Debug;
 
 use color_eyre::Result;
-use eyre::eyre;
-use serde::{Deserialize, Serialize};
+
+
 
 use super::effects::{self, Effects, MutationEvent, MutationEventType, SetModifier};
 use crate::{
@@ -28,36 +28,37 @@ use crate::{
             TurnNumber,
         },
         stats::{Modifier, Operation, StatName},
-        types::{Game, HasCardData, Player},
+        cards::HasCardData,
+        games::{Game, Player},
     },
 };
 
 #[typetag::serde(tag = "type")]
-pub trait Rule: Debug + Send {
+pub trait Rule: Debug + Send + RuleClone {
     /// Called a the start of a new game turn
-    fn on_turn_start(&self, context: &RuleContext, effects: &mut Effects) {}
+    fn on_turn_start(&self, _context: &RuleContext, _effects: &mut Effects) {}
 
     /// Called at end of turn
-    fn on_turn_end(&self, context: &RuleContext, effects: &mut Effects) {}
+    fn on_turn_end(&self, _context: &RuleContext, _effects: &mut Effects) {}
 
     /// Called when a new combat phase begins
-    fn on_combat_start(&self, context: &RuleContext, effects: &mut Effects) {}
+    fn on_combat_start(&self, _context: &RuleContext, _effects: &mut Effects) {}
 
     /// Called when a combat phase ends
-    fn on_combat_end(&self, context: &RuleContext, effects: &mut Effects) {}
+    fn on_combat_end(&self, _context: &RuleContext, _effects: &mut Effects) {}
 
     /// Called at the start of a combat round
-    fn on_round_start(&self, context: &RuleContext, effects: &mut Effects, round: RoundNumber) {}
+    fn on_round_start(&self, _context: &RuleContext, _effects: &mut Effects, _round: RoundNumber) {}
 
     /// Called at the end of a combat round
-    fn on_round_end(&self, context: &RuleContext, effects: &mut Effects, round: RoundNumber) {}
+    fn on_round_end(&self, _context: &RuleContext, _effects: &mut Effects, _round: RoundNumber) {}
 
     /// Called when it is time for this creature to take an action during
     /// combat.
-    fn on_action_start(&self, context: &RuleContext, effects: &mut Effects) {}
+    fn on_action_start(&self, _context: &RuleContext, _effects: &mut Effects) {}
 
     /// Called at the end of this creature's combat action
-    fn on_action_end(&self, context: &RuleContext, effects: &mut Effects) {}
+    fn on_action_end(&self, _context: &RuleContext, _effects: &mut Effects) {}
 
     /// Called to calculate the priority of the main combat skill for this
     /// creature. If this rule contributes a skill which should be considered
@@ -65,22 +66,22 @@ pub trait Rule: Debug + Send {
     /// creature which returns the highest skill priority will have its
     /// on_invoke_skill() callback invoked. In the case of a tie, a random
     /// skill from among the tied skills is selected.
-    fn on_calculate_skill_priority(&self, context: &RuleContext) -> Option<u32> {
+    fn on_calculate_skill_priority(&self, _context: &RuleContext) -> Option<u32> {
         None
     }
 
     /// Called during a creature's action when this rule returns the highest
     /// priority value from on_calculate_skill_priority, as discussed above
-    fn on_invoke_skill(&self, context: &RuleContext, effects: &mut Effects) {}
+    fn on_invoke_skill(&self, _context: &RuleContext, _effects: &mut Effects) {}
 
     /// Called when this creature applies damage to an opposing creature with
     /// the final damage value
     fn on_applied_damage(
         &self,
-        context: &RuleContext,
-        effects: &mut Effects,
-        damage: &Damage,
-        to_target: &Creature,
+        _context: &RuleContext,
+        _effects: &mut Effects,
+        _damage: &Damage,
+        _to_target: &Creature,
     ) {
     }
 
@@ -88,158 +89,118 @@ pub trait Rule: Debug + Send {
     /// final damage value
     fn on_took_damage(
         &self,
-        context: &RuleContext,
-        effects: &mut Effects,
-        damage: &Damage,
-        from_source: &Creature,
+        _context: &RuleContext,
+        _effects: &mut Effects,
+        _damage: &Damage,
+        _from_source: &Creature,
     ) {
     }
 
     /// Called whenever any creature is damaged
     fn on_any_creature_damaged(
         &self,
-        context: &RuleContext,
-        effects: &mut Effects,
-        damage: &Damage,
-        attacker: &Creature,
-        defender: &Creature,
+        _context: &RuleContext,
+        _effects: &mut Effects,
+        _damage: &Damage,
+        _attacker: &Creature,
+        _defender: &Creature,
     ) {
     }
 
     /// Called when this creature kills an enemy creature
-    fn on_killed_enemy(&self, context: &RuleContext, effects: &mut Effects, enemy: &Creature) {}
+    fn on_killed_enemy(&self, _context: &RuleContext, _effects: &mut Effects, _enemy: &Creature) {}
 
     /// Called when this creature dies (its damage total exceeds its health value)
-    fn on_death(&self, context: &RuleContext, effects: &mut Effects, killed_by: &Creature) {}
+    fn on_death(&self, _context: &RuleContext, _effects: &mut Effects, _killed_by: &Creature) {}
 
     /// Called whenever any creature on either side of combat dies
     fn on_any_creature_killed(
         &self,
-        context: &RuleContext,
-        effects: &mut Effects,
-        attacker: &Creature,
-        defender: &Creature,
+        _context: &RuleContext,
+        _effects: &mut Effects,
+        _attacker: &Creature,
+        _defender: &Creature,
     ) {
     }
 
     /// Called when this creature heals damage
     fn on_healed(
         &self,
-        context: &RuleContext,
-        effects: &mut Effects,
-        amount: HealthValue,
-        healed_by: &Creature,
+        _context: &RuleContext,
+        _effects: &mut Effects,
+        _amount: HealthValue,
+        _healed_by: &Creature,
     ) {
     }
 
     /// Called when this creature applies a heal to another creature
     fn on_applied_heal(
         &self,
-        context: &RuleContext,
-        effects: &mut Effects,
-        amount: HealthValue,
-        target: &Creature,
+        _context: &RuleContext,
+        _effects: &mut Effects,
+        _amount: HealthValue,
+        _target: &Creature,
     ) {
     }
 
     /// Called whenever any creature causes damage to be healed
     fn on_any_creature_healed(
         &self,
-        context: &RuleContext,
-        effects: &mut Effects,
-        amount: HealthValue,
-        source: &Creature,
-        target: &Creature,
+        _context: &RuleContext,
+        _effects: &mut Effects,
+        _amount: HealthValue,
+        _source: &Creature,
+        _target: &Creature,
     ) {
     }
 
     /// Called when this creature's mana is increased
     fn on_mana_gained(
         &self,
-        context: &RuleContext,
-        effects: &mut Effects,
-        amount: ManaValue,
-        source: &Creature,
+        _context: &RuleContext,
+        _effects: &mut Effects,
+        _amount: ManaValue,
+        _source: &Creature,
     ) {
     }
 
     /// Called when this creature's mana is decreased
     fn on_mana_lost(
         &self,
-        context: &RuleContext,
-        effects: &mut Effects,
-        amount: ManaValue,
-        source: &Creature,
+        _context: &RuleContext,
+        _effects: &mut Effects,
+        _amount: ManaValue,
+        _source: &Creature,
     ) {
     }
 
     /// Called when a stat modifier is set on this creature
     fn on_stat_modifier_set(
         &self,
-        context: &RuleContext,
-        effects: &mut Effects,
-        modifier: &SetModifier,
-        source: &Creature,
+        _context: &RuleContext,
+        _effects: &mut Effects,
+        _modifier: &SetModifier,
+        _source: &Creature,
     ) {
     }
 }
 
-// pub enum Effect {
-//     ApplyDamage {
-//         creature_id: CreatureId,
-//         damage: Damage,
-//     },
-//     HealDamage {
-//         creature_id: CreatureId,
-//         amount: HealthValue,
-//     },
-//     GainMana {
-//         creature_id: CreatureId,
-//         amount: ManaValue,
-//     },
-//     LoseMana {
-//         creature_id: CreatureId,
-//         amount: ManaValue,
-//     },
-//     SetModifier {
-//         creature_id: CreatureId,
-//         stat: StatName,
-//         value: u32,
-//         operation: Operation,
-//     },
-// }
+pub trait RuleClone {
+    fn clone_box(&self) -> Box<dyn Rule>;
+}
 
-// pub struct EffectData {
-//     pub effect: Effect,
-//     pub rule_id: RuleId,
-//     pub source_creature_id: CreatureId,
-// }
+impl<T: 'static + Rule + Clone> RuleClone for T {
+    fn clone_box(&self) -> Box<dyn Rule> {
+        Box::new(self.clone())
+    }
+}
 
-// pub struct Effects {
-//     effects: Vec<EffectData>,
-// }
+impl Clone for Box<dyn Rule> {
+    fn clone(&self) -> Box<dyn Rule> {
+        self.clone_box()
+    }
+}
 
-// impl Effects {
-//     pub fn new() -> Effects {
-//         Effects { effects: vec![] }
-//     }
-
-//     pub fn push_effect(&mut self, context: &RuleContext, effect: Effect) {
-//         self.effects.push(EffectData {
-//             effect,
-//             rule_id: context.rule_id,
-//             source_creature_id: context.creature.creature_id(),
-//         });
-//     }
-
-//     pub fn len(&self) -> usize {
-//         self.effects.len()
-//     }
-
-//     pub fn iter(&self) -> impl Iterator<Item = &EffectData> {
-//         self.effects.iter()
-//     }
-// }
 
 pub struct RuleContext<'a> {
     pub rule_id: RuleId,
@@ -413,75 +374,6 @@ fn evaluate_rule_function(
     Ok(())
 }
 
-// pub enum MutationEvent {
-//     CreatureKilled {
-//         attacker: CreatureId,
-//         defender: CreatureId,
-//     },
-// }
-
-// fn apply_mutation(
-//     game: &mut Game,
-//     effect_data: &EffectData,
-//     commands: &mut Vec<api::Command>,
-//     events: &mut Vec<MutationEvent>,
-// ) -> Result<()> {
-//     match &effect_data.effect {
-//         Effect::ApplyDamage {
-//             creature_id,
-//             damage,
-//         } => {
-//             let creature = game.creature_mut(*creature_id)?;
-//             match creature.apply_damage(damage.total()) {
-//                 DamageResult::Killed => events.push(MutationEvent::CreatureKilled {
-//                     attacker: effect_data.source_creature_id,
-//                     defender: *creature_id,
-//                 }),
-//                 _ => {}
-//             }
-//         }
-
-//         Effect::HealDamage {
-//             creature_id,
-//             amount,
-//         } => game.creature_mut(*creature_id)?.heal(*amount),
-
-//         Effect::GainMana {
-//             creature_id,
-//             amount,
-//         } => game.creature_mut(*creature_id)?.gain_mana(*amount),
-
-//         Effect::LoseMana {
-//             creature_id,
-//             amount,
-//         } => game.creature_mut(*creature_id)?.lose_mana(*amount)?,
-
-//         Effect::SetModifier {
-//             creature_id,
-//             stat,
-//             value,
-//             operation,
-//         } => game
-//             .creature_mut(*creature_id)?
-//             .stats_mut()
-//             .get_mut(*stat)
-//             .set_modifier(Modifier {
-//                 value: *value,
-//                 operation: *operation,
-//                 source: effect_data.rule_id,
-//             }),
-//     }
-//     Ok(())
-// }
-
-// fn trigger_events(game: &Game, event: &MutationEvent, effects: &mut Effects) -> Result<()> {
-//     match event {
-//         MutationEvent::CreatureKilled { attacker, defender } => {
-//             trigger_on_death_events(game, effects, *attacker, *defender)
-//         }
-//     }
-// }
-
 struct CreatureRuleEvaluator<'a> {
     game: &'a Game,
     effects: &'a mut Effects,
@@ -585,189 +477,3 @@ fn trigger_mutation_events(
     }
     Ok(())
 }
-
-// fn trigger_effect_events(
-//     game: &Game,
-//     effects: &mut Effects,
-//     effect_data: &EffectData,
-// ) -> Result<()> {
-//     match &effect_data.effect {
-//         Effect::ApplyDamage {
-//             creature_id,
-//             damage,
-//         } => trigger_apply_damage_events(
-//             game,
-//             effects,
-//             effect_data.source_creature_id,
-//             *creature_id,
-//             damage,
-//         ),
-
-//         Effect::HealDamage {
-//             creature_id,
-//             amount,
-//         } => evaluate_rule_function(
-//             game,
-//             RuleScope::Creature(*creature_id),
-//             effects,
-//             |r, args| {
-//                 r.on_healed(
-//                     args.rc,
-//                     args.effects,
-//                     *amount,
-//                     args.rc.game.creature(effect_data.source_creature_id)?,
-//                 );
-//                 Ok(())
-//             },
-//         ),
-
-//         Effect::GainMana {
-//             creature_id,
-//             amount,
-//         } => evaluate_rule_function(
-//             game,
-//             RuleScope::Creature(*creature_id),
-//             effects,
-//             |r, args| {
-//                 r.on_mana_gained(
-//                     args.rc,
-//                     args.effects,
-//                     *amount,
-//                     args.rc.game.creature(effect_data.source_creature_id)?,
-//                 );
-//                 Ok(())
-//             },
-//         ),
-
-//         Effect::LoseMana {
-//             creature_id,
-//             amount,
-//         } => evaluate_rule_function(
-//             game,
-//             RuleScope::Creature(*creature_id),
-//             effects,
-//             |r, args| {
-//                 r.on_mana_lost(
-//                     args.rc,
-//                     args.effects,
-//                     *amount,
-//                     args.rc.game.creature(effect_data.source_creature_id)?,
-//                 );
-//                 Ok(())
-//             },
-//         ),
-
-//         Effect::SetModifier {
-//             creature_id,
-//             stat,
-//             value,
-//             operation,
-//         } => Ok(()), // evaluate_rule_function(
-//                      //     game,
-//                      //     RuleScope::Creature(*creature_id),
-//                      //     effects,
-//                      //     |r, args| {
-//                      //         r.on_stat_modifier_set(
-//                      //             args.rc,
-//                      //             args.effects,
-//                      //             *stat,
-//                      //             Modifier {
-//                      //                 value: *value,
-//                      //                 operation: *operation,
-//                      //                 source: effect_data.rule_id,
-//                      //             },
-//                      //             args.rc.game.creature(effect_data.source_creature_id)?,
-//                      //         );
-//                      //         Ok(())
-//                      //     },
-//                      // ),
-//     }
-// }
-
-// fn trigger_apply_damage_events(
-//     game: &Game,
-//     effects: &mut Effects,
-//     attacker_id: CreatureId,
-//     defender_id: CreatureId,
-//     damage: &Damage,
-// ) -> Result<()> {
-//     evaluate_rule_function(
-//         game,
-//         RuleScope::Creature(attacker_id),
-//         effects,
-//         |r, args| {
-//             r.on_applied_damage(
-//                 args.rc,
-//                 args.effects,
-//                 damage,
-//                 args.rc.game.creature(defender_id)?,
-//             );
-//             Ok(())
-//         },
-//     )?;
-
-//     evaluate_rule_function(
-//         game,
-//         RuleScope::Creature(defender_id),
-//         effects,
-//         |r, args| {
-//             r.on_took_damage(
-//                 args.rc,
-//                 args.effects,
-//                 damage,
-//                 args.rc.game.creature(attacker_id)?,
-//             );
-//             Ok(())
-//         },
-//     )?;
-
-//     evaluate_rule_function(game, RuleScope::AllCreatures, effects, |r, args| {
-//         r.on_any_creature_damaged(
-//             args.rc,
-//             args.effects,
-//             damage,
-//             args.rc.game.creature(attacker_id)?,
-//             args.rc.game.creature(defender_id)?,
-//         );
-//         Ok(())
-//     })?;
-//     Ok(())
-// }
-
-// fn trigger_on_death_events(
-//     game: &Game,
-//     effects: &mut Effects,
-//     attacker_id: CreatureId,
-//     defender_id: CreatureId,
-// ) -> Result<()> {
-//     evaluate_rule_function(
-//         game,
-//         RuleScope::Creature(attacker_id),
-//         effects,
-//         |r, args| {
-//             r.on_killed_enemy(args.rc, args.effects, args.rc.game.creature(defender_id)?);
-//             Ok(())
-//         },
-//     )?;
-
-//     evaluate_rule_function(
-//         game,
-//         RuleScope::CreatureIfDead(defender_id),
-//         effects,
-//         |r, args| {
-//             r.on_death(args.rc, args.effects, args.rc.game.creature(attacker_id)?);
-//             Ok(())
-//         },
-//     )?;
-
-//     evaluate_rule_function(game, RuleScope::AllCreatures, effects, |r, args| {
-//         r.on_any_creature_killed(
-//             args.rc,
-//             args.effects,
-//             args.rc.game.creature(attacker_id)?,
-//             args.rc.game.creature(defender_id)?,
-//         );
-//         Ok(())
-//     })?;
-//     Ok(())
-// }

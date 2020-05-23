@@ -13,7 +13,7 @@
 // limitations under the License.
 
 use color_eyre::Result;
-use eyre::eyre;
+
 
 use super::rules::{self, Rule, RuleContext, RuleScope};
 use crate::{
@@ -22,10 +22,10 @@ use crate::{
         creatures::{Creature, Damage, DamageResult},
         primitives::{CreatureId, HealthValue, ManaValue, RuleId},
         stats::{Modifier, Operation, StatName},
-        types::{Game, Player},
+        games::{Game, Player},
     },
 };
-use std::iter;
+
 
 /// Handles running the Combat phase of the game and populating a list of
 /// resulting Commands

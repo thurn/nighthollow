@@ -14,8 +14,9 @@
 
 #![deny(warnings)]
 #![allow(dead_code)]
-#![allow(unused_variables)]
 #![allow(unused_imports)]
+
+#![feature(clamp)]
 
 mod api;
 mod commands;

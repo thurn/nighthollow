@@ -19,7 +19,7 @@ use serde::{Deserialize, Serialize};
 use super::{
     assets::CreatureType,
     stats::{Stat, StatName, Tag, TagName},
-    types::{CardData, HasCardData, Spell},
+    cards::{CardData, HasCardData, Spell},
 };
 use crate::{model::primitives::*, rules::rules::Rule};
 use std::cmp;
@@ -55,7 +55,7 @@ impl Damage {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DamageStat {
     pub value: Stat,
     pub damage_type: DamageType,
@@ -70,7 +70,7 @@ impl DamageStat {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CreatureStats {
     pub health_total: Stat,
     pub health_regeneration_per_round: Stat,
@@ -93,15 +93,15 @@ pub struct CreatureStats {
 }
 
 impl CreatureStats {
-    pub fn tag(&self, name: TagName) -> bool {
+    pub fn tag(&self, _name: TagName) -> bool {
         todo!()
     }
 
-    pub fn get(&self, name: StatName) -> i32 {
+    pub fn get(&self, _name: StatName) -> i32 {
         todo!()
     }
 
-    pub fn get_mut(&mut self, name: StatName) -> &mut Stat {
+    pub fn get_mut(&mut self, _name: StatName) -> &mut Stat {
         &mut self.maximum_mana
     }
 }
@@ -130,7 +130,7 @@ impl Default for CreatureStats {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CreatureData {
     pub card_data: CardData,
     pub base_type: CreatureType,
@@ -150,7 +150,7 @@ pub enum DamageResult {
     AlreadyDead,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Creature {
     pub data: CreatureData,
     pub position: BoardPosition,

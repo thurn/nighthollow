@@ -13,7 +13,8 @@
 // limitations under the License.
 
 pub mod assets;
+pub mod cards;
 pub mod creatures;
+pub mod games;
 pub mod primitives;
 pub mod stats;
-pub mod types;
