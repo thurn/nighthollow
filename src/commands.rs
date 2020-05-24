@@ -57,7 +57,6 @@ pub fn player_name(name: PlayerName) -> api::PlayerName {
 
 pub fn rank_value(rank: RankValue) -> api::RankValue {
     match rank {
-        RankValue::Rank0 => api::RankValue::Rank0,
         RankValue::Rank1 => api::RankValue::Rank1,
         RankValue::Rank2 => api::RankValue::Rank2,
         RankValue::Rank3 => api::RankValue::Rank3,
@@ -68,7 +67,6 @@ pub fn rank_value(rank: RankValue) -> api::RankValue {
 
 pub fn file_value(file: FileValue) -> api::FileValue {
     match file {
-        FileValue::File0 => api::FileValue::File0,
         FileValue::File1 => api::FileValue::File1,
         FileValue::File2 => api::FileValue::File2,
         FileValue::File3 => api::FileValue::File3,

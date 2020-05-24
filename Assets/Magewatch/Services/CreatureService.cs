@@ -181,24 +181,21 @@ namespace Magewatch.Services
     {
       switch (f)
       {
-        case FileValue.File0:
-          return new[]
-            {FileValue.File0, FileValue.File1, FileValue.File2, FileValue.File3, FileValue.File4, FileValue.File5};
         case FileValue.File1:
           return new[]
-            {FileValue.File1, FileValue.File0, FileValue.File2, FileValue.File3, FileValue.File4, FileValue.File5};
+            {FileValue.File1, FileValue.File2, FileValue.File3, FileValue.File4, FileValue.File5};
         case FileValue.File2:
           return new[]
-            {FileValue.File2, FileValue.File1, FileValue.File3, FileValue.File0, FileValue.File4, FileValue.File5};
+            {FileValue.File2, FileValue.File1, FileValue.File3, FileValue.File4, FileValue.File5};
         case FileValue.File3:
           return new[]
-            {FileValue.File3, FileValue.File2, FileValue.File4, FileValue.File1, FileValue.File0, FileValue.File5};
+            {FileValue.File3, FileValue.File2, FileValue.File4, FileValue.File1, FileValue.File5};
         case FileValue.File4:
           return new[]
-            {FileValue.File4, FileValue.File3, FileValue.File5, FileValue.File2, FileValue.File1, FileValue.File0};
+            {FileValue.File4, FileValue.File3, FileValue.File5, FileValue.File2, FileValue.File1};
         case FileValue.File5:
           return new[]
-            {FileValue.File5, FileValue.File4, FileValue.File3, FileValue.File2, FileValue.File1, FileValue.File0};
+            {FileValue.File5, FileValue.File4, FileValue.File3, FileValue.File2, FileValue.File1};
         default: throw Errors.UnknownEnumValue(f);
       }
     }

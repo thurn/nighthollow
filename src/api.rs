@@ -95,19 +95,6 @@ pub struct RepositionCreaturesRequest {
     #[prost(message, repeated, tag = "3")]
     pub position_updates: ::std::vec::Vec<CreaturePositionUpdate>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RunConsoleCommandRequest {
-    #[prost(string, tag = "1")]
-    pub command: std::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub game_id: ::std::option::Option<GameId>,
-    #[prost(enumeration = "PlayerName", tag = "3")]
-    pub player: i32,
-    #[prost(message, optional, tag = "4")]
-    pub creature_id: ::std::option::Option<CreatureId>,
-    #[prost(message, optional, tag = "5")]
-    pub card_id: ::std::option::Option<CardId>,
-}
 /// Requests to start a new game with the provided scenario name. The client
 /// must discard all previous state when sending this request.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -136,7 +123,7 @@ pub struct Request {
     /// Identifies the user making this request
     #[prost(message, optional, tag = "1")]
     pub user_id: ::std::option::Option<UserId>,
-    #[prost(oneof = "request::Request", tags = "2, 3, 4, 5, 6, 7, 8, 9, 10")]
+    #[prost(oneof = "request::Request", tags = "2, 3, 4, 5, 6, 8, 9, 10")]
     pub request: ::std::option::Option<request::Request>,
 }
 pub mod request {
@@ -152,8 +139,6 @@ pub mod request {
         PlayCard(super::PlayCardRequest),
         #[prost(message, tag = "6")]
         RepositionCreatures(super::RepositionCreaturesRequest),
-        #[prost(message, tag = "7")]
-        RunConsoleCommand(super::RunConsoleCommandRequest),
         #[prost(message, tag = "8")]
         LoadScenario(super::MDebugLoadScenarioRequest),
         #[prost(message, tag = "9")]
@@ -520,7 +505,6 @@ pub enum PlayerName {
 #[repr(i32)]
 pub enum RankValue {
     RankUnspecified = 0,
-    Rank0 = 1,
     Rank1 = 2,
     Rank2 = 3,
     Rank3 = 4,
@@ -531,7 +515,6 @@ pub enum RankValue {
 #[repr(i32)]
 pub enum FileValue {
     FileUnspecified = 0,
-    File0 = 1,
     File1 = 2,
     File2 = 3,
     File3 = 4,

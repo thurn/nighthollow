@@ -37,14 +37,6 @@ namespace Magewatch.Components
       });
     }
 
-    public void Console()
-    {
-      Root.Instance.NetworkService.MakeRequest(new Request
-      {
-        RunConsoleCommand = new RunConsoleCommandRequest()
-      });
-    }
-
     public void Advance()
     {
       Root.Instance.NetworkService.MakeRequest(new Request
@@ -63,17 +55,17 @@ namespace Magewatch.Components
           {
             LoadScenario("basic"),
             DrawHands(),
-            PlayCreature(9, RankValue.Rank0, FileValue.File2, PlayerName.User),
-            PlayCreature(11, RankValue.Rank0, FileValue.File3, PlayerName.User),
-            PlayCreature(15, RankValue.Rank0, FileValue.File1, PlayerName.Enemy),
-            PlayCreature(16, RankValue.Rank0, FileValue.File2, PlayerName.Enemy),
-            PlayCreature(17, RankValue.Rank0, FileValue.File3, PlayerName.Enemy),
+            PlayCreature(9, RankValue.Rank1, FileValue.File2, PlayerName.User),
+            PlayCreature(11, RankValue.Rank1, FileValue.File3, PlayerName.User),
+            PlayCreature(15, RankValue.Rank1, FileValue.File1, PlayerName.Enemy),
+            PlayCreature(16, RankValue.Rank1, FileValue.File2, PlayerName.Enemy),
+            PlayCreature(17, RankValue.Rank1, FileValue.File3, PlayerName.Enemy),
             PlayAttachment(12, 9, PlayerName.User),
             PlayAttachment(18, 15, PlayerName.Enemy),
             PlayScroll(13, PlayerName.User),
             PlayScroll(14, PlayerName.User),
             PlayScroll(19, PlayerName.Enemy),
-            PlayCreature(10, RankValue.Rank0, FileValue.File4, PlayerName.User),
+            PlayCreature(10, RankValue.Rank1, FileValue.File4, PlayerName.User),
             PlayScroll(20, PlayerName.Enemy),
             AdvancePhase(),
             AdvancePhase()

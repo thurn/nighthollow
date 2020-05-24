@@ -19,6 +19,6 @@ namespace Magewatch.Utils
     public const int CardImageWidth = 160;
     public const int CardImageHeight = 207;
     public const int IndicatorBottomY = -4;
-    public const int IndicatorRightX = -1;
+    public const int IndicatorRightX = 1;
   }
 }

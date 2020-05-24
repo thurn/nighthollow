@@ -41,7 +41,6 @@ enum PlayerName {
 
 enum RankValue {
   RANK_UNSPECIFIED = 0;
-  RANK_0 = 1;
   RANK_1 = 2;
   RANK_2 = 3;
   RANK_3 = 4;
@@ -51,7 +50,6 @@ enum RankValue {
 
 enum FileValue {
   FILE_UNSPECIFIED = 0;
-  FILE_0 = 1;
   FILE_1 = 2;
   FILE_2 = 3;
   FILE_3 = 4;
@@ -124,18 +122,6 @@ message RepositionCreaturesRequest {
   repeated CreaturePositionUpdate position_updates = 3;
 }
 
-message RunConsoleCommandRequest {
-  string command = 1;
-
-  GameId game_id = 2;
-
-  PlayerName player = 3;
-
-  CreatureId creature_id = 4;
-
-  CardId card_id = 5;
-}
-
 // Requests to start a new game with the provided scenario name. The client
 // must discard all previous state when sending this request.
 message MDebugLoadScenarioRequest {
@@ -165,7 +151,6 @@ message Request {
     AdvancePhaseRequest advance_phase = 4;
     PlayCardRequest play_card = 5;
     RepositionCreaturesRequest reposition_creatures = 6;
-    RunConsoleCommandRequest run_console_command = 7;
     MDebugLoadScenarioRequest load_scenario = 8;
     MDebugDrawCardsRequest draw_cards = 9;
     MDebugRunRequestSequenceRequest run_request_sequence = 10;

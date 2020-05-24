@@ -108,7 +108,6 @@ pub fn start_game() -> Result<(Game, api::CommandList)> {
 
 fn convert_rank(rank: api::RankValue) -> Result<RankValue> {
     match rank {
-        api::RankValue::Rank0 => Ok(RankValue::Rank0),
         api::RankValue::Rank1 => Ok(RankValue::Rank1),
         api::RankValue::Rank2 => Ok(RankValue::Rank2),
         api::RankValue::Rank3 => Ok(RankValue::Rank3),
@@ -120,7 +119,6 @@ fn convert_rank(rank: api::RankValue) -> Result<RankValue> {
 
 fn convert_file(file: api::FileValue) -> Result<FileValue> {
     match file {
-        api::FileValue::File0 => Ok(FileValue::File0),
         api::FileValue::File1 => Ok(FileValue::File1),
         api::FileValue::File2 => Ok(FileValue::File2),
         api::FileValue::File3 => Ok(FileValue::File3),
