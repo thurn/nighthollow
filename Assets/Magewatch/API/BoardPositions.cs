@@ -72,24 +72,24 @@ public static class BoardPositions
         case PlayerName.User:
           switch (rounded)
           {
-            case -8: return RankValue.Rank0;
-            case -7: return RankValue.Rank1;
-            case -6: return RankValue.Rank2;
-            case -5: return RankValue.Rank3;
-            case -4: return RankValue.Rank4;
-            case -3: return RankValue.Rank5;
-            default: return rounded < -8 ? RankValue.Rank0 : RankValue.Rank5;
+            case -3: return RankValue.Rank0;
+            case -4: return RankValue.Rank1;
+            case -5: return RankValue.Rank2;
+            case -6: return RankValue.Rank3;
+            case -7: return RankValue.Rank4;
+            case -8: return RankValue.Rank5;
+            default: return rounded < -8 ? RankValue.Rank5 : RankValue.Rank0;
           }
         case PlayerName.Enemy:
           switch (rounded)
           {
-            case 8: return RankValue.Rank0;
-            case 7: return RankValue.Rank1;
-            case 6: return RankValue.Rank2;
-            case 5: return RankValue.Rank3;
-            case 4: return RankValue.Rank4;
-            case 3: return RankValue.Rank5;
-            default: return rounded > 8 ? RankValue.Rank0 : RankValue.Rank5;
+            case 3: return RankValue.Rank0;
+            case 4: return RankValue.Rank1;
+            case 5: return RankValue.Rank2;
+            case 6: return RankValue.Rank3;
+            case 7: return RankValue.Rank4;
+            case 8: return RankValue.Rank5;
+            default: return rounded > 8 ? RankValue.Rank5 : RankValue.Rank0;
           }
         default:
           throw Errors.UnknownEnumValue(owner);

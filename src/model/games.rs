@@ -80,6 +80,7 @@ pub struct GameState {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Game {
+    pub id: GameId,
     pub state: GameState,
     pub user: Player,
     pub enemy: Player,

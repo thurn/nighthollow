@@ -75,6 +75,8 @@ namespace Magewatch.Components
             PlayScroll(19, PlayerName.Enemy),
             PlayCreature(10, RankValue.Rank0, FileValue.File4, PlayerName.User),
             PlayScroll(20, PlayerName.Enemy),
+            AdvancePhase(),
+            AdvancePhase()
           }
         }
       });
@@ -144,6 +146,12 @@ namespace Magewatch.Components
           CardId = CardId(id),
           PlayUntargeted = new PlayUntargetedCard()
         }
+      };
+
+    Request AdvancePhase() =>
+      new Request
+      {
+        AdvancePhase = new AdvancePhaseRequest()
       };
 
     // public void Create()

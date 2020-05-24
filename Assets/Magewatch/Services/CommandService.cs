@@ -64,6 +64,20 @@ namespace Magewatch.Services
 
       foreach (var command in _currentCommandList.CommandGroups[_currentStep].Commands)
       {
+        if (command.InitiateGame != null)
+        {
+          _expectedCompletions += 2;
+          Root.Instance.CurrentGameId = command.InitiateGame.NewGameId;
+          var user = Root.Instance.GetPlayer(PlayerName.User);
+          var enemy = Root.Instance.GetPlayer(PlayerName.Enemy);
+
+          Root.Instance.CreatureService.DestroyAllCreatures();
+          user.Hand.DestroyAllCards();
+          enemy.Hand.DestroyAllCards();
+          user.UpdatePlayerData(command.InitiateGame.InitialUserState, this);
+          enemy.UpdatePlayerData(command.InitiateGame.InitialEnemyState, this);
+        }
+
         if (command.DisplayError != null)
         {
           Debug.LogError(command.DisplayError.Error);

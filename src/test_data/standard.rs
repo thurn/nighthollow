@@ -123,6 +123,7 @@ pub fn new_player(name: PlayerName) -> Player {
 
 pub fn opening_hands() -> Game {
     Game {
+        id: 1,
         state: GameState {
             phase: GamePhase::Main,
             turn: 1,

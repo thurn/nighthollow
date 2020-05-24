@@ -31,6 +31,14 @@ namespace Magewatch.Services
 
     void Awake()
     {
+      InitializeFiles();
+    }
+
+    void InitializeFiles()
+    {
+      _userFiles.Clear();
+      _enemyFiles.Clear();
+
       for (var i = 0; i < 6; ++i)
       {
         _userFiles.Add(new File(PlayerName.User));
@@ -154,6 +162,17 @@ namespace Magewatch.Services
       }
 
       files[fileValue.ToIndex()].ShiftPositions(rankValue);
+    }
+
+    public void DestroyAllCreatures()
+    {
+      foreach (var creature in _creatures.Values)
+      {
+        Destroy(creature.gameObject);
+      }
+
+      _creatures.Clear();
+      InitializeFiles();
     }
 
     List<File> GetFiles(PlayerName owner) => owner == PlayerName.User ? _userFiles : _enemyFiles;

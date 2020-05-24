@@ -31,6 +31,7 @@ pub fn load_scenario(name: &str) -> Result<Game> {
 
 fn basic() -> Game {
     Game {
+        id: 1,
         state: GameState {
             phase: GamePhase::Main,
             turn: 1,

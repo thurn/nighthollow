@@ -95,9 +95,12 @@ pub fn start_game() -> Result<(Game, api::CommandList)> {
         .map(|c| commands::draw_card_command(c, metadata(c, false)));
 
     let list = api::CommandList {
-        command_groups: vec![api::CommandGroup {
-            commands: user.chain(enemy).collect::<Vec<_>>(),
-        }],
+        command_groups: vec![
+            commands::single(commands::initiate_game_command(&game)),
+            api::CommandGroup {
+                commands: user.chain(enemy).collect::<Vec<_>>(),
+            },
+        ],
     };
 
     Ok((game, list))
@@ -288,8 +291,9 @@ pub fn load_scenario(request: MDebugLoadScenarioRequest) -> Result<api::CommandL
 
     match &mut GAMES.lock() {
         Ok(games) => {
+            let command = commands::initiate_game_command(&game);
             games.insert(String::from("game"), game);
-            commands::empty()
+            Ok(commands::group(vec![command]))
         }
         Err(_) => Err(eyre!("Could not lock mutex")),
     }

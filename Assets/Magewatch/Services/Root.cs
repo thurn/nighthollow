@@ -67,7 +67,7 @@ namespace Magewatch.Services
       }
     }
 
-    public GameId CurrentGameId { get; } = new GameId {Value = 1};
+    public GameId CurrentGameId { get; set; } = new GameId {Value = 1};
 
     public Player GetPlayer(PlayerName playerName)
     {

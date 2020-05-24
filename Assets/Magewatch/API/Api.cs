@@ -129,35 +129,40 @@ namespace Magewatch.API {
             "Y3ROdW1iZXISJQoMbWVsZWVfdGFyZ2V0GAQgASgLMg8uYXBpLkNyZWF0dXJl",
             "SWQiaAoTTURlc3Ryb3lDYXJkQ29tbWFuZBIfCgZwbGF5ZXIYASABKA4yDy5h",
             "cGkuUGxheWVyTmFtZRIcCgdjYXJkX2lkGAIgASgLMgsuYXBpLkNhcmRJZBIS",
-            "CgptdXN0X2V4aXN0GAMgASgIItYECgdDb21tYW5kEiAKBHdhaXQYASABKAsy",
-            "EC5hcGkuV2FpdENvbW1hbmRIABI3ChB1cGRhdGVfaW50ZXJmYWNlGAIgASgL",
-            "MhsuYXBpLlVwZGF0ZUludGVyZmFjZUNvbW1hbmRIABIpCglkcmF3X2NhcmQY",
-            "AyABKAsyFC5hcGkuRHJhd0NhcmRDb21tYW5kSAASLQoLcmV2ZWFsX2NhcmQY",
-            "BCABKAsyFi5hcGkuUmV2ZWFsQ2FyZENvbW1hbmRIABIxCg11cGRhdGVfcGxh",
-            "eWVyGAUgASgLMhguYXBpLlVwZGF0ZVBsYXllckNvbW1hbmRIABJHChljcmVh",
-            "dGVfb3JfdXBkYXRlX2NyZWF0dXJlGAYgASgLMiIuYXBpLkNyZWF0ZU9yVXBk",
-            "YXRlQ3JlYXR1cmVDb21tYW5kSAASNQoPcmVtb3ZlX2NyZWF0dXJlGAcgASgL",
-            "MhouYXBpLlJlbW92ZUNyZWF0dXJlQ29tbWFuZEgAEjYKD3VwZGF0ZV9jcmVh",
-            "dHVyZRgKIAEoCzIbLmFwaS5NVXBkYXRlQ3JlYXR1cmVDb21tYW5kSAASOwoS",
-            "dXNlX2NyZWF0dXJlX3NraWxsGAsgASgLMh0uYXBpLk1Vc2VDcmVhdHVyZVNr",
-            "aWxsQ29tbWFuZEgAEjEKDWRpc3BsYXlfZXJyb3IYDCABKAsyGC5hcGkuRGlz",
-            "cGxheUVycm9yQ29tbWFuZEgAEjAKDGRlc3Ryb3lfY2FyZBgNIAEoCzIYLmFw",
-            "aS5NRGVzdHJveUNhcmRDb21tYW5kSABCCQoHY29tbWFuZCIuCgxDb21tYW5k",
-            "R3JvdXASHgoIY29tbWFuZHMYASADKAsyDC5hcGkuQ29tbWFuZCI4CgtDb21t",
-            "YW5kTGlzdBIpCg5jb21tYW5kX2dyb3VwcxgBIAMoCzIRLmFwaS5Db21tYW5k",
-            "R3JvdXAqOQoKUGxheWVyTmFtZRIWChJQTEFZRVJfVU5TUEVDSUZJRUQQABII",
-            "CgRVU0VSEAESCQoFRU5FTVkQAippCglSYW5rVmFsdWUSFAoQUkFOS19VTlNQ",
-            "RUNJRklFRBAAEgoKBlJBTktfMBABEgoKBlJBTktfMRACEgoKBlJBTktfMhAD",
-            "EgoKBlJBTktfMxAEEgoKBlJBTktfNBAFEgoKBlJBTktfNRAGKmkKCUZpbGVW",
-            "YWx1ZRIUChBGSUxFX1VOU1BFQ0lGSUVEEAASCgoGRklMRV8wEAESCgoGRklM",
-            "RV8xEAISCgoGRklMRV8yEAMSCgoGRklMRV8zEAQSCgoGRklMRV80EAUSCgoG",
-            "RklMRV81EAYqaQoNSW5mbHVlbmNlVHlwZRIZChVJTkZMVUVOQ0VfVU5TUEVD",
-            "SUZJRUQQABIJCgVMSUdIVBABEgcKA1NLWRACEgkKBUZMQU1FEAMSBwoDSUNF",
-            "EAQSCQoFRUFSVEgQBRIKCgZTSEFET1cQBio5CglBc3NldFR5cGUSFAoQVFlQ",
-            "RV9VTlNQRUNJRklFRBAAEgoKBlBSRUZBQhABEgoKBlNQUklURRACKm8KFU1T",
-            "a2lsbEFuaW1hdGlvbk51bWJlchIVChFTS0lMTF9VTlNQRUNJRklFRBAAEgsK",
-            "B1NLSUxMXzEQARILCgdTS0lMTF8yEAISCwoHU0tJTExfMxADEgsKB1NLSUxM",
-            "XzQQBBILCgdTS0lMTF81EAVCEKoCDU1hZ2V3YXRjaC5BUEliBnByb3RvMw=="));
+            "CgptdXN0X2V4aXN0GAMgASgIIpMBChRNSW5pdGlhdGVHYW1lQ29tbWFuZBIg",
+            "CgtuZXdfZ2FtZV9pZBgBIAEoCzILLmFwaS5HYW1lSWQSKwoSaW5pdGlhbF91",
+            "c2VyX3N0YXRlGAIgASgLMg8uYXBpLlBsYXllckRhdGESLAoTaW5pdGlhbF9l",
+            "bmVteV9zdGF0ZRgDIAEoCzIPLmFwaS5QbGF5ZXJEYXRhIooFCgdDb21tYW5k",
+            "EiAKBHdhaXQYASABKAsyEC5hcGkuV2FpdENvbW1hbmRIABI3ChB1cGRhdGVf",
+            "aW50ZXJmYWNlGAIgASgLMhsuYXBpLlVwZGF0ZUludGVyZmFjZUNvbW1hbmRI",
+            "ABIpCglkcmF3X2NhcmQYAyABKAsyFC5hcGkuRHJhd0NhcmRDb21tYW5kSAAS",
+            "LQoLcmV2ZWFsX2NhcmQYBCABKAsyFi5hcGkuUmV2ZWFsQ2FyZENvbW1hbmRI",
+            "ABIxCg11cGRhdGVfcGxheWVyGAUgASgLMhguYXBpLlVwZGF0ZVBsYXllckNv",
+            "bW1hbmRIABJHChljcmVhdGVfb3JfdXBkYXRlX2NyZWF0dXJlGAYgASgLMiIu",
+            "YXBpLkNyZWF0ZU9yVXBkYXRlQ3JlYXR1cmVDb21tYW5kSAASNQoPcmVtb3Zl",
+            "X2NyZWF0dXJlGAcgASgLMhouYXBpLlJlbW92ZUNyZWF0dXJlQ29tbWFuZEgA",
+            "EjYKD3VwZGF0ZV9jcmVhdHVyZRgKIAEoCzIbLmFwaS5NVXBkYXRlQ3JlYXR1",
+            "cmVDb21tYW5kSAASOwoSdXNlX2NyZWF0dXJlX3NraWxsGAsgASgLMh0uYXBp",
+            "Lk1Vc2VDcmVhdHVyZVNraWxsQ29tbWFuZEgAEjEKDWRpc3BsYXlfZXJyb3IY",
+            "DCABKAsyGC5hcGkuRGlzcGxheUVycm9yQ29tbWFuZEgAEjAKDGRlc3Ryb3lf",
+            "Y2FyZBgNIAEoCzIYLmFwaS5NRGVzdHJveUNhcmRDb21tYW5kSAASMgoNaW5p",
+            "dGlhdGVfZ2FtZRgOIAEoCzIZLmFwaS5NSW5pdGlhdGVHYW1lQ29tbWFuZEgA",
+            "QgkKB2NvbW1hbmQiLgoMQ29tbWFuZEdyb3VwEh4KCGNvbW1hbmRzGAEgAygL",
+            "MgwuYXBpLkNvbW1hbmQiOAoLQ29tbWFuZExpc3QSKQoOY29tbWFuZF9ncm91",
+            "cHMYASADKAsyES5hcGkuQ29tbWFuZEdyb3VwKjkKClBsYXllck5hbWUSFgoS",
+            "UExBWUVSX1VOU1BFQ0lGSUVEEAASCAoEVVNFUhABEgkKBUVORU1ZEAIqaQoJ",
+            "UmFua1ZhbHVlEhQKEFJBTktfVU5TUEVDSUZJRUQQABIKCgZSQU5LXzAQARIK",
+            "CgZSQU5LXzEQAhIKCgZSQU5LXzIQAxIKCgZSQU5LXzMQBBIKCgZSQU5LXzQQ",
+            "BRIKCgZSQU5LXzUQBippCglGaWxlVmFsdWUSFAoQRklMRV9VTlNQRUNJRklF",
+            "RBAAEgoKBkZJTEVfMBABEgoKBkZJTEVfMRACEgoKBkZJTEVfMhADEgoKBkZJ",
+            "TEVfMxAEEgoKBkZJTEVfNBAFEgoKBkZJTEVfNRAGKmkKDUluZmx1ZW5jZVR5",
+            "cGUSGQoVSU5GTFVFTkNFX1VOU1BFQ0lGSUVEEAASCQoFTElHSFQQARIHCgNT",
+            "S1kQAhIJCgVGTEFNRRADEgcKA0lDRRAEEgkKBUVBUlRIEAUSCgoGU0hBRE9X",
+            "EAYqOQoJQXNzZXRUeXBlEhQKEFRZUEVfVU5TUEVDSUZJRUQQABIKCgZQUkVG",
+            "QUIQARIKCgZTUFJJVEUQAipvChVNU2tpbGxBbmltYXRpb25OdW1iZXISFQoR",
+            "U0tJTExfVU5TUEVDSUZJRUQQABILCgdTS0lMTF8xEAESCwoHU0tJTExfMhAC",
+            "EgsKB1NLSUxMXzMQAxILCgdTS0lMTF80EAQSCwoHU0tJTExfNRAFQhCqAg1N",
+            "YWdld2F0Y2guQVBJYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.AssetType), typeof(global::Magewatch.API.MSkillAnimationNumber), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -205,7 +210,8 @@ namespace Magewatch.API {
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUpdateCreatureCommand), global::Magewatch.API.MUpdateCreatureCommand.Parser, new[]{ "Update" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUseCreatureSkillCommand), global::Magewatch.API.MUseCreatureSkillCommand.Parser, new[]{ "SourceCreature", "Animation", "OnImpact", "MeleeTarget" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MDestroyCardCommand), global::Magewatch.API.MDestroyCardCommand.Parser, new[]{ "Player", "CardId", "MustExist" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Command), global::Magewatch.API.Command.Parser, new[]{ "Wait", "UpdateInterface", "DrawCard", "RevealCard", "UpdatePlayer", "CreateOrUpdateCreature", "RemoveCreature", "UpdateCreature", "UseCreatureSkill", "DisplayError", "DestroyCard" }, new[]{ "Command" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MInitiateGameCommand), global::Magewatch.API.MInitiateGameCommand.Parser, new[]{ "NewGameId", "InitialUserState", "InitialEnemyState" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Command), global::Magewatch.API.Command.Parser, new[]{ "Wait", "UpdateInterface", "DrawCard", "RevealCard", "UpdatePlayer", "CreateOrUpdateCreature", "RemoveCreature", "UpdateCreature", "UseCreatureSkill", "DisplayError", "DestroyCard", "InitiateGame" }, new[]{ "Command" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CommandGroup), global::Magewatch.API.CommandGroup.Parser, new[]{ "Commands" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CommandList), global::Magewatch.API.CommandList.Parser, new[]{ "CommandGroups" }, null, null, null, null)
           }));
@@ -8409,6 +8415,213 @@ namespace Magewatch.API {
   }
 
   /// <summary>
+  /// Instructs the client to discard all previous state and begin a new game with
+  /// the provided game id.
+  /// </summary>
+  public sealed partial class MInitiateGameCommand : pb::IMessage<MInitiateGameCommand> {
+    private static readonly pb::MessageParser<MInitiateGameCommand> _parser = new pb::MessageParser<MInitiateGameCommand>(() => new MInitiateGameCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<MInitiateGameCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[44]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MInitiateGameCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MInitiateGameCommand(MInitiateGameCommand other) : this() {
+      newGameId_ = other.newGameId_ != null ? other.newGameId_.Clone() : null;
+      initialUserState_ = other.initialUserState_ != null ? other.initialUserState_.Clone() : null;
+      initialEnemyState_ = other.initialEnemyState_ != null ? other.initialEnemyState_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MInitiateGameCommand Clone() {
+      return new MInitiateGameCommand(this);
+    }
+
+    /// <summary>Field number for the "new_game_id" field.</summary>
+    public const int NewGameIdFieldNumber = 1;
+    private global::Magewatch.API.GameId newGameId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.GameId NewGameId {
+      get { return newGameId_; }
+      set {
+        newGameId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "initial_user_state" field.</summary>
+    public const int InitialUserStateFieldNumber = 2;
+    private global::Magewatch.API.PlayerData initialUserState_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.PlayerData InitialUserState {
+      get { return initialUserState_; }
+      set {
+        initialUserState_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "initial_enemy_state" field.</summary>
+    public const int InitialEnemyStateFieldNumber = 3;
+    private global::Magewatch.API.PlayerData initialEnemyState_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.PlayerData InitialEnemyState {
+      get { return initialEnemyState_; }
+      set {
+        initialEnemyState_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as MInitiateGameCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(MInitiateGameCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(NewGameId, other.NewGameId)) return false;
+      if (!object.Equals(InitialUserState, other.InitialUserState)) return false;
+      if (!object.Equals(InitialEnemyState, other.InitialEnemyState)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (newGameId_ != null) hash ^= NewGameId.GetHashCode();
+      if (initialUserState_ != null) hash ^= InitialUserState.GetHashCode();
+      if (initialEnemyState_ != null) hash ^= InitialEnemyState.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (newGameId_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(NewGameId);
+      }
+      if (initialUserState_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(InitialUserState);
+      }
+      if (initialEnemyState_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(InitialEnemyState);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (newGameId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(NewGameId);
+      }
+      if (initialUserState_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(InitialUserState);
+      }
+      if (initialEnemyState_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(InitialEnemyState);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(MInitiateGameCommand other) {
+      if (other == null) {
+        return;
+      }
+      if (other.newGameId_ != null) {
+        if (newGameId_ == null) {
+          NewGameId = new global::Magewatch.API.GameId();
+        }
+        NewGameId.MergeFrom(other.NewGameId);
+      }
+      if (other.initialUserState_ != null) {
+        if (initialUserState_ == null) {
+          InitialUserState = new global::Magewatch.API.PlayerData();
+        }
+        InitialUserState.MergeFrom(other.InitialUserState);
+      }
+      if (other.initialEnemyState_ != null) {
+        if (initialEnemyState_ == null) {
+          InitialEnemyState = new global::Magewatch.API.PlayerData();
+        }
+        InitialEnemyState.MergeFrom(other.InitialEnemyState);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (newGameId_ == null) {
+              NewGameId = new global::Magewatch.API.GameId();
+            }
+            input.ReadMessage(NewGameId);
+            break;
+          }
+          case 18: {
+            if (initialUserState_ == null) {
+              InitialUserState = new global::Magewatch.API.PlayerData();
+            }
+            input.ReadMessage(InitialUserState);
+            break;
+          }
+          case 26: {
+            if (initialEnemyState_ == null) {
+              InitialEnemyState = new global::Magewatch.API.PlayerData();
+            }
+            input.ReadMessage(InitialEnemyState);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
   /// A single instruction to the client UI to perform some action.
   /// </summary>
   public sealed partial class Command : pb::IMessage<Command> {
@@ -8419,7 +8632,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[44]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[45]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8469,6 +8682,9 @@ namespace Magewatch.API {
           break;
         case CommandOneofCase.DestroyCard:
           DestroyCard = other.DestroyCard.Clone();
+          break;
+        case CommandOneofCase.InitiateGame:
+          InitiateGame = other.InitiateGame.Clone();
           break;
       }
 
@@ -8601,6 +8817,17 @@ namespace Magewatch.API {
       }
     }
 
+    /// <summary>Field number for the "initiate_game" field.</summary>
+    public const int InitiateGameFieldNumber = 14;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Magewatch.API.MInitiateGameCommand InitiateGame {
+      get { return commandCase_ == CommandOneofCase.InitiateGame ? (global::Magewatch.API.MInitiateGameCommand) command_ : null; }
+      set {
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.InitiateGame;
+      }
+    }
+
     private object command_;
     /// <summary>Enum of possible cases for the "command" oneof.</summary>
     public enum CommandOneofCase {
@@ -8616,6 +8843,7 @@ namespace Magewatch.API {
       UseCreatureSkill = 11,
       DisplayError = 12,
       DestroyCard = 13,
+      InitiateGame = 14,
     }
     private CommandOneofCase commandCase_ = CommandOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8653,6 +8881,7 @@ namespace Magewatch.API {
       if (!object.Equals(UseCreatureSkill, other.UseCreatureSkill)) return false;
       if (!object.Equals(DisplayError, other.DisplayError)) return false;
       if (!object.Equals(DestroyCard, other.DestroyCard)) return false;
+      if (!object.Equals(InitiateGame, other.InitiateGame)) return false;
       if (CommandCase != other.CommandCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -8671,6 +8900,7 @@ namespace Magewatch.API {
       if (commandCase_ == CommandOneofCase.UseCreatureSkill) hash ^= UseCreatureSkill.GetHashCode();
       if (commandCase_ == CommandOneofCase.DisplayError) hash ^= DisplayError.GetHashCode();
       if (commandCase_ == CommandOneofCase.DestroyCard) hash ^= DestroyCard.GetHashCode();
+      if (commandCase_ == CommandOneofCase.InitiateGame) hash ^= InitiateGame.GetHashCode();
       hash ^= (int) commandCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -8729,6 +8959,10 @@ namespace Magewatch.API {
         output.WriteRawTag(106);
         output.WriteMessage(DestroyCard);
       }
+      if (commandCase_ == CommandOneofCase.InitiateGame) {
+        output.WriteRawTag(114);
+        output.WriteMessage(InitiateGame);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -8769,6 +9003,9 @@ namespace Magewatch.API {
       }
       if (commandCase_ == CommandOneofCase.DestroyCard) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(DestroyCard);
+      }
+      if (commandCase_ == CommandOneofCase.InitiateGame) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(InitiateGame);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -8847,6 +9084,12 @@ namespace Magewatch.API {
             DestroyCard = new global::Magewatch.API.MDestroyCardCommand();
           }
           DestroyCard.MergeFrom(other.DestroyCard);
+          break;
+        case CommandOneofCase.InitiateGame:
+          if (InitiateGame == null) {
+            InitiateGame = new global::Magewatch.API.MInitiateGameCommand();
+          }
+          InitiateGame.MergeFrom(other.InitiateGame);
           break;
       }
 
@@ -8960,6 +9203,15 @@ namespace Magewatch.API {
             DestroyCard = subBuilder;
             break;
           }
+          case 114: {
+            global::Magewatch.API.MInitiateGameCommand subBuilder = new global::Magewatch.API.MInitiateGameCommand();
+            if (commandCase_ == CommandOneofCase.InitiateGame) {
+              subBuilder.MergeFrom(InitiateGame);
+            }
+            input.ReadMessage(subBuilder);
+            InitiateGame = subBuilder;
+            break;
+          }
         }
       }
     }
@@ -8979,7 +9231,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[45]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[46]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9105,7 +9357,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[46]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[47]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

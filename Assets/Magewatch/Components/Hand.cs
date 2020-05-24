@@ -137,6 +137,16 @@ namespace Magewatch.Components
       sequence.AppendCallback(() => onComplete?.Invoke(card));
     }
 
+    public void DestroyAllCards()
+    {
+      foreach (var card in _cards)
+      {
+        Destroy(card.gameObject);
+      }
+
+      _cards.Clear();
+    }
+
     void AnimateCardsToPosition(Action onComplete = null)
     {
       var sequence = DOTween.Sequence();

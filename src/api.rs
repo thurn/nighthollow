@@ -444,12 +444,23 @@ pub struct MDestroyCardCommand {
     #[prost(bool, tag = "3")]
     pub must_exist: bool,
 }
+/// Instructs the client to discard all previous state and begin a new game with
+/// the provided game id.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MInitiateGameCommand {
+    #[prost(message, optional, tag = "1")]
+    pub new_game_id: ::std::option::Option<GameId>,
+    #[prost(message, optional, tag = "2")]
+    pub initial_user_state: ::std::option::Option<PlayerData>,
+    #[prost(message, optional, tag = "3")]
+    pub initial_enemy_state: ::std::option::Option<PlayerData>,
+}
 /// A single instruction to the client UI to perform some action.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Command {
     #[prost(
         oneof = "command::Command",
-        tags = "1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13"
+        tags = "1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14"
     )]
     pub command: ::std::option::Option<command::Command>,
 }
@@ -478,6 +489,8 @@ pub mod command {
         DisplayError(super::DisplayErrorCommand),
         #[prost(message, tag = "13")]
         DestroyCard(super::MDestroyCardCommand),
+        #[prost(message, tag = "14")]
+        InitiateGame(super::MInitiateGameCommand),
     }
 }
 /// Represents a set of commands which should be executed in parallel,

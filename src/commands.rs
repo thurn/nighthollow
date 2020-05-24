@@ -19,8 +19,10 @@ use crate::{
     model::{
         cards::{Card, Cost, HasCardData, ManaCost, Scroll, Spell},
         creatures::{Creature, CreatureData},
-        games::{HasOwner, Player},
-        primitives::{CardId, FileValue, Influence, PlayerName, RankValue, School, SCHOOLS},
+        games::{Game, HasOwner, Player},
+        primitives::{
+            CardId, FileValue, GameId, Influence, PlayerName, RankValue, School, SCHOOLS,
+        },
     },
 };
 
@@ -286,6 +288,18 @@ pub fn destroy_card_command(player: PlayerName, id: CardId, must_exist: bool) ->
                 card_id: Some(card_id(id)),
                 player: player_name(player).into(),
                 must_exist,
+            },
+        )),
+    }
+}
+
+pub fn initiate_game_command(game: &Game) -> api::Command {
+    api::Command {
+        command: Some(api::command::Command::InitiateGame(
+            api::MInitiateGameCommand {
+                new_game_id: Some(api::GameId { value: game.id }),
+                initial_user_state: Some(player_data(&game.user)),
+                initial_enemy_state: Some(player_data(&game.enemy)),
             },
         )),
     }
