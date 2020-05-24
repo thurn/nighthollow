@@ -30,3 +30,8 @@ pub enum CreatureType {
 pub enum SpellType {
     Rage,
 }
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+pub enum ScrollType {
+    FlameScroll,
+}

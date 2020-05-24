@@ -14,7 +14,6 @@
 
 use color_eyre::Result;
 
-
 use crate::{
     api, interface,
     model::{

@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using Magewatch.API;
 using Magewatch.Services;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // ReSharper disable UnusedMember.Global
 
@@ -50,6 +52,19 @@ namespace Magewatch.Components
       Root.Instance.NetworkService.MakeRequest(new Request
       {
         AdvancePhase = new AdvancePhaseRequest()
+      });
+    }
+
+    public void Basic()
+    {
+      Root.Instance.NetworkService.MakeRequest(new Request
+      {
+        LoadTestScenario = new MLoadTestScenarioRequest
+        {
+          ScenarioName = "basic",
+          DrawUserCards = {0, 0, 1, 2, 3, 3},
+          DrawEnemyCards = {0, 0, 1, 2, 3, 3}
+        }
       });
     }
 

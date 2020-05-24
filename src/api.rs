@@ -78,12 +78,10 @@ pub mod play_card_request {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreaturePositionUpdate {
     #[prost(message, optional, tag = "1")]
-    pub game_id: ::std::option::Option<GameId>,
-    #[prost(message, optional, tag = "2")]
     pub creature_id: ::std::option::Option<CreatureId>,
-    #[prost(enumeration = "RankValue", tag = "3")]
+    #[prost(enumeration = "RankValue", tag = "2")]
     pub rank_position: i32,
-    #[prost(enumeration = "FileValue", tag = "4")]
+    #[prost(enumeration = "FileValue", tag = "3")]
     pub file_position: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -106,6 +104,18 @@ pub struct RunConsoleCommandRequest {
     #[prost(message, optional, tag = "5")]
     pub card_id: ::std::option::Option<CardId>,
 }
+/// Requests to start a new game with the provided test scenario name. The
+/// client must discard all previous state when sending this request.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MLoadTestScenarioRequest {
+    #[prost(string, tag = "1")]
+    pub scenario_name: std::string::String,
+    /// Specifies initial cards to draw based on their *deck position*
+    #[prost(uint32, repeated, tag = "2")]
+    pub draw_user_cards: ::std::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "3")]
+    pub draw_enemy_cards: ::std::vec::Vec<u32>,
+}
 /// Data sent to the server whenever the user does something in the game's user
 /// interface
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -113,7 +123,7 @@ pub struct Request {
     /// Identifies the user making this request
     #[prost(message, optional, tag = "1")]
     pub user_id: ::std::option::Option<UserId>,
-    #[prost(oneof = "request::Request", tags = "2, 3, 4, 5, 6, 7")]
+    #[prost(oneof = "request::Request", tags = "2, 3, 4, 5, 6, 7, 8")]
     pub request: ::std::option::Option<request::Request>,
 }
 pub mod request {
@@ -131,6 +141,8 @@ pub mod request {
         RepositionCreatures(super::RepositionCreaturesRequest),
         #[prost(message, tag = "7")]
         RunConsoleCommand(super::RunConsoleCommandRequest),
+        #[prost(message, tag = "8")]
+        LoadTestScenario(super::MLoadTestScenarioRequest),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -342,19 +354,22 @@ pub mod m_on_impact {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MFireProjectile {
-    /// Projectile Prefab to create
+    /// Who is firing the projectile?
     #[prost(message, optional, tag = "1")]
+    pub creature_id: ::std::option::Option<CreatureId>,
+    /// Projectile Prefab to create
+    #[prost(message, optional, tag = "2")]
     pub projectile: ::std::option::Option<Asset>,
     /// What to do when the projectile hits
-    #[prost(message, repeated, tag = "2")]
+    #[prost(message, repeated, tag = "3")]
     pub on_hit: ::std::vec::Vec<MOnImpact>,
-    #[prost(oneof = "m_fire_projectile::Target", tags = "3")]
+    #[prost(oneof = "m_fire_projectile::Target", tags = "4")]
     pub target: ::std::option::Option<m_fire_projectile::Target>,
 }
 pub mod m_fire_projectile {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Target {
-        #[prost(message, tag = "3")]
+        #[prost(message, tag = "4")]
         TargetCreature(super::CreatureId),
     }
 }

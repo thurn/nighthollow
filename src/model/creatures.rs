@@ -18,8 +18,8 @@ use serde::{Deserialize, Serialize};
 
 use super::{
     assets::CreatureType,
-    stats::{Stat, StatName, Tag, TagName},
     cards::{CardData, HasCardData, Spell},
+    stats::{Stat, StatName, Tag, TagName},
 };
 use crate::{model::primitives::*, rules::rules::Rule};
 use std::cmp;
@@ -142,6 +142,10 @@ impl HasCardData for CreatureData {
     fn card_data(&self) -> &CardData {
         &self.card_data
     }
+
+    fn card_data_mut(&mut self) -> &mut CardData {
+        &mut self.card_data
+    }
 }
 
 pub enum DamageResult {
@@ -172,10 +176,11 @@ impl Creature {
     }
 
     pub fn current_health(&self) -> u32 {
-        if self.stats().damage > self.stats().health_total.value() {
+        let health = self.stats().health_total.value();
+        if self.stats().damage > health {
             0
         } else {
-            self.stats().health_total.value() - self.stats().damage
+            health - self.stats().damage
         }
     }
 
@@ -241,6 +246,10 @@ impl Creature {
 
 impl HasCardData for Creature {
     fn card_data(&self) -> &CardData {
-        &self.data.card_data()
+        self.data.card_data()
+    }
+
+    fn card_data_mut(&mut self) -> &mut CardData {
+        self.data.card_data_mut()
     }
 }

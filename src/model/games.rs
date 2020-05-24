@@ -17,11 +17,11 @@ use eyre::eyre;
 use serde::{Deserialize, Serialize};
 
 use super::{
+    cards::{Card, Deck, Scroll},
     creatures::{Creature, CreatureData},
-    stats::{Stat, StatName, Tag, TagName}, cards::{Scroll, Card},
+    stats::{Stat, StatName, Tag, TagName},
 };
-use crate::{model::primitives::*};
-
+use crate::model::primitives::*;
 
 pub trait HasOwner {
     fn owner(&self) -> PlayerName;
@@ -54,9 +54,16 @@ impl Default for PlayerState {
 pub struct Player {
     pub name: PlayerName,
     pub state: PlayerState,
+    pub deck: Deck,
     pub hand: Vec<Card>,
     pub creatures: Vec<Creature>,
     pub scrolls: Vec<Scroll>,
+}
+
+impl Player {
+    pub fn add_to_hand(&mut self, card: Card) {
+        self.hand.push(card)
+    }
 }
 
 impl HasOwner for Player {

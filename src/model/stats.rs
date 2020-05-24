@@ -16,7 +16,7 @@ use std::fmt::Debug;
 
 use serde::{Deserialize, Serialize};
 
-use super::primitives::{RuleId};
+use super::primitives::RuleId;
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub enum StatName {}

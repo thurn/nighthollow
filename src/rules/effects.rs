@@ -24,13 +24,11 @@ use crate::{
     model::{
         assets::{CreatureType, ParticleSystemName, ProjectileName},
         creatures::{Creature, Damage, DamageResult},
+        games::Game,
         primitives::{CreatureId, HealthValue, ManaValue, RuleId, SkillAnimation},
         stats::{Modifier, Operation, StatName},
-        games::Game,
     },
 };
-
-
 
 pub struct EffectData {
     pub effect: Effect,

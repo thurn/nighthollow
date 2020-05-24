@@ -20,8 +20,8 @@ use super::{
 };
 use crate::model::{
     creatures::{Creature, Damage},
-    primitives::{FileValue, SkillAnimation},
     games::Player,
+    primitives::{FileValue, SkillAnimation},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

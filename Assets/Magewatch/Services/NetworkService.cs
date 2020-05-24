@@ -40,7 +40,8 @@ namespace Magewatch.Services
       webRequest.downloadHandler = downloadHandler;
       yield return webRequest.SendWebRequest();
       var data = downloadHandler.data;
-      if (webRequest.isNetworkError || webRequest.isHttpError || webRequest.error != null || data == null)
+      if (webRequest.isNetworkError || webRequest.isHttpError || webRequest.error != null || !webRequest.isDone ||
+          data == null)
       {
         Debug.LogError($"Error making network request: {webRequest.error} for request {request}");
       }

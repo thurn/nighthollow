@@ -64,6 +64,12 @@ namespace Magewatch.Services
 
       foreach (var command in _currentCommandList.CommandGroups[_currentStep].Commands)
       {
+        if (command.DisplayError != null)
+        {
+          Debug.LogError(command.DisplayError.Error);
+          break;
+        }
+
         if (command.Wait != null)
         {
           _expectedCompletions++;

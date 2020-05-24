@@ -748,6 +748,7 @@ dependencies = [
 name = "magewatch"
 version = "0.1.0"
 dependencies = [
+ "bytes",
  "color-eyre",
  "derive_more",
  "eyre",

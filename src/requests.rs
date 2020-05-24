@@ -13,7 +13,7 @@
 // limitations under the License.
 
 use color_eyre::Result;
-use eyre::{eyre};
+use eyre::eyre;
 
 use crate::{
     api, commands, console,
@@ -22,8 +22,9 @@ use crate::{
     model::games::{Game, Player},
     model::primitives::{BoardPosition, FileValue, GamePhase, PlayerName, RankValue},
     rules::combat,
-    test_data::scenarios,
+    test_data::{scenarios, standard},
 };
+use api::MLoadTestScenarioRequest;
 use commands::{CardMetadata, CreatureMetadata};
 use std::{collections::HashMap, sync::Mutex};
 
@@ -49,6 +50,7 @@ pub fn handle_request(request_message: api::Request) -> Result<api::CommandList>
             with_game(|game| play_card(message, &mut game.user))
         }
         api::request::Request::AdvancePhase(_) => with_game(|game| advance_game_phase(game)),
+        api::request::Request::LoadTestScenario(message) => load_test_scenario(message),
         _ => commands::empty(),
     }
 }
@@ -81,7 +83,7 @@ pub fn metadata(card: &Card, revealed: bool) -> CardMetadata {
 }
 
 pub fn start_game() -> Result<(Game, api::CommandList)> {
-    let game = scenarios::opening_hands();
+    let game = standard::opening_hands();
     let user = game
         .user
         .hand
@@ -217,4 +219,41 @@ fn to_preparation_phase(game: &mut Game) -> Result<api::CommandList> {
         upkeep(PlayerName::User, &mut game.user),
         upkeep(PlayerName::Enemy, &mut game.enemy),
     ])
+}
+
+pub fn load_test_scenario(request: MLoadTestScenarioRequest) -> Result<api::CommandList> {
+    let mut game = scenarios::load_scenario(&request.scenario_name)?;
+    let mut commands = vec![];
+
+    request
+        .draw_user_cards
+        .iter()
+        .try_for_each(|i| draw_card_at_index(&mut game.user, *i, &mut commands, true))?;
+    request
+        .draw_enemy_cards
+        .iter()
+        .try_for_each(|i| draw_card_at_index(&mut game.enemy, *i, &mut commands, false))?;
+
+    match &mut GAMES.lock() {
+        Ok(games) => {
+            games.insert(String::from("game"), game);
+            commands::group(commands)
+        }
+        Err(_) => Err(eyre!("Could not lock mutex")),
+    }
+}
+
+fn draw_card_at_index(
+    player: &mut Player,
+    index: u32,
+    commands: &mut Vec<api::Command>,
+    revealed: bool,
+) -> Result<()> {
+    let card = player.deck.draw_card_at_index(index as usize)?;
+    commands.push(commands::draw_card_command(
+        &card,
+        &metadata(&card, revealed),
+    ));
+    player.add_to_hand(card);
+    Ok(())
 }

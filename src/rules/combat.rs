@@ -14,18 +14,16 @@
 
 use color_eyre::Result;
 
-
 use super::rules::{self, Rule, RuleContext, RuleScope};
 use crate::{
     api, commands,
     model::{
         creatures::{Creature, Damage, DamageResult},
+        games::{Game, Player},
         primitives::{CreatureId, HealthValue, ManaValue, RuleId},
         stats::{Modifier, Operation, StatName},
-        games::{Game, Player},
     },
 };
-
 
 /// Handles running the Combat phase of the game and populating a list of
 /// resulting Commands

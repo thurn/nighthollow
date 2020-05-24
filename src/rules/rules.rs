@@ -16,20 +16,18 @@ use std::fmt::Debug;
 
 use color_eyre::Result;
 
-
-
 use super::effects::{self, Effects, MutationEvent, MutationEventType, SetModifier};
 use crate::{
     api,
     model::{
+        cards::HasCardData,
         creatures::{Creature, Damage, DamageResult},
+        games::{Game, Player},
         primitives::{
             ActionNumber, CardId, CreatureId, HealthValue, ManaValue, RoundNumber, RuleId,
             TurnNumber,
         },
         stats::{Modifier, Operation, StatName},
-        cards::HasCardData,
-        games::{Game, Player},
     },
 };
 
@@ -200,7 +198,6 @@ impl Clone for Box<dyn Rule> {
         self.clone_box()
     }
 }
-
 
 pub struct RuleContext<'a> {
     pub rule_id: RuleId,

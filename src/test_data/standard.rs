@@ -12,47 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use color_eyre::Result;
-use eyre::eyre;
+use std::sync::atomic::{AtomicI32, Ordering};
 
+use crate::model::primitives::*;
 use crate::{
-    model::{assets::*, cards::*, creatures::*, games::*, primitives::*, stats::*},
+    model::{assets::*, cards::*, creatures::*, games::*, stats::*},
     rules::basic::BaseMeleeDamageAttack,
 };
 
-pub fn load_scenario(name: &str) -> Result<Game> {
-    match name {
-        "basic" => Ok(basic()),
-        _ => Err(eyre!("Unrecognized scenario name: {}", name)),
-    }
+static NEXT_IDENTIFIER_INDEX: AtomicI32 = AtomicI32::new(1);
+
+fn next_id() -> i32 {
+    NEXT_IDENTIFIER_INDEX.fetch_add(1, Ordering::Relaxed)
 }
 
-fn basic() -> Game {
-    Game {
-        state: GameState {
-            phase: GamePhase::Main,
-            turn: 1,
-        },
-        user: new_player(PlayerName::User, basic_deck),
-        enemy: new_player(PlayerName::Enemy, basic_deck),
-    }
-}
-
-fn new_player(name: PlayerName, deck: impl Fn(PlayerName) -> Vec<Card>) -> Player {
-    Player {
-        name,
-        state: PlayerState::default(),
-        deck: Deck::new(deck(name), name),
-        hand: vec![],
-        creatures: vec![],
-        scrolls: vec![],
-    }
-}
-
-fn berserker(owner: PlayerName) -> CreatureData {
+pub fn berserker(owner: PlayerName) -> CreatureData {
     CreatureData {
         card_data: CardData {
-            id: 0,
+            id: next_id(),
             owner,
             cost: Cost::ManaCost(ManaCost {
                 mana: 2,
@@ -60,7 +37,7 @@ fn berserker(owner: PlayerName) -> CreatureData {
             }),
             name: String::from("Berserker"),
             school: School::Flame,
-            text: String::from("Berserker"),
+            text: "Anger & Axes".to_string(),
         },
         base_type: CreatureType::Berserker,
         stats: CreatureStats {
@@ -72,18 +49,18 @@ fn berserker(owner: PlayerName) -> CreatureData {
     }
 }
 
-fn wizard(owner: PlayerName) -> CreatureData {
+pub fn mage(owner: PlayerName) -> CreatureData {
     CreatureData {
         card_data: CardData {
-            id: 0,
+            id: next_id(),
             owner,
             cost: Cost::ManaCost(ManaCost {
                 mana: 3,
                 influence: Influence::flame(2),
             }),
-            name: String::from("Wizard"),
+            name: String::from("Mage"),
             school: School::Flame,
-            text: String::from("Wizard"),
+            text: "Whiz! Zoom!".to_string(),
         },
         base_type: CreatureType::Mage,
         stats: CreatureStats {
@@ -95,10 +72,10 @@ fn wizard(owner: PlayerName) -> CreatureData {
     }
 }
 
-fn rage(owner: PlayerName) -> Spell {
+pub fn rage(owner: PlayerName) -> Spell {
     Spell {
         card_data: CardData {
-            id: 0,
+            id: next_id(),
             owner,
             cost: Cost::ManaCost(ManaCost {
                 mana: 1,
@@ -106,31 +83,51 @@ fn rage(owner: PlayerName) -> Spell {
             }),
             name: String::from("Rage"),
             school: School::Flame,
-            text: String::from("Rage"),
+            text: "Adds Bonus Damage on Hits".to_string(),
         },
         base_type: SpellType::Rage,
     }
 }
 
-fn flame_scroll(owner: PlayerName) -> Scroll {
+pub fn flame_scroll(owner: PlayerName) -> Scroll {
     Scroll {
         card_data: CardData {
-            id: 0,
+            id: next_id(),
             owner,
             cost: Cost::None,
             name: String::from("Flame Scroll"),
             school: School::Flame,
-            text: String::from("Flame Scroll"),
+            text: "Adds 1 mana and 1 flame influence".to_string(),
         },
         base_type: ScrollType::FlameScroll,
     }
 }
 
-fn basic_deck(owner: PlayerName) -> Vec<Card> {
-    vec![
-        Card::Creature(berserker(owner)),
-        Card::Creature(wizard(owner)),
-        Card::Spell(rage(owner)),
-        Card::Scroll(flame_scroll(owner)),
-    ]
+pub fn new_player(name: PlayerName) -> Player {
+    Player {
+        name,
+        state: PlayerState::default(),
+        deck: Deck::new(vec![], name),
+        hand: vec![
+            Card::Creature(berserker(name)),
+            Card::Creature(berserker(name)),
+            Card::Creature(mage(name)),
+            Card::Spell(rage(name)),
+            Card::Scroll(flame_scroll(name)),
+            Card::Scroll(flame_scroll(name)),
+        ],
+        creatures: vec![],
+        scrolls: vec![],
+    }
+}
+
+pub fn opening_hands() -> Game {
+    Game {
+        state: GameState {
+            phase: GamePhase::Main,
+            turn: 1,
+        },
+        user: new_player(PlayerName::User),
+        enemy: new_player(PlayerName::Enemy),
+    }
 }

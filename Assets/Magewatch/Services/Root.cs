@@ -79,7 +79,7 @@ namespace Magewatch.Services
       }
     }
 
-    void Awake()
+    void OnEnable()
     {
       Errors.CheckNotNull(_mainCamera);
       Errors.CheckNotNull(_mainCanvas);

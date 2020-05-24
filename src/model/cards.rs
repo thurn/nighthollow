@@ -12,15 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::cmp;
+use std::sync::atomic::{AtomicI32, Ordering};
+
+use color_eyre::Result;
+use eyre::eyre;
+use rand::{
+    distributions::{Distribution, WeightedIndex},
+    prelude::thread_rng,
+};
+use serde::{Deserialize, Serialize};
+
 use super::{
-    assets::SpellType,
+    assets::{ScrollType, SpellType},
     creatures::CreatureData,
     games::HasOwner,
     primitives::{CardId, Influence, PlayerName, School},
 };
 
-
-use serde::{Deserialize, Serialize};
+static NEXT_CARD_ID: AtomicI32 = AtomicI32::new(1);
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ManaCost {
@@ -46,10 +56,16 @@ pub struct CardData {
 
 pub trait HasCardData {
     fn card_data(&self) -> &CardData;
+
+    fn card_data_mut(&mut self) -> &mut CardData;
 }
 
 impl HasCardData for CardData {
     fn card_data(&self) -> &CardData {
+        self
+    }
+
+    fn card_data_mut(&mut self) -> &mut CardData {
         self
     }
 }
@@ -70,11 +86,10 @@ impl HasCardData for Spell {
     fn card_data(&self) -> &CardData {
         &self.card_data
     }
-}
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
-pub enum ScrollType {
-    FlameScroll,
+    fn card_data_mut(&mut self) -> &mut CardData {
+        &mut self.card_data
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -86,6 +101,10 @@ pub struct Scroll {
 impl HasCardData for Scroll {
     fn card_data(&self) -> &CardData {
         &self.card_data
+    }
+
+    fn card_data_mut(&mut self) -> &mut CardData {
+        &mut self.card_data
     }
 }
 
@@ -104,4 +123,90 @@ impl HasCardData for Card {
             Card::Scroll(s) => s.card_data(),
         }
     }
+
+    fn card_data_mut(&mut self) -> &mut CardData {
+        match self {
+            Card::Creature(c) => c.card_data_mut(),
+            Card::Spell(s) => s.card_data_mut(),
+            Card::Scroll(s) => s.card_data_mut(),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Deck {
+    cards: Vec<Card>,
+    weights: Vec<u32>,
+}
+
+impl Deck {
+    /// Instantiates a new deck given one copy of each card it should contain.
+    /// The IDs and Owners on the provided cards are overwritten with new
+    /// values.
+    pub fn new(mut cards: Vec<Card>, owner: PlayerName) -> Self {
+        let len = cards.len();
+        cards.iter_mut().for_each(|c| {
+            c.card_data_mut().id = next_card_id();
+            c.card_data_mut().owner = owner;
+        });
+        Deck {
+            cards,
+            weights: vec![4000; len],
+        }
+    }
+
+    /// Iterates over the types of card in this deck
+    pub fn cards(&self) -> impl Iterator<Item = &Card> {
+        self.cards.iter()
+    }
+
+    /// Randomly draws a card from this deck and updates the card draw weights
+    pub fn draw_card(&mut self) -> Result<Card> {
+        let distribution = WeightedIndex::new(&self.weights)?;
+        let mut rng = thread_rng();
+        self.draw_card_at_index(distribution.sample(&mut rng))
+    }
+
+    /// Draws a card with a specific ID from the deck, updating draw weights
+    /// as appropriate
+    pub fn draw_specific_card(&mut self, card_id: CardId) -> Result<Card> {
+        let card_index = self
+            .cards
+            .iter()
+            .position(|c| c.card_data().id == card_id)
+            .ok_or(eyre!("Card not found: {}", card_id))?;
+        self.draw_card_at_index(card_index)
+    }
+
+    /// Draws a card at a specific index position within the deck, updating
+    /// draw weights as appropriate.
+    pub fn draw_card_at_index(&mut self, card_index: usize) -> Result<Card> {
+        let mut card = self
+            .cards
+            .get(card_index)
+            .ok_or(eyre!("Card at index {} not found", card_index))?
+            .clone();
+        self.decrement_weights(card_index)?;
+        card.card_data_mut().id = next_card_id();
+        Ok(card)
+    }
+
+    fn decrement_weights(&mut self, index: usize) -> Result<()> {
+        let weight = self
+            .weights
+            .get(index)
+            .ok_or(eyre!("Index not found {}", index))?;
+        self.weights[index] = match weight {
+            // Linear descent for the first 4 draws, then halves
+            4000 => 3000,
+            3000 => 2000,
+            2000 => 1000,
+            _ => cmp::max(1, weight / 2),
+        };
+        Ok(())
+    }
+}
+
+fn next_card_id() -> CardId {
+    NEXT_CARD_ID.fetch_add(1, Ordering::Relaxed)
 }

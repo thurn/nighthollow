@@ -15,7 +15,6 @@
 #![deny(warnings)]
 #![allow(dead_code)]
 #![allow(unused_imports)]
-
 #![feature(clamp)]
 
 mod api;
@@ -23,7 +22,6 @@ mod commands;
 mod console;
 mod interface;
 mod model;
-mod old;
 mod requests;
 mod rules;
 mod test_data;
