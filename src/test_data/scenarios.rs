@@ -16,11 +16,13 @@ use color_eyre::Result;
 use eyre::eyre;
 
 use crate::{
-    model::{assets::*, cards::*, creatures::*, games::*, primitives::*, stats::*},
+    model::{assets::*, cards, cards::*, creatures::*, games::*, primitives::*, stats::*},
     rules::basic::BaseMeleeDamageAttack,
 };
 
 pub fn load_scenario(name: &str) -> Result<Game> {
+    cards::debug_reset_id_generation();
+
     match name {
         "basic" => Ok(basic()),
         _ => Err(eyre!("Unrecognized scenario name: {}", name)),

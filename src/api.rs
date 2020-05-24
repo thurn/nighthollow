@@ -59,19 +59,21 @@ pub struct PlayUntargetedCard {}
 pub struct PlayCardRequest {
     #[prost(message, optional, tag = "1")]
     pub game_id: ::std::option::Option<GameId>,
-    #[prost(message, optional, tag = "2")]
+    #[prost(enumeration = "PlayerName", tag = "2")]
+    pub player: i32,
+    #[prost(message, optional, tag = "3")]
     pub card_id: ::std::option::Option<CardId>,
-    #[prost(oneof = "play_card_request::PlayCard", tags = "3, 4, 5")]
+    #[prost(oneof = "play_card_request::PlayCard", tags = "4, 5, 6")]
     pub play_card: ::std::option::Option<play_card_request::PlayCard>,
 }
 pub mod play_card_request {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum PlayCard {
-        #[prost(message, tag = "3")]
-        PlayCreature(super::PlayCreatureCard),
         #[prost(message, tag = "4")]
-        PlayAttachment(super::PlayAttachmentCard),
+        PlayCreature(super::PlayCreatureCard),
         #[prost(message, tag = "5")]
+        PlayAttachment(super::PlayAttachmentCard),
+        #[prost(message, tag = "6")]
         PlayUntargeted(super::PlayUntargetedCard),
     }
 }
@@ -88,7 +90,9 @@ pub struct CreaturePositionUpdate {
 pub struct RepositionCreaturesRequest {
     #[prost(message, optional, tag = "1")]
     pub game_id: ::std::option::Option<GameId>,
-    #[prost(message, repeated, tag = "2")]
+    #[prost(enumeration = "PlayerName", tag = "2")]
+    pub player: i32,
+    #[prost(message, repeated, tag = "3")]
     pub position_updates: ::std::vec::Vec<CreaturePositionUpdate>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -104,17 +108,26 @@ pub struct RunConsoleCommandRequest {
     #[prost(message, optional, tag = "5")]
     pub card_id: ::std::option::Option<CardId>,
 }
-/// Requests to start a new game with the provided test scenario name. The
-/// client must discard all previous state when sending this request.
+/// Requests to start a new game with the provided scenario name. The client
+/// must discard all previous state when sending this request.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MLoadTestScenarioRequest {
+pub struct MDebugLoadScenarioRequest {
     #[prost(string, tag = "1")]
     pub scenario_name: std::string::String,
-    /// Specifies initial cards to draw based on their *deck position*
-    #[prost(uint32, repeated, tag = "2")]
+}
+/// Specifies specific cards to draw based on their *deck position*
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MDebugDrawCardsRequest {
+    #[prost(uint32, repeated, tag = "1")]
     pub draw_user_cards: ::std::vec::Vec<u32>,
-    #[prost(uint32, repeated, tag = "3")]
+    #[prost(uint32, repeated, tag = "2")]
     pub draw_enemy_cards: ::std::vec::Vec<u32>,
+}
+/// Run several requests in sequence and return Commands for all of them
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MDebugRunRequestSequenceRequest {
+    #[prost(message, repeated, tag = "1")]
+    pub requests: ::std::vec::Vec<Request>,
 }
 /// Data sent to the server whenever the user does something in the game's user
 /// interface
@@ -123,7 +136,7 @@ pub struct Request {
     /// Identifies the user making this request
     #[prost(message, optional, tag = "1")]
     pub user_id: ::std::option::Option<UserId>,
-    #[prost(oneof = "request::Request", tags = "2, 3, 4, 5, 6, 7, 8")]
+    #[prost(oneof = "request::Request", tags = "2, 3, 4, 5, 6, 7, 8, 9, 10")]
     pub request: ::std::option::Option<request::Request>,
 }
 pub mod request {
@@ -142,7 +155,11 @@ pub mod request {
         #[prost(message, tag = "7")]
         RunConsoleCommand(super::RunConsoleCommandRequest),
         #[prost(message, tag = "8")]
-        LoadTestScenario(super::MLoadTestScenarioRequest),
+        LoadScenario(super::MDebugLoadScenarioRequest),
+        #[prost(message, tag = "9")]
+        DrawCards(super::MDebugDrawCardsRequest),
+        #[prost(message, tag = "10")]
+        RunRequestSequence(super::MDebugRunRequestSequenceRequest),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -292,7 +309,7 @@ pub struct DrawCardCommand {
 /// Reveal an *existing* card and (optionally) animate it to a specific
 /// rank/file position
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PlayCardCommand {
+pub struct RevealCardCommand {
     #[prost(message, optional, tag = "1")]
     pub card: ::std::option::Option<CardData>,
     /// How long to show the card for before animating it away. 0 should be
@@ -415,10 +432,25 @@ pub struct MUseCreatureSkillCommand {
     #[prost(message, optional, tag = "4")]
     pub melee_target: ::std::option::Option<CreatureId>,
 }
+/// Requests to destroy a card in a player's hand
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MDestroyCardCommand {
+    #[prost(enumeration = "PlayerName", tag = "1")]
+    pub player: i32,
+    #[prost(message, optional, tag = "2")]
+    pub card_id: ::std::option::Option<CardId>,
+    /// If true, it is an error for this card to not exist. Otherwise requests
+    /// for cards that do not exist are ignored.
+    #[prost(bool, tag = "3")]
+    pub must_exist: bool,
+}
 /// A single instruction to the client UI to perform some action.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Command {
-    #[prost(oneof = "command::Command", tags = "1, 2, 3, 4, 5, 6, 7, 10, 11, 12")]
+    #[prost(
+        oneof = "command::Command",
+        tags = "1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13"
+    )]
     pub command: ::std::option::Option<command::Command>,
 }
 pub mod command {
@@ -431,7 +463,7 @@ pub mod command {
         #[prost(message, tag = "3")]
         DrawCard(super::DrawCardCommand),
         #[prost(message, tag = "4")]
-        PlayCard(super::PlayCardCommand),
+        RevealCard(super::RevealCardCommand),
         #[prost(message, tag = "5")]
         UpdatePlayer(super::UpdatePlayerCommand),
         #[prost(message, tag = "6")]
@@ -444,6 +476,8 @@ pub mod command {
         UseCreatureSkill(super::MUseCreatureSkillCommand),
         #[prost(message, tag = "12")]
         DisplayError(super::DisplayErrorCommand),
+        #[prost(message, tag = "13")]
+        DestroyCard(super::MDestroyCardCommand),
     }
 }
 /// Represents a set of commands which should be executed in parallel,

@@ -66,7 +66,25 @@ namespace Magewatch.Components
 
     public void ReturnToHand(Card card)
     {
+      // re-insert?
       AnimateCardsToPosition();
+    }
+
+    public void DestroyById(CardId cardId, IOnComplete onComplete, bool mustExist = false)
+    {
+      var index = _cards.FindIndex(c => c.CardId.Equals(cardId));
+      if (index == -1)
+      {
+        if (mustExist)
+        {
+          throw new ArgumentException($"Card id {cardId} not found");
+        }
+        return;
+      }
+      var card = _cards[index];
+      _cards.RemoveAt(index);
+      Destroy(card.gameObject);
+      AnimateCardsToPosition(onComplete.OnComplete);
     }
 
     public void RemoveFromHand(Card card)

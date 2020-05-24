@@ -95,14 +95,16 @@ message PlayUntargetedCard {
 message PlayCardRequest {
   GameId game_id = 1;
 
-  CardId card_id = 2;
+  PlayerName player = 2;
+
+  CardId card_id = 3;
 
   oneof play_card {
-    PlayCreatureCard play_creature = 3;
+    PlayCreatureCard play_creature = 4;
 
-    PlayAttachmentCard play_attachment = 4;
+    PlayAttachmentCard play_attachment = 5;
 
-    PlayUntargetedCard play_untargeted = 5;
+    PlayUntargetedCard play_untargeted = 6;
   }
 }
 
@@ -117,7 +119,9 @@ message CreaturePositionUpdate {
 message RepositionCreaturesRequest {
   GameId game_id = 1;
 
-  repeated CreaturePositionUpdate position_updates = 2;
+  PlayerName player = 2;
+
+  repeated CreaturePositionUpdate position_updates = 3;
 }
 
 message RunConsoleCommandRequest {
@@ -132,14 +136,21 @@ message RunConsoleCommandRequest {
   CardId card_id = 5;
 }
 
-// Requests to start a new game with the provided test scenario name. The
-// client must discard all previous state when sending this request.
-message MLoadTestScenarioRequest {
+// Requests to start a new game with the provided scenario name. The client
+// must discard all previous state when sending this request.
+message MDebugLoadScenarioRequest {
   string scenario_name = 1;
+}
 
-  // Specifies initial cards to draw based on their *deck position*
-  repeated uint32 draw_user_cards = 2;
-  repeated uint32 draw_enemy_cards = 3;
+// Specifies specific cards to draw based on their *deck position*
+message MDebugDrawCardsRequest {
+  repeated uint32 draw_user_cards = 1;
+  repeated uint32 draw_enemy_cards = 2;
+}
+
+// Run several requests in sequence and return Commands for all of them
+message MDebugRunRequestSequenceRequest {
+  repeated Request requests = 1;
 }
 
 // Data sent to the server whenever the user does something in the game's user
@@ -155,7 +166,9 @@ message Request {
     PlayCardRequest play_card = 5;
     RepositionCreaturesRequest reposition_creatures = 6;
     RunConsoleCommandRequest run_console_command = 7;
-    MLoadTestScenarioRequest load_test_scenario = 8;
+    MDebugLoadScenarioRequest load_scenario = 8;
+    MDebugDrawCardsRequest draw_cards = 9;
+    MDebugRunRequestSequenceRequest run_request_sequence = 10;
   }
 }
 
@@ -299,7 +312,7 @@ message DrawCardCommand {
 
 // Reveal an *existing* card and (optionally) animate it to a specific
 // rank/file position
-message PlayCardCommand {
+message RevealCardCommand {
   CardData card = 1;
 
   // How long to show the card for before animating it away. 0 should be
@@ -412,19 +425,31 @@ message MUseCreatureSkillCommand {
   CreatureId melee_target = 4;
 }
 
+// Requests to destroy a card in a player's hand
+message MDestroyCardCommand {
+  PlayerName player = 1;
+
+  CardId card_id = 2;
+
+  // If true, it is an error for this card to not exist. Otherwise requests
+  // for cards that do not exist are ignored.
+  bool must_exist = 3;
+}
+
 // A single instruction to the client UI to perform some action.
 message Command {
   oneof command {
     WaitCommand wait = 1;
     UpdateInterfaceCommand update_interface = 2;
     DrawCardCommand draw_card = 3;
-    PlayCardCommand play_card = 4;
+    RevealCardCommand reveal_card = 4;
     UpdatePlayerCommand update_player = 5;
     CreateOrUpdateCreatureCommand create_or_update_creature = 6;
     RemoveCreatureCommand remove_creature = 7;
     MUpdateCreatureCommand update_creature = 10;
     MUseCreatureSkillCommand use_creature_skill = 11;
     DisplayErrorCommand display_error = 12;
+    MDestroyCardCommand destroy_card = 13;
   }
 }
 

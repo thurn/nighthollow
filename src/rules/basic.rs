@@ -64,6 +64,7 @@ impl Rule for BaseMeleeDamageAttack {
 /// Returns the living creature owned by Player which is on the closest file to
 /// 'file' and which is closest to the front of that file
 fn next_target_for_file(player: &Player, file: FileValue) -> Option<&Creature> {
+    // rank 5 is closest to front actually
     player
         .creatures
         .iter()

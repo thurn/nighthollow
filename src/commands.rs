@@ -20,7 +20,7 @@ use crate::{
         cards::{Card, Cost, HasCardData, ManaCost, Scroll, Spell},
         creatures::{Creature, CreatureData},
         games::{HasOwner, Player},
-        primitives::{FileValue, Influence, PlayerName, RankValue, School, SCHOOLS},
+        primitives::{CardId, FileValue, Influence, PlayerName, RankValue, School, SCHOOLS},
     },
 };
 
@@ -133,10 +133,10 @@ pub fn cost(cost: &Cost) -> api::card_data::Cost {
 
 pub fn creature_archetype(
     creature: &CreatureData,
-    metadata: &CreatureMetadata,
+    metadata: CreatureMetadata,
 ) -> api::CreatureData {
     api::CreatureData {
-        creature_id: Some(creature_id(metadata.id)),
+        creature_id: Some(creature_id(creature.card_data().id)),
         prefab: Some(prefab(&interface::creature_address(creature.base_type))),
         owner: player_name(creature.owner()).into(),
         rank_position: api::RankValue::RankUnspecified.into(),
@@ -146,7 +146,7 @@ pub fn creature_archetype(
     }
 }
 
-pub fn creature_data(creature: &Creature, metadata: &CreatureMetadata) -> api::CreatureData {
+pub fn creature_data(creature: &Creature, metadata: CreatureMetadata) -> api::CreatureData {
     api::CreatureData {
         rank_position: rank_value(creature.position.rank).into(),
         file_position: file_value(creature.position.file).into(),
@@ -165,10 +165,10 @@ pub fn scroll(_scroll: &Scroll) -> api::UntargetedData {
     api::UntargetedData {}
 }
 
-pub fn card_type(card: &Card, metadata: &CardMetadata) -> api::card_data::CardType {
+pub fn card_type(card: &Card, metadata: CardMetadata) -> api::card_data::CardType {
     match card {
         Card::Creature(c) => {
-            api::card_data::CardType::CreatureCard(creature_archetype(c, &metadata.creature))
+            api::card_data::CardType::CreatureCard(creature_archetype(c, metadata.creature))
         }
         Card::Spell(s) => api::card_data::CardType::AttachmentCard(spell(s)),
         Card::Scroll(s) => api::card_data::CardType::UntargetedCard(scroll(s)),
@@ -176,20 +176,18 @@ pub fn card_type(card: &Card, metadata: &CardMetadata) -> api::card_data::CardTy
 }
 
 pub struct CreatureMetadata {
-    pub id: i32,
     pub can_resposition_creature: bool,
 }
 
 pub struct CardMetadata {
-    pub id: i32,
     pub revealed: bool,
     pub can_play: bool,
     pub creature: CreatureMetadata,
 }
 
-pub fn card_data(card: &Card, metadata: &CardMetadata) -> api::CardData {
+pub fn card_data(card: &Card, metadata: CardMetadata) -> api::CardData {
     api::CardData {
-        card_id: Some(card_id(metadata.id)),
+        card_id: Some(card_id(card.card_data().id)),
         prefab: Some(prefab(&format!("Cards/{:?}Card", card.card_data().school))),
         name: card.card_data().name.clone(),
         owner: player_name(card.owner()).into(),
@@ -202,13 +200,13 @@ pub fn card_data(card: &Card, metadata: &CardMetadata) -> api::CardData {
     }
 }
 
-pub fn draw_card(card: &Card, metadata: &CardMetadata) -> api::DrawCardCommand {
+pub fn draw_card(card: &Card, metadata: CardMetadata) -> api::DrawCardCommand {
     api::DrawCardCommand {
         card: Some(card_data(card, metadata)),
     }
 }
 
-pub fn draw_card_command(card: &Card, metadata: &CardMetadata) -> api::Command {
+pub fn draw_card_command(card: &Card, metadata: CardMetadata) -> api::Command {
     api::Command {
         command: Some(api::command::Command::DrawCard(draw_card(card, metadata))),
     }
@@ -226,15 +224,14 @@ pub fn update_player_command(player: &Player) -> api::Command {
     }
 }
 
-pub fn play_card(
-    card: &Card,
-    metadata: &CardMetadata,
+pub fn reveal_card(
+    card: api::CardData,
     delay_milliseconds: i32,
     rank_position: Option<RankValue>,
     file_position: Option<FileValue>,
-) -> api::PlayCardCommand {
-    api::PlayCardCommand {
-        card: Some(card_data(card, metadata)),
+) -> api::RevealCardCommand {
+    api::RevealCardCommand {
+        card: Some(card),
         reveal_delay_milliseconds: delay_milliseconds,
         rank_position: rank_position
             .map_or(api::RankValue::RankUnspecified, |r| rank_value(r))
@@ -242,21 +239,19 @@ pub fn play_card(
         file_position: file_position
             .map_or(api::FileValue::FileUnspecified, |f| file_value(f))
             .into(),
-        ..api::PlayCardCommand::default()
+        ..api::RevealCardCommand::default()
     }
 }
 
-pub fn play_card_command(
-    card: &Card,
-    metadata: &CardMetadata,
+pub fn reveal_card_command(
+    card: api::CardData,
     delay_milliseconds: i32,
     rank_position: Option<RankValue>,
     file_position: Option<FileValue>,
 ) -> api::Command {
     api::Command {
-        command: Some(api::command::Command::PlayCard(play_card(
+        command: Some(api::command::Command::RevealCard(reveal_card(
             card,
-            metadata,
             delay_milliseconds,
             rank_position,
             file_position,
@@ -266,7 +261,7 @@ pub fn play_card_command(
 
 pub fn create_or_update_creature(
     creature: &Creature,
-    metadata: &CreatureMetadata,
+    metadata: CreatureMetadata,
 ) -> api::CreateOrUpdateCreatureCommand {
     api::CreateOrUpdateCreatureCommand {
         creature: Some(creature_data(creature, metadata)),
@@ -275,11 +270,23 @@ pub fn create_or_update_creature(
 
 pub fn create_or_update_creature_command(
     creature: &Creature,
-    metadata: &CreatureMetadata,
+    metadata: CreatureMetadata,
 ) -> api::Command {
     api::Command {
         command: Some(api::command::Command::CreateOrUpdateCreature(
             create_or_update_creature(creature, metadata),
+        )),
+    }
+}
+
+pub fn destroy_card_command(player: PlayerName, id: CardId, must_exist: bool) -> api::Command {
+    api::Command {
+        command: Some(api::command::Command::DestroyCard(
+            api::MDestroyCardCommand {
+                card_id: Some(card_id(id)),
+                player: player_name(player).into(),
+                must_exist,
+            },
         )),
     }
 }
@@ -290,8 +297,14 @@ pub fn empty() -> Result<api::CommandList> {
     })
 }
 
-pub fn group(commands: Vec<api::Command>) -> Result<api::CommandList> {
-    Ok(api::CommandList {
+pub fn single(command: api::Command) -> api::CommandGroup {
+    api::CommandGroup {
+        commands: vec![command],
+    }
+}
+
+pub fn group(commands: Vec<api::Command>) -> api::CommandList {
+    api::CommandList {
         command_groups: vec![api::CommandGroup { commands: commands }],
-    })
+    }
 }

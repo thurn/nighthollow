@@ -106,9 +106,9 @@ namespace Magewatch.Services
           }
         }
 
-        if (command.PlayCard != null)
+        if (command.RevealCard != null)
         {
-          HandlePlayCard(command);
+          HandleRevealCard(command);
         }
 
         if (command.UpdatePlayer != null)
@@ -140,19 +140,16 @@ namespace Magewatch.Services
           creature.FadeOut(this);
         }
 
-        // if (command.MeleeEngage != null)
-        // {
-        //   HandleMeleeEngage(command.MeleeEngage);
-        // }
-        //
-        // if (command.Attack != null)
-        // {
-        //   HandleAttack(commandIndex, command.Attack);
-        // }
-
         if (command.UseCreatureSkill != null)
         {
           HandleUseCreatureSkill(commandIndex, command.UseCreatureSkill);
+        }
+
+        if (command.DestroyCard != null)
+        {
+          _expectedCompletions++;
+          Root.Instance.GetPlayer(command.DestroyCard.Player).Hand
+            .DestroyById(command.DestroyCard.CardId, this, command.DestroyCard.MustExist);
         }
 
         commandIndex++;
@@ -174,20 +171,20 @@ namespace Magewatch.Services
       action();
     }
 
-    void HandlePlayCard(Command command)
+    void HandleRevealCard(Command command)
     {
       _expectedCompletions++;
-      var owner = command.PlayCard.Card.Owner;
+      var owner = command.RevealCard.Card.Owner;
       var player = Root.Instance.GetPlayer(owner);
-      var rank = command.PlayCard.RankPosition;
-      var file = command.PlayCard.FilePosition;
+      var rank = command.RevealCard.RankPosition;
+      var file = command.RevealCard.FilePosition;
       var delay = 2.0f;
-      if (command.PlayCard.RevealDelayMilliseconds > 0)
+      if (command.RevealCard.RevealDelayMilliseconds > 0)
       {
-        delay = command.PlayCard.RevealDelayMilliseconds / 1000f;
+        delay = command.RevealCard.RevealDelayMilliseconds / 1000f;
       }
 
-      player.Hand.RevealMatchingCard(command.PlayCard.Card, card =>
+      player.Hand.RevealMatchingCard(command.RevealCard.Card, card =>
       {
         var sequence = DOTween.Sequence();
         sequence.Insert(delay, card.transform.DOScale(0, 0.2f));
@@ -202,24 +199,6 @@ namespace Magewatch.Services
         sequence.AppendCallback(OnComplete);
       });
     }
-
-    // void HandleMeleeEngage(MeleeEngageCommand meleeEngage)
-    // {
-    //   _expectedCompletions++;
-    //   _creatureService.Get(meleeEngage.CreatureId)
-    //     .MeleeEngageWithTarget(_creatureService.Get(meleeEngage.TargetCreatureId), this);
-    // }
-    //
-    // void HandleAttack(int commandNumber, AttackCommand attack)
-    // {
-    //   _expectedCompletions += attack.HitCount;
-    //   StartCoroutine(RunDelayed(0.1f * commandNumber,
-    //     () =>
-    //     {
-    //       _creatureService.Get(attack.CreatureId)
-    //         .AttackTarget(_creatureService.Get(attack.TargetCreatureId), attack, this);
-    //     }));
-    // }
 
     void HandleUseCreatureSkill(int commandNumber, MUseCreatureSkillCommand command)
     {

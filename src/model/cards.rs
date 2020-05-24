@@ -207,6 +207,11 @@ impl Deck {
     }
 }
 
+// Resets ID generation so subsequent cards will have deterministic IDs
+pub fn debug_reset_id_generation() {
+    NEXT_CARD_ID.store(1, Ordering::SeqCst)
+}
+
 fn next_card_id() -> CardId {
-    NEXT_CARD_ID.fetch_add(1, Ordering::Relaxed)
+    NEXT_CARD_ID.fetch_add(1, Ordering::SeqCst)
 }

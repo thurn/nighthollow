@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Magewatch.API;
 using Magewatch.Services;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 // ReSharper disable UnusedMember.Global
 
@@ -59,11 +57,25 @@ namespace Magewatch.Components
     {
       Root.Instance.NetworkService.MakeRequest(new Request
       {
-        LoadTestScenario = new MLoadTestScenarioRequest
+        RunRequestSequence = new MDebugRunRequestSequenceRequest
         {
-          ScenarioName = "basic",
-          DrawUserCards = {0, 0, 1, 2, 3, 3},
-          DrawEnemyCards = {0, 0, 1, 2, 3, 3}
+          Requests =
+          {
+            LoadScenario("basic"),
+            DrawHands(),
+            PlayCreature(9, RankValue.Rank0, FileValue.File2, PlayerName.User),
+            PlayCreature(11, RankValue.Rank0, FileValue.File3, PlayerName.User),
+            PlayCreature(15, RankValue.Rank0, FileValue.File1, PlayerName.Enemy),
+            PlayCreature(16, RankValue.Rank0, FileValue.File2, PlayerName.Enemy),
+            PlayCreature(17, RankValue.Rank0, FileValue.File3, PlayerName.Enemy),
+            PlayAttachment(12, 9, PlayerName.User),
+            PlayAttachment(18, 15, PlayerName.Enemy),
+            PlayScroll(13, PlayerName.User),
+            PlayScroll(14, PlayerName.User),
+            PlayScroll(19, PlayerName.Enemy),
+            PlayCreature(10, RankValue.Rank0, FileValue.File4, PlayerName.User),
+            PlayScroll(20, PlayerName.Enemy),
+          }
         }
       });
     }
@@ -72,6 +84,67 @@ namespace Magewatch.Components
     {
       Time.timeScale = 0.1f;
     }
+
+    CardId CardId(int id) => new CardId {Value = id};
+
+    CreatureId CreatureId(int id) => new CreatureId {Value = id};
+
+    Request LoadScenario(string scenario) => new Request
+    {
+      LoadScenario = new MDebugLoadScenarioRequest
+      {
+        ScenarioName = scenario,
+      }
+    };
+
+    Request DrawHands() => new Request
+    {
+      DrawCards = new MDebugDrawCardsRequest
+      {
+        DrawUserCards = {0, 0, 1, 2, 3, 3},
+        DrawEnemyCards = {0, 0, 1, 2, 3, 3}
+      }
+    };
+
+    Request PlayCreature(int id, RankValue rank, FileValue file, PlayerName player) =>
+      new Request
+      {
+        PlayCard = new PlayCardRequest
+        {
+          Player = player,
+          CardId = CardId(id),
+          PlayCreature = new PlayCreatureCard
+          {
+            RankPosition = rank,
+            FilePosition = file
+          }
+        }
+      };
+
+    Request PlayAttachment(int id, int target, PlayerName player) =>
+      new Request
+      {
+        PlayCard = new PlayCardRequest
+        {
+          Player = player,
+          CardId = CardId(id),
+          PlayAttachment = new PlayAttachmentCard
+          {
+            CreatureId = CreatureId(target)
+          }
+        }
+      };
+
+    Request PlayScroll(int id, PlayerName player) =>
+      new Request
+      {
+        PlayCard = new PlayCardRequest
+        {
+          Player = player,
+          CardId = CardId(id),
+          PlayUntargeted = new PlayUntargetedCard()
+        }
+      };
 
     // public void Create()
     // {

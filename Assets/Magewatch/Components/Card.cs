@@ -50,6 +50,8 @@ namespace Magewatch.Components
 
     public CardId CardId => _cardData.CardId;
 
+    public PlayerName Owner => _cardData.Owner;
+
     public void Initialize(CardData cardData)
     {
       _cardFront.gameObject.SetActive(false);
@@ -260,6 +262,7 @@ namespace Magewatch.Components
                 PlayCard = new PlayCardRequest
                 {
                   GameId = Root.Instance.CurrentGameId,
+                  Player = Owner,
                   CardId = CardId,
                   PlayUntargeted = new PlayUntargetedCard()
                 }

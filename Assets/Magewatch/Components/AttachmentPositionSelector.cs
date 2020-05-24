@@ -60,6 +60,7 @@ namespace Magewatch.Components
             PlayCard = new PlayCardRequest
             {
               GameId = Root.Instance.CurrentGameId,
+              Player = _card.Owner,
               CardId = _card.CardId,
               PlayAttachment = new PlayAttachmentCard
               {

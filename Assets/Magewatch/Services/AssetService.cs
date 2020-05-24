@@ -51,9 +51,9 @@ namespace Magewatch.Services
         AddCardAssets(command.DrawCard.Card, assets);
       }
 
-      if (command.PlayCard != null)
+      if (command.RevealCard != null)
       {
-        AddCardAssets(command.PlayCard.Card, assets);
+        AddCardAssets(command.RevealCard.Card, assets);
       }
 
       if (command.CreateOrUpdateCreature != null)
