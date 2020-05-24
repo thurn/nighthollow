@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::time::Instant;
+
 use color_eyre::Result;
 
 use super::rules::{self, Rule, RuleContext, RuleScope};
@@ -19,11 +21,13 @@ use crate::{
     api, commands,
     model::{
         creatures::{Creature, Damage, DamageResult},
-        games::{Game, Player},
-        primitives::{CreatureId, HealthValue, ManaValue, RuleId},
+        games::{Game, HasOwner, Player},
+        primitives::{CreatureId, HealthValue, ManaValue, PlayerName, RuleId},
         stats::{Modifier, Operation, StatName},
     },
+    requests,
 };
+use api::MUseCreatureSkillCommand;
 
 /// Handles running the Combat phase of the game and populating a list of
 /// resulting Commands
@@ -35,6 +39,7 @@ pub fn run_combat(game: &mut Game) -> Result<api::CommandList> {
 
     let mut round_number = 1;
     while has_living_creatures(&game.user) && has_living_creatures(&game.enemy) {
+        let now = Instant::now();
         let mut commands: Vec<api::Command> = vec![];
 
         rules::run_rule(
@@ -72,6 +77,12 @@ pub fn run_combat(game: &mut Game) -> Result<api::CommandList> {
         if commands.len() > 0 {
             result.push(api::CommandGroup { commands });
         }
+
+        println!(
+            "Combat round {} completed in {:.3} seconds",
+            round_number,
+            now.elapsed().as_secs_f64()
+        );
         round_number += 1;
     }
 
@@ -79,12 +90,7 @@ pub fn run_combat(game: &mut Game) -> Result<api::CommandList> {
         Ok(rule.on_combat_end(args.rc, args.effects))
     })?;
 
-    for creature in game.user.creatures.iter_mut() {
-        creature.reset()
-    }
-    for creature in game.enemy.creatures.iter_mut() {
-        creature.reset()
-    }
+    run_end_of_combat(game, &mut result);
 
     Ok(api::CommandList {
         command_groups: result,
@@ -149,4 +155,45 @@ fn invoke_main_skill(
     }
 
     Ok(())
+}
+
+fn run_end_of_combat(game: &mut Game, commands: &mut Vec<api::CommandGroup>) {
+    let mut group1 = vec![];
+    let mut group2 = vec![];
+    let mut group3 = vec![];
+    let mut user_life_loss = 0;
+    let mut enemy_life_loss = 0;
+
+    for creature in game.all_creatures_mut() {
+        if creature.is_alive {
+            group1.push(commands::use_creature_skill_command(
+                creature.creature_id(),
+                creature.data.base_type,
+                creature.data.base_type.victory_skill(),
+                vec![],
+                None,
+            ));
+
+            group2.push(commands::remove_creature_command(creature.creature_id()));
+
+            match creature.owner() {
+                PlayerName::User => enemy_life_loss += 1,
+                PlayerName::Enemy => user_life_loss += 1,
+            }
+        }
+
+        creature.reset();
+        group3.push(requests::update_creature(&creature));
+    }
+
+    game.user.state.current_life -= user_life_loss;
+    game.enemy.state.current_life -= enemy_life_loss;
+
+    group1.push(commands::update_player_command(&game.user));
+    group1.push(commands::update_player_command(&game.enemy));
+
+    commands.push(commands::group(group1));
+    commands.push(commands::single(commands::wait_command(1000)));
+    commands.push(commands::group(group2));
+    commands.push(commands::group(group3));
 }

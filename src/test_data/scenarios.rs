@@ -88,7 +88,7 @@ fn wizard(owner: PlayerName) -> CreatureData {
             school: School::Flame,
             text: String::from("Wizard"),
         },
-        base_type: CreatureType::Mage,
+        base_type: CreatureType::Wizard,
         stats: CreatureStats {
             health_total: Stat::new(100),
             base_damage: vec![DamageStat::new(10, DamageType::Physical)],

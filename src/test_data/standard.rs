@@ -62,7 +62,7 @@ pub fn mage(owner: PlayerName) -> CreatureData {
             school: School::Flame,
             text: "Whiz! Zoom!".to_string(),
         },
-        base_type: CreatureType::Mage,
+        base_type: CreatureType::Wizard,
         stats: CreatureStats {
             health_total: Stat::new(100),
             base_damage: vec![DamageStat::new(10, DamageType::Physical)],

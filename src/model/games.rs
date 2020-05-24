@@ -94,6 +94,13 @@ impl Game {
             .chain(self.enemy.creatures.iter())
     }
 
+    pub fn all_creatures_mut(&mut self) -> impl Iterator<Item = &mut Creature> {
+        self.user
+            .creatures
+            .iter_mut()
+            .chain(self.enemy.creatures.iter_mut())
+    }
+
     pub fn player(&self, player: PlayerName) -> &Player {
         match player {
             PlayerName::User => &self.user,

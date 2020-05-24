@@ -17,14 +17,17 @@ use color_eyre::Result;
 use crate::{
     api, interface,
     model::{
+        assets::CreatureType,
         cards::{Card, Cost, HasCardData, ManaCost, Scroll, Spell},
         creatures::{Creature, CreatureData},
         games::{Game, HasOwner, Player},
         primitives::{
-            CardId, FileValue, GameId, Influence, PlayerName, RankValue, School, SCHOOLS,
+            CardId, CreatureId, FileValue, GameId, Influence, PlayerName, RankValue, School,
+            SkillAnimation, SCHOOLS,
         },
     },
 };
+use api::{MOnImpactNumber, MSkillAnimation, MSkillAnimationNumber, MUseCreatureSkillCommand};
 
 pub fn card_id(id: i32) -> api::CardId {
     api::CardId { value: id }
@@ -128,6 +131,23 @@ pub fn cost(cost: &Cost) -> api::card_data::Cost {
     match cost {
         Cost::None => api::card_data::Cost::NoCost(api::NoCost {}),
         Cost::ManaCost(c) => api::card_data::Cost::StandardCost(mana_cost(c)),
+    }
+}
+
+pub fn adapt_skill_animation(
+    animation: SkillAnimation,
+    creature_type: CreatureType,
+) -> MSkillAnimation {
+    MSkillAnimation {
+        skill: match animation {
+            SkillAnimation::Skill1 => MSkillAnimationNumber::Skill1,
+            SkillAnimation::Skill2 => MSkillAnimationNumber::Skill2,
+            SkillAnimation::Skill3 => MSkillAnimationNumber::Skill3,
+            SkillAnimation::Skill4 => MSkillAnimationNumber::Skill4,
+            SkillAnimation::Skill5 => MSkillAnimationNumber::Skill5,
+        }
+        .into(),
+        impact_count: 1,
     }
 }
 
@@ -303,6 +323,43 @@ pub fn initiate_game_command(game: &Game) -> api::Command {
     }
 }
 
+pub fn use_creature_skill_command(
+    source_creature: CreatureId,
+    creature_type: CreatureType,
+    animation: SkillAnimation,
+    on_impact: Vec<MOnImpactNumber>,
+    melee_target: Option<CreatureId>,
+) -> api::Command {
+    api::Command {
+        command: Some(api::command::Command::UseCreatureSkill(
+            MUseCreatureSkillCommand {
+                source_creature: Some(creature_id(source_creature)),
+                animation: Some(adapt_skill_animation(animation, creature_type)),
+                on_impact,
+                melee_target: melee_target.map(creature_id),
+            },
+        )),
+    }
+}
+
+pub fn remove_creature_command(creature: CreatureId) -> api::Command {
+    api::Command {
+        command: Some(api::command::Command::RemoveCreature(
+            api::RemoveCreatureCommand {
+                creature_id: Some(creature_id(creature)),
+            },
+        )),
+    }
+}
+
+pub fn wait_command(milliseconds: i32) -> api::Command {
+    api::Command {
+        command: Some(api::command::Command::Wait(api::WaitCommand {
+            wait_time_milliseconds: milliseconds,
+        })),
+    }
+}
+
 pub fn empty() -> Result<api::CommandList> {
     Ok(api::CommandList {
         command_groups: vec![],
@@ -315,8 +372,16 @@ pub fn single(command: api::Command) -> api::CommandGroup {
     }
 }
 
-pub fn group(commands: Vec<api::Command>) -> api::CommandList {
+pub fn group(commands: Vec<api::Command>) -> api::CommandGroup {
+    api::CommandGroup { commands }
+}
+
+pub fn single_group(commands: Vec<api::Command>) -> api::CommandList {
     api::CommandList {
-        command_groups: vec![api::CommandGroup { commands: commands }],
+        command_groups: vec![group(commands)],
     }
+}
+
+pub fn groups(command_groups: Vec<api::CommandGroup>) -> api::CommandList {
+    api::CommandList { command_groups }
 }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::time::Instant;
+
 use color_eyre::Result;
 use eyre::eyre;
 
@@ -35,8 +37,12 @@ lazy_static! {
 }
 
 pub fn handle_request(request_message: api::Request) -> Result<api::CommandList> {
+    let now = Instant::now();
     let request = request_message.request.ok_or(eyre!("Request not found"))?;
-    match request {
+    let got_request = now.elapsed().as_secs_f64();
+    let start = Instant::now();
+
+    let result = match request {
         api::request::Request::RunRequestSequence(message) => run_request_sequence(message),
         api::request::Request::StartGame(_) => match &mut GAMES.lock() {
             Ok(games) => {
@@ -53,7 +59,14 @@ pub fn handle_request(request_message: api::Request) -> Result<api::CommandList>
         api::request::Request::PlayCard(message) => with_game(|game| play_card(message, game)),
         api::request::Request::AdvancePhase(_) => with_game(|game| advance_game_phase(game)),
         _ => commands::empty(),
-    }
+    };
+
+    println!(
+        "Request completed in {:.3} seconds (got req in {:.3} seconds)",
+        start.elapsed().as_secs_f64(),
+        got_request
+    );
+    result
 }
 
 fn with_game(
@@ -245,7 +258,7 @@ pub fn play_card(request: api::PlayCardRequest, game: &mut Game) -> Result<api::
     })
 }
 
-fn update_creature(creature: &Creature) -> api::Command {
+pub fn update_creature(creature: &Creature) -> api::Command {
     commands::create_or_update_creature_command(
         creature,
         CreatureMetadata {
@@ -278,7 +291,7 @@ fn upkeep(_player_name: PlayerName, player: &mut Player) -> api::Command {
 fn to_preparation_phase(game: &mut Game) -> Result<api::CommandList> {
     game.state.phase = GamePhase::Preparation;
 
-    Ok(commands::group(vec![
+    Ok(commands::single_group(vec![
         upkeep(PlayerName::User, &mut game.user),
         upkeep(PlayerName::Enemy, &mut game.enemy),
     ]))
@@ -291,7 +304,7 @@ pub fn load_scenario(request: MDebugLoadScenarioRequest) -> Result<api::CommandL
         Ok(games) => {
             let command = commands::initiate_game_command(&game);
             games.insert(String::from("game"), game);
-            Ok(commands::group(vec![command]))
+            Ok(commands::single_group(vec![command]))
         }
         Err(_) => Err(eyre!("Could not lock mutex")),
     }
@@ -312,7 +325,7 @@ pub fn debug_draw_cards(
         .iter()
         .try_for_each(|i| draw_card_at_index(&mut game.enemy, *i, &mut commands, false))?;
 
-    Ok(commands::group(commands))
+    Ok(commands::single_group(commands))
 }
 
 fn draw_card_at_index(
@@ -331,12 +344,21 @@ fn draw_card_at_index(
 }
 
 pub fn run_request_sequence(message: MDebugRunRequestSequenceRequest) -> Result<api::CommandList> {
+    let start = Instant::now();
     let mut result = vec![];
+
     for request in message.requests {
         result.extend(handle_request(request)?.command_groups);
     }
 
-    Ok(api::CommandList {
+    let result = api::CommandList {
         command_groups: result,
-    })
+    };
+
+    println!(
+        "All requests completed in {:.3} seconds",
+        start.elapsed().as_secs_f64()
+    );
+
+    Ok(result)
 }

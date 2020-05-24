@@ -64,9 +64,6 @@ namespace Magewatch.Components
             PlayAttachment(18, 15, PlayerName.Enemy),
             PlayScroll(13, PlayerName.User),
             PlayScroll(14, PlayerName.User),
-            PlayScroll(19, PlayerName.Enemy),
-            PlayCreature(10, RankValue.Rank1, FileValue.File4, PlayerName.User),
-            PlayScroll(20, PlayerName.Enemy),
             AdvancePhase(),
             AdvancePhase()
           }

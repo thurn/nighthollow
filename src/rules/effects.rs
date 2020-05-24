@@ -217,30 +217,13 @@ fn use_creature_skill(
 
     Ok(MUseCreatureSkillCommand {
         source_creature: Some(commands::creature_id(skill.source_creature)),
-        animation: Some(adapt_skill_animation(
+        animation: Some(commands::adapt_skill_animation(
             skill.animation,
             game.creature(skill.source_creature)?.data.base_type,
         )),
         on_impact,
         melee_target: skill.melee_target.map(|cid| commands::creature_id(cid)),
     })
-}
-
-fn adapt_skill_animation(
-    animation: SkillAnimation,
-    _creature_type: CreatureType,
-) -> MSkillAnimation {
-    MSkillAnimation {
-        skill: match animation {
-            SkillAnimation::Skill1 => MSkillAnimationNumber::Skill1,
-            SkillAnimation::Skill2 => MSkillAnimationNumber::Skill2,
-            SkillAnimation::Skill3 => MSkillAnimationNumber::Skill3,
-            SkillAnimation::Skill4 => MSkillAnimationNumber::Skill4,
-            SkillAnimation::Skill5 => MSkillAnimationNumber::Skill5,
-        }
-        .into(),
-        impact_count: 1,
-    }
 }
 
 fn adapt_on_impact_number(

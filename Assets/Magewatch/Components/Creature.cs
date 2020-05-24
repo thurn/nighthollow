@@ -220,6 +220,7 @@ namespace Magewatch.Components
 
       sequence.InsertCallback(0.4f, () =>
       {
+        _attachmentDisplay.gameObject.SetActive(true);
         _creatureService.AddCreatureAtPosition(this, RankPosition, FilePosition);
         onComplete.OnComplete();
       });
@@ -228,6 +229,7 @@ namespace Magewatch.Components
     public void FadeOut(IOnComplete onComplete)
     {
       _healthBar.gameObject.SetActive(false);
+      _attachmentDisplay.gameObject.SetActive(false);
       var sequence = DOTween.Sequence();
       foreach (var spriteRenderer in _renderers)
       {

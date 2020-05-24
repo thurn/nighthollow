@@ -26,6 +26,8 @@ mod requests;
 mod rules;
 mod test_data;
 
+use std::time::Instant;
+
 use api::{command, Command, CommandGroup, CommandList, DisplayErrorCommand, Request};
 use warp::Filter;
 
@@ -55,13 +57,18 @@ async fn main() {
             let mut description = format!("{:?}", request);
             description.truncate(500);
             println!("<----- Got request:\n{}", description);
-            match requests::handle_request(request) {
+            let now = Instant::now();
+            let result = requests::handle_request(request);
+            let completed = now.elapsed().as_secs_f64();
+            match result {
                 Ok(response) => {
                     let mut response_description = format!("{:?}", response);
                     response_description.truncate(500);
                     println!(
-                        "-----> Sending {} command(s) in response:\n{}",
+                        "-----> Sending {} command(s) in {:.3} seconds (formatted {:.3}):\n{}",
                         response.command_groups.len(),
+                        completed,
+                        now.elapsed().as_secs_f64(),
                         response_description
                     );
                     warp_protobuf::reply::protobuf(&response)
