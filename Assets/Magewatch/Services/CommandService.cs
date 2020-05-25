@@ -93,17 +93,14 @@ namespace Magewatch.Services
         if (command.UpdateInterface != null)
         {
           var button = Root.Instance.MainButton;
-          button.SetEnabled(command.UpdateInterface.MainButtonEnabled);
-          button.SetText(command.UpdateInterface.MainButtonText);
+          button.UpdateData(command.UpdateInterface);
         }
 
         if (command.UpdateCanPlayCard != null)
         {
-          _expectedCompletions++;
           var card = Errors.CheckNotNull(Root.Instance.GetPlayer(command.UpdateCanPlayCard.Player).Hand
             .Get(command.UpdateCanPlayCard.CardId));
           card.SetCanPlay(command.UpdateCanPlayCard.CanPlay);
-          OnComplete();
         }
 
         if (command.DrawOrUpdateCard != null)
@@ -162,6 +159,7 @@ namespace Magewatch.Services
 
       if (_expectedCompletions == 0)
       {
+        _expectedCompletions++;
         OnComplete();
       }
     }

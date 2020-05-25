@@ -69,8 +69,12 @@ message ConnectToGameRequest {
 }
 
 // Advance the game to the next phase
-message AdvancePhaseRequest {
+message MClickMainButtonRequest {
   GameId game_id = 1;
+
+  PlayerName player = 2;
+
+  uint32 click_event_id = 3;
 }
 
 // Play a creature card at a given position
@@ -148,7 +152,7 @@ message Request {
   oneof request {
     StartGameRequest start_game = 2;
     ConnectToGameRequest connect_to_game = 3;
-    AdvancePhaseRequest advance_phase = 4;
+    MClickMainButtonRequest click_main_button = 4;
     PlayCardRequest play_card = 5;
     RepositionCreaturesRequest reposition_creatures = 6;
     MDebugLoadScenarioRequest load_scenario = 8;
@@ -281,10 +285,12 @@ message WaitCommand {
   uint32 wait_time_milliseconds = 1;
 }
 
-message UpdateInterfaceCommand {
+message MUpdateInterfaceCommand {
   bool main_button_enabled = 1;
 
   string main_button_text = 2;
+
+  uint32 click_event_id = 13;
 }
 
 message UpdatePlayerCommand {
@@ -443,7 +449,7 @@ message MInitiateGameCommand {
 message Command {
   oneof command {
     WaitCommand wait = 1;
-    UpdateInterfaceCommand update_interface = 2;
+    MUpdateInterfaceCommand update_interface = 2;
     MDrawOrUpdateCardCommand draw_or_update_card = 3;
     RevealCardCommand reveal_card = 4;
     UpdatePlayerCommand update_player = 5;

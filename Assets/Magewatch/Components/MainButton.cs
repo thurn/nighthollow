@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using DG.Tweening;
+using Magewatch.API;
+using Magewatch.Services;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,13 +25,10 @@ namespace Magewatch.Components
     [Header("Config")] [SerializeField] Text _text;
     [Header("Config")] [SerializeField] bool _enabled;
 
-    public void SetText(string text)
+    public void UpdateData(MUpdateInterfaceCommand command)
     {
-      _text.text = text;
-    }
-
-    public void SetEnabled(bool isEnabled)
-    {
+      _text.text = command.MainButtonText;
+      var isEnabled = command.MainButtonEnabled;
       var images = GetComponentsInChildren<Image>();
 
       if (isEnabled && !_enabled)
@@ -55,6 +54,18 @@ namespace Magewatch.Components
       }
 
       _enabled = isEnabled;
+    }
+
+    public void OnClick()
+    {
+      Root.Instance.NetworkService.MakeRequest(new Request
+      {
+        ClickMainButton = new MClickMainButtonRequest
+        {
+          GameId = Root.Instance.CurrentGameId,
+          Player = PlayerName.User
+        }
+      });
     }
   }
 }

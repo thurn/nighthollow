@@ -1760,7 +1760,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114754062367011179}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1361708036815494}
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &114754062367011179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2403,8 +2414,8 @@ MonoBehaviour:
   _hand: {fileID: 3461275702818300742}
   _lifeBar: {fileID: 3066537338001364411}
   _lifeText: {fileID: 3066537339235528246}
-  _manaBar: {fileID: 3066537339054923027}
-  _manaText: {fileID: 3066537338845320539}
+  _powerBar: {fileID: 3066537339054923027}
+  _powerText: {fileID: 3066537338845320539}
   _influenceRow: {fileID: 3343174916804785856}
   _projectileCollider: {fileID: 2127014917}
 --- !u!224 &3066537337732379598
@@ -3969,8 +3980,8 @@ MonoBehaviour:
   _hand: {fileID: 1841190611970440670}
   _lifeBar: {fileID: 4588714311478836258}
   _lifeText: {fileID: 4588714312123632494}
-  _manaBar: {fileID: 4588714310884995547}
-  _manaText: {fileID: 4588714310995349787}
+  _powerBar: {fileID: 4588714310884995547}
+  _powerText: {fileID: 4588714310995349787}
   _influenceRow: {fileID: 6452207825707287506}
   _projectileCollider: {fileID: 1320284885}
 --- !u!222 &4588714312742304337

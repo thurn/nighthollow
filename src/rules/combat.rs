@@ -31,8 +31,9 @@ use api::MUseCreatureSkillCommand;
 
 /// Handles running the Combat phase of the game and populating a list of
 /// resulting Commands
-pub fn run_combat(game: &mut Game) -> Result<api::CommandList> {
+pub fn run_combat(game: &mut Game) -> Result<Vec<api::CommandGroup>> {
     let mut result: Vec<api::CommandGroup> = vec![];
+
     rules::run_as_group(game, &mut result, RuleScope::AllCreatures, |rule, args| {
         Ok(rule.on_combat_start(args.rc, args.effects))
     })?;
@@ -92,9 +93,7 @@ pub fn run_combat(game: &mut Game) -> Result<api::CommandList> {
 
     run_end_of_combat(game, &mut result);
 
-    Ok(api::CommandList {
-        command_groups: result,
-    })
+    Ok(result)
 }
 
 /// True if this player has any living creatures

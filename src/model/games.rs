@@ -131,11 +131,16 @@ impl Player {
         self.update_cards(result);
     }
 
-    pub fn upkeep(&mut self, result: &mut Vec<api::CommandGroup>) {
+    pub fn upkeep(&mut self, result: &mut Vec<api::CommandGroup>) -> Result<()> {
         self.state.current_power = self.state.maximum_power;
         self.state.current_influence = self.state.maximum_influence.clone();
         self.state.available_scroll_plays = 1;
         self.update_cards(result);
+        let card = self.draw_card()?;
+        result.push(commands::single(commands::draw_or_update_card_command(
+            card,
+        )));
+        Ok(())
     }
 
     fn update_cards(&mut self, result: &mut Vec<api::CommandGroup>) {

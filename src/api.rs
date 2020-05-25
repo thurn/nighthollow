@@ -33,9 +33,13 @@ pub struct ConnectToGameRequest {
 }
 /// Advance the game to the next phase
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AdvancePhaseRequest {
+pub struct MClickMainButtonRequest {
     #[prost(message, optional, tag = "1")]
     pub game_id: ::std::option::Option<GameId>,
+    #[prost(enumeration = "PlayerName", tag = "2")]
+    pub player: i32,
+    #[prost(uint32, tag = "3")]
+    pub click_event_id: u32,
 }
 /// Play a creature card at a given position
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -134,7 +138,7 @@ pub mod request {
         #[prost(message, tag = "3")]
         ConnectToGame(super::ConnectToGameRequest),
         #[prost(message, tag = "4")]
-        AdvancePhase(super::AdvancePhaseRequest),
+        ClickMainButton(super::MClickMainButtonRequest),
         #[prost(message, tag = "5")]
         PlayCard(super::PlayCardRequest),
         #[prost(message, tag = "6")]
@@ -275,11 +279,13 @@ pub struct WaitCommand {
     pub wait_time_milliseconds: u32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateInterfaceCommand {
+pub struct MUpdateInterfaceCommand {
     #[prost(bool, tag = "1")]
     pub main_button_enabled: bool,
     #[prost(string, tag = "2")]
     pub main_button_text: std::string::String,
+    #[prost(uint32, tag = "13")]
+    pub click_event_id: u32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdatePlayerCommand {
@@ -464,7 +470,7 @@ pub mod command {
         #[prost(message, tag = "1")]
         Wait(super::WaitCommand),
         #[prost(message, tag = "2")]
-        UpdateInterface(super::UpdateInterfaceCommand),
+        UpdateInterface(super::MUpdateInterfaceCommand),
         #[prost(message, tag = "3")]
         DrawOrUpdateCard(super::MDrawOrUpdateCardCommand),
         #[prost(message, tag = "4")]

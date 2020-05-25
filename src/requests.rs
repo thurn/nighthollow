@@ -28,7 +28,10 @@ use crate::{
     rules::combat,
     test_data::scenarios,
 };
-use api::{MDebugDrawCardsRequest, MDebugLoadScenarioRequest, MDebugRunRequestSequenceRequest};
+use api::{
+    MClickMainButtonRequest, MDebugDrawCardsRequest, MDebugLoadScenarioRequest,
+    MDebugRunRequestSequenceRequest,
+};
 use std::{collections::HashMap, sync::Mutex};
 
 lazy_static! {
@@ -59,7 +62,9 @@ pub fn handle_request(request_message: &api::Request) -> Result<api::CommandList
             with_game(|game| debug_draw_cards(game, message))
         }
         api::request::Request::PlayCard(message) => with_game(|game| play_card(message, game)),
-        api::request::Request::AdvancePhase(_) => with_game(|game| advance_game_phase(game)),
+        api::request::Request::ClickMainButton(message) => {
+            with_game(|game| click_main_button(message, game))
+        }
         _ => commands::empty(),
     };
 
@@ -94,17 +99,17 @@ fn draw_card(player: &mut Player, result: &mut Vec<api::Command>) -> Result<()> 
 
 pub fn start_game() -> Result<(Game, api::CommandList)> {
     let mut game = scenarios::basic();
-    let mut commands = vec![];
+    let mut list = vec![next_turn_button(true)];
 
     for i in 0..6 {
-        draw_card(&mut game.user, &mut commands)?;
-        draw_card(&mut game.enemy, &mut commands)?;
+        draw_card(&mut game.user, &mut list)?;
+        draw_card(&mut game.enemy, &mut list)?;
     }
 
     let list = api::CommandList {
         command_groups: vec![
             commands::single(commands::initiate_game_command(&game)),
-            commands::group(commands),
+            commands::group(list),
         ],
     };
 
@@ -277,7 +282,10 @@ pub fn update_creature(creature: &Creature) -> api::Command {
     commands::create_or_update_creature_command(creature)
 }
 
-pub fn advance_game_phase(game: &mut Game) -> Result<api::CommandList> {
+pub fn click_main_button(
+    message: &MClickMainButtonRequest,
+    game: &mut Game,
+) -> Result<api::CommandList> {
     match game.state.phase {
         GamePhase::Preparation => to_main_phase(game),
         GamePhase::Main => to_preparation_phase(game),
@@ -286,15 +294,18 @@ pub fn advance_game_phase(game: &mut Game) -> Result<api::CommandList> {
 
 fn to_main_phase(game: &mut Game) -> Result<api::CommandList> {
     game.state.phase = GamePhase::Main;
-    combat::run_combat(game)
+    let mut combat = combat::run_combat(game)?;
+    combat.insert(0, commands::single(next_turn_button(false)));
+    combat.push(commands::single(next_turn_button(true)));
+    Ok(commands::groups(combat))
 }
 
 fn to_preparation_phase(game: &mut Game) -> Result<api::CommandList> {
     game.state.phase = GamePhase::Preparation;
-    let mut result = vec![];
+    let mut result = vec![commands::single(combat_button())];
 
-    game.user.upkeep(&mut result);
-    game.enemy.upkeep(&mut result);
+    game.user.upkeep(&mut result)?;
+    game.enemy.upkeep(&mut result)?;
 
     Ok(commands::groups(result))
 }
@@ -306,7 +317,10 @@ pub fn load_scenario(request: &MDebugLoadScenarioRequest) -> Result<api::Command
         Ok(games) => {
             let command = commands::initiate_game_command(&game);
             games.insert(String::from("game"), game);
-            Ok(commands::single_group(vec![command]))
+            Ok(commands::single_group(vec![
+                command,
+                next_turn_button(true),
+            ]))
         }
         Err(_) => Err(eyre!("Could not lock mutex")),
     }
@@ -359,4 +373,12 @@ pub fn run_request_sequence(message: &MDebugRunRequestSequenceRequest) -> Result
     );
 
     Ok(result)
+}
+
+fn next_turn_button(enabled: bool) -> api::Command {
+    commands::update_interface_state_command(enabled, String::from("Next Turn"), 1)
+}
+
+fn combat_button() -> api::Command {
+    commands::update_interface_state_command(true, String::from("Combat"), 1)
 }

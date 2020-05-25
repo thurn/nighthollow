@@ -27,7 +27,10 @@ use crate::{
         },
     },
 };
-use api::{MOnImpactNumber, MSkillAnimation, MSkillAnimationNumber, MUseCreatureSkillCommand};
+use api::{
+    MOnImpactNumber, MSkillAnimation, MSkillAnimationNumber, MUpdateInterfaceCommand,
+    MUseCreatureSkillCommand,
+};
 
 pub fn card_id(id: i32) -> api::CardId {
     api::CardId { value: id }
@@ -340,6 +343,22 @@ pub fn wait_command(milliseconds: u32) -> api::Command {
     }
 }
 
+pub fn update_interface_state_command(
+    main_button_enabled: bool,
+    main_button_text: String,
+    click_event_id: u32,
+) -> api::Command {
+    api::Command {
+        command: Some(api::command::Command::UpdateInterface(
+            MUpdateInterfaceCommand {
+                main_button_enabled,
+                main_button_text,
+                click_event_id,
+            },
+        )),
+    }
+}
+
 pub fn empty() -> Result<api::CommandList> {
     Ok(api::CommandList {
         command_groups: vec![],
@@ -371,7 +390,7 @@ pub fn request_name(request: &api::Request) -> &str {
         match r {
             api::request::Request::StartGame(_) => "StartGame",
             api::request::Request::ConnectToGame(_) => "ConnectToGame",
-            api::request::Request::AdvancePhase(_) => "AdvancePhase",
+            api::request::Request::ClickMainButton(_) => "AdvancePhase",
             api::request::Request::PlayCard(_) => "PlayCard",
             api::request::Request::RepositionCreatures(_) => "RepositionCreatures",
             api::request::Request::LoadScenario(_) => "LoadScenario",

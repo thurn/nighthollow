@@ -39,14 +39,6 @@ namespace Magewatch.Components
       });
     }
 
-    public void Advance()
-    {
-      Root.Instance.NetworkService.MakeRequest(new Request
-      {
-        AdvancePhase = new AdvancePhaseRequest()
-      });
-    }
-
     public void Basic()
     {
       Root.Instance.NetworkService.MakeRequest(new Request
@@ -142,7 +134,12 @@ namespace Magewatch.Components
     Request AdvancePhase() =>
       new Request
       {
-        AdvancePhase = new AdvancePhaseRequest()
+        ClickMainButton = new MClickMainButtonRequest
+        {
+          GameId = Root.Instance.CurrentGameId,
+          Player = PlayerName.User,
+          ClickEventId = 1
+        }
       };
 
     // public void Create()
