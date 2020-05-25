@@ -31,8 +31,8 @@ pub fn berserker(owner: PlayerName) -> CreatureData {
         card_data: CardData {
             id: next_id(),
             owner,
-            cost: Cost::ManaCost(ManaCost {
-                mana: 2,
+            cost: Cost::StandardCost(StandardCost {
+                power: 2,
                 influence: Influence::flame(1),
             }),
             name: String::from("Berserker"),
@@ -54,8 +54,8 @@ pub fn mage(owner: PlayerName) -> CreatureData {
         card_data: CardData {
             id: next_id(),
             owner,
-            cost: Cost::ManaCost(ManaCost {
-                mana: 3,
+            cost: Cost::StandardCost(StandardCost {
+                power: 3,
                 influence: Influence::flame(2),
             }),
             name: String::from("Mage"),
@@ -77,8 +77,8 @@ pub fn rage(owner: PlayerName) -> Spell {
         card_data: CardData {
             id: next_id(),
             owner,
-            cost: Cost::ManaCost(ManaCost {
-                mana: 1,
+            cost: Cost::StandardCost(StandardCost {
+                power: 1,
                 influence: Influence::flame(1),
             }),
             name: String::from("Rage"),

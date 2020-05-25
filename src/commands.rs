@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use color_eyre::Result;
+use eyre::Result;
 
 use crate::{
     api, interface,
     model::{
         assets::CreatureType,
-        cards::{Card, Cost, HasCardData, ManaCost, Scroll, Spell},
+        cards::{Card, Cost, HasCardData, Scroll, Spell, StandardCost},
         creatures::{Creature, CreatureData},
         games::{Game, HasOwner, Player},
         primitives::{
@@ -83,8 +83,8 @@ pub fn player_data(player: &Player) -> api::PlayerData {
         player_name: player_name(player.name).into(),
         current_life: player.state.current_life,
         maximum_life: player.state.maximum_life,
-        current_mana: player.state.current_mana,
-        maximum_mana: player.state.maximum_mana,
+        current_power: player.state.current_power,
+        maximum_power: player.state.maximum_power,
         current_influence: influence(&player.state.current_influence),
         maximum_influence: influence(&player.state.current_influence),
     }
@@ -120,9 +120,9 @@ pub fn influence(influence: &Influence) -> Vec<api::Influence> {
     result
 }
 
-pub fn mana_cost(cost: &ManaCost) -> api::StandardCost {
+pub fn standard_cost(cost: &StandardCost) -> api::StandardCost {
     api::StandardCost {
-        mana_cost: cost.mana,
+        power_cost: cost.power,
         influence_cost: influence(&cost.influence),
     }
 }
@@ -130,7 +130,7 @@ pub fn mana_cost(cost: &ManaCost) -> api::StandardCost {
 pub fn cost(cost: &Cost) -> api::card_data::Cost {
     match cost {
         Cost::None => api::card_data::Cost::NoCost(api::NoCost {}),
-        Cost::ManaCost(c) => api::card_data::Cost::StandardCost(mana_cost(c)),
+        Cost::StandardCost(c) => api::card_data::Cost::StandardCost(standard_cost(c)),
     }
 }
 
@@ -246,7 +246,7 @@ pub fn update_player_command(player: &Player) -> api::Command {
 
 pub fn reveal_card(
     card: api::CardData,
-    delay_milliseconds: i32,
+    delay_milliseconds: u32,
     rank_position: Option<RankValue>,
     file_position: Option<FileValue>,
 ) -> api::RevealCardCommand {
@@ -265,7 +265,7 @@ pub fn reveal_card(
 
 pub fn reveal_card_command(
     card: api::CardData,
-    delay_milliseconds: i32,
+    delay_milliseconds: u32,
     rank_position: Option<RankValue>,
     file_position: Option<FileValue>,
 ) -> api::Command {
@@ -352,7 +352,7 @@ pub fn remove_creature_command(creature: CreatureId) -> api::Command {
     }
 }
 
-pub fn wait_command(milliseconds: i32) -> api::Command {
+pub fn wait_command(milliseconds: u32) -> api::Command {
     api::Command {
         command: Some(api::command::Command::Wait(api::WaitCommand {
             wait_time_milliseconds: milliseconds,

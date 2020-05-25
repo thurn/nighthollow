@@ -122,7 +122,7 @@ namespace Magewatch.Components
             _cost.transform.parent.gameObject.SetActive(false);
             break;
           case CardData.CostOneofCase.StandardCost:
-            _cost.text = newCardData.StandardCost.ManaCost.ToString();
+            _cost.text = newCardData.StandardCost.PowerCost.ToString();
             var addIndex = 0;
             foreach (var influence in newCardData.StandardCost.InfluenceCost)
             {

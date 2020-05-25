@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use color_eyre::Result;
 use eyre::eyre;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 
 use super::{
@@ -29,10 +29,10 @@ pub trait HasOwner {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayerState {
-    pub current_life: i32,
-    pub maximum_life: i32,
-    pub current_mana: i32,
-    pub maximum_mana: i32,
+    pub current_life: LifeValue,
+    pub maximum_life: LifeValue,
+    pub current_power: PowerValue,
+    pub maximum_power: ManaValue,
     pub current_influence: Influence,
     pub maximum_influence: Influence,
 }
@@ -42,8 +42,8 @@ impl Default for PlayerState {
         PlayerState {
             current_life: 25,
             maximum_life: 25,
-            current_mana: 0,
-            maximum_mana: 0,
+            current_power: 0,
+            maximum_power: 0,
             current_influence: Influence::default(),
             maximum_influence: Influence::default(),
         }

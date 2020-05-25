@@ -14,7 +14,7 @@
 
 use std::fmt::Debug;
 
-use color_eyre::Result;
+use eyre::Result;
 
 use super::effects::{self, Effects, MutationEvent, MutationEventType, SetModifier};
 use crate::{

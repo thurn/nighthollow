@@ -15,8 +15,8 @@
 use std::cmp;
 use std::sync::atomic::{AtomicI32, Ordering};
 
-use color_eyre::Result;
 use eyre::eyre;
+use eyre::Result;
 use rand::{
     distributions::{Distribution, WeightedIndex},
     prelude::thread_rng,
@@ -27,21 +27,21 @@ use super::{
     assets::{ScrollType, SpellType},
     creatures::CreatureData,
     games::HasOwner,
-    primitives::{CardId, Influence, PlayerName, School},
+    primitives::{CardId, Influence, PlayerName, PowerValue, School},
 };
 
 static NEXT_CARD_ID: AtomicI32 = AtomicI32::new(1);
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ManaCost {
-    pub mana: i32,
+pub struct StandardCost {
+    pub power: PowerValue,
     pub influence: Influence,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Cost {
     None,
-    ManaCost(ManaCost),
+    StandardCost(StandardCost),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -52,20 +52,20 @@ namespace Magewatch.Components
         }
       }
 
-      if (firstUpdate || _playerData.CurrentMana != playerData.CurrentMana)
+      if (firstUpdate || _playerData.CurrentPower != playerData.CurrentPower)
       {
-        if (playerData.MaximumMana == 0)
+        if (playerData.MaximumPower == 0)
         {
           _manaBar.DOFillAmount(0, 0.3f);
         }
         else
         {
-          _manaBar.DOFillAmount(playerData.CurrentMana / (float) playerData.MaximumMana, 0.3f);
+          _manaBar.DOFillAmount(playerData.CurrentPower / (float) playerData.MaximumPower, 0.3f);
         }
       }
 
       _lifeText.text = $"{playerData.CurrentLife}/{playerData.MaximumLife}";
-      _manaText.text = $"{playerData.CurrentMana}/{playerData.MaximumMana}";
+      _manaText.text = $"{playerData.CurrentPower}/{playerData.MaximumPower}";
 
       foreach (Transform child in _influenceRow)
       {
@@ -88,7 +88,7 @@ namespace Magewatch.Components
       }
     }
 
-    int InfluenceCount(PlayerData playerData, InfluenceType influenceType) =>
+    uint InfluenceCount(PlayerData playerData, InfluenceType influenceType) =>
       playerData.CurrentInfluence.ToList().Find(i => i.InfluenceType == influenceType)?.Value ?? 0;
   }
 }

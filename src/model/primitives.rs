@@ -24,6 +24,9 @@ pub type RoundNumber = u32;
 pub type ActionNumber = u32;
 pub type HealthValue = u32;
 pub type ManaValue = u32;
+pub type PowerValue = u32;
+pub type LifeValue = u32;
+pub type InfluenceValue = u32;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub struct RuleId {
@@ -127,16 +130,16 @@ pub enum SkillAnimation {
 
 #[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]
 pub struct Influence {
-    pub light: i32,
-    pub sky: i32,
-    pub flame: i32,
-    pub ice: i32,
-    pub earth: i32,
-    pub shadow: i32,
+    pub light: InfluenceValue,
+    pub sky: InfluenceValue,
+    pub flame: InfluenceValue,
+    pub ice: InfluenceValue,
+    pub earth: InfluenceValue,
+    pub shadow: InfluenceValue,
 }
 
 impl Influence {
-    pub fn new(school: School, amount: i32) -> Influence {
+    pub fn new(school: School, amount: InfluenceValue) -> Influence {
         Influence {
             light: if school == School::Light { amount } else { 0 },
             sky: if school == School::Sky { amount } else { 0 },
@@ -147,28 +150,28 @@ impl Influence {
         }
     }
 
-    pub fn light(i: i32) -> Influence {
+    pub fn light(i: InfluenceValue) -> Influence {
         Influence {
             light: i,
             ..Influence::default()
         }
     }
 
-    pub fn sky(i: i32) -> Influence {
+    pub fn sky(i: InfluenceValue) -> Influence {
         Influence {
             sky: i,
             ..Influence::default()
         }
     }
 
-    pub fn flame(i: i32) -> Influence {
+    pub fn flame(i: InfluenceValue) -> Influence {
         Influence {
             flame: i,
             ..Influence::default()
         }
     }
 
-    pub fn value(&self, school: &School) -> i32 {
+    pub fn value(&self, school: &School) -> InfluenceValue {
         match school {
             School::Light => self.light,
             School::Sky => self.sky,

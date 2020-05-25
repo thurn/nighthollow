@@ -151,8 +151,8 @@ pub mod request {
 pub struct Influence {
     #[prost(enumeration = "InfluenceType", tag = "1")]
     pub influence_type: i32,
-    #[prost(int32, tag = "2")]
-    pub value: i32,
+    #[prost(uint32, tag = "2")]
+    pub value: u32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Asset {
@@ -167,14 +167,14 @@ pub struct Asset {
 pub struct PlayerData {
     #[prost(enumeration = "PlayerName", tag = "1")]
     pub player_name: i32,
-    #[prost(int32, tag = "2")]
-    pub current_life: i32,
-    #[prost(int32, tag = "3")]
-    pub maximum_life: i32,
-    #[prost(int32, tag = "4")]
-    pub current_mana: i32,
-    #[prost(int32, tag = "5")]
-    pub maximum_mana: i32,
+    #[prost(uint32, tag = "2")]
+    pub current_life: u32,
+    #[prost(uint32, tag = "3")]
+    pub maximum_life: u32,
+    #[prost(uint32, tag = "4")]
+    pub current_power: u32,
+    #[prost(uint32, tag = "5")]
+    pub maximum_power: u32,
     #[prost(message, repeated, tag = "6")]
     pub current_influence: ::std::vec::Vec<Influence>,
     #[prost(message, repeated, tag = "7")]
@@ -184,8 +184,8 @@ pub struct PlayerData {
 pub struct NoCost {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StandardCost {
-    #[prost(int32, tag = "1")]
-    pub mana_cost: i32,
+    #[prost(uint32, tag = "1")]
+    pub power_cost: u32,
     #[prost(message, repeated, tag = "2")]
     pub influence_cost: ::std::vec::Vec<Influence>,
 }
@@ -271,8 +271,8 @@ pub struct DisplayErrorCommand {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct WaitCommand {
-    #[prost(int32, tag = "1")]
-    pub wait_time_milliseconds: i32,
+    #[prost(uint32, tag = "1")]
+    pub wait_time_milliseconds: u32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateInterfaceCommand {
@@ -299,8 +299,8 @@ pub struct RevealCardCommand {
     pub card: ::std::option::Option<CardData>,
     /// How long to show the card for before animating it away. 0 should be
     /// interpreted as allowing the client to pick its own default.
-    #[prost(int32, tag = "2")]
-    pub reveal_delay_milliseconds: i32,
+    #[prost(uint32, tag = "2")]
+    pub reveal_delay_milliseconds: u32,
     #[prost(enumeration = "RankValue", tag = "3")]
     pub rank_position: i32,
     #[prost(enumeration = "FileValue", tag = "4")]

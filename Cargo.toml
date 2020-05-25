@@ -8,7 +8,6 @@ default-run = "magewatch"
 
 [dependencies]
 bytes = "0.5"
-color-eyre = "0.3"
 derive_more = "0.99"
 eyre = "0.4"
 lazy_static = "1.4"

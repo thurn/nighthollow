@@ -62,101 +62,101 @@ namespace Magewatch.API {
             "aS5NRGVidWdEcmF3Q2FyZHNSZXF1ZXN0SAASRAoUcnVuX3JlcXVlc3Rfc2Vx",
             "dWVuY2UYCiABKAsyJC5hcGkuTURlYnVnUnVuUmVxdWVzdFNlcXVlbmNlUmVx",
             "dWVzdEgAQgkKB3JlcXVlc3QiRgoJSW5mbHVlbmNlEioKDmluZmx1ZW5jZV90",
-            "eXBlGAEgASgOMhIuYXBpLkluZmx1ZW5jZVR5cGUSDQoFdmFsdWUYAiABKAUi",
+            "eXBlGAEgASgOMhIuYXBpLkluZmx1ZW5jZVR5cGUSDQoFdmFsdWUYAiABKA0i",
             "PAoFQXNzZXQSDwoHYWRkcmVzcxgBIAEoCRIiCgphc3NldF90eXBlGAIgASgO",
-            "Mg4uYXBpLkFzc2V0VHlwZSLgAQoKUGxheWVyRGF0YRIkCgtwbGF5ZXJfbmFt",
+            "Mg4uYXBpLkFzc2V0VHlwZSLiAQoKUGxheWVyRGF0YRIkCgtwbGF5ZXJfbmFt",
             "ZRgBIAEoDjIPLmFwaS5QbGF5ZXJOYW1lEhQKDGN1cnJlbnRfbGlmZRgCIAEo",
-            "BRIUCgxtYXhpbXVtX2xpZmUYAyABKAUSFAoMY3VycmVudF9tYW5hGAQgASgF",
-            "EhQKDG1heGltdW1fbWFuYRgFIAEoBRIpChFjdXJyZW50X2luZmx1ZW5jZRgG",
-            "IAMoCzIOLmFwaS5JbmZsdWVuY2USKQoRbWF4aW11bV9pbmZsdWVuY2UYByAD",
-            "KAsyDi5hcGkuSW5mbHVlbmNlIggKBk5vQ29zdCJJCgxTdGFuZGFyZENvc3QS",
-            "EQoJbWFuYV9jb3N0GAEgASgFEiYKDmluZmx1ZW5jZV9jb3N0GAIgAygLMg4u",
-            "YXBpLkluZmx1ZW5jZSIYCghSaWNoVGV4dBIMCgR0ZXh0GAEgASgJIisKDkF0",
-            "dGFjaG1lbnREYXRhEhkKBWltYWdlGAEgASgLMgouYXBpLkFzc2V0IhAKDlVu",
-            "dGFyZ2V0ZWREYXRhIsMDCghDYXJkRGF0YRIcCgdjYXJkX2lkGAEgASgLMgsu",
-            "YXBpLkNhcmRJZBIaCgZwcmVmYWIYAiABKAsyCi5hcGkuQXNzZXQSDAoEbmFt",
-            "ZRgDIAEoCRIeCgdub19jb3N0GAQgASgLMgsuYXBpLk5vQ29zdEgAEioKDXN0",
-            "YW5kYXJkX2Nvc3QYBSABKAsyES5hcGkuU3RhbmRhcmRDb3N0SAASHgoFb3du",
-            "ZXIYBiABKA4yDy5hcGkuUGxheWVyTmFtZRIZCgVpbWFnZRgHIAEoCzIKLmFw",
-            "aS5Bc3NldBIbCgR0ZXh0GAggASgLMg0uYXBpLlJpY2hUZXh0EhMKC2lzX3Jl",
-            "dmVhbGVkGAkgASgIEhUKDWNhbl9iZV9wbGF5ZWQYCiABKAgSKgoNY3JlYXR1",
-            "cmVfY2FyZBgLIAEoCzIRLmFwaS5DcmVhdHVyZURhdGFIARIuCg9hdHRhY2ht",
-            "ZW50X2NhcmQYDCABKAsyEy5hcGkuQXR0YWNobWVudERhdGFIARIuCg91bnRh",
-            "cmdldGVkX2NhcmQYDSABKAsyEy5hcGkuVW50YXJnZXRlZERhdGFIAUIGCgRj",
-            "b3N0QgsKCWNhcmRfdHlwZSKFAgoMQ3JlYXR1cmVEYXRhEiQKC2NyZWF0dXJl",
-            "X2lkGAEgASgLMg8uYXBpLkNyZWF0dXJlSWQSGgoGcHJlZmFiGAIgASgLMgou",
-            "YXBpLkFzc2V0Eh4KBW93bmVyGAMgASgOMg8uYXBpLlBsYXllck5hbWUSJQoN",
-            "cmFua19wb3NpdGlvbhgEIAEoDjIOLmFwaS5SYW5rVmFsdWUSJQoNZmlsZV9w",
-            "b3NpdGlvbhgFIAEoDjIOLmFwaS5GaWxlVmFsdWUSGwoTY2FuX2JlX3JlcG9z",
-            "aXRpb25lZBgGIAEoCBIoCgthdHRhY2htZW50cxgHIAMoCzITLmFwaS5BdHRh",
-            "Y2htZW50RGF0YSIkChNEaXNwbGF5RXJyb3JDb21tYW5kEg0KBWVycm9yGAEg",
-            "ASgJIi0KC1dhaXRDb21tYW5kEh4KFndhaXRfdGltZV9taWxsaXNlY29uZHMY",
-            "ASABKAUiTwoWVXBkYXRlSW50ZXJmYWNlQ29tbWFuZBIbChNtYWluX2J1dHRv",
-            "bl9lbmFibGVkGAEgASgIEhgKEG1haW5fYnV0dG9uX3RleHQYAiABKAkiNgoT",
-            "VXBkYXRlUGxheWVyQ29tbWFuZBIfCgZwbGF5ZXIYASABKAsyDy5hcGkuUGxh",
-            "eWVyRGF0YSIuCg9EcmF3Q2FyZENvbW1hbmQSGwoEY2FyZBgBIAEoCzINLmFw",
-            "aS5DYXJkRGF0YSKhAQoRUmV2ZWFsQ2FyZENvbW1hbmQSGwoEY2FyZBgBIAEo",
-            "CzINLmFwaS5DYXJkRGF0YRIhChlyZXZlYWxfZGVsYXlfbWlsbGlzZWNvbmRz",
-            "GAIgASgFEiUKDXJhbmtfcG9zaXRpb24YAyABKA4yDi5hcGkuUmFua1ZhbHVl",
-            "EiUKDWZpbGVfcG9zaXRpb24YBCABKA4yDi5hcGkuRmlsZVZhbHVlIkQKHUNy",
-            "ZWF0ZU9yVXBkYXRlQ3JlYXR1cmVDb21tYW5kEiMKCGNyZWF0dXJlGAEgASgL",
-            "MhEuYXBpLkNyZWF0dXJlRGF0YSI9ChVSZW1vdmVDcmVhdHVyZUNvbW1hbmQS",
-            "JAoLY3JlYXR1cmVfaWQYASABKAsyDy5hcGkuQ3JlYXR1cmVJZCJSCg9NU2tp",
-            "bGxBbmltYXRpb24SKQoFc2tpbGwYASABKA4yGi5hcGkuTVNraWxsQW5pbWF0",
-            "aW9uTnVtYmVyEhQKDGltcGFjdF9jb3VudBgCIAEoBSJICg9NT25JbXBhY3RO",
-            "dW1iZXISFQoNaW1wYWN0X251bWJlchgBIAEoDRIeCgZlZmZlY3QYAiABKAsy",
-            "Di5hcGkuTU9uSW1wYWN0InEKCU1PbkltcGFjdBImCgZ1cGRhdGUYASABKAsy",
-            "FC5hcGkuTUNyZWF0dXJlVXBkYXRlSAASLwoPZmlyZV9wcm9qZWN0aWxlGAIg",
-            "ASgLMhQuYXBpLk1GaXJlUHJvamVjdGlsZUgAQgsKCW9uX2ltcGFjdCKtAQoP",
-            "TUZpcmVQcm9qZWN0aWxlEiQKC2NyZWF0dXJlX2lkGAEgASgLMg8uYXBpLkNy",
-            "ZWF0dXJlSWQSHgoKcHJvamVjdGlsZRgCIAEoCzIKLmFwaS5Bc3NldBIeCgZv",
-            "bl9oaXQYAyADKAsyDi5hcGkuTU9uSW1wYWN0EioKD3RhcmdldF9jcmVhdHVy",
-            "ZRgEIAEoCzIPLmFwaS5DcmVhdHVyZUlkSABCCAoGdGFyZ2V0IrwBCg9NQ3Jl",
-            "YXR1cmVVcGRhdGUSJAoLY3JlYXR1cmVfaWQYASABKAsyDy5hcGkuQ3JlYXR1",
-            "cmVJZBIdChVzZXRfaGVhbHRoX3BlcmNlbnRhZ2UYAiABKAISHAoUcGxheV9k",
-            "ZWF0aF9hbmltYXRpb24YAyABKAgSGwoTc2V0X21hbmFfcGVyY2VudGFnZRgE",
-            "IAEoAhIpChVwbGF5X3BhcnRpY2xlX2VmZmVjdHMYBSADKAsyCi5hcGkuQXNz",
-            "ZXQiPgoWTVVwZGF0ZUNyZWF0dXJlQ29tbWFuZBIkCgZ1cGRhdGUYASABKAsy",
-            "FC5hcGkuTUNyZWF0dXJlVXBkYXRlIr0BChhNVXNlQ3JlYXR1cmVTa2lsbENv",
-            "bW1hbmQSKAoPc291cmNlX2NyZWF0dXJlGAEgASgLMg8uYXBpLkNyZWF0dXJl",
-            "SWQSJwoJYW5pbWF0aW9uGAIgASgLMhQuYXBpLk1Ta2lsbEFuaW1hdGlvbhIn",
-            "Cglvbl9pbXBhY3QYAyADKAsyFC5hcGkuTU9uSW1wYWN0TnVtYmVyEiUKDG1l",
-            "bGVlX3RhcmdldBgEIAEoCzIPLmFwaS5DcmVhdHVyZUlkImgKE01EZXN0cm95",
-            "Q2FyZENvbW1hbmQSHwoGcGxheWVyGAEgASgOMg8uYXBpLlBsYXllck5hbWUS",
-            "HAoHY2FyZF9pZBgCIAEoCzILLmFwaS5DYXJkSWQSEgoKbXVzdF9leGlzdBgD",
-            "IAEoCCKTAQoUTUluaXRpYXRlR2FtZUNvbW1hbmQSIAoLbmV3X2dhbWVfaWQY",
-            "ASABKAsyCy5hcGkuR2FtZUlkEisKEmluaXRpYWxfdXNlcl9zdGF0ZRgCIAEo",
-            "CzIPLmFwaS5QbGF5ZXJEYXRhEiwKE2luaXRpYWxfZW5lbXlfc3RhdGUYAyAB",
-            "KAsyDy5hcGkuUGxheWVyRGF0YSKKBQoHQ29tbWFuZBIgCgR3YWl0GAEgASgL",
-            "MhAuYXBpLldhaXRDb21tYW5kSAASNwoQdXBkYXRlX2ludGVyZmFjZRgCIAEo",
-            "CzIbLmFwaS5VcGRhdGVJbnRlcmZhY2VDb21tYW5kSAASKQoJZHJhd19jYXJk",
-            "GAMgASgLMhQuYXBpLkRyYXdDYXJkQ29tbWFuZEgAEi0KC3JldmVhbF9jYXJk",
-            "GAQgASgLMhYuYXBpLlJldmVhbENhcmRDb21tYW5kSAASMQoNdXBkYXRlX3Bs",
-            "YXllchgFIAEoCzIYLmFwaS5VcGRhdGVQbGF5ZXJDb21tYW5kSAASRwoZY3Jl",
-            "YXRlX29yX3VwZGF0ZV9jcmVhdHVyZRgGIAEoCzIiLmFwaS5DcmVhdGVPclVw",
-            "ZGF0ZUNyZWF0dXJlQ29tbWFuZEgAEjUKD3JlbW92ZV9jcmVhdHVyZRgHIAEo",
-            "CzIaLmFwaS5SZW1vdmVDcmVhdHVyZUNvbW1hbmRIABI2Cg91cGRhdGVfY3Jl",
-            "YXR1cmUYCiABKAsyGy5hcGkuTVVwZGF0ZUNyZWF0dXJlQ29tbWFuZEgAEjsK",
-            "EnVzZV9jcmVhdHVyZV9za2lsbBgLIAEoCzIdLmFwaS5NVXNlQ3JlYXR1cmVT",
-            "a2lsbENvbW1hbmRIABIxCg1kaXNwbGF5X2Vycm9yGAwgASgLMhguYXBpLkRp",
-            "c3BsYXlFcnJvckNvbW1hbmRIABIwCgxkZXN0cm95X2NhcmQYDSABKAsyGC5h",
-            "cGkuTURlc3Ryb3lDYXJkQ29tbWFuZEgAEjIKDWluaXRpYXRlX2dhbWUYDiAB",
-            "KAsyGS5hcGkuTUluaXRpYXRlR2FtZUNvbW1hbmRIAEIJCgdjb21tYW5kIi4K",
-            "DENvbW1hbmRHcm91cBIeCghjb21tYW5kcxgBIAMoCzIMLmFwaS5Db21tYW5k",
-            "IjgKC0NvbW1hbmRMaXN0EikKDmNvbW1hbmRfZ3JvdXBzGAEgAygLMhEuYXBp",
-            "LkNvbW1hbmRHcm91cCo5CgpQbGF5ZXJOYW1lEhYKElBMQVlFUl9VTlNQRUNJ",
-            "RklFRBAAEggKBFVTRVIQARIJCgVFTkVNWRACKl0KCVJhbmtWYWx1ZRIUChBS",
-            "QU5LX1VOU1BFQ0lGSUVEEAASCgoGUkFOS18xEAISCgoGUkFOS18yEAMSCgoG",
-            "UkFOS18zEAQSCgoGUkFOS180EAUSCgoGUkFOS181EAYqXQoJRmlsZVZhbHVl",
-            "EhQKEEZJTEVfVU5TUEVDSUZJRUQQABIKCgZGSUxFXzEQAhIKCgZGSUxFXzIQ",
-            "AxIKCgZGSUxFXzMQBBIKCgZGSUxFXzQQBRIKCgZGSUxFXzUQBippCg1JbmZs",
-            "dWVuY2VUeXBlEhkKFUlORkxVRU5DRV9VTlNQRUNJRklFRBAAEgkKBUxJR0hU",
-            "EAESBwoDU0tZEAISCQoFRkxBTUUQAxIHCgNJQ0UQBBIJCgVFQVJUSBAFEgoK",
-            "BlNIQURPVxAGKjkKCUFzc2V0VHlwZRIUChBUWVBFX1VOU1BFQ0lGSUVEEAAS",
-            "CgoGUFJFRkFCEAESCgoGU1BSSVRFEAIqbwoVTVNraWxsQW5pbWF0aW9uTnVt",
-            "YmVyEhUKEVNLSUxMX1VOU1BFQ0lGSUVEEAASCwoHU0tJTExfMRABEgsKB1NL",
-            "SUxMXzIQAhILCgdTS0lMTF8zEAMSCwoHU0tJTExfNBAEEgsKB1NLSUxMXzUQ",
-            "BUIQqgINTWFnZXdhdGNoLkFQSWIGcHJvdG8z"));
+            "DRIUCgxtYXhpbXVtX2xpZmUYAyABKA0SFQoNY3VycmVudF9wb3dlchgEIAEo",
+            "DRIVCg1tYXhpbXVtX3Bvd2VyGAUgASgNEikKEWN1cnJlbnRfaW5mbHVlbmNl",
+            "GAYgAygLMg4uYXBpLkluZmx1ZW5jZRIpChFtYXhpbXVtX2luZmx1ZW5jZRgH",
+            "IAMoCzIOLmFwaS5JbmZsdWVuY2UiCAoGTm9Db3N0IkoKDFN0YW5kYXJkQ29z",
+            "dBISCgpwb3dlcl9jb3N0GAEgASgNEiYKDmluZmx1ZW5jZV9jb3N0GAIgAygL",
+            "Mg4uYXBpLkluZmx1ZW5jZSIYCghSaWNoVGV4dBIMCgR0ZXh0GAEgASgJIisK",
+            "DkF0dGFjaG1lbnREYXRhEhkKBWltYWdlGAEgASgLMgouYXBpLkFzc2V0IhAK",
+            "DlVudGFyZ2V0ZWREYXRhIsMDCghDYXJkRGF0YRIcCgdjYXJkX2lkGAEgASgL",
+            "MgsuYXBpLkNhcmRJZBIaCgZwcmVmYWIYAiABKAsyCi5hcGkuQXNzZXQSDAoE",
+            "bmFtZRgDIAEoCRIeCgdub19jb3N0GAQgASgLMgsuYXBpLk5vQ29zdEgAEioK",
+            "DXN0YW5kYXJkX2Nvc3QYBSABKAsyES5hcGkuU3RhbmRhcmRDb3N0SAASHgoF",
+            "b3duZXIYBiABKA4yDy5hcGkuUGxheWVyTmFtZRIZCgVpbWFnZRgHIAEoCzIK",
+            "LmFwaS5Bc3NldBIbCgR0ZXh0GAggASgLMg0uYXBpLlJpY2hUZXh0EhMKC2lz",
+            "X3JldmVhbGVkGAkgASgIEhUKDWNhbl9iZV9wbGF5ZWQYCiABKAgSKgoNY3Jl",
+            "YXR1cmVfY2FyZBgLIAEoCzIRLmFwaS5DcmVhdHVyZURhdGFIARIuCg9hdHRh",
+            "Y2htZW50X2NhcmQYDCABKAsyEy5hcGkuQXR0YWNobWVudERhdGFIARIuCg91",
+            "bnRhcmdldGVkX2NhcmQYDSABKAsyEy5hcGkuVW50YXJnZXRlZERhdGFIAUIG",
+            "CgRjb3N0QgsKCWNhcmRfdHlwZSKFAgoMQ3JlYXR1cmVEYXRhEiQKC2NyZWF0",
+            "dXJlX2lkGAEgASgLMg8uYXBpLkNyZWF0dXJlSWQSGgoGcHJlZmFiGAIgASgL",
+            "MgouYXBpLkFzc2V0Eh4KBW93bmVyGAMgASgOMg8uYXBpLlBsYXllck5hbWUS",
+            "JQoNcmFua19wb3NpdGlvbhgEIAEoDjIOLmFwaS5SYW5rVmFsdWUSJQoNZmls",
+            "ZV9wb3NpdGlvbhgFIAEoDjIOLmFwaS5GaWxlVmFsdWUSGwoTY2FuX2JlX3Jl",
+            "cG9zaXRpb25lZBgGIAEoCBIoCgthdHRhY2htZW50cxgHIAMoCzITLmFwaS5B",
+            "dHRhY2htZW50RGF0YSIkChNEaXNwbGF5RXJyb3JDb21tYW5kEg0KBWVycm9y",
+            "GAEgASgJIi0KC1dhaXRDb21tYW5kEh4KFndhaXRfdGltZV9taWxsaXNlY29u",
+            "ZHMYASABKA0iTwoWVXBkYXRlSW50ZXJmYWNlQ29tbWFuZBIbChNtYWluX2J1",
+            "dHRvbl9lbmFibGVkGAEgASgIEhgKEG1haW5fYnV0dG9uX3RleHQYAiABKAki",
+            "NgoTVXBkYXRlUGxheWVyQ29tbWFuZBIfCgZwbGF5ZXIYASABKAsyDy5hcGku",
+            "UGxheWVyRGF0YSIuCg9EcmF3Q2FyZENvbW1hbmQSGwoEY2FyZBgBIAEoCzIN",
+            "LmFwaS5DYXJkRGF0YSKhAQoRUmV2ZWFsQ2FyZENvbW1hbmQSGwoEY2FyZBgB",
+            "IAEoCzINLmFwaS5DYXJkRGF0YRIhChlyZXZlYWxfZGVsYXlfbWlsbGlzZWNv",
+            "bmRzGAIgASgNEiUKDXJhbmtfcG9zaXRpb24YAyABKA4yDi5hcGkuUmFua1Zh",
+            "bHVlEiUKDWZpbGVfcG9zaXRpb24YBCABKA4yDi5hcGkuRmlsZVZhbHVlIkQK",
+            "HUNyZWF0ZU9yVXBkYXRlQ3JlYXR1cmVDb21tYW5kEiMKCGNyZWF0dXJlGAEg",
+            "ASgLMhEuYXBpLkNyZWF0dXJlRGF0YSI9ChVSZW1vdmVDcmVhdHVyZUNvbW1h",
+            "bmQSJAoLY3JlYXR1cmVfaWQYASABKAsyDy5hcGkuQ3JlYXR1cmVJZCJSCg9N",
+            "U2tpbGxBbmltYXRpb24SKQoFc2tpbGwYASABKA4yGi5hcGkuTVNraWxsQW5p",
+            "bWF0aW9uTnVtYmVyEhQKDGltcGFjdF9jb3VudBgCIAEoBSJICg9NT25JbXBh",
+            "Y3ROdW1iZXISFQoNaW1wYWN0X251bWJlchgBIAEoDRIeCgZlZmZlY3QYAiAB",
+            "KAsyDi5hcGkuTU9uSW1wYWN0InEKCU1PbkltcGFjdBImCgZ1cGRhdGUYASAB",
+            "KAsyFC5hcGkuTUNyZWF0dXJlVXBkYXRlSAASLwoPZmlyZV9wcm9qZWN0aWxl",
+            "GAIgASgLMhQuYXBpLk1GaXJlUHJvamVjdGlsZUgAQgsKCW9uX2ltcGFjdCKt",
+            "AQoPTUZpcmVQcm9qZWN0aWxlEiQKC2NyZWF0dXJlX2lkGAEgASgLMg8uYXBp",
+            "LkNyZWF0dXJlSWQSHgoKcHJvamVjdGlsZRgCIAEoCzIKLmFwaS5Bc3NldBIe",
+            "CgZvbl9oaXQYAyADKAsyDi5hcGkuTU9uSW1wYWN0EioKD3RhcmdldF9jcmVh",
+            "dHVyZRgEIAEoCzIPLmFwaS5DcmVhdHVyZUlkSABCCAoGdGFyZ2V0IrwBCg9N",
+            "Q3JlYXR1cmVVcGRhdGUSJAoLY3JlYXR1cmVfaWQYASABKAsyDy5hcGkuQ3Jl",
+            "YXR1cmVJZBIdChVzZXRfaGVhbHRoX3BlcmNlbnRhZ2UYAiABKAISHAoUcGxh",
+            "eV9kZWF0aF9hbmltYXRpb24YAyABKAgSGwoTc2V0X21hbmFfcGVyY2VudGFn",
+            "ZRgEIAEoAhIpChVwbGF5X3BhcnRpY2xlX2VmZmVjdHMYBSADKAsyCi5hcGku",
+            "QXNzZXQiPgoWTVVwZGF0ZUNyZWF0dXJlQ29tbWFuZBIkCgZ1cGRhdGUYASAB",
+            "KAsyFC5hcGkuTUNyZWF0dXJlVXBkYXRlIr0BChhNVXNlQ3JlYXR1cmVTa2ls",
+            "bENvbW1hbmQSKAoPc291cmNlX2NyZWF0dXJlGAEgASgLMg8uYXBpLkNyZWF0",
+            "dXJlSWQSJwoJYW5pbWF0aW9uGAIgASgLMhQuYXBpLk1Ta2lsbEFuaW1hdGlv",
+            "bhInCglvbl9pbXBhY3QYAyADKAsyFC5hcGkuTU9uSW1wYWN0TnVtYmVyEiUK",
+            "DG1lbGVlX3RhcmdldBgEIAEoCzIPLmFwaS5DcmVhdHVyZUlkImgKE01EZXN0",
+            "cm95Q2FyZENvbW1hbmQSHwoGcGxheWVyGAEgASgOMg8uYXBpLlBsYXllck5h",
+            "bWUSHAoHY2FyZF9pZBgCIAEoCzILLmFwaS5DYXJkSWQSEgoKbXVzdF9leGlz",
+            "dBgDIAEoCCKTAQoUTUluaXRpYXRlR2FtZUNvbW1hbmQSIAoLbmV3X2dhbWVf",
+            "aWQYASABKAsyCy5hcGkuR2FtZUlkEisKEmluaXRpYWxfdXNlcl9zdGF0ZRgC",
+            "IAEoCzIPLmFwaS5QbGF5ZXJEYXRhEiwKE2luaXRpYWxfZW5lbXlfc3RhdGUY",
+            "AyABKAsyDy5hcGkuUGxheWVyRGF0YSKKBQoHQ29tbWFuZBIgCgR3YWl0GAEg",
+            "ASgLMhAuYXBpLldhaXRDb21tYW5kSAASNwoQdXBkYXRlX2ludGVyZmFjZRgC",
+            "IAEoCzIbLmFwaS5VcGRhdGVJbnRlcmZhY2VDb21tYW5kSAASKQoJZHJhd19j",
+            "YXJkGAMgASgLMhQuYXBpLkRyYXdDYXJkQ29tbWFuZEgAEi0KC3JldmVhbF9j",
+            "YXJkGAQgASgLMhYuYXBpLlJldmVhbENhcmRDb21tYW5kSAASMQoNdXBkYXRl",
+            "X3BsYXllchgFIAEoCzIYLmFwaS5VcGRhdGVQbGF5ZXJDb21tYW5kSAASRwoZ",
+            "Y3JlYXRlX29yX3VwZGF0ZV9jcmVhdHVyZRgGIAEoCzIiLmFwaS5DcmVhdGVP",
+            "clVwZGF0ZUNyZWF0dXJlQ29tbWFuZEgAEjUKD3JlbW92ZV9jcmVhdHVyZRgH",
+            "IAEoCzIaLmFwaS5SZW1vdmVDcmVhdHVyZUNvbW1hbmRIABI2Cg91cGRhdGVf",
+            "Y3JlYXR1cmUYCiABKAsyGy5hcGkuTVVwZGF0ZUNyZWF0dXJlQ29tbWFuZEgA",
+            "EjsKEnVzZV9jcmVhdHVyZV9za2lsbBgLIAEoCzIdLmFwaS5NVXNlQ3JlYXR1",
+            "cmVTa2lsbENvbW1hbmRIABIxCg1kaXNwbGF5X2Vycm9yGAwgASgLMhguYXBp",
+            "LkRpc3BsYXlFcnJvckNvbW1hbmRIABIwCgxkZXN0cm95X2NhcmQYDSABKAsy",
+            "GC5hcGkuTURlc3Ryb3lDYXJkQ29tbWFuZEgAEjIKDWluaXRpYXRlX2dhbWUY",
+            "DiABKAsyGS5hcGkuTUluaXRpYXRlR2FtZUNvbW1hbmRIAEIJCgdjb21tYW5k",
+            "Ii4KDENvbW1hbmRHcm91cBIeCghjb21tYW5kcxgBIAMoCzIMLmFwaS5Db21t",
+            "YW5kIjgKC0NvbW1hbmRMaXN0EikKDmNvbW1hbmRfZ3JvdXBzGAEgAygLMhEu",
+            "YXBpLkNvbW1hbmRHcm91cCo5CgpQbGF5ZXJOYW1lEhYKElBMQVlFUl9VTlNQ",
+            "RUNJRklFRBAAEggKBFVTRVIQARIJCgVFTkVNWRACKl0KCVJhbmtWYWx1ZRIU",
+            "ChBSQU5LX1VOU1BFQ0lGSUVEEAASCgoGUkFOS18xEAISCgoGUkFOS18yEAMS",
+            "CgoGUkFOS18zEAQSCgoGUkFOS180EAUSCgoGUkFOS181EAYqXQoJRmlsZVZh",
+            "bHVlEhQKEEZJTEVfVU5TUEVDSUZJRUQQABIKCgZGSUxFXzEQAhIKCgZGSUxF",
+            "XzIQAxIKCgZGSUxFXzMQBBIKCgZGSUxFXzQQBRIKCgZGSUxFXzUQBippCg1J",
+            "bmZsdWVuY2VUeXBlEhkKFUlORkxVRU5DRV9VTlNQRUNJRklFRBAAEgkKBUxJ",
+            "R0hUEAESBwoDU0tZEAISCQoFRkxBTUUQAxIHCgNJQ0UQBBIJCgVFQVJUSBAF",
+            "EgoKBlNIQURPVxAGKjkKCUFzc2V0VHlwZRIUChBUWVBFX1VOU1BFQ0lGSUVE",
+            "EAASCgoGUFJFRkFCEAESCgoGU1BSSVRFEAIqbwoVTVNraWxsQW5pbWF0aW9u",
+            "TnVtYmVyEhUKEVNLSUxMX1VOU1BFQ0lGSUVEEAASCwoHU0tJTExfMRABEgsK",
+            "B1NLSUxMXzIQAhILCgdTS0lMTF8zEAMSCwoHU0tJTExfNBAEEgsKB1NLSUxM",
+            "XzUQBUIQqgINTWFnZXdhdGNoLkFQSWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.AssetType), typeof(global::Magewatch.API.MSkillAnimationNumber), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -179,9 +179,9 @@ namespace Magewatch.API {
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Request), global::Magewatch.API.Request.Parser, new[]{ "UserId", "StartGame", "ConnectToGame", "AdvancePhase", "PlayCard", "RepositionCreatures", "LoadScenario", "DrawCards", "RunRequestSequence" }, new[]{ "Request" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Influence), global::Magewatch.API.Influence.Parser, new[]{ "InfluenceType", "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Asset), global::Magewatch.API.Asset.Parser, new[]{ "Address", "AssetType" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayerData), global::Magewatch.API.PlayerData.Parser, new[]{ "PlayerName", "CurrentLife", "MaximumLife", "CurrentMana", "MaximumMana", "CurrentInfluence", "MaximumInfluence" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.PlayerData), global::Magewatch.API.PlayerData.Parser, new[]{ "PlayerName", "CurrentLife", "MaximumLife", "CurrentPower", "MaximumPower", "CurrentInfluence", "MaximumInfluence" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.NoCost), global::Magewatch.API.NoCost.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.StandardCost), global::Magewatch.API.StandardCost.Parser, new[]{ "ManaCost", "InfluenceCost" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.StandardCost), global::Magewatch.API.StandardCost.Parser, new[]{ "PowerCost", "InfluenceCost" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.RichText), global::Magewatch.API.RichText.Parser, new[]{ "Text" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.AttachmentData), global::Magewatch.API.AttachmentData.Parser, new[]{ "Image" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.UntargetedData), global::Magewatch.API.UntargetedData.Parser, null, null, null, null, null),
@@ -3211,9 +3211,9 @@ namespace Magewatch.API {
 
     /// <summary>Field number for the "value" field.</summary>
     public const int ValueFieldNumber = 2;
-    private int value_;
+    private uint value_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Value {
+    public uint Value {
       get { return value_; }
       set {
         value_ = value;
@@ -3262,7 +3262,7 @@ namespace Magewatch.API {
       }
       if (Value != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(Value);
+        output.WriteUInt32(Value);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3276,7 +3276,7 @@ namespace Magewatch.API {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) InfluenceType);
       }
       if (Value != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Value);
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Value);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3311,7 +3311,7 @@ namespace Magewatch.API {
             break;
           }
           case 16: {
-            Value = input.ReadInt32();
+            Value = input.ReadUInt32();
             break;
           }
         }
@@ -3509,8 +3509,8 @@ namespace Magewatch.API {
       playerName_ = other.playerName_;
       currentLife_ = other.currentLife_;
       maximumLife_ = other.maximumLife_;
-      currentMana_ = other.currentMana_;
-      maximumMana_ = other.maximumMana_;
+      currentPower_ = other.currentPower_;
+      maximumPower_ = other.maximumPower_;
       currentInfluence_ = other.currentInfluence_.Clone();
       maximumInfluence_ = other.maximumInfluence_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -3534,9 +3534,9 @@ namespace Magewatch.API {
 
     /// <summary>Field number for the "current_life" field.</summary>
     public const int CurrentLifeFieldNumber = 2;
-    private int currentLife_;
+    private uint currentLife_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CurrentLife {
+    public uint CurrentLife {
       get { return currentLife_; }
       set {
         currentLife_ = value;
@@ -3545,34 +3545,34 @@ namespace Magewatch.API {
 
     /// <summary>Field number for the "maximum_life" field.</summary>
     public const int MaximumLifeFieldNumber = 3;
-    private int maximumLife_;
+    private uint maximumLife_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int MaximumLife {
+    public uint MaximumLife {
       get { return maximumLife_; }
       set {
         maximumLife_ = value;
       }
     }
 
-    /// <summary>Field number for the "current_mana" field.</summary>
-    public const int CurrentManaFieldNumber = 4;
-    private int currentMana_;
+    /// <summary>Field number for the "current_power" field.</summary>
+    public const int CurrentPowerFieldNumber = 4;
+    private uint currentPower_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CurrentMana {
-      get { return currentMana_; }
+    public uint CurrentPower {
+      get { return currentPower_; }
       set {
-        currentMana_ = value;
+        currentPower_ = value;
       }
     }
 
-    /// <summary>Field number for the "maximum_mana" field.</summary>
-    public const int MaximumManaFieldNumber = 5;
-    private int maximumMana_;
+    /// <summary>Field number for the "maximum_power" field.</summary>
+    public const int MaximumPowerFieldNumber = 5;
+    private uint maximumPower_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int MaximumMana {
-      get { return maximumMana_; }
+    public uint MaximumPower {
+      get { return maximumPower_; }
       set {
-        maximumMana_ = value;
+        maximumPower_ = value;
       }
     }
 
@@ -3612,8 +3612,8 @@ namespace Magewatch.API {
       if (PlayerName != other.PlayerName) return false;
       if (CurrentLife != other.CurrentLife) return false;
       if (MaximumLife != other.MaximumLife) return false;
-      if (CurrentMana != other.CurrentMana) return false;
-      if (MaximumMana != other.MaximumMana) return false;
+      if (CurrentPower != other.CurrentPower) return false;
+      if (MaximumPower != other.MaximumPower) return false;
       if(!currentInfluence_.Equals(other.currentInfluence_)) return false;
       if(!maximumInfluence_.Equals(other.maximumInfluence_)) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -3625,8 +3625,8 @@ namespace Magewatch.API {
       if (PlayerName != global::Magewatch.API.PlayerName.PlayerUnspecified) hash ^= PlayerName.GetHashCode();
       if (CurrentLife != 0) hash ^= CurrentLife.GetHashCode();
       if (MaximumLife != 0) hash ^= MaximumLife.GetHashCode();
-      if (CurrentMana != 0) hash ^= CurrentMana.GetHashCode();
-      if (MaximumMana != 0) hash ^= MaximumMana.GetHashCode();
+      if (CurrentPower != 0) hash ^= CurrentPower.GetHashCode();
+      if (MaximumPower != 0) hash ^= MaximumPower.GetHashCode();
       hash ^= currentInfluence_.GetHashCode();
       hash ^= maximumInfluence_.GetHashCode();
       if (_unknownFields != null) {
@@ -3648,19 +3648,19 @@ namespace Magewatch.API {
       }
       if (CurrentLife != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(CurrentLife);
+        output.WriteUInt32(CurrentLife);
       }
       if (MaximumLife != 0) {
         output.WriteRawTag(24);
-        output.WriteInt32(MaximumLife);
+        output.WriteUInt32(MaximumLife);
       }
-      if (CurrentMana != 0) {
+      if (CurrentPower != 0) {
         output.WriteRawTag(32);
-        output.WriteInt32(CurrentMana);
+        output.WriteUInt32(CurrentPower);
       }
-      if (MaximumMana != 0) {
+      if (MaximumPower != 0) {
         output.WriteRawTag(40);
-        output.WriteInt32(MaximumMana);
+        output.WriteUInt32(MaximumPower);
       }
       currentInfluence_.WriteTo(output, _repeated_currentInfluence_codec);
       maximumInfluence_.WriteTo(output, _repeated_maximumInfluence_codec);
@@ -3676,16 +3676,16 @@ namespace Magewatch.API {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) PlayerName);
       }
       if (CurrentLife != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CurrentLife);
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(CurrentLife);
       }
       if (MaximumLife != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaximumLife);
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(MaximumLife);
       }
-      if (CurrentMana != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CurrentMana);
+      if (CurrentPower != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(CurrentPower);
       }
-      if (MaximumMana != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaximumMana);
+      if (MaximumPower != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(MaximumPower);
       }
       size += currentInfluence_.CalculateSize(_repeated_currentInfluence_codec);
       size += maximumInfluence_.CalculateSize(_repeated_maximumInfluence_codec);
@@ -3709,11 +3709,11 @@ namespace Magewatch.API {
       if (other.MaximumLife != 0) {
         MaximumLife = other.MaximumLife;
       }
-      if (other.CurrentMana != 0) {
-        CurrentMana = other.CurrentMana;
+      if (other.CurrentPower != 0) {
+        CurrentPower = other.CurrentPower;
       }
-      if (other.MaximumMana != 0) {
-        MaximumMana = other.MaximumMana;
+      if (other.MaximumPower != 0) {
+        MaximumPower = other.MaximumPower;
       }
       currentInfluence_.Add(other.currentInfluence_);
       maximumInfluence_.Add(other.maximumInfluence_);
@@ -3733,19 +3733,19 @@ namespace Magewatch.API {
             break;
           }
           case 16: {
-            CurrentLife = input.ReadInt32();
+            CurrentLife = input.ReadUInt32();
             break;
           }
           case 24: {
-            MaximumLife = input.ReadInt32();
+            MaximumLife = input.ReadUInt32();
             break;
           }
           case 32: {
-            CurrentMana = input.ReadInt32();
+            CurrentPower = input.ReadUInt32();
             break;
           }
           case 40: {
-            MaximumMana = input.ReadInt32();
+            MaximumPower = input.ReadUInt32();
             break;
           }
           case 50: {
@@ -3888,7 +3888,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public StandardCost(StandardCost other) : this() {
-      manaCost_ = other.manaCost_;
+      powerCost_ = other.powerCost_;
       influenceCost_ = other.influenceCost_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -3898,14 +3898,14 @@ namespace Magewatch.API {
       return new StandardCost(this);
     }
 
-    /// <summary>Field number for the "mana_cost" field.</summary>
-    public const int ManaCostFieldNumber = 1;
-    private int manaCost_;
+    /// <summary>Field number for the "power_cost" field.</summary>
+    public const int PowerCostFieldNumber = 1;
+    private uint powerCost_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int ManaCost {
-      get { return manaCost_; }
+    public uint PowerCost {
+      get { return powerCost_; }
       set {
-        manaCost_ = value;
+        powerCost_ = value;
       }
     }
 
@@ -3932,7 +3932,7 @@ namespace Magewatch.API {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (ManaCost != other.ManaCost) return false;
+      if (PowerCost != other.PowerCost) return false;
       if(!influenceCost_.Equals(other.influenceCost_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -3940,7 +3940,7 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (ManaCost != 0) hash ^= ManaCost.GetHashCode();
+      if (PowerCost != 0) hash ^= PowerCost.GetHashCode();
       hash ^= influenceCost_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -3955,9 +3955,9 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (ManaCost != 0) {
+      if (PowerCost != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(ManaCost);
+        output.WriteUInt32(PowerCost);
       }
       influenceCost_.WriteTo(output, _repeated_influenceCost_codec);
       if (_unknownFields != null) {
@@ -3968,8 +3968,8 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (ManaCost != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ManaCost);
+      if (PowerCost != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(PowerCost);
       }
       size += influenceCost_.CalculateSize(_repeated_influenceCost_codec);
       if (_unknownFields != null) {
@@ -3983,8 +3983,8 @@ namespace Magewatch.API {
       if (other == null) {
         return;
       }
-      if (other.ManaCost != 0) {
-        ManaCost = other.ManaCost;
+      if (other.PowerCost != 0) {
+        PowerCost = other.PowerCost;
       }
       influenceCost_.Add(other.influenceCost_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -3999,7 +3999,7 @@ namespace Magewatch.API {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            ManaCost = input.ReadInt32();
+            PowerCost = input.ReadUInt32();
             break;
           }
           case 18: {
@@ -5450,9 +5450,9 @@ namespace Magewatch.API {
 
     /// <summary>Field number for the "wait_time_milliseconds" field.</summary>
     public const int WaitTimeMillisecondsFieldNumber = 1;
-    private int waitTimeMilliseconds_;
+    private uint waitTimeMilliseconds_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int WaitTimeMilliseconds {
+    public uint WaitTimeMilliseconds {
       get { return waitTimeMilliseconds_; }
       set {
         waitTimeMilliseconds_ = value;
@@ -5495,7 +5495,7 @@ namespace Magewatch.API {
     public void WriteTo(pb::CodedOutputStream output) {
       if (WaitTimeMilliseconds != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(WaitTimeMilliseconds);
+        output.WriteUInt32(WaitTimeMilliseconds);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -5506,7 +5506,7 @@ namespace Magewatch.API {
     public int CalculateSize() {
       int size = 0;
       if (WaitTimeMilliseconds != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(WaitTimeMilliseconds);
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(WaitTimeMilliseconds);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -5534,7 +5534,7 @@ namespace Magewatch.API {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            WaitTimeMilliseconds = input.ReadInt32();
+            WaitTimeMilliseconds = input.ReadUInt32();
             break;
           }
         }
@@ -6024,13 +6024,13 @@ namespace Magewatch.API {
 
     /// <summary>Field number for the "reveal_delay_milliseconds" field.</summary>
     public const int RevealDelayMillisecondsFieldNumber = 2;
-    private int revealDelayMilliseconds_;
+    private uint revealDelayMilliseconds_;
     /// <summary>
     /// How long to show the card for before animating it away. 0 should be
     /// interpreted as allowing the client to pick its own default.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int RevealDelayMilliseconds {
+    public uint RevealDelayMilliseconds {
       get { return revealDelayMilliseconds_; }
       set {
         revealDelayMilliseconds_ = value;
@@ -6105,7 +6105,7 @@ namespace Magewatch.API {
       }
       if (RevealDelayMilliseconds != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(RevealDelayMilliseconds);
+        output.WriteUInt32(RevealDelayMilliseconds);
       }
       if (RankPosition != global::Magewatch.API.RankValue.RankUnspecified) {
         output.WriteRawTag(24);
@@ -6127,7 +6127,7 @@ namespace Magewatch.API {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Card);
       }
       if (RevealDelayMilliseconds != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RevealDelayMilliseconds);
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(RevealDelayMilliseconds);
       }
       if (RankPosition != global::Magewatch.API.RankValue.RankUnspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) RankPosition);
@@ -6180,7 +6180,7 @@ namespace Magewatch.API {
             break;
           }
           case 16: {
-            RevealDelayMilliseconds = input.ReadInt32();
+            RevealDelayMilliseconds = input.ReadUInt32();
             break;
           }
           case 24: {

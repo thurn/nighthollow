@@ -14,7 +14,7 @@
 
 use std::time::Instant;
 
-use color_eyre::Result;
+use eyre::Result;
 
 use super::rules::{self, Rule, RuleContext, RuleScope};
 use crate::{

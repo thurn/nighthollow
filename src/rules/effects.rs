@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use color_eyre::Result;
+use eyre::Result;
 
 use super::rules::RuleContext;
 use crate::{

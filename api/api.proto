@@ -170,7 +170,7 @@ enum InfluenceType {
 message Influence {
   InfluenceType influence_type = 1;
 
-  int32 value = 2;
+  uint32 value = 2;
 }
 
 enum AssetType {
@@ -190,13 +190,13 @@ message Asset {
 message PlayerData {
   PlayerName player_name = 1;
 
-  int32 current_life = 2;
+  uint32 current_life = 2;
 
-  int32 maximum_life = 3;
+  uint32 maximum_life = 3;
 
-  int32 current_mana = 4;
+  uint32 current_power = 4;
 
-  int32 maximum_mana = 5;
+  uint32 maximum_power = 5;
 
   repeated Influence current_influence = 6;
 
@@ -207,7 +207,7 @@ message NoCost {
 }
 
 message StandardCost {
-  int32 mana_cost = 1;
+  uint32 power_cost = 1;
 
   repeated Influence influence_cost = 2;
 }
@@ -278,7 +278,7 @@ message DisplayErrorCommand {
 }
 
 message WaitCommand {
-  int32 wait_time_milliseconds = 1;
+  uint32 wait_time_milliseconds = 1;
 }
 
 message UpdateInterfaceCommand {
@@ -302,7 +302,7 @@ message RevealCardCommand {
 
   // How long to show the card for before animating it away. 0 should be
   // interpreted as allowing the client to pick its own default.
-  int32 reveal_delay_milliseconds = 2;
+  uint32 reveal_delay_milliseconds = 2;
 
   RankValue rank_position = 3;
 

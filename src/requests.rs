@@ -14,8 +14,8 @@
 
 use std::time::Instant;
 
-use color_eyre::Result;
 use eyre::eyre;
+use eyre::Result;
 
 use crate::{
     api, commands,
@@ -290,7 +290,7 @@ fn to_main_phase(game: &mut Game) -> Result<api::CommandList> {
 }
 
 fn upkeep(_player_name: PlayerName, player: &mut Player) -> api::Command {
-    player.state.current_mana = player.state.maximum_mana;
+    player.state.current_power = player.state.maximum_power;
     player
         .state
         .current_influence

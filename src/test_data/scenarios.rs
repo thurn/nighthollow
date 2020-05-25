@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use color_eyre::Result;
 use eyre::eyre;
+use eyre::Result;
 
 use crate::{
     model::{assets::*, cards, cards::*, creatures::*, games::*, primitives::*, stats::*},
@@ -57,8 +57,8 @@ fn berserker(owner: PlayerName) -> CreatureData {
         card_data: CardData {
             id: 0,
             owner,
-            cost: Cost::ManaCost(ManaCost {
-                mana: 2,
+            cost: Cost::StandardCost(StandardCost {
+                power: 2,
                 influence: Influence::flame(1),
             }),
             name: String::from("Berserker"),
@@ -80,8 +80,8 @@ fn wizard(owner: PlayerName) -> CreatureData {
         card_data: CardData {
             id: 0,
             owner,
-            cost: Cost::ManaCost(ManaCost {
-                mana: 3,
+            cost: Cost::StandardCost(StandardCost {
+                power: 3,
                 influence: Influence::flame(2),
             }),
             name: String::from("Wizard"),
@@ -103,8 +103,8 @@ fn rage(owner: PlayerName) -> Spell {
         card_data: CardData {
             id: 0,
             owner,
-            cost: Cost::ManaCost(ManaCost {
-                mana: 1,
+            cost: Cost::StandardCost(StandardCost {
+                power: 1,
                 influence: Influence::flame(1),
             }),
             name: String::from("Rage"),
