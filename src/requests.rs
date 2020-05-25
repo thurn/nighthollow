@@ -22,13 +22,13 @@ use crate::{
     model::cards::{Card, HasCardData},
     model::creatures::Creature,
     model::games::{Game, Player},
-    model::primitives::{BoardPosition, CardId, FileValue, GamePhase, PlayerName, RankValue},
+    model::primitives::{
+        BoardPosition, CardId, CreatureId, FileValue, GamePhase, PlayerName, RankValue,
+    },
     rules::combat,
     test_data::{scenarios, standard},
 };
-use api::{
-    CreatureId, MDebugDrawCardsRequest, MDebugLoadScenarioRequest, MDebugRunRequestSequenceRequest,
-};
+use api::{MDebugDrawCardsRequest, MDebugLoadScenarioRequest, MDebugRunRequestSequenceRequest};
 use commands::{CardMetadata, CreatureMetadata};
 use std::{collections::HashMap, sync::Mutex};
 
@@ -36,9 +36,12 @@ lazy_static! {
     static ref GAMES: Mutex<HashMap<String, Game>> = Mutex::new(HashMap::new());
 }
 
-pub fn handle_request(request_message: api::Request) -> Result<api::CommandList> {
+pub fn handle_request(request_message: &api::Request) -> Result<api::CommandList> {
     let now = Instant::now();
-    let request = request_message.request.ok_or(eyre!("Request not found"))?;
+    let request = request_message
+        .request
+        .as_ref()
+        .ok_or(eyre!("Request not found"))?;
     let got_request = now.elapsed().as_secs_f64();
     let start = Instant::now();
 
@@ -62,7 +65,8 @@ pub fn handle_request(request_message: api::Request) -> Result<api::CommandList>
     };
 
     println!(
-        "Request completed in {:.3} seconds (got req in {:.3} seconds)",
+        "Request {:?} completed in {:.3} seconds (got req in {:.3} seconds)",
+        commands::request_name(request_message),
         start.elapsed().as_secs_f64(),
         got_request
     );
@@ -171,17 +175,17 @@ pub fn find_creature(creature_id: api::CreatureId, creatures: &Vec<Creature>) ->
 }
 
 pub fn find_creature_mut(
-    creature_id: api::CreatureId,
+    creature_id: CreatureId,
     creatures: &mut Vec<Creature>,
 ) -> Result<&mut Creature> {
     let result = creatures
         .iter_mut()
-        .find(|c| c.card_data().id == creature_id.value)
+        .find(|c| c.card_data().id == creature_id)
         .ok_or(eyre!("Creature ID not found: {:?}", creature_id))?;
     Ok(result)
 }
 
-pub fn play_card(request: api::PlayCardRequest, game: &mut Game) -> Result<api::CommandList> {
+pub fn play_card(request: &api::PlayCardRequest, game: &mut Game) -> Result<api::CommandList> {
     let mut result = vec![];
     let player_name = convert_player_name(request.player())?;
 
@@ -190,7 +194,10 @@ pub fn play_card(request: api::PlayCardRequest, game: &mut Game) -> Result<api::
         .as_ref()
         .ok_or(eyre!("card_id is required"))?
         .value;
-    let play_card = request.play_card.ok_or(eyre!("play_card is required!"))?;
+    let play_card = request
+        .play_card
+        .as_ref()
+        .ok_or(eyre!("play_card is required!"))?;
     let card = remove_card(game, player_name, card_id)?;
     let card_data = commands::card_data(&card, metadata(&card, true));
     let player = game.player_mut(player_name);
@@ -223,7 +230,10 @@ pub fn play_card(request: api::PlayCardRequest, game: &mut Game) -> Result<api::
         }
         (Card::Spell(s), api::play_card_request::PlayCard::PlayAttachment(play)) => {
             let creature = find_creature_mut(
-                play.creature_id.ok_or(eyre!("creature_id is required"))?,
+                play.creature_id
+                    .as_ref()
+                    .ok_or(eyre!("creature_id is required"))?
+                    .value,
                 &mut player.creatures,
             )?;
             creature.spells.push(s);
@@ -297,7 +307,7 @@ fn to_preparation_phase(game: &mut Game) -> Result<api::CommandList> {
     ]))
 }
 
-pub fn load_scenario(request: MDebugLoadScenarioRequest) -> Result<api::CommandList> {
+pub fn load_scenario(request: &MDebugLoadScenarioRequest) -> Result<api::CommandList> {
     let game = scenarios::load_scenario(&request.scenario_name)?;
 
     match &mut GAMES.lock() {
@@ -312,7 +322,7 @@ pub fn load_scenario(request: MDebugLoadScenarioRequest) -> Result<api::CommandL
 
 pub fn debug_draw_cards(
     game: &mut Game,
-    request: MDebugDrawCardsRequest,
+    request: &MDebugDrawCardsRequest,
 ) -> Result<api::CommandList> {
     let mut commands = vec![];
 
@@ -343,11 +353,11 @@ fn draw_card_at_index(
     Ok(())
 }
 
-pub fn run_request_sequence(message: MDebugRunRequestSequenceRequest) -> Result<api::CommandList> {
+pub fn run_request_sequence(message: &MDebugRunRequestSequenceRequest) -> Result<api::CommandList> {
     let start = Instant::now();
     let mut result = vec![];
 
-    for request in message.requests {
+    for request in message.requests.iter() {
         result.extend(handle_request(request)?.command_groups);
     }
 

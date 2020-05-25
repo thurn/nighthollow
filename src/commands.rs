@@ -385,3 +385,20 @@ pub fn single_group(commands: Vec<api::Command>) -> api::CommandList {
 pub fn groups(command_groups: Vec<api::CommandGroup>) -> api::CommandList {
     api::CommandList { command_groups }
 }
+
+pub fn request_name(request: &api::Request) -> &str {
+    if let Some(r) = &request.request {
+        match r {
+            api::request::Request::StartGame(_) => "StartGame",
+            api::request::Request::ConnectToGame(_) => "ConnectToGame",
+            api::request::Request::AdvancePhase(_) => "AdvancePhase",
+            api::request::Request::PlayCard(_) => "PlayCard",
+            api::request::Request::RepositionCreatures(_) => "RepositionCreatures",
+            api::request::Request::LoadScenario(_) => "LoadScenario",
+            api::request::Request::DrawCards(_) => "DrawCards",
+            api::request::Request::RunRequestSequence(_) => "RunRequestSequence",
+        }
+    } else {
+        "(None)"
+    }
+}

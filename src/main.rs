@@ -17,6 +17,7 @@
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![feature(clamp)]
+#![feature(move_ref_pattern)]
 
 mod api;
 mod commands;
@@ -58,7 +59,7 @@ async fn main() {
             description.truncate(500);
             println!("<----- Got request:\n{}", description);
             let now = Instant::now();
-            let result = requests::handle_request(request);
+            let result = requests::handle_request(&request);
             let completed = now.elapsed().as_secs_f64();
             match result {
                 Ok(response) => {
