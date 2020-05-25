@@ -141,14 +141,7 @@ namespace Magewatch.Components
 
         if (_cardData?.CanBePlayed != newCardData.CanBePlayed)
         {
-          _outline.enabled = newCardData.CanBePlayed;
-          if (newCardData.CanBePlayed)
-          {
-            var color = _outline.color;
-            color.a = 0;
-            _outline.color = color;
-            _outline.DOFade(1.0f, 0.3f);
-          }
+          UpdateOutline(newCardData.CanBePlayed);
         }
       }
       else
@@ -157,6 +150,12 @@ namespace Magewatch.Components
       }
 
       _cardData = newCardData;
+    }
+
+    public void SetCanPlay(bool canPlay)
+    {
+      _cardData.CanBePlayed = canPlay;
+      UpdateOutline(canPlay);
     }
 
     public bool PreviewMode
@@ -180,6 +179,18 @@ namespace Magewatch.Components
       }
     }
 
+    void UpdateOutline(bool canBePlayed)
+    {
+      _outline.enabled = canBePlayed;
+      if (canBePlayed)
+      {
+        var color = _outline.color;
+        color.a = 0;
+        _outline.color = color;
+        _outline.DOFade(1.0f, 0.3f);
+      }
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
       if (_cardData.Owner == PlayerName.User && !_previewMode)
@@ -199,7 +210,8 @@ namespace Magewatch.Components
         var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         transform.position = Input.mousePosition;
 
-        if (mousePosition.x < Constants.IndicatorRightX && mousePosition.y > Constants.IndicatorBottomY)
+        if (_cardData.CanBePlayed && mousePosition.x < Constants.IndicatorRightX &&
+            mousePosition.y > Constants.IndicatorBottomY)
         {
           if (!_overBoard)
           {

@@ -19,7 +19,7 @@ use eyre::Result;
 
 use crate::{
     api, commands,
-    model::cards::{Card, HasCardData},
+    model::cards::{Card, HasCardData, HasCardState},
     model::creatures::{Creature, CreatureState},
     model::games::{Game, Player},
     model::primitives::{
@@ -29,7 +29,6 @@ use crate::{
     test_data::scenarios,
 };
 use api::{MDebugDrawCardsRequest, MDebugLoadScenarioRequest, MDebugRunRequestSequenceRequest};
-use commands::{CardMetadata, CreatureMetadata};
 use std::{collections::HashMap, sync::Mutex};
 
 lazy_static! {
@@ -87,24 +86,9 @@ fn with_game(
     }
 }
 
-pub fn metadata(card: &Card, revealed: bool) -> CardMetadata {
-    let is_user = card.card_data().owner == PlayerName::User;
-    CardMetadata {
-        revealed,
-        can_play: is_user,
-        creature: CreatureMetadata {
-            can_resposition_creature: is_user,
-        },
-    }
-}
-
 fn draw_card(player: &mut Player, result: &mut Vec<api::Command>) -> Result<()> {
-    let card = player.deck.draw_card()?;
-    result.push(commands::draw_card_command(
-        &card,
-        metadata(&card, player.name == PlayerName::User),
-    ));
-    player.add_to_hand(card);
+    let card = player.draw_card()?;
+    result.push(commands::draw_or_update_card_command(&card));
     Ok(())
 }
 
@@ -202,10 +186,11 @@ pub fn play_card(request: &api::PlayCardRequest, game: &mut Game) -> Result<api:
         .play_card
         .as_ref()
         .ok_or(eyre!("play_card is required!"))?;
-    let card = remove_card(game, player_name, card_id)?;
-    let card_data = commands::card_data(&card, metadata(&card, true));
+    let mut card = remove_card(game, player_name, card_id)?;
+    card.card_state_mut().revealed_to_opponent = true;
+
+    let card_data = commands::card_data(&card);
     let player = game.player_mut(player_name);
-    let mut push_group = |command| result.push(commands::single(command));
 
     match (card, play_card) {
         (Card::Creature(c), api::play_card_request::PlayCard::PlayCreature(play)) => {
@@ -219,17 +204,21 @@ pub fn play_card(request: &api::PlayCardRequest, game: &mut Game) -> Result<api:
             };
 
             if player_name == PlayerName::User {
-                push_group(commands::destroy_card_command(player_name, card_id, false));
+                result.push(commands::single(commands::destroy_card_command(
+                    player_name,
+                    card_id,
+                    false,
+                )));
             } else {
-                push_group(commands::reveal_card_command(
+                result.push(commands::single(commands::reveal_card_command(
                     card_data,
                     1000,
                     Some(rank),
                     Some(file),
-                ));
+                )));
             }
 
-            push_group(update_creature(&creature));
+            result.push(commands::single(update_creature(&creature)));
             player.creatures.push(creature);
         }
         (Card::Spell(s), api::play_card_request::PlayCard::PlayAttachment(play)) => {
@@ -243,26 +232,35 @@ pub fn play_card(request: &api::PlayCardRequest, game: &mut Game) -> Result<api:
             creature.spells.push(s);
 
             if player_name == PlayerName::User {
-                push_group(commands::destroy_card_command(player_name, card_id, false));
+                result.push(commands::single(commands::destroy_card_command(
+                    player_name,
+                    card_id,
+                    false,
+                )));
             } else {
-                push_group(commands::reveal_card_command(
+                result.push(commands::single(commands::reveal_card_command(
                     card_data,
                     1000,
                     Some(creature.position.rank),
                     Some(creature.position.file),
-                ));
+                )));
             }
 
-            push_group(update_creature(&creature));
+            result.push(commands::single(update_creature(&creature)));
         }
         (Card::Scroll(s), api::play_card_request::PlayCard::PlayUntargeted(_)) => {
-            player.scrolls.push(s);
             if player_name == PlayerName::User {
-                push_group(commands::destroy_card_command(player_name, card_id, false));
+                result.push(commands::single(commands::destroy_card_command(
+                    player_name,
+                    card_id,
+                    false,
+                )));
             } else {
-                push_group(commands::reveal_card_command(card_data, 500, None, None));
+                result.push(commands::single(commands::reveal_card_command(
+                    card_data, 500, None, None,
+                )));
             }
-            push_group(commands::update_player_command(player));
+            player.add_scroll(s, &mut result);
         }
         _ => return Err(eyre!("Target type does not match card type!")),
     }
@@ -273,12 +271,7 @@ pub fn play_card(request: &api::PlayCardRequest, game: &mut Game) -> Result<api:
 }
 
 pub fn update_creature(creature: &Creature) -> api::Command {
-    commands::create_or_update_creature_command(
-        creature,
-        CreatureMetadata {
-            can_resposition_creature: creature.card_data().owner == PlayerName::User,
-        },
-    )
+    commands::create_or_update_creature_command(creature)
 }
 
 pub fn advance_game_phase(game: &mut Game) -> Result<api::CommandList> {
@@ -293,20 +286,14 @@ fn to_main_phase(game: &mut Game) -> Result<api::CommandList> {
     combat::run_combat(game)
 }
 
-fn upkeep(_player_name: PlayerName, player: &mut Player) -> api::Command {
-    player.state.current_power = player.state.maximum_power;
-    player.state.current_influence = player.state.maximum_influence.clone();
-    player.state.available_scroll_plays = 1;
-    commands::update_player_command(player)
-}
-
 fn to_preparation_phase(game: &mut Game) -> Result<api::CommandList> {
     game.state.phase = GamePhase::Preparation;
+    let mut result = vec![];
 
-    Ok(commands::single_group(vec![
-        upkeep(PlayerName::User, &mut game.user),
-        upkeep(PlayerName::Enemy, &mut game.enemy),
-    ]))
+    game.user.upkeep(&mut result);
+    game.enemy.upkeep(&mut result);
+
+    Ok(commands::single_group(result))
 }
 
 pub fn load_scenario(request: &MDebugLoadScenarioRequest) -> Result<api::CommandList> {
@@ -346,12 +333,8 @@ fn draw_card_at_index(
     commands: &mut Vec<api::Command>,
     revealed: bool,
 ) -> Result<()> {
-    let card = player.deck.draw_card_at_index(index as usize)?;
-    commands.push(commands::draw_card_command(
-        &card,
-        metadata(&card, revealed),
-    ));
-    player.add_to_hand(card);
+    let card = player.draw_card_at_index(index as usize)?;
+    commands.push(commands::draw_or_update_card_command(&card));
     Ok(())
 }
 

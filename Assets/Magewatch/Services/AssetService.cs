@@ -46,9 +46,9 @@ namespace Magewatch.Services
 
     void AddAssetsForCommand(Command command, List<Asset> assets)
     {
-      if (command.DrawCard != null)
+      if (command.DrawOrUpdateCard != null)
       {
-        AddCardAssets(command.DrawCard.Card, assets);
+        AddCardAssets(command.DrawOrUpdateCard.Card, assets);
       }
 
       if (command.RevealCard != null)

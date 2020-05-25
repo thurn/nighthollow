@@ -19,7 +19,7 @@ use super::{
     rules::{Rule, RuleContext},
 };
 use crate::model::{
-    creatures::{Creature, Damage},
+    creatures::{Creature, Damage, HasCreatureData},
     games::Player,
     primitives::{FileValue, SkillAnimation},
 };
@@ -68,7 +68,7 @@ fn next_target_for_file(player: &Player, file: FileValue) -> Option<&Creature> {
     player
         .creatures
         .iter()
-        .filter(|c| c.state.is_alive)
+        .filter(|c| c.is_alive())
         .min_by_key(|c| (file_distance(c.position.file, file), c.position.rank))
 }
 

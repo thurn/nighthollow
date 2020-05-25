@@ -35,6 +35,7 @@ use warp::Filter;
 #[macro_use]
 extern crate lazy_static;
 extern crate eyre;
+extern crate maplit;
 
 fn error_command(message: String) -> CommandList {
     CommandList {

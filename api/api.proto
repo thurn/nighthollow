@@ -291,8 +291,16 @@ message UpdatePlayerCommand {
   PlayerData player = 1;
 }
 
-message DrawCardCommand {
+message MDrawOrUpdateCardCommand {
   CardData card = 1;
+}
+
+message MUpdateCanPlayCardCommand {
+  PlayerName player = 1;
+
+  CardId card_id = 2;
+
+  bool can_play = 3;
 }
 
 // Reveal an *existing* card and (optionally) animate it to a specific
@@ -436,7 +444,7 @@ message Command {
   oneof command {
     WaitCommand wait = 1;
     UpdateInterfaceCommand update_interface = 2;
-    DrawCardCommand draw_card = 3;
+    MDrawOrUpdateCardCommand draw_or_update_card = 3;
     RevealCardCommand reveal_card = 4;
     UpdatePlayerCommand update_player = 5;
     CreateOrUpdateCreatureCommand create_or_update_creature = 6;
@@ -446,6 +454,7 @@ message Command {
     DisplayErrorCommand display_error = 12;
     MDestroyCardCommand destroy_card = 13;
     MInitiateGameCommand initiate_game = 14;
+    MUpdateCanPlayCardCommand update_can_play_card = 15;
   }
 }
 

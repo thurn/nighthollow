@@ -97,27 +97,18 @@ namespace Magewatch.Services
           button.SetText(command.UpdateInterface.MainButtonText);
         }
 
-        if (command.DrawCard != null)
+        if (command.UpdateCanPlayCard != null)
         {
           _expectedCompletions++;
-          var owner = command.DrawCard.Card.Owner;
-          StartCoroutine(RunDelayed(0.1f * (owner == PlayerName.User ? numUserCards : numEnemyCards), () =>
-          {
-            var player = Root.Instance.GetPlayer(owner);
-            player.Hand.DrawCard(command.DrawCard.Card, this);
-          }));
+          var card = Errors.CheckNotNull(Root.Instance.GetPlayer(command.UpdateCanPlayCard.Player).Hand
+            .Get(command.UpdateCanPlayCard.CardId));
+          card.SetCanPlay(command.UpdateCanPlayCard.CanPlay);
+          OnComplete();
+        }
 
-          switch (owner)
-          {
-            case PlayerName.User:
-              numUserCards++;
-              break;
-            case PlayerName.Enemy:
-              numEnemyCards++;
-              break;
-            default:
-              throw Errors.UnknownEnumValue(owner);
-          }
+        if (command.DrawOrUpdateCard != null)
+        {
+          HandleDrawCard(command, ref numUserCards, ref numEnemyCards);
         }
 
         if (command.RevealCard != null)
@@ -172,6 +163,29 @@ namespace Magewatch.Services
       if (_expectedCompletions == 0)
       {
         OnComplete();
+      }
+    }
+
+    void HandleDrawCard(Command command, ref int numUserCards, ref int numEnemyCards)
+    {
+      _expectedCompletions++;
+      var owner = command.DrawOrUpdateCard.Card.Owner;
+      StartCoroutine(RunDelayed(0.1f * (owner == PlayerName.User ? numUserCards : numEnemyCards), () =>
+      {
+        var player = Root.Instance.GetPlayer(owner);
+        player.Hand.DrawOrUpdateCard(command.DrawOrUpdateCard.Card, this);
+      }));
+
+      switch (owner)
+      {
+        case PlayerName.User:
+          numUserCards++;
+          break;
+        case PlayerName.Enemy:
+          numEnemyCards++;
+          break;
+        default:
+          throw Errors.UnknownEnumValue(owner);
       }
     }
 

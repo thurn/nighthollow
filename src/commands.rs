@@ -18,8 +18,8 @@ use crate::{
     api, interface,
     model::{
         assets::CreatureType,
-        cards::{Card, Cost, HasCardData, Scroll, Spell, StandardCost},
-        creatures::{Creature, CreatureData},
+        cards::{Card, Cost, HasCardData, HasCardState, Scroll, Spell, StandardCost},
+        creatures::{Creature, CreatureData, HasCreatureData},
         games::{Game, HasOwner, Player},
         primitives::{
             CardId, CreatureId, FileValue, GameId, Influence, PlayerName, RankValue, School,
@@ -78,18 +78,6 @@ pub fn file_value(file: FileValue) -> api::FileValue {
     }
 }
 
-pub fn player_data(player: &Player) -> api::PlayerData {
-    api::PlayerData {
-        player_name: player_name(player.name).into(),
-        current_life: player.state.current_life,
-        maximum_life: player.state.maximum_life,
-        current_power: player.state.current_power,
-        maximum_power: player.state.maximum_power,
-        current_influence: influence(&player.state.current_influence),
-        maximum_influence: influence(&player.state.current_influence),
-    }
-}
-
 pub fn text(text: &str) -> api::RichText {
     api::RichText {
         text: text.to_string(),
@@ -129,7 +117,7 @@ pub fn standard_cost(cost: &StandardCost) -> api::StandardCost {
 
 pub fn cost(cost: &Cost) -> api::card_data::Cost {
     match cost {
-        Cost::None => api::card_data::Cost::NoCost(api::NoCost {}),
+        Cost::ScrollPlay => api::card_data::Cost::NoCost(api::NoCost {}),
         Cost::StandardCost(c) => api::card_data::Cost::StandardCost(standard_cost(c)),
     }
 }
@@ -151,27 +139,25 @@ pub fn adapt_skill_animation(
     }
 }
 
-pub fn creature_archetype(
-    creature: &CreatureData,
-    metadata: CreatureMetadata,
-) -> api::CreatureData {
+pub fn creature_archetype(creature: &CreatureData) -> api::CreatureData {
     api::CreatureData {
-        creature_id: Some(creature_id(creature.card_data().id)),
+        creature_id: Some(creature_id(creature.creature_id())),
         prefab: Some(prefab(&interface::creature_address(creature.base_type))),
         owner: player_name(creature.owner()).into(),
         rank_position: api::RankValue::RankUnspecified.into(),
         file_position: api::FileValue::FileUnspecified.into(),
-        can_be_repositioned: metadata.can_resposition_creature,
+        can_be_repositioned: false,
         attachments: vec![],
     }
 }
 
-pub fn creature_data(creature: &Creature, metadata: CreatureMetadata) -> api::CreatureData {
+pub fn creature_data(creature: &Creature) -> api::CreatureData {
     api::CreatureData {
         rank_position: rank_value(creature.position.rank).into(),
         file_position: file_value(creature.position.file).into(),
         attachments: creature.spells.iter().map(spell).collect(),
-        ..creature_archetype(&creature.data, metadata)
+        can_be_repositioned: creature.is_user_owned() && creature.can_reposition(),
+        ..creature_archetype(&creature.data)
     }
 }
 
@@ -185,27 +171,15 @@ pub fn scroll(_scroll: &Scroll) -> api::UntargetedData {
     api::UntargetedData {}
 }
 
-pub fn card_type(card: &Card, metadata: CardMetadata) -> api::card_data::CardType {
+pub fn card_type(card: &Card) -> api::card_data::CardType {
     match card {
-        Card::Creature(c) => {
-            api::card_data::CardType::CreatureCard(creature_archetype(c, metadata.creature))
-        }
+        Card::Creature(c) => api::card_data::CardType::CreatureCard(creature_archetype(c)),
         Card::Spell(s) => api::card_data::CardType::AttachmentCard(spell(s)),
         Card::Scroll(s) => api::card_data::CardType::UntargetedCard(scroll(s)),
     }
 }
 
-pub struct CreatureMetadata {
-    pub can_resposition_creature: bool,
-}
-
-pub struct CardMetadata {
-    pub revealed: bool,
-    pub can_play: bool,
-    pub creature: CreatureMetadata,
-}
-
-pub fn card_data(card: &Card, metadata: CardMetadata) -> api::CardData {
+pub fn card_data(card: &Card) -> api::CardData {
     api::CardData {
         card_id: Some(card_id(card.card_data().id)),
         prefab: Some(prefab(&format!("Cards/{:?}Card", card.card_data().school))),
@@ -213,34 +187,46 @@ pub fn card_data(card: &Card, metadata: CardMetadata) -> api::CardData {
         owner: player_name(card.owner()).into(),
         image: Some(sprite(&interface::card_image_address(card))),
         text: Some(text(&card.card_data().text)),
-        is_revealed: metadata.revealed,
-        can_be_played: metadata.can_play,
+        is_revealed: card.is_user_owned() || card.card_state().revealed_to_opponent,
+        can_be_played: card.is_user_owned() && card.card_state().owner_can_play,
         cost: Some(cost(&card.card_data().cost)),
-        card_type: Some(card_type(card, metadata)),
+        card_type: Some(card_type(card)),
     }
 }
 
-pub fn draw_card(card: &Card, metadata: CardMetadata) -> api::DrawCardCommand {
-    api::DrawCardCommand {
-        card: Some(card_data(card, metadata)),
-    }
-}
-
-pub fn draw_card_command(card: &Card, metadata: CardMetadata) -> api::Command {
+pub fn draw_or_update_card_command(card: &Card) -> api::Command {
     api::Command {
-        command: Some(api::command::Command::DrawCard(draw_card(card, metadata))),
+        command: Some(api::command::Command::DrawOrUpdateCard(
+            api::MDrawOrUpdateCardCommand {
+                card: Some(card_data(card)),
+            },
+        )),
     }
 }
 
-pub fn update_player(player: &Player) -> api::UpdatePlayerCommand {
-    api::UpdatePlayerCommand {
-        player: Some(player_data(player)),
+pub fn update_can_play_card_command(
+    player: PlayerName,
+    card: CardId,
+    can_play: bool,
+) -> api::Command {
+    api::Command {
+        command: Some(api::command::Command::UpdateCanPlayCard(
+            api::MUpdateCanPlayCardCommand {
+                player: player_name(player).into(),
+                card_id: Some(card_id(card)),
+                can_play,
+            },
+        )),
     }
 }
 
 pub fn update_player_command(player: &Player) -> api::Command {
     api::Command {
-        command: Some(api::command::Command::UpdatePlayer(update_player(player))),
+        command: Some(api::command::Command::UpdatePlayer(
+            api::UpdatePlayerCommand {
+                player: Some(player.player_data()),
+            },
+        )),
     }
 }
 
@@ -279,22 +265,16 @@ pub fn reveal_card_command(
     }
 }
 
-pub fn create_or_update_creature(
-    creature: &Creature,
-    metadata: CreatureMetadata,
-) -> api::CreateOrUpdateCreatureCommand {
+pub fn create_or_update_creature(creature: &Creature) -> api::CreateOrUpdateCreatureCommand {
     api::CreateOrUpdateCreatureCommand {
-        creature: Some(creature_data(creature, metadata)),
+        creature: Some(creature_data(creature)),
     }
 }
 
-pub fn create_or_update_creature_command(
-    creature: &Creature,
-    metadata: CreatureMetadata,
-) -> api::Command {
+pub fn create_or_update_creature_command(creature: &Creature) -> api::Command {
     api::Command {
         command: Some(api::command::Command::CreateOrUpdateCreature(
-            create_or_update_creature(creature, metadata),
+            create_or_update_creature(creature),
         )),
     }
 }
@@ -316,8 +296,8 @@ pub fn initiate_game_command(game: &Game) -> api::Command {
         command: Some(api::command::Command::InitiateGame(
             api::MInitiateGameCommand {
                 new_game_id: Some(api::GameId { value: game.id }),
-                initial_user_state: Some(player_data(&game.user)),
-                initial_enemy_state: Some(player_data(&game.enemy)),
+                initial_user_state: Some(game.user.player_data()),
+                initial_enemy_state: Some(game.enemy.player_data()),
             },
         )),
     }

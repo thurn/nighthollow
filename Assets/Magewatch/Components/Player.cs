@@ -17,6 +17,7 @@ using DG.Tweening;
 using Magewatch.API;
 using Magewatch.Services;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Magewatch.Components
@@ -26,8 +27,8 @@ namespace Magewatch.Components
     [Header("Config")] [SerializeField] Hand _hand;
     [SerializeField] Image _lifeBar;
     [SerializeField] Text _lifeText;
-    [SerializeField] Image _manaBar;
-    [SerializeField] Text _manaText;
+    [FormerlySerializedAs("_manaBar")] [SerializeField] Image _powerBar;
+    [FormerlySerializedAs("_manaText")] [SerializeField] Text _powerText;
     [SerializeField] RectTransform _influenceRow;
     [SerializeField] Collider2D _projectileCollider;
     [Header("State")] [SerializeField] PlayerData _playerData;
@@ -43,7 +44,7 @@ namespace Magewatch.Components
       {
         if (playerData.MaximumLife == 0)
         {
-          _manaBar.DOFillAmount(0, 0.3f);
+          _powerBar.DOFillAmount(0, 0.3f);
         }
         else
         {
@@ -56,16 +57,16 @@ namespace Magewatch.Components
       {
         if (playerData.MaximumPower == 0)
         {
-          _manaBar.DOFillAmount(0, 0.3f);
+          _powerBar.DOFillAmount(0, 0.3f);
         }
         else
         {
-          _manaBar.DOFillAmount(playerData.CurrentPower / (float) playerData.MaximumPower, 0.3f);
+          _powerBar.DOFillAmount(playerData.CurrentPower / (float) playerData.MaximumPower, 0.3f);
         }
       }
 
       _lifeText.text = $"{playerData.CurrentLife}/{playerData.MaximumLife}";
-      _manaText.text = $"{playerData.CurrentPower}/{playerData.MaximumPower}";
+      _powerText.text = $"{playerData.CurrentPower}/{playerData.MaximumPower}";
 
       foreach (Transform child in _influenceRow)
       {

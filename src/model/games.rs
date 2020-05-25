@@ -17,25 +17,29 @@ use eyre::Result;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    cards::{Card, Deck, Scroll},
-    creatures::{Creature, CreatureData},
+    cards::{Card, Deck, HasCardData, HasCardId, HasCardState, Scroll},
+    creatures::{Creature, CreatureData, HasCreatureData},
     stats::{Stat, StatName, Tag, TagName},
 };
-use crate::model::primitives::*;
+use crate::{api, commands, model::primitives::*};
 
 pub trait HasOwner {
     fn owner(&self) -> PlayerName;
+
+    fn is_user_owned(&self) -> bool {
+        self.owner() == PlayerName::User
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayerState {
-    pub current_life: LifeValue,
-    pub maximum_life: LifeValue,
-    pub current_power: PowerValue,
-    pub maximum_power: ManaValue,
-    pub current_influence: Influence,
-    pub maximum_influence: Influence,
-    pub available_scroll_plays: u32,
+    current_life: LifeValue,
+    maximum_life: LifeValue,
+    current_power: PowerValue,
+    maximum_power: ManaValue,
+    current_influence: Influence,
+    maximum_influence: Influence,
+    available_scroll_plays: u32,
 }
 
 impl Default for PlayerState {
@@ -63,8 +67,99 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn add_to_hand(&mut self, card: Card) {
-        self.hand.push(card)
+    pub fn draw_card(&mut self) -> Result<&Card> {
+        let card = self.deck.draw_card()?;
+        Ok(self.add_to_hand(card))
+    }
+
+    pub fn draw_specific_card(&mut self, id: CardId) -> Result<&Card> {
+        let card = self.deck.draw_specific_card(id)?;
+        Ok(self.add_to_hand(card))
+    }
+
+    pub fn draw_card_at_index(&mut self, index: usize) -> Result<&Card> {
+        let card = self.deck.draw_card_at_index(index)?;
+        Ok(self.add_to_hand(card))
+    }
+
+    fn add_to_hand(&mut self, mut card: Card) -> &Card {
+        Self::update_can_play(&self.state, &mut card);
+        self.hand.push(card);
+        self.hand.last().expect("Card not found?")
+    }
+
+    pub fn decrement_life(&mut self, amount: LifeValue) {
+        self.state.current_life = if amount > self.state.current_life {
+            0
+        } else {
+            self.state.current_life - amount
+        }
+    }
+
+    pub fn add_scroll(&mut self, scroll: Scroll, result: &mut Vec<api::CommandGroup>) {
+        self.state.current_power += scroll.stats.added_current_power;
+        self.state.maximum_power += scroll.stats.added_maximum_power;
+        self.state
+            .current_influence
+            .add(&scroll.stats.added_current_influence);
+        self.state
+            .maximum_influence
+            .add(&scroll.stats.added_maximum_influence);
+        self.state.available_scroll_plays -= 1;
+        self.scrolls.push(scroll);
+
+        let mut updates = vec![];
+        self.update_cards(&mut updates);
+        result.push(commands::group(updates));
+    }
+
+    pub fn upkeep(&mut self, result: &mut Vec<api::Command>) {
+        self.state.current_power = self.state.maximum_power;
+        self.state.current_influence = self.state.maximum_influence.clone();
+        self.state.available_scroll_plays = 1;
+        self.update_cards(result);
+    }
+
+    fn update_cards(&mut self, result: &mut Vec<api::Command>) {
+        let state = &self.state;
+        for card in self.hand.iter_mut() {
+            if Self::update_can_play(state, card) {
+                result.push(commands::update_can_play_card_command(
+                    self.name,
+                    card.card_id(),
+                    card.card_state().owner_can_play,
+                ))
+            }
+        }
+
+        result.push(commands::update_player_command(self))
+    }
+
+    pub fn player_data(&self) -> api::PlayerData {
+        api::PlayerData {
+            player_name: commands::player_name(self.name).into(),
+            current_life: self.state.current_life,
+            maximum_life: self.state.maximum_life,
+            current_power: self.state.current_power,
+            maximum_power: self.state.maximum_power,
+            current_influence: commands::influence(&self.state.current_influence),
+            maximum_influence: commands::influence(&self.state.current_influence),
+        }
+    }
+
+    /// Returns true if the 'can_play' value changed
+    fn update_can_play(state: &PlayerState, card: &mut Card) -> bool {
+        let old_value = card.card_state().owner_can_play;
+        let new_value = match &card.card_data().cost {
+            super::cards::Cost::ScrollPlay => state.available_scroll_plays > 0,
+            super::cards::Cost::StandardCost(cost) => {
+                cost.influence
+                    .less_than_or_equal_to(&state.current_influence)
+                    && cost.power <= state.current_power
+            }
+        };
+        card.card_state_mut().owner_can_play = new_value;
+        old_value != new_value
     }
 }
 

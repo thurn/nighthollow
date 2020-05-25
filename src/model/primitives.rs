@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::collections::BTreeMap;
+
 use eyre::eyre;
 use eyre::Result;
+use maplit::btreemap;
 use serde::{Deserialize, Serialize};
-
-extern crate derive_more;
 
 pub type GameId = i32;
 pub type CardId = i32;
@@ -53,7 +54,7 @@ lazy_static! {
     ];
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone, Ord, PartialOrd)]
 pub enum School {
     Light,
     Sky,
@@ -131,75 +132,89 @@ pub enum SkillAnimation {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
-pub struct InfluenceAmount {
-    pub value: InfluenceValue,
-    pub school: School,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub struct Influence {
-    values: Vec<InfluenceAmount>,
+    light: InfluenceValue,
+    sky: InfluenceValue,
+    flame: InfluenceValue,
+    ice: InfluenceValue,
+    earth: InfluenceValue,
+    shadow: InfluenceValue,
 }
 
 impl Influence {
     pub fn single(value: InfluenceValue, school: School) -> Self {
-        Influence {
-            values: vec![InfluenceAmount { value, school }],
+        let mut result = Influence::default();
+        *result.mut_ref(school) = value;
+        result
+    }
+
+    fn mut_ref(&mut self, school: School) -> &mut InfluenceValue {
+        use School::*;
+        match school {
+            Light => &mut self.light,
+            Sky => &mut self.sky,
+            Flame => &mut self.flame,
+            Ice => &mut self.ice,
+            Earth => &mut self.earth,
+            Shadow => &mut self.shadow,
         }
     }
 
     pub fn value(&self, school: School) -> InfluenceValue {
-        self.values
-            .iter()
-            .find(|v| v.school == school)
-            .map_or(0, |v| v.value)
+        use School::*;
+        match school {
+            Light => self.light,
+            Sky => self.sky,
+            Flame => self.flame,
+            Ice => self.ice,
+            Earth => self.earth,
+            Shadow => self.shadow,
+        }
     }
 
     /// Returns true if every contained Influence value in this object is less
     /// than or equal to its corresponding value in 'other'
     pub fn less_than_or_equal_to(&self, other: &Influence) -> bool {
-        self.values
-            .iter()
-            .all(|amount| amount.value <= other.value(amount.school))
+        for school in SCHOOLS.iter() {
+            if self.value(*school) > other.value(*school) {
+                return false;
+            }
+        }
+        true
+    }
+
+    /// Adds each Influence value in 'other' to the corresponding value in self
+    pub fn add(&mut self, other: &Influence) {
+        for school in SCHOOLS.iter() {
+            *self.mut_ref(*school) = self.value(*school) + other.value(*school);
+        }
     }
 
     /// Decrements each Influence value in this object by the amount present
     /// in 'other', returning an error if this would result in a negative
     /// value.
     pub fn subtract(&mut self, other: &Influence) -> Result<()> {
-        other
-            .values
-            .iter()
-            .try_for_each(|v| self.subtract_amount(v))
-    }
-
-    fn subtract_amount(&mut self, other: &InfluenceAmount) -> Result<()> {
-        let position = self
-            .values
-            .iter()
-            .position(|v| v.school == other.school)
-            .ok_or(eyre!("Value exceeds available influence: {:?}", other))?;
-        let amount = self
-            .values
-            .get_mut(position)
-            .ok_or(eyre!("Not found: {}", position))?;
-
-        if amount.value < other.value {
-            Err(eyre!(
-                "Value {} exceeds available influence: {}",
-                other.value,
-                amount.value
-            ))
-        } else {
-            amount.value -= other.value;
-            Ok(())
+        if !other.less_than_or_equal_to(self) {
+            return Err(eyre!("Can't subtract {:?} from {:?}", other, self));
         }
+
+        for school in SCHOOLS.iter() {
+            *self.mut_ref(*school) = self.value(*school) - other.value(*school);
+        }
+        Ok(())
     }
 }
 
 impl Default for Influence {
     fn default() -> Self {
-        Influence { values: vec![] }
+        Influence {
+            light: 0,
+            sky: 0,
+            flame: 0,
+            ice: 0,
+            earth: 0,
+            shadow: 0,
+        }
     }
 }
 

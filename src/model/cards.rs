@@ -40,14 +40,30 @@ pub struct StandardCost {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Cost {
-    None,
+    ScrollPlay,
     StandardCost(StandardCost),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CardState {
+    pub owner_can_play: bool,
+    pub revealed_to_opponent: bool,
+}
+
+impl Default for CardState {
+    fn default() -> Self {
+        CardState {
+            owner_can_play: false,
+            revealed_to_opponent: false,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CardData {
     pub id: CardId,
     pub owner: PlayerName,
+    pub state: CardState,
     pub cost: Cost,
     pub name: String,
     pub school: School,
@@ -56,7 +72,6 @@ pub struct CardData {
 
 pub trait HasCardData {
     fn card_data(&self) -> &CardData;
-
     fn card_data_mut(&mut self) -> &mut CardData;
 }
 
@@ -73,6 +88,41 @@ impl HasCardData for CardData {
 impl<T: HasCardData> HasOwner for T {
     fn owner(&self) -> PlayerName {
         self.card_data().owner
+    }
+}
+
+pub trait HasCardState {
+    fn card_state(&self) -> &CardState;
+    fn card_state_mut(&mut self) -> &mut CardState;
+}
+
+impl<T: HasCardData> HasCardState for T {
+    fn card_state(&self) -> &CardState {
+        &self.card_data().state
+    }
+
+    fn card_state_mut(&mut self) -> &mut CardState {
+        &mut self.card_data_mut().state
+    }
+}
+
+pub trait HasCardId {
+    fn card_id(&self) -> CardId;
+}
+
+impl<T: HasCardData> HasCardId for T {
+    fn card_id(&self) -> CardId {
+        self.card_data().id
+    }
+}
+
+pub trait HasSchool {
+    fn school(&self) -> School;
+}
+
+impl<T: HasCardData> HasSchool for T {
+    fn school(&self) -> School {
+        self.card_data().school
     }
 }
 
@@ -93,9 +143,18 @@ impl HasCardData for Spell {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ScrollStats {
+    pub added_current_power: PowerValue,
+    pub added_maximum_power: PowerValue,
+    pub added_current_influence: Influence,
+    pub added_maximum_influence: Influence,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Scroll {
     pub card_data: CardData,
     pub base_type: ScrollType,
+    pub stats: ScrollStats,
 }
 
 impl HasCardData for Scroll {

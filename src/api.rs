@@ -287,9 +287,18 @@ pub struct UpdatePlayerCommand {
     pub player: ::std::option::Option<PlayerData>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DrawCardCommand {
+pub struct MDrawOrUpdateCardCommand {
     #[prost(message, optional, tag = "1")]
     pub card: ::std::option::Option<CardData>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MUpdateCanPlayCardCommand {
+    #[prost(enumeration = "PlayerName", tag = "1")]
+    pub player: i32,
+    #[prost(message, optional, tag = "2")]
+    pub card_id: ::std::option::Option<CardId>,
+    #[prost(bool, tag = "3")]
+    pub can_play: bool,
 }
 /// Reveal an *existing* card and (optionally) animate it to a specific
 /// rank/file position
@@ -445,7 +454,7 @@ pub struct MInitiateGameCommand {
 pub struct Command {
     #[prost(
         oneof = "command::Command",
-        tags = "1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14"
+        tags = "1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15"
     )]
     pub command: ::std::option::Option<command::Command>,
 }
@@ -457,7 +466,7 @@ pub mod command {
         #[prost(message, tag = "2")]
         UpdateInterface(super::UpdateInterfaceCommand),
         #[prost(message, tag = "3")]
-        DrawCard(super::DrawCardCommand),
+        DrawOrUpdateCard(super::MDrawOrUpdateCardCommand),
         #[prost(message, tag = "4")]
         RevealCard(super::RevealCardCommand),
         #[prost(message, tag = "5")]
@@ -476,6 +485,8 @@ pub mod command {
         DestroyCard(super::MDestroyCardCommand),
         #[prost(message, tag = "14")]
         InitiateGame(super::MInitiateGameCommand),
+        #[prost(message, tag = "15")]
+        UpdateCanPlayCard(super::MUpdateCanPlayCardCommand),
     }
 }
 /// Represents a set of commands which should be executed in parallel,

@@ -20,7 +20,7 @@ use super::rules::{self, Rule, RuleContext, RuleScope};
 use crate::{
     api, commands,
     model::{
-        creatures::{Creature, Damage, DamageResult},
+        creatures::{Creature, Damage, DamageResult, HasCreatureData},
         games::{Game, HasOwner, Player},
         primitives::{CreatureId, HealthValue, ManaValue, PlayerName, RuleId},
         stats::{Modifier, Operation, StatName},
@@ -99,7 +99,7 @@ pub fn run_combat(game: &mut Game) -> Result<api::CommandList> {
 
 /// True if this player has any living creatures
 fn has_living_creatures(player: &Player) -> bool {
-    player.creatures.iter().any(|c| c.state.is_alive)
+    player.creatures.iter().any(|c| c.is_alive())
 }
 
 /// Returns an iterator over creature IDs in initiatve order
@@ -165,7 +165,7 @@ fn run_end_of_combat(game: &mut Game, commands: &mut Vec<api::CommandGroup>) {
     let mut enemy_life_loss = 0;
 
     for creature in game.all_creatures_mut() {
-        if creature.state.is_alive {
+        if creature.is_alive() {
             group1.push(commands::use_creature_skill_command(
                 creature.creature_id(),
                 creature.data.base_type,
@@ -186,8 +186,8 @@ fn run_end_of_combat(game: &mut Game, commands: &mut Vec<api::CommandGroup>) {
         group3.push(requests::update_creature(&creature));
     }
 
-    game.user.state.current_life -= user_life_loss;
-    game.enemy.state.current_life -= enemy_life_loss;
+    game.user.decrement_life(user_life_loss);
+    game.enemy.decrement_life(enemy_life_loss);
 
     group1.push(commands::update_player_command(&game.user));
     group1.push(commands::update_player_command(&game.enemy));

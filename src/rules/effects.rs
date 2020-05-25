@@ -23,7 +23,7 @@ use crate::{
     commands,
     model::{
         assets::{CreatureType, ParticleSystemName, ProjectileName},
-        creatures::{Creature, Damage, DamageResult},
+        creatures::{Creature, Damage, DamageResult, HasCreatureData},
         games::Game,
         primitives::{CreatureId, HealthValue, ManaValue, RuleId, SkillAnimation},
         stats::{Modifier, Operation, StatName},
@@ -275,7 +275,10 @@ fn adapt_creature_mutation(
         creature_id: Some(commands::creature_id(mutation.target_id)),
         set_health_percentage: ratio(creature.current_health(), health),
         play_death_animation: result == MutationResult::Killed,
-        set_mana_percentage: ratio(creature.state.mana, creature.stats().maximum_mana.value()),
+        set_mana_percentage: ratio(
+            creature.current_mana(),
+            creature.stats().maximum_mana.value(),
+        ),
         play_particle_effects: vec![],
     })
 }

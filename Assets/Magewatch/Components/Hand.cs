@@ -55,13 +55,23 @@ namespace Magewatch.Components
       }
     }
 
-    public void DrawCard(CardData cardData, IOnComplete onComplete, bool animate = true)
+    public Card Get(CardId cardId) => _cards.Find(c => c.CardId.Equals(cardId));
+
+    public void DrawOrUpdateCard(CardData cardData, IOnComplete onComplete, bool animate = true)
     {
-      var card = ComponentUtils.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas);
-      card.Initialize(cardData);
-      card.transform.position = _deckPosition.position;
-      card.transform.localScale = Vector2.one * _initialCardScale;
-      AddToHand(card, onComplete, animate);
+      var card = Get(cardData.CardId);
+      if (card)
+      {
+        card.UpdateCardData(cardData);
+      }
+      else
+      {
+        card = ComponentUtils.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas);
+        card.Initialize(cardData);
+        card.transform.position = _deckPosition.position;
+        card.transform.localScale = Vector2.one * _initialCardScale;
+        AddToHand(card, onComplete, animate);
+      }
     }
 
     public void ReturnToHand(Card card)
@@ -79,6 +89,7 @@ namespace Magewatch.Components
         {
           throw new ArgumentException($"Card id {cardId} not found");
         }
+        onComplete.OnComplete();
         return;
       }
       var card = _cards[index];

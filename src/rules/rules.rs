@@ -21,7 +21,7 @@ use crate::{
     api,
     model::{
         cards::HasCardData,
-        creatures::{Creature, Damage, DamageResult},
+        creatures::{Creature, Damage, DamageResult, HasCreatureData},
         games::{Game, Player},
         primitives::{
             ActionNumber, CardId, CreatureId, HealthValue, ManaValue, RoundNumber, RuleId,
@@ -246,8 +246,8 @@ impl RuleScope {
 
     fn should_process_creature(&self, creature: &Creature) -> bool {
         match self {
-            RuleScope::CreatureIfDead(_) => !creature.state.is_alive,
-            _ => creature.state.is_alive,
+            RuleScope::CreatureIfDead(_) => !creature.is_alive(),
+            _ => creature.is_alive(),
         }
     }
 

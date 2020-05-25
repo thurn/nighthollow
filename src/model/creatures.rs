@@ -18,7 +18,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{
     assets::CreatureType,
-    cards::{CardData, HasCardData, Spell},
+    cards::{CardData, HasCardData, HasCardId, Spell},
     stats::{Stat, StatName, Tag, TagName},
 };
 use crate::{model::primitives::*, rules::rules::Rule};
@@ -152,10 +152,10 @@ pub enum DamageResult {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CreatureState {
-    pub is_alive: bool,
-    pub damage: HealthValue,
-    pub mana: ManaValue,
-    pub can_reposition: bool,
+    is_alive: bool,
+    damage: HealthValue,
+    mana: ManaValue,
+    can_reposition: bool,
 }
 
 impl Default for CreatureState {
@@ -178,16 +178,24 @@ pub struct Creature {
 }
 
 impl Creature {
-    pub fn creature_id(&self) -> CreatureId {
-        self.card_data().id
-    }
-
     pub fn stats(&self) -> &CreatureStats {
         &self.data.stats
     }
 
     pub fn stats_mut(&mut self) -> &mut CreatureStats {
         &mut self.data.stats
+    }
+
+    pub fn is_alive(&self) -> bool {
+        self.state.is_alive
+    }
+
+    pub fn current_mana(&self) -> ManaValue {
+        self.state.mana
+    }
+
+    pub fn can_reposition(&self) -> bool {
+        self.state.can_reposition
     }
 
     pub fn current_health(&self) -> u32 {
@@ -264,5 +272,31 @@ impl HasCardData for Creature {
 
     fn card_data_mut(&mut self) -> &mut CardData {
         self.data.card_data_mut()
+    }
+}
+
+pub trait HasCreatureData {
+    fn creature_id(&self) -> CreatureId;
+
+    fn base_type(&self) -> CreatureType;
+}
+
+impl HasCreatureData for Creature {
+    fn creature_id(&self) -> CreatureId {
+        self.card_data().card_id()
+    }
+
+    fn base_type(&self) -> CreatureType {
+        self.data.base_type
+    }
+}
+
+impl HasCreatureData for CreatureData {
+    fn creature_id(&self) -> CreatureId {
+        self.card_data().card_id()
+    }
+
+    fn base_type(&self) -> CreatureType {
+        self.base_type
     }
 }

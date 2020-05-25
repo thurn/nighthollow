@@ -57,6 +57,7 @@ fn berserker(owner: PlayerName) -> CreatureData {
         card_data: CardData {
             id: 0,
             owner,
+            state: CardState::default(),
             cost: Cost::StandardCost(StandardCost {
                 power: 2,
                 influence: Influence::single(1, School::Flame),
@@ -80,6 +81,7 @@ fn wizard(owner: PlayerName) -> CreatureData {
         card_data: CardData {
             id: 0,
             owner,
+            state: CardState::default(),
             cost: Cost::StandardCost(StandardCost {
                 power: 3,
                 influence: Influence::single(2, School::Flame),
@@ -103,6 +105,7 @@ fn rage(owner: PlayerName) -> Spell {
         card_data: CardData {
             id: 0,
             owner,
+            state: CardState::default(),
             cost: Cost::StandardCost(StandardCost {
                 power: 1,
                 influence: Influence::single(1, School::Flame),
@@ -120,12 +123,19 @@ fn flame_scroll(owner: PlayerName) -> Scroll {
         card_data: CardData {
             id: 0,
             owner,
-            cost: Cost::None,
+            state: CardState::default(),
+            cost: Cost::ScrollPlay,
             name: String::from("Flame Scroll"),
             school: School::Flame,
             text: String::from("Flame Scroll"),
         },
         base_type: ScrollType::FlameScroll,
+        stats: ScrollStats {
+            added_current_power: 1,
+            added_maximum_power: 1,
+            added_current_influence: Influence::single(1, School::Flame),
+            added_maximum_influence: Influence::single(1, School::Flame),
+        },
     }
 }
 
