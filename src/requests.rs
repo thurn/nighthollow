@@ -20,13 +20,13 @@ use eyre::Result;
 use crate::{
     api, commands,
     model::cards::{Card, HasCardData},
-    model::creatures::Creature,
+    model::creatures::{Creature, CreatureState},
     model::games::{Game, Player},
     model::primitives::{
         BoardPosition, CardId, CreatureId, FileValue, GamePhase, PlayerName, RankValue,
     },
     rules::combat,
-    test_data::{scenarios, standard},
+    test_data::scenarios,
 };
 use api::{MDebugDrawCardsRequest, MDebugLoadScenarioRequest, MDebugRunRequestSequenceRequest};
 use commands::{CardMetadata, CreatureMetadata};
@@ -98,25 +98,29 @@ pub fn metadata(card: &Card, revealed: bool) -> CardMetadata {
     }
 }
 
+fn draw_card(player: &mut Player, result: &mut Vec<api::Command>) -> Result<()> {
+    let card = player.deck.draw_card()?;
+    result.push(commands::draw_card_command(
+        &card,
+        metadata(&card, player.name == PlayerName::User),
+    ));
+    player.add_to_hand(card);
+    Ok(())
+}
+
 pub fn start_game() -> Result<(Game, api::CommandList)> {
-    let game = standard::opening_hands();
-    let user = game
-        .user
-        .hand
-        .iter()
-        .map(|c| commands::draw_card_command(c, metadata(c, true)));
-    let enemy = game
-        .enemy
-        .hand
-        .iter()
-        .map(|c| commands::draw_card_command(c, metadata(c, false)));
+    let mut game = scenarios::basic();
+    let mut commands = vec![];
+
+    for i in 0..6 {
+        draw_card(&mut game.user, &mut commands)?;
+        draw_card(&mut game.enemy, &mut commands)?;
+    }
 
     let list = api::CommandList {
         command_groups: vec![
             commands::single(commands::initiate_game_command(&game)),
-            api::CommandGroup {
-                commands: user.chain(enemy).collect::<Vec<_>>(),
-            },
+            commands::group(commands),
         ],
     };
 
@@ -210,8 +214,8 @@ pub fn play_card(request: &api::PlayCardRequest, game: &mut Game) -> Result<api:
             let creature = Creature {
                 data: c,
                 position: BoardPosition { rank, file },
-                is_alive: true,
                 spells: vec![],
+                state: CreatureState::default(),
             };
 
             if player_name == PlayerName::User {
@@ -291,10 +295,8 @@ fn to_main_phase(game: &mut Game) -> Result<api::CommandList> {
 
 fn upkeep(_player_name: PlayerName, player: &mut Player) -> api::Command {
     player.state.current_power = player.state.maximum_power;
-    player
-        .state
-        .current_influence
-        .set_to(&player.state.maximum_influence);
+    player.state.current_influence = player.state.maximum_influence.clone();
+    player.state.available_scroll_plays = 1;
     commands::update_player_command(player)
 }
 

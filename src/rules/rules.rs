@@ -246,8 +246,8 @@ impl RuleScope {
 
     fn should_process_creature(&self, creature: &Creature) -> bool {
         match self {
-            RuleScope::CreatureIfDead(_) => !creature.is_alive,
-            _ => creature.is_alive,
+            RuleScope::CreatureIfDead(_) => !creature.state.is_alive,
+            _ => creature.state.is_alive,
         }
     }
 

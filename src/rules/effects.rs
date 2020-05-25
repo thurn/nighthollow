@@ -275,7 +275,7 @@ fn adapt_creature_mutation(
         creature_id: Some(commands::creature_id(mutation.target_id)),
         set_health_percentage: ratio(creature.current_health(), health),
         play_death_animation: result == MutationResult::Killed,
-        set_mana_percentage: ratio(creature.stats().mana, creature.stats().maximum_mana.value()),
+        set_mana_percentage: ratio(creature.state.mana, creature.stats().maximum_mana.value()),
         play_particle_effects: vec![],
     })
 }

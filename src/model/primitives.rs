@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use eyre::eyre;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 
 extern crate derive_more;
@@ -128,109 +130,76 @@ pub enum SkillAnimation {
     Skill5,
 }
 
-#[derive(Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+pub struct InfluenceAmount {
+    pub value: InfluenceValue,
+    pub school: School,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub struct Influence {
-    pub light: InfluenceValue,
-    pub sky: InfluenceValue,
-    pub flame: InfluenceValue,
-    pub ice: InfluenceValue,
-    pub earth: InfluenceValue,
-    pub shadow: InfluenceValue,
+    values: Vec<InfluenceAmount>,
 }
 
 impl Influence {
-    pub fn new(school: School, amount: InfluenceValue) -> Influence {
+    pub fn single(value: InfluenceValue, school: School) -> Self {
         Influence {
-            light: if school == School::Light { amount } else { 0 },
-            sky: if school == School::Sky { amount } else { 0 },
-            flame: if school == School::Flame { amount } else { 0 },
-            ice: if school == School::Ice { amount } else { 0 },
-            earth: if school == School::Earth { amount } else { 0 },
-            shadow: if school == School::Shadow { amount } else { 0 },
+            values: vec![InfluenceAmount { value, school }],
         }
     }
 
-    pub fn light(i: InfluenceValue) -> Influence {
-        Influence {
-            light: i,
-            ..Influence::default()
+    pub fn value(&self, school: School) -> InfluenceValue {
+        self.values
+            .iter()
+            .find(|v| v.school == school)
+            .map_or(0, |v| v.value)
+    }
+
+    /// Returns true if every contained Influence value in this object is less
+    /// than or equal to its corresponding value in 'other'
+    pub fn less_than_or_equal_to(&self, other: &Influence) -> bool {
+        self.values
+            .iter()
+            .all(|amount| amount.value <= other.value(amount.school))
+    }
+
+    /// Decrements each Influence value in this object by the amount present
+    /// in 'other', returning an error if this would result in a negative
+    /// value.
+    pub fn subtract(&mut self, other: &Influence) -> Result<()> {
+        other
+            .values
+            .iter()
+            .try_for_each(|v| self.subtract_amount(v))
+    }
+
+    fn subtract_amount(&mut self, other: &InfluenceAmount) -> Result<()> {
+        let position = self
+            .values
+            .iter()
+            .position(|v| v.school == other.school)
+            .ok_or(eyre!("Value exceeds available influence: {:?}", other))?;
+        let amount = self
+            .values
+            .get_mut(position)
+            .ok_or(eyre!("Not found: {}", position))?;
+
+        if amount.value < other.value {
+            Err(eyre!(
+                "Value {} exceeds available influence: {}",
+                other.value,
+                amount.value
+            ))
+        } else {
+            amount.value -= other.value;
+            Ok(())
         }
-    }
-
-    pub fn sky(i: InfluenceValue) -> Influence {
-        Influence {
-            sky: i,
-            ..Influence::default()
-        }
-    }
-
-    pub fn flame(i: InfluenceValue) -> Influence {
-        Influence {
-            flame: i,
-            ..Influence::default()
-        }
-    }
-
-    pub fn value(&self, school: &School) -> InfluenceValue {
-        match school {
-            School::Light => self.light,
-            School::Sky => self.sky,
-            School::Flame => self.flame,
-            School::Ice => self.ice,
-            School::Earth => self.earth,
-            School::Shadow => self.shadow,
-        }
-    }
-
-    pub fn add(&mut self, other: &Influence) {
-        self.light += other.light;
-        self.sky += other.sky;
-        self.flame += other.flame;
-        self.ice += other.ice;
-        self.earth += other.earth;
-        self.shadow += other.shadow;
-    }
-
-    pub fn subtract(&mut self, other: &Influence) {
-        self.light -= other.light;
-        self.sky -= other.sky;
-        self.flame -= other.flame;
-        self.ice -= other.ice;
-        self.earth -= other.earth;
-        self.shadow -= other.shadow;
-    }
-
-    pub fn set_to(&mut self, other: &Influence) {
-        self.light = other.light;
-        self.sky = other.sky;
-        self.flame = other.flame;
-        self.ice = other.ice;
-        self.earth = other.earth;
-        self.shadow = other.shadow;
     }
 }
 
 impl Default for Influence {
     fn default() -> Self {
-        Influence {
-            light: 0,
-            sky: 0,
-            flame: 0,
-            ice: 0,
-            earth: 0,
-            shadow: 0,
-        }
-    }
-}
-
-impl std::fmt::Display for Influence {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for school in SCHOOLS.iter() {
-            if self.value(school) > 0 {
-                write!(f, "{}{}", self.value(school), school.abbreviation())?;
-            }
-        }
-        Ok(())
+        Influence { values: vec![] }
     }
 }
 

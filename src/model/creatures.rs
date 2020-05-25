@@ -74,11 +74,9 @@ impl DamageStat {
 pub struct CreatureStats {
     pub health_total: Stat,
     pub health_regeneration_per_round: Stat,
-    pub damage: HealthValue,
     pub starting_mana: Stat,
     pub maximum_mana: Stat,
     pub mana_regeneration_per_round: Stat,
-    pub mana: ManaValue,
     pub initiative: Stat,
     pub crit_chance: Stat,
     pub crit_multiplier: Stat,
@@ -111,11 +109,9 @@ impl Default for CreatureStats {
         CreatureStats {
             health_total: Stat::new(0),
             health_regeneration_per_round: Stat::new(0),
-            damage: 0,
             starting_mana: Stat::new(0),
             maximum_mana: Stat::new(0),
             mana_regeneration_per_round: Stat::new(0),
-            mana: 0,
             initiative: Stat::new(0),
             crit_chance: Stat::new(0),
             crit_multiplier: Stat::new(0),
@@ -155,11 +151,30 @@ pub enum DamageResult {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CreatureState {
+    pub is_alive: bool,
+    pub damage: HealthValue,
+    pub mana: ManaValue,
+    pub can_reposition: bool,
+}
+
+impl Default for CreatureState {
+    fn default() -> Self {
+        CreatureState {
+            is_alive: true,
+            damage: 0,
+            mana: 0,
+            can_reposition: true,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Creature {
     pub data: CreatureData,
     pub position: BoardPosition,
-    pub is_alive: bool,
     pub spells: Vec<Spell>,
+    pub state: CreatureState,
 }
 
 impl Creature {
@@ -177,70 +192,68 @@ impl Creature {
 
     pub fn current_health(&self) -> u32 {
         let health = self.stats().health_total.value();
-        if self.stats().damage > health {
+        if self.state.damage > health {
             0
         } else {
-            health - self.stats().damage
+            health - self.state.damage
         }
     }
 
     pub fn apply_damage(&mut self, value: HealthValue) -> DamageResult {
-        if !self.is_alive {
+        if !self.state.is_alive {
             return DamageResult::AlreadyDead;
         }
 
-        self.stats_mut().damage += value;
+        self.state.damage += value;
 
-        if self.stats().health_total.value() > self.stats().damage {
+        if self.stats().health_total.value() > self.state.damage {
             return DamageResult::StillAlive;
         } else {
-            self.is_alive = false;
+            self.state.is_alive = false;
             return DamageResult::Killed;
         }
     }
 
     pub fn heal(&mut self, value: HealthValue) {
-        if !self.is_alive {
+        if !self.state.is_alive {
             return;
         }
 
-        if value > self.stats().damage {
-            self.stats_mut().damage = 0
+        if value > self.state.damage {
+            self.state.damage = 0
         } else {
-            self.stats_mut().damage -= value
+            self.state.damage -= value
         }
     }
 
     pub fn lose_mana(&mut self, value: ManaValue) -> Result<()> {
-        if !self.is_alive {
+        if !self.state.is_alive {
             return Ok(());
         }
 
-        if value < self.stats().mana {
+        if value < self.state.mana {
             Err(eyre!(
                 "Cannot lose {} mana, only {} available",
                 value,
-                self.stats().mana
+                self.state.mana
             ))
         } else {
-            Ok(self.stats_mut().mana -= value)
+            Ok(self.state.mana -= value)
         }
     }
 
     pub fn gain_mana(&mut self, value: ManaValue) {
-        if !self.is_alive {
+        if !self.state.is_alive {
             return;
         }
 
-        self.stats_mut().mana =
-            cmp::min(self.stats().maximum_mana.value(), self.stats().mana + value);
+        self.state.mana = cmp::min(self.stats().maximum_mana.value(), self.state.mana + value);
     }
 
     pub fn reset(&mut self) {
-        self.is_alive = true;
-        let mut stats = &mut self.data.stats;
-        stats.damage = 0;
-        stats.mana = stats.starting_mana.value();
+        self.state.is_alive = true;
+        self.state.damage = 0;
+        self.state.mana = self.stats().starting_mana.value();
     }
 }
 

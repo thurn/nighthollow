@@ -68,7 +68,7 @@ fn next_target_for_file(player: &Player, file: FileValue) -> Option<&Creature> {
     player
         .creatures
         .iter()
-        .filter(|c| c.is_alive)
+        .filter(|c| c.state.is_alive)
         .min_by_key(|c| (file_distance(c.position.file, file), c.position.rank))
 }
 

@@ -96,7 +96,7 @@ pub fn text(text: &str) -> api::RichText {
     }
 }
 
-pub fn influence_type(school: &School) -> api::InfluenceType {
+pub fn influence_type(school: School) -> api::InfluenceType {
     match school {
         School::Light => api::InfluenceType::Light,
         School::Sky => api::InfluenceType::Sky,
@@ -110,10 +110,10 @@ pub fn influence_type(school: &School) -> api::InfluenceType {
 pub fn influence(influence: &Influence) -> Vec<api::Influence> {
     let mut result = Vec::new();
     for school in SCHOOLS.iter() {
-        if influence.value(school) > 0 {
+        if influence.value(*school) > 0 {
             result.push(api::Influence {
-                influence_type: influence_type(school).into(),
-                value: influence.value(school),
+                influence_type: influence_type(*school).into(),
+                value: influence.value(*school),
             })
         }
     }

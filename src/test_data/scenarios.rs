@@ -29,7 +29,7 @@ pub fn load_scenario(name: &str) -> Result<Game> {
     }
 }
 
-fn basic() -> Game {
+pub fn basic() -> Game {
     Game {
         id: 1,
         state: GameState {
@@ -59,7 +59,7 @@ fn berserker(owner: PlayerName) -> CreatureData {
             owner,
             cost: Cost::StandardCost(StandardCost {
                 power: 2,
-                influence: Influence::flame(1),
+                influence: Influence::single(1, School::Flame),
             }),
             name: String::from("Berserker"),
             school: School::Flame,
@@ -82,7 +82,7 @@ fn wizard(owner: PlayerName) -> CreatureData {
             owner,
             cost: Cost::StandardCost(StandardCost {
                 power: 3,
-                influence: Influence::flame(2),
+                influence: Influence::single(2, School::Flame),
             }),
             name: String::from("Wizard"),
             school: School::Flame,
@@ -105,7 +105,7 @@ fn rage(owner: PlayerName) -> Spell {
             owner,
             cost: Cost::StandardCost(StandardCost {
                 power: 1,
-                influence: Influence::flame(1),
+                influence: Influence::single(1, School::Flame),
             }),
             name: String::from("Rage"),
             school: School::Flame,
@@ -134,6 +134,17 @@ fn basic_deck(owner: PlayerName) -> Vec<Card> {
         Card::Creature(berserker(owner)),
         Card::Creature(wizard(owner)),
         Card::Spell(rage(owner)),
+        Card::Scroll(flame_scroll(owner)),
+        Card::Creature(berserker(owner)),
+        Card::Creature(wizard(owner)),
+        Card::Creature(berserker(owner)),
+        Card::Creature(berserker(owner)),
+        Card::Creature(wizard(owner)),
+        Card::Spell(rage(owner)),
+        Card::Scroll(flame_scroll(owner)),
+        Card::Scroll(flame_scroll(owner)),
+        Card::Scroll(flame_scroll(owner)),
+        Card::Scroll(flame_scroll(owner)),
         Card::Scroll(flame_scroll(owner)),
     ]
 }

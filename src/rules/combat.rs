@@ -99,7 +99,7 @@ pub fn run_combat(game: &mut Game) -> Result<api::CommandList> {
 
 /// True if this player has any living creatures
 fn has_living_creatures(player: &Player) -> bool {
-    player.creatures.iter().any(|c| c.is_alive)
+    player.creatures.iter().any(|c| c.state.is_alive)
 }
 
 /// Returns an iterator over creature IDs in initiatve order
@@ -165,7 +165,7 @@ fn run_end_of_combat(game: &mut Game, commands: &mut Vec<api::CommandGroup>) {
     let mut enemy_life_loss = 0;
 
     for creature in game.all_creatures_mut() {
-        if creature.is_alive {
+        if creature.state.is_alive {
             group1.push(commands::use_creature_skill_command(
                 creature.creature_id(),
                 creature.data.base_type,

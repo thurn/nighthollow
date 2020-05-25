@@ -29,6 +29,8 @@ namespace Magewatch.Components
     //   _idCounter = 100;
     // }
 
+    const int FirstId = 31;
+
     public void StartGame()
     {
       Root.Instance.NetworkService.MakeRequest(new Request
@@ -55,15 +57,15 @@ namespace Magewatch.Components
           {
             LoadScenario("basic"),
             DrawHands(),
-            PlayCreature(9, RankValue.Rank1, FileValue.File2, PlayerName.User),
-            PlayCreature(11, RankValue.Rank1, FileValue.File3, PlayerName.User),
-            PlayCreature(15, RankValue.Rank1, FileValue.File1, PlayerName.Enemy),
-            PlayCreature(16, RankValue.Rank1, FileValue.File2, PlayerName.Enemy),
-            PlayCreature(17, RankValue.Rank1, FileValue.File3, PlayerName.Enemy),
-            PlayAttachment(12, 9, PlayerName.User),
-            PlayAttachment(18, 15, PlayerName.Enemy),
-            PlayScroll(13, PlayerName.User),
-            PlayScroll(14, PlayerName.User),
+            PlayCreature(FirstId, RankValue.Rank1, FileValue.File2, PlayerName.User),
+            PlayCreature(FirstId + 2, RankValue.Rank1, FileValue.File3, PlayerName.User),
+            PlayCreature(FirstId + 6, RankValue.Rank1, FileValue.File1, PlayerName.Enemy),
+            PlayCreature(FirstId + 7, RankValue.Rank1, FileValue.File2, PlayerName.Enemy),
+            PlayCreature(FirstId + 8, RankValue.Rank1, FileValue.File3, PlayerName.Enemy),
+            PlayAttachment(FirstId + 3, FirstId, PlayerName.User),
+            PlayAttachment(FirstId + 9, FirstId + 6, PlayerName.Enemy),
+            PlayScroll(FirstId + 4, PlayerName.User),
+            PlayScroll(FirstId + 5, PlayerName.User),
             AdvancePhase(),
             AdvancePhase()
           }

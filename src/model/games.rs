@@ -35,6 +35,7 @@ pub struct PlayerState {
     pub maximum_power: ManaValue,
     pub current_influence: Influence,
     pub maximum_influence: Influence,
+    pub available_scroll_plays: u32,
 }
 
 impl Default for PlayerState {
@@ -42,10 +43,11 @@ impl Default for PlayerState {
         PlayerState {
             current_life: 25,
             maximum_life: 25,
-            current_power: 0,
-            maximum_power: 0,
-            current_influence: Influence::default(),
-            maximum_influence: Influence::default(),
+            current_power: 1,
+            maximum_power: 1,
+            current_influence: Influence::single(1, School::Flame),
+            maximum_influence: Influence::single(1, School::Flame),
+            available_scroll_plays: 1,
         }
     }
 }
