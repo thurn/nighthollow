@@ -34,29 +34,29 @@ use crate::{
 #[typetag::serde(tag = "type")]
 pub trait Rule: Debug + Send + RuleClone {
     /// Called a the start of a new game turn
-    fn on_turn_start(&self, _context: &RuleContext, _effects: &mut Effects) {}
+    fn on_turn_start(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called at end of turn
-    fn on_turn_end(&self, _context: &RuleContext, _effects: &mut Effects) {}
+    fn on_turn_end(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called when a new combat phase begins
-    fn on_combat_start(&self, _context: &RuleContext, _effects: &mut Effects) {}
+    fn on_combat_start(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called when a combat phase ends
-    fn on_combat_end(&self, _context: &RuleContext, _effects: &mut Effects) {}
+    fn on_combat_end(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called at the start of a combat round
-    fn on_round_start(&self, _context: &RuleContext, _effects: &mut Effects, _round: RoundNumber) {}
+    fn on_round_start(&self, context: &RuleContext, effects: &mut Effects, _round: RoundNumber) {}
 
     /// Called at the end of a combat round
-    fn on_round_end(&self, _context: &RuleContext, _effects: &mut Effects, _round: RoundNumber) {}
+    fn on_round_end(&self, context: &RuleContext, effects: &mut Effects, _round: RoundNumber) {}
 
     /// Called when it is time for this creature to take an action during
     /// combat.
-    fn on_action_start(&self, _context: &RuleContext, _effects: &mut Effects) {}
+    fn on_action_start(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called at the end of this creature's combat action
-    fn on_action_end(&self, _context: &RuleContext, _effects: &mut Effects) {}
+    fn on_action_end(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called to calculate the priority of the main combat skill for this
     /// creature. If this rule contributes a skill which should be considered
@@ -64,22 +64,22 @@ pub trait Rule: Debug + Send + RuleClone {
     /// creature which returns the highest skill priority will have its
     /// on_invoke_skill() callback invoked. In the case of a tie, a random
     /// skill from among the tied skills is selected.
-    fn on_calculate_skill_priority(&self, _context: &RuleContext) -> Option<u32> {
+    fn on_calculate_skill_priority(&self, context: &RuleContext) -> Option<u32> {
         None
     }
 
     /// Called during a creature's action when this rule returns the highest
     /// priority value from on_calculate_skill_priority, as discussed above
-    fn on_invoke_skill(&self, _context: &RuleContext, _effects: &mut Effects) {}
+    fn on_invoke_skill(&self, context: &RuleContext, effects: &mut Effects) {}
 
     /// Called when this creature applies damage to an opposing creature with
     /// the final damage value
     fn on_applied_damage(
         &self,
-        _context: &RuleContext,
-        _effects: &mut Effects,
-        _damage: &Damage,
-        _to_target: &Creature,
+        context: &RuleContext,
+        effects: &mut Effects,
+        damage: &Damage,
+        to_target: &Creature,
     ) {
     }
 
@@ -87,98 +87,98 @@ pub trait Rule: Debug + Send + RuleClone {
     /// final damage value
     fn on_took_damage(
         &self,
-        _context: &RuleContext,
-        _effects: &mut Effects,
-        _damage: &Damage,
-        _from_source: &Creature,
+        context: &RuleContext,
+        effects: &mut Effects,
+        damage: &Damage,
+        from_source: &Creature,
     ) {
     }
 
     /// Called whenever any creature is damaged
     fn on_any_creature_damaged(
         &self,
-        _context: &RuleContext,
-        _effects: &mut Effects,
-        _damage: &Damage,
-        _attacker: &Creature,
-        _defender: &Creature,
+        context: &RuleContext,
+        effects: &mut Effects,
+        damage: &Damage,
+        attacker: &Creature,
+        defender: &Creature,
     ) {
     }
 
     /// Called when this creature kills an enemy creature
-    fn on_killed_enemy(&self, _context: &RuleContext, _effects: &mut Effects, _enemy: &Creature) {}
+    fn on_killed_enemy(&self, context: &RuleContext, effects: &mut Effects, enemy: &Creature) {}
 
     /// Called when this creature dies (its damage total exceeds its health value)
-    fn on_death(&self, _context: &RuleContext, _effects: &mut Effects, _killed_by: &Creature) {}
+    fn on_death(&self, context: &RuleContext, effects: &mut Effects, killed_by: &Creature) {}
 
     /// Called whenever any creature on either side of combat dies
     fn on_any_creature_killed(
         &self,
-        _context: &RuleContext,
-        _effects: &mut Effects,
-        _attacker: &Creature,
-        _defender: &Creature,
+        context: &RuleContext,
+        effects: &mut Effects,
+        attacker: &Creature,
+        defender: &Creature,
     ) {
     }
 
     /// Called when this creature heals damage
     fn on_healed(
         &self,
-        _context: &RuleContext,
-        _effects: &mut Effects,
-        _amount: HealthValue,
-        _healed_by: &Creature,
+        context: &RuleContext,
+        effects: &mut Effects,
+        amount: HealthValue,
+        healed_by: &Creature,
     ) {
     }
 
     /// Called when this creature applies a heal to another creature
     fn on_applied_heal(
         &self,
-        _context: &RuleContext,
-        _effects: &mut Effects,
-        _amount: HealthValue,
-        _target: &Creature,
+        context: &RuleContext,
+        effects: &mut Effects,
+        amount: HealthValue,
+        target: &Creature,
     ) {
     }
 
     /// Called whenever any creature causes damage to be healed
     fn on_any_creature_healed(
         &self,
-        _context: &RuleContext,
-        _effects: &mut Effects,
-        _amount: HealthValue,
-        _source: &Creature,
-        _target: &Creature,
+        context: &RuleContext,
+        effects: &mut Effects,
+        amount: HealthValue,
+        source: &Creature,
+        target: &Creature,
     ) {
     }
 
     /// Called when this creature's mana is increased
     fn on_mana_gained(
         &self,
-        _context: &RuleContext,
-        _effects: &mut Effects,
-        _amount: ManaValue,
-        _source: &Creature,
+        context: &RuleContext,
+        effects: &mut Effects,
+        amount: ManaValue,
+        source: &Creature,
     ) {
     }
 
     /// Called when this creature's mana is decreased
     fn on_mana_lost(
         &self,
-        _context: &RuleContext,
-        _effects: &mut Effects,
-        _amount: ManaValue,
-        _source: &Creature,
+        context: &RuleContext,
+        effects: &mut Effects,
+        amount: ManaValue,
+        source: &Creature,
     ) {
     }
 
     /// Called when a stat modifier is set on this creature
     fn on_stat_modifier_set(
         &self,
-        _context: &RuleContext,
-        _effects: &mut Effects,
-        _modifier: &SetModifier,
-        _source: &Creature,
+        context: &RuleContext,
+        effects: &mut Effects,
+        modifier: &SetModifier,
+        source: &Creature,
     ) {
     }
 }
@@ -351,7 +351,7 @@ fn evaluate_rule_function(
 
         for (index, rule) in creature.data.rules.iter().enumerate() {
             if scope.should_process_rule(index) {
-                let rule_context = RuleContext {
+                let rulecontext = RuleContext {
                     rule_id: RuleId { creature_id, index },
                     creature,
                     game,
@@ -360,7 +360,7 @@ fn evaluate_rule_function(
                 function(
                     rule,
                     RuleArgs {
-                        rc: &rule_context,
+                        rc: &rulecontext,
                         effects,
                     },
                 )?;

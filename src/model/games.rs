@@ -183,6 +183,7 @@ impl Player {
                     && cost.power <= state.current_power
             }
         };
+
         card.card_state_mut().owner_can_play = new_value;
         old_value != new_value
     }
