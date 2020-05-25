@@ -191,6 +191,7 @@ pub fn play_card(request: &api::PlayCardRequest, game: &mut Game) -> Result<api:
 
     let card_data = commands::card_data(&card);
     let player = game.player_mut(player_name);
+    let cost = card.card_data().cost.clone();
 
     match (card, play_card) {
         (Card::Creature(c), api::play_card_request::PlayCard::PlayCreature(play)) => {
@@ -220,6 +221,7 @@ pub fn play_card(request: &api::PlayCardRequest, game: &mut Game) -> Result<api:
 
             result.push(commands::single(update_creature(&creature)));
             player.creatures.push(creature);
+            player.pay_cost(&cost, &mut result)?;
         }
         (Card::Spell(s), api::play_card_request::PlayCard::PlayAttachment(play)) => {
             let creature = find_creature_mut(
@@ -247,6 +249,7 @@ pub fn play_card(request: &api::PlayCardRequest, game: &mut Game) -> Result<api:
             }
 
             result.push(commands::single(update_creature(&creature)));
+            player.pay_cost(&cost, &mut result)?;
         }
         (Card::Scroll(s), api::play_card_request::PlayCard::PlayUntargeted(_)) => {
             if player_name == PlayerName::User {
@@ -293,7 +296,7 @@ fn to_preparation_phase(game: &mut Game) -> Result<api::CommandList> {
     game.user.upkeep(&mut result);
     game.enemy.upkeep(&mut result);
 
-    Ok(commands::single_group(result))
+    Ok(commands::groups(result))
 }
 
 pub fn load_scenario(request: &MDebugLoadScenarioRequest) -> Result<api::CommandList> {

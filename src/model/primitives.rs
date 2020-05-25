@@ -16,7 +16,6 @@ use std::collections::BTreeMap;
 
 use eyre::eyre;
 use eyre::Result;
-use maplit::btreemap;
 use serde::{Deserialize, Serialize};
 
 pub type GameId = i32;

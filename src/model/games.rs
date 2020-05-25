@@ -17,7 +17,7 @@ use eyre::Result;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    cards::{Card, Deck, HasCardData, HasCardId, HasCardState, Scroll},
+    cards::{Card, Cost, Deck, HasCardData, HasCardId, HasCardState, Scroll},
     creatures::{Creature, CreatureData, HasCreatureData},
     stats::{Stat, StatName, Tag, TagName},
 };
@@ -96,6 +96,26 @@ impl Player {
         }
     }
 
+    pub fn pay_cost(&mut self, cost: &Cost, result: &mut Vec<api::CommandGroup>) -> Result<()> {
+        match cost {
+            Cost::ScrollPlay => {}
+            Cost::StandardCost(cost) => {
+                if cost.power > self.state.current_power {
+                    return Err(eyre!(
+                        "Can't pay power cost {}, have only {}",
+                        cost.power,
+                        self.state.current_power
+                    ));
+                }
+                self.state.current_power -= cost.power;
+                self.state.current_influence.subtract(&cost.influence)?;
+            }
+        }
+
+        self.update_cards(result);
+        Ok(())
+    }
+
     pub fn add_scroll(&mut self, scroll: Scroll, result: &mut Vec<api::CommandGroup>) {
         self.state.current_power += scroll.stats.added_current_power;
         self.state.maximum_power += scroll.stats.added_maximum_power;
@@ -108,23 +128,22 @@ impl Player {
         self.state.available_scroll_plays -= 1;
         self.scrolls.push(scroll);
 
-        let mut updates = vec![];
-        self.update_cards(&mut updates);
-        result.push(commands::group(updates));
+        self.update_cards(result);
     }
 
-    pub fn upkeep(&mut self, result: &mut Vec<api::Command>) {
+    pub fn upkeep(&mut self, result: &mut Vec<api::CommandGroup>) {
         self.state.current_power = self.state.maximum_power;
         self.state.current_influence = self.state.maximum_influence.clone();
         self.state.available_scroll_plays = 1;
         self.update_cards(result);
     }
 
-    fn update_cards(&mut self, result: &mut Vec<api::Command>) {
+    fn update_cards(&mut self, result: &mut Vec<api::CommandGroup>) {
         let state = &self.state;
+        let mut group = vec![];
         for card in self.hand.iter_mut() {
             if Self::update_can_play(state, card) {
-                result.push(commands::update_can_play_card_command(
+                group.push(commands::update_can_play_card_command(
                     self.name,
                     card.card_id(),
                     card.card_state().owner_can_play,
@@ -132,7 +151,8 @@ impl Player {
             }
         }
 
-        result.push(commands::update_player_command(self))
+        group.push(commands::update_player_command(self));
+        result.push(commands::group(group));
     }
 
     pub fn player_data(&self) -> api::PlayerData {
@@ -143,7 +163,7 @@ impl Player {
             current_power: self.state.current_power,
             maximum_power: self.state.maximum_power,
             current_influence: commands::influence(&self.state.current_influence),
-            maximum_influence: commands::influence(&self.state.current_influence),
+            maximum_influence: commands::influence(&self.state.maximum_influence),
         }
     }
 
