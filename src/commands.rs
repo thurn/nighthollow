@@ -299,8 +299,6 @@ pub fn initiate_game_command(game: &Game) -> api::Command {
         command: Some(api::command::Command::InitiateGame(
             api::MInitiateGameCommand {
                 new_game_id: Some(api::GameId { value: game.id }),
-                initial_user_state: Some(game.user.player_data()),
-                initial_enemy_state: Some(game.enemy.player_data()),
             },
         )),
     }
@@ -357,6 +355,10 @@ pub fn update_interface_state_command(
             },
         )),
     }
+}
+
+pub fn empty_group() -> api::CommandGroup {
+    api::CommandGroup { commands: vec![] }
 }
 
 pub fn empty() -> Result<api::CommandList> {

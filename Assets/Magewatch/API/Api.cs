@@ -128,42 +128,40 @@ namespace Magewatch.API {
             "Y3QYAyADKAsyFC5hcGkuTU9uSW1wYWN0TnVtYmVyEiUKDG1lbGVlX3Rhcmdl",
             "dBgEIAEoCzIPLmFwaS5DcmVhdHVyZUlkImgKE01EZXN0cm95Q2FyZENvbW1h",
             "bmQSHwoGcGxheWVyGAEgASgOMg8uYXBpLlBsYXllck5hbWUSHAoHY2FyZF9p",
-            "ZBgCIAEoCzILLmFwaS5DYXJkSWQSEgoKbXVzdF9leGlzdBgDIAEoCCKTAQoU",
-            "TUluaXRpYXRlR2FtZUNvbW1hbmQSIAoLbmV3X2dhbWVfaWQYASABKAsyCy5h",
-            "cGkuR2FtZUlkEisKEmluaXRpYWxfdXNlcl9zdGF0ZRgCIAEoCzIPLmFwaS5Q",
-            "bGF5ZXJEYXRhEiwKE2luaXRpYWxfZW5lbXlfc3RhdGUYAyABKAsyDy5hcGku",
-            "UGxheWVyRGF0YSLeBQoHQ29tbWFuZBIgCgR3YWl0GAEgASgLMhAuYXBpLldh",
-            "aXRDb21tYW5kSAASOAoQdXBkYXRlX2ludGVyZmFjZRgCIAEoCzIcLmFwaS5N",
-            "VXBkYXRlSW50ZXJmYWNlQ29tbWFuZEgAEjwKE2RyYXdfb3JfdXBkYXRlX2Nh",
-            "cmQYAyABKAsyHS5hcGkuTURyYXdPclVwZGF0ZUNhcmRDb21tYW5kSAASLQoL",
-            "cmV2ZWFsX2NhcmQYBCABKAsyFi5hcGkuUmV2ZWFsQ2FyZENvbW1hbmRIABIx",
-            "Cg11cGRhdGVfcGxheWVyGAUgASgLMhguYXBpLlVwZGF0ZVBsYXllckNvbW1h",
-            "bmRIABJHChljcmVhdGVfb3JfdXBkYXRlX2NyZWF0dXJlGAYgASgLMiIuYXBp",
-            "LkNyZWF0ZU9yVXBkYXRlQ3JlYXR1cmVDb21tYW5kSAASNQoPcmVtb3ZlX2Ny",
-            "ZWF0dXJlGAcgASgLMhouYXBpLlJlbW92ZUNyZWF0dXJlQ29tbWFuZEgAEjYK",
-            "D3VwZGF0ZV9jcmVhdHVyZRgKIAEoCzIbLmFwaS5NVXBkYXRlQ3JlYXR1cmVD",
-            "b21tYW5kSAASOwoSdXNlX2NyZWF0dXJlX3NraWxsGAsgASgLMh0uYXBpLk1V",
-            "c2VDcmVhdHVyZVNraWxsQ29tbWFuZEgAEjEKDWRpc3BsYXlfZXJyb3IYDCAB",
-            "KAsyGC5hcGkuRGlzcGxheUVycm9yQ29tbWFuZEgAEjAKDGRlc3Ryb3lfY2Fy",
-            "ZBgNIAEoCzIYLmFwaS5NRGVzdHJveUNhcmRDb21tYW5kSAASMgoNaW5pdGlh",
-            "dGVfZ2FtZRgOIAEoCzIZLmFwaS5NSW5pdGlhdGVHYW1lQ29tbWFuZEgAEj4K",
-            "FHVwZGF0ZV9jYW5fcGxheV9jYXJkGA8gASgLMh4uYXBpLk1VcGRhdGVDYW5Q",
-            "bGF5Q2FyZENvbW1hbmRIAEIJCgdjb21tYW5kIi4KDENvbW1hbmRHcm91cBIe",
-            "Cghjb21tYW5kcxgBIAMoCzIMLmFwaS5Db21tYW5kIjgKC0NvbW1hbmRMaXN0",
-            "EikKDmNvbW1hbmRfZ3JvdXBzGAEgAygLMhEuYXBpLkNvbW1hbmRHcm91cCo5",
-            "CgpQbGF5ZXJOYW1lEhYKElBMQVlFUl9VTlNQRUNJRklFRBAAEggKBFVTRVIQ",
-            "ARIJCgVFTkVNWRACKl0KCVJhbmtWYWx1ZRIUChBSQU5LX1VOU1BFQ0lGSUVE",
-            "EAASCgoGUkFOS18xEAISCgoGUkFOS18yEAMSCgoGUkFOS18zEAQSCgoGUkFO",
-            "S180EAUSCgoGUkFOS181EAYqXQoJRmlsZVZhbHVlEhQKEEZJTEVfVU5TUEVD",
-            "SUZJRUQQABIKCgZGSUxFXzEQAhIKCgZGSUxFXzIQAxIKCgZGSUxFXzMQBBIK",
-            "CgZGSUxFXzQQBRIKCgZGSUxFXzUQBippCg1JbmZsdWVuY2VUeXBlEhkKFUlO",
-            "RkxVRU5DRV9VTlNQRUNJRklFRBAAEgkKBUxJR0hUEAESBwoDU0tZEAISCQoF",
-            "RkxBTUUQAxIHCgNJQ0UQBBIJCgVFQVJUSBAFEgoKBlNIQURPVxAGKjkKCUFz",
-            "c2V0VHlwZRIUChBUWVBFX1VOU1BFQ0lGSUVEEAASCgoGUFJFRkFCEAESCgoG",
-            "U1BSSVRFEAIqbwoVTVNraWxsQW5pbWF0aW9uTnVtYmVyEhUKEVNLSUxMX1VO",
-            "U1BFQ0lGSUVEEAASCwoHU0tJTExfMRABEgsKB1NLSUxMXzIQAhILCgdTS0lM",
-            "TF8zEAMSCwoHU0tJTExfNBAEEgsKB1NLSUxMXzUQBUIQqgINTWFnZXdhdGNo",
-            "LkFQSWIGcHJvdG8z"));
+            "ZBgCIAEoCzILLmFwaS5DYXJkSWQSEgoKbXVzdF9leGlzdBgDIAEoCCI4ChRN",
+            "SW5pdGlhdGVHYW1lQ29tbWFuZBIgCgtuZXdfZ2FtZV9pZBgBIAEoCzILLmFw",
+            "aS5HYW1lSWQi3gUKB0NvbW1hbmQSIAoEd2FpdBgBIAEoCzIQLmFwaS5XYWl0",
+            "Q29tbWFuZEgAEjgKEHVwZGF0ZV9pbnRlcmZhY2UYAiABKAsyHC5hcGkuTVVw",
+            "ZGF0ZUludGVyZmFjZUNvbW1hbmRIABI8ChNkcmF3X29yX3VwZGF0ZV9jYXJk",
+            "GAMgASgLMh0uYXBpLk1EcmF3T3JVcGRhdGVDYXJkQ29tbWFuZEgAEi0KC3Jl",
+            "dmVhbF9jYXJkGAQgASgLMhYuYXBpLlJldmVhbENhcmRDb21tYW5kSAASMQoN",
+            "dXBkYXRlX3BsYXllchgFIAEoCzIYLmFwaS5VcGRhdGVQbGF5ZXJDb21tYW5k",
+            "SAASRwoZY3JlYXRlX29yX3VwZGF0ZV9jcmVhdHVyZRgGIAEoCzIiLmFwaS5D",
+            "cmVhdGVPclVwZGF0ZUNyZWF0dXJlQ29tbWFuZEgAEjUKD3JlbW92ZV9jcmVh",
+            "dHVyZRgHIAEoCzIaLmFwaS5SZW1vdmVDcmVhdHVyZUNvbW1hbmRIABI2Cg91",
+            "cGRhdGVfY3JlYXR1cmUYCiABKAsyGy5hcGkuTVVwZGF0ZUNyZWF0dXJlQ29t",
+            "bWFuZEgAEjsKEnVzZV9jcmVhdHVyZV9za2lsbBgLIAEoCzIdLmFwaS5NVXNl",
+            "Q3JlYXR1cmVTa2lsbENvbW1hbmRIABIxCg1kaXNwbGF5X2Vycm9yGAwgASgL",
+            "MhguYXBpLkRpc3BsYXlFcnJvckNvbW1hbmRIABIwCgxkZXN0cm95X2NhcmQY",
+            "DSABKAsyGC5hcGkuTURlc3Ryb3lDYXJkQ29tbWFuZEgAEjIKDWluaXRpYXRl",
+            "X2dhbWUYDiABKAsyGS5hcGkuTUluaXRpYXRlR2FtZUNvbW1hbmRIABI+ChR1",
+            "cGRhdGVfY2FuX3BsYXlfY2FyZBgPIAEoCzIeLmFwaS5NVXBkYXRlQ2FuUGxh",
+            "eUNhcmRDb21tYW5kSABCCQoHY29tbWFuZCIuCgxDb21tYW5kR3JvdXASHgoI",
+            "Y29tbWFuZHMYASADKAsyDC5hcGkuQ29tbWFuZCI4CgtDb21tYW5kTGlzdBIp",
+            "Cg5jb21tYW5kX2dyb3VwcxgBIAMoCzIRLmFwaS5Db21tYW5kR3JvdXAqOQoK",
+            "UGxheWVyTmFtZRIWChJQTEFZRVJfVU5TUEVDSUZJRUQQABIICgRVU0VSEAES",
+            "CQoFRU5FTVkQAipdCglSYW5rVmFsdWUSFAoQUkFOS19VTlNQRUNJRklFRBAA",
+            "EgoKBlJBTktfMRACEgoKBlJBTktfMhADEgoKBlJBTktfMxAEEgoKBlJBTktf",
+            "NBAFEgoKBlJBTktfNRAGKl0KCUZpbGVWYWx1ZRIUChBGSUxFX1VOU1BFQ0lG",
+            "SUVEEAASCgoGRklMRV8xEAISCgoGRklMRV8yEAMSCgoGRklMRV8zEAQSCgoG",
+            "RklMRV80EAUSCgoGRklMRV81EAYqaQoNSW5mbHVlbmNlVHlwZRIZChVJTkZM",
+            "VUVOQ0VfVU5TUEVDSUZJRUQQABIJCgVMSUdIVBABEgcKA1NLWRACEgkKBUZM",
+            "QU1FEAMSBwoDSUNFEAQSCQoFRUFSVEgQBRIKCgZTSEFET1cQBio5CglBc3Nl",
+            "dFR5cGUSFAoQVFlQRV9VTlNQRUNJRklFRBAAEgoKBlBSRUZBQhABEgoKBlNQ",
+            "UklURRACKm8KFU1Ta2lsbEFuaW1hdGlvbk51bWJlchIVChFTS0lMTF9VTlNQ",
+            "RUNJRklFRBAAEgsKB1NLSUxMXzEQARILCgdTS0lMTF8yEAISCwoHU0tJTExf",
+            "MxADEgsKB1NLSUxMXzQQBBILCgdTS0lMTF81EAVCEKoCDU1hZ2V3YXRjaC5B",
+            "UEliBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.AssetType), typeof(global::Magewatch.API.MSkillAnimationNumber), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -211,7 +209,7 @@ namespace Magewatch.API {
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUpdateCreatureCommand), global::Magewatch.API.MUpdateCreatureCommand.Parser, new[]{ "Update" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUseCreatureSkillCommand), global::Magewatch.API.MUseCreatureSkillCommand.Parser, new[]{ "SourceCreature", "Animation", "OnImpact", "MeleeTarget" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MDestroyCardCommand), global::Magewatch.API.MDestroyCardCommand.Parser, new[]{ "Player", "CardId", "MustExist" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MInitiateGameCommand), global::Magewatch.API.MInitiateGameCommand.Parser, new[]{ "NewGameId", "InitialUserState", "InitialEnemyState" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MInitiateGameCommand), global::Magewatch.API.MInitiateGameCommand.Parser, new[]{ "NewGameId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Command), global::Magewatch.API.Command.Parser, new[]{ "Wait", "UpdateInterface", "DrawOrUpdateCard", "RevealCard", "UpdatePlayer", "CreateOrUpdateCreature", "RemoveCreature", "UpdateCreature", "UseCreatureSkill", "DisplayError", "DestroyCard", "InitiateGame", "UpdateCanPlayCard" }, new[]{ "Command" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CommandGroup), global::Magewatch.API.CommandGroup.Parser, new[]{ "Commands" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CommandList), global::Magewatch.API.CommandList.Parser, new[]{ "CommandGroups" }, null, null, null, null)
@@ -8420,8 +8418,6 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MInitiateGameCommand(MInitiateGameCommand other) : this() {
       newGameId_ = other.newGameId_ != null ? other.newGameId_.Clone() : null;
-      initialUserState_ = other.initialUserState_ != null ? other.initialUserState_.Clone() : null;
-      initialEnemyState_ = other.initialEnemyState_ != null ? other.initialEnemyState_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -8441,28 +8437,6 @@ namespace Magewatch.API {
       }
     }
 
-    /// <summary>Field number for the "initial_user_state" field.</summary>
-    public const int InitialUserStateFieldNumber = 2;
-    private global::Magewatch.API.PlayerData initialUserState_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.PlayerData InitialUserState {
-      get { return initialUserState_; }
-      set {
-        initialUserState_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "initial_enemy_state" field.</summary>
-    public const int InitialEnemyStateFieldNumber = 3;
-    private global::Magewatch.API.PlayerData initialEnemyState_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.PlayerData InitialEnemyState {
-      get { return initialEnemyState_; }
-      set {
-        initialEnemyState_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as MInitiateGameCommand);
@@ -8477,8 +8451,6 @@ namespace Magewatch.API {
         return true;
       }
       if (!object.Equals(NewGameId, other.NewGameId)) return false;
-      if (!object.Equals(InitialUserState, other.InitialUserState)) return false;
-      if (!object.Equals(InitialEnemyState, other.InitialEnemyState)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -8486,8 +8458,6 @@ namespace Magewatch.API {
     public override int GetHashCode() {
       int hash = 1;
       if (newGameId_ != null) hash ^= NewGameId.GetHashCode();
-      if (initialUserState_ != null) hash ^= InitialUserState.GetHashCode();
-      if (initialEnemyState_ != null) hash ^= InitialEnemyState.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -8505,14 +8475,6 @@ namespace Magewatch.API {
         output.WriteRawTag(10);
         output.WriteMessage(NewGameId);
       }
-      if (initialUserState_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(InitialUserState);
-      }
-      if (initialEnemyState_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(InitialEnemyState);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -8523,12 +8485,6 @@ namespace Magewatch.API {
       int size = 0;
       if (newGameId_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(NewGameId);
-      }
-      if (initialUserState_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(InitialUserState);
-      }
-      if (initialEnemyState_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(InitialEnemyState);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -8547,18 +8503,6 @@ namespace Magewatch.API {
         }
         NewGameId.MergeFrom(other.NewGameId);
       }
-      if (other.initialUserState_ != null) {
-        if (initialUserState_ == null) {
-          InitialUserState = new global::Magewatch.API.PlayerData();
-        }
-        InitialUserState.MergeFrom(other.InitialUserState);
-      }
-      if (other.initialEnemyState_ != null) {
-        if (initialEnemyState_ == null) {
-          InitialEnemyState = new global::Magewatch.API.PlayerData();
-        }
-        InitialEnemyState.MergeFrom(other.InitialEnemyState);
-      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -8575,20 +8519,6 @@ namespace Magewatch.API {
               NewGameId = new global::Magewatch.API.GameId();
             }
             input.ReadMessage(NewGameId);
-            break;
-          }
-          case 18: {
-            if (initialUserState_ == null) {
-              InitialUserState = new global::Magewatch.API.PlayerData();
-            }
-            input.ReadMessage(InitialUserState);
-            break;
-          }
-          case 26: {
-            if (initialEnemyState_ == null) {
-              InitialEnemyState = new global::Magewatch.API.PlayerData();
-            }
-            input.ReadMessage(InitialEnemyState);
             break;
           }
         }

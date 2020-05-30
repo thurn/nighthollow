@@ -21,7 +21,7 @@ use super::{
     cards::{CardData, HasCardData, HasCardId, Spell},
     stats::{Stat, StatName, Tag, TagName},
 };
-use crate::{model::primitives::*, rules::rules::Rule};
+use crate::{model::primitives::*, rules::engine::Rule};
 use std::cmp;
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]

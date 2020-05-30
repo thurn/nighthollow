@@ -25,7 +25,6 @@ use crate::{
     model::primitives::{
         BoardPosition, CardId, CreatureId, FileValue, GamePhase, PlayerName, RankValue,
     },
-    rules::combat,
     test_data::scenarios,
 };
 use api::{

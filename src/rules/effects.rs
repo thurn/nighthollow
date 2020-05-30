@@ -12,141 +12,89 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use eyre::Result;
+use std::collections::BTreeSet;
 
-use super::rules::RuleContext;
+use eyre::{eyre, Result};
+
+use super::{
+    engine::RuleIdentifier,
+    events::{Event, Events},
+};
 use crate::{
-    api::{
-        self, m_on_impact, MCreatureUpdate, MFireProjectile, MOnImpact, MOnImpactNumber,
-        MSkillAnimation, MSkillAnimationNumber, MUseCreatureSkillCommand,
-    },
-    commands,
+    api,
     model::{
-        assets::{CreatureType, ParticleSystemName, ProjectileName},
-        creatures::{Creature, Damage, DamageResult, HasCreatureData},
+        cards::HasCardId,
         games::Game,
-        primitives::{CreatureId, HealthValue, ManaValue, RuleId, SkillAnimation},
-        stats::{Modifier, Operation, StatName},
+        primitives::{CreatureId, PlayerName},
+        stats::{Operation, StatName},
     },
 };
 
-pub struct EffectData {
-    pub effect: Effect,
-    pub rule_id: RuleId,
-    pub source_creature_id: CreatureId,
+#[derive(Debug, Clone)]
+pub enum EffectSource {
+    Creature(CreatureId),
+    Player(PlayerName),
+    Game,
 }
 
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
+pub struct EffectData {
+    pub effect: Effect,
+    pub rule_identifier: RuleIdentifier,
+}
+
+impl EffectData {
+    pub fn identifier(&self) -> RuleIdentifier {
+        self.rule_identifier.clone()
+    }
+}
+
+#[derive(Debug)]
 pub struct Effects {
-    effects: Vec<EffectData>,
+    data: BTreeSet<EffectData>,
 }
 
 impl Effects {
     pub fn new() -> Effects {
-        Effects { effects: vec![] }
+        Effects {
+            data: BTreeSet::new(),
+        }
     }
 
-    pub fn push_effect(&mut self, context: &RuleContext, effect: Effect) {
-        self.effects.push(EffectData {
+    pub fn push_effect(&mut self, identifier: &RuleIdentifier, effect: Effect) {
+        self.data.insert(EffectData {
             effect,
-            rule_id: context.rule_id,
-            source_creature_id: context.creature.creature_id(),
+            rule_identifier: identifier.clone(),
         });
     }
 
     pub fn len(&self) -> usize {
-        self.effects.len()
+        self.data.len()
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &EffectData> {
-        self.effects.iter()
+        self.data.iter()
     }
 }
 
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
 pub enum Effect {
-    UseCreatureSkill(CreatureSkill),
+    DrawCard(PlayerName),
 }
 
-pub struct CreatureSkill {
-    source_creature: CreatureId,
-
-    // A skill animation to play
-    animation: SkillAnimation,
-
-    // Effects to apply when the animation reaches its impact frame
-    on_impact: Vec<OnImpactNumber>,
-
-    // Optionally, a target for this skill. The creature will move into
-    // melee range with this target before playing the skill animation.
-    melee_target: Option<CreatureId>,
-}
-
-impl CreatureSkill {
-    pub fn simple_melee(
-        creature: &Creature,
-        animation: SkillAnimation,
-        target: CreatureId,
-        mutation: CreatureMutation,
-    ) -> Effect {
-        Effect::UseCreatureSkill(CreatureSkill {
-            source_creature: creature.creature_id(),
-            animation,
-            melee_target: Some(target),
-            on_impact: vec![OnImpactNumber {
-                impact_number: 1,
-                effect: OnImpact::ApplyCreatureMutation(ApplyCreatureMutation {
-                    target_id: target,
-                    mutation,
-                }),
-            }],
-        })
-    }
-}
-
-pub struct OnImpactNumber {
-    impact_number: u32,
-    effect: OnImpact,
-}
-
-pub enum OnImpact {
-    ApplyCreatureMutation(ApplyCreatureMutation),
-    FireProjectile(FireProjectile),
-}
-
-pub struct FireProjectile {
-    projectile: ProjectileName,
-    on_hit: Vec<OnImpact>,
-    target: ProjectileTarget,
-}
-
-pub enum ProjectileTarget {
-    TargetCreature(CreatureId),
-}
-
-pub struct ApplyCreatureMutation {
-    pub target_id: CreatureId,
-    pub mutation: CreatureMutation,
-}
-
-pub struct CreatureMutation {
-    pub set_modifiers: Vec<SetModifier>,
-    pub apply_damage: Option<Damage>,
-    pub heal_damage: Option<HealthValue>,
-    pub gain_mana: Option<ManaValue>,
-    pub lose_mana: Option<ManaValue>,
-    pub play_particle_systems: Vec<ParticleSystemName>,
-}
-
-impl Default for CreatureMutation {
-    fn default() -> Self {
-        CreatureMutation {
-            set_modifiers: vec![],
-            apply_damage: None,
-            heal_damage: None,
-            gain_mana: None,
-            lose_mana: None,
-            play_particle_systems: vec![],
+pub fn apply_effect(game: &mut Game, events: &mut Events, effect_data: &EffectData) -> Result<()> {
+    match &effect_data.effect {
+        Effect::DrawCard(player_name) => {
+            let player = game.player_mut(*player_name);
+            let card = player.deck.draw_card()?;
+            events.push_event(
+                effect_data.identifier(),
+                Event::CardDrawn(player.name, card.card_id()),
+            );
+            player.hand.push(card);
         }
     }
+    Ok(())
 }
 
 #[derive(Debug, Clone)]
@@ -154,230 +102,4 @@ pub struct SetModifier {
     pub stat: StatName,
     pub value: u32,
     pub operation: Operation,
-}
-
-/// Represents a mutation which ocurred during effect application which should
-// be used to trigger further "on mutation x happened" rules
-pub struct MutationEvent {
-    pub source_creature: CreatureId,
-    pub target_creature: CreatureId,
-    pub event_type: MutationEventType,
-}
-
-/// Possible types of mutation event
-pub enum MutationEventType {
-    AppliedDamage(Damage),
-    Killed(Damage),
-    Healed(HealthValue),
-    GainedMana(ManaValue),
-    LostMana(ManaValue),
-    SetModifier(SetModifier),
-}
-
-/// Applies a specific Effect to the Game, mutating game state. The 'commands'
-/// buffer is populated with resulting commands which should be sent to the
-/// client. The 'events' buffer is populated with mutation events, used to
-/// trigger addtional rules as a result of this effect.
-pub fn apply_effect(
-    game: &mut Game,
-    effect_data: &EffectData,
-    commands: &mut Vec<api::Command>,
-    events: &mut Vec<MutationEvent>,
-) -> Result<()> {
-    match &effect_data.effect {
-        Effect::UseCreatureSkill(skill) => {
-            commands.push(api::Command {
-                command: Some(api::command::Command::UseCreatureSkill(use_creature_skill(
-                    game,
-                    effect_data,
-                    skill,
-                    events,
-                )?)),
-            });
-        }
-    }
-    Ok(())
-}
-
-fn use_creature_skill(
-    game: &mut Game,
-    effect_data: &EffectData,
-    skill: &CreatureSkill,
-    events: &mut Vec<MutationEvent>,
-) -> Result<MUseCreatureSkillCommand> {
-    let mut on_impact = vec![];
-    for on_impact_number in skill.on_impact.iter() {
-        on_impact.push(adapt_on_impact_number(
-            game,
-            effect_data,
-            on_impact_number,
-            events,
-        )?)
-    }
-
-    Ok(MUseCreatureSkillCommand {
-        source_creature: Some(commands::creature_id(skill.source_creature)),
-        animation: Some(commands::adapt_skill_animation(
-            skill.animation,
-            game.creature(skill.source_creature)?.data.base_type,
-        )),
-        on_impact,
-        melee_target: skill.melee_target.map(|cid| commands::creature_id(cid)),
-    })
-}
-
-fn adapt_on_impact_number(
-    game: &mut Game,
-    effect_data: &EffectData,
-    on_impact_number: &OnImpactNumber,
-    events: &mut Vec<MutationEvent>,
-) -> Result<MOnImpactNumber> {
-    Ok(MOnImpactNumber {
-        impact_number: on_impact_number.impact_number,
-        effect: Some(adapt_on_impact(
-            game,
-            effect_data,
-            &on_impact_number.effect,
-            events,
-        )?),
-    })
-}
-
-fn adapt_on_impact(
-    game: &mut Game,
-    effect_data: &EffectData,
-    on_impact: &OnImpact,
-    events: &mut Vec<MutationEvent>,
-) -> Result<MOnImpact> {
-    Ok(MOnImpact {
-        on_impact: Some(match on_impact {
-            OnImpact::ApplyCreatureMutation(mutation) => m_on_impact::OnImpact::Update(
-                adapt_creature_mutation(game, effect_data, mutation, events)?,
-            ),
-            OnImpact::FireProjectile(fire_projectile) => m_on_impact::OnImpact::FireProjectile(
-                adapt_fire_projectile(game, effect_data, fire_projectile, events)?,
-            ),
-        }),
-    })
-}
-
-fn adapt_creature_mutation(
-    game: &mut Game,
-    effect_data: &EffectData,
-    mutation: &ApplyCreatureMutation,
-    events: &mut Vec<MutationEvent>,
-) -> Result<MCreatureUpdate> {
-    let result = apply_mutation(game, effect_data, mutation, events)?;
-    let creature = game.creature(mutation.target_id)?;
-    let health = creature.stats().health_total.value();
-
-    Ok(MCreatureUpdate {
-        creature_id: Some(commands::creature_id(mutation.target_id)),
-        set_health_percentage: ratio(creature.current_health(), health),
-        play_death_animation: result == MutationResult::Killed,
-        set_mana_percentage: ratio(
-            creature.current_mana(),
-            creature.stats().maximum_mana.value(),
-        ),
-        play_particle_effects: vec![],
-    })
-}
-
-fn ratio(a: u32, b: u32) -> f32 {
-    if b == 0 {
-        0.0
-    } else {
-        (a as f32 / b as f32).clamp(0.0, 1.0)
-    }
-}
-
-#[derive(Debug, PartialEq, Eq)]
-enum MutationResult {
-    None,
-    Killed,
-}
-
-fn apply_mutation(
-    game: &mut Game,
-    effect_data: &EffectData,
-    apply_mutation: &ApplyCreatureMutation,
-    events: &mut Vec<MutationEvent>,
-) -> Result<MutationResult> {
-    let target_id = apply_mutation.target_id;
-    let mutation = &apply_mutation.mutation;
-    let creature = game.creature_mut(target_id)?;
-    let mut result = MutationResult::None;
-
-    for set_modifier in mutation.set_modifiers.iter() {
-        creature
-            .stats_mut()
-            .get_mut(set_modifier.stat)
-            .set_modifier(Modifier {
-                value: set_modifier.value,
-                operation: set_modifier.operation,
-                source: effect_data.rule_id,
-            });
-        events.push(MutationEvent {
-            source_creature: effect_data.source_creature_id,
-            target_creature: target_id,
-            event_type: MutationEventType::SetModifier(set_modifier.clone()),
-        });
-    }
-
-    if let Some(damage) = &mutation.apply_damage {
-        events.push(MutationEvent {
-            source_creature: effect_data.source_creature_id,
-            target_creature: apply_mutation.target_id,
-            event_type: MutationEventType::AppliedDamage(damage.clone()),
-        });
-        match creature.apply_damage(damage.total()) {
-            DamageResult::Killed => {
-                result = MutationResult::Killed;
-                events.push(MutationEvent {
-                    source_creature: effect_data.source_creature_id,
-                    target_creature: target_id,
-                    event_type: MutationEventType::Killed(damage.clone()),
-                })
-            }
-            _ => {}
-        }
-    }
-
-    if let Some(healing) = mutation.heal_damage {
-        creature.heal(healing);
-        events.push(MutationEvent {
-            source_creature: effect_data.source_creature_id,
-            target_creature: target_id,
-            event_type: MutationEventType::Healed(healing),
-        });
-    }
-
-    if let Some(mana_gain) = mutation.gain_mana {
-        creature.gain_mana(mana_gain);
-        events.push(MutationEvent {
-            source_creature: effect_data.source_creature_id,
-            target_creature: target_id,
-            event_type: MutationEventType::GainedMana(mana_gain),
-        });
-    }
-
-    if let Some(mana_loss) = mutation.lose_mana {
-        creature.lose_mana(mana_loss)?;
-        events.push(MutationEvent {
-            source_creature: effect_data.source_creature_id,
-            target_creature: target_id,
-            event_type: MutationEventType::LostMana(mana_loss),
-        });
-    }
-
-    Ok(result)
-}
-
-fn adapt_fire_projectile(
-    _game: &mut Game,
-    _effect_data: &EffectData,
-    _fire_projectile: &FireProjectile,
-    _events: &mut Vec<MutationEvent>,
-) -> Result<MFireProjectile> {
-    todo!()
 }

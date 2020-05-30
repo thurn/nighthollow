@@ -18,12 +18,15 @@
 #![allow(unused_variables)]
 #![feature(clamp)]
 #![feature(move_ref_pattern)]
+#![feature(type_alias_impl_trait)]
 
 mod api;
 mod commands;
+mod gameplay;
 mod interface;
 mod model;
-mod requests;
+// mod requests;
+mod responses;
 mod rules;
 mod test_data;
 
@@ -36,6 +39,8 @@ use warp::Filter;
 extern crate lazy_static;
 extern crate eyre;
 extern crate maplit;
+
+pub enum Empty {}
 
 fn error_command(message: String) -> CommandList {
     CommandList {
@@ -60,7 +65,7 @@ async fn main() {
             description.truncate(500);
             println!("<----- Got request:\n{}", description);
             let now = Instant::now();
-            let result = requests::handle_request(&request);
+            let result = responses::handle_request(&request);
             let completed = now.elapsed().as_secs_f64();
             match result {
                 Ok(response) => {

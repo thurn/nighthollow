@@ -21,7 +21,11 @@ use super::{
     creatures::{Creature, CreatureData, HasCreatureData},
     stats::{Stat, StatName, Tag, TagName},
 };
-use crate::{api, commands, model::primitives::*};
+use crate::{
+    api, commands,
+    model::primitives::*,
+    rules::engine::{Rule, RulesEngine},
+};
 
 pub trait HasOwner {
     fn owner(&self) -> PlayerName;
@@ -64,9 +68,17 @@ pub struct Player {
     pub hand: Vec<Card>,
     pub creatures: Vec<Creature>,
     pub scrolls: Vec<Scroll>,
+    pub rules: Vec<Box<dyn Rule>>,
 }
 
 impl Player {
+    pub fn card(&self, card_id: CardId) -> Result<&Card> {
+        self.hand
+            .iter()
+            .find(|c| c.card_id() == card_id)
+            .ok_or(eyre!("Card not found: {}", card_id))
+    }
+
     pub fn draw_card(&mut self) -> Result<&Card> {
         let card = self.deck.draw_card()?;
         Ok(self.add_to_hand(card))
@@ -196,9 +208,16 @@ impl HasOwner for Player {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum MainButtonState {
+    ToCombat,
+    EndTurn,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GameState {
     pub phase: GamePhase,
     pub turn: TurnNumber,
+    pub main_button: MainButtonState,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

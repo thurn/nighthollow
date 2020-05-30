@@ -15,8 +15,8 @@
 use serde::{Deserialize, Serialize};
 
 use super::{
-    effects::{CreatureMutation, CreatureSkill, Effects},
-    rules::{Rule, RuleContext},
+    effects2::{CreatureMutation, CreatureSkill, Effects},
+    rules::{BaseRule, CreatureRule, RuleContext},
 };
 use crate::model::{
     creatures::{Creature, Damage, HasCreatureData},
@@ -35,13 +35,15 @@ impl BaseMeleeDamageAttack {
     }
 }
 
+impl BaseRule<Creature> for BaseMeleeDamageAttack {}
+
 #[typetag::serde]
-impl Rule for BaseMeleeDamageAttack {
-    fn on_calculate_skill_priority(&self, _context: &RuleContext) -> Option<u32> {
+impl CreatureRule for BaseMeleeDamageAttack {
+    fn on_calculate_skill_priority(&self, context: &RuleContext<Creature>) -> Option<u32> {
         Some(1)
     }
 
-    fn on_invoke_skill(&self, context: &RuleContext, effects: &mut Effects) {
+    fn on_invoke_skill(&self, context: &RuleContext<Creature>, effects: &mut Effects) {
         if let Some(target) =
             next_target_for_file(context.opponent(), context.creature.position.file)
         {

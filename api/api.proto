@@ -439,10 +439,6 @@ message MDestroyCardCommand {
 // the provided game id.
 message MInitiateGameCommand {
   GameId new_game_id = 1;
-
-  PlayerData initial_user_state = 2;
-
-  PlayerData initial_enemy_state = 3;
 }
 
 // A single instruction to the client UI to perform some action.

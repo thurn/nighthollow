@@ -9,6 +9,7 @@ default-run = "magewatch"
 [dependencies]
 bytes = "0.5"
 derive_more = "0.99"
+dyn-clone = "1.0"
 eyre = "0.4"
 lazy_static = "1.4"
 log = "0.4"

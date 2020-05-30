@@ -21,6 +21,8 @@ use serde::{Deserialize, Serialize};
 pub type GameId = i32;
 pub type CardId = i32;
 pub type CreatureId = i32;
+pub type SpellId = i32;
+pub type ScrollId = i32;
 pub type TurnNumber = u32;
 pub type RoundNumber = u32;
 pub type ActionNumber = u32;
@@ -76,7 +78,7 @@ impl School {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone, Ord, PartialOrd)]
 pub enum PlayerName {
     User,
     Enemy,

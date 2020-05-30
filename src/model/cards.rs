@@ -25,9 +25,9 @@ use serde::{Deserialize, Serialize};
 
 use super::{
     assets::{ScrollType, SpellType},
-    creatures::CreatureData,
+    creatures::{Creature, CreatureData},
     games::HasOwner,
-    primitives::{CardId, Influence, PlayerName, PowerValue, School},
+    primitives::{CardId, FileValue, Influence, PlayerName, PowerValue, RankValue, School},
 };
 
 static NEXT_CARD_ID: AtomicI32 = AtomicI32::new(1);
@@ -190,6 +190,12 @@ impl HasCardData for Card {
             Card::Scroll(s) => s.card_data_mut(),
         }
     }
+}
+
+pub enum CardWithTarget<'a> {
+    Creature(&'a CreatureData, RankValue, FileValue),
+    Spell(&'a Spell, &'a Creature),
+    Scroll(&'a Scroll),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

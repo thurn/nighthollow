@@ -450,10 +450,6 @@ pub struct MDestroyCardCommand {
 pub struct MInitiateGameCommand {
     #[prost(message, optional, tag = "1")]
     pub new_game_id: ::std::option::Option<GameId>,
-    #[prost(message, optional, tag = "2")]
-    pub initial_user_state: ::std::option::Option<PlayerData>,
-    #[prost(message, optional, tag = "3")]
-    pub initial_enemy_state: ::std::option::Option<PlayerData>,
 }
 /// A single instruction to the client UI to perform some action.
 #[derive(Clone, PartialEq, ::prost::Message)]

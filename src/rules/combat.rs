@@ -16,7 +16,7 @@ use std::time::Instant;
 
 use eyre::Result;
 
-use super::rules::{self, Rule, RuleContext, RuleScope};
+use super::{effects2::EffectSource, rules::{self, BaseRule, CreatureRule, RuleContext, RuleScope}};
 use crate::{
     api, commands,
     model::{
@@ -138,6 +138,7 @@ fn invoke_main_skill(
                 rule_id: RuleId { creature_id, index },
                 creature,
                 game,
+                source: EffectSource::Creature(creature_id)
             })
             .map(|priority| RuleWithPriority { priority, index })
         })
