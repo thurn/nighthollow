@@ -17,7 +17,7 @@ use eyre::{eyre, Result};
 use crate::{
     api, commands,
     model::{
-        cards::{Card, HasCardState},
+        cards::{Card, HasCardState, Scroll, Spell},
         creatures::{Creature, CreatureData, CreatureState, HasCreatureData},
         games::Player,
         primitives::{BoardPosition, CardId, CreatureId, FileValue, PlayerName, RankValue},
@@ -64,13 +64,50 @@ pub fn on_play_card_request(
             requests::convert_rank(play_creature.rank_position())?,
             requests::convert_file(play_creature.file_position())?,
         ),
-        // (Card::Spell(spell), PlayAttachment(play_attachment)) => commands::empty(),
-        // (Card::Scroll(scroll), PlayUntargeted(_)) => commands::empty(),
+        (Card::Spell(spell), PlayAttachment(play_attachment)) => on_play_attachment(
+            player,
+            &mut result,
+            spell,
+            card_data,
+            requests::convert_creature_id(
+                play_attachment
+                    .creature_id
+                    .as_ref()
+                    .ok_or_else(|| eyre!("creature_id is required"))?,
+            ),
+        ),
+        (Card::Scroll(scroll), PlayUntargeted(_)) => {
+            on_play_scroll(player, &mut result, scroll, card_data)
+        }
         _ => Err(eyre!("Card did not match targeting type")),
     }?;
 
     engine.invoke_as_group(&mut result, trigger)?;
     Ok(commands::groups(result))
+}
+
+fn reveal_card(
+    player_name: PlayerName,
+    result: &mut Vec<api::CommandGroup>,
+    card_data: api::CardData,
+    rank: Option<RankValue>,
+    file: Option<FileValue>,
+) -> Result<()> {
+    if player_name == PlayerName::User {
+        result.push(commands::single(commands::destroy_card_command(
+            player_name,
+            card_data
+                .card_id
+                .ok_or_else(|| eyre!("card_id is required"))?,
+            false,
+        )));
+    } else {
+        result.push(commands::single(commands::reveal_card_command(
+            card_data, 1000, rank, file,
+        )));
+    }
+
+    Ok(())
 }
 
 fn on_play_creature(
@@ -89,22 +126,7 @@ fn on_play_creature(
         state: CreatureState::default(),
     };
 
-    if player.name == PlayerName::User {
-        result.push(commands::single(commands::destroy_card_command(
-            player.name,
-            card_data
-                .card_id
-                .ok_or_else(|| eyre!("card_id is required"))?,
-            false,
-        )));
-    } else {
-        result.push(commands::single(commands::reveal_card_command(
-            card_data,
-            1000,
-            Some(rank),
-            Some(file),
-        )));
-    }
+    reveal_card(player.name, result, card_data, Some(rank), Some(file))?;
 
     result.push(commands::single(
         commands::create_or_update_creature_command(&creature),
@@ -112,4 +134,48 @@ fn on_play_creature(
     player.creatures.push(creature);
 
     Ok(Trigger::CreaturePlayed(player.name, creature_id))
+}
+
+fn on_play_attachment(
+    player: &mut Player,
+    result: &mut Vec<api::CommandGroup>,
+    spell: Spell,
+    card_data: api::CardData,
+    target_id: CreatureId,
+) -> Result<Trigger> {
+    let spell_id = spell.spell_id();
+    let creature = player
+        .creatures
+        .iter_mut()
+        .find(|c| c.creature_id() == target_id)
+        .ok_or_else(|| eyre!("Creature not found"))?;
+
+    reveal_card(
+        player.name,
+        result,
+        card_data,
+        Some(creature.position.rank),
+        Some(creature.position.file),
+    )?;
+
+    creature.spells.push(spell);
+    result.push(commands::single(
+        commands::create_or_update_creature_command(&creature),
+    ));
+
+    Ok(Trigger::SpellPlayed(player.name, target_id, spell_id))
+}
+
+fn on_play_scroll(
+    player: &mut Player,
+    result: &mut Vec<api::CommandGroup>,
+    scroll: Scroll,
+    card_data: api::CardData,
+) -> Result<Trigger> {
+    let scroll_id = scroll.scroll_id();
+
+    reveal_card(player.name, result, card_data, None, None)?;
+
+    player.scrolls.push(scroll);
+    Ok(Trigger::ScrollPlayed(player.name, scroll_id))
 }

@@ -27,7 +27,9 @@ use super::{
     assets::{ScrollType, SpellType},
     creatures::{Creature, CreatureData},
     games::HasOwner,
-    primitives::{CardId, FileValue, Influence, PlayerName, PowerValue, RankValue, School},
+    primitives::{
+        CardId, FileValue, Influence, PlayerName, PowerValue, RankValue, School, ScrollId, SpellId,
+    },
 };
 
 static NEXT_CARD_ID: AtomicI32 = AtomicI32::new(1);
@@ -132,6 +134,12 @@ pub struct Spell {
     pub base_type: SpellType,
 }
 
+impl Spell {
+    pub fn spell_id(&self) -> SpellId {
+        self.card_data.id
+    }
+}
+
 impl HasCardData for Spell {
     fn card_data(&self) -> &CardData {
         &self.card_data
@@ -155,6 +163,12 @@ pub struct Scroll {
     pub card_data: CardData,
     pub base_type: ScrollType,
     pub stats: ScrollStats,
+}
+
+impl Scroll {
+    pub fn scroll_id(&self) -> ScrollId {
+        self.card_data.id
+    }
 }
 
 impl HasCardData for Scroll {

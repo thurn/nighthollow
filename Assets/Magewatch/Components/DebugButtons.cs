@@ -55,11 +55,11 @@ namespace Magewatch.Components
             PlayCreature(FirstId + 6, RankValue.Rank1, FileValue.File1, PlayerName.Enemy),
             PlayCreature(FirstId + 7, RankValue.Rank1, FileValue.File2, PlayerName.Enemy),
             PlayCreature(FirstId + 8, RankValue.Rank1, FileValue.File3, PlayerName.Enemy),
+            PlayAttachment(FirstId + 3, FirstId, PlayerName.User),
+            PlayAttachment(FirstId + 9, FirstId + 6, PlayerName.Enemy),
+            PlayScroll(FirstId + 10, PlayerName.Enemy),
+            PlayScroll(FirstId + 5, PlayerName.User),
           }
-          //   PlayAttachment(FirstId + 3, FirstId, PlayerName.User),
-          //   PlayAttachment(FirstId + 9, FirstId + 6, PlayerName.Enemy),
-          //   PlayScroll(FirstId + 4, PlayerName.User),
-          //   PlayScroll(FirstId + 5, PlayerName.User),
           //   AdvancePhase(),
           //   AdvancePhase()
           // }

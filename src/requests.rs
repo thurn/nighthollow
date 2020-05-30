@@ -18,7 +18,7 @@ use crate::{
     model::{
         cards,
         games::Game,
-        primitives::{CardId, FileValue, PlayerName, RankValue},
+        primitives::{CardId, CreatureId, FileValue, PlayerName, RankValue},
     },
     rules::engine::{RulesEngine, Trigger},
     test_data::scenarios,
@@ -54,6 +54,10 @@ pub fn convert_player_name(player_name: api::PlayerName) -> Result<PlayerName> {
         api::PlayerName::Enemy => Ok(PlayerName::Enemy),
         _ => Err(eyre!("Unrecognized player name: {:?}", player_name)),
     }
+}
+
+pub fn convert_creature_id(creature_id: &api::CreatureId) -> CreatureId {
+    creature_id.value
 }
 
 pub fn convert_rank(rank: api::RankValue) -> Result<RankValue> {
