@@ -243,12 +243,11 @@ pub fn reveal_card(
         card: Some(card),
         reveal_delay_milliseconds: delay_milliseconds,
         rank_position: rank_position
-            .map_or(api::RankValue::RankUnspecified, |r| rank_value(r))
+            .map_or(api::RankValue::RankUnspecified, rank_value)
             .into(),
         file_position: file_position
-            .map_or(api::FileValue::FileUnspecified, |f| file_value(f))
+            .map_or(api::FileValue::FileUnspecified, file_value)
             .into(),
-        ..api::RevealCardCommand::default()
     }
 }
 

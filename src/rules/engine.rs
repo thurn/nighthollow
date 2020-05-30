@@ -366,7 +366,7 @@ impl RulesEngine {
         commands: &mut Vec<api::Command>,
         trigger: Trigger,
     ) -> Result<()> {
-        let mut effects = Effects::new();
+        let mut effects = Effects::default();
         self.populate_rule_effects(&mut effects, trigger)?;
 
         let mut event_index = 0;
@@ -377,7 +377,7 @@ impl RulesEngine {
                 effects::apply_effect(&mut self.game, &mut events, effect)?;
             }
 
-            effects = Effects::new();
+            effects = Effects::default();
 
             for event in &events.data[event_index..] {
                 events::populate_event_rule_effects(self, &mut effects, event)?;

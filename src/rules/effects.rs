@@ -53,10 +53,6 @@ pub struct Effects {
 }
 
 impl Effects {
-    pub fn new() -> Effects {
-        Effects { data: vec![] }
-    }
-
     pub fn push_effect(&mut self, identifier: &RuleIdentifier, effect: Effect) {
         self.data.push(EffectData {
             effect,
@@ -70,6 +66,12 @@ impl Effects {
 
     pub fn iter(&self) -> impl Iterator<Item = &EffectData> {
         self.data.iter()
+    }
+}
+
+impl Default for Effects {
+    fn default() -> Effects {
+        Effects { data: vec![] }
     }
 }
 

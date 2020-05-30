@@ -36,7 +36,7 @@ pub struct Damage {
 }
 
 impl Damage {
-    pub fn from(stats: &Vec<DamageStat>) -> Self {
+    pub fn from(stats: &[DamageStat]) -> Self {
         Damage {
             values: stats
                 .iter()
@@ -215,10 +215,10 @@ impl Creature {
         self.state.damage += value;
 
         if self.stats().health_total.value() > self.state.damage {
-            return DamageResult::StillAlive;
+            DamageResult::StillAlive
         } else {
             self.state.is_alive = false;
-            return DamageResult::Killed;
+            DamageResult::Killed
         }
     }
 
@@ -246,7 +246,8 @@ impl Creature {
                 self.state.mana
             ))
         } else {
-            Ok(self.state.mana -= value)
+            self.state.mana -= value;
+            Ok(())
         }
     }
 

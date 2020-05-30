@@ -239,7 +239,7 @@ impl Deck {
             .cards
             .iter()
             .position(|c| c.card_data().id == card_id)
-            .ok_or(eyre!("Card not found: {}", card_id))?;
+            .ok_or_else(|| eyre!("Card not found: {}", card_id))?;
         self.draw_card_at_index(card_index)
     }
 
@@ -249,7 +249,7 @@ impl Deck {
         let mut card = self
             .cards
             .get(card_index)
-            .ok_or(eyre!("Card at index {} not found", card_index))?
+            .ok_or_else(|| eyre!("Card at index {} not found", card_index))?
             .clone();
         self.decrement_weights(card_index)?;
         card.card_data_mut().id = next_card_id();
@@ -260,7 +260,7 @@ impl Deck {
         let weight = self
             .weights
             .get(index)
-            .ok_or(eyre!("Index not found {}", index))?;
+            .ok_or_else(|| eyre!("Index not found {}", index))?;
         self.weights[index] = match weight {
             // Linear descent for the first 4 draws, then halves
             4000 => 3000,

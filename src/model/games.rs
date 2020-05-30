@@ -76,7 +76,7 @@ impl Player {
         self.hand
             .iter()
             .find(|c| c.card_id() == card_id)
-            .ok_or(eyre!("Card not found: {}", card_id))
+            .ok_or_else(|| eyre!("Card not found: {}", card_id))
     }
 
     pub fn draw_card(&mut self) -> Result<&Card> {
@@ -260,7 +260,7 @@ impl Game {
     pub fn creature(&self, creature_id: CreatureId) -> Result<&Creature> {
         self.all_creatures()
             .find(|c| c.creature_id() == creature_id)
-            .ok_or(eyre!("Creature ID {} not found", creature_id))
+            .ok_or_else(|| eyre!("Creature ID {} not found", creature_id))
     }
 
     pub fn creature_mut(&mut self, creature_id: CreatureId) -> Result<&mut Creature> {
@@ -269,6 +269,6 @@ impl Game {
             .iter_mut()
             .chain(self.enemy.creatures.iter_mut())
             .find(|c| c.creature_id() == creature_id)
-            .ok_or(eyre!("Creature ID {} not found", creature_id))
+            .ok_or_else(|| eyre!("Creature ID {} not found", creature_id))
     }
 }
