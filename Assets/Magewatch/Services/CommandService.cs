@@ -74,8 +74,6 @@ namespace Magewatch.Services
           Root.Instance.CreatureService.DestroyAllCreatures();
           user.Hand.DestroyAllCards();
           enemy.Hand.DestroyAllCards();
-          user.UpdatePlayerData(command.InitiateGame.InitialUserState, this);
-          enemy.UpdatePlayerData(command.InitiateGame.InitialEnemyState, this);
         }
 
         if (command.DisplayError != null)

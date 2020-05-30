@@ -25,8 +25,8 @@ mod commands;
 mod gameplay;
 mod interface;
 mod model;
-// mod requests;
-mod responses;
+// mod requests2;
+mod requests;
 mod rules;
 mod test_data;
 
@@ -65,14 +65,14 @@ async fn main() {
             description.truncate(500);
             println!("<----- Got request:\n{}", description);
             let now = Instant::now();
-            let result = responses::handle_request(&request);
+            let result = requests::handle_request(&request);
             let completed = now.elapsed().as_secs_f64();
             match result {
                 Ok(response) => {
                     let mut response_description = format!("{:?}", response);
                     response_description.truncate(500);
                     println!(
-                        "-----> Sending {} command(s) in {:.3} seconds (formatted {:.3}):\n{}",
+                        "-----> Sending {} groups(s) in {:.3} seconds (formatted {:.3}):\n{}",
                         response.command_groups.len(),
                         completed,
                         now.elapsed().as_secs_f64(),

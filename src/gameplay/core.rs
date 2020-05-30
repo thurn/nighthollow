@@ -26,6 +26,12 @@ use crate::{
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CorePlayerRules {}
 
+impl CorePlayerRules {
+    pub fn new() -> Box<Self> {
+        Box::from(CorePlayerRules {})
+    }
+}
+
 #[typetag::serde]
 impl Rule for CorePlayerRules {
     fn triggers(&self) -> Vec<TriggerCondition> {

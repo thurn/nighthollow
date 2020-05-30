@@ -294,11 +294,11 @@ pub fn destroy_card_command(player: PlayerName, id: CardId, must_exist: bool) ->
     }
 }
 
-pub fn initiate_game_command(game: &Game) -> api::Command {
+pub fn initiate_game_command(game_id: GameId) -> api::Command {
     api::Command {
         command: Some(api::command::Command::InitiateGame(
             api::MInitiateGameCommand {
-                new_game_id: Some(api::GameId { value: game.id }),
+                new_game_id: Some(api::GameId { value: game_id }),
             },
         )),
     }

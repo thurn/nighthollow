@@ -16,7 +16,7 @@ use eyre::{eyre, Result};
 
 use super::{
     effects::Effects,
-    engine::{RuleIdentifier, RulesEngine, TriggerData},
+    engine::{RuleIdentifier, RulesEngine, Trigger},
 };
 use crate::{
     api,
@@ -61,7 +61,7 @@ pub fn populate_event_rule_effects(
 ) -> Result<()> {
     match event_data.event {
         Event::CardDrawn(player_name, card_id) => {
-            engine.populate_rule_effects(effects, TriggerData::CardDrawn(player_name, card_id))
+            engine.populate_rule_effects(effects, Trigger::CardDrawn(player_name, card_id))
         }
     }
 }

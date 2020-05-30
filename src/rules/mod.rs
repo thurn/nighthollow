@@ -14,8 +14,8 @@
 
 // pub mod basic;
 // pub mod combat;
-pub mod command_generation;
 pub mod effects;
+pub mod responses;
 // pub mod effects2;
 pub mod engine;
 pub mod events;

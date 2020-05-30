@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::collections::BTreeSet;
-
 use eyre::{eyre, Result};
 
 use super::{
@@ -37,7 +35,7 @@ pub enum EffectSource {
     Game,
 }
 
-#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct EffectData {
     pub effect: Effect,
     pub rule_identifier: RuleIdentifier,
@@ -51,18 +49,16 @@ impl EffectData {
 
 #[derive(Debug)]
 pub struct Effects {
-    data: BTreeSet<EffectData>,
+    data: Vec<EffectData>,
 }
 
 impl Effects {
     pub fn new() -> Effects {
-        Effects {
-            data: BTreeSet::new(),
-        }
+        Effects { data: vec![] }
     }
 
     pub fn push_effect(&mut self, identifier: &RuleIdentifier, effect: Effect) {
-        self.data.insert(EffectData {
+        self.data.push(EffectData {
             effect,
             rule_identifier: identifier.clone(),
         });
@@ -77,7 +73,7 @@ impl Effects {
     }
 }
 
-#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum Effect {
     DrawCard(PlayerName),
 }

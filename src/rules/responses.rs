@@ -14,9 +14,19 @@
 
 use eyre::Result;
 
-use super::events::Events;
-use crate::{api, model::games::Game};
+use super::events::{Event, Events};
+use crate::{api, commands, model::games::Game};
 
-pub fn generate(game: &Game, events: Events, commands: &mut Vec<api::Command>) -> Result<()> {
+pub fn generate(game: &Game, events: Events, result: &mut Vec<api::Command>) -> Result<()> {
+    for event_data in &events.data {
+        match event_data.event {
+            Event::CardDrawn(player_name, card_id) => {
+                result.push(commands::draw_or_update_card_command(
+                    game.player(player_name).card(card_id)?,
+                ));
+            }
+        }
+    }
+
     Ok(())
 }

@@ -15,7 +15,10 @@
 use eyre::eyre;
 use eyre::Result;
 
-use crate::model::{assets::*, cards, cards::*, creatures::*, games::*, primitives::*, stats::*};
+use crate::{
+    gameplay::core::CorePlayerRules,
+    model::{assets::*, cards, cards::*, creatures::*, games::*, primitives::*, stats::*},
+};
 
 pub fn load_scenario(name: &str) -> Result<Game> {
     cards::debug_reset_id_generation();
@@ -47,7 +50,7 @@ fn new_player(name: PlayerName, deck: impl Fn(PlayerName) -> Vec<Card>) -> Playe
         hand: vec![],
         creatures: vec![],
         scrolls: vec![],
-        rules: vec![],
+        rules: vec![CorePlayerRules::new()],
     }
 }
 

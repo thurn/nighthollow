@@ -18,9 +18,9 @@ use dyn_clone::DynClone;
 use eyre::{eyre, Result};
 
 use super::{
-    command_generation,
     effects::{self, Effects, SetModifier},
     events::{self, Events},
+    responses,
 };
 use crate::{
     api,
@@ -65,7 +65,7 @@ pub enum TriggerName {
 }
 
 #[derive(Debug, Clone)]
-pub enum TriggerData {
+pub enum Trigger {
     GameStart,
     GameEnd,
     TurnStart,
@@ -112,49 +112,49 @@ pub enum TriggerData {
     },
 }
 
-impl TriggerData {
+impl Trigger {
     fn trigger_name(&self) -> TriggerName {
         match self {
-            TriggerData::GameStart => TriggerName::GameStart,
-            TriggerData::GameEnd => TriggerName::GameEnd,
-            TriggerData::TurnStart => TriggerName::TurnStart,
-            TriggerData::TurnEnd => TriggerName::TurnEnd,
-            TriggerData::PlayerLifeChanged(_, _) => TriggerName::PlayerLifeChanged,
-            TriggerData::PlayerPowerChanged(_, _) => TriggerName::PlayerPowerChanged,
-            TriggerData::PlayerInfluenceChanged(_, _) => TriggerName::PlayerInfluenceChanged,
-            TriggerData::CardDrawn(_, _) => TriggerName::CardDrawn,
-            TriggerData::CardPlayed(_, _) => TriggerName::CardPlayed,
-            TriggerData::CreaturePlayed(_, _) => TriggerName::CreaturePlayed,
-            TriggerData::ScrollPlayed(_, _) => TriggerName::ScrollPlayed,
-            TriggerData::SpellPlayed(_, _) => TriggerName::SpellPlayed,
-            TriggerData::CombatStart => TriggerName::CombatStart,
-            TriggerData::CombatEnd => TriggerName::CombatEnd,
-            TriggerData::RoundStart(_) => TriggerName::RoundStart,
-            TriggerData::RoundEnd(_) => TriggerName::RoundEnd,
-            TriggerData::ActionStart(_) => TriggerName::ActionStart,
-            TriggerData::InvokeSkill(_) => TriggerName::InvokeSkill,
-            TriggerData::ActionEnd(_) => TriggerName::ActionEnd,
-            TriggerData::CreatureDamaged {
+            Trigger::GameStart => TriggerName::GameStart,
+            Trigger::GameEnd => TriggerName::GameEnd,
+            Trigger::TurnStart => TriggerName::TurnStart,
+            Trigger::TurnEnd => TriggerName::TurnEnd,
+            Trigger::PlayerLifeChanged(_, _) => TriggerName::PlayerLifeChanged,
+            Trigger::PlayerPowerChanged(_, _) => TriggerName::PlayerPowerChanged,
+            Trigger::PlayerInfluenceChanged(_, _) => TriggerName::PlayerInfluenceChanged,
+            Trigger::CardDrawn(_, _) => TriggerName::CardDrawn,
+            Trigger::CardPlayed(_, _) => TriggerName::CardPlayed,
+            Trigger::CreaturePlayed(_, _) => TriggerName::CreaturePlayed,
+            Trigger::ScrollPlayed(_, _) => TriggerName::ScrollPlayed,
+            Trigger::SpellPlayed(_, _) => TriggerName::SpellPlayed,
+            Trigger::CombatStart => TriggerName::CombatStart,
+            Trigger::CombatEnd => TriggerName::CombatEnd,
+            Trigger::RoundStart(_) => TriggerName::RoundStart,
+            Trigger::RoundEnd(_) => TriggerName::RoundEnd,
+            Trigger::ActionStart(_) => TriggerName::ActionStart,
+            Trigger::InvokeSkill(_) => TriggerName::InvokeSkill,
+            Trigger::ActionEnd(_) => TriggerName::ActionEnd,
+            Trigger::CreatureDamaged {
                 attacker,
                 defender,
                 damage,
             } => TriggerName::CreatureDamaged,
-            TriggerData::CreatureKilled {
+            Trigger::CreatureKilled {
                 killed_by,
                 defender,
                 damage,
             } => TriggerName::CreatureKilled,
-            TriggerData::CreatureHealed {
+            Trigger::CreatureHealed {
                 source,
                 target,
                 amount,
             } => TriggerName::CreatureHealed,
-            TriggerData::CreatureManaChanged {
+            Trigger::CreatureManaChanged {
                 source,
                 target,
                 amount,
             } => TriggerName::CreatureManaChanged,
-            TriggerData::CreatureStatModifierSet {
+            Trigger::CreatureStatModifierSet {
                 source,
                 target,
                 modifier,
@@ -164,46 +164,46 @@ impl TriggerData {
 
     fn entity_id(&self) -> Option<EntityId> {
         match self {
-            TriggerData::GameStart => None,
-            TriggerData::GameEnd => None,
-            TriggerData::TurnStart => None,
-            TriggerData::TurnEnd => None,
-            TriggerData::PlayerLifeChanged(p, _) => Some(EntityId::PlayerName(*p)),
-            TriggerData::PlayerPowerChanged(p, _) => Some(EntityId::PlayerName(*p)),
-            TriggerData::PlayerInfluenceChanged(p, _) => Some(EntityId::PlayerName(*p)),
-            TriggerData::CardDrawn(p, _) => Some(EntityId::PlayerName(*p)),
-            TriggerData::CardPlayed(p, _) => Some(EntityId::PlayerName(*p)),
-            TriggerData::CreaturePlayed(_, c) => Some(EntityId::CreatureId(*c)),
-            TriggerData::ScrollPlayed(p, _) => Some(EntityId::PlayerName(*p)),
-            TriggerData::SpellPlayed(p, _) => Some(EntityId::PlayerName(*p)),
-            TriggerData::CombatStart => None,
-            TriggerData::CombatEnd => None,
-            TriggerData::RoundStart(_) => None,
-            TriggerData::RoundEnd(_) => None,
-            TriggerData::ActionStart(c) => Some(EntityId::CreatureId(*c)),
-            TriggerData::InvokeSkill(c) => Some(EntityId::CreatureId(*c)),
-            TriggerData::ActionEnd(c) => Some(EntityId::CreatureId(*c)),
-            TriggerData::CreatureDamaged {
+            Trigger::GameStart => None,
+            Trigger::GameEnd => None,
+            Trigger::TurnStart => None,
+            Trigger::TurnEnd => None,
+            Trigger::PlayerLifeChanged(p, _) => Some(EntityId::PlayerName(*p)),
+            Trigger::PlayerPowerChanged(p, _) => Some(EntityId::PlayerName(*p)),
+            Trigger::PlayerInfluenceChanged(p, _) => Some(EntityId::PlayerName(*p)),
+            Trigger::CardDrawn(p, _) => Some(EntityId::PlayerName(*p)),
+            Trigger::CardPlayed(p, _) => Some(EntityId::PlayerName(*p)),
+            Trigger::CreaturePlayed(_, c) => Some(EntityId::CreatureId(*c)),
+            Trigger::ScrollPlayed(p, _) => Some(EntityId::PlayerName(*p)),
+            Trigger::SpellPlayed(p, _) => Some(EntityId::PlayerName(*p)),
+            Trigger::CombatStart => None,
+            Trigger::CombatEnd => None,
+            Trigger::RoundStart(_) => None,
+            Trigger::RoundEnd(_) => None,
+            Trigger::ActionStart(c) => Some(EntityId::CreatureId(*c)),
+            Trigger::InvokeSkill(c) => Some(EntityId::CreatureId(*c)),
+            Trigger::ActionEnd(c) => Some(EntityId::CreatureId(*c)),
+            Trigger::CreatureDamaged {
                 attacker,
                 defender,
                 damage,
             } => Some(EntityId::CreatureId(*defender)),
-            TriggerData::CreatureKilled {
+            Trigger::CreatureKilled {
                 killed_by,
                 defender,
                 damage,
             } => Some(EntityId::CreatureId(*defender)),
-            TriggerData::CreatureHealed {
+            Trigger::CreatureHealed {
                 source,
                 target,
                 amount,
             } => Some(EntityId::CreatureId(*target)),
-            TriggerData::CreatureManaChanged {
+            Trigger::CreatureManaChanged {
                 source,
                 target,
                 amount,
             } => Some(EntityId::CreatureId(*target)),
-            TriggerData::CreatureStatModifierSet {
+            Trigger::CreatureStatModifierSet {
                 source,
                 target,
                 modifier,
@@ -273,7 +273,7 @@ pub enum TriggerKey {
     Entity(TriggerName, EntityId),
 }
 
-#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct RuleIdentifier {
     pub index: usize,
     pub entity_id: EntityId,
@@ -282,7 +282,7 @@ pub struct RuleIdentifier {
 #[derive(Debug)]
 pub struct TriggerContext<'a> {
     pub this: Entity<'a>,
-    pub data: &'a TriggerData,
+    pub data: &'a Trigger,
     pub identifier: &'a RuleIdentifier,
     pub game: &'a Game,
 }
@@ -303,7 +303,7 @@ struct RuleData {
 }
 
 impl RuleData {
-    fn context<'a>(&'a self, game: &'a Game, data: &'a TriggerData) -> Result<TriggerContext<'a>> {
+    fn context<'a>(&'a self, game: &'a Game, data: &'a Trigger) -> Result<TriggerContext<'a>> {
         Ok(TriggerContext {
             this: self.identifier.entity_id.find_in(game)?,
             data,
@@ -315,7 +315,7 @@ impl RuleData {
     fn on_trigger<'a>(
         &self,
         game: &'a Game,
-        data: &'a TriggerData,
+        data: &'a Trigger,
         effects: &mut Effects,
     ) -> Result<()> {
         self.rule.on_trigger(self.context(game, data)?, effects)
@@ -330,14 +330,21 @@ pub struct RulesEngine {
 
 impl RulesEngine {
     pub fn new(game: Game) -> Self {
-        Self {
+        let user_rules = game.user.rules.clone();
+        let enemy_rules = game.enemy.rules.clone();
+
+        let mut result = Self {
             game,
             rule_map: BTreeMap::new(),
-        }
+        };
+
+        result.add_rules(EntityId::PlayerName(PlayerName::User), user_rules);
+        result.add_rules(EntityId::PlayerName(PlayerName::Enemy), enemy_rules);
+        result
     }
 
-    pub fn add_rules(&mut self, entity_id: EntityId, rules: impl Iterator<Item = Box<dyn Rule>>) {
-        for (index, rule) in rules.enumerate() {
+    pub fn add_rules(&mut self, entity_id: EntityId, rules: Vec<Box<dyn Rule>>) {
+        for (index, rule) in rules.iter().enumerate() {
             let conditions = rule.triggers();
             for condition in conditions {
                 let data = RuleData {
@@ -357,7 +364,7 @@ impl RulesEngine {
     pub fn invoke_trigger(
         &mut self,
         commands: &mut Vec<api::Command>,
-        trigger: TriggerData,
+        trigger: Trigger,
     ) -> Result<()> {
         let mut effects = Effects::new();
         self.populate_rule_effects(&mut effects, trigger)?;
@@ -378,12 +385,12 @@ impl RulesEngine {
             event_index = events.data.len();
         }
 
-        command_generation::generate(&self.game, events, commands)?;
+        responses::generate(&self.game, events, commands)?;
 
         Ok(())
     }
 
-    pub fn populate_rule_effects(&self, effects: &mut Effects, trigger: TriggerData) -> Result<()> {
+    pub fn populate_rule_effects(&self, effects: &mut Effects, trigger: Trigger) -> Result<()> {
         if let Some(rules) = self
             .rule_map
             .get(&TriggerKey::Global(trigger.trigger_name()))
