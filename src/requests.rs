@@ -16,12 +16,14 @@ use crate::{
     api, commands,
     gameplay::{debug, play_card},
     model::{
+        cards,
         games::Game,
         primitives::{CardId, FileValue, PlayerName, RankValue},
     },
     rules::engine::{RulesEngine, Trigger},
     test_data::scenarios,
 };
+use api::MDebugRequest;
 use eyre::eyre;
 use eyre::Result;
 use std::{collections::HashMap, sync::Mutex};
@@ -79,7 +81,7 @@ pub fn convert_file(file: api::FileValue) -> Result<FileValue> {
 fn with_engine(
     function: impl FnOnce(&mut RulesEngine) -> Result<api::CommandList>,
 ) -> Result<api::CommandList> {
-    match &mut ENGINES.lock() {
+    match &mut ENGINES.try_lock() {
         Ok(engines) => {
             // Clone the engine and mutate it so that on error the previous value
             // will be preserved.
@@ -95,25 +97,12 @@ fn with_engine(
     }
 }
 
-fn on_start_game(message: &api::StartGameRequest) -> Result<api::CommandList> {
-    initialize(scenarios::basic(), |engine, result| {
-        engine.invoke_as_group(result, Trigger::GameStart)
-    })
-}
-
-fn on_debug(message: &api::MDebugRequest) -> Result<api::CommandList> {
-    initialize(scenarios::basic(), |engine, result| {
-        debug::on_debug_request(engine, message, result)
-    })
-}
-
 fn initialize(
     game: Game,
     function: impl FnOnce(&mut RulesEngine, &mut Vec<api::CommandGroup>) -> Result<()>,
 ) -> Result<api::CommandList> {
-    match &mut ENGINES.lock() {
+    match &mut ENGINES.try_lock() {
         Ok(engines) => {
-            let game = scenarios::basic();
             let mut commands = vec![commands::group(vec![
                 commands::initiate_game_command(game.id),
                 commands::update_player_command(&game.user),
@@ -126,4 +115,25 @@ fn initialize(
         }
         Err(_) => Err(eyre!("Could not lock mutex")),
     }
+}
+
+fn on_start_game(message: &api::StartGameRequest) -> Result<api::CommandList> {
+    initialize(scenarios::basic(), |engine, result| {
+        engine.invoke_as_group(result, Trigger::GameStart)
+    })
+}
+
+fn on_debug(message: &MDebugRequest) -> Result<api::CommandList> {
+    cards::debug_reset_id_generation();
+
+    let mut groups = initialize(scenarios::basic(), |engine, result| {
+        debug::draw_debug_cards(engine, message, result)
+    })?
+    .command_groups;
+
+    for request in message.run_requests.iter() {
+        groups.extend(handle_request(request)?.command_groups);
+    }
+
+    Ok(commands::groups(groups))
 }

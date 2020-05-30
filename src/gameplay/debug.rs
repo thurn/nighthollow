@@ -22,7 +22,7 @@ use crate::{
     rules::engine::RulesEngine,
 };
 
-pub fn on_debug_request(
+pub fn draw_debug_cards(
     engine: &mut RulesEngine,
     request: &MDebugRequest,
     result: &mut Vec<api::CommandGroup>,
@@ -38,8 +38,6 @@ pub fn on_debug_request(
         .try_for_each(|i| draw_card_at_index(&mut engine.game.enemy, *i, &mut group, false))?;
     result.push(commands::group(group));
 
-    run_request_sequence(request, result)?;
-
     Ok(())
 }
 
@@ -52,15 +50,5 @@ fn draw_card_at_index(
     let card = player.deck.draw_card_at_index(index as usize)?;
     commands.push(commands::draw_or_update_card_command(&card));
     player.hand.push(card);
-    Ok(())
-}
-
-fn run_request_sequence(
-    message: &MDebugRequest,
-    result: &mut Vec<api::CommandGroup>,
-) -> Result<()> {
-    for request in message.run_requests.iter() {
-        result.extend(requests::handle_request(request)?.command_groups);
-    }
     Ok(())
 }

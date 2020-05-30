@@ -17,7 +17,7 @@ use eyre::{eyre, Result};
 use crate::{
     api, commands,
     model::{
-        cards::Card,
+        cards::{Card, HasCardState},
         creatures::{Creature, CreatureData, CreatureState, HasCreatureData},
         games::Player,
         primitives::{BoardPosition, CardId, CreatureId, FileValue, PlayerName, RankValue},
@@ -50,7 +50,8 @@ pub fn on_play_card_request(
     engine.invoke_as_group(&mut result, Trigger::CardPlayed(player_name, card_id))?;
 
     let player = engine.game.player_mut(player_name);
-    let card = player.remove_from_hand(card_id)?;
+    let mut card = player.remove_from_hand(card_id)?;
+    card.card_state_mut().revealed_to_opponent = true;
     let card_data = commands::card_data(&card);
 
     use api::play_card_request::PlayCard::*;
