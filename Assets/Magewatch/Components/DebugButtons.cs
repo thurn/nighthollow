@@ -43,24 +43,25 @@ namespace Magewatch.Components
     {
       Root.Instance.NetworkService.MakeRequest(new Request
       {
-        RunRequestSequence = new MDebugRunRequestSequenceRequest
+        Debug = new MDebugRequest
         {
-          Requests =
-          {
-            LoadScenario("basic"),
-            DrawHands(),
-            PlayCreature(FirstId, RankValue.Rank1, FileValue.File2, PlayerName.User),
-            PlayCreature(FirstId + 2, RankValue.Rank1, FileValue.File3, PlayerName.User),
-            PlayCreature(FirstId + 6, RankValue.Rank1, FileValue.File1, PlayerName.Enemy),
-            PlayCreature(FirstId + 7, RankValue.Rank1, FileValue.File2, PlayerName.Enemy),
-            PlayCreature(FirstId + 8, RankValue.Rank1, FileValue.File3, PlayerName.Enemy),
-            PlayAttachment(FirstId + 3, FirstId, PlayerName.User),
-            PlayAttachment(FirstId + 9, FirstId + 6, PlayerName.Enemy),
-            PlayScroll(FirstId + 4, PlayerName.User),
-            PlayScroll(FirstId + 5, PlayerName.User),
-            AdvancePhase(),
-            AdvancePhase()
-          }
+          LoadScenarioName = "basic",
+          DrawUserCards = {0, 0, 1, 2, 3, 3},
+          DrawEnemyCards = {0, 0, 1, 2, 3, 3},
+          // RunRequests =
+          // {
+          //   PlayCreature(FirstId, RankValue.Rank1, FileValue.File2, PlayerName.User),
+          //   PlayCreature(FirstId + 2, RankValue.Rank1, FileValue.File3, PlayerName.User),
+          //   PlayCreature(FirstId + 6, RankValue.Rank1, FileValue.File1, PlayerName.Enemy),
+          //   PlayCreature(FirstId + 7, RankValue.Rank1, FileValue.File2, PlayerName.Enemy),
+          //   PlayCreature(FirstId + 8, RankValue.Rank1, FileValue.File3, PlayerName.Enemy),
+          //   PlayAttachment(FirstId + 3, FirstId, PlayerName.User),
+          //   PlayAttachment(FirstId + 9, FirstId + 6, PlayerName.Enemy),
+          //   PlayScroll(FirstId + 4, PlayerName.User),
+          //   PlayScroll(FirstId + 5, PlayerName.User),
+          //   AdvancePhase(),
+          //   AdvancePhase()
+          // }
         }
       });
     }
@@ -73,23 +74,6 @@ namespace Magewatch.Components
     CardId CardId(int id) => new CardId {Value = id};
 
     CreatureId CreatureId(int id) => new CreatureId {Value = id};
-
-    Request LoadScenario(string scenario) => new Request
-    {
-      LoadScenario = new MDebugLoadScenarioRequest
-      {
-        ScenarioName = scenario,
-      }
-    };
-
-    Request DrawHands() => new Request
-    {
-      DrawCards = new MDebugDrawCardsRequest
-      {
-        DrawUserCards = {0, 0, 1, 2, 3, 3},
-        DrawEnemyCards = {0, 0, 1, 2, 3, 3}
-      }
-    };
 
     Request PlayCreature(int id, RankValue rank, FileValue file, PlayerName player) =>
       new Request

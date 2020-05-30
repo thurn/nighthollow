@@ -18,7 +18,7 @@ use crate::{
     api, interface,
     model::{
         assets::CreatureType,
-        cards::{Card, Cost, HasCardData, HasCardState, Scroll, Spell, StandardCost},
+        cards::{Card, Cost, HasCardData, HasCardId, HasCardState, Scroll, Spell, StandardCost},
         creatures::{Creature, CreatureData, HasCreatureData},
         games::{Game, HasOwner, Player},
         primitives::{
@@ -184,7 +184,7 @@ pub fn card_type(card: &Card) -> api::card_data::CardType {
 
 pub fn card_data(card: &Card) -> api::CardData {
     api::CardData {
-        card_id: Some(card_id(card.card_data().id)),
+        card_id: Some(card_id(card.card_id())),
         prefab: Some(prefab(&format!("Cards/{:?}Card", card.card_data().school))),
         name: card.card_data().name.clone(),
         owner: player_name(card.owner()).into(),
@@ -281,11 +281,11 @@ pub fn create_or_update_creature_command(creature: &Creature) -> api::Command {
     }
 }
 
-pub fn destroy_card_command(player: PlayerName, id: CardId, must_exist: bool) -> api::Command {
+pub fn destroy_card_command(player: PlayerName, id: api::CardId, must_exist: bool) -> api::Command {
     api::Command {
         command: Some(api::command::Command::DestroyCard(
             api::MDestroyCardCommand {
-                card_id: Some(card_id(id)),
+                card_id: Some(id),
                 player: player_name(player).into(),
                 must_exist,
             },
@@ -394,9 +394,29 @@ pub fn request_name(request: &api::Request) -> &str {
             api::request::Request::ClickMainButton(_) => "AdvancePhase",
             api::request::Request::PlayCard(_) => "PlayCard",
             api::request::Request::RepositionCreatures(_) => "RepositionCreatures",
-            api::request::Request::LoadScenario(_) => "LoadScenario",
-            api::request::Request::DrawCards(_) => "DrawCards",
-            api::request::Request::RunRequestSequence(_) => "RunRequestSequence",
+            api::request::Request::Debug(_) => "Debug",
+        }
+    } else {
+        "(None)"
+    }
+}
+
+pub fn command_name(command: &api::Command) -> &str {
+    if let Some(c) = &command.command {
+        match c {
+            api::command::Command::Wait(_) => "Wait",
+            api::command::Command::UpdateInterface(_) => "UpdateInterface",
+            api::command::Command::DrawOrUpdateCard(_) => "DrawOrUpdateCard",
+            api::command::Command::RevealCard(_) => "RevealCard",
+            api::command::Command::UpdatePlayer(_) => "UpdatePlayer",
+            api::command::Command::CreateOrUpdateCreature(_) => "CreateOrUpdateCreature",
+            api::command::Command::RemoveCreature(_) => "RemoveCreature",
+            api::command::Command::UpdateCreature(_) => "UpdateCreature",
+            api::command::Command::UseCreatureSkill(_) => "UseCreatureSkill",
+            api::command::Command::DisplayError(_) => "DisplayError",
+            api::command::Command::DestroyCard(_) => "DestroyCard",
+            api::command::Command::InitiateGame(_) => "InitiateGame",
+            api::command::Command::UpdateCanPlayCard(_) => "UpdatCanPlayCard",
         }
     } else {
         "(None)"

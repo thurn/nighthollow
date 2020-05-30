@@ -48,7 +48,7 @@ namespace Magewatch.Services
       else
       {
         var response = CommandList.Parser.ParseFrom(webRequest.downloadHandler.data);
-        Debug.Log($"Got response: {response}");
+        Debug.Log(response);
         Root.Instance.CommandService.HandleCommands(response);
       }
     }

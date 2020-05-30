@@ -16,7 +16,7 @@ use eyre::eyre;
 use eyre::Result;
 
 use crate::{
-    gameplay::core::CorePlayerRules,
+    gameplay::player_rules::CorePlayerRules,
     model::{assets::*, cards, cards::*, creatures::*, games::*, primitives::*, stats::*},
 };
 

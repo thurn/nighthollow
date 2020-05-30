@@ -27,8 +27,13 @@ namespace Magewatch.Components
     [Header("Config")] [SerializeField] Hand _hand;
     [SerializeField] Image _lifeBar;
     [SerializeField] Text _lifeText;
-    [FormerlySerializedAs("_manaBar")] [SerializeField] Image _powerBar;
-    [FormerlySerializedAs("_manaText")] [SerializeField] Text _powerText;
+
+    [FormerlySerializedAs("_manaBar")] [SerializeField]
+    Image _powerBar;
+
+    [FormerlySerializedAs("_manaText")] [SerializeField]
+    Text _powerText;
+
     [SerializeField] RectTransform _influenceRow;
     [SerializeField] Collider2D _projectileCollider;
     [Header("State")] [SerializeField] PlayerData _playerData;
@@ -44,7 +49,7 @@ namespace Magewatch.Components
       {
         if (playerData.MaximumLife == 0)
         {
-          _powerBar.DOFillAmount(0, 0.3f);
+          _lifeBar.DOFillAmount(0, 0.3f).OnComplete(onComplete.OnComplete);
         }
         else
         {

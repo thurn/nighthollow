@@ -23,7 +23,7 @@ use super::{
     responses,
 };
 use crate::{
-    api,
+    api, commands,
     model::{
         cards::{Card, Scroll, Spell},
         creatures::{Creature, Damage, HasCreatureData},
@@ -324,7 +324,7 @@ impl RuleData {
 
 #[derive(Debug, Clone)]
 pub struct RulesEngine {
-    game: Game,
+    pub game: Game,
     rule_map: BTreeMap<TriggerKey, Vec<RuleData>>,
 }
 
@@ -363,7 +363,7 @@ impl RulesEngine {
 
     pub fn invoke_trigger(
         &mut self,
-        commands: &mut Vec<api::Command>,
+        result: &mut Vec<api::Command>,
         trigger: Trigger,
     ) -> Result<()> {
         let mut effects = Effects::default();
@@ -385,8 +385,22 @@ impl RulesEngine {
             event_index = events.data.len();
         }
 
-        responses::generate(&self.game, events, commands)?;
+        responses::generate(&self.game, events, result)?;
 
+        Ok(())
+    }
+
+    pub fn invoke_as_group(
+        &mut self,
+        result: &mut Vec<api::CommandGroup>,
+        trigger: Trigger,
+    ) -> Result<()> {
+        let mut output = vec![];
+        self.invoke_trigger(&mut output, trigger)?;
+
+        if output.is_empty() {
+            result.push(commands::group(output));
+        }
         Ok(())
     }
 

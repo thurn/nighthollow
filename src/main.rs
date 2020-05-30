@@ -69,13 +69,21 @@ async fn main() {
             let completed = now.elapsed().as_secs_f64();
             match result {
                 Ok(response) => {
-                    let mut response_description = format!("{:?}", response);
-                    response_description.truncate(500);
+                    let response_description = response
+                        .command_groups
+                        .iter()
+                        .map(|group| {
+                            group
+                                .commands
+                                .iter()
+                                .map(commands::command_name)
+                                .collect::<Vec<&str>>()
+                        })
+                        .collect::<Vec<Vec<&str>>>();
                     println!(
-                        "-----> Sending {} groups(s) in {:.3} seconds (formatted {:.3}):\n{}",
+                        "-----> Sending {} groups(s) in {:.3} seconds\n{:?}",
                         response.command_groups.len(),
                         completed,
-                        now.elapsed().as_secs_f64(),
                         response_description
                     );
                     warp_protobuf::reply::protobuf(&response)

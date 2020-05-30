@@ -79,98 +79,108 @@ impl Player {
             .ok_or_else(|| eyre!("Card not found: {}", card_id))
     }
 
-    pub fn draw_card(&mut self) -> Result<&Card> {
-        let card = self.deck.draw_card()?;
-        Ok(self.add_to_hand(card))
+    // pub fn draw_card(&mut self) -> Result<&Card> {
+    //     let card = self.deck.draw_card()?;
+    //     Ok(self.add_to_hand(card))
+    // }
+
+    pub fn remove_from_hand(&mut self, card_id: CardId) -> Result<Card> {
+        let position = self
+            .hand
+            .iter()
+            .position(|c| c.card_data().id == card_id)
+            .ok_or_else(|| eyre!("Card ID not found: {:?}", card_id))?;
+
+        Ok(self.hand.remove(position))
     }
 
-    pub fn draw_specific_card(&mut self, id: CardId) -> Result<&Card> {
-        let card = self.deck.draw_specific_card(id)?;
-        Ok(self.add_to_hand(card))
-    }
+    // pub fn draw_specific_card(&mut self, id: CardId) -> Result<&Card> {
+    //     let card = self.deck.draw_specific_card(id)?;
+    //     Ok(self.add_to_hand(card))
+    // }
 
-    pub fn draw_card_at_index(&mut self, index: usize) -> Result<&Card> {
-        let card = self.deck.draw_card_at_index(index)?;
-        Ok(self.add_to_hand(card))
-    }
+    // pub fn draw_card_at_index(&mut self, index: usize) -> Result<&Card> {
+    //     let card = self.deck.draw_card_at_index(index)?;
+    //     Ok(self.add_to_hand(card))
+    // }
 
-    fn add_to_hand(&mut self, mut card: Card) -> &Card {
-        Self::update_can_play(&self.state, &mut card);
-        self.hand.push(card);
-        self.hand.last().expect("Card not found?")
-    }
+    // fn add_to_hand(&mut self, mut card: Card) -> &Card {
+    //     Self::update_can_play(&self.state, &mut card);
+    //     self.hand.push(card);
+    //     self.hand.last().expect("Card not found?")
+    // }
 
-    pub fn decrement_life(&mut self, amount: LifeValue) {
-        self.state.current_life = if amount > self.state.current_life {
-            0
-        } else {
-            self.state.current_life - amount
-        }
-    }
+    // pub fn decrement_life(&mut self, amount: LifeValue) {
+    //     self.state.current_life = if amount > self.state.current_life {
+    //         0
+    //     } else {
+    //         self.state.current_life - amount
+    //     }
+    // }
 
-    pub fn pay_cost(&mut self, cost: &Cost, result: &mut Vec<api::CommandGroup>) -> Result<()> {
-        match cost {
-            Cost::ScrollPlay => {}
-            Cost::StandardCost(cost) => {
-                if cost.power > self.state.current_power {
-                    return Err(eyre!(
-                        "Can't pay power cost {}, have only {}",
-                        cost.power,
-                        self.state.current_power
-                    ));
-                }
-                self.state.current_power -= cost.power;
-                self.state.current_influence.subtract(&cost.influence)?;
-            }
-        }
+    // pub fn pay_cost(&mut self, cost: &Cost, result: &mut Vec<api::CommandGroup>) -> Result<()> {
+    //     match cost {
+    //         Cost::ScrollPlay => {}
+    //         Cost::StandardCost(cost) => {
+    //             if cost.power > self.state.current_power {
+    //                 return Err(eyre!(
+    //                     "Can't pay power cost {}, have only {}",
+    //                     cost.power,
+    //                     self.state.current_power
+    //                 ));
+    //             }
+    //             self.state.current_power -= cost.power;
+    //             self.state.current_influence.subtract(&cost.influence)?;
+    //         }
+    //     }
 
-        self.update_cards(result);
-        Ok(())
-    }
+    //     self.update_cards(result);
+    //     Ok(())
+    // }
 
-    pub fn add_scroll(&mut self, scroll: Scroll, result: &mut Vec<api::CommandGroup>) {
-        self.state.current_power += scroll.stats.added_current_power;
-        self.state.maximum_power += scroll.stats.added_maximum_power;
-        self.state
-            .current_influence
-            .add(&scroll.stats.added_current_influence);
-        self.state
-            .maximum_influence
-            .add(&scroll.stats.added_maximum_influence);
-        self.state.available_scroll_plays -= 1;
-        self.scrolls.push(scroll);
+    // pub fn add_scroll(&mut self, scroll: Scroll, result: &mut Vec<api::CommandGroup>) {
+    //     self.state.current_power += scroll.stats.added_current_power;
+    //     self.state.maximum_power += scroll.stats.added_maximum_power;
+    //     self.state
+    //         .current_influence
+    //         .add(&scroll.stats.added_current_influence);
+    //     self.state
+    //         .maximum_influence
+    //         .add(&scroll.stats.added_maximum_influence);
+    //     self.state.available_scroll_plays -= 1;
+    //     self.scrolls.push(scroll);
 
-        self.update_cards(result);
-    }
+    //     self.update_cards(result);
+    // }
 
-    pub fn upkeep(&mut self, result: &mut Vec<api::CommandGroup>) -> Result<()> {
-        self.state.current_power = self.state.maximum_power;
-        self.state.current_influence = self.state.maximum_influence.clone();
-        self.state.available_scroll_plays = 1;
-        self.update_cards(result);
-        let card = self.draw_card()?;
-        result.push(commands::single(commands::draw_or_update_card_command(
-            card,
-        )));
-        Ok(())
-    }
+    // pub fn upkeep(&mut self, result: &mut Vec<api::CommandGroup>) -> Result<()> {
+    //     self.state.current_power = self.state.maximum_power;
+    //     self.state.current_influence = self.state.maximum_influence.clone();
+    //     self.state.available_scroll_plays = 1;
+    //     self.update_cards(result);
+    //     let card = self.draw_card()?;
+    //     result.push(commands::single(commands::draw_or_update_card_command(
+    //         card,
+    //     )));
+    //     Ok(())
+    // }
 
-    fn update_cards(&mut self, result: &mut Vec<api::CommandGroup>) {
-        let state = &self.state;
-        let mut group = vec![];
-        for card in self.hand.iter_mut() {
-            if Self::update_can_play(state, card) {
-                group.push(commands::update_can_play_card_command(
-                    self.name,
-                    card.card_id(),
-                    card.card_state().owner_can_play,
-                ))
-            }
-        }
+    // fn update_cards(&mut self, result: &mut Vec<api::CommandGroup>) {
+    //     let state = &self.state;
+    //     let mut group = vec![];
+    //     for card in self.hand.iter_mut() {
+    //         if Self::update_can_play(state, card) {
+    //             group.push(commands::update_can_play_card_command(
+    //                 self.name,
+    //                 card.card_id(),
+    //                 card.card_state().owner_can_play,
+    //             ))
+    //         }
+    //     }
 
-        group.push(commands::update_player_command(self));
-        result.push(commands::group(group));
-    }
+    //     group.push(commands::update_player_command(self));
+    //     result.push(commands::group(group));
+    // }
 
     pub fn player_data(&self) -> api::PlayerData {
         api::PlayerData {
@@ -184,21 +194,21 @@ impl Player {
         }
     }
 
-    /// Returns true if the 'can_play' value changed
-    fn update_can_play(state: &PlayerState, card: &mut Card) -> bool {
-        let old_value = card.card_state().owner_can_play;
-        let new_value = match &card.card_data().cost {
-            super::cards::Cost::ScrollPlay => state.available_scroll_plays > 0,
-            super::cards::Cost::StandardCost(cost) => {
-                cost.influence
-                    .less_than_or_equal_to(&state.current_influence)
-                    && cost.power <= state.current_power
-            }
-        };
+    // Returns true if the 'can_play' value changed
+    // fn update_can_play(state: &PlayerState, card: &mut Card) -> bool {
+    //     let old_value = card.card_state().owner_can_play;
+    //     let new_value = match &card.card_data().cost {
+    //         super::cards::Cost::ScrollPlay => state.available_scroll_plays > 0,
+    //         super::cards::Cost::StandardCost(cost) => {
+    //             cost.influence
+    //                 .less_than_or_equal_to(&state.current_influence)
+    //                 && cost.power <= state.current_power
+    //         }
+    //     };
 
-        card.card_state_mut().owner_can_play = new_value;
-        old_value != new_value
-    }
+    //     card.card_state_mut().owner_can_play = new_value;
+    //     old_value != new_value
+    // }
 }
 
 impl HasOwner for Player {

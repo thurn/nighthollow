@@ -99,26 +99,16 @@ pub struct RepositionCreaturesRequest {
     #[prost(message, repeated, tag = "3")]
     pub position_updates: ::std::vec::Vec<CreaturePositionUpdate>,
 }
-/// Requests to start a new game with the provided scenario name. The client
-/// must discard all previous state when sending this request.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MDebugLoadScenarioRequest {
+pub struct MDebugRequest {
     #[prost(string, tag = "1")]
-    pub scenario_name: std::string::String,
-}
-/// Specifies specific cards to draw based on their *deck position*
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MDebugDrawCardsRequest {
-    #[prost(uint32, repeated, tag = "1")]
-    pub draw_user_cards: ::std::vec::Vec<u32>,
+    pub load_scenario_name: std::string::String,
     #[prost(uint32, repeated, tag = "2")]
+    pub draw_user_cards: ::std::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "3")]
     pub draw_enemy_cards: ::std::vec::Vec<u32>,
-}
-/// Run several requests in sequence and return Commands for all of them
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MDebugRunRequestSequenceRequest {
-    #[prost(message, repeated, tag = "1")]
-    pub requests: ::std::vec::Vec<Request>,
+    #[prost(message, repeated, tag = "4")]
+    pub run_requests: ::std::vec::Vec<Request>,
 }
 /// Data sent to the server whenever the user does something in the game's user
 /// interface
@@ -127,7 +117,7 @@ pub struct Request {
     /// Identifies the user making this request
     #[prost(message, optional, tag = "1")]
     pub user_id: ::std::option::Option<UserId>,
-    #[prost(oneof = "request::Request", tags = "2, 3, 4, 5, 6, 8, 9, 10")]
+    #[prost(oneof = "request::Request", tags = "2, 3, 4, 5, 6, 7")]
     pub request: ::std::option::Option<request::Request>,
 }
 pub mod request {
@@ -143,12 +133,8 @@ pub mod request {
         PlayCard(super::PlayCardRequest),
         #[prost(message, tag = "6")]
         RepositionCreatures(super::RepositionCreaturesRequest),
-        #[prost(message, tag = "8")]
-        LoadScenario(super::MDebugLoadScenarioRequest),
-        #[prost(message, tag = "9")]
-        DrawCards(super::MDebugDrawCardsRequest),
-        #[prost(message, tag = "10")]
-        RunRequestSequence(super::MDebugRunRequestSequenceRequest),
+        #[prost(message, tag = "7")]
+        Debug(super::MDebugRequest),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]

@@ -14,8 +14,8 @@
 
 use crate::{
     api, commands,
+    gameplay::{debug, play_card},
     model::{
-        cards::{Card, CardWithTarget},
         games::Game,
         primitives::{CardId, FileValue, PlayerName, RankValue},
     },
@@ -37,12 +37,42 @@ pub fn handle_request(request_message: &api::Request) -> Result<api::CommandList
         .ok_or_else(|| eyre!("Request is required"))?;
 
     match request {
-        api::request::Request::StartGame(message) => start_game(message),
-        api::request::Request::PlayCard(message) => with_engine(|e| play_card(e, message)),
-        api::request::Request::ClickMainButton(message) => {
-            with_engine(|e| click_main_button(e, message))
+        api::request::Request::StartGame(message) => on_start_game(message),
+        api::request::Request::Debug(message) => on_debug(message),
+        api::request::Request::PlayCard(message) => {
+            with_engine(|e| play_card::on_play_card_request(e, message))
         }
         _ => commands::empty(),
+    }
+}
+
+pub fn convert_player_name(player_name: api::PlayerName) -> Result<PlayerName> {
+    match player_name {
+        api::PlayerName::User => Ok(PlayerName::User),
+        api::PlayerName::Enemy => Ok(PlayerName::Enemy),
+        _ => Err(eyre!("Unrecognized player name: {:?}", player_name)),
+    }
+}
+
+pub fn convert_rank(rank: api::RankValue) -> Result<RankValue> {
+    match rank {
+        api::RankValue::Rank1 => Ok(RankValue::Rank1),
+        api::RankValue::Rank2 => Ok(RankValue::Rank2),
+        api::RankValue::Rank3 => Ok(RankValue::Rank3),
+        api::RankValue::Rank4 => Ok(RankValue::Rank4),
+        api::RankValue::Rank5 => Ok(RankValue::Rank5),
+        _ => Err(eyre!("Invalid rank: {:?}", rank)),
+    }
+}
+
+pub fn convert_file(file: api::FileValue) -> Result<FileValue> {
+    match file {
+        api::FileValue::File1 => Ok(FileValue::File1),
+        api::FileValue::File2 => Ok(FileValue::File2),
+        api::FileValue::File3 => Ok(FileValue::File3),
+        api::FileValue::File4 => Ok(FileValue::File4),
+        api::FileValue::File5 => Ok(FileValue::File5),
+        _ => Err(eyre!("Invalid file: {:?}", file)),
     }
 }
 
@@ -65,117 +95,35 @@ fn with_engine(
     }
 }
 
-fn start_game(message: &api::StartGameRequest) -> Result<api::CommandList> {
+fn on_start_game(message: &api::StartGameRequest) -> Result<api::CommandList> {
+    initialize(scenarios::basic(), |engine, result| {
+        engine.invoke_as_group(result, Trigger::GameStart)
+    })
+}
+
+fn on_debug(message: &api::MDebugRequest) -> Result<api::CommandList> {
+    initialize(scenarios::basic(), |engine, result| {
+        debug::on_debug_request(engine, message, result)
+    })
+}
+
+fn initialize(
+    game: Game,
+    function: impl FnOnce(&mut RulesEngine, &mut Vec<api::CommandGroup>) -> Result<()>,
+) -> Result<api::CommandList> {
     match &mut ENGINES.lock() {
         Ok(engines) => {
             let game = scenarios::basic();
-            let mut commands = vec![
+            let mut commands = vec![commands::group(vec![
                 commands::initiate_game_command(game.id),
                 commands::update_player_command(&game.user),
                 commands::update_player_command(&game.enemy),
-            ];
+            ])];
             let mut engine = RulesEngine::new(game);
-            engine.invoke_trigger(&mut commands, Trigger::GameStart)?;
+            function(&mut engine, &mut commands)?;
             engines.insert(String::from("game"), engine);
-            Ok(commands::single_group(commands))
+            Ok(commands::groups(commands))
         }
         Err(_) => Err(eyre!("Could not lock mutex")),
-    }
-}
-
-fn convert_player_name(player_name: api::PlayerName) -> Result<PlayerName> {
-    match player_name {
-        api::PlayerName::User => Ok(PlayerName::User),
-        api::PlayerName::Enemy => Ok(PlayerName::Enemy),
-        _ => Err(eyre!("Unrecognized player name: {:?}", player_name)),
-    }
-}
-
-fn play_card(engine: &mut RulesEngine, message: &api::PlayCardRequest) -> Result<api::CommandList> {
-    // Ok(commands::groups(rules::run_game_rule(
-    //     game,
-    //     convert_player_name(message.player())?,
-    //     |r, rc, e| {
-    //         let card_id = message
-    //             .card_id
-    //             .as_ref()
-    //             .ok_or_else(|| eyre!("card_id is required"))?
-    //             .value;
-    //         let play = message
-    //             .play_card
-    //             .as_ref()
-    //             .ok_or_else(|| eyre!("play_card is required"))?;
-    //         r.on_play_card_request(
-    //             rc,
-    //             e,
-    //             &card_with_target(rc.game, rc.creature.name, card_id, play)?,
-    //         );
-    //         Ok(())
-    //     },
-    // )?))
-    commands::empty()
-}
-
-fn click_main_button(
-    engine: &mut RulesEngine,
-    message: &api::MClickMainButtonRequest,
-) -> Result<api::CommandList> {
-    // Ok(commands::groups(rules::run_game_rule(
-    //     game,
-    //     convert_player_name(message.player())?,
-    //     |r, rc, e| {
-    //         r.on_main_button_click_request(rc, e);
-    //         Ok(())
-    //     },
-    // )?))
-    commands::empty()
-}
-
-fn convert_rank(rank: api::RankValue) -> Result<RankValue> {
-    match rank {
-        api::RankValue::Rank1 => Ok(RankValue::Rank1),
-        api::RankValue::Rank2 => Ok(RankValue::Rank2),
-        api::RankValue::Rank3 => Ok(RankValue::Rank3),
-        api::RankValue::Rank4 => Ok(RankValue::Rank4),
-        api::RankValue::Rank5 => Ok(RankValue::Rank5),
-        _ => Err(eyre!("Invalid rank: {:?}", rank)),
-    }
-}
-
-fn convert_file(file: api::FileValue) -> Result<FileValue> {
-    match file {
-        api::FileValue::File1 => Ok(FileValue::File1),
-        api::FileValue::File2 => Ok(FileValue::File2),
-        api::FileValue::File3 => Ok(FileValue::File3),
-        api::FileValue::File4 => Ok(FileValue::File4),
-        api::FileValue::File5 => Ok(FileValue::File5),
-        _ => Err(eyre!("Invalid file: {:?}", file)),
-    }
-}
-
-fn card_with_target<'a>(
-    game: &'a Game,
-    player_name: PlayerName,
-    card_id: CardId,
-    request: &api::play_card_request::PlayCard,
-) -> Result<CardWithTarget<'a>> {
-    let card = game.player(player_name).card(card_id)?;
-    use api::play_card_request::PlayCard::*;
-    match (card, request) {
-        (Card::Creature(creature), PlayCreature(play_creature)) => Ok(CardWithTarget::Creature(
-            creature,
-            convert_rank(play_creature.rank_position())?,
-            convert_file(play_creature.file_position())?,
-        )),
-        (Card::Spell(spell), PlayAttachment(play_attachment)) => {
-            let creature_id = play_attachment
-                .creature_id
-                .as_ref()
-                .ok_or_else(|| eyre!("creature_id is required"))?
-                .value;
-            Ok(CardWithTarget::Spell(spell, game.creature(creature_id)?))
-        }
-        (Card::Scroll(scroll), PlayUntargeted(_)) => Ok(CardWithTarget::Scroll(scroll)),
-        _ => Err(eyre!("Card did not match targeting type")),
     }
 }

@@ -66,7 +66,6 @@ namespace Magewatch.Services
       {
         if (command.InitiateGame != null)
         {
-          _expectedCompletions += 2;
           Root.Instance.CurrentGameId = command.InitiateGame.NewGameId;
           var user = Root.Instance.GetPlayer(PlayerName.User);
           var enemy = Root.Instance.GetPlayer(PlayerName.Enemy);
@@ -251,6 +250,10 @@ namespace Magewatch.Services
         if (_currentStep < _currentCommandList.CommandGroups.Count)
         {
           RunCommandStep();
+        }
+        else
+        {
+          Debug.Log("All Commands Executed");
         }
       }
       else if (_completionCount > _expectedCompletions)

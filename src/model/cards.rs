@@ -53,7 +53,7 @@ pub struct CardState {
 impl Default for CardState {
     fn default() -> Self {
         CardState {
-            owner_can_play: false,
+            owner_can_play: true, // tmp
             revealed_to_opponent: false,
         }
     }
@@ -190,12 +190,6 @@ impl HasCardData for Card {
             Card::Scroll(s) => s.card_data_mut(),
         }
     }
-}
-
-pub enum CardWithTarget<'a> {
-    Creature(&'a CreatureData, RankValue, FileValue),
-    Spell(&'a Spell, &'a Creature),
-    Scroll(&'a Scroll),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
