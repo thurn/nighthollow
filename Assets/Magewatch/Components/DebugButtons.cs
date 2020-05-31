@@ -59,8 +59,8 @@ namespace Magewatch.Components
             PlayAttachment(FirstId + 9, FirstId + 6, PlayerName.Enemy),
             PlayScroll(FirstId + 10, PlayerName.Enemy),
             PlayScroll(FirstId + 5, PlayerName.User),
+            AdvancePhase(),
           }
-          //   AdvancePhase(),
           //   AdvancePhase()
           // }
         }

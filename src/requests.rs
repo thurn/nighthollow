@@ -14,7 +14,7 @@
 
 use crate::{
     api, commands,
-    gameplay::{debug, play_card},
+    gameplay::{debug, interface, play_card},
     model::{
         cards,
         games::Game,
@@ -43,6 +43,9 @@ pub fn handle_request(request_message: &api::Request) -> Result<api::CommandList
         api::request::Request::Debug(message) => on_debug(message),
         api::request::Request::PlayCard(message) => {
             with_engine(|e| play_card::on_play_card_request(e, message))
+        }
+        api::request::Request::ClickMainButton(message) => {
+            with_engine(|e| interface::on_click_main_button_request(e, message))
         }
         _ => commands::empty(),
     }

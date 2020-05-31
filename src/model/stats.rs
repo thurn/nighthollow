@@ -59,7 +59,7 @@ pub struct Modifier {
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub enum Operation {
-    SetBase,
+    Set,
     Add,
     IncreaseByPercent,
     MultiplyByPercent,

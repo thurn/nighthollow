@@ -37,13 +37,14 @@ pub trait HasOwner {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayerState {
-    current_life: LifeValue,
-    maximum_life: LifeValue,
-    current_power: PowerValue,
-    maximum_power: ManaValue,
-    current_influence: Influence,
-    maximum_influence: Influence,
-    available_scroll_plays: u32,
+    pub current_life: LifeValue,
+    pub maximum_life: LifeValue,
+    pub current_power: PowerValue,
+    pub maximum_power: ManaValue,
+    pub current_influence: Influence,
+    pub maximum_influence: Influence,
+    pub current_scroll_plays: u32,
+    pub maximum_scroll_plays: u32,
 }
 
 impl Default for PlayerState {
@@ -55,9 +56,22 @@ impl Default for PlayerState {
             maximum_power: 1,
             current_influence: Influence::single(1, School::Flame),
             maximum_influence: Influence::single(1, School::Flame),
-            available_scroll_plays: 1,
+            current_scroll_plays: 1,
+            maximum_scroll_plays: 1,
         }
     }
+}
+
+#[derive(Debug, Clone)]
+pub enum PlayerAttribute {
+    CurrentLife(LifeValue),
+    MaximumLife(LifeValue),
+    CurrentPower(PowerValue),
+    MaximumPower(PowerValue),
+    CurrentInfluence(Influence),
+    MaximumInfluence(Influence),
+    CurrentScrollPlays(u32),
+    MaximumScrollPlays(u32),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

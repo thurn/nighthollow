@@ -21,7 +21,7 @@ use super::{
 use crate::{
     api,
     model::{
-        games::Game,
+        games::{Game, PlayerAttribute},
         primitives::{CardId, PlayerName},
     },
 };
@@ -52,6 +52,7 @@ impl Events {
 #[derive(Debug, Clone)]
 pub enum Event {
     CardDrawn(PlayerName, CardId),
+    PlayerAttributeSet(PlayerName, PlayerAttribute),
 }
 
 pub fn populate_event_rule_effects(
@@ -59,9 +60,35 @@ pub fn populate_event_rule_effects(
     effects: &mut Effects,
     event_data: &EventData,
 ) -> Result<()> {
-    match event_data.event {
+    match &event_data.event {
         Event::CardDrawn(player_name, card_id) => {
-            engine.populate_rule_effects(effects, Trigger::CardDrawn(player_name, card_id))
+            engine.populate_rule_effects(effects, Trigger::CardDrawn(*player_name, *card_id))?;
         }
+        Event::PlayerAttributeSet(player_name, attribute) => {
+            populate_player_attribute_events(engine, effects, *player_name, attribute.clone())?
+        }
+    }
+
+    Ok(())
+}
+
+fn populate_player_attribute_events(
+    engine: &RulesEngine,
+    effects: &mut Effects,
+    player_name: PlayerName,
+    attribute: PlayerAttribute,
+) -> Result<()> {
+    match attribute {
+        PlayerAttribute::CurrentLife(life) => {
+            engine.populate_rule_effects(effects, Trigger::PlayerLifeChanged(player_name, life))
+        }
+        PlayerAttribute::CurrentPower(power) => {
+            engine.populate_rule_effects(effects, Trigger::PlayerPowerChanged(player_name, power))
+        }
+        PlayerAttribute::CurrentInfluence(influence) => engine.populate_rule_effects(
+            effects,
+            Trigger::PlayerInfluenceChanged(player_name, influence),
+        ),
+        _ => Ok(()),
     }
 }

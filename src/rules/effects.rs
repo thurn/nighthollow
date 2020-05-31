@@ -22,7 +22,7 @@ use crate::{
     api,
     model::{
         cards::HasCardId,
-        games::Game,
+        games::{Game, PlayerAttribute},
         primitives::{CreatureId, PlayerName},
         stats::{Operation, StatName},
     },
@@ -78,21 +78,64 @@ impl Default for Effects {
 #[derive(Debug, Clone)]
 pub enum Effect {
     DrawCard(PlayerName),
+    SetPlayerAttribute(PlayerName, PlayerAttribute),
 }
 
 pub fn apply_effect(game: &mut Game, events: &mut Events, effect_data: &EffectData) -> Result<()> {
+    let identifier = effect_data.identifier();
     match &effect_data.effect {
         Effect::DrawCard(player_name) => {
             let player = game.player_mut(*player_name);
             let card = player.deck.draw_card()?;
-            events.push_event(
-                effect_data.identifier(),
-                Event::CardDrawn(player.name, card.card_id()),
-            );
+            events.push_event(identifier, Event::CardDrawn(player.name, card.card_id()));
             player.hand.push(card);
+        }
+        Effect::SetPlayerAttribute(player_name, player_attribute) => {
+            set_player_attribute(game, events, identifier, *player_name, player_attribute)
         }
     }
     Ok(())
+}
+
+fn set_player_attribute(
+    game: &mut Game,
+    events: &mut Events,
+    identifier: RuleIdentifier,
+    player_name: PlayerName,
+    attribute: &PlayerAttribute,
+) {
+    let mut state = &mut game.player_mut(player_name).state;
+    match attribute {
+        PlayerAttribute::CurrentLife(life) => {
+            state.current_life = *life;
+        }
+        PlayerAttribute::MaximumLife(life) => {
+            state.maximum_life = *life;
+        }
+        PlayerAttribute::CurrentPower(power) => {
+            state.current_power = *power;
+        }
+        PlayerAttribute::MaximumPower(power) => {
+            state.maximum_power = *power;
+        }
+        PlayerAttribute::CurrentInfluence(influence) => {
+            state.current_influence = influence.clone();
+        }
+        PlayerAttribute::MaximumInfluence(influence) => {
+            state.maximum_influence = influence.clone();
+        }
+        PlayerAttribute::CurrentScrollPlays(plays) => {
+            state.current_scroll_plays = *plays;
+        }
+        PlayerAttribute::MaximumScrollPlays(plays) => {
+            state.maximum_scroll_plays = *plays;
+        }
+    }
+
+    events.push_event(
+        identifier,
+        Event::PlayerAttributeSet(player_name, attribute.clone()),
+    );
 }
 
 #[derive(Debug, Clone)]

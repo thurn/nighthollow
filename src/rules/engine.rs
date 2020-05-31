@@ -37,6 +37,7 @@ use crate::{
 };
 
 #[derive(Debug, Copy, Clone, Ord, PartialOrd, Eq, PartialEq)]
+#[non_exhaustive]
 pub enum TriggerName {
     GameStart,
     GameEnd,
@@ -65,6 +66,7 @@ pub enum TriggerName {
 }
 
 #[derive(Debug, Clone)]
+#[non_exhaustive]
 pub enum Trigger {
     GameStart,
     GameEnd,
@@ -282,7 +284,7 @@ pub struct RuleIdentifier {
 #[derive(Debug)]
 pub struct TriggerContext<'a> {
     pub this: Entity<'a>,
-    pub data: &'a Trigger,
+    pub trigger: &'a Trigger,
     pub identifier: &'a RuleIdentifier,
     pub game: &'a Game,
 }
@@ -303,10 +305,10 @@ struct RuleData {
 }
 
 impl RuleData {
-    fn context<'a>(&'a self, game: &'a Game, data: &'a Trigger) -> Result<TriggerContext<'a>> {
+    fn context<'a>(&'a self, game: &'a Game, trigger: &'a Trigger) -> Result<TriggerContext<'a>> {
         Ok(TriggerContext {
             this: self.identifier.entity_id.find_in(game)?,
-            data,
+            trigger,
             identifier: &self.identifier,
             game,
         })
@@ -315,10 +317,10 @@ impl RuleData {
     fn on_trigger<'a>(
         &self,
         game: &'a Game,
-        data: &'a Trigger,
+        trigger: &'a Trigger,
         effects: &mut Effects,
     ) -> Result<()> {
-        self.rule.on_trigger(self.context(game, data)?, effects)
+        self.rule.on_trigger(self.context(game, trigger)?, effects)
     }
 }
 
@@ -368,26 +370,7 @@ impl RulesEngine {
     ) -> Result<()> {
         let mut effects = Effects::default();
         self.populate_rule_effects(&mut effects, trigger)?;
-
-        let mut event_index = 0;
-        let mut events = Events::new();
-
-        while effects.len() > 0 {
-            for effect in effects.iter() {
-                effects::apply_effect(&mut self.game, &mut events, effect)?;
-            }
-
-            effects = Effects::default();
-
-            for event in &events.data[event_index..] {
-                events::populate_event_rule_effects(self, &mut effects, event)?;
-            }
-            event_index = events.data.len();
-        }
-
-        responses::generate(&self.game, events, result)?;
-
-        Ok(())
+        self.apply_effects(result, effects)
     }
 
     pub fn invoke_as_group(
@@ -398,7 +381,7 @@ impl RulesEngine {
         let mut output = vec![];
         self.invoke_trigger(&mut output, trigger)?;
 
-        if output.is_empty() {
+        if !output.is_empty() {
             result.push(commands::group(output));
         }
         Ok(())
@@ -424,6 +407,32 @@ impl RulesEngine {
                 }
             }
         }
+
+        Ok(())
+    }
+
+    fn apply_effects(
+        &mut self,
+        result: &mut Vec<api::Command>,
+        mut effects: Effects,
+    ) -> Result<()> {
+        let mut event_index = 0;
+        let mut events = Events::new();
+
+        while effects.len() > 0 {
+            for effect in effects.iter() {
+                effects::apply_effect(&mut self.game, &mut events, effect)?;
+            }
+
+            effects = Effects::default();
+
+            for event in &events.data[event_index..] {
+                events::populate_event_rule_effects(self, &mut effects, event)?;
+            }
+            event_index = events.data.len();
+        }
+
+        responses::generate(&self.game, events, result)?;
 
         Ok(())
     }

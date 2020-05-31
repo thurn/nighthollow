@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::collections::BTreeSet;
+
 use eyre::Result;
 
 use super::events::{Event, Events};
 use crate::{api, commands, model::games::Game};
 
 pub fn generate(game: &Game, events: Events, result: &mut Vec<api::Command>) -> Result<()> {
+    let mut update_players = BTreeSet::new();
     for event_data in &events.data {
         match event_data.event {
             Event::CardDrawn(player_name, card_id) => {
@@ -25,7 +28,14 @@ pub fn generate(game: &Game, events: Events, result: &mut Vec<api::Command>) -> 
                     game.player(player_name).card(card_id)?,
                 ));
             }
+            Event::PlayerAttributeSet(player_name, _) => {
+                update_players.insert(player_name);
+            }
         }
+    }
+
+    for player in &update_players {
+        result.push(commands::update_player_command(game.player(*player)));
     }
 
     Ok(())

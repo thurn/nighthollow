@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod combat;
-pub mod debug;
-pub mod interface;
-pub mod play_card;
-pub mod player_rules;
+use crate::{api, commands, rules::engine::RulesEngine};
+use eyre::Result;
+
+pub fn run_combat(engine: &mut RulesEngine) -> Result<api::CommandList> {
+    commands::empty()
+}
