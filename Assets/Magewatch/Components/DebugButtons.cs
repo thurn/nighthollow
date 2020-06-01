@@ -60,9 +60,8 @@ namespace Magewatch.Components
             PlayScroll(FirstId + 10, PlayerName.Enemy),
             PlayScroll(FirstId + 5, PlayerName.User),
             AdvancePhase(),
+            AdvancePhase()
           }
-          //   AdvancePhase()
-          // }
         }
       });
     }

@@ -12,11 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use crate::prelude::*;
+
 use super::primitives::SkillAnimation;
-use serde::{Deserialize, Serialize};
+
+pub trait HasAddress {
+    fn address(&self) -> &str;
+}
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum ProjectileName {}
+
+impl HasAddress for ProjectileName {
+    fn address(&self) -> &str {
+        todo!()
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum ParticleSystemName {}

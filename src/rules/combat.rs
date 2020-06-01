@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::time::Instant;
+use crate::prelude::*;
 
-use eyre::Result;
-
-use super::{effects2::EffectSource, rules::{self, BaseRule, CreatureRule, RuleContext, RuleScope}};
+use super::{
+    effects2::EffectSource,
+    rules::{self, BaseRule, CreatureRule, RuleContext, RuleScope},
+};
 use crate::{
     api, commands,
     model::{
@@ -138,7 +139,7 @@ fn invoke_main_skill(
                 rule_id: RuleId { creature_id, index },
                 creature,
                 game,
-                source: EffectSource::Creature(creature_id)
+                source: EffectSource::Creature(creature_id),
             })
             .map(|priority| RuleWithPriority { priority, index })
         })

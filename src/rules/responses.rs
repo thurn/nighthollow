@@ -14,27 +14,34 @@
 
 use std::collections::BTreeSet;
 
-use eyre::Result;
+use crate::prelude::*;
 
-use super::events::{Event, Events};
+use super::{
+    creature_skills,
+    events::{Event, Events},
+};
 use crate::{api, commands, model::games::Game};
 
 pub fn generate(game: &Game, events: Events, result: &mut Vec<api::Command>) -> Result<()> {
     let mut update_players = BTreeSet::new();
     for event_data in &events.data {
-        match event_data.event {
+        match &event_data.event {
             Event::CardDrawn(player_name, card_id) => {
                 result.push(commands::draw_or_update_card_command(
-                    game.player(player_name).card(card_id)?,
+                    game.player(*player_name).card(*card_id)?,
                 ));
             }
             Event::PlayerAttributeSet(player_name, _) => {
                 update_players.insert(player_name);
             }
+            Event::CreatureSkillUsed(skill) => {
+                result.push(creature_skills::command_for_skill(game, &skill)?);
+            }
+            _ => {}
         }
     }
 
-    for player in &update_players {
+    for player in update_players {
         result.push(commands::update_player_command(game.player(*player)));
     }
 

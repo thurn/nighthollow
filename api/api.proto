@@ -359,17 +359,14 @@ message MOnImpact {
 }
 
 message MFireProjectile {
-  // Who is firing the projectile?
-  CreatureId creature_id = 1;
-
   // Projectile Prefab to create
-  Asset projectile = 2;
+  Asset projectile = 1;
 
   // What to do when the projectile hits
-  repeated MOnImpact on_hit = 3;
+  repeated MOnImpact on_hit = 2;
 
   oneof target {
-    CreatureId target_creature = 4;
+    CreatureId target_creature = 3;
   }
 }
 

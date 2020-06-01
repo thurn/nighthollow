@@ -12,17 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use eyre::eyre;
-use eyre::Result;
-use serde::{Deserialize, Serialize};
+use crate::prelude::*;
 
 use super::{
     assets::CreatureType,
     cards::{CardData, HasCardData, HasCardId, Spell},
     stats::{Stat, StatName, Tag, TagName},
 };
-use crate::{model::primitives::*, rules::engine::Rule};
-use std::cmp;
+use crate::{
+    model::primitives::*,
+    rules::engine::{Rule, RuleIdentifier},
+};
+use std::{
+    cmp,
+    collections::{BTreeMap, BTreeSet},
+};
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub struct DamageAmount {
@@ -156,6 +160,7 @@ pub struct CreatureState {
     damage: HealthValue,
     mana: ManaValue,
     can_reposition: bool,
+    skills: BTreeMap<RuleIdentifier, u32>,
 }
 
 impl Default for CreatureState {
@@ -165,6 +170,7 @@ impl Default for CreatureState {
             damage: 0,
             mana: 0,
             can_reposition: true,
+            skills: BTreeMap::new(),
         }
     }
 }
@@ -257,6 +263,22 @@ impl Creature {
         }
 
         self.state.mana = cmp::min(self.stats().maximum_mana.value(), self.state.mana + value);
+    }
+
+    pub fn highest_priority_skill(&self) -> Option<RuleIdentifier> {
+        self.state
+            .skills
+            .iter()
+            .max_by_key(|(_, p)| *p)
+            .map(|(id, _)| *id)
+    }
+
+    pub fn set_skill_priority(&mut self, rule_identifier: RuleIdentifier, priority: u32) {
+        println!(
+            "Setting priority for {:?} to {:?}",
+            rule_identifier, priority
+        );
+        self.state.skills.insert(rule_identifier, priority);
     }
 
     pub fn reset(&mut self) {

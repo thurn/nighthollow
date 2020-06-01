@@ -14,8 +14,9 @@
 
 use std::fmt::Debug;
 
+use crate::prelude::*;
+
 use dyn_clone::DynClone;
-use eyre::Result;
 
 use super::{
     command_generation,

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use crate::prelude::*;
+
 use crate::model::{
     assets::{CreatureType, ScrollType, SpellType},
     cards::Card,

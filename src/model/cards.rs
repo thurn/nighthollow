@@ -15,18 +15,17 @@
 use std::cmp;
 use std::sync::atomic::{AtomicI32, Ordering};
 
-use eyre::eyre;
-use eyre::Result;
+use crate::prelude::*;
+
 use rand::{
     distributions::{Distribution, WeightedIndex},
     prelude::thread_rng,
 };
-use serde::{Deserialize, Serialize};
 
 use super::{
     assets::{ScrollType, SpellType},
     creatures::{Creature, CreatureData},
-    games::HasOwner,
+    players::HasOwner,
     primitives::{
         CardId, FileValue, Influence, PlayerName, PowerValue, RankValue, School, ScrollId, SpellId,
     },

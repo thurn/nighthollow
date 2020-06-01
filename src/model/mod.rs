@@ -16,5 +16,6 @@ pub mod assets;
 pub mod cards;
 pub mod creatures;
 pub mod games;
+pub mod players;
 pub mod primitives;
 pub mod stats;

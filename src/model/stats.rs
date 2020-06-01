@@ -14,9 +14,9 @@
 
 use std::fmt::Debug;
 
-use serde::{Deserialize, Serialize};
+use crate::prelude::*;
 
-use super::primitives::RuleId;
+use crate::rules::engine::RuleIdentifier;
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub enum StatName {}
@@ -54,7 +54,7 @@ impl Stat {
 pub struct Modifier {
     pub value: u32,
     pub operation: Operation,
-    pub source: RuleId,
+    pub source: RuleIdentifier,
 }
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]
@@ -77,5 +77,5 @@ pub struct Tag {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TagModifier {
     value: bool,
-    source: RuleId,
+    source: RuleIdentifier,
 }

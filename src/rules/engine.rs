@@ -14,8 +14,8 @@
 
 use std::{collections::BTreeMap, fmt::Debug};
 
+use crate::prelude::*;
 use dyn_clone::DynClone;
-use eyre::{eyre, Result};
 
 use super::{
     effects::{self, Effects, SetModifier},
@@ -27,7 +27,8 @@ use crate::{
     model::{
         cards::{Card, Scroll, Spell},
         creatures::{Creature, Damage, HasCreatureData},
-        games::{Game, Player},
+        games::Game,
+        players::{HasOwner, Player},
         primitives::{
             CardId, CreatureId, HealthValue, Influence, LifeValue, ManaValue, PlayerName,
             PowerValue, RoundNumber, ScrollId, SpellId,
@@ -61,12 +62,26 @@ pub enum TriggerName {
     CreatureDamaged,
     CreatureKilled,
     CreatureHealed,
-    CreatureManaChanged,
+    CreatureManaGained,
+    CreatureManaLost,
     CreatureStatModifierSet,
 }
 
+impl TriggerName {
+    pub fn this(self) -> TriggerCondition {
+        TriggerCondition::This(self)
+    }
+
+    pub fn any(self) -> TriggerCondition {
+        TriggerCondition::Any(self)
+    }
+
+    pub fn source(self) -> TriggerCondition {
+        TriggerCondition::Source(self)
+    }
+}
+
 #[derive(Debug, Clone)]
-#[non_exhaustive]
 pub enum Trigger {
     GameStart,
     GameEnd,
@@ -102,7 +117,12 @@ pub enum Trigger {
         target: CreatureId,
         amount: HealthValue,
     },
-    CreatureManaChanged {
+    CreatureManaGained {
+        source: CreatureId,
+        target: CreatureId,
+        amount: ManaValue,
+    },
+    CreatureManaLost {
         source: CreatureId,
         target: CreatureId,
         amount: ManaValue,
@@ -151,11 +171,16 @@ impl Trigger {
                 target,
                 amount,
             } => TriggerName::CreatureHealed,
-            Trigger::CreatureManaChanged {
+            Trigger::CreatureManaGained {
                 source,
                 target,
                 amount,
-            } => TriggerName::CreatureManaChanged,
+            } => TriggerName::CreatureManaGained,
+            Trigger::CreatureManaLost {
+                source,
+                target,
+                amount,
+            } => TriggerName::CreatureManaLost,
             Trigger::CreatureStatModifierSet {
                 source,
                 target,
@@ -164,52 +189,120 @@ impl Trigger {
         }
     }
 
-    fn entity_id(&self) -> Option<EntityId> {
+    fn entity_ids(&self) -> EntityIds {
         match self {
-            Trigger::GameStart => None,
-            Trigger::GameEnd => None,
-            Trigger::TurnStart => None,
-            Trigger::TurnEnd => None,
-            Trigger::PlayerLifeChanged(p, _) => Some(EntityId::PlayerName(*p)),
-            Trigger::PlayerPowerChanged(p, _) => Some(EntityId::PlayerName(*p)),
-            Trigger::PlayerInfluenceChanged(p, _) => Some(EntityId::PlayerName(*p)),
-            Trigger::CardDrawn(p, _) => Some(EntityId::PlayerName(*p)),
-            Trigger::CardPlayed(p, _) => Some(EntityId::PlayerName(*p)),
-            Trigger::CreaturePlayed(_, c) => Some(EntityId::CreatureId(*c)),
-            Trigger::ScrollPlayed(p, _) => Some(EntityId::PlayerName(*p)),
-            Trigger::SpellPlayed(p, _, _) => Some(EntityId::PlayerName(*p)),
-            Trigger::CombatStart => None,
-            Trigger::CombatEnd => None,
-            Trigger::RoundStart(_) => None,
-            Trigger::RoundEnd(_) => None,
-            Trigger::ActionStart(c) => Some(EntityId::CreatureId(*c)),
-            Trigger::InvokeSkill(c) => Some(EntityId::CreatureId(*c)),
-            Trigger::ActionEnd(c) => Some(EntityId::CreatureId(*c)),
+            Trigger::GameStart => EntityIds::default(),
+            Trigger::GameEnd => EntityIds::default(),
+            Trigger::TurnStart => EntityIds::default(),
+            Trigger::TurnEnd => EntityIds::default(),
+            Trigger::PlayerLifeChanged(p, _) => EntityIds::player(*p),
+            Trigger::PlayerPowerChanged(p, _) => EntityIds::player(*p),
+            Trigger::PlayerInfluenceChanged(p, _) => EntityIds::player(*p),
+            Trigger::CardDrawn(p, _) => EntityIds::player(*p),
+            Trigger::CardPlayed(p, _) => EntityIds::player(*p),
+            Trigger::CreaturePlayed(p, c) => EntityIds {
+                player: Some(*p),
+                source_creature: None,
+                target_creature: Some(*c),
+            },
+            Trigger::ScrollPlayed(p, _) => EntityIds::player(*p),
+            Trigger::SpellPlayed(p, _, _) => EntityIds::player(*p),
+            Trigger::CombatStart => EntityIds::default(),
+            Trigger::CombatEnd => EntityIds::default(),
+            Trigger::RoundStart(_) => EntityIds::default(),
+            Trigger::RoundEnd(_) => EntityIds::default(),
+            Trigger::ActionStart(c) => EntityIds::creature(*c),
+            Trigger::InvokeSkill(c) => EntityIds::creature(*c),
+            Trigger::ActionEnd(c) => EntityIds::creature(*c),
             Trigger::CreatureDamaged {
                 attacker,
                 defender,
                 damage,
-            } => Some(EntityId::CreatureId(*defender)),
+            } => EntityIds {
+                player: None,
+                source_creature: Some(*attacker),
+                target_creature: Some(*defender),
+            },
             Trigger::CreatureKilled {
                 killed_by,
                 defender,
                 damage,
-            } => Some(EntityId::CreatureId(*defender)),
+            } => EntityIds {
+                player: None,
+                source_creature: Some(*killed_by),
+                target_creature: Some(*defender),
+            },
             Trigger::CreatureHealed {
                 source,
                 target,
                 amount,
-            } => Some(EntityId::CreatureId(*target)),
-            Trigger::CreatureManaChanged {
+            } => EntityIds {
+                player: None,
+                source_creature: Some(*source),
+                target_creature: Some(*target),
+            },
+            Trigger::CreatureManaGained {
                 source,
                 target,
                 amount,
-            } => Some(EntityId::CreatureId(*target)),
+            } => EntityIds {
+                player: None,
+                source_creature: Some(*source),
+                target_creature: Some(*target),
+            },
+            Trigger::CreatureManaLost {
+                source,
+                target,
+                amount,
+            } => EntityIds {
+                player: None,
+                source_creature: Some(*source),
+                target_creature: Some(*target),
+            },
             Trigger::CreatureStatModifierSet {
                 source,
                 target,
                 modifier,
-            } => Some(EntityId::CreatureId(*target)),
+            } => EntityIds {
+                player: None,
+                source_creature: Some(*source),
+                target_creature: Some(*target),
+            },
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+struct EntityIds {
+    player: Option<PlayerName>,
+    source_creature: Option<CreatureId>,
+    target_creature: Option<CreatureId>,
+}
+
+impl EntityIds {
+    fn player(player_name: PlayerName) -> Self {
+        Self {
+            player: Some(player_name),
+            source_creature: None,
+            target_creature: None,
+        }
+    }
+
+    fn creature(creature_id: CreatureId) -> Self {
+        Self {
+            player: None,
+            source_creature: None,
+            target_creature: Some(creature_id),
+        }
+    }
+}
+
+impl Default for EntityIds {
+    fn default() -> Self {
+        Self {
+            player: None,
+            source_creature: None,
+            target_creature: None,
         }
     }
 }
@@ -239,7 +332,7 @@ impl<'a> Entity<'a> {
     }
 }
 
-#[derive(Debug, Copy, Clone, PartialOrd, Ord, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialOrd, Ord, Eq, PartialEq)]
 pub enum EntityId {
     PlayerName(PlayerName),
     CreatureId(CreatureId),
@@ -257,6 +350,7 @@ impl EntityId {
 #[derive(Debug, Copy, Clone, Ord, PartialOrd, Eq, PartialEq)]
 pub enum TriggerCondition {
     This(TriggerName),
+    Source(TriggerName),
     Any(TriggerName),
 }
 
@@ -265,6 +359,7 @@ impl TriggerCondition {
         match self {
             TriggerCondition::This(name) => TriggerKey::Entity(name, entity_id),
             TriggerCondition::Any(name) => TriggerKey::Global(name),
+            TriggerCondition::Source(name) => TriggerKey::Source(name, entity_id),
         }
     }
 }
@@ -273,9 +368,10 @@ impl TriggerCondition {
 pub enum TriggerKey {
     Global(TriggerName),
     Entity(TriggerName, EntityId),
+    Source(TriggerName, EntityId),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
 pub struct RuleIdentifier {
     pub index: usize,
     pub entity_id: EntityId,
@@ -289,11 +385,20 @@ pub struct TriggerContext<'a> {
     pub game: &'a Game,
 }
 
+impl<'a> TriggerContext<'a> {
+    pub fn opponent(&self) -> &Player {
+        self.game.player(match self.this {
+            Entity::Creature(c) => c.owner().opponent(),
+            Entity::Player(p) => p.name.opponent(),
+        })
+    }
+}
+
 #[typetag::serde(tag = "type")]
 pub trait Rule: Debug + Send + DynClone {
     fn triggers(&self) -> Vec<TriggerCondition>;
 
-    fn on_trigger(&self, context: TriggerContext, effects: &mut Effects) -> Result<()>;
+    fn on_trigger(&self, context: &TriggerContext, effects: &mut Effects) -> Result<()>;
 }
 
 dyn_clone::clone_trait_object!(Rule);
@@ -305,9 +410,14 @@ struct RuleData {
 }
 
 impl RuleData {
-    fn context<'a>(&'a self, game: &'a Game, trigger: &'a Trigger) -> Result<TriggerContext<'a>> {
+    fn context<'a>(
+        &'a self,
+        this: Entity<'a>,
+        game: &'a Game,
+        trigger: &'a Trigger,
+    ) -> Result<TriggerContext<'a>> {
         Ok(TriggerContext {
-            this: self.identifier.entity_id.find_in(game)?,
+            this,
             trigger,
             identifier: &self.identifier,
             game,
@@ -320,47 +430,32 @@ impl RuleData {
         trigger: &'a Trigger,
         effects: &mut Effects,
     ) -> Result<()> {
-        self.rule.on_trigger(self.context(game, trigger)?, effects)
+        self.rule.on_trigger(
+            &self.context(self.identifier.entity_id.find_in(game)?, game, trigger)?,
+            effects,
+        )
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct RulesEngine {
     pub game: Game,
+    rules: BTreeMap<RuleIdentifier, RuleData>,
     rule_map: BTreeMap<TriggerKey, Vec<RuleData>>,
 }
 
 impl RulesEngine {
     pub fn new(game: Game) -> Self {
-        let user_rules = game.user.rules.clone();
-        let enemy_rules = game.enemy.rules.clone();
-
-        let mut result = Self {
+        let (rules, rule_map) = create_maps(&game);
+        Self {
             game,
-            rule_map: BTreeMap::new(),
-        };
-
-        result.add_rules(EntityId::PlayerName(PlayerName::User), user_rules);
-        result.add_rules(EntityId::PlayerName(PlayerName::Enemy), enemy_rules);
-        result
+            rules,
+            rule_map,
+        }
     }
 
-    pub fn add_rules(&mut self, entity_id: EntityId, rules: Vec<Box<dyn Rule>>) {
-        for (index, rule) in rules.iter().enumerate() {
-            let conditions = rule.triggers();
-            for condition in conditions {
-                let data = RuleData {
-                    rule: rule.clone(),
-                    identifier: RuleIdentifier { index, entity_id },
-                };
-                let key = condition.to_key(entity_id);
-                if let Some(rules) = self.rule_map.get_mut(&key) {
-                    rules.push(data);
-                } else {
-                    self.rule_map.insert(key, vec![data]);
-                }
-            }
-        }
+    pub fn add_rules(&mut self, entity_id: EntityId, input: Vec<Box<dyn Rule>>) {
+        add_rules(&mut self.rules, &mut self.rule_map, entity_id, input);
     }
 
     pub fn invoke_trigger(
@@ -387,6 +482,19 @@ impl RulesEngine {
         Ok(())
     }
 
+    pub fn invoke_rule(
+        &mut self,
+        rule_identifier: RuleIdentifier,
+        result: &mut Vec<api::Command>,
+        trigger: Trigger,
+    ) -> Result<()> {
+        let mut effects = Effects::default();
+        if let Some(r) = self.rules.get(&rule_identifier) {
+            r.on_trigger(&self.game, &trigger, &mut effects)?;
+        }
+        self.apply_effects(result, effects)
+    }
+
     pub fn populate_rule_effects(&self, effects: &mut Effects, trigger: Trigger) -> Result<()> {
         if let Some(rules) = self
             .rule_map
@@ -397,11 +505,36 @@ impl RulesEngine {
             }
         }
 
-        if let Some(entity_id) = trigger.entity_id() {
+        let entity_ids = trigger.entity_ids();
+        let ids = vec![
+            entity_ids.player.map(EntityId::PlayerName),
+            entity_ids.target_creature.map(EntityId::CreatureId),
+        ];
+
+        for entity_id in ids.into_iter().filter_map(|x| x) {
+            println!(
+                "Id {:?} for trigger {:?}",
+                entity_id,
+                trigger.trigger_name()
+            );
             if let Some(rules) = self
                 .rule_map
                 .get(&TriggerKey::Entity(trigger.trigger_name(), entity_id))
             {
+                println!("Found rules for {:?}", trigger.trigger_name());
+                for rule_data in rules {
+                    rule_data.on_trigger(&self.game, &trigger, effects)?;
+                }
+            } else {
+                println!("No rules for {:?}", trigger.trigger_name());
+            }
+        }
+
+        if let Some(creature_id) = entity_ids.source_creature {
+            if let Some(rules) = self.rule_map.get(&TriggerKey::Source(
+                trigger.trigger_name(),
+                EntityId::CreatureId(creature_id),
+            )) {
                 for rule_data in rules {
                     rule_data.on_trigger(&self.game, &trigger, effects)?;
                 }
@@ -435,5 +568,59 @@ impl RulesEngine {
         responses::generate(&self.game, events, result)?;
 
         Ok(())
+    }
+}
+
+fn create_maps(
+    game: &Game,
+) -> (
+    BTreeMap<RuleIdentifier, RuleData>,
+    BTreeMap<TriggerKey, Vec<RuleData>>,
+) {
+    let mut rules = BTreeMap::new();
+    let mut rule_maps = BTreeMap::new();
+
+    add_rules(
+        &mut rules,
+        &mut rule_maps,
+        EntityId::PlayerName(PlayerName::User),
+        game.user.rules.clone(),
+    );
+
+    add_rules(
+        &mut rules,
+        &mut rule_maps,
+        EntityId::PlayerName(PlayerName::Enemy),
+        game.enemy.rules.clone(),
+    );
+
+    (rules, rule_maps)
+}
+
+fn add_rules(
+    rules: &mut BTreeMap<RuleIdentifier, RuleData>,
+    rule_map: &mut BTreeMap<TriggerKey, Vec<RuleData>>,
+    entity_id: EntityId,
+    input: Vec<Box<dyn Rule>>,
+) {
+    for (index, rule) in input.iter().enumerate() {
+        let identifier = RuleIdentifier { index, entity_id };
+        let data = RuleData {
+            rule: rule.clone(),
+            identifier,
+        };
+
+        rules.insert(identifier, data.clone());
+
+        let conditions = rule.triggers();
+        for condition in conditions {
+            let key = condition.to_key(entity_id);
+            println!("adding rule for key {:?} - {:?}", key, data);
+            if let Some(r) = rule_map.get_mut(&key) {
+                r.push(data.clone());
+            } else {
+                rule_map.insert(key, vec![data.clone()]);
+            }
+        }
     }
 }

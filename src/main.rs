@@ -18,7 +18,7 @@
 #![allow(unused_variables)]
 #![feature(clamp)]
 #![feature(move_ref_pattern)]
-#![feature(type_alias_impl_trait)]
+#![feature(map_first_last)]
 
 mod api;
 mod commands;
@@ -26,6 +26,7 @@ mod gameplay;
 mod interface;
 mod model;
 // mod requests2;
+mod prelude;
 mod requests;
 mod rules;
 mod test_data;
@@ -38,7 +39,6 @@ use warp::Filter;
 #[macro_use]
 extern crate lazy_static;
 extern crate eyre;
-extern crate maplit;
 
 pub enum Empty {}
 

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use eyre::Result;
+use crate::prelude::*;
 
 use super::combat;
 use crate::{
@@ -35,5 +35,6 @@ pub fn on_click_main_button_request(
 fn advance_turn(engine: &mut RulesEngine) -> Result<api::CommandList> {
     let mut result = vec![];
     engine.invoke_trigger(&mut result, Trigger::TurnStart)?;
+    engine.game.state.phase = GamePhase::Preparation;
     Ok(commands::single_group(result))
 }

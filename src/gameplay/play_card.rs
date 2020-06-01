@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use eyre::{eyre, Result};
+use crate::prelude::*;
 
 use crate::{
     api, commands,
     model::{
         cards::{Card, HasCardState, Scroll, Spell},
         creatures::{Creature, CreatureData, CreatureState, HasCreatureData},
-        games::Player,
+        players::{HasOwner, Player},
         primitives::{BoardPosition, CardId, CreatureId, FileValue, PlayerName, RankValue},
     },
     requests,
-    rules::engine::{RulesEngine, Trigger},
+    rules::engine::{EntityId, Rule, RulesEngine, Trigger},
 };
 
 enum CardWithTarget {
@@ -55,9 +55,9 @@ pub fn on_play_card_request(
     let card_data = commands::card_data(&card);
 
     use api::play_card_request::PlayCard::*;
-    let trigger = match (card, request) {
+    match (card, request) {
         (Card::Creature(creature_data), PlayCreature(play_creature)) => on_play_creature(
-            player,
+            engine,
             &mut result,
             creature_data,
             card_data,
@@ -65,7 +65,7 @@ pub fn on_play_card_request(
             requests::convert_file(play_creature.file_position())?,
         ),
         (Card::Spell(spell), PlayAttachment(play_attachment)) => on_play_attachment(
-            player,
+            engine,
             &mut result,
             spell,
             card_data,
@@ -77,12 +77,11 @@ pub fn on_play_card_request(
             ),
         ),
         (Card::Scroll(scroll), PlayUntargeted(_)) => {
-            on_play_scroll(player, &mut result, scroll, card_data)
+            on_play_scroll(engine, &mut result, scroll, card_data)
         }
         _ => Err(eyre!("Card did not match targeting type")),
     }?;
 
-    engine.invoke_as_group(&mut result, trigger)?;
     Ok(commands::groups(result))
 }
 
@@ -111,39 +110,46 @@ fn reveal_card(
 }
 
 fn on_play_creature(
-    player: &mut Player,
+    engine: &mut RulesEngine,
     result: &mut Vec<api::CommandGroup>,
     creature_data: CreatureData,
     card_data: api::CardData,
     rank: RankValue,
     file: FileValue,
-) -> Result<Trigger> {
+) -> Result<()> {
     let creature_id = creature_data.creature_id();
+    let player = engine.game.player_mut(creature_data.owner());
+    let player_name = player.name;
     let creature = Creature {
         data: creature_data,
         position: BoardPosition { rank, file },
         spells: vec![],
         state: CreatureState::default(),
     };
+    let rules = creature.data.rules.clone();
 
-    reveal_card(player.name, result, card_data, Some(rank), Some(file))?;
+    reveal_card(player_name, result, card_data, Some(rank), Some(file))?;
 
     result.push(commands::single(
         commands::create_or_update_creature_command(&creature),
     ));
     player.creatures.push(creature);
 
-    Ok(Trigger::CreaturePlayed(player.name, creature_id))
+    engine.add_rules(EntityId::CreatureId(creature_id), rules);
+    engine.invoke_as_group(result, Trigger::CreaturePlayed(player_name, creature_id))?;
+    Ok(())
 }
 
 fn on_play_attachment(
-    player: &mut Player,
+    engine: &mut RulesEngine,
     result: &mut Vec<api::CommandGroup>,
     spell: Spell,
     card_data: api::CardData,
     target_id: CreatureId,
-) -> Result<Trigger> {
+) -> Result<()> {
     let spell_id = spell.spell_id();
+    let player = engine.game.player_mut(spell.owner());
+    let player_name = player.name;
     let creature = player
         .creatures
         .iter_mut()
@@ -151,7 +157,7 @@ fn on_play_attachment(
         .ok_or_else(|| eyre!("Creature not found"))?;
 
     reveal_card(
-        player.name,
+        player_name,
         result,
         card_data,
         Some(creature.position.rank),
@@ -163,19 +169,27 @@ fn on_play_attachment(
         commands::create_or_update_creature_command(&creature),
     ));
 
-    Ok(Trigger::SpellPlayed(player.name, target_id, spell_id))
+    engine.invoke_as_group(
+        result,
+        Trigger::SpellPlayed(player_name, target_id, spell_id),
+    )?;
+    Ok(())
 }
 
 fn on_play_scroll(
-    player: &mut Player,
+    engine: &mut RulesEngine,
     result: &mut Vec<api::CommandGroup>,
     scroll: Scroll,
     card_data: api::CardData,
-) -> Result<Trigger> {
+) -> Result<()> {
     let scroll_id = scroll.scroll_id();
+    let player = engine.game.player_mut(scroll.owner());
+    let player_name = player.name;
 
     reveal_card(player.name, result, card_data, None, None)?;
 
     player.scrolls.push(scroll);
-    Ok(Trigger::ScrollPlayed(player.name, scroll_id))
+
+    engine.invoke_as_group(result, Trigger::ScrollPlayed(player_name, scroll_id))?;
+    Ok(())
 }

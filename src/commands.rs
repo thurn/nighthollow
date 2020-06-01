@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use eyre::Result;
+use crate::prelude::*;
 
 use crate::{
     api, interface,
@@ -20,7 +20,8 @@ use crate::{
         assets::CreatureType,
         cards::{Card, Cost, HasCardData, HasCardId, HasCardState, Scroll, Spell, StandardCost},
         creatures::{Creature, CreatureData, HasCreatureData},
-        games::{Game, HasOwner, Player},
+        games::Game,
+        players::{HasOwner, Player},
         primitives::{
             CardId, CreatureId, FileValue, GameId, Influence, PlayerName, RankValue, School,
             SkillAnimation, SCHOOLS,
@@ -122,6 +123,18 @@ pub fn cost(cost: &Cost) -> api::card_data::Cost {
     match cost {
         Cost::ScrollPlay => api::card_data::Cost::NoCost(api::NoCost {}),
         Cost::StandardCost(c) => api::card_data::Cost::StandardCost(standard_cost(c)),
+    }
+}
+
+pub fn player_data(player: &Player) -> api::PlayerData {
+    api::PlayerData {
+        player_name: player_name(player.name).into(),
+        current_life: player.state.current_life,
+        maximum_life: player.state.maximum_life,
+        current_power: player.state.current_power,
+        maximum_power: player.state.maximum_power,
+        current_influence: influence(&player.state.current_influence),
+        maximum_influence: influence(&player.state.maximum_influence),
     }
 }
 
@@ -227,7 +240,7 @@ pub fn update_player_command(player: &Player) -> api::Command {
     api::Command {
         command: Some(api::command::Command::UpdatePlayer(
             api::UpdatePlayerCommand {
-                player: Some(player.player_data()),
+                player: Some(player_data(player)),
             },
         )),
     }

@@ -14,9 +14,7 @@
 
 use std::collections::BTreeMap;
 
-use eyre::eyre;
-use eyre::Result;
-use serde::{Deserialize, Serialize};
+use crate::prelude::*;
 
 pub type GameId = i32;
 pub type CardId = i32;
@@ -31,12 +29,6 @@ pub type ManaValue = u32;
 pub type PowerValue = u32;
 pub type LifeValue = u32;
 pub type InfluenceValue = u32;
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
-pub struct RuleId {
-    pub creature_id: CreatureId,
-    pub index: usize,
-}
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 pub enum GamePhase {

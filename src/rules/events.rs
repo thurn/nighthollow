@@ -12,17 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use eyre::{eyre, Result};
+use crate::prelude::*;
 
 use super::{
+    creature_skills::{CreatureMutation, CreatureSkill, MutationResult},
     effects::Effects,
     engine::{RuleIdentifier, RulesEngine, Trigger},
 };
 use crate::{
     api,
     model::{
-        games::{Game, PlayerAttribute},
-        primitives::{CardId, PlayerName},
+        games::Game,
+        players::PlayerAttribute,
+        primitives::{CardId, CreatureId, PlayerName},
     },
 };
 
@@ -53,6 +55,15 @@ impl Events {
 pub enum Event {
     CardDrawn(PlayerName, CardId),
     PlayerAttributeSet(PlayerName, PlayerAttribute),
+    CreatureMutated(CreatureMutated),
+    CreatureSkillUsed(CreatureSkill),
+}
+
+#[derive(Debug, Clone)]
+pub struct CreatureMutated {
+    pub source_creature: CreatureId,
+    pub mutation: CreatureMutation,
+    pub result: MutationResult,
 }
 
 pub fn populate_event_rule_effects(
@@ -62,14 +73,20 @@ pub fn populate_event_rule_effects(
 ) -> Result<()> {
     match &event_data.event {
         Event::CardDrawn(player_name, card_id) => {
-            engine.populate_rule_effects(effects, Trigger::CardDrawn(*player_name, *card_id))?;
+            engine.populate_rule_effects(effects, Trigger::CardDrawn(*player_name, *card_id))
         }
         Event::PlayerAttributeSet(player_name, attribute) => {
-            populate_player_attribute_events(engine, effects, *player_name, attribute.clone())?
+            populate_player_attribute_events(engine, effects, *player_name, attribute.clone())
         }
+        Event::CreatureMutated(CreatureMutated {
+            source_creature,
+            mutation,
+            result,
+        }) => {
+            populate_creature_mutation_events(engine, effects, *source_creature, mutation, result)
+        }
+        _ => Ok(()),
     }
-
-    Ok(())
 }
 
 fn populate_player_attribute_events(
@@ -91,4 +108,81 @@ fn populate_player_attribute_events(
         ),
         _ => Ok(()),
     }
+}
+
+fn populate_creature_mutation_events(
+    engine: &RulesEngine,
+    effects: &mut Effects,
+    source_id: CreatureId,
+    mutation: &CreatureMutation,
+    result: &MutationResult,
+) -> Result<()> {
+    let target_id = mutation.target_id;
+    for modifier in &mutation.set_modifiers {
+        engine.populate_rule_effects(
+            effects,
+            Trigger::CreatureStatModifierSet {
+                source: target_id,
+                target: target_id,
+                modifier: modifier.clone(),
+            },
+        )?;
+    }
+
+    if let Some(amount) = mutation.heal_damage {
+        engine.populate_rule_effects(
+            effects,
+            Trigger::CreatureHealed {
+                source: target_id,
+                target: target_id,
+                amount,
+            },
+        )?;
+    }
+
+    if let Some(damage) = &mutation.apply_damage {
+        engine.populate_rule_effects(
+            effects,
+            Trigger::CreatureDamaged {
+                attacker: target_id,
+                defender: target_id,
+                damage: damage.clone(),
+            },
+        )?;
+
+        if *result == MutationResult::Killed {
+            engine.populate_rule_effects(
+                effects,
+                Trigger::CreatureKilled {
+                    killed_by: target_id,
+                    defender: target_id,
+                    damage: damage.clone(),
+                },
+            )?;
+        }
+    }
+
+    if let Some(amount) = mutation.gain_mana {
+        engine.populate_rule_effects(
+            effects,
+            Trigger::CreatureManaGained {
+                source: target_id,
+                target: target_id,
+                amount,
+            },
+        )?;
+    }
+
+    if let Some(amount) = mutation.lose_mana {
+        engine.populate_rule_effects(
+            effects,
+            Trigger::CreatureManaLost {
+                source: target_id,
+                target: target_id,
+                amount,
+            },
+        )?;
+    }
+
+    Ok(())
 }

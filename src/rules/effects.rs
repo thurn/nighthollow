@@ -12,17 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use eyre::{eyre, Result};
+use crate::prelude::*;
 
 use super::{
-    engine::RuleIdentifier,
+    creature_skills::{self, CreatureSkill},
+    engine::{RuleIdentifier, TriggerContext},
     events::{Event, Events},
 };
 use crate::{
     api,
     model::{
         cards::HasCardId,
-        games::{Game, PlayerAttribute},
+        games::Game,
+        players::PlayerAttribute,
         primitives::{CreatureId, PlayerName},
         stats::{Operation, StatName},
     },
@@ -43,7 +45,7 @@ pub struct EffectData {
 
 impl EffectData {
     pub fn identifier(&self) -> RuleIdentifier {
-        self.rule_identifier.clone()
+        self.rule_identifier
     }
 }
 
@@ -53,10 +55,10 @@ pub struct Effects {
 }
 
 impl Effects {
-    pub fn push_effect(&mut self, identifier: &RuleIdentifier, effect: Effect) {
+    pub fn push_effect(&mut self, context: &TriggerContext, effect: Effect) {
         self.data.push(EffectData {
             effect,
-            rule_identifier: identifier.clone(),
+            rule_identifier: *context.identifier,
         });
     }
 
@@ -79,6 +81,8 @@ impl Default for Effects {
 pub enum Effect {
     DrawCard(PlayerName),
     SetPlayerAttribute(PlayerName, PlayerAttribute),
+    SetSkillPriority(CreatureId, RuleIdentifier, u32),
+    UseCreatureSkill(CreatureSkill),
 }
 
 pub fn apply_effect(game: &mut Game, events: &mut Events, effect_data: &EffectData) -> Result<()> {
@@ -92,6 +96,12 @@ pub fn apply_effect(game: &mut Game, events: &mut Events, effect_data: &EffectDa
         }
         Effect::SetPlayerAttribute(player_name, player_attribute) => {
             set_player_attribute(game, events, identifier, *player_name, player_attribute)
+        }
+        Effect::SetSkillPriority(creature_id, rule_identifier, priority) => game
+            .creature_mut(*creature_id)?
+            .set_skill_priority(*rule_identifier, *priority),
+        Effect::UseCreatureSkill(skill) => {
+            creature_skills::apply_creature_skill(game, events, identifier, skill)?;
         }
     }
     Ok(())

@@ -15,10 +15,22 @@
 use eyre::eyre;
 use eyre::Result;
 
+use crate::prelude::*;
+
 use crate::{
-    gameplay::player_rules::CorePlayerRules,
-    model::{assets::*, cards, cards::*, creatures::*, games::*, primitives::*, stats::*},
+    gameplay::{basic_attacks::BasicMeleeAttack, core_player_rules::CorePlayerRules},
+    model::{
+        assets::*,
+        cards,
+        cards::*,
+        creatures::*,
+        games::*,
+        players::{Player, PlayerState},
+        primitives::*,
+        stats::*,
+    },
 };
+use std::collections::BTreeMap;
 
 pub fn load_scenario(name: &str) -> Result<Game> {
     cards::debug_reset_id_generation();
@@ -74,7 +86,7 @@ fn berserker(owner: PlayerName) -> CreatureData {
             base_damage: vec![DamageStat::new(25, DamageType::Physical)],
             ..CreatureStats::default()
         },
-        rules: vec![],
+        rules: vec![BasicMeleeAttack::new(SkillAnimation::Skill2)],
     }
 }
 
@@ -98,7 +110,7 @@ fn wizard(owner: PlayerName) -> CreatureData {
             base_damage: vec![DamageStat::new(10, DamageType::Physical)],
             ..CreatureStats::default()
         },
-        rules: vec![],
+        rules: vec![BasicMeleeAttack::new(SkillAnimation::Skill3)],
     }
 }
 

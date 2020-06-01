@@ -14,8 +14,9 @@
 
 use std::{fmt::Debug, iter};
 
+use crate::prelude::*;
+
 use dyn_clone::DynClone;
-use eyre::Result;
 
 use super::effects2::{self, CreatureMutationEvent, Effects, SetModifier};
 use crate::{

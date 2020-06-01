@@ -16,7 +16,7 @@ use eyre::Result;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    model::games::{Player, PlayerAttribute},
+    model::players::PlayerAttribute,
     rules::{
         effects::{Effect, Effects},
         engine::{Rule, Trigger, TriggerCondition, TriggerContext, TriggerName},
@@ -35,20 +35,14 @@ impl CorePlayerRules {
 #[typetag::serde]
 impl Rule for CorePlayerRules {
     fn triggers(&self) -> Vec<TriggerCondition> {
-        vec![
-            TriggerCondition::Any(TriggerName::GameStart),
-            TriggerCondition::Any(TriggerName::TurnStart),
-        ]
+        vec![TriggerName::GameStart.any(), TriggerName::TurnStart.any()]
     }
 
-    fn on_trigger(&self, context: TriggerContext, effects: &mut Effects) -> Result<()> {
+    fn on_trigger(&self, context: &TriggerContext, effects: &mut Effects) -> Result<()> {
         match context.trigger {
             Trigger::GameStart => {
                 for i in 0..6 {
-                    effects.push_effect(
-                        context.identifier,
-                        Effect::DrawCard(context.this.player()?.name),
-                    );
+                    effects.push_effect(context, Effect::DrawCard(context.this.player()?.name));
                 }
             }
             Trigger::TurnStart => on_advance_turn(context, effects)?,
@@ -59,12 +53,12 @@ impl Rule for CorePlayerRules {
     }
 }
 
-fn on_advance_turn(context: TriggerContext, effects: &mut Effects) -> Result<()> {
+fn on_advance_turn(context: &TriggerContext, effects: &mut Effects) -> Result<()> {
     let player = context.this.player()?;
     let name = player.name;
 
     effects.push_effect(
-        context.identifier,
+        context,
         Effect::SetPlayerAttribute(
             name,
             PlayerAttribute::CurrentPower(player.state.maximum_power),
@@ -72,7 +66,7 @@ fn on_advance_turn(context: TriggerContext, effects: &mut Effects) -> Result<()>
     );
 
     effects.push_effect(
-        context.identifier,
+        context,
         Effect::SetPlayerAttribute(
             name,
             PlayerAttribute::CurrentInfluence(player.state.maximum_influence.clone()),
@@ -80,14 +74,14 @@ fn on_advance_turn(context: TriggerContext, effects: &mut Effects) -> Result<()>
     );
 
     effects.push_effect(
-        context.identifier,
+        context,
         Effect::SetPlayerAttribute(
             name,
             PlayerAttribute::CurrentScrollPlays(player.state.maximum_scroll_plays),
         ),
     );
 
-    effects.push_effect(context.identifier, Effect::DrawCard(name));
+    effects.push_effect(context, Effect::DrawCard(name));
 
     Ok(())
 }

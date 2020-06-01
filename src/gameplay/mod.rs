@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+pub mod basic_attacks;
 pub mod combat;
+pub mod core_player_rules;
 pub mod debug;
 pub mod interface;
 pub mod play_card;
-pub mod player_rules;

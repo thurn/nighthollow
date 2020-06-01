@@ -108,55 +108,54 @@ namespace Magewatch.API {
             "ZmZlY3QYAiABKAsyDi5hcGkuTU9uSW1wYWN0InEKCU1PbkltcGFjdBImCgZ1",
             "cGRhdGUYASABKAsyFC5hcGkuTUNyZWF0dXJlVXBkYXRlSAASLwoPZmlyZV9w",
             "cm9qZWN0aWxlGAIgASgLMhQuYXBpLk1GaXJlUHJvamVjdGlsZUgAQgsKCW9u",
-            "X2ltcGFjdCKtAQoPTUZpcmVQcm9qZWN0aWxlEiQKC2NyZWF0dXJlX2lkGAEg",
-            "ASgLMg8uYXBpLkNyZWF0dXJlSWQSHgoKcHJvamVjdGlsZRgCIAEoCzIKLmFw",
-            "aS5Bc3NldBIeCgZvbl9oaXQYAyADKAsyDi5hcGkuTU9uSW1wYWN0EioKD3Rh",
-            "cmdldF9jcmVhdHVyZRgEIAEoCzIPLmFwaS5DcmVhdHVyZUlkSABCCAoGdGFy",
-            "Z2V0IrwBCg9NQ3JlYXR1cmVVcGRhdGUSJAoLY3JlYXR1cmVfaWQYASABKAsy",
-            "Dy5hcGkuQ3JlYXR1cmVJZBIdChVzZXRfaGVhbHRoX3BlcmNlbnRhZ2UYAiAB",
-            "KAISHAoUcGxheV9kZWF0aF9hbmltYXRpb24YAyABKAgSGwoTc2V0X21hbmFf",
-            "cGVyY2VudGFnZRgEIAEoAhIpChVwbGF5X3BhcnRpY2xlX2VmZmVjdHMYBSAD",
-            "KAsyCi5hcGkuQXNzZXQiPgoWTVVwZGF0ZUNyZWF0dXJlQ29tbWFuZBIkCgZ1",
-            "cGRhdGUYASABKAsyFC5hcGkuTUNyZWF0dXJlVXBkYXRlIr0BChhNVXNlQ3Jl",
-            "YXR1cmVTa2lsbENvbW1hbmQSKAoPc291cmNlX2NyZWF0dXJlGAEgASgLMg8u",
-            "YXBpLkNyZWF0dXJlSWQSJwoJYW5pbWF0aW9uGAIgASgLMhQuYXBpLk1Ta2ls",
-            "bEFuaW1hdGlvbhInCglvbl9pbXBhY3QYAyADKAsyFC5hcGkuTU9uSW1wYWN0",
-            "TnVtYmVyEiUKDG1lbGVlX3RhcmdldBgEIAEoCzIPLmFwaS5DcmVhdHVyZUlk",
-            "ImgKE01EZXN0cm95Q2FyZENvbW1hbmQSHwoGcGxheWVyGAEgASgOMg8uYXBp",
-            "LlBsYXllck5hbWUSHAoHY2FyZF9pZBgCIAEoCzILLmFwaS5DYXJkSWQSEgoK",
-            "bXVzdF9leGlzdBgDIAEoCCI4ChRNSW5pdGlhdGVHYW1lQ29tbWFuZBIgCgtu",
-            "ZXdfZ2FtZV9pZBgBIAEoCzILLmFwaS5HYW1lSWQi3gUKB0NvbW1hbmQSIAoE",
-            "d2FpdBgBIAEoCzIQLmFwaS5XYWl0Q29tbWFuZEgAEjgKEHVwZGF0ZV9pbnRl",
-            "cmZhY2UYAiABKAsyHC5hcGkuTVVwZGF0ZUludGVyZmFjZUNvbW1hbmRIABI8",
-            "ChNkcmF3X29yX3VwZGF0ZV9jYXJkGAMgASgLMh0uYXBpLk1EcmF3T3JVcGRh",
-            "dGVDYXJkQ29tbWFuZEgAEi0KC3JldmVhbF9jYXJkGAQgASgLMhYuYXBpLlJl",
-            "dmVhbENhcmRDb21tYW5kSAASMQoNdXBkYXRlX3BsYXllchgFIAEoCzIYLmFw",
-            "aS5VcGRhdGVQbGF5ZXJDb21tYW5kSAASRwoZY3JlYXRlX29yX3VwZGF0ZV9j",
-            "cmVhdHVyZRgGIAEoCzIiLmFwaS5DcmVhdGVPclVwZGF0ZUNyZWF0dXJlQ29t",
-            "bWFuZEgAEjUKD3JlbW92ZV9jcmVhdHVyZRgHIAEoCzIaLmFwaS5SZW1vdmVD",
-            "cmVhdHVyZUNvbW1hbmRIABI2Cg91cGRhdGVfY3JlYXR1cmUYCiABKAsyGy5h",
-            "cGkuTVVwZGF0ZUNyZWF0dXJlQ29tbWFuZEgAEjsKEnVzZV9jcmVhdHVyZV9z",
-            "a2lsbBgLIAEoCzIdLmFwaS5NVXNlQ3JlYXR1cmVTa2lsbENvbW1hbmRIABIx",
-            "Cg1kaXNwbGF5X2Vycm9yGAwgASgLMhguYXBpLkRpc3BsYXlFcnJvckNvbW1h",
-            "bmRIABIwCgxkZXN0cm95X2NhcmQYDSABKAsyGC5hcGkuTURlc3Ryb3lDYXJk",
-            "Q29tbWFuZEgAEjIKDWluaXRpYXRlX2dhbWUYDiABKAsyGS5hcGkuTUluaXRp",
-            "YXRlR2FtZUNvbW1hbmRIABI+ChR1cGRhdGVfY2FuX3BsYXlfY2FyZBgPIAEo",
-            "CzIeLmFwaS5NVXBkYXRlQ2FuUGxheUNhcmRDb21tYW5kSABCCQoHY29tbWFu",
-            "ZCIuCgxDb21tYW5kR3JvdXASHgoIY29tbWFuZHMYASADKAsyDC5hcGkuQ29t",
-            "bWFuZCI4CgtDb21tYW5kTGlzdBIpCg5jb21tYW5kX2dyb3VwcxgBIAMoCzIR",
-            "LmFwaS5Db21tYW5kR3JvdXAqOQoKUGxheWVyTmFtZRIWChJQTEFZRVJfVU5T",
-            "UEVDSUZJRUQQABIICgRVU0VSEAESCQoFRU5FTVkQAipdCglSYW5rVmFsdWUS",
-            "FAoQUkFOS19VTlNQRUNJRklFRBAAEgoKBlJBTktfMRACEgoKBlJBTktfMhAD",
-            "EgoKBlJBTktfMxAEEgoKBlJBTktfNBAFEgoKBlJBTktfNRAGKl0KCUZpbGVW",
-            "YWx1ZRIUChBGSUxFX1VOU1BFQ0lGSUVEEAASCgoGRklMRV8xEAISCgoGRklM",
-            "RV8yEAMSCgoGRklMRV8zEAQSCgoGRklMRV80EAUSCgoGRklMRV81EAYqaQoN",
-            "SW5mbHVlbmNlVHlwZRIZChVJTkZMVUVOQ0VfVU5TUEVDSUZJRUQQABIJCgVM",
-            "SUdIVBABEgcKA1NLWRACEgkKBUZMQU1FEAMSBwoDSUNFEAQSCQoFRUFSVEgQ",
-            "BRIKCgZTSEFET1cQBio5CglBc3NldFR5cGUSFAoQVFlQRV9VTlNQRUNJRklF",
-            "RBAAEgoKBlBSRUZBQhABEgoKBlNQUklURRACKm8KFU1Ta2lsbEFuaW1hdGlv",
-            "bk51bWJlchIVChFTS0lMTF9VTlNQRUNJRklFRBAAEgsKB1NLSUxMXzEQARIL",
-            "CgdTS0lMTF8yEAISCwoHU0tJTExfMxADEgsKB1NLSUxMXzQQBBILCgdTS0lM",
-            "TF81EAVCEKoCDU1hZ2V3YXRjaC5BUEliBnByb3RvMw=="));
+            "X2ltcGFjdCKHAQoPTUZpcmVQcm9qZWN0aWxlEh4KCnByb2plY3RpbGUYASAB",
+            "KAsyCi5hcGkuQXNzZXQSHgoGb25faGl0GAIgAygLMg4uYXBpLk1PbkltcGFj",
+            "dBIqCg90YXJnZXRfY3JlYXR1cmUYAyABKAsyDy5hcGkuQ3JlYXR1cmVJZEgA",
+            "QggKBnRhcmdldCK8AQoPTUNyZWF0dXJlVXBkYXRlEiQKC2NyZWF0dXJlX2lk",
+            "GAEgASgLMg8uYXBpLkNyZWF0dXJlSWQSHQoVc2V0X2hlYWx0aF9wZXJjZW50",
+            "YWdlGAIgASgCEhwKFHBsYXlfZGVhdGhfYW5pbWF0aW9uGAMgASgIEhsKE3Nl",
+            "dF9tYW5hX3BlcmNlbnRhZ2UYBCABKAISKQoVcGxheV9wYXJ0aWNsZV9lZmZl",
+            "Y3RzGAUgAygLMgouYXBpLkFzc2V0Ij4KFk1VcGRhdGVDcmVhdHVyZUNvbW1h",
+            "bmQSJAoGdXBkYXRlGAEgASgLMhQuYXBpLk1DcmVhdHVyZVVwZGF0ZSK9AQoY",
+            "TVVzZUNyZWF0dXJlU2tpbGxDb21tYW5kEigKD3NvdXJjZV9jcmVhdHVyZRgB",
+            "IAEoCzIPLmFwaS5DcmVhdHVyZUlkEicKCWFuaW1hdGlvbhgCIAEoCzIULmFw",
+            "aS5NU2tpbGxBbmltYXRpb24SJwoJb25faW1wYWN0GAMgAygLMhQuYXBpLk1P",
+            "bkltcGFjdE51bWJlchIlCgxtZWxlZV90YXJnZXQYBCABKAsyDy5hcGkuQ3Jl",
+            "YXR1cmVJZCJoChNNRGVzdHJveUNhcmRDb21tYW5kEh8KBnBsYXllchgBIAEo",
+            "DjIPLmFwaS5QbGF5ZXJOYW1lEhwKB2NhcmRfaWQYAiABKAsyCy5hcGkuQ2Fy",
+            "ZElkEhIKCm11c3RfZXhpc3QYAyABKAgiOAoUTUluaXRpYXRlR2FtZUNvbW1h",
+            "bmQSIAoLbmV3X2dhbWVfaWQYASABKAsyCy5hcGkuR2FtZUlkIt4FCgdDb21t",
+            "YW5kEiAKBHdhaXQYASABKAsyEC5hcGkuV2FpdENvbW1hbmRIABI4ChB1cGRh",
+            "dGVfaW50ZXJmYWNlGAIgASgLMhwuYXBpLk1VcGRhdGVJbnRlcmZhY2VDb21t",
+            "YW5kSAASPAoTZHJhd19vcl91cGRhdGVfY2FyZBgDIAEoCzIdLmFwaS5NRHJh",
+            "d09yVXBkYXRlQ2FyZENvbW1hbmRIABItCgtyZXZlYWxfY2FyZBgEIAEoCzIW",
+            "LmFwaS5SZXZlYWxDYXJkQ29tbWFuZEgAEjEKDXVwZGF0ZV9wbGF5ZXIYBSAB",
+            "KAsyGC5hcGkuVXBkYXRlUGxheWVyQ29tbWFuZEgAEkcKGWNyZWF0ZV9vcl91",
+            "cGRhdGVfY3JlYXR1cmUYBiABKAsyIi5hcGkuQ3JlYXRlT3JVcGRhdGVDcmVh",
+            "dHVyZUNvbW1hbmRIABI1Cg9yZW1vdmVfY3JlYXR1cmUYByABKAsyGi5hcGku",
+            "UmVtb3ZlQ3JlYXR1cmVDb21tYW5kSAASNgoPdXBkYXRlX2NyZWF0dXJlGAog",
+            "ASgLMhsuYXBpLk1VcGRhdGVDcmVhdHVyZUNvbW1hbmRIABI7ChJ1c2VfY3Jl",
+            "YXR1cmVfc2tpbGwYCyABKAsyHS5hcGkuTVVzZUNyZWF0dXJlU2tpbGxDb21t",
+            "YW5kSAASMQoNZGlzcGxheV9lcnJvchgMIAEoCzIYLmFwaS5EaXNwbGF5RXJy",
+            "b3JDb21tYW5kSAASMAoMZGVzdHJveV9jYXJkGA0gASgLMhguYXBpLk1EZXN0",
+            "cm95Q2FyZENvbW1hbmRIABIyCg1pbml0aWF0ZV9nYW1lGA4gASgLMhkuYXBp",
+            "Lk1Jbml0aWF0ZUdhbWVDb21tYW5kSAASPgoUdXBkYXRlX2Nhbl9wbGF5X2Nh",
+            "cmQYDyABKAsyHi5hcGkuTVVwZGF0ZUNhblBsYXlDYXJkQ29tbWFuZEgAQgkK",
+            "B2NvbW1hbmQiLgoMQ29tbWFuZEdyb3VwEh4KCGNvbW1hbmRzGAEgAygLMgwu",
+            "YXBpLkNvbW1hbmQiOAoLQ29tbWFuZExpc3QSKQoOY29tbWFuZF9ncm91cHMY",
+            "ASADKAsyES5hcGkuQ29tbWFuZEdyb3VwKjkKClBsYXllck5hbWUSFgoSUExB",
+            "WUVSX1VOU1BFQ0lGSUVEEAASCAoEVVNFUhABEgkKBUVORU1ZEAIqXQoJUmFu",
+            "a1ZhbHVlEhQKEFJBTktfVU5TUEVDSUZJRUQQABIKCgZSQU5LXzEQAhIKCgZS",
+            "QU5LXzIQAxIKCgZSQU5LXzMQBBIKCgZSQU5LXzQQBRIKCgZSQU5LXzUQBipd",
+            "CglGaWxlVmFsdWUSFAoQRklMRV9VTlNQRUNJRklFRBAAEgoKBkZJTEVfMRAC",
+            "EgoKBkZJTEVfMhADEgoKBkZJTEVfMxAEEgoKBkZJTEVfNBAFEgoKBkZJTEVf",
+            "NRAGKmkKDUluZmx1ZW5jZVR5cGUSGQoVSU5GTFVFTkNFX1VOU1BFQ0lGSUVE",
+            "EAASCQoFTElHSFQQARIHCgNTS1kQAhIJCgVGTEFNRRADEgcKA0lDRRAEEgkK",
+            "BUVBUlRIEAUSCgoGU0hBRE9XEAYqOQoJQXNzZXRUeXBlEhQKEFRZUEVfVU5T",
+            "UEVDSUZJRUQQABIKCgZQUkVGQUIQARIKCgZTUFJJVEUQAipvChVNU2tpbGxB",
+            "bmltYXRpb25OdW1iZXISFQoRU0tJTExfVU5TUEVDSUZJRUQQABILCgdTS0lM",
+            "TF8xEAESCwoHU0tJTExfMhACEgsKB1NLSUxMXzMQAxILCgdTS0lMTF80EAQS",
+            "CwoHU0tJTExfNRAFQhCqAg1NYWdld2F0Y2guQVBJYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.AssetType), typeof(global::Magewatch.API.MSkillAnimationNumber), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -197,7 +196,7 @@ namespace Magewatch.API {
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MSkillAnimation), global::Magewatch.API.MSkillAnimation.Parser, new[]{ "Skill", "ImpactCount" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MOnImpactNumber), global::Magewatch.API.MOnImpactNumber.Parser, new[]{ "ImpactNumber", "Effect" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MOnImpact), global::Magewatch.API.MOnImpact.Parser, new[]{ "Update", "FireProjectile" }, new[]{ "OnImpact" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MFireProjectile), global::Magewatch.API.MFireProjectile.Parser, new[]{ "CreatureId", "Projectile", "OnHit", "TargetCreature" }, new[]{ "Target" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MFireProjectile), global::Magewatch.API.MFireProjectile.Parser, new[]{ "Projectile", "OnHit", "TargetCreature" }, new[]{ "Target" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MCreatureUpdate), global::Magewatch.API.MCreatureUpdate.Parser, new[]{ "CreatureId", "SetHealthPercentage", "PlayDeathAnimation", "SetManaPercentage", "PlayParticleEffects" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUpdateCreatureCommand), global::Magewatch.API.MUpdateCreatureCommand.Parser, new[]{ "Update" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUseCreatureSkillCommand), global::Magewatch.API.MUseCreatureSkillCommand.Parser, new[]{ "SourceCreature", "Animation", "OnImpact", "MeleeTarget" }, null, null, null, null),
@@ -7026,7 +7025,6 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MFireProjectile(MFireProjectile other) : this() {
-      creatureId_ = other.creatureId_ != null ? other.creatureId_.Clone() : null;
       projectile_ = other.projectile_ != null ? other.projectile_.Clone() : null;
       onHit_ = other.onHit_.Clone();
       switch (other.TargetCase) {
@@ -7043,22 +7041,8 @@ namespace Magewatch.API {
       return new MFireProjectile(this);
     }
 
-    /// <summary>Field number for the "creature_id" field.</summary>
-    public const int CreatureIdFieldNumber = 1;
-    private global::Magewatch.API.CreatureId creatureId_;
-    /// <summary>
-    /// Who is firing the projectile?
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.CreatureId CreatureId {
-      get { return creatureId_; }
-      set {
-        creatureId_ = value;
-      }
-    }
-
     /// <summary>Field number for the "projectile" field.</summary>
-    public const int ProjectileFieldNumber = 2;
+    public const int ProjectileFieldNumber = 1;
     private global::Magewatch.API.Asset projectile_;
     /// <summary>
     /// Projectile Prefab to create
@@ -7072,9 +7056,9 @@ namespace Magewatch.API {
     }
 
     /// <summary>Field number for the "on_hit" field.</summary>
-    public const int OnHitFieldNumber = 3;
+    public const int OnHitFieldNumber = 2;
     private static readonly pb::FieldCodec<global::Magewatch.API.MOnImpact> _repeated_onHit_codec
-        = pb::FieldCodec.ForMessage(26, global::Magewatch.API.MOnImpact.Parser);
+        = pb::FieldCodec.ForMessage(18, global::Magewatch.API.MOnImpact.Parser);
     private readonly pbc::RepeatedField<global::Magewatch.API.MOnImpact> onHit_ = new pbc::RepeatedField<global::Magewatch.API.MOnImpact>();
     /// <summary>
     /// What to do when the projectile hits
@@ -7085,7 +7069,7 @@ namespace Magewatch.API {
     }
 
     /// <summary>Field number for the "target_creature" field.</summary>
-    public const int TargetCreatureFieldNumber = 4;
+    public const int TargetCreatureFieldNumber = 3;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Magewatch.API.CreatureId TargetCreature {
       get { return targetCase_ == TargetOneofCase.TargetCreature ? (global::Magewatch.API.CreatureId) target_ : null; }
@@ -7099,7 +7083,7 @@ namespace Magewatch.API {
     /// <summary>Enum of possible cases for the "target" oneof.</summary>
     public enum TargetOneofCase {
       None = 0,
-      TargetCreature = 4,
+      TargetCreature = 3,
     }
     private TargetOneofCase targetCase_ = TargetOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7126,7 +7110,6 @@ namespace Magewatch.API {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (!object.Equals(CreatureId, other.CreatureId)) return false;
       if (!object.Equals(Projectile, other.Projectile)) return false;
       if(!onHit_.Equals(other.onHit_)) return false;
       if (!object.Equals(TargetCreature, other.TargetCreature)) return false;
@@ -7137,7 +7120,6 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (creatureId_ != null) hash ^= CreatureId.GetHashCode();
       if (projectile_ != null) hash ^= Projectile.GetHashCode();
       hash ^= onHit_.GetHashCode();
       if (targetCase_ == TargetOneofCase.TargetCreature) hash ^= TargetCreature.GetHashCode();
@@ -7155,17 +7137,13 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (creatureId_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(CreatureId);
-      }
       if (projectile_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(10);
         output.WriteMessage(Projectile);
       }
       onHit_.WriteTo(output, _repeated_onHit_codec);
       if (targetCase_ == TargetOneofCase.TargetCreature) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(26);
         output.WriteMessage(TargetCreature);
       }
       if (_unknownFields != null) {
@@ -7176,9 +7154,6 @@ namespace Magewatch.API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (creatureId_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatureId);
-      }
       if (projectile_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Projectile);
       }
@@ -7196,12 +7171,6 @@ namespace Magewatch.API {
     public void MergeFrom(MFireProjectile other) {
       if (other == null) {
         return;
-      }
-      if (other.creatureId_ != null) {
-        if (creatureId_ == null) {
-          CreatureId = new global::Magewatch.API.CreatureId();
-        }
-        CreatureId.MergeFrom(other.CreatureId);
       }
       if (other.projectile_ != null) {
         if (projectile_ == null) {
@@ -7231,24 +7200,17 @@ namespace Magewatch.API {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            if (creatureId_ == null) {
-              CreatureId = new global::Magewatch.API.CreatureId();
-            }
-            input.ReadMessage(CreatureId);
-            break;
-          }
-          case 18: {
             if (projectile_ == null) {
               Projectile = new global::Magewatch.API.Asset();
             }
             input.ReadMessage(Projectile);
             break;
           }
-          case 26: {
+          case 18: {
             onHit_.AddEntriesFrom(input, _repeated_onHit_codec);
             break;
           }
-          case 34: {
+          case 26: {
             global::Magewatch.API.CreatureId subBuilder = new global::Magewatch.API.CreatureId();
             if (targetCase_ == TargetOneofCase.TargetCreature) {
               subBuilder.MergeFrom(TargetCreature);

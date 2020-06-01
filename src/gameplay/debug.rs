@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use eyre::Result;
+use crate::prelude::*;
 
 use crate::{
     api::{self, MDebugRequest},
     commands,
-    model::games::Player,
+    model::players::Player,
     requests,
     rules::engine::RulesEngine,
 };

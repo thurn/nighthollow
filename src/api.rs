@@ -357,22 +357,19 @@ pub mod m_on_impact {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MFireProjectile {
-    /// Who is firing the projectile?
-    #[prost(message, optional, tag = "1")]
-    pub creature_id: ::std::option::Option<CreatureId>,
     /// Projectile Prefab to create
-    #[prost(message, optional, tag = "2")]
+    #[prost(message, optional, tag = "1")]
     pub projectile: ::std::option::Option<Asset>,
     /// What to do when the projectile hits
-    #[prost(message, repeated, tag = "3")]
+    #[prost(message, repeated, tag = "2")]
     pub on_hit: ::std::vec::Vec<MOnImpact>,
-    #[prost(oneof = "m_fire_projectile::Target", tags = "4")]
+    #[prost(oneof = "m_fire_projectile::Target", tags = "3")]
     pub target: ::std::option::Option<m_fire_projectile::Target>,
 }
 pub mod m_fire_projectile {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Target {
-        #[prost(message, tag = "4")]
+        #[prost(message, tag = "3")]
         TargetCreature(super::CreatureId),
     }
 }

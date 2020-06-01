@@ -12,8 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::{collections::HashMap, sync::Mutex};
+
+use crate::prelude::*;
+
 use crate::{
-    api, commands,
+    api::{self, MDebugRequest},
+    commands,
     gameplay::{debug, interface, play_card},
     model::{
         cards,
@@ -23,10 +28,6 @@ use crate::{
     rules::engine::{RulesEngine, Trigger},
     test_data::scenarios,
 };
-use api::MDebugRequest;
-use eyre::eyre;
-use eyre::Result;
-use std::{collections::HashMap, sync::Mutex};
 
 lazy_static! {
     static ref ENGINES: Mutex<HashMap<String, RulesEngine>> = Mutex::new(HashMap::new());
