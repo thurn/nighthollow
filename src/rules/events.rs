@@ -16,7 +16,7 @@ use crate::prelude::*;
 
 use super::{
     creature_skills::{CreatureMutation, CreatureSkill, MutationResult},
-    effects::Effects,
+    effects::{AttributeMutationResult, Effects},
     engine::{RuleIdentifier, RulesEngine, Trigger},
 };
 use crate::{
@@ -54,9 +54,16 @@ impl Events {
 #[derive(Debug, Clone)]
 pub enum Event {
     CardDrawn(PlayerName, CardId),
-    PlayerAttributeSet(PlayerName, PlayerAttribute),
+    PlayerAttributeModified(PlayerAttributeModified),
     CreatureMutated(CreatureMutated),
     CreatureSkillUsed(CreatureSkill),
+}
+
+#[derive(Debug, Copy, Clone)]
+pub struct PlayerAttributeModified {
+    pub player_name: PlayerName,
+    pub attribute: PlayerAttribute,
+    pub result: AttributeMutationResult,
 }
 
 #[derive(Debug, Clone)]
@@ -75,8 +82,8 @@ pub fn populate_event_rule_effects(
         Event::CardDrawn(player_name, card_id) => {
             engine.populate_rule_effects(effects, Trigger::CardDrawn(*player_name, *card_id))
         }
-        Event::PlayerAttributeSet(player_name, attribute) => {
-            populate_player_attribute_events(engine, effects, *player_name, attribute.clone())
+        Event::PlayerAttributeModified(modified) => {
+            populate_player_attribute_events(engine, effects, modified)
         }
         Event::CreatureMutated(CreatureMutated {
             source_creature,
@@ -92,19 +99,24 @@ pub fn populate_event_rule_effects(
 fn populate_player_attribute_events(
     engine: &RulesEngine,
     effects: &mut Effects,
-    player_name: PlayerName,
-    attribute: PlayerAttribute,
+    modified: &PlayerAttributeModified,
 ) -> Result<()> {
-    match attribute {
-        PlayerAttribute::CurrentLife(life) => {
-            engine.populate_rule_effects(effects, Trigger::PlayerLifeChanged(player_name, life))
-        }
-        PlayerAttribute::CurrentPower(power) => {
-            engine.populate_rule_effects(effects, Trigger::PlayerPowerChanged(player_name, power))
-        }
+    if modified.result == AttributeMutationResult::GameOver {
+        engine.populate_rule_effects(effects, Trigger::PlayerLifeZero(modified.player_name))?;
+    }
+
+    match modified.attribute {
+        PlayerAttribute::CurrentLife(life) => engine.populate_rule_effects(
+            effects,
+            Trigger::PlayerLifeChanged(modified.player_name, life),
+        ),
+        PlayerAttribute::CurrentPower(power) => engine.populate_rule_effects(
+            effects,
+            Trigger::PlayerPowerChanged(modified.player_name, power),
+        ),
         PlayerAttribute::CurrentInfluence(influence) => engine.populate_rule_effects(
             effects,
-            Trigger::PlayerInfluenceChanged(player_name, influence),
+            Trigger::PlayerInfluenceChanged(modified.player_name, influence),
         ),
         _ => Ok(()),
     }
@@ -124,7 +136,7 @@ fn populate_creature_mutation_events(
             Trigger::CreatureStatModifierSet {
                 source: target_id,
                 target: target_id,
-                modifier: modifier.clone(),
+                modifier: *modifier,
             },
         )?;
     }
@@ -146,7 +158,7 @@ fn populate_creature_mutation_events(
             Trigger::CreatureDamaged {
                 attacker: target_id,
                 defender: target_id,
-                damage: damage.clone(),
+                damage: *damage,
             },
         )?;
 
@@ -156,7 +168,7 @@ fn populate_creature_mutation_events(
                 Trigger::CreatureKilled {
                     killed_by: target_id,
                     defender: target_id,
-                    damage: damage.clone(),
+                    damage: *damage,
                 },
             )?;
         }

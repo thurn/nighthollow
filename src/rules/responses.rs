@@ -31,8 +31,8 @@ pub fn generate(game: &Game, events: Events, result: &mut Vec<api::Command>) -> 
                     game.player(*player_name).card(*card_id)?,
                 ));
             }
-            Event::PlayerAttributeSet(player_name, _) => {
-                update_players.insert(player_name);
+            Event::PlayerAttributeModified(modified) => {
+                update_players.insert(modified.player_name);
             }
             Event::CreatureSkillUsed(skill) => {
                 result.push(creature_skills::command_for_skill(game, &skill)?);
@@ -42,7 +42,7 @@ pub fn generate(game: &Game, events: Events, result: &mut Vec<api::Command>) -> 
     }
 
     for player in update_players {
-        result.push(commands::update_player_command(game.player(*player)));
+        result.push(commands::update_player_command(game.player(player)));
     }
 
     Ok(())

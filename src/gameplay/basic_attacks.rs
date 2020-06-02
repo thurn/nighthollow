@@ -16,9 +16,9 @@ use crate::prelude::*;
 
 use crate::{
     model::{
-        creatures::{Creature, Damage, HasCreatureData},
+        creatures::{Creature, HasCreatureData},
         players::Player,
-        primitives::{FileValue, SkillAnimation},
+        primitives::{Damage, FileValue, SkillAnimation},
     },
     rules::{
         creature_skills::{CreatureMutation, CreatureSkill},
@@ -67,9 +67,9 @@ impl Rule for BasicMeleeAttack {
                             *creature_id,
                             self.animation,
                             CreatureMutation {
-                                apply_damage: Some(Damage::from(
-                                    &context.this.creature()?.stats().base_damage,
-                                )),
+                                apply_damage: Some(
+                                    context.this.creature()?.stats().base_damage.damage(),
+                                ),
                                 ..CreatureMutation::new(target.creature_id())
                             },
                         ),

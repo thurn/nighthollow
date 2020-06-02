@@ -28,48 +28,38 @@ use std::{
     collections::{BTreeMap, BTreeSet},
 };
 
-#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
-pub struct DamageAmount {
-    pub value: u32,
-    pub damage_type: DamageType,
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Damage {
-    pub values: Vec<DamageAmount>,
+pub struct DamageStats {
+    pub radiant: Stat,
+    pub electric: Stat,
+    pub fire: Stat,
+    pub cold: Stat,
+    pub physical: Stat,
+    pub necrotic: Stat,
 }
 
-impl Damage {
-    pub fn from(stats: &[DamageStat]) -> Self {
+impl DamageStats {
+    pub fn damage(&self) -> Damage {
         Damage {
-            values: stats
-                .iter()
-                .map(|stat| DamageAmount {
-                    value: stat.value.value(),
-                    damage_type: stat.damage_type,
-                })
-                .collect::<Vec<_>>(),
+            radiant: self.radiant.value(),
+            electric: self.electric.value(),
+            fire: self.fire.value(),
+            cold: self.cold.value(),
+            physical: self.physical.value(),
+            necrotic: self.necrotic.value(),
         }
     }
-
-    pub fn total(&self) -> u32 {
-        self.values
-            .iter()
-            .fold(0, |accum, amount| accum + amount.value)
-    }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DamageStat {
-    pub value: Stat,
-    pub damage_type: DamageType,
-}
-
-impl DamageStat {
-    pub fn new(amount: u32, damage_type: DamageType) -> Self {
-        DamageStat {
-            value: Stat::new(amount),
-            damage_type,
+impl Default for DamageStats {
+    fn default() -> Self {
+        Self {
+            radiant: Stat::new(0),
+            electric: Stat::new(0),
+            fire: Stat::new(0),
+            cold: Stat::new(0),
+            physical: Stat::new(0),
+            necrotic: Stat::new(0),
         }
     }
 }
@@ -86,9 +76,10 @@ pub struct CreatureStats {
     pub crit_multiplier: Stat,
     pub accuracy: Stat,
     pub evasion: Stat,
-    pub base_damage: Vec<DamageStat>,
-    pub damage_resistance: Vec<DamageStat>,
-    pub damage_reduction: Vec<DamageStat>,
+    pub opponent_life_reduction: Stat,
+    pub base_damage: DamageStats,
+    pub damage_resistance: DamageStats,
+    pub damage_reduction: DamageStats,
 
     pub tags: Vec<(TagName, Tag)>,
     pub dynamic_stats: Vec<(StatName, Stat)>,
@@ -121,9 +112,10 @@ impl Default for CreatureStats {
             crit_multiplier: Stat::new(0),
             accuracy: Stat::new(0),
             evasion: Stat::new(0),
-            base_damage: vec![],
-            damage_resistance: vec![],
-            damage_reduction: vec![],
+            opponent_life_reduction: Stat::new(1),
+            base_damage: DamageStats::default(),
+            damage_resistance: DamageStats::default(),
+            damage_reduction: DamageStats::default(),
             tags: vec![],
             dynamic_stats: vec![],
         }

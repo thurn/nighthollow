@@ -26,11 +26,11 @@ use crate::{
     api, commands,
     model::{
         cards::{Card, Scroll, Spell},
-        creatures::{Creature, Damage, HasCreatureData},
+        creatures::{Creature, HasCreatureData},
         games::Game,
         players::{HasOwner, Player},
         primitives::{
-            CardId, CreatureId, HealthValue, Influence, LifeValue, ManaValue, PlayerName,
+            CardId, CreatureId, Damage, HealthValue, Influence, LifeValue, ManaValue, PlayerName,
             PowerValue, RoundNumber, ScrollId, SpellId,
         },
         stats::StatName,
@@ -38,13 +38,13 @@ use crate::{
 };
 
 #[derive(Debug, Copy, Clone, Ord, PartialOrd, Eq, PartialEq)]
-#[non_exhaustive]
 pub enum TriggerName {
     GameStart,
     GameEnd,
     TurnStart,
     TurnEnd,
     PlayerLifeChanged,
+    PlayerLifeZero,
     PlayerPowerChanged,
     PlayerInfluenceChanged,
     CardDrawn,
@@ -81,13 +81,14 @@ impl TriggerName {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub enum Trigger {
     GameStart,
     GameEnd,
     TurnStart,
     TurnEnd,
     PlayerLifeChanged(PlayerName, LifeValue),
+    PlayerLifeZero(PlayerName),
     PlayerPowerChanged(PlayerName, PowerValue),
     PlayerInfluenceChanged(PlayerName, Influence),
     CardDrawn(PlayerName, CardId),
@@ -142,6 +143,7 @@ impl Trigger {
             Trigger::TurnStart => TriggerName::TurnStart,
             Trigger::TurnEnd => TriggerName::TurnEnd,
             Trigger::PlayerLifeChanged(_, _) => TriggerName::PlayerLifeChanged,
+            Trigger::PlayerLifeZero(_) => TriggerName::PlayerLifeZero,
             Trigger::PlayerPowerChanged(_, _) => TriggerName::PlayerPowerChanged,
             Trigger::PlayerInfluenceChanged(_, _) => TriggerName::PlayerInfluenceChanged,
             Trigger::CardDrawn(_, _) => TriggerName::CardDrawn,
@@ -196,6 +198,7 @@ impl Trigger {
             Trigger::TurnStart => EntityIds::default(),
             Trigger::TurnEnd => EntityIds::default(),
             Trigger::PlayerLifeChanged(p, _) => EntityIds::player(*p),
+            Trigger::PlayerLifeZero(p) => EntityIds::player(*p),
             Trigger::PlayerPowerChanged(p, _) => EntityIds::player(*p),
             Trigger::PlayerInfluenceChanged(p, _) => EntityIds::player(*p),
             Trigger::CardDrawn(p, _) => EntityIds::player(*p),
@@ -272,7 +275,7 @@ impl Trigger {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Copy, Clone)]
 struct EntityIds {
     player: Option<PlayerName>,
     source_creature: Option<CreatureId>,
@@ -512,21 +515,13 @@ impl RulesEngine {
         ];
 
         for entity_id in ids.into_iter().filter_map(|x| x) {
-            println!(
-                "Id {:?} for trigger {:?}",
-                entity_id,
-                trigger.trigger_name()
-            );
             if let Some(rules) = self
                 .rule_map
                 .get(&TriggerKey::Entity(trigger.trigger_name(), entity_id))
             {
-                println!("Found rules for {:?}", trigger.trigger_name());
                 for rule_data in rules {
                     rule_data.on_trigger(&self.game, &trigger, effects)?;
                 }
-            } else {
-                println!("No rules for {:?}", trigger.trigger_name());
             }
         }
 
@@ -615,7 +610,6 @@ fn add_rules(
         let conditions = rule.triggers();
         for condition in conditions {
             let key = condition.to_key(entity_id);
-            println!("adding rule for key {:?} - {:?}", key, data);
             if let Some(r) = rule_map.get_mut(&key) {
                 r.push(data.clone());
             } else {

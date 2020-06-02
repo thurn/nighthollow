@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use eyre::Result;
-use serde::{Deserialize, Serialize};
+use crate::prelude::*;
 
 use crate::{
     model::players::PlayerAttribute,
     rules::{
-        effects::{Effect, Effects},
+        effects::{Effect, Effects, Operator},
         engine::{Rule, Trigger, TriggerCondition, TriggerContext, TriggerName},
     },
 };
@@ -59,24 +58,27 @@ fn on_advance_turn(context: &TriggerContext, effects: &mut Effects) -> Result<()
 
     effects.push_effect(
         context,
-        Effect::SetPlayerAttribute(
+        Effect::ModifyPlayerAttribute(
             name,
+            Operator::Set,
             PlayerAttribute::CurrentPower(player.state.maximum_power),
         ),
     );
 
     effects.push_effect(
         context,
-        Effect::SetPlayerAttribute(
+        Effect::ModifyPlayerAttribute(
             name,
-            PlayerAttribute::CurrentInfluence(player.state.maximum_influence.clone()),
+            Operator::Set,
+            PlayerAttribute::CurrentInfluence(player.state.maximum_influence),
         ),
     );
 
     effects.push_effect(
         context,
-        Effect::SetPlayerAttribute(
+        Effect::ModifyPlayerAttribute(
             name,
+            Operator::Set,
             PlayerAttribute::CurrentScrollPlays(player.state.maximum_scroll_plays),
         ),
     );

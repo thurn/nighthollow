@@ -18,7 +18,10 @@ use eyre::Result;
 use crate::prelude::*;
 
 use crate::{
-    gameplay::{basic_attacks::BasicMeleeAttack, core_player_rules::CorePlayerRules},
+    gameplay::{
+        basic_attacks::BasicMeleeAttack, core_creature_rules::CoreCreatureRules,
+        core_player_rules::CorePlayerRules,
+    },
     model::{
         assets::*,
         cards,
@@ -83,10 +86,16 @@ fn berserker(owner: PlayerName) -> CreatureData {
         base_type: CreatureType::Berserker,
         stats: CreatureStats {
             health_total: Stat::new(100),
-            base_damage: vec![DamageStat::new(25, DamageType::Physical)],
+            base_damage: DamageStats {
+                physical: Stat::new(25),
+                ..DamageStats::default()
+            },
             ..CreatureStats::default()
         },
-        rules: vec![BasicMeleeAttack::new(SkillAnimation::Skill2)],
+        rules: vec![
+            CoreCreatureRules::new(),
+            BasicMeleeAttack::new(SkillAnimation::Skill2),
+        ],
     }
 }
 
@@ -107,10 +116,16 @@ fn wizard(owner: PlayerName) -> CreatureData {
         base_type: CreatureType::Wizard,
         stats: CreatureStats {
             health_total: Stat::new(100),
-            base_damage: vec![DamageStat::new(10, DamageType::Physical)],
+            base_damage: DamageStats {
+                physical: Stat::new(10),
+                ..DamageStats::default()
+            },
             ..CreatureStats::default()
         },
-        rules: vec![BasicMeleeAttack::new(SkillAnimation::Skill3)],
+        rules: vec![
+            CoreCreatureRules::new(),
+            BasicMeleeAttack::new(SkillAnimation::Skill3),
+        ],
     }
 }
 

@@ -32,28 +32,20 @@ pub fn run_combat(engine: &mut RulesEngine) -> Result<api::CommandList> {
     let mut round_number = 1;
 
     while has_living_creatures(&engine.game.user) && has_living_creatures(&engine.game.enemy) {
-        println!("Round {}", round_number);
         let mut commands = vec![];
         engine.invoke_trigger(&mut commands, Trigger::RoundStart(round_number))?;
 
         for creature_id in initiative_order(&engine.game) {
-            println!("Action for {}", creature_id);
             if engine.game.creature(creature_id)?.is_alive() {
                 engine.invoke_trigger(&mut commands, Trigger::ActionStart(creature_id))?;
 
                 if let Some(skill_id) = engine.game.creature(creature_id)?.highest_priority_skill()
                 {
-                    println!(
-                        "Invoking skill {:?} for creature {:?}",
-                        skill_id, creature_id
-                    );
                     engine.invoke_rule(
                         skill_id,
                         &mut commands,
                         Trigger::InvokeSkill(creature_id),
                     )?;
-                } else {
-                    println!("No skill found")
                 }
 
                 engine.invoke_trigger(&mut commands, Trigger::ActionEnd(creature_id))?;
@@ -69,6 +61,8 @@ pub fn run_combat(engine: &mut RulesEngine) -> Result<api::CommandList> {
     }
 
     engine.invoke_as_group(&mut result, Trigger::CombatEnd)?;
+
+    run_end_of_combat(&mut engine.game, &mut result);
 
     engine.game.state.phase = GamePhase::Main;
     Ok(commands::groups(result))
@@ -90,4 +84,22 @@ fn initiative_order(game: &Game) -> impl Iterator<Item = CreatureId> {
         .collect::<Vec<_>>();
     pairs.sort();
     pairs.into_iter().map(|pair| pair.1)
+}
+
+fn run_end_of_combat(game: &mut Game, commands: &mut Vec<api::CommandGroup>) {
+    let mut group1 = vec![];
+    let mut group2 = vec![];
+
+    for creature in game.all_creatures_mut() {
+        if creature.is_alive() {
+            group1.push(commands::remove_creature_command(creature.creature_id()));
+        }
+
+        creature.reset();
+        group2.push(commands::create_or_update_creature_command(&creature));
+    }
+
+    commands.push(commands::single(commands::wait_command(1000)));
+    commands.push(commands::group(group1));
+    commands.push(commands::group(group2));
 }

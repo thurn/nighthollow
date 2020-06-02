@@ -20,31 +20,34 @@ use super::{
     events::{CreatureMutated, Event, Events},
 };
 use crate::{
-    api, commands,
+    api::{
+        self, MCreatureUpdate, MFireProjectile, MOnImpact, MOnImpactNumber,
+        MUseCreatureSkillCommand,
+    },
+    commands,
     model::{
         assets::{HasAddress, ParticleSystemName, ProjectileName},
-        creatures::{Creature, Damage, DamageResult, HasCreatureData},
+        creatures::{Creature, DamageResult, HasCreatureData},
         games::Game,
-        primitives::{CreatureId, HealthValue, ManaValue, SkillAnimation},
+        primitives::{CreatureId, Damage, HealthValue, ManaValue, SkillAnimation},
         stats::{Modifier, Operation, StatName},
     },
 };
-use api::{MCreatureUpdate, MFireProjectile, MOnImpact, MOnImpactNumber, MUseCreatureSkillCommand};
 
 #[derive(Debug, Clone)]
 pub struct CreatureSkill {
-    source_creature: CreatureId,
+    pub source_creature: CreatureId,
 
     // A skill animation to play
-    animation: SkillAnimation,
+    pub animation: SkillAnimation,
 
     // Effects to apply when the animation reaches its impact frame
-    on_impact: Vec<OnImpactNumber>,
+    pub on_impact: Vec<OnImpactNumber>,
 
     // Optionally, a target for this skill. The creature will move into
     // melee range with this target before playing the skill animation, but
     // this choice is cosmetic -- it has no gameplay effect.
-    melee_target: Option<CreatureId>,
+    pub melee_target: Option<CreatureId>,
 }
 
 impl CreatureSkill {
@@ -67,8 +70,8 @@ impl CreatureSkill {
 
 #[derive(Debug, Clone)]
 pub struct OnImpactNumber {
-    impact_number: u32,
-    effect: OnImpact,
+    pub impact_number: u32,
+    pub effect: OnImpact,
 }
 
 #[derive(Debug, Clone)]
@@ -79,9 +82,9 @@ pub enum OnImpact {
 
 #[derive(Debug, Clone)]
 pub struct FireProjectile {
-    projectile: ProjectileName,
-    on_hit: Vec<OnImpact>,
-    target: ProjectileTarget,
+    pub projectile: ProjectileName,
+    pub on_hit: Vec<OnImpact>,
+    pub target: ProjectileTarget,
 }
 
 #[derive(Debug, Clone)]

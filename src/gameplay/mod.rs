@@ -14,6 +14,7 @@
 
 pub mod basic_attacks;
 pub mod combat;
+pub mod core_creature_rules;
 pub mod core_player_rules;
 pub mod debug;
 pub mod interface;

@@ -19,7 +19,7 @@ use super::{
     creatures::Creature,
     primitives::{CardId, Influence, LifeValue, ManaValue, PlayerName, PowerValue, School},
 };
-use crate::rules::engine::Rule;
+use crate::rules::{effects::UnderflowBehavior, engine::Rule};
 
 pub trait HasOwner {
     fn owner(&self) -> PlayerName;
@@ -56,7 +56,7 @@ impl Default for PlayerState {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum PlayerAttribute {
     CurrentLife(LifeValue),
     MaximumLife(LifeValue),
@@ -95,6 +95,114 @@ impl Player {
             .ok_or_else(|| eyre!("Card ID not found: {:?}", card_id))?;
 
         Ok(self.hand.remove(position))
+    }
+
+    pub fn set_attribute(&mut self, attribute: PlayerAttribute) -> Result<PlayerAttribute> {
+        self.modify_attribute(
+            attribute,
+            |int_ref, int_val| {
+                *int_ref = int_val;
+                Ok(())
+            },
+            |influence_ref, influence_val| {
+                *influence_ref = influence_val;
+                Ok(())
+            },
+        )
+    }
+
+    pub fn add_attribute(&mut self, attribute: PlayerAttribute) -> Result<PlayerAttribute> {
+        self.modify_attribute(
+            attribute,
+            |int_ref, int_val| {
+                *int_ref += int_val;
+                Ok(())
+            },
+            |influence_ref, influence_val| {
+                influence_ref.add(&influence_val);
+                Ok(())
+            },
+        )
+    }
+
+    pub fn subtract_attribute(
+        &mut self,
+        attribute: PlayerAttribute,
+        underflow_behavior: UnderflowBehavior,
+    ) -> Result<PlayerAttribute> {
+        self.modify_attribute(
+            attribute,
+            |int_ref, int_val| {
+                if int_val > *int_ref {
+                    match underflow_behavior {
+                        UnderflowBehavior::Error => Err(eyre!(
+                            "Cannot subtract, {} is larger than {}",
+                            int_val,
+                            *int_ref
+                        )),
+                        UnderflowBehavior::SetZero => {
+                            *int_ref = 0;
+                            Ok(())
+                        }
+                    }
+                } else {
+                    *int_ref -= int_val;
+                    Ok(())
+                }
+            },
+            |influence_ref, influence_val| {
+                influence_ref.subtract(&influence_val, underflow_behavior)
+            },
+        )
+    }
+    fn modify_attribute(
+        &mut self,
+        attribute: PlayerAttribute,
+        int_function: impl FnOnce(&mut u32, u32) -> Result<()>,
+        influence_function: impl FnOnce(&mut Influence, Influence) -> Result<()>,
+    ) -> Result<PlayerAttribute> {
+        match attribute {
+            PlayerAttribute::CurrentLife(life) => {
+                int_function(&mut self.state.current_life, life)?;
+                Ok(PlayerAttribute::CurrentLife(self.state.current_life))
+            }
+            PlayerAttribute::MaximumLife(life) => {
+                int_function(&mut self.state.maximum_life, life)?;
+                Ok(PlayerAttribute::MaximumLife(self.state.maximum_life))
+            }
+            PlayerAttribute::CurrentPower(power) => {
+                int_function(&mut self.state.current_power, power)?;
+                Ok(PlayerAttribute::CurrentPower(self.state.current_power))
+            }
+            PlayerAttribute::MaximumPower(power) => {
+                int_function(&mut self.state.maximum_power, power)?;
+                Ok(PlayerAttribute::MaximumPower(self.state.maximum_power))
+            }
+            PlayerAttribute::CurrentInfluence(influence) => {
+                influence_function(&mut self.state.current_influence, influence)?;
+                Ok(PlayerAttribute::CurrentInfluence(
+                    self.state.current_influence,
+                ))
+            }
+            PlayerAttribute::MaximumInfluence(influence) => {
+                influence_function(&mut self.state.maximum_influence, influence)?;
+                Ok(PlayerAttribute::MaximumInfluence(
+                    self.state.maximum_influence,
+                ))
+            }
+            PlayerAttribute::CurrentScrollPlays(plays) => {
+                int_function(&mut self.state.current_scroll_plays, plays)?;
+                Ok(PlayerAttribute::CurrentScrollPlays(
+                    self.state.current_scroll_plays,
+                ))
+            }
+            PlayerAttribute::MaximumScrollPlays(plays) => {
+                int_function(&mut self.state.maximum_scroll_plays, plays)?;
+                Ok(PlayerAttribute::MaximumScrollPlays(
+                    self.state.maximum_scroll_plays,
+                ))
+            }
+        }
     }
 }
 

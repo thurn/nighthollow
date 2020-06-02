@@ -17,7 +17,7 @@ use crate::prelude::*;
 use super::{
     creature_skills::{self, CreatureSkill},
     engine::{RuleIdentifier, TriggerContext},
-    events::{Event, Events},
+    events::{Event, Events, PlayerAttributeModified},
 };
 use crate::{
     api,
@@ -29,13 +29,6 @@ use crate::{
         stats::{Operation, StatName},
     },
 };
-
-#[derive(Debug, Clone)]
-pub enum EffectSource {
-    Creature(CreatureId),
-    Player(PlayerName),
-    Game,
-}
 
 #[derive(Debug, Clone)]
 pub struct EffectData {
@@ -77,10 +70,23 @@ impl Default for Effects {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+pub enum UnderflowBehavior {
+    Error,
+    SetZero,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum Operator {
+    Set,
+    Add,
+    Subtract(UnderflowBehavior),
+}
+
 #[derive(Debug, Clone)]
 pub enum Effect {
     DrawCard(PlayerName),
-    SetPlayerAttribute(PlayerName, PlayerAttribute),
+    ModifyPlayerAttribute(PlayerName, Operator, PlayerAttribute),
     SetSkillPriority(CreatureId, RuleIdentifier, u32),
     UseCreatureSkill(CreatureSkill),
 }
@@ -94,8 +100,15 @@ pub fn apply_effect(game: &mut Game, events: &mut Events, effect_data: &EffectDa
             events.push_event(identifier, Event::CardDrawn(player.name, card.card_id()));
             player.hand.push(card);
         }
-        Effect::SetPlayerAttribute(player_name, player_attribute) => {
-            set_player_attribute(game, events, identifier, *player_name, player_attribute)
+        Effect::ModifyPlayerAttribute(player_name, operator, player_attribute) => {
+            modify_player_attribute(
+                game,
+                events,
+                identifier,
+                *player_name,
+                *operator,
+                *player_attribute,
+            )?;
         }
         Effect::SetSkillPriority(creature_id, rule_identifier, priority) => game
             .creature_mut(*creature_id)?
@@ -107,48 +120,46 @@ pub fn apply_effect(game: &mut Game, events: &mut Events, effect_data: &EffectDa
     Ok(())
 }
 
-fn set_player_attribute(
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+pub enum AttributeMutationResult {
+    None,
+    GameOver,
+}
+
+fn modify_player_attribute(
     game: &mut Game,
     events: &mut Events,
     identifier: RuleIdentifier,
     player_name: PlayerName,
-    attribute: &PlayerAttribute,
-) {
-    let mut state = &mut game.player_mut(player_name).state;
-    match attribute {
-        PlayerAttribute::CurrentLife(life) => {
-            state.current_life = *life;
+    operator: Operator,
+    attribute: PlayerAttribute,
+) -> Result<()> {
+    let player = &mut game.player_mut(player_name);
+    let new_value = match operator {
+        Operator::Set => player.set_attribute(attribute),
+        Operator::Add => player.add_attribute(attribute),
+        Operator::Subtract(underflow_bheavior) => {
+            player.subtract_attribute(attribute, underflow_bheavior)
         }
-        PlayerAttribute::MaximumLife(life) => {
-            state.maximum_life = *life;
-        }
-        PlayerAttribute::CurrentPower(power) => {
-            state.current_power = *power;
-        }
-        PlayerAttribute::MaximumPower(power) => {
-            state.maximum_power = *power;
-        }
-        PlayerAttribute::CurrentInfluence(influence) => {
-            state.current_influence = influence.clone();
-        }
-        PlayerAttribute::MaximumInfluence(influence) => {
-            state.maximum_influence = influence.clone();
-        }
-        PlayerAttribute::CurrentScrollPlays(plays) => {
-            state.current_scroll_plays = *plays;
-        }
-        PlayerAttribute::MaximumScrollPlays(plays) => {
-            state.maximum_scroll_plays = *plays;
-        }
-    }
+    };
 
     events.push_event(
         identifier,
-        Event::PlayerAttributeSet(player_name, attribute.clone()),
+        Event::PlayerAttributeModified(PlayerAttributeModified {
+            player_name: player.name,
+            attribute: new_value?,
+            result: if player.state.current_life == 0 {
+                AttributeMutationResult::GameOver
+            } else {
+                AttributeMutationResult::None
+            },
+        }),
     );
+
+    Ok(())
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub struct SetModifier {
     pub stat: StatName,
     pub value: u32,

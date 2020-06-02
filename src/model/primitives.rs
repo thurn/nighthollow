@@ -14,7 +14,7 @@
 
 use std::collections::BTreeMap;
 
-use crate::prelude::*;
+use crate::{prelude::*, rules::effects::UnderflowBehavior};
 
 pub type GameId = i32;
 pub type CardId = i32;
@@ -103,7 +103,7 @@ pub enum FileValue {
     File5,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub struct BoardPosition {
     pub rank: RankValue,
     pub file: FileValue,
@@ -124,7 +124,7 @@ pub enum SkillAnimation {
     Skill5,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Influence {
     light: InfluenceValue,
     sky: InfluenceValue,
@@ -186,15 +186,27 @@ impl Influence {
     /// Decrements each Influence value in this object by the amount present
     /// in 'other', returning an error if this would result in a negative
     /// value.
-    pub fn subtract(&mut self, other: &Influence) -> Result<()> {
+    pub fn subtract(
+        &mut self,
+        other: &Influence,
+        underflow_behavior: UnderflowBehavior,
+    ) -> Result<()> {
         if !other.less_than_or_equal_to(self) {
-            return Err(eyre!("Can't subtract {:?} from {:?}", other, self));
+            match underflow_behavior {
+                UnderflowBehavior::Error => {
+                    Err(eyre!("Can't subtract {:?} from {:?}", other, self))
+                }
+                UnderflowBehavior::SetZero => {
+                    *self = Influence::default();
+                    Ok(())
+                }
+            }
+        } else {
+            for school in SCHOOLS.iter() {
+                *self.mut_ref(*school) = self.value(*school) - other.value(*school);
+            }
+            Ok(())
         }
-
-        for school in SCHOOLS.iter() {
-            *self.mut_ref(*school) = self.value(*school) - other.value(*school);
-        }
-        Ok(())
     }
 }
 
@@ -219,4 +231,74 @@ pub enum DamageType {
     Cold,
     Physical,
     Necrotic,
+}
+
+lazy_static! {
+    pub static ref DAMAGE_TYPES: Vec<DamageType> = vec![
+        DamageType::Radiant,
+        DamageType::Electric,
+        DamageType::Fire,
+        DamageType::Cold,
+        DamageType::Physical,
+        DamageType::Necrotic
+    ];
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
+pub struct Damage {
+    pub radiant: HealthValue,
+    pub electric: HealthValue,
+    pub fire: HealthValue,
+    pub cold: HealthValue,
+    pub physical: HealthValue,
+    pub necrotic: HealthValue,
+}
+
+impl Damage {
+    pub fn single(value: HealthValue, damage_type: DamageType) -> Self {
+        let mut result = Damage::default();
+        *result.mut_ref(damage_type) = value;
+        result
+    }
+
+    pub fn value(&self, damage_type: DamageType) -> HealthValue {
+        use DamageType::*;
+        match damage_type {
+            Radiant => self.radiant,
+            Electric => self.electric,
+            Fire => self.fire,
+            Cold => self.cold,
+            Physical => self.physical,
+            Necrotic => self.necrotic,
+        }
+    }
+
+    fn mut_ref(&mut self, damage_type: DamageType) -> &mut HealthValue {
+        use DamageType::*;
+        match damage_type {
+            Radiant => &mut self.radiant,
+            Electric => &mut self.electric,
+            Fire => &mut self.fire,
+            Cold => &mut self.cold,
+            Physical => &mut self.physical,
+            Necrotic => &mut self.necrotic,
+        }
+    }
+
+    pub fn total(&self) -> HealthValue {
+        DAMAGE_TYPES.iter().map(|t| self.value(*t)).sum()
+    }
+}
+
+impl Default for Damage {
+    fn default() -> Self {
+        Self {
+            radiant: 0,
+            electric: 0,
+            fire: 0,
+            cold: 0,
+            physical: 0,
+            necrotic: 0,
+        }
+    }
 }
