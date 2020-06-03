@@ -201,12 +201,20 @@ impl Trigger {
             Trigger::PlayerLifeZero(p) => EntityIds::player(*p),
             Trigger::PlayerPowerChanged(p, _) => EntityIds::player(*p),
             Trigger::PlayerInfluenceChanged(p, _) => EntityIds::player(*p),
-            Trigger::CardDrawn(p, _) => EntityIds::player(*p),
-            Trigger::CardPlayed(p, _) => EntityIds::player(*p),
+            Trigger::CardDrawn(p, card_id) => EntityIds {
+                player: Some(*p),
+                card: Some(*card_id),
+                ..EntityIds::default()
+            },
+            Trigger::CardPlayed(p, card_id) => EntityIds {
+                player: Some(*p),
+                card: Some(*card_id),
+                ..EntityIds::default()
+            },
             Trigger::CreaturePlayed(p, c) => EntityIds {
                 player: Some(*p),
-                source_creature: None,
                 target_creature: Some(*c),
+                ..EntityIds::default()
             },
             Trigger::ScrollPlayed(p, _) => EntityIds::player(*p),
             Trigger::SpellPlayed(p, _, _) => EntityIds::player(*p),
@@ -222,54 +230,54 @@ impl Trigger {
                 defender,
                 damage,
             } => EntityIds {
-                player: None,
                 source_creature: Some(*attacker),
                 target_creature: Some(*defender),
+                ..EntityIds::default()
             },
             Trigger::CreatureKilled {
                 killed_by,
                 defender,
                 damage,
             } => EntityIds {
-                player: None,
                 source_creature: Some(*killed_by),
                 target_creature: Some(*defender),
+                ..EntityIds::default()
             },
             Trigger::CreatureHealed {
                 source,
                 target,
                 amount,
             } => EntityIds {
-                player: None,
                 source_creature: Some(*source),
                 target_creature: Some(*target),
+                ..EntityIds::default()
             },
             Trigger::CreatureManaGained {
                 source,
                 target,
                 amount,
             } => EntityIds {
-                player: None,
                 source_creature: Some(*source),
                 target_creature: Some(*target),
+                ..EntityIds::default()
             },
             Trigger::CreatureManaLost {
                 source,
                 target,
                 amount,
             } => EntityIds {
-                player: None,
                 source_creature: Some(*source),
                 target_creature: Some(*target),
+                ..EntityIds::default()
             },
             Trigger::CreatureStatModifierSet {
                 source,
                 target,
                 modifier,
             } => EntityIds {
-                player: None,
                 source_creature: Some(*source),
                 target_creature: Some(*target),
+                ..EntityIds::default()
             },
         }
     }
@@ -278,6 +286,7 @@ impl Trigger {
 #[derive(Debug, Copy, Clone)]
 struct EntityIds {
     player: Option<PlayerName>,
+    card: Option<CardId>,
     source_creature: Option<CreatureId>,
     target_creature: Option<CreatureId>,
 }
@@ -286,16 +295,14 @@ impl EntityIds {
     fn player(player_name: PlayerName) -> Self {
         Self {
             player: Some(player_name),
-            source_creature: None,
-            target_creature: None,
+            ..Self::default()
         }
     }
 
     fn creature(creature_id: CreatureId) -> Self {
         Self {
-            player: None,
-            source_creature: None,
             target_creature: Some(creature_id),
+            ..Self::default()
         }
     }
 }
@@ -304,6 +311,7 @@ impl Default for EntityIds {
     fn default() -> Self {
         Self {
             player: None,
+            card: None,
             source_creature: None,
             target_creature: None,
         }
@@ -314,23 +322,28 @@ impl Default for EntityIds {
 pub enum Entity<'a> {
     Creature(&'a Creature),
     Player(&'a Player),
+    Card(&'a Card),
 }
 
 impl<'a> Entity<'a> {
     pub fn creature(&self) -> Result<&Creature> {
         match self {
             Entity::Creature(c) => Ok(c),
-            Entity::Player(p) => Err(eyre!("Expected creature but got player {:?}", p.name)),
+            _ => Err(eyre!("Expected creature but got {:?}", self)),
         }
     }
 
     pub fn player(&self) -> Result<&Player> {
         match self {
             Entity::Player(p) => Ok(p),
-            Entity::Creature(c) => Err(eyre!(
-                "Expected player but got creature {:?}",
-                c.creature_id()
-            )),
+            _ => Err(eyre!("Expected player but got {:?}", self)),
+        }
+    }
+
+    pub fn card(&self) -> Result<&Card> {
+        match self {
+            Entity::Card(c) => Ok(c),
+            _ => Err(eyre!("Expected card but got {:?}", self)),
         }
     }
 }
@@ -339,6 +352,7 @@ impl<'a> Entity<'a> {
 pub enum EntityId {
     PlayerName(PlayerName),
     CreatureId(CreatureId),
+    CardId(CardId),
 }
 
 impl EntityId {
@@ -346,6 +360,7 @@ impl EntityId {
         Ok(match self {
             EntityId::PlayerName(player_name) => Entity::Player(game.player(*player_name)),
             EntityId::CreatureId(creature_id) => Entity::Creature(game.creature(*creature_id)?),
+            EntityId::CardId(card_id) => Entity::Card(game.card(*card_id)?),
         })
     }
 }
@@ -389,11 +404,16 @@ pub struct TriggerContext<'a> {
 }
 
 impl<'a> TriggerContext<'a> {
-    pub fn opponent(&self) -> &Player {
+    pub fn owner(&self) -> &Player {
         self.game.player(match self.this {
-            Entity::Creature(c) => c.owner().opponent(),
-            Entity::Player(p) => p.name.opponent(),
+            Entity::Creature(c) => c.owner(),
+            Entity::Player(p) => p.name,
+            Entity::Card(c) => c.owner(),
         })
+    }
+
+    pub fn opponent(&self) -> &Player {
+        self.game.player(self.owner().name.opponent())
     }
 }
 
@@ -512,6 +532,7 @@ impl RulesEngine {
         let ids = vec![
             entity_ids.player.map(EntityId::PlayerName),
             entity_ids.target_creature.map(EntityId::CreatureId),
+            entity_ids.card.map(EntityId::CardId),
         ];
 
         for entity_id in ids.into_iter().filter_map(|x| x) {
@@ -549,7 +570,7 @@ impl RulesEngine {
 
         while effects.len() > 0 {
             for effect in effects.iter() {
-                effects::apply_effect(&mut self.game, &mut events, effect)?;
+                effects::apply_effect(self, &mut events, effect)?;
             }
 
             effects = Effects::default();

@@ -57,6 +57,7 @@ pub enum Event {
     PlayerAttributeModified(PlayerAttributeModified),
     CreatureMutated(CreatureMutated),
     CreatureSkillUsed(CreatureSkill),
+    CanPlayCardModified(CardId),
 }
 
 #[derive(Debug, Copy, Clone)]
@@ -80,6 +81,7 @@ pub fn populate_event_rule_effects(
 ) -> Result<()> {
     match &event_data.event {
         Event::CardDrawn(player_name, card_id) => {
+            println!("CardDrawn event {:?}", card_id);
             engine.populate_rule_effects(effects, Trigger::CardDrawn(*player_name, *card_id))
         }
         Event::PlayerAttributeModified(modified) => {

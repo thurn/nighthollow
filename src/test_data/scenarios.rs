@@ -19,8 +19,11 @@ use crate::prelude::*;
 
 use crate::{
     gameplay::{
-        basic_attacks::BasicMeleeAttack, core_creature_rules::CoreCreatureRules,
-        core_player_rules::CorePlayerRules,
+        basic_attacks::BasicMeleeAttack,
+        core::{
+            card_rules::CoreCardRules, creature_rules::CoreCreatureRules,
+            player_rules::CorePlayerRules,
+        },
     },
     model::{
         assets::*,
@@ -73,6 +76,7 @@ fn berserker(owner: PlayerName) -> CreatureData {
     CreatureData {
         card_data: CardData {
             id: 0,
+            rules: vec![CoreCardRules::new()],
             owner,
             state: CardState::default(),
             cost: Cost::StandardCost(StandardCost {
@@ -103,6 +107,7 @@ fn wizard(owner: PlayerName) -> CreatureData {
     CreatureData {
         card_data: CardData {
             id: 0,
+            rules: vec![CoreCardRules::new()],
             owner,
             state: CardState::default(),
             cost: Cost::StandardCost(StandardCost {
@@ -133,6 +138,7 @@ fn rage(owner: PlayerName) -> Spell {
     Spell {
         card_data: CardData {
             id: 0,
+            rules: vec![CoreCardRules::new()],
             owner,
             state: CardState::default(),
             cost: Cost::StandardCost(StandardCost {
@@ -151,6 +157,7 @@ fn flame_scroll(owner: PlayerName) -> Scroll {
     Scroll {
         card_data: CardData {
             id: 0,
+            rules: vec![CoreCardRules::new()],
             owner,
             state: CardState::default(),
             cost: Cost::ScrollPlay,

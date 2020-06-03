@@ -17,6 +17,7 @@
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(clippy::single_match)]
+#![allow(clippy::unit_arg)]
 #![feature(clamp)]
 #![feature(move_ref_pattern)]
 #![feature(map_first_last)]

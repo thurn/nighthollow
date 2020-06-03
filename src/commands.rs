@@ -204,7 +204,7 @@ pub fn card_data(card: &Card) -> api::CardData {
         image: Some(sprite(&interface::card_image_address(card))),
         text: Some(text(&card.card_data().text)),
         is_revealed: card.is_user_owned() || card.card_state().revealed_to_opponent,
-        can_be_played: card.is_user_owned() && card.card_state().owner_can_play,
+        can_be_played: card.is_user_owned() && card.card_state().owner_can_play.value(),
         cost: Some(cost(&card.card_data().cost)),
         card_type: Some(card_type(card)),
     }
@@ -429,7 +429,7 @@ pub fn command_name(command: &api::Command) -> &str {
             api::command::Command::DisplayError(_) => "DisplayError",
             api::command::Command::DestroyCard(_) => "DestroyCard",
             api::command::Command::InitiateGame(_) => "InitiateGame",
-            api::command::Command::UpdateCanPlayCard(_) => "UpdatCanPlayCard",
+            api::command::Command::UpdateCanPlayCard(_) => "UpdateCanPlayCard",
         }
     } else {
         "(None)"

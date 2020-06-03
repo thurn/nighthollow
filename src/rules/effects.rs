@@ -16,17 +16,17 @@ use crate::prelude::*;
 
 use super::{
     creature_skills::{self, CreatureSkill},
-    engine::{RuleIdentifier, TriggerContext},
+    engine::{EntityId, RuleIdentifier, RulesEngine, TriggerContext},
     events::{Event, Events, PlayerAttributeModified},
 };
 use crate::{
     api,
     model::{
-        cards::HasCardId,
+        cards::{HasCardData, HasCardId},
         games::Game,
         players::PlayerAttribute,
-        primitives::{CreatureId, PlayerName},
-        stats::{Operation, StatName},
+        primitives::{CardId, CreatureId, PlayerName},
+        stats::{Operation, StatName, TagModifier},
     },
 };
 
@@ -89,20 +89,22 @@ pub enum Effect {
     ModifyPlayerAttribute(PlayerName, Operator, PlayerAttribute),
     SetSkillPriority(CreatureId, RuleIdentifier, u32),
     UseCreatureSkill(CreatureSkill),
+    SetCanPlayCard(CardId, bool),
 }
 
-pub fn apply_effect(game: &mut Game, events: &mut Events, effect_data: &EffectData) -> Result<()> {
+pub fn apply_effect(
+    engine: &mut RulesEngine,
+    events: &mut Events,
+    effect_data: &EffectData,
+) -> Result<()> {
     let identifier = effect_data.identifier();
     match &effect_data.effect {
         Effect::DrawCard(player_name) => {
-            let player = game.player_mut(*player_name);
-            let card = player.deck.draw_card()?;
-            events.push_event(identifier, Event::CardDrawn(player.name, card.card_id()));
-            player.hand.push(card);
+            draw_card(engine, events, identifier, *player_name)?;
         }
         Effect::ModifyPlayerAttribute(player_name, operator, player_attribute) => {
             modify_player_attribute(
-                game,
+                &mut engine.game,
                 events,
                 identifier,
                 *player_name,
@@ -110,13 +112,34 @@ pub fn apply_effect(game: &mut Game, events: &mut Events, effect_data: &EffectDa
                 *player_attribute,
             )?;
         }
-        Effect::SetSkillPriority(creature_id, rule_identifier, priority) => game
+        Effect::SetSkillPriority(creature_id, rule_identifier, priority) => engine
+            .game
             .creature_mut(*creature_id)?
             .set_skill_priority(*rule_identifier, *priority),
         Effect::UseCreatureSkill(skill) => {
-            creature_skills::apply_creature_skill(game, events, identifier, skill)?;
+            creature_skills::apply_creature_skill(&mut engine.game, events, identifier, skill)?;
+        }
+        Effect::SetCanPlayCard(card_id, value) => {
+            set_can_play_card(engine, events, identifier, *card_id, *value)?;
         }
     }
+    Ok(())
+}
+
+fn draw_card(
+    engine: &mut RulesEngine,
+    events: &mut Events,
+    identifier: RuleIdentifier,
+    player_name: PlayerName,
+) -> Result<()> {
+    let player = engine.game.player_mut(player_name);
+    let card = player.deck.draw_card()?;
+    let card_id = card.card_id();
+    let rules = card.card_data().rules.clone();
+    events.push_event(identifier, Event::CardDrawn(player.name, card.card_id()));
+    player.hand.push(card);
+    println!("Adding rules for {:?}", card_id);
+    engine.add_rules(EntityId::CardId(card_id), rules);
     Ok(())
 }
 
@@ -164,4 +187,25 @@ pub struct SetModifier {
     pub stat: StatName,
     pub value: u32,
     pub operation: Operation,
+}
+
+fn set_can_play_card(
+    engine: &mut RulesEngine,
+    events: &mut Events,
+    identifier: RuleIdentifier,
+    card_id: CardId,
+    value: bool,
+) -> Result<()> {
+    engine
+        .game
+        .card_mut(card_id)?
+        .card_data_mut()
+        .state
+        .owner_can_play
+        .set_modifier(TagModifier {
+            value,
+            source: identifier,
+        });
+    events.push_event(identifier, Event::CanPlayCardModified(card_id));
+    Ok(())
 }

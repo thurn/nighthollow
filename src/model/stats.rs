@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::fmt::Debug;
+use std::{collections::BTreeMap, fmt::Debug};
 
 use crate::prelude::*;
 
@@ -45,12 +45,12 @@ impl Stat {
         self.value
     }
 
-    pub fn set_modifier(&mut self, _modifier: Modifier) {
+    pub fn set_modifier(&mut self, modifier: Modifier) {
         todo!()
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub struct Modifier {
     pub value: u32,
     pub operation: Operation,
@@ -71,11 +71,39 @@ pub enum TagName {}
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Tag {
     value: bool,
-    modifiers: Vec<TagModifier>,
+    modifiers: BTreeMap<RuleIdentifier, bool>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+impl Default for Tag {
+    fn default() -> Self {
+        Self {
+            value: false,
+            modifiers: BTreeMap::new(),
+        }
+    }
+}
+
+impl Tag {
+    pub fn value(&self) -> bool {
+        self.value
+    }
+
+    pub fn set_modifier(&mut self, modifier: TagModifier) {
+        self.modifiers.insert(modifier.source, modifier.value);
+        self.update();
+    }
+
+    fn update(&mut self) {
+        self.value = if self.modifiers.is_empty() {
+            false
+        } else {
+            self.modifiers.values().all(|v| *v)
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub struct TagModifier {
-    value: bool,
-    source: RuleIdentifier,
+    pub value: bool,
+    pub source: RuleIdentifier,
 }

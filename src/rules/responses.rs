@@ -20,16 +20,18 @@ use super::{
     creature_skills,
     events::{Event, Events},
 };
-use crate::{api, commands, model::games::Game};
+use crate::{
+    api, commands,
+    model::{cards::HasCardData, games::Game, players::HasOwner},
+};
 
 pub fn generate(game: &Game, events: Events, result: &mut Vec<api::Command>) -> Result<()> {
     let mut update_players = BTreeSet::new();
+    let mut update_cards = BTreeSet::new();
     for event_data in &events.data {
         match &event_data.event {
             Event::CardDrawn(player_name, card_id) => {
-                result.push(commands::draw_or_update_card_command(
-                    game.player(*player_name).card(*card_id)?,
-                ));
+                update_cards.insert(*card_id);
             }
             Event::PlayerAttributeModified(modified) => {
                 update_players.insert(modified.player_name);
@@ -37,12 +39,19 @@ pub fn generate(game: &Game, events: Events, result: &mut Vec<api::Command>) -> 
             Event::CreatureSkillUsed(skill) => {
                 result.push(creature_skills::command_for_skill(game, &skill)?);
             }
+            Event::CanPlayCardModified(card_id) => {
+                update_cards.insert(*card_id);
+            }
             _ => {}
         }
     }
 
     for player in update_players {
         result.push(commands::update_player_command(game.player(player)));
+    }
+
+    for card_id in update_cards {
+        result.push(commands::draw_or_update_card_command(game.card(card_id)?));
     }
 
     Ok(())

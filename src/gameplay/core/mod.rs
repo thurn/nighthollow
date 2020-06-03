@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod basic_attacks;
-pub mod combat;
-pub mod core;
-pub mod debug;
-pub mod interface;
-pub mod play_card;
+pub mod card_rules;
+pub mod creature_rules;
+pub mod player_rules;

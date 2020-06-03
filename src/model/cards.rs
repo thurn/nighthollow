@@ -15,7 +15,7 @@
 use std::cmp;
 use std::sync::atomic::{AtomicI32, Ordering};
 
-use crate::prelude::*;
+use crate::{prelude::*, rules::engine::Rule};
 
 use rand::{
     distributions::{Distribution, WeightedIndex},
@@ -29,6 +29,7 @@ use super::{
     primitives::{
         CardId, FileValue, Influence, PlayerName, PowerValue, RankValue, School, ScrollId, SpellId,
     },
+    stats::Tag,
 };
 
 static NEXT_CARD_ID: AtomicI32 = AtomicI32::new(1);
@@ -47,14 +48,14 @@ pub enum Cost {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CardState {
-    pub owner_can_play: bool,
+    pub owner_can_play: Tag,
     pub revealed_to_opponent: bool,
 }
 
 impl Default for CardState {
     fn default() -> Self {
         CardState {
-            owner_can_play: true, // tmp
+            owner_can_play: Tag::default(),
             revealed_to_opponent: false,
         }
     }
@@ -63,6 +64,7 @@ impl Default for CardState {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CardData {
     pub id: CardId,
+    pub rules: Vec<Box<dyn Rule>>,
     pub owner: PlayerName,
     pub state: CardState,
     pub cost: Cost,

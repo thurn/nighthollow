@@ -48,6 +48,14 @@ pub struct Game {
 }
 
 impl Game {
+    pub fn all_cards(&self) -> impl Iterator<Item = &Card> {
+        self.user.hand.iter().chain(self.enemy.hand.iter())
+    }
+
+    pub fn all_cards_mut(&mut self) -> impl Iterator<Item = &mut Card> {
+        self.user.hand.iter_mut().chain(self.enemy.hand.iter_mut())
+    }
+
     pub fn all_creatures(&self) -> impl Iterator<Item = &Creature> {
         self.user
             .creatures
@@ -76,6 +84,18 @@ impl Game {
         }
     }
 
+    pub fn card(&self, card_id: CardId) -> Result<&Card> {
+        self.all_cards()
+            .find(|c| c.card_id() == card_id)
+            .ok_or_else(|| eyre!("Card Id {} not found", card_id))
+    }
+
+    pub fn card_mut(&mut self, card_id: CardId) -> Result<&mut Card> {
+        self.all_cards_mut()
+            .find(|c| c.card_id() == card_id)
+            .ok_or_else(|| eyre!("Card ID {} not found", card_id))
+    }
+
     pub fn creature(&self, creature_id: CreatureId) -> Result<&Creature> {
         self.all_creatures()
             .find(|c| c.creature_id() == creature_id)
@@ -83,10 +103,7 @@ impl Game {
     }
 
     pub fn creature_mut(&mut self, creature_id: CreatureId) -> Result<&mut Creature> {
-        self.user
-            .creatures
-            .iter_mut()
-            .chain(self.enemy.creatures.iter_mut())
+        self.all_creatures_mut()
             .find(|c| c.creature_id() == creature_id)
             .ok_or_else(|| eyre!("Creature ID {} not found", creature_id))
     }

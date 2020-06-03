@@ -95,8 +95,10 @@ namespace Magewatch.Services
 
         if (command.UpdateCanPlayCard != null)
         {
-          var card = Errors.CheckNotNull(Root.Instance.GetPlayer(command.UpdateCanPlayCard.Player).Hand
-            .Get(command.UpdateCanPlayCard.CardId));
+          var card = Errors.CheckNotNull(
+            Root.Instance.GetPlayer(command.UpdateCanPlayCard.Player).Hand
+              .Get(command.UpdateCanPlayCard.CardId),
+            $"Card ID {command.UpdateCanPlayCard.CardId} not found!");
           card.SetCanPlay(command.UpdateCanPlayCard.CanPlay);
         }
 
