@@ -187,7 +187,7 @@ namespace Magewatch.Components
         var color = _outline.color;
         color.a = 0;
         _outline.color = color;
-        _outline.DOFade(1.0f, 0.3f);
+        _outline.DOFade(1.0f, 0.1f);
       }
     }
 

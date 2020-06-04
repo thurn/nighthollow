@@ -28,13 +28,30 @@ pub fn on_click_main_button_request(
 ) -> Result<api::CommandList> {
     match engine.game.state.phase {
         GamePhase::Main => advance_turn(engine),
-        GamePhase::Preparation => combat::run_combat(engine),
+        GamePhase::Preparation => Ok(commands::groups(run_combat(engine)?)),
     }
+}
+
+fn run_combat(engine: &mut RulesEngine) -> Result<Vec<api::CommandGroup>> {
+    let mut groups = combat::run_combat(engine)?;
+    groups.push(commands::single(commands::update_interface_state_command(
+        true, "End Turn",
+    )));
+    Ok(groups)
 }
 
 fn advance_turn(engine: &mut RulesEngine) -> Result<api::CommandList> {
     let mut result = vec![];
-    engine.invoke_trigger(&mut result, Trigger::TurnStart)?;
+    engine.invoke_trigger(&mut result, Trigger::TurnEnd)?;
     engine.game.state.phase = GamePhase::Preparation;
-    Ok(commands::single_group(result))
+    engine.game.state.turn += 1;
+    engine.invoke_trigger(&mut result, Trigger::TurnStart)?;
+    if engine.game.all_creatures().any(|x| true) {
+        result.push(commands::update_interface_state_command(true, "Combat!"));
+        Ok(commands::single_group(result))
+    } else {
+        let mut groups = vec![commands::group(result)];
+        groups.extend(run_combat(engine)?);
+        Ok(commands::groups(groups))
+    }
 }

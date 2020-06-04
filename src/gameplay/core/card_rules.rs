@@ -19,7 +19,7 @@ use crate::{
         cards::{Cost, HasCardData, HasCardId},
         games::Game,
         players::{Player, PlayerAttribute},
-        primitives::PlayerName,
+        primitives::{GamePhase, PlayerName},
     },
     rules::{
         effects::{Effect, Effects, Operator, UnderflowBehavior},
@@ -42,6 +42,8 @@ impl Rule for CoreCardRules {
         vec![
             TriggerName::CardDrawn.this(),
             TriggerName::CardPlayed.this(),
+            TriggerName::TurnStart.any(),
+            TriggerName::MainPhaseStart.any(),
             TriggerName::PlayerInfluenceChanged.any(),
             TriggerName::PlayerPowerChanged.any(),
         ]
@@ -49,16 +51,17 @@ impl Rule for CoreCardRules {
 
     fn on_trigger(&self, context: &TriggerContext, effects: &mut Effects) -> Result<()> {
         let card = context.this.card()?;
-        let can_pay = can_pay_cost(context.owner(), &card.card_data().cost);
+        let can_play = can_pay_cost(context.owner(), &card.card_data().cost)
+            && context.game.state.phase == GamePhase::Main;
 
         if let Trigger::CardPlayed(player_name, card_id) = context.trigger {
-            if can_pay {
+            if can_play {
                 Ok(effects.push_effect(context, Effect::PlayCard(context.owner_name(), *card_id)))
             } else {
-                Err(eyre!("Cannot pay cost for card id #{}", card_id))
+                Err(eyre!("Cannot play card id #{}", card_id))
             }
         } else {
-            Ok(effects.push_effect(context, Effect::SetCanPlayCard(card.card_id(), can_pay)))
+            Ok(effects.push_effect(context, Effect::SetCanPlayCard(card.card_id(), can_play)))
         }
     }
 }

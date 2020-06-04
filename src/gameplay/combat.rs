@@ -25,7 +25,7 @@ use crate::{
     rules::engine::{RulesEngine, Trigger},
 };
 
-pub fn run_combat(engine: &mut RulesEngine) -> Result<api::CommandList> {
+pub fn run_combat(engine: &mut RulesEngine) -> Result<Vec<api::CommandGroup>> {
     let mut result = vec![];
 
     engine.invoke_as_group(&mut result, Trigger::CombatStart)?;
@@ -65,7 +65,8 @@ pub fn run_combat(engine: &mut RulesEngine) -> Result<api::CommandList> {
     run_end_of_combat(&mut engine.game, &mut result);
 
     engine.game.state.phase = GamePhase::Main;
-    Ok(commands::groups(result))
+    engine.invoke_as_group(&mut result, Trigger::MainPhaseStart)?;
+    Ok(result)
 }
 
 /// True if this player has any living creatures
@@ -89,9 +90,10 @@ fn initiative_order(game: &Game) -> impl Iterator<Item = CreatureId> {
 fn run_end_of_combat(game: &mut Game, commands: &mut Vec<api::CommandGroup>) {
     let mut group1 = vec![];
     let mut group2 = vec![];
+    let opposed = !game.user.creatures.is_empty() && !game.enemy.creatures.is_empty();
 
     for creature in game.all_creatures_mut() {
-        if creature.is_alive() {
+        if opposed && creature.is_alive() {
             group1.push(commands::remove_creature_command(creature.creature_id()));
         }
 
@@ -99,7 +101,15 @@ fn run_end_of_combat(game: &mut Game, commands: &mut Vec<api::CommandGroup>) {
         group2.push(commands::create_or_update_creature_command(&creature));
     }
 
-    commands.push(commands::single(commands::wait_command(1000)));
-    commands.push(commands::group(group1));
-    commands.push(commands::group(group2));
+    if opposed {
+        commands.push(commands::single(commands::wait_command(1000)));
+    }
+
+    if !group1.is_empty() {
+        commands.push(commands::group(group1));
+    }
+
+    if !group2.is_empty() {
+        commands.push(commands::group(group2));
+    }
 }

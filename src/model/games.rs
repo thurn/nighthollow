@@ -36,7 +36,6 @@ pub enum MainButtonState {
 pub struct GameState {
     pub phase: GamePhase,
     pub turn: TurnNumber,
-    pub main_button: MainButtonState,
 }
 
 impl Default for GameState {
@@ -44,7 +43,6 @@ impl Default for GameState {
         Self {
             phase: GamePhase::Main,
             turn: 1,
-            main_button: MainButtonState::EndTurn,
         }
     }
 }

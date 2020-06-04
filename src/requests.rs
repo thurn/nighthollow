@@ -115,6 +115,7 @@ fn initialize(
                 commands::initiate_game_command(game.id),
                 commands::update_player_command(&game.user),
                 commands::update_player_command(&game.enemy),
+                commands::update_interface_state_command(true, "End Turn"),
             ])];
             let mut engine = RulesEngine::new(game);
             function(&mut engine, &mut commands)?;

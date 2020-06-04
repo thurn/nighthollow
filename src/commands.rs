@@ -339,15 +339,13 @@ pub fn wait_command(milliseconds: u32) -> api::Command {
 
 pub fn update_interface_state_command(
     main_button_enabled: bool,
-    main_button_text: String,
-    click_event_id: u32,
+    main_button_text: &str,
 ) -> api::Command {
     api::Command {
         command: Some(api::command::Command::UpdateInterface(
             MUpdateInterfaceCommand {
                 main_button_enabled,
-                main_button_text,
-                click_event_id,
+                main_button_text: String::from(main_button_text),
             },
         )),
     }

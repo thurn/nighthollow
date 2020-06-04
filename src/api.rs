@@ -275,8 +275,6 @@ pub struct MUpdateInterfaceCommand {
     pub main_button_enabled: bool,
     #[prost(string, tag = "2")]
     pub main_button_text: std::string::String,
-    #[prost(uint32, tag = "13")]
-    pub click_event_id: u32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdatePlayerCommand {

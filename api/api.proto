@@ -282,8 +282,6 @@ message MUpdateInterfaceCommand {
   bool main_button_enabled = 1;
 
   string main_button_text = 2;
-
-  uint32 click_event_id = 13;
 }
 
 message UpdatePlayerCommand {
