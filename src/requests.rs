@@ -126,7 +126,7 @@ fn initialize(
 }
 
 fn on_start_game(message: &api::StartGameRequest) -> Result<api::CommandList> {
-    initialize(scenarios::basic(), |engine, result| {
+    initialize(scenarios::load_scenario("standard")?, |engine, result| {
         engine.invoke_as_group(result, Trigger::GameStart)
     })
 }
@@ -134,9 +134,10 @@ fn on_start_game(message: &api::StartGameRequest) -> Result<api::CommandList> {
 fn on_debug(message: &MDebugRequest) -> Result<api::CommandList> {
     cards::debug_reset_id_generation();
 
-    let mut groups = initialize(scenarios::basic(), |engine, result| {
-        debug::draw_debug_cards(engine, message, result)
-    })?
+    let mut groups = initialize(
+        scenarios::load_scenario(&message.load_scenario_name)?,
+        |engine, result| debug::handle_debug_request(engine, message, result),
+    )?
     .command_groups;
 
     for request in message.run_requests.iter() {

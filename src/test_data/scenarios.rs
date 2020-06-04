@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use eyre::eyre;
-use eyre::Result;
-
 use crate::prelude::*;
 
 use crate::{
@@ -42,21 +39,27 @@ pub fn load_scenario(name: &str) -> Result<Game> {
     cards::debug_reset_id_generation();
 
     match name {
-        "basic" => Ok(basic()),
+        "standard" => Ok(standard()),
+        "basic_turn" => Ok(basic_turn()),
         _ => Err(eyre!("Unrecognized scenario name: {}", name)),
     }
 }
 
-pub fn basic() -> Game {
+fn standard() -> Game {
     Game {
         id: 1,
-        state: GameState {
-            phase: GamePhase::Main,
-            turn: 1,
-            main_button: MainButtonState::EndTurn,
-        },
+        state: GameState::default(),
         user: new_player(PlayerName::User, basic_deck),
         enemy: new_player(PlayerName::Enemy, basic_deck),
+    }
+}
+
+fn basic_turn() -> Game {
+    Game {
+        id: 1,
+        state: GameState::default(),
+        user: basic_turn_player(new_player(PlayerName::User, basic_deck)),
+        enemy: basic_turn_player(new_player(PlayerName::Enemy, basic_deck)),
     }
 }
 
@@ -70,6 +73,14 @@ fn new_player(name: PlayerName, deck: impl Fn(PlayerName) -> Vec<Card>) -> Playe
         scrolls: vec![],
         rules: vec![CorePlayerRules::new()],
     }
+}
+
+fn basic_turn_player(mut player: Player) -> Player {
+    player.state.current_power = 8;
+    player.state.maximum_power = 8;
+    player.state.current_influence = Influence::single(6, School::Flame);
+    player.state.maximum_influence = Influence::single(6, School::Flame);
+    player
 }
 
 fn berserker(owner: PlayerName) -> CreatureData {

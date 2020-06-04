@@ -36,51 +36,43 @@ namespace Magewatch.Components
 
     [SerializeField] RectTransform _influenceRow;
     [SerializeField] Collider2D _projectileCollider;
-    [Header("State")] [SerializeField] PlayerData _playerData;
 
     public Hand Hand => _hand;
 
     public Collider2D Collider => _projectileCollider;
 
-    public void UpdatePlayerData(PlayerData playerData, IOnComplete onComplete)
+    public void UpdatePlayerData(PlayerData newPlayerData, IOnComplete onComplete)
     {
-      var firstUpdate = _playerData == null;
-      if (firstUpdate || _playerData.CurrentLife != playerData.CurrentLife)
+      if (newPlayerData.MaximumLife == 0)
       {
-        if (playerData.MaximumLife == 0)
-        {
-          _lifeBar.DOFillAmount(0, 0.3f).OnComplete(onComplete.OnComplete);
-        }
-        else
-        {
-          _lifeBar.DOFillAmount(playerData.CurrentLife / (float) playerData.MaximumLife, 0.3f)
-            .OnComplete(onComplete.OnComplete);
-        }
+        _lifeBar.DOFillAmount(0, 0.3f).OnComplete(onComplete.OnComplete);
+      }
+      else
+      {
+        _lifeBar.DOFillAmount(newPlayerData.CurrentLife / (float) newPlayerData.MaximumLife, 0.3f)
+          .OnComplete(onComplete.OnComplete);
       }
 
-      if (firstUpdate || _playerData.CurrentPower != playerData.CurrentPower)
+      if (newPlayerData.MaximumPower == 0)
       {
-        if (playerData.MaximumPower == 0)
-        {
-          _powerBar.DOFillAmount(0, 0.3f);
-        }
-        else
-        {
-          _powerBar.DOFillAmount(playerData.CurrentPower / (float) playerData.MaximumPower, 0.3f);
-        }
+        _powerBar.DOFillAmount(0, 0.3f);
+      }
+      else
+      {
+        _powerBar.DOFillAmount(newPlayerData.CurrentPower / (float) newPlayerData.MaximumPower, 0.3f);
       }
 
-      _lifeText.text = $"{playerData.CurrentLife}/{playerData.MaximumLife}";
-      _powerText.text = $"{playerData.CurrentPower}/{playerData.MaximumPower}";
+      _lifeText.text = $"{newPlayerData.CurrentLife}/{newPlayerData.MaximumLife}";
+      _powerText.text = $"{newPlayerData.CurrentPower}/{newPlayerData.MaximumPower}";
 
       foreach (Transform child in _influenceRow)
       {
         Destroy(child.gameObject);
       }
 
-      foreach (var influence in playerData.MaximumInfluence)
+      foreach (var influence in newPlayerData.MaximumInfluence)
       {
-        var currentInfluence = InfluenceCount(playerData, influence.InfluenceType);
+        var currentInfluence = InfluenceCount(newPlayerData, influence.InfluenceType);
         for (var i = 0; i < influence.Value; ++i)
         {
           var image = Root.Instance.Prefabs.CreateInfluence();

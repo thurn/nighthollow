@@ -266,10 +266,6 @@ impl Creature {
     }
 
     pub fn set_skill_priority(&mut self, rule_identifier: RuleIdentifier, priority: u32) {
-        println!(
-            "Setting priority for {:?} to {:?}",
-            rule_identifier, priority
-        );
         self.state.skills.insert(rule_identifier, priority);
     }
 

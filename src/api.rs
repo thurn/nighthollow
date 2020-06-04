@@ -100,14 +100,19 @@ pub struct RepositionCreaturesRequest {
     pub position_updates: ::std::vec::Vec<CreaturePositionUpdate>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MDebugPlayerUpdate {
+    #[prost(enumeration = "PlayerName", tag = "1")]
+    pub player_name: i32,
+    #[prost(uint32, repeated, tag = "3")]
+    pub draw_cards_at_index: ::std::vec::Vec<u32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MDebugRequest {
     #[prost(string, tag = "1")]
     pub load_scenario_name: std::string::String,
-    #[prost(uint32, repeated, tag = "2")]
-    pub draw_user_cards: ::std::vec::Vec<u32>,
-    #[prost(uint32, repeated, tag = "3")]
-    pub draw_enemy_cards: ::std::vec::Vec<u32>,
-    #[prost(message, repeated, tag = "4")]
+    #[prost(message, repeated, tag = "2")]
+    pub player_updates: ::std::vec::Vec<MDebugPlayerUpdate>,
+    #[prost(message, repeated, tag = "3")]
     pub run_requests: ::std::vec::Vec<Request>,
 }
 /// Data sent to the server whenever the user does something in the game's user

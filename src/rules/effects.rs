@@ -243,16 +243,15 @@ fn set_can_play_card(
     card_id: CardId,
     value: bool,
 ) -> Result<()> {
-    engine
-        .game
-        .card_mut(card_id)?
-        .card_data_mut()
-        .state
-        .owner_can_play
-        .set_modifier(TagModifier {
-            value,
-            source: identifier,
-        });
-    events.push_event(identifier, Event::CanPlayCardModified(card_id));
+    let card = engine.game.card_mut(card_id)?.card_data_mut();
+    let previous_value = card.state.owner_can_play.value();
+    card.state.owner_can_play.set_modifier(TagModifier {
+        value,
+        source: identifier,
+    });
+
+    if card.state.owner_can_play.value() != previous_value {
+        events.push_event(identifier, Event::CanPlayCardModified(card_id));
+    }
     Ok(())
 }

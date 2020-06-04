@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using Magewatch.API;
 using Magewatch.Services;
 using UnityEngine;
@@ -45,9 +46,12 @@ namespace Magewatch.Components
       {
         Debug = new MDebugRequest
         {
-          LoadScenarioName = "basic",
-          DrawUserCards = {0, 0, 1, 2, 3, 3},
-          DrawEnemyCards = {0, 0, 1, 2, 3, 3},
+          LoadScenarioName = "basic_turn",
+          PlayerUpdates =
+          {
+            DrawCards(PlayerName.User, new uint[] {0, 0, 1, 2, 3, 3}),
+            DrawCards(PlayerName.Enemy, new uint[] {0, 0, 1, 2, 3, 3})
+          },
           RunRequests =
           {
             PlayCreature(FirstId, RankValue.Rank1, FileValue.File2, PlayerName.User),
@@ -74,6 +78,16 @@ namespace Magewatch.Components
     CardId CardId(int id) => new CardId {Value = id};
 
     CreatureId CreatureId(int id) => new CreatureId {Value = id};
+
+    MDebugPlayerUpdate DrawCards(PlayerName playerName, IEnumerable<uint> cards)
+    {
+      var result = new MDebugPlayerUpdate
+      {
+        PlayerName = playerName
+      };
+      result.DrawCardsAtIndex.Add(cards);
+      return result;
+    }
 
     Request PlayCreature(int id, RankValue rank, FileValue file, PlayerName player) =>
       new Request

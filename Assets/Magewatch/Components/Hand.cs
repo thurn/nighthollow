@@ -63,6 +63,7 @@ namespace Magewatch.Components
       if (card)
       {
         card.UpdateCardData(cardData);
+        onComplete.OnComplete();
       }
       else
       {

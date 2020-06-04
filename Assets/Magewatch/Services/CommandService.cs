@@ -92,7 +92,7 @@ namespace Magewatch.Services
           var button = Root.Instance.MainButton;
           button.UpdateData(command.UpdateInterface);
         }
-        
+
         if (command.DrawOrUpdateCard != null)
         {
           HandleDrawCard(command, ref numUserCards, ref numEnemyCards);
@@ -195,6 +195,7 @@ namespace Magewatch.Services
       var rank = command.RevealCard.RankPosition;
       var file = command.RevealCard.FilePosition;
       var delay = 2.0f;
+
       if (command.RevealCard.RevealDelayMilliseconds > 0)
       {
         delay = command.RevealCard.RevealDelayMilliseconds / 1000f;

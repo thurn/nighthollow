@@ -39,6 +39,16 @@ pub struct GameState {
     pub main_button: MainButtonState,
 }
 
+impl Default for GameState {
+    fn default() -> Self {
+        Self {
+            phase: GamePhase::Main,
+            turn: 1,
+            main_button: MainButtonState::EndTurn,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Game {
     pub id: GameId,

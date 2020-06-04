@@ -17,38 +17,62 @@ use crate::prelude::*;
 use crate::{
     api::{self, MDebugRequest},
     commands,
-    model::players::Player,
+    model::{
+        cards::{HasCardData, HasCardId},
+        players::Player,
+        primitives::PlayerName,
+    },
     requests,
-    rules::engine::RulesEngine,
+    rules::engine::{EntityId, RulesEngine},
 };
+use api::MDebugPlayerUpdate;
 
-pub fn draw_debug_cards(
+pub fn handle_debug_request(
     engine: &mut RulesEngine,
     request: &MDebugRequest,
     result: &mut Vec<api::CommandGroup>,
 ) -> Result<()> {
     let mut group = vec![];
-    request
-        .draw_user_cards
-        .iter()
-        .try_for_each(|i| draw_card_at_index(&mut engine.game.user, *i, &mut group, true))?;
-    request
-        .draw_enemy_cards
-        .iter()
-        .try_for_each(|i| draw_card_at_index(&mut engine.game.enemy, *i, &mut group, false))?;
-    result.push(commands::group(group));
 
+    request
+        .player_updates
+        .iter()
+        .try_for_each(|u| handle_player_update(engine, u, &mut group))?;
+
+    result.push(commands::group(group));
+    Ok(())
+}
+
+fn handle_player_update(
+    engine: &mut RulesEngine,
+    update: &MDebugPlayerUpdate,
+    commands: &mut Vec<api::Command>,
+) -> Result<()> {
+    update.draw_cards_at_index.iter().try_for_each(|i| {
+        draw_card_at_index(
+            engine,
+            requests::convert_player_name(update.player_name())?,
+            *i,
+            commands,
+            true,
+        )
+    })?;
     Ok(())
 }
 
 fn draw_card_at_index(
-    player: &mut Player,
+    engine: &mut RulesEngine,
+    player_name: PlayerName,
     index: u32,
     commands: &mut Vec<api::Command>,
     revealed: bool,
 ) -> Result<()> {
+    let player = engine.game.player_mut(player_name);
     let card = player.deck.draw_card_at_index(index as usize)?;
+    let card_id = card.card_id();
+    let rules = card.card_data().rules.clone();
     commands.push(commands::draw_or_update_card_command(&card));
     player.hand.push(card);
+    engine.add_rules(EntityId::CardId(card_id), rules);
     Ok(())
 }

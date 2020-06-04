@@ -46,6 +46,7 @@ impl Rule for CoreCardRules {
             TriggerName::PlayerPowerChanged.any(),
         ]
     }
+
     fn on_trigger(&self, context: &TriggerContext, effects: &mut Effects) -> Result<()> {
         let card = context.this.card()?;
         let can_pay = can_pay_cost(context.owner(), &card.card_data().cost);
@@ -54,7 +55,7 @@ impl Rule for CoreCardRules {
             if can_pay {
                 Ok(effects.push_effect(context, Effect::PlayCard(context.owner_name(), *card_id)))
             } else {
-                Err(eyre!("Cannot pay cost for {}", card_id))
+                Err(eyre!("Cannot pay cost for card id #{}", card_id))
             }
         } else {
             Ok(effects.push_effect(context, Effect::SetCanPlayCard(card.card_id(), can_pay)))
