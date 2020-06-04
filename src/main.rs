@@ -27,7 +27,6 @@ mod commands;
 mod gameplay;
 mod interface;
 mod model;
-// mod requests2;
 mod prelude;
 mod requests;
 mod rules;
