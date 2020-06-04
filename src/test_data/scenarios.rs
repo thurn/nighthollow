@@ -18,8 +18,10 @@ use crate::{
     gameplay::{
         basic_attacks::BasicMeleeAttack,
         core::{
-            card_rules::CoreCardRules, creature_rules::CoreCreatureRules,
-            player_rules::CorePlayerRules, scroll_rules::CoreScrollRules,
+            card_rules::{CoreCardRules, CreatureTargetingRestriction},
+            creature_rules::CoreCreatureRules,
+            player_rules::CorePlayerRules,
+            scroll_rules::CoreScrollRules,
         },
     },
     model::{
@@ -149,7 +151,7 @@ fn rage(owner: PlayerName) -> Spell {
     Spell {
         card_data: CardData {
             id: 0,
-            rules: vec![CoreCardRules::new()],
+            rules: vec![CoreCardRules::new(), CreatureTargetingRestriction::new()],
             owner,
             state: CardState::default(),
             cost: Cost::StandardCost(StandardCost {

@@ -74,3 +74,30 @@ fn can_pay_cost(player: &Player, cost: &Cost) -> bool {
         }
     }
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CreatureTargetingRestriction {}
+
+impl CreatureTargetingRestriction {
+    pub fn new() -> Box<Self> {
+        Box::from(CreatureTargetingRestriction {})
+    }
+}
+
+#[typetag::serde]
+impl Rule for CreatureTargetingRestriction {
+    fn triggers(&self) -> Vec<TriggerCondition> {
+        vec![
+            TriggerName::CardDrawn.this(),
+            TriggerName::CreaturePlayed.any(),
+        ]
+    }
+
+    fn on_trigger(&self, context: &TriggerContext, effects: &mut Effects) -> Result<()> {
+        let card = context.this.card()?;
+        Ok(effects.push_effect(
+            context,
+            Effect::SetCanPlayCard(card.card_id(), !context.owner().creatures.is_empty()),
+        ))
+    }
+}
