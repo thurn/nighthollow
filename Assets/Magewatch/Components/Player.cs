@@ -73,11 +73,13 @@ namespace Magewatch.Components
       foreach (var influence in newPlayerData.MaximumInfluence)
       {
         var currentInfluence = InfluenceCount(newPlayerData, influence.InfluenceType);
+        var direction = newPlayerData.PlayerName == PlayerName.Enemy ? -1 : 1;
         for (var i = 0; i < influence.Value; ++i)
         {
           var image = Root.Instance.Prefabs.CreateInfluence();
           image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.InfluenceType);
           image.transform.SetParent(_influenceRow);
+          image.transform.localPosition = new Vector3(i * 60 * direction, 0, 0);
           if (i >= currentInfluence)
           {
             image.color = Color.gray;
