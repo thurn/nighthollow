@@ -34,13 +34,13 @@ use super::{
 
 static NEXT_CARD_ID: AtomicI32 = AtomicI32::new(1);
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub struct StandardCost {
     pub power: PowerValue,
     pub influence: Influence,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 pub enum Cost {
     ScrollPlay,
     StandardCost(StandardCost),
@@ -164,6 +164,7 @@ pub struct Scroll {
     pub card_data: CardData,
     pub base_type: ScrollType,
     pub stats: ScrollStats,
+    pub rules: Vec<Box<dyn Rule>>,
 }
 
 impl Scroll {

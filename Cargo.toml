@@ -10,6 +10,7 @@ default-run = "magewatch"
 bytes = "0.5"
 dyn-clone = "1.0"
 eyre = "0.4"
+color-eyre = { version = "0.3", default-features = false }
 lazy_static = "1.4"
 log = "0.4"
 pretty_env_logger = "0.4"

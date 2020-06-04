@@ -220,22 +220,6 @@ pub fn draw_or_update_card_command(card: &Card) -> api::Command {
     }
 }
 
-pub fn update_can_play_card_command(
-    player: PlayerName,
-    card: CardId,
-    can_play: bool,
-) -> api::Command {
-    api::Command {
-        command: Some(api::command::Command::UpdateCanPlayCard(
-            api::MUpdateCanPlayCardCommand {
-                player: player_name(player).into(),
-                card_id: Some(card_id(card)),
-                can_play,
-            },
-        )),
-    }
-}
-
 pub fn update_player_command(player: &Player) -> api::Command {
     api::Command {
         command: Some(api::command::Command::UpdatePlayer(
@@ -429,7 +413,6 @@ pub fn command_name(command: &api::Command) -> &str {
             api::command::Command::DisplayError(_) => "DisplayError",
             api::command::Command::DestroyCard(_) => "DestroyCard",
             api::command::Command::InitiateGame(_) => "InitiateGame",
-            api::command::Command::UpdateCanPlayCard(_) => "UpdateCanPlayCard",
         }
     } else {
         "(None)"

@@ -191,7 +191,12 @@ impl Influence {
         other: &Influence,
         underflow_behavior: UnderflowBehavior,
     ) -> Result<()> {
-        if !other.less_than_or_equal_to(self) {
+        if other.less_than_or_equal_to(self) {
+            for school in SCHOOLS.iter() {
+                *self.mut_ref(*school) = self.value(*school) - other.value(*school);
+            }
+            Ok(())
+        } else {
             match underflow_behavior {
                 UnderflowBehavior::Error => {
                     Err(eyre!("Can't subtract {:?} from {:?}", other, self))
@@ -201,11 +206,6 @@ impl Influence {
                     Ok(())
                 }
             }
-        } else {
-            for school in SCHOOLS.iter() {
-                *self.mut_ref(*school) = self.value(*school) - other.value(*school);
-            }
-            Ok(())
         }
     }
 }

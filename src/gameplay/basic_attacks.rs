@@ -50,14 +50,12 @@ impl Rule for BasicMeleeAttack {
     fn on_trigger(&self, context: &TriggerContext, effects: &mut Effects) -> Result<()> {
         match context.trigger {
             Trigger::CreaturePlayed(_, creature_id) => {
-                println!("Creature played {}", creature_id);
                 effects.push_effect(
                     context,
                     Effect::SetSkillPriority(*creature_id, *context.identifier, 1),
                 );
             }
             Trigger::InvokeSkill(creature_id) => {
-                println!("Invoke skill {}", creature_id);
                 if let Some(target) =
                     next_target_for_file(context.opponent(), context.this.creature()?.position.file)
                 {

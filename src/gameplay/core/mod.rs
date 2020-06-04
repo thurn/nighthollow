@@ -15,3 +15,4 @@
 pub mod card_rules;
 pub mod creature_rules;
 pub mod player_rules;
+pub mod scroll_rules;

@@ -47,6 +47,8 @@ pub fn on_play_card_request(
         .as_ref()
         .ok_or_else(|| eyre!("play_card is required"))?;
     let player_name = requests::convert_player_name(message.player())?;
+
+    // Must be before card is removed from hand to avoid broken update events:
     engine.invoke_as_group(&mut result, Trigger::CardPlayed(player_name, card_id))?;
 
     let player = engine.game.player_mut(player_name);
@@ -185,11 +187,13 @@ fn on_play_scroll(
     let scroll_id = scroll.scroll_id();
     let player = engine.game.player_mut(scroll.owner());
     let player_name = player.name;
+    let rules = scroll.rules.clone();
 
     reveal_card(player.name, result, card_data, None, None)?;
 
     player.scrolls.push(scroll);
 
+    engine.add_rules(EntityId::ScrollId(scroll_id), rules);
     engine.invoke_as_group(result, Trigger::ScrollPlayed(player_name, scroll_id))?;
     Ok(())
 }

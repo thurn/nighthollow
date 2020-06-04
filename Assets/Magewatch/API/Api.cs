@@ -93,69 +93,65 @@ namespace Magewatch.API {
             "EhYKDmNsaWNrX2V2ZW50X2lkGA0gASgNIjYKE1VwZGF0ZVBsYXllckNvbW1h",
             "bmQSHwoGcGxheWVyGAEgASgLMg8uYXBpLlBsYXllckRhdGEiNwoYTURyYXdP",
             "clVwZGF0ZUNhcmRDb21tYW5kEhsKBGNhcmQYASABKAsyDS5hcGkuQ2FyZERh",
-            "dGEibAoZTVVwZGF0ZUNhblBsYXlDYXJkQ29tbWFuZBIfCgZwbGF5ZXIYASAB",
-            "KA4yDy5hcGkuUGxheWVyTmFtZRIcCgdjYXJkX2lkGAIgASgLMgsuYXBpLkNh",
-            "cmRJZBIQCghjYW5fcGxheRgDIAEoCCKhAQoRUmV2ZWFsQ2FyZENvbW1hbmQS",
-            "GwoEY2FyZBgBIAEoCzINLmFwaS5DYXJkRGF0YRIhChlyZXZlYWxfZGVsYXlf",
-            "bWlsbGlzZWNvbmRzGAIgASgNEiUKDXJhbmtfcG9zaXRpb24YAyABKA4yDi5h",
-            "cGkuUmFua1ZhbHVlEiUKDWZpbGVfcG9zaXRpb24YBCABKA4yDi5hcGkuRmls",
-            "ZVZhbHVlIkQKHUNyZWF0ZU9yVXBkYXRlQ3JlYXR1cmVDb21tYW5kEiMKCGNy",
-            "ZWF0dXJlGAEgASgLMhEuYXBpLkNyZWF0dXJlRGF0YSI9ChVSZW1vdmVDcmVh",
-            "dHVyZUNvbW1hbmQSJAoLY3JlYXR1cmVfaWQYASABKAsyDy5hcGkuQ3JlYXR1",
-            "cmVJZCJSCg9NU2tpbGxBbmltYXRpb24SKQoFc2tpbGwYASABKA4yGi5hcGku",
-            "TVNraWxsQW5pbWF0aW9uTnVtYmVyEhQKDGltcGFjdF9jb3VudBgCIAEoBSJI",
-            "Cg9NT25JbXBhY3ROdW1iZXISFQoNaW1wYWN0X251bWJlchgBIAEoDRIeCgZl",
-            "ZmZlY3QYAiABKAsyDi5hcGkuTU9uSW1wYWN0InEKCU1PbkltcGFjdBImCgZ1",
-            "cGRhdGUYASABKAsyFC5hcGkuTUNyZWF0dXJlVXBkYXRlSAASLwoPZmlyZV9w",
-            "cm9qZWN0aWxlGAIgASgLMhQuYXBpLk1GaXJlUHJvamVjdGlsZUgAQgsKCW9u",
-            "X2ltcGFjdCKHAQoPTUZpcmVQcm9qZWN0aWxlEh4KCnByb2plY3RpbGUYASAB",
-            "KAsyCi5hcGkuQXNzZXQSHgoGb25faGl0GAIgAygLMg4uYXBpLk1PbkltcGFj",
-            "dBIqCg90YXJnZXRfY3JlYXR1cmUYAyABKAsyDy5hcGkuQ3JlYXR1cmVJZEgA",
-            "QggKBnRhcmdldCK8AQoPTUNyZWF0dXJlVXBkYXRlEiQKC2NyZWF0dXJlX2lk",
-            "GAEgASgLMg8uYXBpLkNyZWF0dXJlSWQSHQoVc2V0X2hlYWx0aF9wZXJjZW50",
-            "YWdlGAIgASgCEhwKFHBsYXlfZGVhdGhfYW5pbWF0aW9uGAMgASgIEhsKE3Nl",
-            "dF9tYW5hX3BlcmNlbnRhZ2UYBCABKAISKQoVcGxheV9wYXJ0aWNsZV9lZmZl",
-            "Y3RzGAUgAygLMgouYXBpLkFzc2V0Ij4KFk1VcGRhdGVDcmVhdHVyZUNvbW1h",
-            "bmQSJAoGdXBkYXRlGAEgASgLMhQuYXBpLk1DcmVhdHVyZVVwZGF0ZSK9AQoY",
-            "TVVzZUNyZWF0dXJlU2tpbGxDb21tYW5kEigKD3NvdXJjZV9jcmVhdHVyZRgB",
-            "IAEoCzIPLmFwaS5DcmVhdHVyZUlkEicKCWFuaW1hdGlvbhgCIAEoCzIULmFw",
-            "aS5NU2tpbGxBbmltYXRpb24SJwoJb25faW1wYWN0GAMgAygLMhQuYXBpLk1P",
-            "bkltcGFjdE51bWJlchIlCgxtZWxlZV90YXJnZXQYBCABKAsyDy5hcGkuQ3Jl",
-            "YXR1cmVJZCJoChNNRGVzdHJveUNhcmRDb21tYW5kEh8KBnBsYXllchgBIAEo",
-            "DjIPLmFwaS5QbGF5ZXJOYW1lEhwKB2NhcmRfaWQYAiABKAsyCy5hcGkuQ2Fy",
-            "ZElkEhIKCm11c3RfZXhpc3QYAyABKAgiOAoUTUluaXRpYXRlR2FtZUNvbW1h",
-            "bmQSIAoLbmV3X2dhbWVfaWQYASABKAsyCy5hcGkuR2FtZUlkIt4FCgdDb21t",
-            "YW5kEiAKBHdhaXQYASABKAsyEC5hcGkuV2FpdENvbW1hbmRIABI4ChB1cGRh",
-            "dGVfaW50ZXJmYWNlGAIgASgLMhwuYXBpLk1VcGRhdGVJbnRlcmZhY2VDb21t",
-            "YW5kSAASPAoTZHJhd19vcl91cGRhdGVfY2FyZBgDIAEoCzIdLmFwaS5NRHJh",
-            "d09yVXBkYXRlQ2FyZENvbW1hbmRIABItCgtyZXZlYWxfY2FyZBgEIAEoCzIW",
-            "LmFwaS5SZXZlYWxDYXJkQ29tbWFuZEgAEjEKDXVwZGF0ZV9wbGF5ZXIYBSAB",
-            "KAsyGC5hcGkuVXBkYXRlUGxheWVyQ29tbWFuZEgAEkcKGWNyZWF0ZV9vcl91",
-            "cGRhdGVfY3JlYXR1cmUYBiABKAsyIi5hcGkuQ3JlYXRlT3JVcGRhdGVDcmVh",
-            "dHVyZUNvbW1hbmRIABI1Cg9yZW1vdmVfY3JlYXR1cmUYByABKAsyGi5hcGku",
-            "UmVtb3ZlQ3JlYXR1cmVDb21tYW5kSAASNgoPdXBkYXRlX2NyZWF0dXJlGAog",
-            "ASgLMhsuYXBpLk1VcGRhdGVDcmVhdHVyZUNvbW1hbmRIABI7ChJ1c2VfY3Jl",
-            "YXR1cmVfc2tpbGwYCyABKAsyHS5hcGkuTVVzZUNyZWF0dXJlU2tpbGxDb21t",
-            "YW5kSAASMQoNZGlzcGxheV9lcnJvchgMIAEoCzIYLmFwaS5EaXNwbGF5RXJy",
-            "b3JDb21tYW5kSAASMAoMZGVzdHJveV9jYXJkGA0gASgLMhguYXBpLk1EZXN0",
-            "cm95Q2FyZENvbW1hbmRIABIyCg1pbml0aWF0ZV9nYW1lGA4gASgLMhkuYXBp",
-            "Lk1Jbml0aWF0ZUdhbWVDb21tYW5kSAASPgoUdXBkYXRlX2Nhbl9wbGF5X2Nh",
-            "cmQYDyABKAsyHi5hcGkuTVVwZGF0ZUNhblBsYXlDYXJkQ29tbWFuZEgAQgkK",
-            "B2NvbW1hbmQiLgoMQ29tbWFuZEdyb3VwEh4KCGNvbW1hbmRzGAEgAygLMgwu",
-            "YXBpLkNvbW1hbmQiOAoLQ29tbWFuZExpc3QSKQoOY29tbWFuZF9ncm91cHMY",
-            "ASADKAsyES5hcGkuQ29tbWFuZEdyb3VwKjkKClBsYXllck5hbWUSFgoSUExB",
-            "WUVSX1VOU1BFQ0lGSUVEEAASCAoEVVNFUhABEgkKBUVORU1ZEAIqXQoJUmFu",
-            "a1ZhbHVlEhQKEFJBTktfVU5TUEVDSUZJRUQQABIKCgZSQU5LXzEQAhIKCgZS",
-            "QU5LXzIQAxIKCgZSQU5LXzMQBBIKCgZSQU5LXzQQBRIKCgZSQU5LXzUQBipd",
-            "CglGaWxlVmFsdWUSFAoQRklMRV9VTlNQRUNJRklFRBAAEgoKBkZJTEVfMRAC",
-            "EgoKBkZJTEVfMhADEgoKBkZJTEVfMxAEEgoKBkZJTEVfNBAFEgoKBkZJTEVf",
-            "NRAGKmkKDUluZmx1ZW5jZVR5cGUSGQoVSU5GTFVFTkNFX1VOU1BFQ0lGSUVE",
-            "EAASCQoFTElHSFQQARIHCgNTS1kQAhIJCgVGTEFNRRADEgcKA0lDRRAEEgkK",
-            "BUVBUlRIEAUSCgoGU0hBRE9XEAYqOQoJQXNzZXRUeXBlEhQKEFRZUEVfVU5T",
-            "UEVDSUZJRUQQABIKCgZQUkVGQUIQARIKCgZTUFJJVEUQAipvChVNU2tpbGxB",
-            "bmltYXRpb25OdW1iZXISFQoRU0tJTExfVU5TUEVDSUZJRUQQABILCgdTS0lM",
-            "TF8xEAESCwoHU0tJTExfMhACEgsKB1NLSUxMXzMQAxILCgdTS0lMTF80EAQS",
-            "CwoHU0tJTExfNRAFQhCqAg1NYWdld2F0Y2guQVBJYgZwcm90bzM="));
+            "dGEioQEKEVJldmVhbENhcmRDb21tYW5kEhsKBGNhcmQYASABKAsyDS5hcGku",
+            "Q2FyZERhdGESIQoZcmV2ZWFsX2RlbGF5X21pbGxpc2Vjb25kcxgCIAEoDRIl",
+            "Cg1yYW5rX3Bvc2l0aW9uGAMgASgOMg4uYXBpLlJhbmtWYWx1ZRIlCg1maWxl",
+            "X3Bvc2l0aW9uGAQgASgOMg4uYXBpLkZpbGVWYWx1ZSJECh1DcmVhdGVPclVw",
+            "ZGF0ZUNyZWF0dXJlQ29tbWFuZBIjCghjcmVhdHVyZRgBIAEoCzIRLmFwaS5D",
+            "cmVhdHVyZURhdGEiPQoVUmVtb3ZlQ3JlYXR1cmVDb21tYW5kEiQKC2NyZWF0",
+            "dXJlX2lkGAEgASgLMg8uYXBpLkNyZWF0dXJlSWQiUgoPTVNraWxsQW5pbWF0",
+            "aW9uEikKBXNraWxsGAEgASgOMhouYXBpLk1Ta2lsbEFuaW1hdGlvbk51bWJl",
+            "chIUCgxpbXBhY3RfY291bnQYAiABKAUiSAoPTU9uSW1wYWN0TnVtYmVyEhUK",
+            "DWltcGFjdF9udW1iZXIYASABKA0SHgoGZWZmZWN0GAIgASgLMg4uYXBpLk1P",
+            "bkltcGFjdCJxCglNT25JbXBhY3QSJgoGdXBkYXRlGAEgASgLMhQuYXBpLk1D",
+            "cmVhdHVyZVVwZGF0ZUgAEi8KD2ZpcmVfcHJvamVjdGlsZRgCIAEoCzIULmFw",
+            "aS5NRmlyZVByb2plY3RpbGVIAEILCglvbl9pbXBhY3QihwEKD01GaXJlUHJv",
+            "amVjdGlsZRIeCgpwcm9qZWN0aWxlGAEgASgLMgouYXBpLkFzc2V0Eh4KBm9u",
+            "X2hpdBgCIAMoCzIOLmFwaS5NT25JbXBhY3QSKgoPdGFyZ2V0X2NyZWF0dXJl",
+            "GAMgASgLMg8uYXBpLkNyZWF0dXJlSWRIAEIICgZ0YXJnZXQivAEKD01DcmVh",
+            "dHVyZVVwZGF0ZRIkCgtjcmVhdHVyZV9pZBgBIAEoCzIPLmFwaS5DcmVhdHVy",
+            "ZUlkEh0KFXNldF9oZWFsdGhfcGVyY2VudGFnZRgCIAEoAhIcChRwbGF5X2Rl",
+            "YXRoX2FuaW1hdGlvbhgDIAEoCBIbChNzZXRfbWFuYV9wZXJjZW50YWdlGAQg",
+            "ASgCEikKFXBsYXlfcGFydGljbGVfZWZmZWN0cxgFIAMoCzIKLmFwaS5Bc3Nl",
+            "dCI+ChZNVXBkYXRlQ3JlYXR1cmVDb21tYW5kEiQKBnVwZGF0ZRgBIAEoCzIU",
+            "LmFwaS5NQ3JlYXR1cmVVcGRhdGUivQEKGE1Vc2VDcmVhdHVyZVNraWxsQ29t",
+            "bWFuZBIoCg9zb3VyY2VfY3JlYXR1cmUYASABKAsyDy5hcGkuQ3JlYXR1cmVJ",
+            "ZBInCglhbmltYXRpb24YAiABKAsyFC5hcGkuTVNraWxsQW5pbWF0aW9uEicK",
+            "CW9uX2ltcGFjdBgDIAMoCzIULmFwaS5NT25JbXBhY3ROdW1iZXISJQoMbWVs",
+            "ZWVfdGFyZ2V0GAQgASgLMg8uYXBpLkNyZWF0dXJlSWQiaAoTTURlc3Ryb3lD",
+            "YXJkQ29tbWFuZBIfCgZwbGF5ZXIYASABKA4yDy5hcGkuUGxheWVyTmFtZRIc",
+            "CgdjYXJkX2lkGAIgASgLMgsuYXBpLkNhcmRJZBISCgptdXN0X2V4aXN0GAMg",
+            "ASgIIjgKFE1Jbml0aWF0ZUdhbWVDb21tYW5kEiAKC25ld19nYW1lX2lkGAEg",
+            "ASgLMgsuYXBpLkdhbWVJZCKeBQoHQ29tbWFuZBIgCgR3YWl0GAEgASgLMhAu",
+            "YXBpLldhaXRDb21tYW5kSAASOAoQdXBkYXRlX2ludGVyZmFjZRgCIAEoCzIc",
+            "LmFwaS5NVXBkYXRlSW50ZXJmYWNlQ29tbWFuZEgAEjwKE2RyYXdfb3JfdXBk",
+            "YXRlX2NhcmQYAyABKAsyHS5hcGkuTURyYXdPclVwZGF0ZUNhcmRDb21tYW5k",
+            "SAASLQoLcmV2ZWFsX2NhcmQYBCABKAsyFi5hcGkuUmV2ZWFsQ2FyZENvbW1h",
+            "bmRIABIxCg11cGRhdGVfcGxheWVyGAUgASgLMhguYXBpLlVwZGF0ZVBsYXll",
+            "ckNvbW1hbmRIABJHChljcmVhdGVfb3JfdXBkYXRlX2NyZWF0dXJlGAYgASgL",
+            "MiIuYXBpLkNyZWF0ZU9yVXBkYXRlQ3JlYXR1cmVDb21tYW5kSAASNQoPcmVt",
+            "b3ZlX2NyZWF0dXJlGAcgASgLMhouYXBpLlJlbW92ZUNyZWF0dXJlQ29tbWFu",
+            "ZEgAEjYKD3VwZGF0ZV9jcmVhdHVyZRgKIAEoCzIbLmFwaS5NVXBkYXRlQ3Jl",
+            "YXR1cmVDb21tYW5kSAASOwoSdXNlX2NyZWF0dXJlX3NraWxsGAsgASgLMh0u",
+            "YXBpLk1Vc2VDcmVhdHVyZVNraWxsQ29tbWFuZEgAEjEKDWRpc3BsYXlfZXJy",
+            "b3IYDCABKAsyGC5hcGkuRGlzcGxheUVycm9yQ29tbWFuZEgAEjAKDGRlc3Ry",
+            "b3lfY2FyZBgNIAEoCzIYLmFwaS5NRGVzdHJveUNhcmRDb21tYW5kSAASMgoN",
+            "aW5pdGlhdGVfZ2FtZRgOIAEoCzIZLmFwaS5NSW5pdGlhdGVHYW1lQ29tbWFu",
+            "ZEgAQgkKB2NvbW1hbmQiLgoMQ29tbWFuZEdyb3VwEh4KCGNvbW1hbmRzGAEg",
+            "AygLMgwuYXBpLkNvbW1hbmQiOAoLQ29tbWFuZExpc3QSKQoOY29tbWFuZF9n",
+            "cm91cHMYASADKAsyES5hcGkuQ29tbWFuZEdyb3VwKjkKClBsYXllck5hbWUS",
+            "FgoSUExBWUVSX1VOU1BFQ0lGSUVEEAASCAoEVVNFUhABEgkKBUVORU1ZEAIq",
+            "XQoJUmFua1ZhbHVlEhQKEFJBTktfVU5TUEVDSUZJRUQQABIKCgZSQU5LXzEQ",
+            "AhIKCgZSQU5LXzIQAxIKCgZSQU5LXzMQBBIKCgZSQU5LXzQQBRIKCgZSQU5L",
+            "XzUQBipdCglGaWxlVmFsdWUSFAoQRklMRV9VTlNQRUNJRklFRBAAEgoKBkZJ",
+            "TEVfMRACEgoKBkZJTEVfMhADEgoKBkZJTEVfMxAEEgoKBkZJTEVfNBAFEgoK",
+            "BkZJTEVfNRAGKmkKDUluZmx1ZW5jZVR5cGUSGQoVSU5GTFVFTkNFX1VOU1BF",
+            "Q0lGSUVEEAASCQoFTElHSFQQARIHCgNTS1kQAhIJCgVGTEFNRRADEgcKA0lD",
+            "RRAEEgkKBUVBUlRIEAUSCgoGU0hBRE9XEAYqOQoJQXNzZXRUeXBlEhQKEFRZ",
+            "UEVfVU5TUEVDSUZJRUQQABIKCgZQUkVGQUIQARIKCgZTUFJJVEUQAipvChVN",
+            "U2tpbGxBbmltYXRpb25OdW1iZXISFQoRU0tJTExfVU5TUEVDSUZJRUQQABIL",
+            "CgdTS0lMTF8xEAESCwoHU0tJTExfMhACEgsKB1NLSUxMXzMQAxILCgdTS0lM",
+            "TF80EAQSCwoHU0tJTExfNRAFQhCqAg1NYWdld2F0Y2guQVBJYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Magewatch.API.PlayerName), typeof(global::Magewatch.API.RankValue), typeof(global::Magewatch.API.FileValue), typeof(global::Magewatch.API.InfluenceType), typeof(global::Magewatch.API.AssetType), typeof(global::Magewatch.API.MSkillAnimationNumber), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -189,7 +185,6 @@ namespace Magewatch.API {
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUpdateInterfaceCommand), global::Magewatch.API.MUpdateInterfaceCommand.Parser, new[]{ "MainButtonEnabled", "MainButtonText", "ClickEventId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.UpdatePlayerCommand), global::Magewatch.API.UpdatePlayerCommand.Parser, new[]{ "Player" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MDrawOrUpdateCardCommand), global::Magewatch.API.MDrawOrUpdateCardCommand.Parser, new[]{ "Card" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUpdateCanPlayCardCommand), global::Magewatch.API.MUpdateCanPlayCardCommand.Parser, new[]{ "Player", "CardId", "CanPlay" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.RevealCardCommand), global::Magewatch.API.RevealCardCommand.Parser, new[]{ "Card", "RevealDelayMilliseconds", "RankPosition", "FilePosition" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CreateOrUpdateCreatureCommand), global::Magewatch.API.CreateOrUpdateCreatureCommand.Parser, new[]{ "Creature" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.RemoveCreatureCommand), global::Magewatch.API.RemoveCreatureCommand.Parser, new[]{ "CreatureId" }, null, null, null, null),
@@ -202,7 +197,7 @@ namespace Magewatch.API {
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MUseCreatureSkillCommand), global::Magewatch.API.MUseCreatureSkillCommand.Parser, new[]{ "SourceCreature", "Animation", "OnImpact", "MeleeTarget" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MDestroyCardCommand), global::Magewatch.API.MDestroyCardCommand.Parser, new[]{ "Player", "CardId", "MustExist" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.MInitiateGameCommand), global::Magewatch.API.MInitiateGameCommand.Parser, new[]{ "NewGameId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Command), global::Magewatch.API.Command.Parser, new[]{ "Wait", "UpdateInterface", "DrawOrUpdateCard", "RevealCard", "UpdatePlayer", "CreateOrUpdateCreature", "RemoveCreature", "UpdateCreature", "UseCreatureSkill", "DisplayError", "DestroyCard", "InitiateGame", "UpdateCanPlayCard" }, new[]{ "Command" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.Command), global::Magewatch.API.Command.Parser, new[]{ "Wait", "UpdateInterface", "DrawOrUpdateCard", "RevealCard", "UpdatePlayer", "CreateOrUpdateCreature", "RemoveCreature", "UpdateCreature", "UseCreatureSkill", "DisplayError", "DestroyCard", "InitiateGame" }, new[]{ "Command" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CommandGroup), global::Magewatch.API.CommandGroup.Parser, new[]{ "Commands" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Magewatch.API.CommandList), global::Magewatch.API.CommandList.Parser, new[]{ "CommandGroups" }, null, null, null, null)
           }));
@@ -5762,197 +5757,6 @@ namespace Magewatch.API {
 
   }
 
-  public sealed partial class MUpdateCanPlayCardCommand : pb::IMessage<MUpdateCanPlayCardCommand> {
-    private static readonly pb::MessageParser<MUpdateCanPlayCardCommand> _parser = new pb::MessageParser<MUpdateCanPlayCardCommand>(() => new MUpdateCanPlayCardCommand());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<MUpdateCanPlayCardCommand> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[30]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public MUpdateCanPlayCardCommand() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public MUpdateCanPlayCardCommand(MUpdateCanPlayCardCommand other) : this() {
-      player_ = other.player_;
-      cardId_ = other.cardId_ != null ? other.cardId_.Clone() : null;
-      canPlay_ = other.canPlay_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public MUpdateCanPlayCardCommand Clone() {
-      return new MUpdateCanPlayCardCommand(this);
-    }
-
-    /// <summary>Field number for the "player" field.</summary>
-    public const int PlayerFieldNumber = 1;
-    private global::Magewatch.API.PlayerName player_ = global::Magewatch.API.PlayerName.PlayerUnspecified;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.PlayerName Player {
-      get { return player_; }
-      set {
-        player_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "card_id" field.</summary>
-    public const int CardIdFieldNumber = 2;
-    private global::Magewatch.API.CardId cardId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.CardId CardId {
-      get { return cardId_; }
-      set {
-        cardId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "can_play" field.</summary>
-    public const int CanPlayFieldNumber = 3;
-    private bool canPlay_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool CanPlay {
-      get { return canPlay_; }
-      set {
-        canPlay_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as MUpdateCanPlayCardCommand);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(MUpdateCanPlayCardCommand other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (Player != other.Player) return false;
-      if (!object.Equals(CardId, other.CardId)) return false;
-      if (CanPlay != other.CanPlay) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (Player != global::Magewatch.API.PlayerName.PlayerUnspecified) hash ^= Player.GetHashCode();
-      if (cardId_ != null) hash ^= CardId.GetHashCode();
-      if (CanPlay != false) hash ^= CanPlay.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (Player != global::Magewatch.API.PlayerName.PlayerUnspecified) {
-        output.WriteRawTag(8);
-        output.WriteEnum((int) Player);
-      }
-      if (cardId_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(CardId);
-      }
-      if (CanPlay != false) {
-        output.WriteRawTag(24);
-        output.WriteBool(CanPlay);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (Player != global::Magewatch.API.PlayerName.PlayerUnspecified) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Player);
-      }
-      if (cardId_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CardId);
-      }
-      if (CanPlay != false) {
-        size += 1 + 1;
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(MUpdateCanPlayCardCommand other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Player != global::Magewatch.API.PlayerName.PlayerUnspecified) {
-        Player = other.Player;
-      }
-      if (other.cardId_ != null) {
-        if (cardId_ == null) {
-          CardId = new global::Magewatch.API.CardId();
-        }
-        CardId.MergeFrom(other.CardId);
-      }
-      if (other.CanPlay != false) {
-        CanPlay = other.CanPlay;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            Player = (global::Magewatch.API.PlayerName) input.ReadEnum();
-            break;
-          }
-          case 18: {
-            if (cardId_ == null) {
-              CardId = new global::Magewatch.API.CardId();
-            }
-            input.ReadMessage(CardId);
-            break;
-          }
-          case 24: {
-            CanPlay = input.ReadBool();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
   /// <summary>
   /// Reveal an *existing* card and (optionally) animate it to a specific
   /// rank/file position
@@ -5965,7 +5769,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[31]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[30]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6188,7 +5992,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[32]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[31]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6323,7 +6127,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[33]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[32]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6458,7 +6262,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[34]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[33]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6624,7 +6428,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[35]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[34]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6798,7 +6602,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[36]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[35]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7008,7 +6812,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[37]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[36]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7233,7 +7037,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[38]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[37]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7489,7 +7293,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[39]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[38]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7627,7 +7431,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[40]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[39]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7866,7 +7670,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[41]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[40]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8065,7 +7869,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[42]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[41]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8203,7 +8007,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[43]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[42]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8256,9 +8060,6 @@ namespace Magewatch.API {
           break;
         case CommandOneofCase.InitiateGame:
           InitiateGame = other.InitiateGame.Clone();
-          break;
-        case CommandOneofCase.UpdateCanPlayCard:
-          UpdateCanPlayCard = other.UpdateCanPlayCard.Clone();
           break;
       }
 
@@ -8402,17 +8203,6 @@ namespace Magewatch.API {
       }
     }
 
-    /// <summary>Field number for the "update_can_play_card" field.</summary>
-    public const int UpdateCanPlayCardFieldNumber = 15;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Magewatch.API.MUpdateCanPlayCardCommand UpdateCanPlayCard {
-      get { return commandCase_ == CommandOneofCase.UpdateCanPlayCard ? (global::Magewatch.API.MUpdateCanPlayCardCommand) command_ : null; }
-      set {
-        command_ = value;
-        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.UpdateCanPlayCard;
-      }
-    }
-
     private object command_;
     /// <summary>Enum of possible cases for the "command" oneof.</summary>
     public enum CommandOneofCase {
@@ -8429,7 +8219,6 @@ namespace Magewatch.API {
       DisplayError = 12,
       DestroyCard = 13,
       InitiateGame = 14,
-      UpdateCanPlayCard = 15,
     }
     private CommandOneofCase commandCase_ = CommandOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8468,7 +8257,6 @@ namespace Magewatch.API {
       if (!object.Equals(DisplayError, other.DisplayError)) return false;
       if (!object.Equals(DestroyCard, other.DestroyCard)) return false;
       if (!object.Equals(InitiateGame, other.InitiateGame)) return false;
-      if (!object.Equals(UpdateCanPlayCard, other.UpdateCanPlayCard)) return false;
       if (CommandCase != other.CommandCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -8488,7 +8276,6 @@ namespace Magewatch.API {
       if (commandCase_ == CommandOneofCase.DisplayError) hash ^= DisplayError.GetHashCode();
       if (commandCase_ == CommandOneofCase.DestroyCard) hash ^= DestroyCard.GetHashCode();
       if (commandCase_ == CommandOneofCase.InitiateGame) hash ^= InitiateGame.GetHashCode();
-      if (commandCase_ == CommandOneofCase.UpdateCanPlayCard) hash ^= UpdateCanPlayCard.GetHashCode();
       hash ^= (int) commandCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -8551,10 +8338,6 @@ namespace Magewatch.API {
         output.WriteRawTag(114);
         output.WriteMessage(InitiateGame);
       }
-      if (commandCase_ == CommandOneofCase.UpdateCanPlayCard) {
-        output.WriteRawTag(122);
-        output.WriteMessage(UpdateCanPlayCard);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -8598,9 +8381,6 @@ namespace Magewatch.API {
       }
       if (commandCase_ == CommandOneofCase.InitiateGame) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(InitiateGame);
-      }
-      if (commandCase_ == CommandOneofCase.UpdateCanPlayCard) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(UpdateCanPlayCard);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -8685,12 +8465,6 @@ namespace Magewatch.API {
             InitiateGame = new global::Magewatch.API.MInitiateGameCommand();
           }
           InitiateGame.MergeFrom(other.InitiateGame);
-          break;
-        case CommandOneofCase.UpdateCanPlayCard:
-          if (UpdateCanPlayCard == null) {
-            UpdateCanPlayCard = new global::Magewatch.API.MUpdateCanPlayCardCommand();
-          }
-          UpdateCanPlayCard.MergeFrom(other.UpdateCanPlayCard);
           break;
       }
 
@@ -8813,15 +8587,6 @@ namespace Magewatch.API {
             InitiateGame = subBuilder;
             break;
           }
-          case 122: {
-            global::Magewatch.API.MUpdateCanPlayCardCommand subBuilder = new global::Magewatch.API.MUpdateCanPlayCardCommand();
-            if (commandCase_ == CommandOneofCase.UpdateCanPlayCard) {
-              subBuilder.MergeFrom(UpdateCanPlayCard);
-            }
-            input.ReadMessage(subBuilder);
-            UpdateCanPlayCard = subBuilder;
-            break;
-          }
         }
       }
     }
@@ -8841,7 +8606,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[44]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[43]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8967,7 +8732,7 @@ namespace Magewatch.API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[45]; }
+      get { return global::Magewatch.API.ApiReflection.Descriptor.MessageTypes[44]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

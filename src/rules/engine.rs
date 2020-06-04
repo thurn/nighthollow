@@ -216,7 +216,11 @@ impl Trigger {
                 target_creature: Some(*c),
                 ..EntityIds::default()
             },
-            Trigger::ScrollPlayed(p, _) => EntityIds::player(*p),
+            Trigger::ScrollPlayed(p, scroll_id) => EntityIds {
+                player: Some(*p),
+                scroll: Some(*scroll_id),
+                ..EntityIds::default()
+            },
             Trigger::SpellPlayed(p, _, _) => EntityIds::player(*p),
             Trigger::CombatStart => EntityIds::default(),
             Trigger::CombatEnd => EntityIds::default(),
@@ -287,6 +291,7 @@ impl Trigger {
 struct EntityIds {
     player: Option<PlayerName>,
     card: Option<CardId>,
+    scroll: Option<ScrollId>,
     source_creature: Option<CreatureId>,
     target_creature: Option<CreatureId>,
 }
@@ -312,6 +317,7 @@ impl Default for EntityIds {
         Self {
             player: None,
             card: None,
+            scroll: None,
             source_creature: None,
             target_creature: None,
         }
@@ -323,6 +329,7 @@ pub enum Entity<'a> {
     Creature(&'a Creature),
     Player(&'a Player),
     Card(&'a Card),
+    Scroll(&'a Scroll),
 }
 
 impl<'a> Entity<'a> {
@@ -346,6 +353,13 @@ impl<'a> Entity<'a> {
             _ => Err(eyre!("Expected card but got {:?}", self)),
         }
     }
+
+    pub fn scroll(&self) -> Result<&Scroll> {
+        match self {
+            Entity::Scroll(s) => Ok(s),
+            _ => Err(eyre!("Expected card but got {:?}", self)),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialOrd, Ord, Eq, PartialEq)]
@@ -353,6 +367,7 @@ pub enum EntityId {
     PlayerName(PlayerName),
     CreatureId(CreatureId),
     CardId(CardId),
+    ScrollId(ScrollId),
 }
 
 impl EntityId {
@@ -361,6 +376,7 @@ impl EntityId {
             EntityId::PlayerName(player_name) => Entity::Player(game.player(*player_name)),
             EntityId::CreatureId(creature_id) => Entity::Creature(game.creature(*creature_id)?),
             EntityId::CardId(card_id) => Entity::Card(game.card(*card_id)?),
+            EntityId::ScrollId(scroll_id) => Entity::Scroll(game.scroll(*scroll_id)?),
         })
     }
 }
@@ -404,12 +420,17 @@ pub struct TriggerContext<'a> {
 }
 
 impl<'a> TriggerContext<'a> {
-    pub fn owner(&self) -> &Player {
-        self.game.player(match self.this {
+    pub fn owner_name(&self) -> PlayerName {
+        match self.this {
             Entity::Creature(c) => c.owner(),
             Entity::Player(p) => p.name,
             Entity::Card(c) => c.owner(),
-        })
+            Entity::Scroll(s) => s.owner(),
+        }
+    }
+
+    pub fn owner(&self) -> &Player {
+        self.game.player(self.owner_name())
     }
 
     pub fn opponent(&self) -> &Player {
@@ -438,13 +459,20 @@ impl RuleData {
         this: Entity<'a>,
         game: &'a Game,
         trigger: &'a Trigger,
-    ) -> Result<TriggerContext<'a>> {
-        Ok(TriggerContext {
+    ) -> TriggerContext<'a> {
+        TriggerContext {
             this,
             trigger,
             identifier: &self.identifier,
             game,
-        })
+        }
+    }
+
+    fn should_trigger(&self, game: &Game) -> bool {
+        match self.identifier.entity_id {
+            EntityId::CardId(card_id) => game.has_card(card_id),
+            _ => true,
+        }
     }
 
     fn on_trigger<'a>(
@@ -453,8 +481,21 @@ impl RuleData {
         trigger: &'a Trigger,
         effects: &mut Effects,
     ) -> Result<()> {
+        if !self.should_trigger(game) {
+            return Ok(());
+        }
+
         self.rule.on_trigger(
-            &self.context(self.identifier.entity_id.find_in(game)?, game, trigger)?,
+            &self.context(
+                self.identifier.entity_id.find_in(game).map_err(|error| {
+                    error.wrap_err(format!(
+                        "Unable to find entity {:?} for trigger {:?}",
+                        self.identifier.entity_id, trigger
+                    ))
+                })?,
+                game,
+                trigger,
+            ),
             effects,
         )
     }
@@ -533,6 +574,7 @@ impl RulesEngine {
             entity_ids.player.map(EntityId::PlayerName),
             entity_ids.target_creature.map(EntityId::CreatureId),
             entity_ids.card.map(EntityId::CardId),
+            entity_ids.scroll.map(EntityId::ScrollId),
         ];
 
         for entity_id in ids.into_iter().filter_map(|x| x) {

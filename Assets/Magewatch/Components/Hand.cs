@@ -176,7 +176,7 @@ namespace Magewatch.Components
           t.DOLocalRotate(new Vector3(0, 0,
             _zRotationMultiplier * CalculateZRotation(curvePosition)), duration: 0.3f));
       }
-      
+
       sequence.AppendCallback(() => onComplete?.Invoke());
     }
 

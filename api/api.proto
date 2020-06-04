@@ -289,14 +289,6 @@ message MDrawOrUpdateCardCommand {
   CardData card = 1;
 }
 
-message MUpdateCanPlayCardCommand {
-  PlayerName player = 1;
-
-  CardId card_id = 2;
-
-  bool can_play = 3;
-}
-
 // Reveal an *existing* card and (optionally) animate it to a specific
 // rank/file position
 message RevealCardCommand {
@@ -441,7 +433,6 @@ message Command {
     DisplayErrorCommand display_error = 12;
     MDestroyCardCommand destroy_card = 13;
     MInitiateGameCommand initiate_game = 14;
-    MUpdateCanPlayCardCommand update_can_play_card = 15;
   }
 }
 

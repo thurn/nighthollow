@@ -70,6 +70,10 @@ impl Game {
             .chain(self.enemy.creatures.iter_mut())
     }
 
+    pub fn all_scrolls(&self) -> impl Iterator<Item = &Scroll> {
+        self.user.scrolls.iter().chain(self.enemy.scrolls.iter())
+    }
+
     pub fn player(&self, player: PlayerName) -> &Player {
         match player {
             PlayerName::User => &self.user,
@@ -96,6 +100,10 @@ impl Game {
             .ok_or_else(|| eyre!("Card ID {} not found", card_id))
     }
 
+    pub fn has_card(&self, card_id: CardId) -> bool {
+        self.all_cards().any(|c| c.card_id() == card_id)
+    }
+
     pub fn creature(&self, creature_id: CreatureId) -> Result<&Creature> {
         self.all_creatures()
             .find(|c| c.creature_id() == creature_id)
@@ -106,5 +114,11 @@ impl Game {
         self.all_creatures_mut()
             .find(|c| c.creature_id() == creature_id)
             .ok_or_else(|| eyre!("Creature ID {} not found", creature_id))
+    }
+
+    pub fn scroll(&self, scroll_id: ScrollId) -> Result<&Scroll> {
+        self.all_scrolls()
+            .find(|s| s.scroll_id() == scroll_id)
+            .ok_or_else(|| eyre!("Scroll Id {} not found", scroll_id))
     }
 }

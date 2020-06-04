@@ -22,7 +22,7 @@ use crate::{
         basic_attacks::BasicMeleeAttack,
         core::{
             card_rules::CoreCardRules, creature_rules::CoreCreatureRules,
-            player_rules::CorePlayerRules,
+            player_rules::CorePlayerRules, scroll_rules::CoreScrollRules,
         },
     },
     model::{
@@ -172,6 +172,7 @@ fn flame_scroll(owner: PlayerName) -> Scroll {
             added_current_influence: Influence::single(1, School::Flame),
             added_maximum_influence: Influence::single(1, School::Flame),
         },
+        rules: vec![CoreScrollRules::new()],
     }
 }
 

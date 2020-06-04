@@ -92,16 +92,7 @@ namespace Magewatch.Services
           var button = Root.Instance.MainButton;
           button.UpdateData(command.UpdateInterface);
         }
-
-        if (command.UpdateCanPlayCard != null)
-        {
-          var card = Errors.CheckNotNull(
-            Root.Instance.GetPlayer(command.UpdateCanPlayCard.Player).Hand
-              .Get(command.UpdateCanPlayCard.CardId),
-            $"Card ID {command.UpdateCanPlayCard.CardId} not found!");
-          card.SetCanPlay(command.UpdateCanPlayCard.CanPlay);
-        }
-
+        
         if (command.DrawOrUpdateCard != null)
         {
           HandleDrawCard(command, ref numUserCards, ref numEnemyCards);

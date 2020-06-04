@@ -22,7 +22,7 @@ use super::{
 use crate::{
     api,
     model::{
-        cards::{HasCardData, HasCardId},
+        cards::{Cost, HasCardData, HasCardId},
         games::Game,
         players::PlayerAttribute,
         primitives::{CardId, CreatureId, PlayerName},
@@ -86,6 +86,7 @@ pub enum Operator {
 #[derive(Debug, Clone)]
 pub enum Effect {
     DrawCard(PlayerName),
+    PlayCard(PlayerName, CardId),
     ModifyPlayerAttribute(PlayerName, Operator, PlayerAttribute),
     SetSkillPriority(CreatureId, RuleIdentifier, u32),
     UseCreatureSkill(CreatureSkill),
@@ -101,6 +102,9 @@ pub fn apply_effect(
     match &effect_data.effect {
         Effect::DrawCard(player_name) => {
             draw_card(engine, events, identifier, *player_name)?;
+        }
+        Effect::PlayCard(player_name, card_id) => {
+            play_card(&mut engine.game, events, identifier, *player_name, *card_id)?;
         }
         Effect::ModifyPlayerAttribute(player_name, operator, player_attribute) => {
             modify_player_attribute(
@@ -138,8 +142,51 @@ fn draw_card(
     let rules = card.card_data().rules.clone();
     events.push_event(identifier, Event::CardDrawn(player.name, card.card_id()));
     player.hand.push(card);
-    println!("Adding rules for {:?}", card_id);
     engine.add_rules(EntityId::CardId(card_id), rules);
+    Ok(())
+}
+
+fn play_card(
+    game: &mut Game,
+    events: &mut Events,
+    identifier: RuleIdentifier,
+    player_name: PlayerName,
+    card_id: CardId,
+) -> Result<()> {
+    let cost = game.player(player_name).card(card_id)?.card_data().cost;
+
+    match cost {
+        Cost::ScrollPlay => {
+            modify_player_attribute(
+                game,
+                events,
+                identifier,
+                player_name,
+                Operator::Subtract(UnderflowBehavior::Error),
+                PlayerAttribute::CurrentScrollPlays(1),
+            )?;
+        }
+        Cost::StandardCost(standard_cost) => {
+            modify_player_attribute(
+                game,
+                events,
+                identifier,
+                player_name,
+                Operator::Subtract(UnderflowBehavior::Error),
+                PlayerAttribute::CurrentPower(standard_cost.power),
+            )?;
+            modify_player_attribute(
+                game,
+                events,
+                identifier,
+                player_name,
+                Operator::Subtract(UnderflowBehavior::Error),
+                PlayerAttribute::CurrentInfluence(standard_cost.influence),
+            )?;
+        }
+    }
+
+    events.push_event(identifier, Event::CardPlayed(player_name, card_id));
     Ok(())
 }
 
