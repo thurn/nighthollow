@@ -21,6 +21,7 @@ use super::{
     stats::{Stat, StatName, Tag, TagName},
 };
 use crate::{
+    agents::agent::Agent,
     api, commands,
     model::primitives::*,
     rules::engine::{Rule, RulesEngine},
@@ -53,6 +54,7 @@ pub struct Game {
     pub state: GameState,
     pub user: Player,
     pub enemy: Player,
+    pub agent: Box<dyn Agent>,
 }
 
 impl Game {

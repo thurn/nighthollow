@@ -22,6 +22,7 @@
 #![feature(move_ref_pattern)]
 #![feature(map_first_last)]
 
+mod agents;
 mod api;
 mod commands;
 mod gameplay;

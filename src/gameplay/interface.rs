@@ -46,6 +46,7 @@ fn advance_turn(engine: &mut RulesEngine) -> Result<api::CommandList> {
     engine.game.state.phase = GamePhase::Preparation;
     engine.game.state.turn += 1;
     engine.invoke_trigger(&mut result, Trigger::TurnStart)?;
+
     if engine.game.all_creatures().any(|x| true) {
         result.push(commands::update_interface_state_command(true, "Combat!"));
         Ok(commands::single_group(result))

@@ -15,6 +15,7 @@
 use crate::prelude::*;
 
 use crate::{
+    agents::agent::NullAgent,
     gameplay::{
         basic_attacks::BasicMeleeAttack,
         core::{
@@ -53,6 +54,7 @@ fn standard() -> Game {
         state: GameState::default(),
         user: new_player(PlayerName::User, basic_deck),
         enemy: new_player(PlayerName::Enemy, basic_deck),
+        agent: Box::from(NullAgent {}),
     }
 }
 
@@ -62,6 +64,7 @@ fn basic_turn() -> Game {
         state: GameState::default(),
         user: basic_turn_player(new_player(PlayerName::User, basic_deck)),
         enemy: basic_turn_player(new_player(PlayerName::Enemy, basic_deck)),
+        agent: Box::from(NullAgent {}),
     }
 }
 

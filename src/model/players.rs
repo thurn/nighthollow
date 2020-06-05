@@ -17,7 +17,9 @@ use crate::prelude::*;
 use super::{
     cards::{Card, Deck, HasCardData, HasCardId, Scroll},
     creatures::Creature,
-    primitives::{CardId, Influence, LifeValue, ManaValue, PlayerName, PowerValue, School},
+    primitives::{
+        BoardPosition, CardId, Influence, LifeValue, ManaValue, PlayerName, PowerValue, School,
+    },
 };
 use crate::rules::{effects::UnderflowBehavior, engine::Rule};
 
@@ -85,6 +87,10 @@ impl Player {
             .iter()
             .find(|c| c.card_id() == card_id)
             .ok_or_else(|| eyre!("Card not found: {}", card_id))
+    }
+
+    pub fn creature_position_available(&self, position: BoardPosition) -> bool {
+        self.creatures.iter().all(|c| c.position != position)
     }
 
     pub fn remove_from_hand(&mut self, card_id: CardId) -> Result<Card> {

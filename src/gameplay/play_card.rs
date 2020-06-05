@@ -17,26 +17,99 @@ use crate::prelude::*;
 use crate::{
     api, commands,
     model::{
-        cards::{Card, HasCardState, Scroll, Spell},
+        cards::{Card, CardWithTarget, HasCardId, HasCardState, Scroll, Spell},
         creatures::{Creature, CreatureData, CreatureState, HasCreatureData},
+        games::Game,
         players::{HasOwner, Player},
         primitives::{BoardPosition, CardId, CreatureId, FileValue, PlayerName, RankValue},
     },
     requests,
     rules::engine::{EntityId, Rule, RulesEngine, Trigger},
 };
+use api::play_card_request::PlayCard;
 
-enum CardWithTarget {
-    Creature(CardId, RankValue, FileValue),
-    Spell(CardId, CreatureId),
-    Scroll(CardId),
+pub fn play_card<'a>(
+    engine: &'a mut RulesEngine,
+    card: CardWithTarget<'a>,
+) -> Result<api::CommandList> {
+    play_card_internal(engine, PlayCardWithTarget::from(card))
 }
 
 pub fn on_play_card_request(
     engine: &mut RulesEngine,
     message: &api::PlayCardRequest,
 ) -> Result<api::CommandList> {
+    play_card_internal(
+        engine,
+        PlayCardWithTarget::from(to_card_with_target(&engine.game, message)?),
+    )
+}
+
+fn play_card_internal(
+    engine: &mut RulesEngine,
+    card_with_target: PlayCardWithTarget,
+) -> Result<api::CommandList> {
     let mut result = vec![];
+    let owner = engine.game.card(card_with_target.id)?.owner();
+
+    // Must be before card is removed from hand to avoid broken update events:
+    engine.invoke_as_group(&mut result, Trigger::CardPlayed(owner, card_with_target.id))?;
+
+    let player = engine.game.player_mut(owner);
+    let mut card = player.remove_from_hand(card_with_target.id)?;
+    card.card_state_mut().revealed_to_opponent = true;
+    let card_data = commands::card_data(&card);
+
+    match (card, card_with_target.target) {
+        (Card::Creature(creature_data), PlayCardTarget::Creature(position)) => {
+            on_play_creature(engine, &mut result, creature_data, card_data, position)
+        }
+        (Card::Spell(spell), PlayCardTarget::Spell(target_id)) => {
+            on_play_attachment(engine, &mut result, spell, card_data, target_id)
+        }
+        (Card::Scroll(scroll), PlayCardTarget::Scroll) => {
+            on_play_scroll(engine, &mut result, scroll, card_data)
+        }
+        _ => Err(eyre!("Card did not match targeting type")),
+    }?;
+
+    Ok(commands::groups(result))
+}
+
+enum PlayCardTarget {
+    Creature(BoardPosition),
+    Spell(CreatureId),
+    Scroll,
+}
+
+struct PlayCardWithTarget {
+    id: CardId,
+    target: PlayCardTarget,
+}
+
+impl PlayCardWithTarget {
+    pub fn from(card: CardWithTarget) -> PlayCardWithTarget {
+        match card {
+            CardWithTarget::Creature(c, position) => PlayCardWithTarget {
+                id: c.card_id(),
+                target: PlayCardTarget::Creature(position),
+            },
+            CardWithTarget::Spell(s, target_creature) => PlayCardWithTarget {
+                id: s.card_id(),
+                target: PlayCardTarget::Spell(target_creature.creature_id()),
+            },
+            CardWithTarget::Scroll(s) => PlayCardWithTarget {
+                id: s.card_id(),
+                target: PlayCardTarget::Scroll,
+            },
+        }
+    }
+}
+
+fn to_card_with_target<'a>(
+    game: &'a Game,
+    message: &api::PlayCardRequest,
+) -> Result<CardWithTarget<'a>> {
     let card_id = message
         .card_id
         .as_ref()
@@ -47,44 +120,32 @@ pub fn on_play_card_request(
         .as_ref()
         .ok_or_else(|| eyre!("play_card is required"))?;
     let player_name = requests::convert_player_name(message.player())?;
+    let card = game.player(player_name).card(card_id)?;
 
-    // Must be before card is removed from hand to avoid broken update events:
-    engine.invoke_as_group(&mut result, Trigger::CardPlayed(player_name, card_id))?;
-
-    let player = engine.game.player_mut(player_name);
-    let mut card = player.remove_from_hand(card_id)?;
-    card.card_state_mut().revealed_to_opponent = true;
-    let card_data = commands::card_data(&card);
-
-    use api::play_card_request::PlayCard::*;
     match (card, request) {
-        (Card::Creature(creature_data), PlayCreature(play_creature)) => on_play_creature(
-            engine,
-            &mut result,
-            creature_data,
-            card_data,
-            requests::convert_rank(play_creature.rank_position())?,
-            requests::convert_file(play_creature.file_position())?,
-        ),
-        (Card::Spell(spell), PlayAttachment(play_attachment)) => on_play_attachment(
-            engine,
-            &mut result,
-            spell,
-            card_data,
-            requests::convert_creature_id(
-                play_attachment
-                    .creature_id
-                    .as_ref()
-                    .ok_or_else(|| eyre!("creature_id is required"))?,
-            ),
-        ),
-        (Card::Scroll(scroll), PlayUntargeted(_)) => {
-            on_play_scroll(engine, &mut result, scroll, card_data)
+        (Card::Creature(creature_data), PlayCard::PlayCreature(play_creature)) => {
+            Ok(CardWithTarget::Creature(
+                creature_data,
+                BoardPosition {
+                    rank: requests::convert_rank(play_creature.rank_position())?,
+                    file: requests::convert_file(play_creature.file_position())?,
+                },
+            ))
         }
+        (Card::Spell(spell), PlayCard::PlayAttachment(play_attachment)) => {
+            Ok(CardWithTarget::Spell(
+                spell,
+                game.creature(requests::convert_creature_id(
+                    play_attachment
+                        .creature_id
+                        .as_ref()
+                        .ok_or_else(|| eyre!("creature_id is required"))?,
+                ))?,
+            ))
+        }
+        (Card::Scroll(scroll), PlayCard::PlayUntargeted(_)) => Ok(CardWithTarget::Scroll(scroll)),
         _ => Err(eyre!("Card did not match targeting type")),
-    }?;
-
-    Ok(commands::groups(result))
+    }
 }
 
 fn reveal_card(
@@ -116,21 +177,31 @@ fn on_play_creature(
     result: &mut Vec<api::CommandGroup>,
     creature_data: CreatureData,
     card_data: api::CardData,
-    rank: RankValue,
-    file: FileValue,
+    position: BoardPosition,
 ) -> Result<()> {
-    let creature_id = creature_data.creature_id();
     let player = engine.game.player_mut(creature_data.owner());
     let player_name = player.name;
+
+    if !player.creature_position_available(position) {
+        return Err(eyre!("Creature position {:?} already occupied!", position));
+    }
+
     let creature = Creature {
         data: creature_data,
-        position: BoardPosition { rank, file },
+        position,
         spells: vec![],
         state: CreatureState::default(),
     };
     let rules = creature.data.rules.clone();
+    let creature_id = creature.creature_id();
 
-    reveal_card(player_name, result, card_data, Some(rank), Some(file))?;
+    reveal_card(
+        player_name,
+        result,
+        card_data,
+        Some(position.rank),
+        Some(position.file),
+    )?;
 
     result.push(commands::single(
         commands::create_or_update_creature_command(&creature),
@@ -149,14 +220,9 @@ fn on_play_attachment(
     card_data: api::CardData,
     target_id: CreatureId,
 ) -> Result<()> {
-    let spell_id = spell.spell_id();
     let player = engine.game.player_mut(spell.owner());
     let player_name = player.name;
-    let creature = player
-        .creatures
-        .iter_mut()
-        .find(|c| c.creature_id() == target_id)
-        .ok_or_else(|| eyre!("Creature not found"))?;
+    let creature = engine.game.creature_mut(target_id)?;
 
     reveal_card(
         player_name,
@@ -165,6 +231,7 @@ fn on_play_attachment(
         Some(creature.position.rank),
         Some(creature.position.file),
     )?;
+    let spell_id = spell.spell_id();
 
     creature.spells.push(spell);
     result.push(commands::single(

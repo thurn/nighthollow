@@ -27,7 +27,8 @@ use super::{
     creatures::{Creature, CreatureData},
     players::HasOwner,
     primitives::{
-        CardId, FileValue, Influence, PlayerName, PowerValue, RankValue, School, ScrollId, SpellId,
+        BoardPosition, CardId, FileValue, Influence, PlayerName, PowerValue, RankValue, School,
+        ScrollId, SpellId,
     },
     stats::Tag,
 };
@@ -76,6 +77,10 @@ pub struct CardData {
 pub trait HasCardData {
     fn card_data(&self) -> &CardData;
     fn card_data_mut(&mut self) -> &mut CardData;
+
+    fn can_play(&self) -> bool {
+        self.card_data().state.owner_can_play.value()
+    }
 }
 
 impl HasCardData for CardData {
@@ -204,6 +209,23 @@ impl HasCardData for Card {
             Card::Creature(c) => c.card_data_mut(),
             Card::Spell(s) => s.card_data_mut(),
             Card::Scroll(s) => s.card_data_mut(),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum CardWithTarget<'a> {
+    Creature(&'a CreatureData, BoardPosition),
+    Spell(&'a Spell, &'a Creature),
+    Scroll(&'a Scroll),
+}
+
+impl<'a> CardWithTarget<'a> {
+    pub fn owner(&self) -> PlayerName {
+        match self {
+            CardWithTarget::Creature(c, _) => c.owner(),
+            CardWithTarget::Spell(s, _) => s.owner(),
+            CardWithTarget::Scroll(s) => s.owner(),
         }
     }
 }

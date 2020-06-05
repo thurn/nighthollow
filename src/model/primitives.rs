@@ -85,6 +85,16 @@ impl PlayerName {
     }
 }
 
+lazy_static! {
+    pub static ref RANKS: Vec<RankValue> = vec![
+        RankValue::Rank1,
+        RankValue::Rank2,
+        RankValue::Rank3,
+        RankValue::Rank4,
+        RankValue::Rank5
+    ];
+}
+
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone, Ord, PartialOrd)]
 pub enum RankValue {
     Rank1,
@@ -92,6 +102,16 @@ pub enum RankValue {
     Rank3,
     Rank4,
     Rank5,
+}
+
+lazy_static! {
+    pub static ref FILES: Vec<FileValue> = vec![
+        FileValue::File1,
+        FileValue::File2,
+        FileValue::File3,
+        FileValue::File4,
+        FileValue::File5
+    ];
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone, Ord, PartialOrd)]
@@ -103,7 +123,7 @@ pub enum FileValue {
     File5,
 }
 
-#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, Eq, PartialEq)]
 pub struct BoardPosition {
     pub rank: RankValue,
     pub file: FileValue,
@@ -207,6 +227,10 @@ impl Influence {
                 }
             }
         }
+    }
+
+    pub fn total(&self) -> HealthValue {
+        SCHOOLS.iter().map(|t| self.value(*t)).sum()
     }
 }
 
