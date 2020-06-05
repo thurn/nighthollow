@@ -361,6 +361,10 @@ pub fn empty() -> Result<api::CommandList> {
     })
 }
 
+pub fn one_group(commands: Vec<api::Command>) -> Vec<api::CommandGroup> {
+    vec![group(commands)]
+}
+
 pub fn single(command: api::Command) -> api::CommandGroup {
     api::CommandGroup {
         commands: vec![command],

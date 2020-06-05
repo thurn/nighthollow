@@ -25,10 +25,8 @@ use crate::{
     rules::engine::{RulesEngine, Trigger},
 };
 
-pub fn run_combat(engine: &mut RulesEngine) -> Result<Vec<api::CommandGroup>> {
-    let mut result = vec![];
-
-    engine.invoke_as_group(&mut result, Trigger::CombatStart)?;
+pub fn run_combat(engine: &mut RulesEngine, result: &mut Vec<api::CommandGroup>) -> Result<()> {
+    engine.invoke_as_group(result, Trigger::CombatStart)?;
     let mut round_number = 1;
 
     while has_living_creatures(&engine.game.user) && has_living_creatures(&engine.game.enemy) {
@@ -60,13 +58,10 @@ pub fn run_combat(engine: &mut RulesEngine) -> Result<Vec<api::CommandGroup>> {
         round_number += 1;
     }
 
-    engine.invoke_as_group(&mut result, Trigger::CombatEnd)?;
+    engine.invoke_as_group(result, Trigger::CombatEnd)?;
 
-    run_end_of_combat(&mut engine.game, &mut result);
-
-    engine.game.state.phase = GamePhase::Main;
-    engine.invoke_as_group(&mut result, Trigger::MainPhaseStart)?;
-    Ok(result)
+    run_end_of_combat(&mut engine.game, result);
+    Ok(())
 }
 
 /// True if this player has any living creatures

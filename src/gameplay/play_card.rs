@@ -28,32 +28,28 @@ use crate::{
 };
 use api::play_card_request::PlayCard;
 
-pub fn play_card<'a>(
-    engine: &'a mut RulesEngine,
-    card: CardWithTarget<'a>,
-) -> Result<api::CommandList> {
-    play_card_internal(engine, PlayCardWithTarget::from(card))
-}
-
 pub fn on_play_card_request(
     engine: &mut RulesEngine,
     message: &api::PlayCardRequest,
 ) -> Result<api::CommandList> {
-    play_card_internal(
+    let mut result = vec![];
+    play(
         engine,
-        PlayCardWithTarget::from(to_card_with_target(&engine.game, message)?),
-    )
+        to_card_with_target(&engine.game, message)?,
+        &mut result,
+    )?;
+    Ok(commands::groups(result))
 }
 
-fn play_card_internal(
+pub fn play(
     engine: &mut RulesEngine,
     card_with_target: PlayCardWithTarget,
-) -> Result<api::CommandList> {
-    let mut result = vec![];
+    result: &mut Vec<api::CommandGroup>,
+) -> Result<()> {
     let owner = engine.game.card(card_with_target.id)?.owner();
 
     // Must be before card is removed from hand to avoid broken update events:
-    engine.invoke_as_group(&mut result, Trigger::CardPlayed(owner, card_with_target.id))?;
+    engine.invoke_as_group(result, Trigger::CardPlayed(owner, card_with_target.id))?;
 
     let player = engine.game.player_mut(owner);
     let mut card = player.remove_from_hand(card_with_target.id)?;
@@ -62,29 +58,27 @@ fn play_card_internal(
 
     match (card, card_with_target.target) {
         (Card::Creature(creature_data), PlayCardTarget::Creature(position)) => {
-            on_play_creature(engine, &mut result, creature_data, card_data, position)
+            on_play_creature(engine, result, creature_data, card_data, position)
         }
         (Card::Spell(spell), PlayCardTarget::Spell(target_id)) => {
-            on_play_attachment(engine, &mut result, spell, card_data, target_id)
+            on_play_attachment(engine, result, spell, card_data, target_id)
         }
         (Card::Scroll(scroll), PlayCardTarget::Scroll) => {
-            on_play_scroll(engine, &mut result, scroll, card_data)
+            on_play_scroll(engine, result, scroll, card_data)
         }
         _ => Err(eyre!("Card did not match targeting type")),
-    }?;
-
-    Ok(commands::groups(result))
+    }
 }
 
-enum PlayCardTarget {
+pub enum PlayCardTarget {
     Creature(BoardPosition),
     Spell(CreatureId),
     Scroll,
 }
 
-struct PlayCardWithTarget {
-    id: CardId,
-    target: PlayCardTarget,
+pub struct PlayCardWithTarget {
+    pub id: CardId,
+    pub target: PlayCardTarget,
 }
 
 impl PlayCardWithTarget {
@@ -109,7 +103,7 @@ impl PlayCardWithTarget {
 fn to_card_with_target<'a>(
     game: &'a Game,
     message: &api::PlayCardRequest,
-) -> Result<CardWithTarget<'a>> {
+) -> Result<PlayCardWithTarget> {
     let card_id = message
         .card_id
         .as_ref()
@@ -122,30 +116,29 @@ fn to_card_with_target<'a>(
     let player_name = requests::convert_player_name(message.player())?;
     let card = game.player(player_name).card(card_id)?;
 
-    match (card, request) {
+    let target = match (card, request) {
         (Card::Creature(creature_data), PlayCard::PlayCreature(play_creature)) => {
-            Ok(CardWithTarget::Creature(
-                creature_data,
-                BoardPosition {
-                    rank: requests::convert_rank(play_creature.rank_position())?,
-                    file: requests::convert_file(play_creature.file_position())?,
-                },
-            ))
+            Ok(PlayCardTarget::Creature(BoardPosition {
+                rank: requests::convert_rank(play_creature.rank_position())?,
+                file: requests::convert_file(play_creature.file_position())?,
+            }))
         }
         (Card::Spell(spell), PlayCard::PlayAttachment(play_attachment)) => {
-            Ok(CardWithTarget::Spell(
-                spell,
-                game.creature(requests::convert_creature_id(
-                    play_attachment
-                        .creature_id
-                        .as_ref()
-                        .ok_or_else(|| eyre!("creature_id is required"))?,
-                ))?,
-            ))
+            Ok(PlayCardTarget::Spell(requests::convert_creature_id(
+                play_attachment
+                    .creature_id
+                    .as_ref()
+                    .ok_or_else(|| eyre!("creature_id is required"))?,
+            )))
         }
-        (Card::Scroll(scroll), PlayCard::PlayUntargeted(_)) => Ok(CardWithTarget::Scroll(scroll)),
+        (Card::Scroll(scroll), PlayCard::PlayUntargeted(_)) => Ok(PlayCardTarget::Scroll),
         _ => Err(eyre!("Card did not match targeting type")),
-    }
+    }?;
+
+    Ok(PlayCardWithTarget {
+        id: card_id,
+        target,
+    })
 }
 
 fn reveal_card(
