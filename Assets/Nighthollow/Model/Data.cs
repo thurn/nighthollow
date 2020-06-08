@@ -16,14 +16,24 @@ using System.Collections.Generic;
 
 namespace Nighthollow.Model
 {
-  public struct CreatureId
+  public readonly struct CreatureId
   {
-    public int Value;
+    public readonly int Value;
+
+    public CreatureId(int value)
+    {
+      Value = value;
+    }
   }
 
-  public struct CardId
+  public readonly struct CardId
   {
-    public int Value;
+    public readonly int Value;
+
+    public CardId(int value)
+    {
+      Value = value;
+    }
   }
 
   public enum PlayerName
@@ -110,8 +120,6 @@ namespace Nighthollow.Model
 
     public StandardCost StandardCost;
 
-    public PlayerName Owner;
-
     public Asset Image;
 
     public bool CanBePlayed;
@@ -127,9 +135,9 @@ namespace Nighthollow.Model
 
     public PlayerName Owner;
 
-    public RankValue RankPosition;
+    public RankValue? RankPosition;
 
-    public FileValue FilePosition;
+    public FileValue? FilePosition;
 
     public List<AttachmentData> Attachments;
   }

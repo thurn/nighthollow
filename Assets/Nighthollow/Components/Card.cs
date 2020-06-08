@@ -31,9 +31,7 @@ namespace Nighthollow.Components
     [SerializeField] RectTransform _cardBack;
     [SerializeField] RectTransform _cardFront;
     [SerializeField] Image _cardImage;
-    [SerializeField] TextMeshProUGUI _name;
     [SerializeField] TextMeshProUGUI _cost;
-    [SerializeField] TextMeshProUGUI _text;
     [SerializeField] List<Image> _influence;
     [SerializeField] Image _outline;
 
@@ -50,8 +48,6 @@ namespace Nighthollow.Components
 
     public CardId CardId => _cardData.CardId;
 
-    public PlayerName Owner => _cardData.Owner;
-
     public void Initialize(CardData cardData)
     {
       _cardFront.gameObject.SetActive(false);
@@ -65,7 +61,7 @@ namespace Nighthollow.Components
       if (!_initialized && _debugMode)
       {
         Initialize(_cardData);
-        _isFaceUp = _cardData.Owner == PlayerName.User;
+        _isFaceUp = true;
         transform.localScale = Vector2.one * _debugCardScale;
       }
 
@@ -78,7 +74,7 @@ namespace Nighthollow.Components
     {
       Errors.CheckNotNull(newCardData);
 
-      _hand = Root.Instance.GetPlayer(newCardData.Owner).Hand;
+      _hand = Root.Instance.GetPlayer(PlayerName.User).Hand;
 
       if (!_isFaceUp)
       {
@@ -147,19 +143,19 @@ namespace Nighthollow.Components
 
     void UpdateOutline(bool canBePlayed)
     {
-      _outline.enabled = canBePlayed;
-      if (canBePlayed)
-      {
-        var color = _outline.color;
-        color.a = 0;
-        _outline.color = color;
-        _outline.DOFade(1.0f, 0.1f);
-      }
+      // _outline.enabled = canBePlayed;
+      // if (canBePlayed)
+      // {
+      //   var color = _outline.color;
+      //   color.a = 0;
+      //   _outline.color = color;
+      //   _outline.DOFade(1.0f, 0.1f);
+      // }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-      if (_cardData.Owner == PlayerName.User && !_previewMode)
+      if (!_previewMode)
       {
         _isDragging = true;
         _initialDragPosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);

@@ -23,9 +23,60 @@ namespace Nighthollow.Components
 {
   public sealed class DebugButtons : MonoBehaviour
   {
+    int _idCounter;
+
     public void Slow()
     {
       Time.timeScale = 0.1f;
     }
+
+    public void Draw()
+    {
+      var card = Wizard();
+      Root.Instance.AssetService.FetchAssets(card, () =>
+      {
+        Root.Instance.GetPlayer(PlayerName.User).Hand.DrawOrUpdateCard(card);
+      });
+    }
+
+    CardData Wizard() => new CardData
+    {
+      CardId = new CardId(_idCounter++),
+      Prefab = Prefab("Content/Card"),
+      StandardCost = Cost(50, School.Flame, 1),
+      Image = Sprite("CreatureImages/Wizard"),
+      CanBePlayed = false,
+      CreatureData = new CreatureData
+      {
+        CreatureId = new CreatureId(_idCounter++),
+        Prefab = Prefab("Creatures/Wizard"),
+        Owner = PlayerName.User,
+      }
+    };
+
+    Asset Prefab(string address) => new Asset
+    {
+      Address = address,
+      AssetType = AssetType.Prefab
+    };
+
+    Asset Sprite(string address) => new Asset
+    {
+      Address = address,
+      AssetType = AssetType.Sprite
+    };
+
+    StandardCost Cost(int mana, School school, int influence) => new StandardCost
+    {
+      ManaCost = 50,
+      InfluenceCost = new List<Influence>
+      {
+        new Influence
+        {
+          School = school,
+          Value = influence
+        }
+      }
+    };
   }
 }

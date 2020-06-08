@@ -29,5 +29,69 @@ namespace Nighthollow.Services
     readonly Dictionary<string, Object> _assetCache = new Dictionary<string, Object>();
 
     public T Get<T>(Asset asset) where T : Object => _assetCache[asset.Address] as T;
+
+    public void FetchAssets(CardData card, Action onComplete)
+    {
+      var assets = new List<Asset>();
+      AddCardAssets(card, assets);
+      StartCoroutine(PopulateAssets(assets, onComplete));
+    }
+
+    void AddCardAssets(CardData card, List<Asset> assets)
+    {
+      assets.Add(card.Prefab);
+      assets.Add(card.Image);
+      AddCreatureAssets(card.CreatureData, assets);
+    }
+
+    void AddCreatureAssets(CreatureData creature, List<Asset> assets)
+    {
+      assets.Add(creature.Prefab);
+
+      if (creature.Attachments != null)
+      {
+        foreach (var attachment in creature.Attachments)
+        {
+          AddAttachmentAssets(attachment, assets);
+        }
+      }
+    }
+
+    void AddAttachmentAssets(AttachmentData attachmentData, List<Asset> assets)
+    {
+      assets.Add(attachmentData.Image);
+    }
+
+    IEnumerator PopulateAssets(List<Asset> assets, Action onComplete)
+    {
+      assets.RemoveAll(x => x == null);
+      var requests = assets.Select(asset => Resources.LoadAsync(asset.Address, TypeForAsset(asset))).ToList();
+
+      foreach (var request in requests)
+      {
+        yield return request;
+      }
+
+      for (var i = 0; i < requests.Count; ++i)
+      {
+        var asset = requests[i].asset;
+        _assetCache[assets[i].Address] = Errors.CheckNotNull(asset, $"For asset address: '{assets[i].Address}'");
+      }
+
+      onComplete();
+    }
+
+    Type TypeForAsset(Asset asset)
+    {
+      switch (asset.AssetType)
+      {
+        case AssetType.Prefab:
+          return typeof(GameObject);
+        case AssetType.Sprite:
+          return typeof(Sprite);
+        default:
+          throw Errors.UnknownEnumValue(asset.AssetType);
+      }
+    }
   }
 }

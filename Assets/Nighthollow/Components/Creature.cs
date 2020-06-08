@@ -94,9 +94,9 @@ namespace Nighthollow.Components
 
     public PlayerName Owner => _creatureData.Owner;
 
-    public RankValue RankPosition => _creatureData.RankPosition;
+    public RankValue? RankPosition => _creatureData.RankPosition;
 
-    public FileValue FilePosition => _creatureData.FilePosition;
+    public FileValue? FilePosition => _creatureData.FilePosition;
 
     public bool AnimationPaused
     {
@@ -107,9 +107,12 @@ namespace Nighthollow.Components
     {
       transform.eulerAngles = newData.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
-      transform.position = new Vector2(
-        newData.RankPosition.ToXPosition(newData.Owner),
-        newData.FilePosition.ToYPosition());
+      if (newData.RankPosition.HasValue && newData.FilePosition.HasValue)
+      {
+        transform.position = new Vector2(
+          newData.RankPosition.Value.ToXPosition(newData.Owner),
+          newData.FilePosition.Value.ToYPosition());
+      }
 
       _attachmentDisplay.SetAttachments(newData.Attachments);
 
@@ -211,7 +214,7 @@ namespace Nighthollow.Components
       sequence.InsertCallback(0.4f, () =>
       {
         _attachmentDisplay.gameObject.SetActive(true);
-        _creatureService.AddCreatureAtPosition(this, RankPosition, FilePosition);
+        _creatureService.AddCreatureAtPosition(this, RankPosition.Value, FilePosition.Value);
       });
     }
 

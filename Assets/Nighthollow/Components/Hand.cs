@@ -29,7 +29,6 @@ namespace Nighthollow.Components
     [SerializeField] Transform _showCardPosition;
     [SerializeField] float _initialCardScale;
     [SerializeField] float _finalCardScale;
-    [SerializeField] float _dragEndScale;
     [SerializeField] int _zRotationMultiplier;
     [Header("State")]
     [SerializeField] Transform _controlPoint1;
@@ -105,6 +104,7 @@ namespace Nighthollow.Components
 
     public void AddToHand(Card card, bool animate = true)
     {
+      card.transform.SetParent(transform);
       _cards.Add(card);
 
       if (animate)
