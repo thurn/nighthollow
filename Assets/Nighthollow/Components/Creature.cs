@@ -114,7 +114,10 @@ namespace Nighthollow.Components
           newData.FilePosition.Value.ToYPosition());
       }
 
-      _attachmentDisplay.SetAttachments(newData.Attachments);
+      if (newData.Attachments != null)
+      {
+        _attachmentDisplay.SetAttachments(newData.Attachments);
+      }
 
       _creatureData = newData;
     }

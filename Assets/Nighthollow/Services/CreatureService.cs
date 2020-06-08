@@ -122,7 +122,7 @@ namespace Nighthollow.Services
       var files = GetFiles(owner);
       foreach (var f in Closest(filePosition))
       {
-        if (files[f.ToIndex()].Count() < 6)
+        if (files[f.ToIndex()].Count() < 8)
         {
           return f;
         }
@@ -205,7 +205,7 @@ namespace Nighthollow.Services
   sealed class File
   {
     [SerializeField] PlayerName _owner;
-    [SerializeField] List<Creature> _creatures = new List<Creature> {null, null, null, null, null, null};
+    [SerializeField] List<Creature> _creatures = new List<Creature> {null, null, null, null, null, null, null, null};
 
     public File(PlayerName owner)
     {
@@ -234,7 +234,7 @@ namespace Nighthollow.Services
     public void ShiftPositions(RankValue rank)
     {
       var index = rank.ToIndex();
-      if (Count() == 6)
+      if (Count() == 8)
       {
         throw new ArgumentException("File is full!");
       }

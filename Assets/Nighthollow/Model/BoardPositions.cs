@@ -27,23 +27,18 @@ namespace Nighthollow.Model
         case PlayerName.User:
           switch (rank)
           {
-            case RankValue.Rank1: return -2.0f;
-            case RankValue.Rank2: return -3.5f;
+            case RankValue.Rank1: return -8.0f;
+            case RankValue.Rank2: return -6.5f;
             case RankValue.Rank3: return -5.0f;
-            case RankValue.Rank4: return -6.5f;
-            case RankValue.Rank5: return -8.0f;
+            case RankValue.Rank4: return -3.5f;
+            case RankValue.Rank5: return -2.0f;
+            case RankValue.Rank6: return -0.5f;
+            case RankValue.Rank7: return 1.0f;
+            case RankValue.Rank8: return 2.5f;
             default: throw Errors.UnknownEnumValue(rank);
           }
         case PlayerName.Enemy:
-          switch (rank)
-          {
-            case RankValue.Rank1: return 2.0f;
-            case RankValue.Rank2: return 3.5f;
-            case RankValue.Rank3: return 5.0f;
-            case RankValue.Rank4: return 6.5f;
-            case RankValue.Rank5: return 8.0f;
-            default: throw Errors.UnknownEnumValue(rank);
-          }
+          throw Errors.UnknownEnumValue(rank);
         default:
           throw Errors.UnknownEnumValue(owner);
       }
@@ -58,6 +53,9 @@ namespace Nighthollow.Model
         case RankValue.Rank3: return 2;
         case RankValue.Rank4: return 3;
         case RankValue.Rank5: return 4;
+        case RankValue.Rank6: return 5;
+        case RankValue.Rank7: return 6;
+        case RankValue.Rank8: return 7;
         default: throw Errors.UnknownEnumValue(rank);
       }
     }
@@ -88,7 +86,10 @@ namespace Nighthollow.Model
         case 2: return RankValue.Rank3;
         case 3: return RankValue.Rank4;
         case 4: return RankValue.Rank5;
-        default: throw Errors.UnknownIntEnumValue(index, 0, 4);
+        case 5: return RankValue.Rank6;
+        case 6: return RankValue.Rank7;
+        case 7: return RankValue.Rank8;
+        default: throw Errors.UnknownIntEnumValue(index, 0, 7);
       }
     }
 

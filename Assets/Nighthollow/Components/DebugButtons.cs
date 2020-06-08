@@ -45,7 +45,7 @@ namespace Nighthollow.Components
       Prefab = Prefab("Content/Card"),
       StandardCost = Cost(50, School.Flame, 1),
       Image = Sprite("CreatureImages/Wizard"),
-      CanBePlayed = false,
+      CanBePlayed = true,
       CreatureData = new CreatureData
       {
         CreatureId = new CreatureId(_idCounter++),
