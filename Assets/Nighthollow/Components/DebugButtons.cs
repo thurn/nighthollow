@@ -43,7 +43,7 @@ namespace Nighthollow.Components
     {
       CardId = new CardId(_idCounter++),
       Prefab = Prefab("Content/Card"),
-      StandardCost = Cost(50, School.Flame, 1),
+      StandardCost = Cost(100, School.Flame, 1),
       Image = Sprite("CreatureImages/Wizard"),
       CanBePlayed = true,
       CreatureData = new CreatureData
@@ -68,7 +68,7 @@ namespace Nighthollow.Components
 
     StandardCost Cost(int mana, School school, int influence) => new StandardCost
     {
-      ManaCost = 50,
+      ManaCost = mana,
       InfluenceCost = new List<Influence>
       {
         new Influence

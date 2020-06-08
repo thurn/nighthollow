@@ -27,14 +27,14 @@ namespace Nighthollow.Model
         case PlayerName.User:
           switch (rank)
           {
-            case RankValue.Rank1: return -8.0f;
-            case RankValue.Rank2: return -6.5f;
-            case RankValue.Rank3: return -5.0f;
-            case RankValue.Rank4: return -3.5f;
-            case RankValue.Rank5: return -2.0f;
-            case RankValue.Rank6: return -0.5f;
-            case RankValue.Rank7: return 1.0f;
-            case RankValue.Rank8: return 2.5f;
+            case RankValue.Rank1: return -8.8f;
+            case RankValue.Rank2: return -6.3f;
+            case RankValue.Rank3: return -3.8f;
+            case RankValue.Rank4: return -1.3f;
+            case RankValue.Rank5: return 1.2f;
+            case RankValue.Rank6: return 3.7f;
+            case RankValue.Rank7: return 6.2f;
+            case RankValue.Rank8: return 8.7f;
             default: throw Errors.UnknownEnumValue(rank);
           }
         case PlayerName.Enemy:
@@ -97,11 +97,11 @@ namespace Nighthollow.Model
     {
       switch (file)
       {
-        case FileValue.File1: return -3.0f;
-        case FileValue.File2: return -1.75f;
-        case FileValue.File3: return -0.5f;
-        case FileValue.File4: return 0.75f;
-        case FileValue.File5: return 2.0f;
+        case FileValue.File1: return -9.8f;
+        case FileValue.File2: return -7.2f;
+        case FileValue.File3: return -4.6f;
+        case FileValue.File4: return -2f;
+        case FileValue.File5: return 0.6f;
         default: throw Errors.UnknownEnumValue(file);
       }
     }

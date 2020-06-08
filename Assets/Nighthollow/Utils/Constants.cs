@@ -16,7 +16,7 @@ namespace Nighthollow.Utils
 {
   public static class Constants
   {
-    public const int IndicatorBottomY = -4;
-    public const int IndicatorRightX = 4;
+    public const int IndicatorBottomY = -10;
+    public const int IndicatorRightX = 14;
   }
 }

@@ -43,7 +43,6 @@ namespace Nighthollow.Services
     public CreatureService CreatureService => _creatureService;
 
     [SerializeField] Player _user;
-    [SerializeField] Player _enemy;
 
     public static Root Instance
     {
@@ -63,7 +62,6 @@ namespace Nighthollow.Services
       switch (playerName)
       {
         case PlayerName.User: return _user;
-        case PlayerName.Enemy: return _enemy;
         default: throw Errors.UnknownEnumValue(playerName);
       }
     }
@@ -77,7 +75,6 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_creatureService);
       Errors.CheckNotNull(_user);
-      Errors.CheckNotNull(_enemy);
 
       _instance = this;
     }
