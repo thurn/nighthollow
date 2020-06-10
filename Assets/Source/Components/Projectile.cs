@@ -36,10 +36,10 @@ namespace Nighthollow.Components
     //   ComponentUtils.GetComponent<Projectile>(projectile).Initialize(firingPoint, target, onHit);
     // }
 
-    public static void Instantiate(Asset asset, Transform firingPoint, Collider2D target,
+    public static void Instantiate(AssetReference asset, Transform firingPoint, Collider2D target,
       Action onHit)
     {
-      var projectile = Root.Instance.ObjectPoolService.Instantiate(asset, firingPoint.position);
+      var projectile = Injector.Instance.ObjectPoolService.Instantiate(asset, firingPoint.position);
       ComponentUtils.GetComponent<Projectile>(projectile).Initialize(firingPoint, target, onHit);
     }
 
@@ -51,7 +51,7 @@ namespace Nighthollow.Components
       transform.position = new Vector3(firingPoint.position.x, firingPoint.position.y, 0);
       transform.rotation = Quaternion.LookRotation(target.bounds.center - transform.position, Vector3.up);
 
-      var flash = Root.Instance.ObjectPoolService.Instantiate(_flashEffect.gameObject, transform.position);
+      var flash = Injector.Instance.ObjectPoolService.Instantiate(_flashEffect.gameObject, transform.position);
       flash.transform.forward = transform.forward;
     }
 
@@ -72,7 +72,7 @@ namespace Nighthollow.Components
     {
       if (other == _target)
       {
-        var hit = Root.Instance.ObjectPoolService.Instantiate(_hitEffect.gameObject, transform.position);
+        var hit = Injector.Instance.ObjectPoolService.Instantiate(_hitEffect.gameObject, transform.position);
         hit.transform.forward = -transform.forward;
         _onHit?.Invoke();
         gameObject.SetActive(false);

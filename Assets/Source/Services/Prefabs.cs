@@ -34,7 +34,7 @@ namespace Nighthollow.Services
     [SerializeField] Sprite _shadowSymbol;
 
     public HealthBar CreateHealthBar() => ComponentUtils.Instantiate(_healthBarPrefab,
-      Root.Instance.MainCanvas);
+      Injector.Instance.MainCanvas);
 
     public SpriteRenderer CreateCursor() => ComponentUtils.Instantiate(_cursorPrefab);
 

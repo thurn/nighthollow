@@ -74,7 +74,7 @@ namespace Nighthollow.Components
     {
       Errors.CheckNotNull(newCardData);
 
-      _hand = Root.Instance.GetPlayer(PlayerName.User).Hand;
+      _hand = Injector.Instance.GetPlayer(PlayerName.User).Hand;
 
       if (!_isFaceUp)
       {
@@ -91,7 +91,7 @@ namespace Nighthollow.Components
           .Insert(atPosition: 0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, duration: 0.3f));
       }
 
-      _cardImage.sprite = Root.Instance.AssetService.Get<Sprite>(newCardData.Image);
+      _cardImage.sprite = Injector.Instance.AssetService.Get<Sprite>(newCardData.Image);
 
 
       _cost.text = newCardData.StandardCost.ManaCost.ToString();
@@ -136,7 +136,7 @@ namespace Nighthollow.Components
       for (var i = 0; i < influence.Value; ++i)
       {
         _influence[addIndex].enabled = true;
-        _influence[addIndex].sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.School);
+        _influence[addIndex].sprite = Injector.Instance.Prefabs.SpriteForInfluenceType(influence.School);
         addIndex++;
       }
     }
@@ -158,7 +158,7 @@ namespace Nighthollow.Components
       if (!_previewMode)
       {
         _isDragging = true;
-        _initialDragPosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+        _initialDragPosition = Injector.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         _initialDragRotation = transform.rotation;
         _initialDragSiblingIndex = transform.GetSiblingIndex();
         transform.SetAsLastSibling();
@@ -169,7 +169,7 @@ namespace Nighthollow.Components
     {
       if (_isDragging)
       {
-        var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+        var mousePosition = Injector.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         transform.position = Input.mousePosition;
 
         if (_cardData.CanBePlayed && mousePosition.x < Constants.IndicatorRightX &&
@@ -203,7 +203,7 @@ namespace Nighthollow.Components
     {
       if (_isDragging)
       {
-        var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+        var mousePosition = Injector.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         _isDragging = false;
         transform.SetSiblingIndex(_initialDragSiblingIndex);
         _hand.ReturnToHand(this);

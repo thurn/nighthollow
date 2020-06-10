@@ -65,7 +65,7 @@ namespace Nighthollow.Components
       }
       else
       {
-        card = ComponentUtils.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas);
+        card = ComponentUtils.Instantiate<Card>(cardData.Prefab, Injector.Instance.MainCanvas);
         card.Initialize(cardData);
         card.transform.position = _deckPosition.position;
         card.transform.localScale = Vector2.one * _initialCardScale;

@@ -26,7 +26,7 @@ namespace Nighthollow.Components
     public void Initialize(AttachmentData attachmentData)
     {
       _attachmentData = attachmentData;
-      _spriteRenderer.sprite = Root.Instance.AssetService.Get<Sprite>(attachmentData.Image);
+      _spriteRenderer.sprite = Injector.Instance.AssetService.Get<Sprite>(attachmentData.Image);
       transform.localScale = 0.5f * Vector2.one;
     }
 

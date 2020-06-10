@@ -20,9 +20,9 @@ using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class Root : MonoBehaviour
+  public sealed class Injector : MonoBehaviour
   {
-    static Root _instance;
+    static Injector _instance;
 
     [SerializeField] Camera _mainCamera;
     public Camera MainCamera => _mainCamera;
@@ -44,7 +44,7 @@ namespace Nighthollow.Services
 
     [SerializeField] Player _user;
 
-    public static Root Instance
+    public static Injector Instance
     {
       get
       {

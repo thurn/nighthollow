@@ -33,9 +33,9 @@ namespace Nighthollow.Components
     public void Draw()
     {
       var card = Wizard();
-      Root.Instance.AssetService.FetchAssets(card, () =>
+      Injector.Instance.AssetService.FetchAssets(card, () =>
       {
-        Root.Instance.GetPlayer(PlayerName.User).Hand.DrawOrUpdateCard(card);
+        Injector.Instance.GetPlayer(PlayerName.User).Hand.DrawOrUpdateCard(card);
       });
     }
 
@@ -54,13 +54,13 @@ namespace Nighthollow.Components
       }
     };
 
-    Asset Prefab(string address) => new Asset
+    AssetReference Prefab(string address) => new AssetReference
     {
       Address = address,
       AssetType = AssetType.Prefab
     };
 
-    Asset Sprite(string address) => new Asset
+    AssetReference Sprite(string address) => new AssetReference
     {
       Address = address,
       AssetType = AssetType.Sprite

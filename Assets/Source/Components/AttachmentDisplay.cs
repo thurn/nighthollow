@@ -48,7 +48,7 @@ namespace Nighthollow.Components
 
       foreach (var attachment in attachments)
       {
-        var newInstance = Root.Instance.Prefabs.CreateAttachment();
+        var newInstance = Injector.Instance.Prefabs.CreateAttachment();
         newInstance.Initialize(attachment);
         AddAttachment(newInstance, null, false);
       }

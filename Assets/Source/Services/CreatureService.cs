@@ -50,7 +50,7 @@ namespace Nighthollow.Services
     {
       if (Input.GetMouseButtonDown(0))
       {
-        var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+        var mousePosition = Injector.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         if (mousePosition.y >= Constants.IndicatorBottomY &&
             mousePosition.x <= Constants.IndicatorRightX)
         {

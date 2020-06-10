@@ -63,11 +63,11 @@ namespace Nighthollow.Components
 
     public void Initialize(CreatureData creatureData)
     {
-      _creatureService = Root.Instance.CreatureService;
+      _creatureService = Injector.Instance.CreatureService;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
       _sortingGroup = GetComponent<SortingGroup>();
-      _healthBar = Root.Instance.Prefabs.CreateHealthBar();
+      _healthBar = Injector.Instance.Prefabs.CreateHealthBar();
       _healthBar.gameObject.SetActive(false);
 
       UpdateCreatureData(creatureData);
@@ -185,7 +185,7 @@ namespace Nighthollow.Components
 
     public void OnDeathAnimationCompleted()
     {
-      Root.Instance.CreatureService.Destroy(_creatureData.CreatureId);
+      Injector.Instance.CreatureService.Destroy(_creatureData.CreatureId);
     }
 
     public void Destroy()
@@ -250,7 +250,7 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
+      var pos = Injector.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _healthBar.transform.position = pos;
 
       // Ensure lower Y creatures are always rendered on top of higher Y creatures
