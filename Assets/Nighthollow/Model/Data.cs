@@ -86,7 +86,7 @@ namespace Nighthollow.Model
     Sprite
   }
 
-  public sealed class AssetReference
+  public sealed class Asset
   {
     public string Address;
 
@@ -112,18 +112,18 @@ namespace Nighthollow.Model
 
   public sealed class AttachmentData
   {
-    public AssetReference Image;
+    public Asset Image;
   }
 
   public sealed class CardData
   {
     public CardId CardId;
 
-    public AssetReference Prefab;
+    public Asset Prefab;
 
     public StandardCost StandardCost;
 
-    public AssetReference Image;
+    public Asset Image;
 
     public bool CanBePlayed;
 
@@ -134,7 +134,7 @@ namespace Nighthollow.Model
   {
     public CreatureId CreatureId;
 
-    public AssetReference Prefab;
+    public Asset Prefab;
 
     public PlayerName Owner;
 
