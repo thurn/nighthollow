@@ -17,6 +17,7 @@ using Nighthollow.Components;
 using Nighthollow.Model;
 using Nighthollow.Utils;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Nighthollow.Services
 {
@@ -42,8 +43,8 @@ namespace Nighthollow.Services
     [SerializeField] CreatureService _creatureService;
     public CreatureService CreatureService => _creatureService;
 
-    [SerializeField] Player _player;
-    public Player Player => _player;
+    [FormerlySerializedAs("_player")] [SerializeField] User _user;
+    public User User => _user;
 
     public static Root Instance
     {
@@ -66,7 +67,7 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_assetService);
       Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_creatureService);
-      Errors.CheckNotNull(_player);
+      Errors.CheckNotNull(_user);
 
       _instance = this;
     }

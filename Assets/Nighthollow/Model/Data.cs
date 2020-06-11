@@ -166,9 +166,8 @@ namespace Nighthollow.Model
     }
   }
 
-  public sealed class PlayerData
+  public sealed class UserData
   {
-    public readonly PlayerName PlayerName;
     public readonly int CurrentLife;
     public readonly int MaximumLife;
     public readonly int CurrentMana;
@@ -176,10 +175,9 @@ namespace Nighthollow.Model
     public readonly IReadOnlyList<Influence> CurrentInfluence;
     public readonly IReadOnlyList<Influence> MaximumInfluence;
 
-    public PlayerData(PlayerName playerName, int currentLife, int maximumLife, int currentMana, int maximumMana,
+    public UserData(int currentLife, int maximumLife, int currentMana, int maximumMana,
       IReadOnlyList<Influence> currentInfluence, IReadOnlyList<Influence> maximumInfluence)
     {
-      PlayerName = playerName;
       CurrentLife = currentLife;
       MaximumLife = maximumLife;
       CurrentMana = currentMana;
@@ -191,8 +189,7 @@ namespace Nighthollow.Model
     public override string ToString()
     {
       return
-        $"[PlayerData {nameof(PlayerName)}: {PlayerName}, " +
-        $"{nameof(CurrentLife)}: {CurrentLife}, " +
+        $"[UserData {nameof(CurrentLife)}: {CurrentLife}, " +
         $"{nameof(MaximumLife)}: {MaximumLife}, " +
         $"{nameof(CurrentMana)}: {CurrentMana}, " +
         $"{nameof(MaximumMana)}: {MaximumMana}, " +
@@ -272,14 +269,17 @@ namespace Nighthollow.Model
 
     public readonly PlayerName Owner;
 
+    public readonly int Speed;
+
     public readonly IReadOnlyList<AttachmentData> Attachments;
 
     public CreatureData(CreatureId creatureId, Asset prefab, PlayerName owner,
-      IReadOnlyList<AttachmentData> attachments)
+      int speed, IReadOnlyList<AttachmentData> attachments)
     {
       CreatureId = creatureId;
       Prefab = prefab;
       Owner = owner;
+      Speed = speed;
       Attachments = attachments;
     }
 

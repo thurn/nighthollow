@@ -33,12 +33,17 @@ namespace Nighthollow.Components
     public void Draw()
     {
       var card = Wizard();
-      var hand = Root.Instance.Player.Hand;
-      Root.Instance.AssetService.FetchAssets(card, () =>
+      var hand = Root.Instance.User.Hand;
+      Root.Instance.AssetService.FetchCardAssets(card, () =>
       {
         hand.DrawCard(card);
         hand.GetCard(card.CardId).SetCanPlay(true);
       });
+    }
+
+    public void Enemy()
+    {
+      CreatureService.CreateEnemyCreature(Viking(), FileValue.File3);
     }
 
     CardData Wizard() => new CardData(
@@ -49,10 +54,20 @@ namespace Nighthollow.Components
       creatureData: new CreatureData
       (
         creatureId: new CreatureId(_idCounter++),
-        prefab: Prefab("Creatures/Wizard"),
+        prefab: Prefab("Creatures/Player/Wizard"),
         owner: PlayerName.User,
+        speed: 0,
         attachments: new List<AttachmentData>()
       )
+    );
+
+    CreatureData Viking() => new CreatureData
+    (
+      creatureId: new CreatureId(_idCounter++),
+      prefab: Prefab("Creatures/Enemy/Viking"),
+      owner: PlayerName.Enemy,
+      speed: 1000,
+      attachments: new List<AttachmentData>()
     );
 
     Asset Prefab(string address) => new Asset(address, AssetType.Prefab);

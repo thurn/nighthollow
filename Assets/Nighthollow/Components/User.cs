@@ -22,7 +22,7 @@ using UnityEngine.UI;
 
 namespace Nighthollow.Components
 {
-  public sealed class Player : MonoBehaviour
+  public sealed class User : MonoBehaviour
   {
     [Header("Config")] [SerializeField] Hand _hand;
     [SerializeField] Image _lifeBar;
@@ -35,37 +35,33 @@ namespace Nighthollow.Components
     Text _powerText;
 
     [SerializeField] RectTransform _influenceRow;
-    [SerializeField] Collider2D _projectileCollider;
 
     public Hand Hand => _hand;
 
-    public Collider2D Collider => _projectileCollider;
-
-    public void UpdatePlayerData(PlayerData newPlayerData)
+    public void UpdateUserData(UserData newUserData)
     {
       _lifeBar.DOFillAmount(
-        newPlayerData.MaximumLife == 0 ? 0 : newPlayerData.CurrentLife / (float) newPlayerData.MaximumLife, 0.3f);
+        newUserData.MaximumLife == 0 ? 0 : newUserData.CurrentLife / (float) newUserData.MaximumLife, 0.3f);
       _powerBar.DOFillAmount(
-        newPlayerData.MaximumMana == 0 ? 0 : newPlayerData.CurrentMana / (float) newPlayerData.MaximumMana, 0.3f);
+        newUserData.MaximumMana == 0 ? 0 : newUserData.CurrentMana / (float) newUserData.MaximumMana, 0.3f);
 
-      _lifeText.text = $"{newPlayerData.CurrentLife}/{newPlayerData.MaximumLife}";
-      _powerText.text = $"{newPlayerData.CurrentMana}/{newPlayerData.MaximumMana}";
+      _lifeText.text = $"{newUserData.CurrentLife}/{newUserData.MaximumLife}";
+      _powerText.text = $"{newUserData.CurrentMana}/{newUserData.MaximumMana}";
 
       foreach (Transform child in _influenceRow)
       {
         Destroy(child.gameObject);
       }
 
-      foreach (var influence in newPlayerData.MaximumInfluence)
+      foreach (var influence in newUserData.MaximumInfluence)
       {
-        var currentInfluence = InfluenceCount(newPlayerData, influence.School);
-        var direction = newPlayerData.PlayerName == PlayerName.Enemy ? -1 : 1;
+        var currentInfluence = InfluenceCount(newUserData, influence.School);
         for (var i = 0; i < influence.Value; ++i)
         {
           var image = Root.Instance.Prefabs.CreateInfluence();
           image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.School);
           image.transform.SetParent(_influenceRow);
-          image.transform.localPosition = new Vector3(i * 60 * direction, 0, 0);
+          image.transform.localPosition = new Vector3(i * 60, 0, 0);
           if (i >= currentInfluence)
           {
             image.color = Color.gray;
@@ -74,7 +70,7 @@ namespace Nighthollow.Components
       }
     }
 
-    int InfluenceCount(PlayerData playerData, School influenceType) =>
-      playerData.CurrentInfluence.ToList().Find(i => i.School == influenceType)?.Value ?? 0;
+    int InfluenceCount(UserData userData, School influenceType) =>
+      userData.CurrentInfluence.ToList().Find(i => i.School == influenceType)?.Value ?? 0;
   }
 }

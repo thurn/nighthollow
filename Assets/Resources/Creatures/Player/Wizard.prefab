@@ -506,7 +506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2225211046073280316}
   m_Layer: 0
-  m_Name: MeleePosition
+  m_Name: ProjectileSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1041,9 +1041,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb0063e42209b4ce7a793fdb2058422c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugMode: 1
+  _debugMode: 0
   _speed: 3
-  _meleePosition: {fileID: 2225211046073280316}
+  _projectileSource: {fileID: 2225211046073280316}
   _attachmentDisplay: {fileID: 6889323225763016593}
   _healthbarAnchor: {fileID: 2225211045742742407}
   _initialized: 0
@@ -1051,7 +1051,6 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _collider: {fileID: 0}
   _healthBar: {fileID: 0}
-  _touchedTarget: 0
   _creatureService: {fileID: 0}
   _renderers:
   - {fileID: 2225211047329402530}
@@ -1073,9 +1072,6 @@ MonoBehaviour:
   - {fileID: 2225211045965277984}
   - {fileID: 2225211045586637184}
   _sortingGroup: {fileID: 0}
-  _currentImpactCount: 0
-  _currentTarget: {fileID: 0}
-  _currentSkill: 0
 --- !u!95 &2225211046518890783
 Animator:
   serializedVersion: 3

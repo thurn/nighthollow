@@ -30,10 +30,17 @@ namespace Nighthollow.Services
 
     public T Get<T>(Asset asset) where T : Object => _assetCache[asset.Address] as T;
 
-    public void FetchAssets(CardData card, Action onComplete)
+    public void FetchCardAssets(CardData card, Action onComplete)
     {
       var assets = new List<Asset>();
       AddCardAssets(card, assets);
+      StartCoroutine(PopulateAssets(assets, onComplete));
+    }
+
+    public void FetchCreatureAssets(CreatureData creature, Action onComplete)
+    {
+      var assets = new List<Asset>();
+      AddCreatureAssets(creature, assets);
       StartCoroutine(PopulateAssets(assets, onComplete));
     }
 

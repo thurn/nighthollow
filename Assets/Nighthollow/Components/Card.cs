@@ -75,7 +75,7 @@ namespace Nighthollow.Components
     {
       Errors.CheckNotNull(newCardData);
 
-      _hand = Root.Instance.Player.Hand;
+      _hand = Root.Instance.User.Hand;
 
       if (!_isFaceUp)
       {
@@ -174,7 +174,7 @@ namespace Nighthollow.Components
           if (!_overBoard)
           {
             gameObject.SetActive(false);
-            var creature = CreatureService.Create(_cardData.CreatureData);
+            var creature = CreatureService.CreateUserCreature(_cardData.CreatureData);
             creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
             _overBoard = true;
           }

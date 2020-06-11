@@ -26,8 +26,7 @@ namespace Nighthollow.Services
   public sealed class CreatureService : MonoBehaviour
   {
     readonly Dictionary<int, Creature> _creatures = new Dictionary<int, Creature>();
-    [SerializeField] List<File> _userFiles;
-    [SerializeField] List<File> _enemyFiles;
+    [SerializeField] List<File> _files;
 
     void Awake()
     {
@@ -36,13 +35,11 @@ namespace Nighthollow.Services
 
     void InitializeFiles()
     {
-      _userFiles.Clear();
-      _enemyFiles.Clear();
+      _files.Clear();
 
       for (var i = 0; i < 6; ++i)
       {
-        _userFiles.Add(new File(PlayerName.User));
-        _enemyFiles.Add(new File(PlayerName.Enemy));
+        _files.Add(new File());
       }
     }
 
@@ -55,14 +52,14 @@ namespace Nighthollow.Services
             mousePosition.x <= Constants.IndicatorRightX)
         {
           // Clowntown version of a drag handler. Switch this to use proper collider detection or something.
-          var file = _userFiles[BoardPositions.ClosestFileForYPosition(mousePosition.y - 0.5f).ToIndex()];
+          var file = _files[BoardPositions.ClosestFileForYPosition(mousePosition.y - 0.5f).ToIndex()];
           var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x);
           var draggingCreature =
             file.GetAtPosition(rank);
 
           if (!draggingCreature)
           {
-            file = _userFiles[BoardPositions.ClosestFileForYPosition(mousePosition.y - 1.5f).ToIndex()];
+            file = _files[BoardPositions.ClosestFileForYPosition(mousePosition.y - 1.5f).ToIndex()];
             draggingCreature = file.GetAtPosition(rank);
           }
 
@@ -75,7 +72,7 @@ namespace Nighthollow.Services
       }
     }
 
-    public static Creature Create(CreatureData creatureData)
+    public static Creature CreateUserCreature(CreatureData creatureData)
     {
       var result =
         ComponentUtils.Instantiate<Creature>(creatureData.Prefab);
@@ -83,7 +80,16 @@ namespace Nighthollow.Services
       return result;
     }
 
-    public bool HasCreature(CreatureId creatureId) => _creatures.ContainsKey(creatureId.Value);
+    public static void CreateEnemyCreature(CreatureData creatureData, FileValue file)
+    {
+      Root.Instance.AssetService.FetchCreatureAssets(creatureData, () =>
+      {
+        var result =
+          ComponentUtils.Instantiate<Creature>(creatureData.Prefab);
+        result.Initialize(creatureData);
+        result.SetEnemyCreatureFile(file);
+      });
+    }
 
     public Creature Get(CreatureId creatureId)
     {
@@ -98,19 +104,20 @@ namespace Nighthollow.Services
     public void Destroy(CreatureId creatureId)
     {
       var creature = Get(creatureId);
-      var files = GetFiles(creature.Owner);
-      files[creature.FilePosition.ToIndex()].RemoveAtPosition(creature.RankPosition);
+      if (creature.RankPosition.HasValue)
+      {
+        _files[creature.FilePosition.ToIndex()].RemoveAtPosition(creature.RankPosition.Value);
+      }
       _creatures.Remove(creatureId.Value);
       creature.Destroy();
     }
 
-    public void AddCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
+    public void AddUserCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
     {
-      var files = GetFiles(creature.Owner);
-      creature.SetPosition(rank, file);
-      files[file.ToIndex()].AddCreature(creature, rank);
+      creature.SetUserCreaturePosition(rank, file);
+      _files[file.ToIndex()].AddCreature(creature, rank);
       _creatures[creature.CreatureId.Value] = creature;
-      foreach (var f in files)
+      foreach (var f in _files)
       {
         f.ToDefaultPositions();
       }
@@ -119,10 +126,9 @@ namespace Nighthollow.Services
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
     public FileValue GetClosestAvailableFile(FileValue filePosition, PlayerName owner)
     {
-      var files = GetFiles(owner);
       foreach (var f in Closest(filePosition))
       {
-        if (files[f.ToIndex()].Count() < 8)
+        if (_files[f.ToIndex()].Count() < 8)
         {
           return f;
         }
@@ -131,37 +137,18 @@ namespace Nighthollow.Services
       throw new InvalidOperationException("Board is Full!");
     }
 
-    /// <summary>Get the closest creature owned by 'owner' to 'position'</summary>
-    public Creature GetClosestCreature(PlayerName owner, Vector2 position)
-    {
-      Creature result = null;
-      var closestDistance = float.MaxValue;
-      foreach (var creature in _creatures.Values)
-      {
-        var distance = Vector2.Distance(position, creature.transform.position);
-        if (creature.Owner == owner && distance < closestDistance)
-        {
-          closestDistance = distance;
-          result = creature;
-        }
-      }
-
-      return result;
-    }
-
     /// <summary>
     /// Shifts the positions of creatures such that the provided 'rank,file' position is available. Only one position
     /// shift can be in effect at a time.
     /// </summary>
-    public void ShiftPositions(PlayerName owner, RankValue rankValue, FileValue fileValue)
+    public void ShiftPositions(RankValue rankValue, FileValue fileValue)
     {
-      var files = GetFiles(owner);
-      foreach (var file in files)
+      foreach (var file in _files)
       {
         file.ToDefaultPositions();
       }
 
-      files[fileValue.ToIndex()].ShiftPositions(rankValue);
+      _files[fileValue.ToIndex()].ShiftPositions(rankValue);
     }
 
     public void DestroyAllCreatures()
@@ -174,8 +161,6 @@ namespace Nighthollow.Services
       _creatures.Clear();
       InitializeFiles();
     }
-
-    List<File> GetFiles(PlayerName owner) => owner == PlayerName.User ? _userFiles : _enemyFiles;
 
     static IEnumerable<FileValue> Closest(FileValue f)
     {
@@ -204,13 +189,7 @@ namespace Nighthollow.Services
   [Serializable]
   sealed class File
   {
-    [SerializeField] PlayerName _owner;
     [SerializeField] List<Creature> _creatures = new List<Creature> {null, null, null, null, null, null, null, null};
-
-    public File(PlayerName owner)
-    {
-      _owner = owner;
-    }
 
     public int Count() => _creatures.Count(c => c != null);
 

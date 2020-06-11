@@ -18,5 +18,7 @@ namespace Nighthollow.Utils
   {
     public const int IndicatorBottomY = -10;
     public const int IndicatorRightX = 14;
+    public const float EnemyCreatureYOffset = 1.25f;
+    public const float EnemyCreatureStartingX = 20.0f;
   }
 }

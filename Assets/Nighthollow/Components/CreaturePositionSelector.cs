@@ -74,13 +74,13 @@ namespace Nighthollow.Components
 
           transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), 0), 0.3f);
           _creature.AnimationPaused = false;
-          _creatureService.AddCreatureAtPosition(_creature, rank, file);
+          _creatureService.AddUserCreatureAtPosition(_creature, rank, file);
         }
         else
         {
           if (rank != _rank || file != _file)
           {
-            _creatureService.ShiftPositions(_creature.Owner, rank, file);
+            _creatureService.ShiftPositions(rank, file);
             var position = new Vector3(rank.ToXPosition(), file.ToYPosition(), 0);
             _cursor.transform.position = position + new Vector3(0, 1, 0);
             _rank = rank;

@@ -33,30 +33,29 @@ namespace Nighthollow.Components
   public sealed class Creature : MonoBehaviour
   {
     [Header("Config")] [SerializeField] bool _debugMode;
-    [SerializeField] float _speed = 2;
     [SerializeField] Transform _projectileSource;
     [SerializeField] AttachmentDisplay _attachmentDisplay;
     [SerializeField] Transform _healthbarAnchor;
 
     [Header("State")] [SerializeField] bool _initialized;
+    [SerializeField] CreatureData _creatureData;
     [SerializeField] CreatureState _state;
     [SerializeField] RankValue? _rankPosition;
     [SerializeField] FileValue? _filePosition;
     [SerializeField] Animator _animator;
     [SerializeField] Collider2D _collider;
     [SerializeField] HealthBar _healthBar;
-    [SerializeField] CreatureData _creatureData;
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SpriteRenderer[] _renderers;
     [SerializeField] SortingGroup _sortingGroup;
 
-    static readonly int Speed = Animator.StringToHash("Speed");
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
     static readonly int Skill3 = Animator.StringToHash("Skill3");
     static readonly int Skill4 = Animator.StringToHash("Skill4");
     static readonly int Skill5 = Animator.StringToHash("Skill5");
     static readonly int Death = Animator.StringToHash("Death");
+    static readonly int Moving = Animator.StringToHash("Moving");
 
     public void Initialize(CreatureData creatureData)
     {
@@ -77,7 +76,7 @@ namespace Nighthollow.Components
       if (!_initialized && _debugMode)
       {
         Initialize(_creatureData);
-        _creatureService.AddCreatureAtPosition(this,
+        _creatureService.AddUserCreatureAtPosition(this,
           BoardPositions.ClosestRankForXPosition(transform.position.x),
           BoardPositions.ClosestFileForYPosition(transform.position.y));
       }
@@ -92,18 +91,7 @@ namespace Nighthollow.Components
 
     public PlayerName Owner => _creatureData.Owner;
 
-    public RankValue RankPosition
-    {
-      get
-      {
-        if (_rankPosition.HasValue)
-        {
-          return _rankPosition.Value;
-        }
-
-        throw new InvalidOperationException("Creature does not have a position");
-      }
-    }
+    public RankValue? RankPosition => _rankPosition;
 
     public FileValue FilePosition
     {
@@ -114,9 +102,10 @@ namespace Nighthollow.Components
           return _filePosition.Value;
         }
 
-        throw new InvalidOperationException("Creature does not have a position");
+        throw new InvalidOperationException("Creature does not have a file position");
       }
     }
+
     public bool AnimationPaused
     {
       set => _animator.speed = value ? 0 : 1;
@@ -134,11 +123,21 @@ namespace Nighthollow.Components
       _creatureData = newData;
     }
 
-    public void SetPosition(RankValue rankValue, FileValue fileValue)
+    public void SetEnemyCreatureFile(FileValue fileValue)
+    {
+      _filePosition = fileValue;
+      _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
+      transform.position = new Vector2(
+        Constants.EnemyCreatureStartingX,
+        // We need to offset the Y position for enemy creatures because they are center-anchored:
+        fileValue.ToYPosition() + Constants.EnemyCreatureYOffset);
+    }
+
+    public void SetUserCreaturePosition(RankValue rankValue, FileValue fileValue)
     {
       _rankPosition = rankValue;
       _filePosition = fileValue;
-      _state = CreatureState.Idle;
+      _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
       transform.position = new Vector2(
         rankValue.ToXPosition(),
         fileValue.ToYPosition());
@@ -178,7 +177,7 @@ namespace Nighthollow.Components
       Destroy(gameObject);
       Destroy(_healthBar.gameObject);
     }
-    
+
     // Called by skill animations on their 'start impact' frame
     // ReSharper disable once UnusedMember.Local
     void AttackStart()
@@ -193,6 +192,16 @@ namespace Nighthollow.Components
       // Ensure lower Y creatures are always rendered on top of higher Y creatures
       _sortingGroup.sortingOrder =
         100 - Mathf.RoundToInt(transform.position.y * 10) - Mathf.RoundToInt(transform.position.x);
+
+      if (_state == CreatureState.Moving)
+      {
+        _animator.SetBool(Moving, true);
+        transform.Translate(Vector3.right * (Time.deltaTime * (_creatureData.Speed / 1000f)));
+      }
+      else
+      {
+        _animator.SetBool(Moving, false);
+      }
     }
   }
 }
