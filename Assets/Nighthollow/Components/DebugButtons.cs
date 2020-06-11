@@ -30,6 +30,11 @@ namespace Nighthollow.Components
       Time.timeScale = 0.1f;
     }
 
+    public void StartGame()
+    {
+      Root.Instance.RequestService.StartNewGame();
+    }
+
     public void Draw()
     {
       var card = Wizard();

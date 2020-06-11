@@ -34,6 +34,9 @@ namespace Nighthollow.Services
     [SerializeField] Prefabs _prefabs;
     public Prefabs Prefabs => _prefabs;
 
+    [SerializeField] RequestService _requestService;
+    public RequestService RequestService => _requestService;
+
     [SerializeField] AssetService _assetService;
     public AssetService AssetService => _assetService;
 
@@ -64,6 +67,7 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_mainCamera);
       Errors.CheckNotNull(_mainCanvas);
       Errors.CheckNotNull(_prefabs);
+      Errors.CheckNotNull(_requestService);
       Errors.CheckNotNull(_assetService);
       Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_creatureService);
