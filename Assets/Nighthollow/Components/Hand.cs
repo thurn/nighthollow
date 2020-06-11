@@ -61,12 +61,6 @@ namespace Nighthollow.Components
       AddToHand(card, animate);
     }
 
-    public void ReturnToHand(Card card)
-    {
-      // re-insert?
-      AnimateCardsToPosition();
-    }
-
     public Card GetCard(CardId cardId) =>
       Errors.CheckNotNull(_cards.Find(c => c.CardId.Equals(cardId)), "Card not found!");
 
@@ -132,7 +126,7 @@ namespace Nighthollow.Components
       _cards.Clear();
     }
 
-    void AnimateCardsToPosition(Action onComplete = null)
+    public void AnimateCardsToPosition(Action onComplete = null)
     {
       var sequence = DOTween.Sequence();
       for (var i = 0; i < _cards.Count; ++i)

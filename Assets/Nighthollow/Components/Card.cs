@@ -201,7 +201,7 @@ namespace Nighthollow.Components
       {
         _isDragging = false;
         transform.SetSiblingIndex(_initialDragSiblingIndex);
-        _hand.ReturnToHand(this);
+        _hand.AnimateCardsToPosition();
       }
     }
   }

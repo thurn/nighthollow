@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using DG.Tweening;
+using System;
 using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -21,11 +21,12 @@ using UnityEngine.Rendering;
 
 namespace Nighthollow.Components
 {
-  enum CreatureState
+  public enum CreatureState
   {
+    Placing,
     Idle,
-    MeleeEngage,
-    UseSkill,
+    Moving,
+    UsingSkill,
     Dying
   }
 
@@ -33,25 +34,21 @@ namespace Nighthollow.Components
   {
     [Header("Config")] [SerializeField] bool _debugMode;
     [SerializeField] float _speed = 2;
-    [SerializeField] Transform _meleePosition;
+    [SerializeField] Transform _projectileSource;
     [SerializeField] AttachmentDisplay _attachmentDisplay;
     [SerializeField] Transform _healthbarAnchor;
 
     [Header("State")] [SerializeField] bool _initialized;
     [SerializeField] CreatureState _state;
-    [SerializeField] RankValue _rankPosition;
-    [SerializeField] FileValue _filePosition;
+    [SerializeField] RankValue? _rankPosition;
+    [SerializeField] FileValue? _filePosition;
     [SerializeField] Animator _animator;
     [SerializeField] Collider2D _collider;
     [SerializeField] HealthBar _healthBar;
     [SerializeField] CreatureData _creatureData;
-    [SerializeField] bool _touchedTarget;
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SpriteRenderer[] _renderers;
     [SerializeField] SortingGroup _sortingGroup;
-    [SerializeField] int _currentImpactCount;
-    [SerializeField] Creature _currentTarget;
-    [SerializeField] SkillAnimationNumber _currentSkill;
 
     static readonly int Speed = Animator.StringToHash("Speed");
     static readonly int Skill1 = Animator.StringToHash("Skill1");
@@ -64,6 +61,7 @@ namespace Nighthollow.Components
     public void Initialize(CreatureData creatureData)
     {
       _creatureService = Root.Instance.CreatureService;
+      _state = CreatureState.Placing;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
       _sortingGroup = GetComponent<SortingGroup>();
@@ -94,10 +92,31 @@ namespace Nighthollow.Components
 
     public PlayerName Owner => _creatureData.Owner;
 
-    public RankValue? RankPosition => _rankPosition;
+    public RankValue RankPosition
+    {
+      get
+      {
+        if (_rankPosition.HasValue)
+        {
+          return _rankPosition.Value;
+        }
 
-    public FileValue? FilePosition => _filePosition;
+        throw new InvalidOperationException("Creature does not have a position");
+      }
+    }
 
+    public FileValue FilePosition
+    {
+      get
+      {
+        if (_filePosition.HasValue)
+        {
+          return _filePosition.Value;
+        }
+
+        throw new InvalidOperationException("Creature does not have a position");
+      }
+    }
     public bool AnimationPaused
     {
       set => _animator.speed = value ? 0 : 1;
@@ -119,33 +138,15 @@ namespace Nighthollow.Components
     {
       _rankPosition = rankValue;
       _filePosition = fileValue;
+      _state = CreatureState.Idle;
       transform.position = new Vector2(
         rankValue.ToXPosition(),
         fileValue.ToYPosition());
     }
 
-    public void UseSkill(SkillAnimationNumber number, Creature meleeTarget)
+    public void UseSkill(SkillAnimationNumber skill, Creature meleeTarget)
     {
-      _currentSkill = number;
-
-      if (meleeTarget)
-      {
-        _currentTarget = meleeTarget;
-        _touchedTarget = false;
-        _state = CreatureState.MeleeEngage;
-      }
-      else
-      {
-        UseCurrentSkill();
-      }
-    }
-
-    void UseCurrentSkill()
-    {
-      _currentImpactCount = 0;
-      _state = CreatureState.UseSkill;
-
-      switch (_currentSkill)
+      switch (skill)
       {
         case SkillAnimationNumber.Skill1:
           _animator.SetTrigger(Skill1);
@@ -163,7 +164,7 @@ namespace Nighthollow.Components
           _animator.SetTrigger(Skill5);
           break;
         default:
-          throw Errors.UnknownEnumValue(_currentSkill);
+          throw Errors.UnknownEnumValue(skill);
       }
     }
 
@@ -177,57 +178,12 @@ namespace Nighthollow.Components
       Destroy(gameObject);
       Destroy(_healthBar.gameObject);
     }
-
-    public bool Highlighted
-    {
-      set
-      {
-        foreach (var spriteRenderer in _renderers)
-        {
-          spriteRenderer.color = value ? Color.green : Color.white;
-        }
-      }
-    }
-
-    public void FadeIn()
-    {
-      var sequence = DOTween.Sequence();
-      foreach (var spriteRenderer in _renderers)
-      {
-        spriteRenderer.color = new Color(1, 1, 1, 0);
-        sequence.Insert(0, spriteRenderer.DOFade(1.0f, 0.3f));
-      }
-
-      sequence.InsertCallback(0.4f, () =>
-      {
-        _attachmentDisplay.gameObject.SetActive(true);
-        _creatureService.AddCreatureAtPosition(this, RankPosition.Value, FilePosition.Value);
-      });
-    }
-
-    public void FadeOut()
-    {
-      _healthBar.gameObject.SetActive(false);
-      _attachmentDisplay.gameObject.SetActive(false);
-      var sequence = DOTween.Sequence();
-      foreach (var spriteRenderer in _renderers)
-      {
-        sequence.Insert(0, spriteRenderer.DOFade(0.0f, 0.3f));
-      }
-
-      sequence.InsertCallback(0.4f, () => { _creatureService.Destroy(CreatureId); });
-    }
-
+    
     // Called by skill animations on their 'start impact' frame
     // ReSharper disable once UnusedMember.Local
     void AttackStart()
     {
-      _currentImpactCount++;
     }
-
-    Transform MeleePosition => _meleePosition;
-
-    Creature CurrentTarget => _currentTarget;
 
     void Update()
     {
@@ -237,44 +193,6 @@ namespace Nighthollow.Components
       // Ensure lower Y creatures are always rendered on top of higher Y creatures
       _sortingGroup.sortingOrder =
         100 - Mathf.RoundToInt(transform.position.y * 10) - Mathf.RoundToInt(transform.position.x);
-
-      if (_state == CreatureState.MeleeEngage)
-      {
-        // To prevent creatures from overlapping too much, in cases where a creature is *not* the primary target
-        // of its opponent, we add a small Y offset to its target position to stagger the creatures in a more visually
-        // pleasing way
-        var yOffset = Vector3.zero;
-        if (_currentTarget.CurrentTarget != this)
-        {
-          yOffset = new Vector3(0, new[] {0.5f, -0.5f, -0.3f, 0.3f}[CreatureId.Value % 4], 0);
-        }
-
-        if (Vector2.Distance(MeleePosition.position, _currentTarget.MeleePosition.position + yOffset) < 0.05f)
-        {
-          _animator.SetInteger(Speed, 0);
-          if (!_touchedTarget)
-          {
-            UseCurrentSkill();
-            _touchedTarget = true;
-          }
-        }
-        else
-        {
-          _animator.SetInteger(Speed,
-            Vector2.Distance(transform.position, _currentTarget.transform.position) > 2
-              ? 2
-              : 1);
-
-          // Each creature has a desired "melee position" in front of it indicating where attackers should be placed.
-          // We translate the creature's position until its own melee position matches its target's melee position.
-          var meleePositionOffset = transform.position - MeleePosition.position;
-
-          transform.position = Vector3.MoveTowards(
-            transform.position,
-            _currentTarget.MeleePosition.position + meleePositionOffset + yOffset,
-            _speed * Time.deltaTime);
-        }
-      }
     }
   }
 }

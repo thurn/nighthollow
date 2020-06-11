@@ -99,7 +99,7 @@ namespace Nighthollow.Services
     {
       var creature = Get(creatureId);
       var files = GetFiles(creature.Owner);
-      files[creature.FilePosition.Value.ToIndex()].RemoveAtPosition(creature.RankPosition.Value);
+      files[creature.FilePosition.ToIndex()].RemoveAtPosition(creature.RankPosition);
       _creatures.Remove(creatureId.Value);
       creature.Destroy();
     }

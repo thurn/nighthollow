@@ -43,23 +43,10 @@ namespace Nighthollow.Components
 
     public void UpdatePlayerData(PlayerData newPlayerData)
     {
-      if (newPlayerData.MaximumLife == 0)
-      {
-        _lifeBar.DOFillAmount(0, 0.3f);
-      }
-      else
-      {
-        _lifeBar.DOFillAmount(newPlayerData.CurrentLife / (float) newPlayerData.MaximumLife, 0.3f);
-      }
-
-      if (newPlayerData.MaximumMana == 0)
-      {
-        _powerBar.DOFillAmount(0, 0.3f);
-      }
-      else
-      {
-        _powerBar.DOFillAmount(newPlayerData.CurrentMana / (float) newPlayerData.MaximumMana, 0.3f);
-      }
+      _lifeBar.DOFillAmount(
+        newPlayerData.MaximumLife == 0 ? 0 : newPlayerData.CurrentLife / (float) newPlayerData.MaximumLife, 0.3f);
+      _powerBar.DOFillAmount(
+        newPlayerData.MaximumMana == 0 ? 0 : newPlayerData.CurrentMana / (float) newPlayerData.MaximumMana, 0.3f);
 
       _lifeText.text = $"{newPlayerData.CurrentLife}/{newPlayerData.MaximumLife}";
       _powerText.text = $"{newPlayerData.CurrentMana}/{newPlayerData.MaximumMana}";

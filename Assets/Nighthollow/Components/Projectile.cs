@@ -29,20 +29,12 @@ namespace Nighthollow.Components
     [Header("State")] Collider2D _target;
     Action _onHit;
 
-    // public static void Instantiate(FireProjectileEffect fireProjectile, Transform firingPoint, Collider2D target,
-    //   Action onHit)
-    // {
-    //   var projectile = Root.Instance.ObjectPoolService.Instantiate(fireProjectile.Prefab, firingPoint.position);
-    //   ComponentUtils.GetComponent<Projectile>(projectile).Initialize(firingPoint, target, onHit);
-    // }
-
     public static void Instantiate(Asset asset, Transform firingPoint, Collider2D target,
       Action onHit)
     {
       var projectile = Root.Instance.ObjectPoolService.Instantiate(asset, firingPoint.position);
       ComponentUtils.GetComponent<Projectile>(projectile).Initialize(firingPoint, target, onHit);
     }
-
 
     void Initialize(Transform firingPoint, Collider2D target, Action onHit)
     {

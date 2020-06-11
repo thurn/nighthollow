@@ -90,10 +90,10 @@ namespace Nighthollow.Model
       switch (file)
       {
         case FileValue.File1: return -9.8f;
-        case FileValue.File2: return -7.2f;
-        case FileValue.File3: return -4.6f;
-        case FileValue.File4: return -2f;
-        case FileValue.File5: return 0.6f;
+        case FileValue.File2: return -7.3f;
+        case FileValue.File3: return -4.8f;
+        case FileValue.File4: return -2.3f;
+        case FileValue.File5: return 0.2f;
         default: throw Errors.UnknownEnumValue(file);
       }
     }
