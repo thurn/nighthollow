@@ -26,12 +26,10 @@ namespace Nighthollow.Components
   {
     [Header("Config")] [SerializeField] bool _debugMode;
     [SerializeField] Transform _deckPosition;
-    [SerializeField] Transform _showCardPosition;
     [SerializeField] float _initialCardScale;
     [SerializeField] float _finalCardScale;
     [SerializeField] int _zRotationMultiplier;
-    [Header("State")]
-    [SerializeField] Transform _controlPoint1;
+    [Header("State")] [SerializeField] Transform _controlPoint1;
     [SerializeField] Transform _controlPoint2;
     [SerializeField] Transform _controlPoint3;
     [SerializeField] Transform _controlPoint4;
@@ -54,23 +52,13 @@ namespace Nighthollow.Components
       }
     }
 
-    public Card Get(CardId cardId) => _cards.Find(c => c.CardId.Equals(cardId));
-
-    public void DrawOrUpdateCard(CardData cardData, bool animate = true)
+    public void DrawCard(CardData cardData, bool animate = true)
     {
-      var card = Get(cardData.CardId);
-      if (card)
-      {
-        card.UpdateCardData(cardData);
-      }
-      else
-      {
-        card = ComponentUtils.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas);
-        card.Initialize(cardData);
-        card.transform.position = _deckPosition.position;
-        card.transform.localScale = Vector2.one * _initialCardScale;
-        AddToHand(card, animate);
-      }
+      var card = ComponentUtils.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas);
+      card.Initialize(cardData);
+      card.transform.position = _deckPosition.position;
+      card.transform.localScale = Vector2.one * _initialCardScale;
+      AddToHand(card, animate);
     }
 
     public void ReturnToHand(Card card)
@@ -78,6 +66,9 @@ namespace Nighthollow.Components
       // re-insert?
       AnimateCardsToPosition();
     }
+
+    public Card GetCard(CardId cardId) =>
+      Errors.CheckNotNull(_cards.Find(c => c.CardId.Equals(cardId)), "Card not found!");
 
     public void DestroyById(CardId cardId, bool mustExist = false)
     {
@@ -88,8 +79,10 @@ namespace Nighthollow.Components
         {
           throw new ArgumentException($"Card id {cardId} not found");
         }
+
         return;
       }
+
       var card = _cards[index];
       _cards.RemoveAt(index);
       Destroy(card.gameObject);
@@ -121,30 +114,12 @@ namespace Nighthollow.Components
       {
         foreach (var card in _cards)
         {
-          card.PreviewMode = value;
+          card.DisableDragging = value;
         }
 
         _handOverridePosition = value;
         AnimateCardsToPosition();
       }
-    }
-
-    public void RevealMatchingCard(CardData cardData, Action<Card> onComplete = null)
-    {
-      var card = _cards.Find(c => c.CardId.Value == cardData.CardId.Value);
-
-      if (!card)
-      {
-        throw new ArgumentException($"Card with ID {cardData.CardId} not found!");
-      }
-
-      RemoveFromHand(card);
-      card.UpdateCardData(cardData);
-      var sequence = DOTween.Sequence();
-      sequence.Insert(0, card.transform.DOMove(_showCardPosition.position, 0.3f));
-      sequence.Insert(0, card.transform.DORotateQuaternion(_showCardPosition.rotation, 0.3f));
-      sequence.Insert(0, card.transform.DOScale(_showCardPosition.localScale, 0.3f));
-      sequence.AppendCallback(() => onComplete?.Invoke(card));
     }
 
     public void DestroyAllCards()

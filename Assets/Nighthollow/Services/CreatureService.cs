@@ -56,7 +56,7 @@ namespace Nighthollow.Services
         {
           // Clowntown version of a drag handler. Switch this to use proper collider detection or something.
           var file = _userFiles[BoardPositions.ClosestFileForYPosition(mousePosition.y - 0.5f).ToIndex()];
-          var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x, PlayerName.User);
+          var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x);
           var draggingCreature =
             file.GetAtPosition(rank);
 
@@ -309,7 +309,7 @@ namespace Nighthollow.Services
       {
         if (creatures[i])
         {
-          creatures[i].transform.DOMoveX(BoardPositions.RankForIndex(i).ToXPosition(_owner), 0.2f);
+          creatures[i].transform.DOMoveX(BoardPositions.RankForIndex(i).ToXPosition(), 0.2f);
         }
       }
     }

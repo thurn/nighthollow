@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using Nighthollow.Model;
 using Nighthollow.Services;
@@ -41,6 +39,8 @@ namespace Nighthollow.Components
 
     [Header("State")] [SerializeField] bool _initialized;
     [SerializeField] CreatureState _state;
+    [SerializeField] RankValue _rankPosition;
+    [SerializeField] FileValue _filePosition;
     [SerializeField] Animator _animator;
     [SerializeField] Collider2D _collider;
     [SerializeField] HealthBar _healthBar;
@@ -80,7 +80,7 @@ namespace Nighthollow.Components
       {
         Initialize(_creatureData);
         _creatureService.AddCreatureAtPosition(this,
-          BoardPositions.ClosestRankForXPosition(transform.position.x, _creatureData.Owner),
+          BoardPositions.ClosestRankForXPosition(transform.position.x),
           BoardPositions.ClosestFileForYPosition(transform.position.y));
       }
     }
@@ -94,9 +94,9 @@ namespace Nighthollow.Components
 
     public PlayerName Owner => _creatureData.Owner;
 
-    public RankValue? RankPosition => _creatureData.RankPosition;
+    public RankValue? RankPosition => _rankPosition;
 
-    public FileValue? FilePosition => _creatureData.FilePosition;
+    public FileValue? FilePosition => _filePosition;
 
     public bool AnimationPaused
     {
@@ -106,13 +106,6 @@ namespace Nighthollow.Components
     public void UpdateCreatureData(CreatureData newData)
     {
       transform.eulerAngles = newData.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
-
-      if (newData.RankPosition.HasValue && newData.FilePosition.HasValue)
-      {
-        transform.position = new Vector2(
-          newData.RankPosition.Value.ToXPosition(newData.Owner),
-          newData.FilePosition.Value.ToYPosition());
-      }
 
       if (newData.Attachments != null)
       {
@@ -124,20 +117,11 @@ namespace Nighthollow.Components
 
     public void SetPosition(RankValue rankValue, FileValue fileValue)
     {
-      _creatureData.RankPosition = rankValue;
-      _creatureData.FilePosition = fileValue;
-      UpdateCreatureData(_creatureData);
-    }
-
-    public void AddAttachment(Attachment attachment)
-    {
-      Errors.CheckNotNull(attachment);
-
-      _attachmentDisplay.AddAttachment(attachment, () =>
-      {
-        _creatureData.Attachments.Add(attachment.AttachmentData);
-        UpdateCreatureData(_creatureData);
-      });
+      _rankPosition = rankValue;
+      _filePosition = fileValue;
+      transform.position = new Vector2(
+        rankValue.ToXPosition(),
+        fileValue.ToYPosition());
     }
 
     public void UseSkill(SkillAnimationNumber number, Creature meleeTarget)
@@ -231,10 +215,7 @@ namespace Nighthollow.Components
         sequence.Insert(0, spriteRenderer.DOFade(0.0f, 0.3f));
       }
 
-      sequence.InsertCallback(0.4f, () =>
-      {
-        _creatureService.Destroy(CreatureId);
-      });
+      sequence.InsertCallback(0.4f, () => { _creatureService.Destroy(CreatureId); });
     }
 
     // Called by skill animations on their 'start impact' frame

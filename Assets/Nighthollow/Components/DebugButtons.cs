@@ -33,50 +33,37 @@ namespace Nighthollow.Components
     public void Draw()
     {
       var card = Wizard();
+      var hand = Root.Instance.Player.Hand;
       Root.Instance.AssetService.FetchAssets(card, () =>
       {
-        Root.Instance.GetPlayer(PlayerName.User).Hand.DrawOrUpdateCard(card);
+        hand.DrawCard(card);
+        hand.GetCard(card.CardId).SetCanPlay(true);
       });
     }
 
-    CardData Wizard() => new CardData
-    {
-      CardId = new CardId(_idCounter++),
-      Prefab = Prefab("Content/Card"),
-      StandardCost = Cost(100, School.Flame, 1),
-      Image = Sprite("CreatureImages/Wizard"),
-      CanBePlayed = true,
-      CreatureData = new CreatureData
+    CardData Wizard() => new CardData(
+      cardId: new CardId(_idCounter++),
+      prefab: Prefab("Content/Card"),
+      cost: Cost(100, School.Flame, 1),
+      image: Sprite("CreatureImages/Wizard"),
+      creatureData: new CreatureData
+      (
+        creatureId: new CreatureId(_idCounter++),
+        prefab: Prefab("Creatures/Wizard"),
+        owner: PlayerName.User,
+        attachments: new List<AttachmentData>()
+      )
+    );
+
+    Asset Prefab(string address) => new Asset(address, AssetType.Prefab);
+
+    Asset Sprite(string address) => new Asset(address, AssetType.Sprite);
+
+    Cost Cost(int mana, School school, int influence) => new Cost(
+      mana,
+      new List<Influence>
       {
-        CreatureId = new CreatureId(_idCounter++),
-        Prefab = Prefab("Creatures/Wizard"),
-        Owner = PlayerName.User,
-      }
-    };
-
-    Asset Prefab(string address) => new Asset
-    {
-      Address = address,
-      AssetType = AssetType.Prefab
-    };
-
-    Asset Sprite(string address) => new Asset
-    {
-      Address = address,
-      AssetType = AssetType.Sprite
-    };
-
-    StandardCost Cost(int mana, School school, int influence) => new StandardCost
-    {
-      ManaCost = mana,
-      InfluenceCost = new List<Influence>
-      {
-        new Influence
-        {
-          School = school,
-          Value = influence
-        }
-      }
-    };
+        new Influence(school, influence)
+      });
   }
 }

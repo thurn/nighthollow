@@ -42,7 +42,8 @@ namespace Nighthollow.Services
     [SerializeField] CreatureService _creatureService;
     public CreatureService CreatureService => _creatureService;
 
-    [SerializeField] Player _user;
+    [SerializeField] Player _player;
+    public Player Player => _player;
 
     public static Root Instance
     {
@@ -57,15 +58,6 @@ namespace Nighthollow.Services
       }
     }
 
-    public Player GetPlayer(PlayerName playerName)
-    {
-      switch (playerName)
-      {
-        case PlayerName.User: return _user;
-        default: throw Errors.UnknownEnumValue(playerName);
-      }
-    }
-
     void OnEnable()
     {
       Errors.CheckNotNull(_mainCamera);
@@ -74,7 +66,7 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_assetService);
       Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_creatureService);
-      Errors.CheckNotNull(_user);
+      Errors.CheckNotNull(_player);
 
       _instance = this;
     }

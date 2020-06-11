@@ -20,27 +20,19 @@ namespace Nighthollow.Model
 {
   public static class BoardPositions
   {
-    public static float ToXPosition(this RankValue rank, PlayerName owner)
+    public static float ToXPosition(this RankValue rank)
     {
-      switch (owner)
+      switch (rank)
       {
-        case PlayerName.User:
-          switch (rank)
-          {
-            case RankValue.Rank1: return -8.8f;
-            case RankValue.Rank2: return -6.3f;
-            case RankValue.Rank3: return -3.8f;
-            case RankValue.Rank4: return -1.3f;
-            case RankValue.Rank5: return 1.2f;
-            case RankValue.Rank6: return 3.7f;
-            case RankValue.Rank7: return 6.2f;
-            case RankValue.Rank8: return 8.7f;
-            default: throw Errors.UnknownEnumValue(rank);
-          }
-        case PlayerName.Enemy:
-          throw Errors.UnknownEnumValue(rank);
-        default:
-          throw Errors.UnknownEnumValue(owner);
+        case RankValue.Rank1: return -8.8f;
+        case RankValue.Rank2: return -6.3f;
+        case RankValue.Rank3: return -3.8f;
+        case RankValue.Rank4: return -1.3f;
+        case RankValue.Rank5: return 1.2f;
+        case RankValue.Rank6: return 3.7f;
+        case RankValue.Rank7: return 6.2f;
+        case RankValue.Rank8: return 8.7f;
+        default: throw Errors.UnknownEnumValue(rank);
       }
     }
 
@@ -60,13 +52,13 @@ namespace Nighthollow.Model
       }
     }
 
-    public static RankValue ClosestRankForXPosition(float xPosition, PlayerName owner)
+    public static RankValue ClosestRankForXPosition(float xPosition)
     {
       var closestDistance = float.MaxValue;
       var closestRank = RankValue.Rank1;
       foreach (RankValue rank in Enum.GetValues(typeof(RankValue)))
       {
-        var distance = Mathf.Abs(rank.ToXPosition(owner) - xPosition);
+        var distance = Mathf.Abs(rank.ToXPosition() - xPosition);
         if (distance < closestDistance)
         {
           closestDistance = distance;

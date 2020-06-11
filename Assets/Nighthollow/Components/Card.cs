@@ -37,7 +37,8 @@ namespace Nighthollow.Components
 
     [Header("State")] [SerializeField] CardData _cardData;
     [SerializeField] Hand _hand;
-    [SerializeField] bool _previewMode;
+    [SerializeField] bool _canBePlayed;
+    [SerializeField] bool _disableDragging;
     [SerializeField] bool _initialized;
     [SerializeField] bool _isFaceUp;
     [SerializeField] bool _isDragging;
@@ -74,7 +75,7 @@ namespace Nighthollow.Components
     {
       Errors.CheckNotNull(newCardData);
 
-      _hand = Root.Instance.GetPlayer(PlayerName.User).Hand;
+      _hand = Root.Instance.Player.Hand;
 
       if (!_isFaceUp)
       {
@@ -94,9 +95,9 @@ namespace Nighthollow.Components
       _cardImage.sprite = Root.Instance.AssetService.Get<Sprite>(newCardData.Image);
 
 
-      _cost.text = newCardData.StandardCost.ManaCost.ToString();
+      _cost.text = newCardData.Cost.ManaCost.ToString();
       var addIndex = 0;
-      foreach (var influence in newCardData.StandardCost.InfluenceCost)
+      foreach (var influence in newCardData.Cost.InfluenceCost)
       {
         AddInfluence(influence, ref addIndex);
       }
@@ -106,23 +107,18 @@ namespace Nighthollow.Components
         _influence[addIndex++].enabled = false;
       }
 
-      if (_cardData?.CanBePlayed != newCardData.CanBePlayed)
-      {
-        UpdateOutline(newCardData.CanBePlayed);
-      }
-
       _cardData = newCardData;
     }
 
     public void SetCanPlay(bool canPlay)
     {
-      _cardData.CanBePlayed = canPlay;
-      UpdateOutline(canPlay);
+      _canBePlayed = canPlay;
+      UpdateOutline();
     }
 
-    public bool PreviewMode
+    public bool DisableDragging
     {
-      set => _previewMode = value;
+      set => _disableDragging = value;
     }
 
     public void OnPlayed()
@@ -141,21 +137,21 @@ namespace Nighthollow.Components
       }
     }
 
-    void UpdateOutline(bool canBePlayed)
+    void UpdateOutline()
     {
-      // _outline.enabled = canBePlayed;
-      // if (canBePlayed)
-      // {
-      //   var color = _outline.color;
-      //   color.a = 0;
-      //   _outline.color = color;
-      //   _outline.DOFade(1.0f, 0.1f);
-      // }
+      _outline.enabled = _canBePlayed;
+      if (_canBePlayed)
+      {
+        var color = _outline.color;
+        color.a = 0;
+        _outline.color = color;
+        _outline.DOFade(1.0f, 0.1f);
+      }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-      if (!_previewMode)
+      if (!_disableDragging)
       {
         _isDragging = true;
         _initialDragPosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -172,7 +168,7 @@ namespace Nighthollow.Components
         var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         transform.position = Input.mousePosition;
 
-        if (_cardData.CanBePlayed && mousePosition.x < Constants.IndicatorRightX &&
+        if (_canBePlayed && mousePosition.x < Constants.IndicatorRightX &&
             mousePosition.y > Constants.IndicatorBottomY)
         {
           if (!_overBoard)
@@ -203,7 +199,6 @@ namespace Nighthollow.Components
     {
       if (_isDragging)
       {
-        var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         _isDragging = false;
         transform.SetSiblingIndex(_initialDragSiblingIndex);
         _hand.ReturnToHand(this);

@@ -53,7 +53,7 @@ namespace Nighthollow.Components
       if (!_card || (mousePosition.y >= Constants.IndicatorBottomY &&
                      mousePosition.x <= Constants.IndicatorRightX))
       {
-        var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x, _creature.Owner);
+        var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x);
         var file = _creatureService.GetClosestAvailableFile(
           BoardPositions.ClosestFileForYPosition(mousePosition.y), _creature.Owner);
 
@@ -72,7 +72,7 @@ namespace Nighthollow.Components
             spriteRenderer.color = Color.white;
           }
 
-          transform.DOMove(new Vector3(rank.ToXPosition(_creature.Owner), file.ToYPosition(), 0), 0.3f);
+          transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), 0), 0.3f);
           _creature.AnimationPaused = false;
           _creatureService.AddCreatureAtPosition(_creature, rank, file);
         }
@@ -81,8 +81,8 @@ namespace Nighthollow.Components
           if (rank != _rank || file != _file)
           {
             _creatureService.ShiftPositions(_creature.Owner, rank, file);
-            var position = new Vector3(rank.ToXPosition(_creature.Owner), file.ToYPosition(), 0);
-            _cursor.transform.position = position;
+            var position = new Vector3(rank.ToXPosition(), file.ToYPosition(), 0);
+            _cursor.transform.position = position + new Vector3(0, 1, 0);
             _rank = rank;
             _file = file;
           }

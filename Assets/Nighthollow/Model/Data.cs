@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 
 namespace Nighthollow.Model
 {
-  public readonly struct CreatureId
+  public readonly struct CreatureId : IEquatable<CreatureId>
   {
     public readonly int Value;
 
@@ -24,15 +25,65 @@ namespace Nighthollow.Model
     {
       Value = value;
     }
+
+    public bool Equals(CreatureId other)
+    {
+      return Value == other.Value;
+    }
+
+    public override bool Equals(object obj)
+    {
+      return obj is CreatureId other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      return Value;
+    }
+
+    public static bool operator ==(CreatureId left, CreatureId right)
+    {
+      return left.Equals(right);
+    }
+
+    public static bool operator !=(CreatureId left, CreatureId right)
+    {
+      return !left.Equals(right);
+    }
   }
 
-  public readonly struct CardId
+  public readonly struct CardId : IEquatable<CardId>
   {
     public readonly int Value;
 
     public CardId(int value)
     {
       Value = value;
+    }
+
+    public bool Equals(CardId other)
+    {
+      return Value == other.Value;
+    }
+
+    public override bool Equals(object obj)
+    {
+      return obj is CardId other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      return Value;
+    }
+
+    public static bool operator ==(CardId left, CardId right)
+    {
+      return left.Equals(right);
+    }
+
+    public static bool operator !=(CardId left, CardId right)
+    {
+      return !left.Equals(right);
     }
   }
 
@@ -75,9 +126,20 @@ namespace Nighthollow.Model
 
   public sealed class Influence
   {
-    public School School;
+    public readonly School School;
 
-    public int Value;
+    public readonly int Value;
+
+    public Influence(School school, int value)
+    {
+      School = school;
+      Value = value;
+    }
+
+    public override string ToString()
+    {
+      return $"[Influence {nameof(School)}: {School}, {nameof(Value)}: {Value}]";
+    }
   }
 
   public enum AssetType
@@ -88,61 +150,146 @@ namespace Nighthollow.Model
 
   public sealed class Asset
   {
-    public string Address;
+    public readonly string Address;
 
-    public AssetType AssetType;
+    public readonly AssetType AssetType;
+
+    public Asset(string address, AssetType assetType)
+    {
+      Address = address;
+      AssetType = assetType;
+    }
+
+    public override string ToString()
+    {
+      return $"[Asset {nameof(Address)}: {Address}, {nameof(AssetType)}: {AssetType}]";
+    }
   }
 
   public sealed class PlayerData
   {
-    public PlayerName PlayerName;
-    public int CurrentLife;
-    public int MaximumLife;
-    public int CurrentMana;
-    public int MaximumMana;
-    public List<Influence> CurrentInfluence;
-    public List<Influence> MaximumInfluence;
+    public readonly PlayerName PlayerName;
+    public readonly int CurrentLife;
+    public readonly int MaximumLife;
+    public readonly int CurrentMana;
+    public readonly int MaximumMana;
+    public readonly IReadOnlyList<Influence> CurrentInfluence;
+    public readonly IReadOnlyList<Influence> MaximumInfluence;
+
+    public PlayerData(PlayerName playerName, int currentLife, int maximumLife, int currentMana, int maximumMana,
+      IReadOnlyList<Influence> currentInfluence, IReadOnlyList<Influence> maximumInfluence)
+    {
+      PlayerName = playerName;
+      CurrentLife = currentLife;
+      MaximumLife = maximumLife;
+      CurrentMana = currentMana;
+      MaximumMana = maximumMana;
+      CurrentInfluence = currentInfluence;
+      MaximumInfluence = maximumInfluence;
+    }
+
+    public override string ToString()
+    {
+      return
+        $"[PlayerData {nameof(PlayerName)}: {PlayerName}, " +
+        $"{nameof(CurrentLife)}: {CurrentLife}, " +
+        $"{nameof(MaximumLife)}: {MaximumLife}, " +
+        $"{nameof(CurrentMana)}: {CurrentMana}, " +
+        $"{nameof(MaximumMana)}: {MaximumMana}, " +
+        $"{nameof(CurrentInfluence)}: {CurrentInfluence}, " +
+        $"{nameof(MaximumInfluence)}: {MaximumInfluence}]";
+    }
   }
 
-  public sealed class StandardCost
+  public sealed class Cost
   {
-    public int ManaCost;
-    public List<Influence> InfluenceCost;
+    public readonly int ManaCost;
+    public readonly IReadOnlyList<Influence> InfluenceCost;
+
+    public Cost(int manaCost, IReadOnlyList<Influence> influenceCost)
+    {
+      ManaCost = manaCost;
+      InfluenceCost = influenceCost;
+    }
+
+    public override string ToString()
+    {
+      return $"[Cost {nameof(ManaCost)}: {ManaCost}, {nameof(InfluenceCost)}: {InfluenceCost}]";
+    }
   }
 
   public sealed class AttachmentData
   {
-    public Asset Image;
+    public readonly Asset Image;
+
+    public AttachmentData(Asset image)
+    {
+      Image = image;
+    }
+
+    public override string ToString()
+    {
+      return $"[Attachment {nameof(Image)}: {Image}]";
+    }
   }
 
   public sealed class CardData
   {
-    public CardId CardId;
+    public readonly CardId CardId;
 
-    public Asset Prefab;
+    public readonly Asset Prefab;
 
-    public StandardCost StandardCost;
+    public readonly Cost Cost;
 
-    public Asset Image;
+    public readonly Asset Image;
 
-    public bool CanBePlayed;
+    public readonly CreatureData CreatureData;
 
-    public CreatureData CreatureData;
+    public CardData(CardId cardId, Asset prefab, Cost cost, Asset image, CreatureData creatureData)
+    {
+      CardId = cardId;
+      Prefab = prefab;
+      Cost = cost;
+      Image = image;
+      CreatureData = creatureData;
+    }
+
+    public override string ToString()
+    {
+      return $"[CardData {nameof(CardId)}: {CardId}, " +
+             $"{nameof(Prefab)}: {Prefab}, " +
+             $"{nameof(Cost)}: {Cost}, " +
+             $"{nameof(Image)}: {Image}, " +
+             $"{nameof(CreatureData)}: {CreatureData}]";
+    }
   }
 
   public sealed class CreatureData
   {
-    public CreatureId CreatureId;
+    public readonly CreatureId CreatureId;
 
-    public Asset Prefab;
+    public readonly Asset Prefab;
 
-    public PlayerName Owner;
+    public readonly PlayerName Owner;
 
-    public RankValue? RankPosition;
+    public readonly IReadOnlyList<AttachmentData> Attachments;
 
-    public FileValue? FilePosition;
+    public CreatureData(CreatureId creatureId, Asset prefab, PlayerName owner,
+      IReadOnlyList<AttachmentData> attachments)
+    {
+      CreatureId = creatureId;
+      Prefab = prefab;
+      Owner = owner;
+      Attachments = attachments;
+    }
 
-    public List<AttachmentData> Attachments;
+    public override string ToString()
+    {
+      return $"[CreatureData {nameof(CreatureId)}: {CreatureId}, " +
+             $"{nameof(Prefab)}: {Prefab}, " +
+             $"{nameof(Owner)}: {Owner}, " +
+             $"{nameof(Attachments)}: {Attachments}]";
+    }
   }
 
   public enum SkillAnimationNumber

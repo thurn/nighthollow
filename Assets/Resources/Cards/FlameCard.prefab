@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8762771020445010892}
   - component: {fileID: 8954949609278149526}
   m_Layer: 5
-  m_Name: FireCard
+  m_Name: FlameCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,9 +55,7 @@ MonoBehaviour:
   _cardBack: {fileID: 3422935168648590701}
   _cardFront: {fileID: 3422935170716830397}
   _cardImage: {fileID: 3877078278858366202}
-  _name: {fileID: 3560853329539104791}
   _cost: {fileID: 4335890247283577373}
-  _text: {fileID: 1642552972138800255}
   _influence:
   - {fileID: 3470589743675506382}
   - {fileID: 5100302184667440685}
@@ -65,22 +63,9 @@ MonoBehaviour:
   - {fileID: 7170910077756811947}
   - {fileID: 1354626846825411433}
   _outline: {fileID: 5614621031374396764}
-  _cardData:
-    CardId: 0
-    Name: 
-    ManaCost: 0
-    Owner: 0
-    Text: 
-    IsRevealed: 0
-    CanBePlayed: 0
-    CreatureData:
-      CreatureId: 0
-      Owner: 0
-      RankPosition: 0
-      FilePosition: 0
-      CanBeRepositioned: 0
   _hand: {fileID: 0}
-  _previewMode: 0
+  _canBePlayed: 0
+  _disableDragging: 0
   _initialized: 0
   _isFaceUp: 0
   _isDragging: 0
