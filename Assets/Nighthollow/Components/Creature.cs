@@ -46,7 +46,6 @@ namespace Nighthollow.Components
     [SerializeField] Collider2D _collider;
     [SerializeField] HealthBar _healthBar;
     [SerializeField] CreatureService _creatureService;
-    [SerializeField] SpriteRenderer[] _renderers;
     [SerializeField] SortingGroup _sortingGroup;
 
     static readonly int Skill1 = Animator.StringToHash("Skill1");
@@ -56,6 +55,7 @@ namespace Nighthollow.Components
     static readonly int Skill5 = Animator.StringToHash("Skill5");
     static readonly int Death = Animator.StringToHash("Death");
     static readonly int Moving = Animator.StringToHash("Moving");
+    static readonly int AnimationSpeed = Animator.StringToHash("AnimationSpeed");
 
     public void Initialize(CreatureData creatureData)
     {
@@ -66,6 +66,12 @@ namespace Nighthollow.Components
       _sortingGroup = GetComponent<SortingGroup>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();
       _healthBar.gameObject.SetActive(false);
+      gameObject.layer = creatureData.Owner == PlayerName.User
+        ? Constants.UserCreaturesLayer
+        : Constants.EnemyCreaturesLayer;
+
+      // Slow down enemy animations a bit
+      _animator.SetFloat(AnimationSpeed, creatureData.Owner == PlayerName.User ? 1.0f : 0.5f);
 
       UpdateCreatureData(creatureData);
       _initialized = true;
@@ -80,11 +86,6 @@ namespace Nighthollow.Components
           BoardPositions.ClosestRankForXPosition(transform.position.x),
           BoardPositions.ClosestFileForYPosition(transform.position.y));
       }
-    }
-
-    void OnValidate()
-    {
-      _renderers = GetComponentsInChildren<SpriteRenderer>();
     }
 
     public CreatureId CreatureId => _creatureData.CreatureId;
@@ -143,8 +144,10 @@ namespace Nighthollow.Components
         fileValue.ToYPosition());
     }
 
-    public void UseSkill(SkillAnimationNumber skill, Creature meleeTarget)
+    public void UseSkill(SkillAnimationNumber skill)
     {
+      _state = CreatureState.UsingSkill;
+
       switch (skill)
       {
         case SkillAnimationNumber.Skill1:
@@ -167,21 +170,37 @@ namespace Nighthollow.Components
       }
     }
 
-    public void OnDeathAnimationCompleted()
-    {
-      Root.Instance.CreatureService.Destroy(_creatureData.CreatureId);
-    }
-
     public void Destroy()
     {
       Destroy(gameObject);
       Destroy(_healthBar.gameObject);
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+      UseSkill(Owner == PlayerName.User ? SkillAnimationNumber.Skill3 : SkillAnimationNumber.Skill1);
+    }
+
     // Called by skill animations on their 'start impact' frame
     // ReSharper disable once UnusedMember.Local
     void AttackStart()
     {
+    }
+
+    public void OnSkillAnimationCompleted(SkillAnimationNumber animationNumber)
+    {
+      var result = Physics2D.OverlapBox(
+        _collider.bounds.center,
+        _collider.bounds.size,
+        angle: 0,
+        Constants.LayerMaskForPlayer(Owner.GetOpponent()));
+      Debug.Log($"Creature::AttackStart> {name} found overlap of {result}");
+      UseSkill(Owner == PlayerName.User ? SkillAnimationNumber.Skill3 : SkillAnimationNumber.Skill1);
+    }
+
+    public void OnDeathAnimationCompleted()
+    {
+      Root.Instance.CreatureService.Destroy(_creatureData.CreatureId);
     }
 
     void Update()

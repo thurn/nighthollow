@@ -66,7 +66,7 @@ namespace Nighthollow.Components
       creatureId: new CreatureId(_idCounter++),
       prefab: Prefab("Creatures/Enemy/Viking"),
       owner: PlayerName.Enemy,
-      speed: 1000,
+      speed: 2000,
       attachments: new List<AttachmentData>()
     );
 

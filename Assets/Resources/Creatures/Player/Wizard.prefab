@@ -1042,7 +1042,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debugMode: 0
-  _speed: 3
   _projectileSource: {fileID: 2225211046073280316}
   _attachmentDisplay: {fileID: 6889323225763016593}
   _healthbarAnchor: {fileID: 2225211045742742407}
@@ -1115,7 +1114,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 100}
+  m_Offset: {x: 30, y: 100}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1126,7 +1125,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 100, y: 200}
+  m_Size: {x: 140, y: 200}
   m_EdgeRadius: 0
 --- !u!50 &2225211046518890755
 Rigidbody2D:

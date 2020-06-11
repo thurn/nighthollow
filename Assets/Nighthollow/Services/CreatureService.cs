@@ -91,7 +91,7 @@ namespace Nighthollow.Services
       });
     }
 
-    public Creature Get(CreatureId creatureId)
+    public Creature GetCreature(CreatureId creatureId)
     {
       if (!_creatures.ContainsKey(creatureId.Value))
       {
@@ -103,7 +103,7 @@ namespace Nighthollow.Services
 
     public void Destroy(CreatureId creatureId)
     {
-      var creature = Get(creatureId);
+      var creature = GetCreature(creatureId);
       if (creature.RankPosition.HasValue)
       {
         _files[creature.FilePosition.ToIndex()].RemoveAtPosition(creature.RankPosition.Value);

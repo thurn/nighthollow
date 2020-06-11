@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Model;
+using UnityEngine;
+
 namespace Nighthollow.Utils
 {
   public static class Constants
@@ -20,5 +23,26 @@ namespace Nighthollow.Utils
     public const int IndicatorRightX = 14;
     public const float EnemyCreatureYOffset = 1.25f;
     public const float EnemyCreatureStartingX = 20.0f;
+
+    public const int UserCreaturesLayer = 8;
+    public const int EnemyCreaturesLayer = 9;
+    public const int UserProjectilesLayer = 10;
+    public const int EnemyProjectilesLayer = 11;
+
+    static readonly LayerMask UserCreaturesLayerMask = LayerMask.GetMask("UserCreatures");
+    static readonly LayerMask EnemyCreaturesLayerMask = LayerMask.GetMask("EnemyCreatures");
+
+    public static LayerMask LayerMaskForPlayer(PlayerName playerName)
+    {
+      switch (playerName)
+      {
+        case PlayerName.User:
+          return UserCreaturesLayerMask;
+        case PlayerName.Enemy:
+          return EnemyCreaturesLayerMask;
+        default:
+          throw Errors.UnknownEnumValue(playerName);
+      }
+    }
   }
 }
