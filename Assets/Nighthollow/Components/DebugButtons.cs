@@ -43,7 +43,7 @@ namespace Nighthollow.Components
 
     public void Enemy()
     {
-      CreatureService.CreateEnemyCreature(Viking(), FileValue.File3);
+      Root.Instance.CreatureService.CreateEnemyCreature(Viking(), FileValue.File3);
     }
 
     CardData Wizard() => new CardData(

@@ -174,7 +174,7 @@ namespace Nighthollow.Components
           if (!_overBoard)
           {
             gameObject.SetActive(false);
-            var creature = CreatureService.CreateUserCreature(_cardData.CreatureData);
+            var creature = Root.Instance.CreatureService.CreateUserCreature(_cardData.CreatureData);
             creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
             _overBoard = true;
           }

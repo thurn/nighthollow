@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Linq;
 using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -48,6 +49,8 @@ namespace Nighthollow.Components
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SortingGroup _sortingGroup;
 
+    static readonly Collider2D[] ColliderArray = Enumerable.Repeat<Collider2D>(null, 128).ToArray();
+
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
     static readonly int Skill3 = Animator.StringToHash("Skill3");
@@ -63,6 +66,7 @@ namespace Nighthollow.Components
       _state = CreatureState.Placing;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
+      _collider.enabled = false;
       _sortingGroup = GetComponent<SortingGroup>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();
       _healthBar.gameObject.SetActive(false);
@@ -124,7 +128,7 @@ namespace Nighthollow.Components
       _creatureData = newData;
     }
 
-    public void SetEnemyCreatureFile(FileValue fileValue)
+    public void ActivateEnemyCreature(FileValue fileValue)
     {
       _filePosition = fileValue;
       _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
@@ -132,9 +136,10 @@ namespace Nighthollow.Components
         Constants.EnemyCreatureStartingX,
         // We need to offset the Y position for enemy creatures because they are center-anchored:
         fileValue.ToYPosition() + Constants.EnemyCreatureYOffset);
+      _collider.enabled = true;
     }
 
-    public void SetUserCreaturePosition(RankValue rankValue, FileValue fileValue)
+    public void ActivateUserCreature(RankValue rankValue, FileValue fileValue)
     {
       _rankPosition = rankValue;
       _filePosition = fileValue;
@@ -142,10 +147,16 @@ namespace Nighthollow.Components
       transform.position = new Vector2(
         rankValue.ToXPosition(),
         fileValue.ToYPosition());
+      _collider.enabled = true;
     }
 
     public void UseSkill(SkillAnimationNumber skill)
     {
+      if (!IsAlive())
+      {
+        throw new InvalidOperationException("Attempted to use skill on non-living creature");
+      }
+
       _state = CreatureState.UsingSkill;
 
       switch (skill)
@@ -170,6 +181,20 @@ namespace Nighthollow.Components
       }
     }
 
+    public void SetHealthPercentage(float percentage)
+    {
+      _healthBar.Value = percentage;
+      _healthBar.gameObject.SetActive(_healthBar.Value < 1);
+    }
+
+    public void PlayDeathAnimation()
+    {
+      _animator.SetTrigger(Death);
+      _collider.enabled = false;
+      _healthBar.gameObject.SetActive(false);
+      _state = CreatureState.Dying;
+    }
+
     public void Destroy()
     {
       Destroy(gameObject);
@@ -178,6 +203,7 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
+      if (!IsAlive()) return;
       UseSkill(Owner == PlayerName.User ? SkillAnimationNumber.Skill3 : SkillAnimationNumber.Skill1);
     }
 
@@ -185,23 +211,52 @@ namespace Nighthollow.Components
     // ReSharper disable once UnusedMember.Local
     void AttackStart()
     {
+      if (!IsAlive()) return;
+
+      var hitCount = Physics2D.OverlapBoxNonAlloc(
+        _collider.bounds.center,
+        _collider.bounds.size,
+        angle: 0,
+        ColliderArray,
+        Constants.LayerMaskForPlayer(Owner.GetOpponent()));
+
+      for (var i = 0; i < hitCount; ++i)
+      {
+        var creature = ComponentUtils.GetComponent<Creature>(ColliderArray[i]);
+        var damage = Owner == PlayerName.User ? 0.1f : 0.2f;
+        creature.SetHealthPercentage(creature._healthBar.Value - damage);
+        if (creature._healthBar.Value <= 0)
+        {
+          creature.PlayDeathAnimation();
+        }
+      }
     }
 
     public void OnSkillAnimationCompleted(SkillAnimationNumber animationNumber)
     {
+      if (!IsAlive()) return;
+
       var result = Physics2D.OverlapBox(
         _collider.bounds.center,
         _collider.bounds.size,
         angle: 0,
         Constants.LayerMaskForPlayer(Owner.GetOpponent()));
-      Debug.Log($"Creature::AttackStart> {name} found overlap of {result}");
-      UseSkill(Owner == PlayerName.User ? SkillAnimationNumber.Skill3 : SkillAnimationNumber.Skill1);
+      if (result)
+      {
+        UseSkill(Owner == PlayerName.User ? SkillAnimationNumber.Skill3 : SkillAnimationNumber.Skill1);
+      }
+      else
+      {
+        _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
+      }
     }
 
     public void OnDeathAnimationCompleted()
     {
       Root.Instance.CreatureService.Destroy(_creatureData.CreatureId);
     }
+
+    bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
 
     void Update()
     {
