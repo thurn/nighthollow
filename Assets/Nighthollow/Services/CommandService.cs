@@ -12,26 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using clojure.clr.api;
-using clojure.lang;
+using System.Collections;
+using System.Linq;
+using Nighthollow.Model;
 using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class RequestService : MonoBehaviour
+  public sealed class CommandService : MonoBehaviour
   {
-    const string Namespace = "nighthollow.api";
-    IFn _onStartNewGame;
-
-    void Start()
+    public void ResetState()
     {
-      Arcadia.Util.require(Namespace);
-      _onStartNewGame = Clojure.var(Namespace, "on-start-new-game");
+      Root.Instance.User.Hand.DestroyAllCards();
+      Root.Instance.CreatureService.DestroyAllCreatures();
     }
-
-    public void StartNewGame(CommandService commands)
+    
+    public void DrawCards(IEnumerable cards)
     {
-      _onStartNewGame.invoke(commands);
+      Root.Instance.User.Hand.DrawCards(cards.Cast<CardData>());
     }
   }
 }

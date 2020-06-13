@@ -13,7 +13,9 @@
 // limitations under the License.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Nighthollow.Model
 {
@@ -148,13 +150,13 @@ namespace Nighthollow.Model
     Sprite
   }
 
-  public sealed class Asset
+  public sealed class AssetData
   {
     public readonly string Address;
 
     public readonly AssetType AssetType;
 
-    public Asset(string address, AssetType assetType)
+    public AssetData(string address, AssetType assetType)
     {
       Address = address;
       AssetType = assetType;
@@ -162,7 +164,7 @@ namespace Nighthollow.Model
 
     public override string ToString()
     {
-      return $"[Asset {nameof(Address)}: {Address}, {nameof(AssetType)}: {AssetType}]";
+      return $"[AssetData {nameof(Address)}: {Address}, {nameof(AssetType)}: {AssetType}]";
     }
   }
 
@@ -170,43 +172,36 @@ namespace Nighthollow.Model
   {
     public readonly int CurrentLife;
     public readonly int MaximumLife;
-    public readonly int CurrentMana;
-    public readonly int MaximumMana;
-    public readonly IReadOnlyList<Influence> CurrentInfluence;
-    public readonly IReadOnlyList<Influence> MaximumInfluence;
+    public readonly int Mana;
+    public readonly IEnumerable<Influence> Influence;
 
-    public UserData(int currentLife, int maximumLife, int currentMana, int maximumMana,
-      IReadOnlyList<Influence> currentInfluence, IReadOnlyList<Influence> maximumInfluence)
+    public UserData(int currentLife, int maximumLife, int mana, IEnumerable influence)
     {
       CurrentLife = currentLife;
       MaximumLife = maximumLife;
-      CurrentMana = currentMana;
-      MaximumMana = maximumMana;
-      CurrentInfluence = currentInfluence;
-      MaximumInfluence = maximumInfluence;
+      Mana = mana;
+      Influence = influence.Cast<Influence>();
     }
 
     public override string ToString()
     {
       return
-        $"[UserData {nameof(CurrentLife)}: {CurrentLife}, " +
-        $"{nameof(MaximumLife)}: {MaximumLife}, " +
-        $"{nameof(CurrentMana)}: {CurrentMana}, " +
-        $"{nameof(MaximumMana)}: {MaximumMana}, " +
-        $"{nameof(CurrentInfluence)}: {CurrentInfluence}, " +
-        $"{nameof(MaximumInfluence)}: {MaximumInfluence}]";
+        $"[UserData {nameof(CurrentLife)}: {CurrentLife},\n" +
+        $"{nameof(MaximumLife)}: {MaximumLife},\n" +
+        $"{nameof(Mana)}: {Mana},\n" +
+        $"{nameof(Influence)}: {Influence}]";
     }
   }
 
   public sealed class Cost
   {
     public readonly int ManaCost;
-    public readonly IReadOnlyList<Influence> InfluenceCost;
+    public readonly IEnumerable<Influence> InfluenceCost;
 
-    public Cost(int manaCost, IReadOnlyList<Influence> influenceCost)
+    public Cost(int manaCost, IEnumerable influenceCost)
     {
       ManaCost = manaCost;
-      InfluenceCost = influenceCost;
+      InfluenceCost = influenceCost.Cast<Influence>();
     }
 
     public override string ToString()
@@ -217,9 +212,9 @@ namespace Nighthollow.Model
 
   public sealed class AttachmentData
   {
-    public readonly Asset Image;
+    public readonly AssetData Image;
 
-    public AttachmentData(Asset image)
+    public AttachmentData(AssetData image)
     {
       Image = image;
     }
@@ -234,15 +229,15 @@ namespace Nighthollow.Model
   {
     public readonly CardId CardId;
 
-    public readonly Asset Prefab;
+    public readonly AssetData Prefab;
 
     public readonly Cost Cost;
 
-    public readonly Asset Image;
+    public readonly AssetData Image;
 
     public readonly CreatureData CreatureData;
 
-    public CardData(CardId cardId, Asset prefab, Cost cost, Asset image, CreatureData creatureData)
+    public CardData(CardId cardId, AssetData prefab, Cost cost, AssetData image, CreatureData creatureData)
     {
       CardId = cardId;
       Prefab = prefab;
@@ -253,10 +248,10 @@ namespace Nighthollow.Model
 
     public override string ToString()
     {
-      return $"[CardData {nameof(CardId)}: {CardId}, " +
-             $"{nameof(Prefab)}: {Prefab}, " +
-             $"{nameof(Cost)}: {Cost}, " +
-             $"{nameof(Image)}: {Image}, " +
+      return $"[CardData {nameof(CardId)}: {CardId},\n" +
+             $"{nameof(Prefab)}: {Prefab},\n" +
+             $"{nameof(Cost)}: {Cost},\n" +
+             $"{nameof(Image)}: {Image},\n" +
              $"{nameof(CreatureData)}: {CreatureData}]";
     }
   }
@@ -265,29 +260,29 @@ namespace Nighthollow.Model
   {
     public readonly CreatureId CreatureId;
 
-    public readonly Asset Prefab;
+    public readonly AssetData Prefab;
 
     public readonly PlayerName Owner;
 
     public readonly int Speed;
 
-    public readonly IReadOnlyList<AttachmentData> Attachments;
+    public readonly IEnumerable<AttachmentData> Attachments;
 
-    public CreatureData(CreatureId creatureId, Asset prefab, PlayerName owner,
-      int speed, IReadOnlyList<AttachmentData> attachments)
+    public CreatureData(CreatureId creatureId, AssetData prefab, PlayerName owner,
+      int speed, IEnumerable attachments)
     {
       CreatureId = creatureId;
       Prefab = prefab;
       Owner = owner;
       Speed = speed;
-      Attachments = attachments;
+      Attachments = attachments.Cast<AttachmentData>();
     }
 
     public override string ToString()
     {
-      return $"[CreatureData {nameof(CreatureId)}: {CreatureId}, " +
-             $"{nameof(Prefab)}: {Prefab}, " +
-             $"{nameof(Owner)}: {Owner}, " +
+      return $"[CreatureData {nameof(CreatureId)}: {CreatureId},\n" +
+             $"{nameof(Prefab)}: {Prefab},\n" +
+             $"{nameof(Owner)}: {Owner},\n" +
              $"{nameof(Attachments)}: {Attachments}]";
     }
   }

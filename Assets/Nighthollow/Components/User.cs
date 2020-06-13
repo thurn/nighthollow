@@ -28,11 +28,11 @@ namespace Nighthollow.Components
     [SerializeField] Image _lifeBar;
     [SerializeField] Text _lifeText;
 
-    [FormerlySerializedAs("_manaBar")] [SerializeField]
-    Image _powerBar;
+    [FormerlySerializedAs("_powerBar")] [SerializeField]
+    Image _manaBar;
 
-    [FormerlySerializedAs("_manaText")] [SerializeField]
-    Text _powerText;
+    [FormerlySerializedAs("_powerText")] [SerializeField]
+    Text _manaText;
 
     [SerializeField] RectTransform _influenceRow;
 
@@ -41,36 +41,26 @@ namespace Nighthollow.Components
     public void UpdateUserData(UserData newUserData)
     {
       _lifeBar.DOFillAmount(
-        newUserData.MaximumLife == 0 ? 0 : newUserData.CurrentLife / (float) newUserData.MaximumLife, 0.3f);
-      _powerBar.DOFillAmount(
-        newUserData.MaximumMana == 0 ? 0 : newUserData.CurrentMana / (float) newUserData.MaximumMana, 0.3f);
+        newUserData.MaximumLife == 0 ? 0 : newUserData.CurrentLife / (float) newUserData.MaximumLife, 0.3f); ;
 
       _lifeText.text = $"{newUserData.CurrentLife}/{newUserData.MaximumLife}";
-      _powerText.text = $"{newUserData.CurrentMana}/{newUserData.MaximumMana}";
+      _manaText.text = $"{newUserData.Mana}";
 
       foreach (Transform child in _influenceRow)
       {
         Destroy(child.gameObject);
       }
 
-      foreach (var influence in newUserData.MaximumInfluence)
+      foreach (var influence in newUserData.Influence)
       {
-        var currentInfluence = InfluenceCount(newUserData, influence.School);
         for (var i = 0; i < influence.Value; ++i)
         {
           var image = Root.Instance.Prefabs.CreateInfluence();
           image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.School);
           image.transform.SetParent(_influenceRow);
           image.transform.localPosition = new Vector3(i * 60, 0, 0);
-          if (i >= currentInfluence)
-          {
-            image.color = Color.gray;
-          }
         }
       }
     }
-
-    int InfluenceCount(UserData userData, School influenceType) =>
-      userData.CurrentInfluence.ToList().Find(i => i.School == influenceType)?.Value ?? 0;
   }
 }

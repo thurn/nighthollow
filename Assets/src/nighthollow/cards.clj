@@ -13,7 +13,12 @@
 ;; limitations under the License.
 
 (ns nighthollow.cards
-  (:require [nighthollow.core :as core]))
+  (:require
+   [nighthollow.core :as core]
+   [nighthollow.api :as api]
+   [nighthollow.data :as data]))
+
+(defn card-id [id] [:card id])
 
 (defn new-weight
   "Returns the next weight in sequence for a given card weight. The first 3
@@ -42,7 +47,7 @@
   state and the drawn card added to the :cards list"
   [{{deck :deck hand :hand :as user} :user cards :cards}]
   (let [[card weight] (first deck)
-        card-with-id (assoc card :card-id (core/generate-id :card))]
+        card-with-id (core/assoc-id card)]
     {:cards (conj cards card-with-id)
      :user (-> user
                (update :hand conj card-with-id)
@@ -50,17 +55,19 @@
 
 (defmethod core/handle-effect
   :draw-cards
-  draw-cards
+  handle-draw-cards
   [state {quantity :quantity}]
   (let [input {:user (get-in state [:game :user]) :cards []}
         {user :user cards :cards} (nth (iterate draw-card input) quantity)]
     (-> state
         (assoc-in [:game :user] user)
-        (core/push-event {:event :cards-drawn :cards cards}))))
+        (core/push-event {:event :cards-drawn
+                          :cards cards
+                          :entities (map #(vector :card (:id %)) cards)}))))
 
 (defmethod core/apply-event-commands!
   :cards-drawn
-  draw-cards-command
-  [{cards :cards} & args]
-  (println "on drew cards" cards)
+  apply-cards-drawn
+  [{cards :cards} commands _]
+  (.DrawCards commands (mapv api/->card-data cards))
   #{})

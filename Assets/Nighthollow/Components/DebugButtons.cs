@@ -32,18 +32,13 @@ namespace Nighthollow.Components
 
     public void StartGame()
     {
-      Root.Instance.RequestService.StartNewGame();
+      Root.Instance.RequestService.StartNewGame(Root.Instance.CommandService);
     }
 
     public void Draw()
     {
       var card = Wizard();
-      var hand = Root.Instance.User.Hand;
-      Root.Instance.AssetService.FetchCardAssets(card, () =>
-      {
-        hand.DrawCard(card);
-        hand.GetCard(card.CardId).SetCanPlay(true);
-      });
+      Root.Instance.User.Hand.DrawCards(new List<CardData> { card, card, card });
     }
 
     public void Enemy()
@@ -75,9 +70,9 @@ namespace Nighthollow.Components
       attachments: new List<AttachmentData>()
     );
 
-    Asset Prefab(string address) => new Asset(address, AssetType.Prefab);
+    AssetData Prefab(string address) => new AssetData(address, AssetType.Prefab);
 
-    Asset Sprite(string address) => new Asset(address, AssetType.Sprite);
+    AssetData Sprite(string address) => new AssetData(address, AssetType.Sprite);
 
     Cost Cost(int mana, School school, int influence) => new Cost(
       mana,

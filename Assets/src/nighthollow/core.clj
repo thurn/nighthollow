@@ -14,16 +14,18 @@
 
 (ns nighthollow.core)
 
+(defonce ^:private previous-state (atom nil))
+
 (defonce ^:private state (atom {:game nil, :rules {}, :events []}))
 
-(defonce ^:private root (atom {}))
+(defonce ^:private commands (atom {}))
 
 (defonce ^:private last-id-generated (atom 0))
 
-(defn generate-id
-  "Generates a new ID for an entity of type 'type'."
-  [type]
-  [type (swap! last-id-generated inc)])
+(defn assoc-id
+  "Sets a new :id on an entity"
+  [entity]
+  (assoc entity :id (swap! last-id-generated inc)))
 
 (defmulti find-entity
   "Multimethod for locating entities within the game. Implementations should
@@ -57,15 +59,15 @@
 
   - An event (see 'dispatch!').
   - The current value of the :game key of the 'state' atom
-  - The current value of the 'root' atom
+  - The current value of the 'commands' atom
 
   The function should return a set of entity IDs which were modified by this
   event. Those entities' game objects will be updated automatically to their
   new state. Additionally, for more complex use-cases like playing animations,
   implementations are free to directly modify game objects themselves."
-  (fn [event game root] (:event event)))
+  (fn [event commands game] (:event event)))
 
-(defmethod apply-event-commands! :default [event game root] #{})
+(defmethod apply-event-commands! :default [event commands game] #{})
 
 (defmulti update-game-object!
   "Multimethod for updating GameObjects after effect resolution has mutated
@@ -73,18 +75,18 @@
 
   - An 'entity-type', used for dispatch
   - An 'entity' in the game
-  - The current value of the 'root' atom
+  - The current value of the 'commands' atom
 
   The implementation should directly modify the Unity GameObject corresponding
   to 'entity' to reflect its new state. No return value is expected."
-  (fn [entity-type entity root] entity-type))
+  (fn [entity-type entity commands] entity-type))
 
 (defn- rules-for-event
   "Returns a sequence of rules which are interested in this event based on the
   trigger values they provided at registration time"
   [{event :event source :source entities :entities}]
   (let [rules (event (:rules @state))]
-    (if (seq entities)
+    (if (and (seq entities) (seq rules))
       (concat
        (rules [:global])
        (mapcat rules (map #(vector :entity %) entities))
@@ -126,7 +128,9 @@
   - If any new events were added by effect handlers, recursively repeats this
     process for each event added.
 
-  The return value is a sequence of all events processed."
+  The return value is a sequence of all events processed.
+
+  TODO: Make this return a new state value instead of mutating in place."
   [initial-event]
   (loop [event initial-event all-events []]
     (if event
@@ -152,14 +156,21 @@
   Any registered rules for this event will be invoked to trigger mutations to
   the state of the game. Returns nil."
   [event]
+  (reset! previous-state @state)
   (let [events (apply-effects! event)
         game (:game @state)
         apply-commands! (fn [event]
-                          (apply-event-commands! event game @root))
+                          (apply-event-commands! event @commands game))
         updated-ids (apply concat (into #{} (mapv apply-commands! events)))]
     (doseq [entity-id updated-ids]
       (when-let [entity (find-entity entity-id game)]
-        (update-game-object! entity-id entity @root)))))
+        (update-game-object! entity-id entity @commands)))))
+
+(defn undo!
+  "Undoes the results of the last dispatch! command. Note that this rolls back
+  Clojure state only, it cannot change Unity state."
+  []
+  (reset! state @previous-state))
 
 (defn- register-rule
   "Returns a new state with a single [index rule-function] tuple associated with
@@ -216,8 +227,8 @@
   'entity-id' by looking for the vector at the provided 'rules-path', which
   should follow the navigation syntax of the core 'get-in' function. Returns
   nil."
-  [new-root game entity-id rules-path]
-  (reset! root new-root)
+  [new-commands game entity-id rules-path]
+  (reset! commands new-commands)
   (reset! state (register-rules {:game game :events [] :rules {}}
                                 entity-id
                                 (get-in game rules-path)))

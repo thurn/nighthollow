@@ -15,15 +15,20 @@
 (ns nighthollow.test-data
   (:require [nighthollow.data :as data]))
 
+(def card
+  {:owner :user
+   :can-play false
+   :card-prefab "Content/Card"})
+
 (def wizard-card
-  {:name "Wizard"
-   :can-play {:value false}
-   :cost {:kind :standard
-          :mana 100
-          :influence [[:flame 1]]}
-   :base-type :wizard
-   :stats {:health 100
-           :damage [[:physical 10]]}})
+  (merge card
+         {:name "Wizard"
+          :type :creature
+          :image "CreatureImages/Wizard"
+          :cost {:mana 100 :influence {:flame 1}}
+          :creature-prefab "Creatures/Player/Wizard"
+          :health 100
+          :damage {:physical 10}}))
 
 (def standard-deck
   [wizard-card])

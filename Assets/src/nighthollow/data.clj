@@ -17,8 +17,6 @@
 
 (def user-id [:user])
 
-(defn card-id [id] [:card id])
-
 (defn creature-id [id] [:creature id])
 
 (defmethod core/find-entity :user find-user [_ game] (:user game))
@@ -26,7 +24,7 @@
 (def default-user-state
   {:current-life 25
    :maximum-life 25
-   :current-mana 0
+   :mana 0
    :influence []})
 
 (defn ^{:event :game-start}

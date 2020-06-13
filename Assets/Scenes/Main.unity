@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 169299294}
   - component: {fileID: 169299297}
   - component: {fileID: 169299298}
+  - component: {fileID: 169299301}
   - component: {fileID: 169299300}
   - component: {fileID: 169299299}
   - component: {fileID: 169299296}
@@ -198,6 +199,7 @@ MonoBehaviour:
   _mainCanvas: {fileID: 1736363420}
   _prefabs: {fileID: 169299299}
   _requestService: {fileID: 169299298}
+  _commandService: {fileID: 169299301}
   _assetService: {fileID: 169299300}
   _objectPoolService: {fileID: 169299296}
   _creatureService: {fileID: 169299295}
@@ -250,6 +252,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b08830f75c8451e8a76e68c728ca25d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &169299301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169299293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3ae31da676d46afb1b3fe8a20634395, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!213 &192261797
@@ -5441,8 +5455,8 @@ MonoBehaviour:
   _hand: {fileID: 1841190611970440670}
   _lifeBar: {fileID: 4588714311478836258}
   _lifeText: {fileID: 4588714312123632494}
-  _powerBar: {fileID: 4588714310884995547}
-  _powerText: {fileID: 4588714310995349787}
+  _manaBar: {fileID: 4588714310884995547}
+  _manaText: {fileID: 4588714310995349787}
   _influenceRow: {fileID: 6452207825707287506}
 --- !u!222 &4588714312742304337
 CanvasRenderer:

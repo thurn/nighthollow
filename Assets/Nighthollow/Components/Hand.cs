@@ -52,13 +52,22 @@ namespace Nighthollow.Components
       }
     }
 
-    public void DrawCard(CardData cardData, bool animate = true)
+    public void DrawCards(IEnumerable<CardData> cards)
     {
-      var card = ComponentUtils.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas);
-      card.Initialize(cardData);
-      card.transform.position = _deckPosition.position;
-      card.transform.localScale = Vector2.one * _initialCardScale;
-      AddToHand(card, animate);
+      Root.Instance.AssetService.FetchCardAssets(cards, () => { StartCoroutine(DrawsCardAsync(cards)); });
+    }
+
+    IEnumerator<YieldInstruction> DrawsCardAsync(IEnumerable<CardData> cards)
+    {
+      foreach (var cardData in cards)
+      {
+        var card = ComponentUtils.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas);
+        card.Initialize(cardData);
+        card.transform.position = _deckPosition.position;
+        card.transform.localScale = Vector2.one * _initialCardScale;
+        AddToHand(card);
+        yield return new WaitForSeconds(0.2f);
+      }
     }
 
     public Card GetCard(CardId cardId) =>

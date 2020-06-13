@@ -22,7 +22,7 @@ namespace Nighthollow.Utils
 {
   public static class ComponentUtils
   {
-    public static T Instantiate<T>(Asset prefab, Transform parent = null) where T : Component
+    public static T Instantiate<T>(AssetData prefab, Transform parent = null) where T : Component
     {
       Errors.CheckNotNull(prefab);
       var prefabObject = Object.Instantiate(Root.Instance.AssetService.Get<GameObject>(prefab), parent);

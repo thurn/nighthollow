@@ -28,30 +28,33 @@ namespace Nighthollow.Services
   {
     readonly Dictionary<string, Object> _assetCache = new Dictionary<string, Object>();
 
-    public T Get<T>(Asset asset) where T : Object => _assetCache[asset.Address] as T;
+    public T Get<T>(AssetData asset) where T : Object => _assetCache[asset.Address] as T;
 
-    public void FetchCardAssets(CardData card, Action onComplete)
+    public void FetchCardAssets(IEnumerable<CardData> cards, Action onComplete)
     {
-      var assets = new List<Asset>();
-      AddCardAssets(card, assets);
+      var assets = new List<AssetData>();
+      foreach (var card in cards)
+      {
+        AddCardAssets(card, assets);
+      }
       StartCoroutine(PopulateAssets(assets, onComplete));
     }
 
     public void FetchCreatureAssets(CreatureData creature, Action onComplete)
     {
-      var assets = new List<Asset>();
+      var assets = new List<AssetData>();
       AddCreatureAssets(creature, assets);
       StartCoroutine(PopulateAssets(assets, onComplete));
     }
 
-    void AddCardAssets(CardData card, List<Asset> assets)
+    void AddCardAssets(CardData card, List<AssetData> assets)
     {
       assets.Add(card.Prefab);
       assets.Add(card.Image);
       AddCreatureAssets(card.CreatureData, assets);
     }
 
-    void AddCreatureAssets(CreatureData creature, List<Asset> assets)
+    void AddCreatureAssets(CreatureData creature, List<AssetData> assets)
     {
       assets.Add(creature.Prefab);
 
@@ -64,14 +67,13 @@ namespace Nighthollow.Services
       }
     }
 
-    void AddAttachmentAssets(AttachmentData attachmentData, List<Asset> assets)
+    void AddAttachmentAssets(AttachmentData attachmentData, ICollection<AssetData> assets)
     {
       assets.Add(attachmentData.Image);
     }
 
-    IEnumerator PopulateAssets(List<Asset> assets, Action onComplete)
+    IEnumerator PopulateAssets(IReadOnlyList<AssetData> assets, Action onComplete)
     {
-      assets.RemoveAll(x => x == null);
       var requests = assets.Select(asset => Resources.LoadAsync(asset.Address, TypeForAsset(asset))).ToList();
 
       foreach (var request in requests)
@@ -88,7 +90,7 @@ namespace Nighthollow.Services
       onComplete();
     }
 
-    Type TypeForAsset(Asset asset)
+    Type TypeForAsset(AssetData asset)
     {
       switch (asset.AssetType)
       {
