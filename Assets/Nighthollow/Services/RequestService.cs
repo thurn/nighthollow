@@ -26,7 +26,7 @@ namespace Nighthollow.Services
     void Start()
     {
       Arcadia.Util.require(Namespace);
-      _startNewGame = Clojure.var(Namespace, "start-new-game");
+      _startNewGame = Clojure.var(Namespace, "on-start-new-game");
     }
 
     public void StartNewGame()

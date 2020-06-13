@@ -12,15 +12,27 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.api
-  (:require
-   [arcadia.core :as arcadia]
-   [nighthollow.core :as core]
-   [nighthollow.data :as data]
-   [nighthollow.test-data :as test-data]))
+(ns nighthollow.data
+  (:require [nighthollow.core :as core]))
 
-(defn on-start-new-game []
-  (arcadia/log "Start Game from API!")
-  (core/start-game! (test-data/load-scenario :standard)
-                    data/user-id
-                    [:user :rules]))
+(def user-id [:user])
+
+(defn card-id [id] [:card id])
+
+(defn creature-id [id] [:creature id])
+
+(defmethod core/find-entity :user find-user [_ game] (:user game))
+
+(def default-user-state
+  {:current-life 25
+   :maximum-life 25
+   :current-mana 0
+   :influence []})
+
+(defn ^{:event :game-start}
+  draw-opening-hand
+  [& _]
+  [{:effect :draw-cards :quantity 5}])
+
+(def default-user-rules
+  [#'draw-opening-hand])
