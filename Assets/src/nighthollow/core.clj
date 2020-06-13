@@ -18,6 +18,13 @@
 
 (defonce ^:private root (atom {}))
 
+(defonce ^:private last-id-generated (atom 0))
+
+(defn generate-id
+  "Generates a new ID for an entity of type 'type'."
+  [type]
+  [type (swap! last-id-generated inc)])
+
 (defmulti find-entity
   "Multimethod for locating entities within the game. Implementations should
   accept two parameters: the entity ID (a vector whose first element must be
@@ -42,23 +49,23 @@
   current batch of effects is done executing"
   (fn [state effect] (:effect effect)))
 
-(defmulti apply-effect-commands!
-  "Multimethod for applying effects to mutate the state of the game interface.
-  This is the final step of event resolution, and it is only invoked after all
-  effect handlers have been recursively executed. The function will receive
-  three parameters:
+(defmulti apply-event-commands!
+  "Multimethod for applying mutations to the state of the game interface based
+  on events raised. This is the final step of event resolution, and it is only
+  invoked after all effect handlers have been recursively executed. The
+  function will receive three parameters:
 
-  - An effect as described above (see 'handle-effect').
+  - An event (see 'dispatch!').
   - The current value of the :game key of the 'state' atom
   - The current value of the 'root' atom
 
   The function should return a set of entity IDs which were modified by this
-  effect. Those entities' game objects will be updated automatically to their
+  event. Those entities' game objects will be updated automatically to their
   new state. Additionally, for more complex use-cases like playing animations,
   implementations are free to directly modify game objects themselves."
-  (fn [effect game root] (:effect effect)))
+  (fn [event game root] (:event event)))
 
-(defmethod apply-effect-commands! :default [effect state root] #{})
+(defmethod apply-event-commands! :default [event game root] #{})
 
 (defmulti update-game-object!
   "Multimethod for updating GameObjects after effect resolution has mutated
@@ -77,11 +84,11 @@
   trigger values they provided at registration time"
   [{event :event source :source entities :entities}]
   (let [rules (event (:rules @state))]
-    (if entities
+    (if (seq entities)
       (concat
        (rules [:global])
-       (mapcat rules (map #(vector :entity %) (:entities event)))
-       (rules [:source (:source event)]))
+       (mapcat rules (map #(vector :entity %) entities))
+       (rules [:source source]))
       ;; If the event has no ':entities', *all* rules are invoked
       (flatten (vals rules)))))
 
@@ -119,15 +126,20 @@
   - If any new events were added by effect handlers, recursively repeats this
     process for each event added.
 
-  The return value is a sequence of all effects produced."
+  The return value is a sequence of all events processed."
   [initial-event]
-  (loop [event initial-event all-effects []]
+  (loop [event initial-event all-events []]
     (if event
       (let [effects (invoke-rules (:game @state) event)]
         (doseq [effect effects]
           (swap! state handle-effect effect))
-        (recur (pop-event!) (concat all-effects effects)))
-      all-effects)))
+        (recur (pop-event!) (conj all-events event)))
+      all-events)))
+
+(defn push-event
+  "Helper to return a new state value with 'event' added to the :events list"
+  [state event]
+  (update state :events conj event))
 
 (defn dispatch!
   "Raises a new game event. The argument should be an event specification map
@@ -140,11 +152,11 @@
   Any registered rules for this event will be invoked to trigger mutations to
   the state of the game. Returns nil."
   [event]
-  (let [effects (apply-effects! event)
+  (let [events (apply-effects! event)
         game (:game @state)
-        apply-commands! (fn [effect]
-                          (apply-effect-commands! effect game @root))
-        updated-ids (doall (mapcat apply-commands! effects))]
+        apply-commands! (fn [event]
+                          (apply-event-commands! event game @root))
+        updated-ids (apply concat (into #{} (mapv apply-commands! events)))]
     (doseq [entity-id updated-ids]
       (when-let [entity (find-entity entity-id game)]
         (update-game-object! entity-id entity @root)))))
@@ -204,7 +216,8 @@
   'entity-id' by looking for the vector at the provided 'rules-path', which
   should follow the navigation syntax of the core 'get-in' function. Returns
   nil."
-  [game entity-id rules-path]
+  [new-root game entity-id rules-path]
+  (reset! root new-root)
   (reset! state (register-rules {:game game :events [] :rules {}}
                                 entity-id
                                 (get-in game rules-path)))

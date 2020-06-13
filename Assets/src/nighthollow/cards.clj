@@ -35,17 +35,32 @@
     4 2
     1))
 
-(defn draw-random-card
-  "Adds a new randomly-selected card from the user's deck to their hand, and
-  decrements the associated weight value for that card."
-  [{deck :deck hand :hand :as user}]
-  (let [[card weight] (first deck)]
-    (-> user
-        (update :hand conj card)
-        (update-in [:deck 0] assoc 1 (new-weight weight)))))
+(defn draw-card
+  "Takes a map with a :user value and a :cards accumulator. Adds a new
+  randomly-selected card from the user's deck to their hand, decrementing the
+  associated weight value for that card. Returns a map with the updated user
+  state and the drawn card added to the :cards list"
+  [{{deck :deck hand :hand :as user} :user cards :cards}]
+  (let [[card weight] (first deck)
+        card-with-id (assoc card :card-id (core/generate-id :card))]
+    {:cards (conj cards card-with-id)
+     :user (-> user
+               (update :hand conj card-with-id)
+               (update-in [:deck 0] assoc 1 (new-weight weight)))}))
 
 (defmethod core/handle-effect
   :draw-cards
   draw-cards
   [state {quantity :quantity}]
-  (update-in state [:game :user] draw-random-card))
+  (let [input {:user (get-in state [:game :user]) :cards []}
+        {user :user cards :cards} (nth (iterate draw-card input) quantity)]
+    (-> state
+        (assoc-in [:game :user] user)
+        (core/push-event {:event :cards-drawn :cards cards}))))
+
+(defmethod core/apply-event-commands!
+  :cards-drawn
+  draw-cards-command
+  [{cards :cards} & args]
+  (println "on drew cards" cards)
+  #{})

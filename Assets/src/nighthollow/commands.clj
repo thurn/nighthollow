@@ -12,16 +12,5 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.api
-  (:require
-   [arcadia.core :as arcadia]
-   [nighthollow.core :as core]
-   [nighthollow.data :as data]
-   [nighthollow.test-data :as test-data]))
-
-(defn on-start-new-game [root]
-  (arcadia/log "Start Game from API!")
-  (core/start-game! root
-                    (test-data/load-scenario :standard)
-                    data/user-id
-                    [:user :rules]))
+(ns nighthollow.commands
+  (:require [nighthollow.core :as core]))
