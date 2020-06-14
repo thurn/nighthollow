@@ -4,3 +4,6 @@
 [submodule "Assets/Arcadia"]
 	path = Assets/Arcadia
 	url = https://github.com/arcadia-unity/Arcadia.git
+[submodule "Assets/vendor/clr.spec.alpha"]
+	path = Assets/vendor/clr.spec.alpha
+	url = https://github.com/clojure/clr.spec.alpha.git
