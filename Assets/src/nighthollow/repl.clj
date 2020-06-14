@@ -15,7 +15,8 @@
 (ns nighthollow.repl
   (:require
    [clojure.pprint :as pprint]
-   [clojure.repl :as repl]))
+   [clojure.repl :as repl]
+   [clojure.test :as test]))
 
 (defmacro add-standard-functions []
   '(do
@@ -26,3 +27,20 @@
      (require '[nighthollow.core :as c])
      (require '[nighthollow.api :as a])
      (require '[nighthollow.main :as m])))
+
+(defn report [{type :type :as args}]
+  (case type
+    :begin-test-var (println "Running" (:var args))
+    :fail (do
+            (print "Failed! ")
+            (when-let [file (:file args)] (print "File: " file " "))
+            (when (> (:line args) 0) (print "Line: " (:line args) " "))
+            (when-let [message (:message args)] (print message))
+            (print "\n")
+            (println "Expected: " (:expected args))
+            (println "Actual: " (:actual args)))
+    nil))
+
+(defn run-tests []
+  (binding [test/report report]
+    (test/run-tests)))
