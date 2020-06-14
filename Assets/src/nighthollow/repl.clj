@@ -12,19 +12,17 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.main
+(ns nighthollow.repl
   (:require
-   [arcadia.core :as arcadia]
-   [nighthollow.api]
-   [nighthollow.cards]
-   [nighthollow.core :as core]
-   [nighthollow.data :as data]
-   [nighthollow.test :as test]))
+   [clojure.pprint :as pprint]
+   [clojure.repl :as repl]))
 
-(defn on-start-new-game [commands]
-  (arcadia/log "Start Game")
-  (core/start-game! commands
-                    test/new-game
-                    data/user-id
-                    [:user :rules])
-  (core/dispatch! {:event :game-start}))
+(defmacro add-standard-functions []
+  '(do
+     (use 'clojure.repl)
+     (use 'clojure.pprint)
+     (require '[nighthollow.test :as t])
+     (require '[nighthollow.data :as d])
+     (require '[nighthollow.core :as c])
+     (require '[nighthollow.api :as a])
+     (require '[nighthollow.main :as m])))

@@ -21,7 +21,22 @@
 
 (defmethod core/find-entity :user find-user [_ game] (:user game))
 
-(def default-user-state
+(def card
+  {:owner :user
+   :can-play false
+   :card-prefab "Content/Card"})
+
+(def wizard-card
+  (merge card
+         {:name "Wizard"
+          :type :creature
+          :image "CreatureImages/Wizard"
+          :cost {:mana 100 :influence {:flame 1}}
+          :creature-prefab "Creatures/Player/Wizard"
+          :health 100
+          :damage {:physical 10}}))
+
+(def user
   {:current-life 25
    :maximum-life 25
    :mana 0
@@ -32,5 +47,5 @@
   [& _]
   [{:effect :draw-cards :quantity 5}])
 
-(def default-user-rules
+(def user-rules
   [#'draw-opening-hand])

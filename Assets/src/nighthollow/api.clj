@@ -14,17 +14,8 @@
 
 (ns nighthollow.api
   (:require
-   [arcadia.core :as arcadia]
    [nighthollow.core :as core]
-   [nighthollow.data :as data]
-   [nighthollow.test-data :as test-data]))
-
-(defn on-start-new-game [commands]
-  (arcadia/log "Start Game from API!")
-  (core/start-game! commands
-                    (test-data/load-scenario :standard)
-                    data/user-id
-                    [:user :rules]))
+   [nighthollow.data :as data]))
 
 (defn ->creature-id [id] (CreatureId. id))
 

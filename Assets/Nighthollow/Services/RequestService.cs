@@ -20,7 +20,7 @@ namespace Nighthollow.Services
 {
   public sealed class RequestService : MonoBehaviour
   {
-    const string Namespace = "nighthollow.api";
+    const string Namespace = "nighthollow.main";
     IFn _onStartNewGame;
 
     void Start()

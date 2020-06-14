@@ -12,19 +12,24 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.main
-  (:require
-   [arcadia.core :as arcadia]
-   [nighthollow.api]
-   [nighthollow.cards]
-   [nighthollow.core :as core]
-   [nighthollow.data :as data]
-   [nighthollow.test :as test]))
+(ns nighthollow.test
+  (:require [nighthollow.data :as data]))
 
-(defn on-start-new-game [commands]
-  (arcadia/log "Start Game")
-  (core/start-game! commands
-                    test/new-game
-                    data/user-id
-                    [:user :rules])
-  (core/dispatch! {:event :game-start}))
+(def card (assoc data/wizard-card :id 0))
+
+(def deck
+  (mapv #(vector % 4000) [data/wizard-card]))
+
+(def new-game
+  {:game-id 1
+   :user {:rules data/user-rules
+          :state data/user
+          :deck deck
+          :hand []}})
+
+(def ongoing-game
+  {:game-id 1
+   :user {:rules data/user-rules
+          :state data/user
+          :deck deck
+          :hand [card]}})
