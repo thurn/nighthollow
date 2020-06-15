@@ -26,10 +26,20 @@ namespace Nighthollow.Services
       Root.Instance.User.Hand.DestroyAllCards();
       Root.Instance.CreatureService.DestroyAllCreatures();
     }
-    
+
     public void DrawCards(IEnumerable cards)
     {
       Root.Instance.User.Hand.DrawCards(cards.Cast<CardData>());
+    }
+
+    public void UpdateCard(CardData cardData)
+    {
+      Root.Instance.User.Hand.GetCard(cardData.CardId).UpdateCardData(cardData);
+    }
+
+    public void UpdateCreature(CreatureData creatureData)
+    {
+      Root.Instance.CreatureService.GetCreature(creatureData.CreatureId).UpdateCreatureData(creatureData);
     }
   }
 }

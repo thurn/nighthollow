@@ -22,9 +22,16 @@
    [nighthollow.test :as test]))
 
 (defn on-start-new-game [commands]
-  (arcadia/log "Start Game")
+  (arcadia/log "on-start-new-game" commands)
   (core/start-game! commands
                     test/new-game
                     data/user-id
                     [:user :rules])
   (core/dispatch! {:event :game-start}))
+
+(defn on-card-drawn [card-id]
+  (arcadia/log "on-card-drawn" card-id)
+  (core/dispatch! {:event :card-drawn, :entities [[:card card-id]]}))
+
+(defn on-played-card [card-id target-rank target-file]
+  (arcadia/log "on-played-card" card-id target-rank target-file))

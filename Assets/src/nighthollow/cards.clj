@@ -14,9 +14,12 @@
 
 (ns nighthollow.cards
   (:require
+   [arcadia.core :as arcadia]
+   [clojure.test :refer [deftest is]]
    [nighthollow.core :as core]
    [nighthollow.api :as api]
-   [nighthollow.data :as data]))
+   [nighthollow.data :as data]
+   [nighthollow.test :as t]))
 
 (defn card-id [id] [:card id])
 
@@ -44,30 +47,56 @@
   "Takes a map with a :user value and a :cards accumulator. Adds a new
   randomly-selected card from the user's deck to their hand, decrementing the
   associated weight value for that card. Returns a map with the updated user
-  state and the drawn card added to the :cards list"
-  [{{deck :deck hand :hand :as user} :user cards :cards}]
-  (let [[card weight] (first deck)
-        card-with-id (core/assoc-id card)]
-    {:cards (conj cards card-with-id)
+  state and the drawn card added to the user's hand"
+  [{{deck :deck, hand :hand, :as user} :user cards :cards}]
+  (let [[drawn-card weight] (first deck)
+        card-id (core/new-id)
+        with-id (assoc drawn-card :id card-id)]
+    {:cards (conj cards with-id)
      :user (-> user
-               (update :hand conj card-with-id)
+               (update :hand assoc [:card card-id] with-id)
                (update-in [:deck 0] assoc 1 (new-weight weight)))}))
+
+(defmethod core/find-entity
+  :card
+  find-card
+  [card-id game]
+  (get-in game [:user :hand card-id]))
+
+(deftest test-find-entity
+  (is (= t/card
+         (core/find-entity [:card t/card-id] t/ongoing-game))))
+
+(defmethod core/update-game-object!
+  :card
+  update-card
+  [_ card commands]
+  (let [cd (api/->card-data card)]
+    (.UpdateCard commands cd)))
+
+(defn register-card-rules
+  [state card]
+  (core/register-rules state [:card (:id card)] (:rules card)))
 
 (defmethod core/handle-effect
   :draw-cards
   handle-draw-cards
   [state {quantity :quantity}]
   (let [input {:user (get-in state [:game :user]) :cards []}
-        {user :user cards :cards} (nth (iterate draw-card input) quantity)]
-    (-> state
+        {user :user cards :cards} (nth (iterate draw-card input) quantity)
+        state-with-rules (reduce register-card-rules state cards)]
+    (-> state-with-rules
         (assoc-in [:game :user] user)
-        (core/push-event {:event :cards-drawn
-                          :cards cards
-                          :entities (map #(vector :card (:id %)) cards)}))))
+        (core/push-event {:event :start-drawing-cards, :cards cards}))))
 
 (defmethod core/apply-event-commands!
-  :cards-drawn
+  :start-drawing-cards
   apply-cards-drawn
   [{cards :cards} commands _]
-  (.DrawCards commands (mapv api/->card-data cards))
-  #{})
+  (.DrawCards commands (mapv api/->card-data cards)))
+
+(defmethod core/handle-effect
+  :set-can-play-card
+  handle-set-can-play-card
+  [state {value :value, card-id :card-id}]
+  (update-in state [:game :user :hand card-id] assoc :can-play value))

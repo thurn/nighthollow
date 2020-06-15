@@ -12,7 +12,8 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.core)
+(ns nighthollow.core
+  (:require [arcadia.core :as arcadia]))
 
 (defonce ^:private previous-state (atom nil))
 
@@ -22,10 +23,10 @@
 
 (defonce ^:private last-id-generated (atom 0))
 
-(defn assoc-id
-  "Sets a new :id on an entity"
-  [entity]
-  (assoc entity :id (swap! last-id-generated inc)))
+(defn new-id
+  "Returns a new unique integer ID"
+  []
+  (swap! last-id-generated inc))
 
 (defmulti find-entity
   "Multimethod for locating entities within the game. Implementations should
@@ -61,25 +62,26 @@
   - The current value of the :game key of the 'state' atom
   - The current value of the 'commands' atom
 
-  The function should return a set of entity IDs which were modified by this
-  event. Those entities' game objects will be updated automatically to their
-  new state. Additionally, for more complex use-cases like playing animations,
-  implementations are free to directly modify game objects themselves."
+  The function should mutate the interface state appropriately for this event.
+  Note that entities which appear in the :entities list of an event are
+  automatically updated (see 'update-game-object!'), so updating them here is
+  not required. This function is intended to support more complex use-cases
+  like playing animations. Returns nil."
   (fn [event commands game] (:event event)))
 
-(defmethod apply-event-commands! :default [event commands game] #{})
+(defmethod apply-event-commands! :default [event commands game] nil)
 
 (defmulti update-game-object!
   "Multimethod for updating GameObjects after effect resolution has mutated
   the state of the game. The function will receive 3 arguments:
 
-  - An 'entity-type', used for dispatch
+  - The 'entity-id', used for dispatch
   - An 'entity' in the game
   - The current value of the 'commands' atom
 
   The implementation should directly modify the Unity GameObject corresponding
   to 'entity' to reflect its new state. No return value is expected."
-  (fn [entity-type entity commands] entity-type))
+  (fn [[entity-type & rest] entity commands] entity-type))
 
 (defn- rules-for-event
   "Returns a sequence of rules which are interested in this event based on the
@@ -100,7 +102,9 @@
   run."
   [game event {rule :rule entity-id :entity-id index :index}]
   (if-let [entity (find-entity entity-id game)]
-    (rule entity event game index)))
+    (rule entity {:event event
+                  :game game
+                  :index index})))
 
 (defn- invoke-rules
   "Given the current game state and an event, invokes all rule functions which
@@ -158,11 +162,10 @@
   [event]
   (reset! previous-state @state)
   (let [events (apply-effects! event)
-        game (:game @state)
-        apply-commands! (fn [event]
-                          (apply-event-commands! event @commands game))
-        updated-ids (apply concat (into #{} (mapv apply-commands! events)))]
-    (doseq [entity-id updated-ids]
+        game (:game @state)]
+    (doseq [event events]
+      (apply-event-commands! event @commands game))
+    (doseq [entity-id (distinct (mapcat :entities events))]
       (when-let [entity (find-entity entity-id game)]
         (update-game-object! entity-id entity @commands)))))
 
@@ -189,13 +192,13 @@
   occurs within the game. The 'rules' parameter is expected to contain a vector
   of clojure vars mapping to rule functions with associated rule metadata.
 
-  Rule functions will be invoked with four parameters:
+  Rule functions will be invoked with two arguments: the current value of the
+  entity owning this rule (as indicated by 'entity-id' here), and a
+  'rule-context' map containing the following keys:
 
-  1) The current value of the entity owning this rule (as indicated by
-     the 'entity-id' parameter)
-  2) The event in question (see 'dispatch' above for structure)
-  3) The current value of the :game key of the 'state' atom
-  4) The index of the rule within its parent entity
+  - :event, the event in question (see 'dispatch' above for structure)
+  - :game, containing the current value of the :game key of the 'state' atom
+  - :index, the index of the rule within its parent entity
 
   The rule should return a sequence of Effects (see 'handle-effect' below
   for structure) to mutate the state of the game in some way.

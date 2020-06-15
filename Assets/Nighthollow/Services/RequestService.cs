@@ -14,6 +14,7 @@
 
 using clojure.clr.api;
 using clojure.lang;
+using Nighthollow.Model;
 using UnityEngine;
 
 namespace Nighthollow.Services
@@ -22,16 +23,30 @@ namespace Nighthollow.Services
   {
     const string Namespace = "nighthollow.main";
     IFn _onStartNewGame;
+    IFn _onCardDrawn;
+    IFn _onPlayedCard;
 
     void Start()
     {
       Arcadia.Util.require(Namespace);
       _onStartNewGame = Clojure.var(Namespace, "on-start-new-game");
+      _onCardDrawn = Clojure.var(Namespace, "on-card-drawn");
+      _onPlayedCard = Clojure.var(Namespace, "on-played-card");
     }
 
-    public void StartNewGame(CommandService commands)
+    public void OnCardDrawn(CardId cardId)
+    {
+      _onCardDrawn.invoke(cardId.Value);
+    }
+
+    public void OnStartNewGame(CommandService commands)
     {
       _onStartNewGame.invoke(commands);
+    }
+
+    public void OnPlayedCard(CardId cardId, RankValue targetRank, FileValue targetFile)
+    {
+      _onPlayedCard.invoke(cardId, targetRank, targetFile);
     }
   }
 }

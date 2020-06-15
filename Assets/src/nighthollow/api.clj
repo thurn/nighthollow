@@ -90,11 +90,13 @@
 
 (defn ->card-data [{card-id :id
                     address :card-prefab
+                    can-play :can-play
                     cost :cost
                     image-address :image
                     :as card}]
   (CardData. (->card-id card-id)
              (->asset-data :prefab address)
+             can-play
              (->cost cost)
              (->asset-data :sprite image-address)
              (->creature-data card)))

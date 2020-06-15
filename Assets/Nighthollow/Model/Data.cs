@@ -52,6 +52,11 @@ namespace Nighthollow.Model
     {
       return !left.Equals(right);
     }
+
+    public override string ToString()
+    {
+      return $"[CreatureID {nameof(Value)}: {Value}]";
+    }
   }
 
   public readonly struct CardId : IEquatable<CardId>
@@ -86,6 +91,11 @@ namespace Nighthollow.Model
     public static bool operator !=(CardId left, CardId right)
     {
       return !left.Equals(right);
+    }
+
+    public override string ToString()
+    {
+      return $"[CardId {nameof(Value)}: {Value}]";
     }
   }
 
@@ -231,16 +241,19 @@ namespace Nighthollow.Model
 
     public readonly AssetData Prefab;
 
+    public readonly bool CanPlay;
+
     public readonly Cost Cost;
 
     public readonly AssetData Image;
 
     public readonly CreatureData CreatureData;
 
-    public CardData(CardId cardId, AssetData prefab, Cost cost, AssetData image, CreatureData creatureData)
+    public CardData(CardId cardId, AssetData prefab, bool canPlay, Cost cost, AssetData image, CreatureData creatureData)
     {
       CardId = cardId;
       Prefab = prefab;
+      CanPlay = canPlay;
       Cost = cost;
       Image = image;
       CreatureData = creatureData;
@@ -250,6 +263,7 @@ namespace Nighthollow.Model
     {
       return $"[CardData {nameof(CardId)}: {CardId},\n" +
              $"{nameof(Prefab)}: {Prefab},\n" +
+             $"{nameof(CanPlay)}: {CanPlay}\n" +
              $"{nameof(Cost)}: {Cost},\n" +
              $"{nameof(Image)}: {Image},\n" +
              $"{nameof(CreatureData)}: {CreatureData}]";

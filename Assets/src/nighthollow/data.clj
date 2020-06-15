@@ -13,18 +13,33 @@
 ;; limitations under the License.
 
 (ns nighthollow.data
-  (:require [nighthollow.core :as core]))
+  (:require
+   [arcadia.core :as arcadia]
+   [nighthollow.core :as core]))
 
 (def user-id [:user])
 
 (defn creature-id [id] [:creature id])
 
+(defn find-id
+  "Returns a predicate which checks if an entity's id is 'id'."
+  [id]
+  (fn [map] (if (= (:id map) id) map nil)))
+
 (defmethod core/find-entity :user find-user [_ game] (:user game))
+
+(defn ^{:event :card-drawn}
+  default-can-play-card
+  [card _]
+  [{:effect :set-can-play-card
+    :value true
+    :card-id [:card (:id card)]}])
 
 (def card
   {:owner :user
    :can-play false
-   :card-prefab "Content/Card"})
+   :card-prefab "Content/Card"
+   :rules [#'default-can-play-card]})
 
 (def wizard-card
   (merge card
@@ -44,7 +59,7 @@
 
 (defn ^{:event :game-start}
   draw-opening-hand
-  [& _]
+  [_ _]
   [{:effect :draw-cards :quantity 5}])
 
 (def user-rules

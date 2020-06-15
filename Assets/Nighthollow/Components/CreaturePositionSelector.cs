@@ -62,6 +62,7 @@ namespace Nighthollow.Components
           if (_card)
           {
             _card.OnPlayed();
+            Root.Instance.RequestService.OnPlayedCard(_card.CardId, rank, file);
           }
 
           Destroy(_cursor);

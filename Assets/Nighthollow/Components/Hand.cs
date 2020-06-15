@@ -66,12 +66,13 @@ namespace Nighthollow.Components
         card.transform.position = _deckPosition.position;
         card.transform.localScale = Vector2.one * _initialCardScale;
         AddToHand(card);
+        Root.Instance.RequestService.OnCardDrawn(card.CardId);
         yield return new WaitForSeconds(0.2f);
       }
     }
 
     public Card GetCard(CardId cardId) =>
-      Errors.CheckNotNull(_cards.Find(c => c.CardId.Equals(cardId)), "Card not found!");
+      Errors.CheckNotNull(_cards.Find(c => c.CardId.Value == cardId.Value), $"Card {cardId} not found!");
 
     public void DestroyById(CardId cardId, bool mustExist = false)
     {

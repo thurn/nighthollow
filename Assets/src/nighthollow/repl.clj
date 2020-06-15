@@ -15,18 +15,27 @@
 (ns nighthollow.repl
   (:require
    [clojure.pprint :as pprint]
-   [clojure.repl :as repl]
+   [clojure.repl]
+   [clojure.string :as string]
    [clojure.test :as test]))
 
-(defmacro add-standard-functions []
-  '(do
-     (use 'clojure.repl)
-     (use 'clojure.pprint)
-     (require '[nighthollow.test :as t])
-     (require '[nighthollow.data :as d])
-     (require '[nighthollow.core :as c])
-     (require '[nighthollow.api :as a])
-     (require '[nighthollow.main :as m])))
+(defn add-standard-functions
+  []
+  (use 'clojure.repl)
+  (use 'clojure.pprint)
+  (require '[nighthollow.test :as t])
+  (require '[nighthollow.data :as d])
+  (require '[nighthollow.core :as c])
+  (require '[nighthollow.api :as a])
+  (require '[nighthollow.main :as m])
+  (use '[nighthollow.repl]))
+
+(defn populate-all []
+  (doseq [n (map ns-name (all-ns))]
+    (when (string/starts-with? (name n) "nighthollow")
+      (println "Adding to" n)
+      (in-ns n)
+      (add-standard-functions))))
 
 (defn report [{type :type :as args}]
   (case type
@@ -44,3 +53,10 @@
 (defn run-tests []
   (binding [test/report report]
     (test/run-tests)))
+
+(defn restart []
+  (.ResetState @nighthollow.core/commands)
+  (nighthollow.main/on-start-new-game @nighthollow.core/commands))
+
+(defn hand []
+  (get-in @nighthollow.core/state [:game :user :hand]))

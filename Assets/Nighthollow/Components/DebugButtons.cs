@@ -30,9 +30,19 @@ namespace Nighthollow.Components
       Time.timeScale = 0.1f;
     }
 
+    public void Fast()
+    {
+      Time.timeScale = 1.0f;
+    }
+
     public void StartGame()
     {
-      Root.Instance.RequestService.StartNewGame(Root.Instance.CommandService);
+      Root.Instance.RequestService.OnStartNewGame(Root.Instance.CommandService);
+    }
+
+    public void ResetGame()
+    {
+      Root.Instance.CommandService.ResetState();
     }
 
     public void Draw()
@@ -49,6 +59,7 @@ namespace Nighthollow.Components
     CardData Wizard() => new CardData(
       cardId: new CardId(_idCounter++),
       prefab: Prefab("Content/Card"),
+      canPlay: true,
       cost: Cost(100, School.Flame, 1),
       image: Sprite("CreatureImages/Wizard"),
       creatureData: new CreatureData

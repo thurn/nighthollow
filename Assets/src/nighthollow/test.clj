@@ -15,21 +15,28 @@
 (ns nighthollow.test
   (:require [nighthollow.data :as data]))
 
-(def card (assoc data/wizard-card :id 0))
+(def card-id 0)
+
+(def card (assoc data/wizard-card :id card-id))
 
 (def deck
   (mapv #(vector % 4000) [data/wizard-card]))
 
-(def new-game
-  {:game-id 1
-   :user {:rules data/user-rules
+(def hand [card])
+
+(def user
+  {:rules data/user-rules
           :state data/user
           :deck deck
-          :hand []}})
+          :hand {}})
+
+(def new-game
+  {:game-id 1
+   :user user})
 
 (def ongoing-game
   {:game-id 1
    :user {:rules data/user-rules
           :state data/user
           :deck deck
-          :hand [card]}})
+          :hand {[:card-id card-id] card}}})

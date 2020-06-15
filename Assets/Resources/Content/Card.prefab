@@ -1026,7 +1026,6 @@ MonoBehaviour:
   - {fileID: 6045075448873755335}
   _outline: {fileID: 5893235104549452333}
   _hand: {fileID: 0}
-  _canBePlayed: 0
   _disableDragging: 0
   _initialized: 0
   _isFaceUp: 0
