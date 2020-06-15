@@ -70,9 +70,8 @@
 (defmethod core/update-game-object!
   :card
   update-card
-  [_ card commands]
-  (let [cd (api/->card-data card)]
-    (.UpdateCard commands cd)))
+  [_ card]
+  (Commands/UpdateCard (api/->card-data card)))
 
 (defn register-card-rules
   [state card]
@@ -92,8 +91,8 @@
 (defmethod core/apply-event-commands!
   :start-drawing-cards
   apply-cards-drawn
-  [{cards :cards} commands _]
-  (.DrawCards commands (mapv api/->card-data cards)))
+  [{cards :cards} _]
+  (Commands/DrawCards (mapv api/->card-data cards)))
 
 (defmethod core/handle-effect
   :set-can-play-card

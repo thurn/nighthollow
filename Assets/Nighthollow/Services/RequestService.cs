@@ -34,14 +34,14 @@ namespace Nighthollow.Services
       _onPlayedCard = Clojure.var(Namespace, "on-played-card");
     }
 
+    public void OnStartNewGame()
+    {
+      _onStartNewGame.invoke();
+    }
+
     public void OnCardDrawn(CardId cardId)
     {
       _onCardDrawn.invoke(cardId.Value);
-    }
-
-    public void OnStartNewGame(CommandService commands)
-    {
-      _onStartNewGame.invoke(commands);
     }
 
     public void OnPlayedCard(CardId cardId, RankValue targetRank, FileValue targetFile)

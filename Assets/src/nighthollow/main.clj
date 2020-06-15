@@ -21,10 +21,9 @@
    [nighthollow.data :as data]
    [nighthollow.test :as test]))
 
-(defn on-start-new-game [commands]
-  (arcadia/log "on-start-new-game" commands)
-  (core/start-game! commands
-                    test/new-game
+(defn on-start-new-game []
+  (arcadia/log "on-start-new-game")
+  (core/start-game! test/new-game
                     data/user-id
                     [:user :rules])
   (core/dispatch! {:event :game-start}))

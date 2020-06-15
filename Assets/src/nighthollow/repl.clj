@@ -55,7 +55,7 @@
     (test/run-tests)))
 
 (defn restart []
-  (.ResetState @nighthollow.core/commands)
+  (Commands/ResetState)
   (nighthollow.main/on-start-new-game @nighthollow.core/commands))
 
 (defn hand []

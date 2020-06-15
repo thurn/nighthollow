@@ -19,8 +19,6 @@
 
 (defonce ^:private state (atom {:game nil, :rules {}, :events []}))
 
-(defonce ^:private commands (atom {}))
-
 (defonce ^:private last-id-generated (atom 0))
 
 (defn new-id
@@ -56,32 +54,26 @@
   "Multimethod for applying mutations to the state of the game interface based
   on events raised. This is the final step of event resolution, and it is only
   invoked after all effect handlers have been recursively executed. The
-  function will receive three parameters:
-
-  - An event (see 'dispatch!').
-  - The current value of the :game key of the 'state' atom
-  - The current value of the 'commands' atom
+  function will receive two parameters An event (see 'dispatch!'), and the
+  current value of the :game key of the 'state' atom.
 
   The function should mutate the interface state appropriately for this event.
   Note that entities which appear in the :entities list of an event are
   automatically updated (see 'update-game-object!'), so updating them here is
   not required. This function is intended to support more complex use-cases
   like playing animations. Returns nil."
-  (fn [event commands game] (:event event)))
+  (fn [event game] (:event event)))
 
-(defmethod apply-event-commands! :default [event commands game] nil)
+(defmethod apply-event-commands! :default [event game] nil)
 
 (defmulti update-game-object!
   "Multimethod for updating GameObjects after effect resolution has mutated
-  the state of the game. The function will receive 3 arguments:
-
-  - The 'entity-id', used for dispatch
-  - An 'entity' in the game
-  - The current value of the 'commands' atom
+  the state of the game. The function will receive two arguments: The
+  'entity-id', used for dispatch, and an 'entity' in the game.
 
   The implementation should directly modify the Unity GameObject corresponding
   to 'entity' to reflect its new state. No return value is expected."
-  (fn [[entity-type & rest] entity commands] entity-type))
+  (fn [[entity-type & rest] entity] entity-type))
 
 (defn- rules-for-event
   "Returns a sequence of rules which are interested in this event based on the
@@ -164,10 +156,10 @@
   (let [events (apply-effects! event)
         game (:game @state)]
     (doseq [event events]
-      (apply-event-commands! event @commands game))
+      (apply-event-commands! event game))
     (doseq [entity-id (distinct (mapcat :entities events))]
       (when-let [entity (find-entity entity-id game)]
-        (update-game-object! entity-id entity @commands)))))
+        (update-game-object! entity-id entity)))))
 
 (defn undo!
   "Undoes the results of the last dispatch! command. Note that this rolls back
@@ -230,8 +222,7 @@
   'entity-id' by looking for the vector at the provided 'rules-path', which
   should follow the navigation syntax of the core 'get-in' function. Returns
   nil."
-  [new-commands game entity-id rules-path]
-  (reset! commands new-commands)
+  [game entity-id rules-path]
   (reset! state (register-rules {:game game :events [] :rules {}}
                                 entity-id
                                 (get-in game rules-path)))
