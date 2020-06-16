@@ -15,6 +15,7 @@
 using System.Collections;
 using System.Linq;
 using Nighthollow.Model;
+// ReSharper disable UnusedMember.Global
 
 namespace Nighthollow.Services
 {
@@ -33,12 +34,18 @@ namespace Nighthollow.Services
 
     public static void UpdateCard(CardData cardData)
     {
-      Root.Instance.User.Hand.GetCard(cardData.CardId).UpdateCardData(cardData);
+      if (Root.Instance.User.Hand.HasCard(cardData.CardId))
+      {
+        Root.Instance.User.Hand.GetCard(cardData.CardId).UpdateCardData(cardData);
+      }
     }
 
     public static void UpdateCreature(CreatureData creatureData)
     {
-      Root.Instance.CreatureService.GetCreature(creatureData.CreatureId).UpdateCreatureData(creatureData);
+      if (Root.Instance.CreatureService.HasCreature(creatureData.CreatureId))
+      {
+        Root.Instance.CreatureService.GetCreature(creatureData.CreatureId).UpdateCreatureData(creatureData);
+      }
     }
   }
 }

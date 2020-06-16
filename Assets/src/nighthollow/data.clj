@@ -30,16 +30,25 @@
 
 (defn ^{:event :card-drawn}
   default-can-play-card
-  [card _]
+  [{card-id :entity-id}]
   [{:effect :set-can-play-card
     :can-play true
-    :card-id [:card (:id card)]}])
+    :card-id card-id}])
+
+(defn ^{:event :card-played}
+  default-played-card
+  [{[_ id :as card-id] :entity-id, {rank :rank, file :file} :event}]
+  [{:effect :play-creature
+    :card-id card-id
+    :creature-id [:creature id]
+    :rank rank
+    :file file}])
 
 (def card
   {:owner :user
    :can-play false
    :card-prefab "Content/Card"
-   :rules [#'default-can-play-card]})
+   :rules [#'default-can-play-card #'default-played-card]})
 
 (def creature
   (merge card
@@ -69,11 +78,13 @@
   {:current-life 25
    :maximum-life 25
    :mana 0
-   :influence {}})
+   :influence {}
+   :hand {}
+   :creatures {}})
 
 (defn ^{:event :game-start}
   draw-opening-hand
-  [_ _]
+  [_]
   [{:effect :draw-cards :quantity 5}])
 
 (def user-rules

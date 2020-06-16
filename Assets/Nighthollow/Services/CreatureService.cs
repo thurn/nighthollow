@@ -92,6 +92,8 @@ namespace Nighthollow.Services
       });
     }
 
+    public bool HasCreature(CreatureId creatureId) => _creatures.ContainsKey(creatureId.Value);
+
     public Creature GetCreature(CreatureId creatureId)
     {
       if (!_creatures.ContainsKey(creatureId.Value))
@@ -109,6 +111,7 @@ namespace Nighthollow.Services
       {
         _files[creature.FilePosition.ToIndex()].RemoveAtPosition(creature.RankPosition.Value);
       }
+
       _creatures.Remove(creatureId.Value);
       creature.Destroy();
     }
@@ -156,7 +159,15 @@ namespace Nighthollow.Services
     {
       foreach (var creature in _creatures.Values)
       {
-        Destroy(creature.gameObject);
+        if (creature && creature.gameObject)
+        {
+          Debug.Log($"CreatureService::DestroyAllCreatures> Destroying {creature}");
+          Destroy(creature.gameObject);
+        }
+        else
+        {
+          Debug.LogError($"Already destroyed: {creature}");
+        }
       }
 
       _creatures.Clear();

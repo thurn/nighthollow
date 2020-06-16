@@ -44,6 +44,27 @@
     7 RankValue/Rank7
     8 RankValue/Rank8))
 
+(def ranks {RankValue/Rank1 1
+            RankValue/Rank2 2
+            RankValue/Rank3 3
+            RankValue/Rank4 4
+            RankValue/Rank5 5
+            RankValue/Rank6 6
+            RankValue/Rank7 7
+            RankValue/Rank8 8})
+
+(defn <-rank-value [rank]
+  (s/assert :d/rank (ranks rank)))
+
+(def files {FileValue/File1 1
+            FileValue/File2 2
+            FileValue/File3 3
+            FileValue/File4 4
+            FileValue/File5 5})
+
+(defn <-file-value [file]
+  (s/assert :d/file (files file)))
+
 (s/fdef ->file-value :args (s/cat :file :d/file))
 (defn ->file-value [file]
   (case file

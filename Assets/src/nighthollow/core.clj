@@ -117,8 +117,15 @@
   run."
   [game event {rule :rule entity-id :entity-id index :index}]
   (when-let [entity (find-entity entity-id game)]
-    (s/assert (specs/spec-for-entity-id entity-id) entity)
-    (rule entity {:event event, :game game, :index index})))
+    (specs/validate (str "Rule entity argument " rule)
+                    (specs/spec-for-entity-id entity-id) entity)
+    (specs/validate (str "Rule returned effects" rule)
+                    (s/coll-of :d/effect)
+                    (rule {:entity entity
+                           :entity-id entity-id
+                           :index index
+                           :event event
+                           :game game}))))
 
 (s/fdef invoke-rules :args (s/cat :game :d/game, :event :d/event))
 (defn- invoke-rules
@@ -216,13 +223,14 @@
   occurs within the game. The 'rules' parameter is expected to contain a vector
   of clojure vars mapping to rule functions with associated rule metadata.
 
-  Rule functions will be invoked with two arguments: the current value of the
-  entity owning this rule (as indicated by 'entity-id' here), and a
-  'rule-context' map containing the following keys:
+  Rule functions will be invoked with a rule context map containing the
+  following keys:
 
+  - :entity, the entity owning this rule (as indicated by 'entity-id' here)
+  - :entity-id, the value passed as 'entity-id' to this function
+  - :index, the index of the rule within its parent entity
   - :event, the event in question (see 'dispatch' above for structure)
   - :game, containing the current value of the :game key of the 'state' atom
-  - :index, the index of the rule within its parent entity
 
   The rule should return a sequence of Effects (see 'handle-effect' for
   structure) to mutate the state of the game in some way.

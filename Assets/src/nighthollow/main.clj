@@ -18,7 +18,7 @@
    [clojure.spec.alpha :as s]
    [clojure.spec.test.alpha :as stest]
    [expound.alpha :as expound]
-   [nighthollow.api]
+   [nighthollow.api :as api]
    [nighthollow.cards]
    [nighthollow.core :as core]
    [nighthollow.data :as data]
@@ -39,4 +39,8 @@
   (core/dispatch! {:event :card-drawn, :entities [[:card card-id]]}))
 
 (defn on-played-card [card-id target-rank target-file]
-  (arcadia/log "on-played-card" card-id target-rank target-file))
+  (arcadia/log "on-played-card" card-id target-rank target-file)
+  (core/dispatch! {:event :card-played
+                   :rank (api/<-rank-value target-rank)
+                   :file (api/<-file-value target-file)
+                   :entities [[:card card-id]]}))

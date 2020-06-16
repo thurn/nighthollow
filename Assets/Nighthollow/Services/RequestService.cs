@@ -47,7 +47,7 @@ namespace Nighthollow.Services
 
     public void OnPlayedCard(CardId cardId, RankValue targetRank, FileValue targetFile)
     {
-      _onPlayedCard.invoke(cardId, targetRank, targetFile);
+      _onPlayedCard.invoke(cardId.Value, targetRank, targetFile);
     }
   }
 }

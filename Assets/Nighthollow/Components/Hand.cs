@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Nighthollow.Model;
 using Nighthollow.Services;
@@ -70,6 +71,8 @@ namespace Nighthollow.Components
         yield return new WaitForSeconds(0.2f);
       }
     }
+
+    public bool HasCard(CardId cardId) => _cards.Any(c => c.CardId.Value == cardId.Value);
 
     public Card GetCard(CardId cardId) =>
       Errors.CheckNotNull(_cards.Find(c => c.CardId.Value == cardId.Value), $"Card {cardId} not found!");

@@ -99,3 +99,10 @@
   handle-set-can-play-card
   [state {can-play :can-play, card-id :card-id}]
   (update-in state [:game :user :hand card-id] assoc :can-play can-play))
+
+(defmethod core/handle-effect
+  :play-creature
+  handle-play-creature
+  [state {card-id :card-id, creature-id :creature-id, rank :rank, file :file}]
+  (arcadia/log "play-creature" card-id creature-id rank file)
+  state)

@@ -14,8 +14,20 @@
 
 (ns nighthollow.specs
   (:require
+   [arcadia.core :as arcadia]
    [clojure.spec.alpha :as s]
    [clojure.spec.test.alpha :as stest]))
+
+(defn validate
+  "Wrapper around clojure spec assert that adds a custom failure message"
+  [message spec x]
+  (if (s/valid? spec x)
+    x
+    (let [m (str "Error in " message "\n"
+                 "Spec " spec " does not match value " x)]
+      (arcadia/log m)
+      (println m)
+      (s/assert spec x))))
 
 (defn instrument! [namespace]
   (when (s/check-asserts?)
@@ -35,6 +47,7 @@
 (s/def :d/influence (s/map-of :d/school nat-int?))
 (s/def :d/deck vector?)
 (s/def :d/hand (s/map-of :d/card-id :d/card))
+(s/def :d/creatures (s/map-of :d/creature-id :d/creature))
 
 (s/def :d/user (s/keys :req-un [:d/rules
                                 :d/current-life
@@ -77,6 +90,7 @@
 (s/def :d/evasion nat-int?)
 (s/def :d/damage-resistance (s/map-of :d/damage-type nat-int?))
 (s/def :d/damage-reduction (s/map-of :d/damage-type nat-int?))
+(s/def :d/creature-id (s/tuple #{:creature} int?))
 
 (s/def :d/creature (s/keys :req-un [:d/creature-prefab
                                     :d/health
@@ -115,15 +129,26 @@
 (s/def :d/entities (s/coll-of :d/entity-id))
 
 (defmulti event-spec :event)
-
-(defmethod event-spec :game-start [_] (s/keys))
-(defmethod event-spec :start-drawing-cards [_] (s/keys :req-un [:d/cards]))
-(defmethod event-spec :card-drawn [_] (s/keys :req-un [:d/entities]))
+(defmethod event-spec :game-start [_]
+  (s/keys))
+(defmethod event-spec :start-drawing-cards [_]
+  (s/keys :req-un [:d/cards]))
+(defmethod event-spec :card-drawn [_]
+  (s/keys :req-un [:d/entities]))
+(defmethod event-spec :card-played [_]
+  (s/keys :req-un [:d/entities :d/rank :d/file]))
 (s/def :d/event (s/multi-spec event-spec :event))
 
 (s/def :d/quantity nat-int?)
 
 (defmulti effect-spec :effect)
-(defmethod effect-spec :draw-cards [_] (s/keys :req-un [:d/quantity]))
-(defmethod effect-spec :set-can-play-card [_] (s/keys :req-un [:d/can-play]))
+(defmethod effect-spec :draw-cards [_]
+  (s/keys :req-un [:d/quantity]))
+(defmethod effect-spec :set-can-play-card [_]
+  (s/keys :req-un [:d/can-play]))
+(defmethod effect-spec :play-creature [_]
+  (s/keys :req-un [:d/card-id
+                   :d/creature-id
+                   :d/rank
+                   :d/file]))
 (s/def :d/effect (s/multi-spec effect-spec :effect))
