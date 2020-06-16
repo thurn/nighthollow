@@ -13,11 +13,14 @@
 ;; limitations under the License.
 
 (ns nighthollow.core
-  (:require [arcadia.core :as arcadia]))
+  (:require
+   [arcadia.core :as arcadia]
+   [clojure.spec.alpha :as s]
+   [nighthollow.specs :as specs]))
 
 (defonce ^:private previous-state (atom nil))
 
-(defonce ^:private state (atom {:game nil, :rules {}, :events []}))
+(defonce ^:private state (atom {:game nil, :rules-map {}, :events []}))
 
 (defonce ^:private last-id-generated (atom 0))
 
@@ -46,9 +49,14 @@
 
   The handler should return a new value for the state atom. New events to
   handle can be added to the :events vector and new rules can be added to the
-  :rules vector, but in both cases they will not be 'seen' until the
+  :rules-map vector, but in both cases they will not be 'seen' until the
   current batch of effects is done executing"
   (fn [state effect] (:effect effect)))
+
+(defn- run-handle-effect
+  [state effect]
+  (s/assert :d/state (handle-effect (s/assert :d/state state)
+                                    (s/assert :d/effect effect))))
 
 (defmulti apply-event-commands!
   "Multimethod for applying mutations to the state of the game interface based
@@ -64,6 +72,10 @@
   like playing animations. Returns nil."
   (fn [event game] (:event event)))
 
+(defn- run-apply-event-commands!
+  [event game]
+  (apply-event-commands! (s/assert :d/event event) (s/assert :d/game game)))
+
 (defmethod apply-event-commands! :default [event game] nil)
 
 (defmulti update-game-object!
@@ -72,32 +84,43 @@
   'entity-id', used for dispatch, and an 'entity' in the game.
 
   The implementation should directly modify the Unity GameObject corresponding
-  to 'entity' to reflect its new state. No return value is expected."
+  to 'entity' to reflect its new state. Returns nil."
   (fn [[entity-type & rest] entity] entity-type))
 
+(defn- run-update-game-object!
+  [entity-id entity]
+  (update-game-object! (s/assert :d/entity-id entity-id)
+                       (s/assert (specs/spec-for-entity-id entity-id) entity)))
+
+(s/fdef rules-for-event :args (s/cat :event :d/event,
+                                     :source-id :d/entity-id
+                                     :entities (s/coll-of :d/entity-id)))
 (defn- rules-for-event
   "Returns a sequence of rules which are interested in this event based on the
   trigger values they provided at registration time"
-  [{event :event source :source entities :entities}]
-  (let [rules (event (:rules @state))]
+  [{event :event source-id :source entities :entities}]
+  (let [rules (event (:rules-map @state))]
     (if (and (seq entities) (seq rules))
       (concat
        (rules [:global])
        (mapcat rules (map #(vector :entity %) entities))
-       (rules [:source source]))
+       (rules [:source source-id]))
       ;; If the event has no ':entities', *all* rules are invoked
       (flatten (vals rules)))))
 
+(s/fdef invoke-rule :args (s/cat :game :d/game,
+                                 :event :d/event,
+                                 :context map?))
 (defn- invoke-rule
   "Given the current game state and the context for a rule, runs the rule,
   returning a sequence of the resulting effects or nil if the rule did not
   run."
   [game event {rule :rule entity-id :entity-id index :index}]
-  (if-let [entity (find-entity entity-id game)]
-    (rule entity {:event event
-                  :game game
-                  :index index})))
+  (when-let [entity (find-entity entity-id game)]
+    (s/assert (specs/spec-for-entity-id entity-id) entity)
+    (rule entity {:event event, :game game, :index index})))
 
+(s/fdef invoke-rules :args (s/cat :game :d/game, :event :d/event))
 (defn- invoke-rules
   "Given the current game state and an event, invokes all rule functions which
   are interested in this event (based on their :trigger values supplied at
@@ -113,6 +136,7 @@
     (swap! state update :events (constantly (vec rest)))
     (first event)))
 
+(s/fdef apply-effects! :args (s/cat :initial-event :d/event))
 (defn- apply-effects!
   "Applies game state updates by running effect handlers. This process involves
   three steps:
@@ -132,15 +156,17 @@
     (if event
       (let [effects (invoke-rules (:game @state) event)]
         (doseq [effect effects]
-          (swap! state handle-effect effect))
+          (swap! state run-handle-effect effect))
         (recur (pop-event!) (conj all-events event)))
       all-events)))
 
+(s/fdef push-event :args (s/cat :state :d/state, :event :d/event))
 (defn push-event
   "Helper to return a new state value with 'event' added to the :events list"
   [state event]
   (update state :events conj event))
 
+(s/fdef dispatch! :args (s/cat :event :d/event))
 (defn dispatch!
   "Raises a new game event. The argument should be an event specification map
   with an :event key mapping to a keyword identifying type of event that
@@ -156,10 +182,10 @@
   (let [events (apply-effects! event)
         game (:game @state)]
     (doseq [event events]
-      (apply-event-commands! event game))
+      (run-apply-event-commands! event game))
     (doseq [entity-id (distinct (mapcat :entities events))]
       (when-let [entity (find-entity entity-id game)]
-        (update-game-object! entity-id entity)))))
+        (run-update-game-object! entity-id entity)))))
 
 (defn undo!
   "Undoes the results of the last dispatch! command. Note that this rolls back
@@ -167,6 +193,9 @@
   []
   (reset! state @previous-state))
 
+(s/fdef register-rule :args (s/cat :entity-id :d/entity-id
+                                   :state :d/state
+                                   :rule (s/tuple nat-int? var?)))
 (defn- register-rule
   "Returns a new state with a single [index rule-function] tuple associated with
   the given entity id"
@@ -176,8 +205,11 @@
                    [:global]
                    [(or trigger :entity) entity-id])
         context {:rule @function, :entity-id entity-id, :index index}]
-    (update-in state [:rules event rule-key] conj context)))
+    (update-in state [:rules-map event rule-key] conj context)))
 
+(s/fdef register-rules :args (s/cat :state :d/state
+                                    :entity-id :d/entity-id
+                                    :rules-map (s/coll-of var?)))
 (defn register-rules
   "Registers rules for an entity, returning a new 'state' value with the rules
   added. Rules are pure functions which are invoked when some action
@@ -192,8 +224,8 @@
   - :game, containing the current value of the :game key of the 'state' atom
   - :index, the index of the rule within its parent entity
 
-  The rule should return a sequence of Effects (see 'handle-effect' below
-  for structure) to mutate the state of the game in some way.
+  The rule should return a sequence of Effects (see 'handle-effect' for
+  structure) to mutate the state of the game in some way.
 
   Rule vars should have attached metadata which indicates when the rule
   function should be invoked. All rules must have an :event metadata key
@@ -216,6 +248,9 @@
   (let [indices (map-indexed vector rules)]
     (reduce (partial register-rule entity-id) state indices)))
 
+(s/fdef start-game! :args (s/cat :game :d/game
+                                 :entity-id some?
+                                 :rules-path (s/coll-of keyword?)))
 (defn start-game!
   "Initiaties a new game by resetting the game state to the value provided in
   'game'. Registers initial game rules associated with the entity with id
@@ -223,7 +258,9 @@
   should follow the navigation syntax of the core 'get-in' function. Returns
   nil."
   [game entity-id rules-path]
-  (reset! state (register-rules {:game game :events [] :rules {}}
+  (reset! state (register-rules {:game game :events [] :rules-map {}}
                                 entity-id
                                 (get-in game rules-path)))
   nil)
+
+(specs/instrument! *ns*)

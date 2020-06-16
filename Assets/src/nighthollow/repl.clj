@@ -30,7 +30,7 @@
   (require '[nighthollow.main :as m])
   (use '[nighthollow.repl]))
 
-(defn populate-all []
+(defn populate []
   (doseq [n (map ns-name (all-ns))]
     (when (string/starts-with? (name n) "nighthollow")
       (println "Adding to" n)
@@ -50,13 +50,13 @@
             (println "Actual: " (:actual args)))
     nil))
 
-(defn run-tests []
+(defn !test []
   (binding [test/report report]
     (test/run-tests)))
 
-(defn restart []
+(defn !restart []
   (Commands/ResetState)
-  (nighthollow.main/on-start-new-game @nighthollow.core/commands))
+  (nighthollow.main/on-start-new-game))
 
-(defn hand []
+(defn ?hand []
   (get-in @nighthollow.core/state [:game :user :hand]))

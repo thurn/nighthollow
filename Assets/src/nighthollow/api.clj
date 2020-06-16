@@ -14,20 +14,27 @@
 
 (ns nighthollow.api
   (:require
+   [clojure.spec.alpha :as s]
    [nighthollow.core :as core]
-   [nighthollow.data :as data]))
+   [nighthollow.data :as data]
+   [nighthollow.specs :as specs])) 
 
-(defn ->creature-id [id] (CreatureId. id))
+(s/fdef ->creature-id :args (s/cat :id int?))
+(defn ->creature-id [id]
+  (CreatureId. id))
 
+(s/fdef ->card-id :args (s/cat :id int?))
 (defn ->card-id [id] (CardId. id))
 
+(s/fdef ->player-name :args (s/cat :name :d/player-name))
 (defn ->player-name [name]
   (case name
     :user PlayerName/User
     :enemy PlayerName/Enemy))
 
+(s/fdef ->rank-value :args (s/cat :rank :d/rank))
 (defn ->rank-value [rank]
-  (case rank
+  (case :d/rank rank
     1 RankValue/Rank1
     2 RankValue/Rank2
     3 RankValue/Rank3
@@ -37,6 +44,7 @@
     7 RankValue/Rank7
     8 RankValue/Rank8))
 
+(s/fdef ->file-value :args (s/cat :file :d/file))
 (defn ->file-value [file]
   (case file
     1 FileValue/File1
@@ -45,6 +53,7 @@
     4 FileValue/File4
     5 FileValue/File5))
 
+(s/fdef ->school :args (s/cat :school :d/school))
 (defn ->school [school]
   (case school
     :light  School/Light
@@ -54,29 +63,36 @@
     :earth  School/Earth
     :shadow School/Shadow))
 
+(s/fdef ->influence :args (s/cat :influence (s/tuple :d/school nat-int?)))
 (defn ->influence [[school value]]
   (Influence. (->school school) value))
 
+(s/fdef ->asset-type :args (s/cat :asset-type :d/asset-type))
 (defn ->asset-type [asset-type]
   (case asset-type
     :prefab AssetType/Prefab
     :sprite AssetType/Sprite))
 
+(s/fdef ->asset-data :args (s/cat :type :d/asset-type :address string?))
 (defn ->asset-data [type address]
   (AssetData. address (->asset-type type)))
 
+(s/fdef ->user-data :args (s/cat :user :d/user))
 (defn ->user-data [{current-life :current-life
                     maximum-life :maximum-life
                     mana :mana
                     influence :influence}]
   (UserData. current-life maximum-life mana (mapv ->influence (seq influence))))
 
+(s/fdef ->cost :args (s/cat :cst :d/cost))
 (defn ->cost [{mana :mana, influence :influence}]
   (Cost. mana (mapv ->influence (seq influence))))
 
+(s/fdef ->attachment-data :args (s/cat :address string?))
 (defn ->attachment-data [address]
   (AttachmentData. (->asset-data address)))
 
+(s/fdef ->creature-data :args (s/cat :creature :d/creature))
 (defn ->creature-data [{creature-id :id
                         address :creature-prefab
                         owner :owner
@@ -88,6 +104,7 @@
                  (or speed 0)
                  (mapv ->attachment-data attachments)))
 
+(s/fdef ->card-data :args (s/cat :card :d/card))
 (defn ->card-data [{card-id :id
                     address :card-prefab
                     can-play :can-play
@@ -108,3 +125,5 @@
     :skill3 SkillAnimationNumber/Skill3
     :skill4 SkillAnimationNumber/Skill4
     :skill5 SkillAnimationNumber/Skill5))
+
+(specs/instrument! *ns*)

@@ -25,10 +25,11 @@
 (def hand [card])
 
 (def user
-  {:rules data/user-rules
+  (merge data/user
+         {:rules data/user-rules
           :state data/user
           :deck deck
-          :hand {}})
+          :hand {}}))
 
 (def new-game
   {:game-id 1
@@ -36,7 +37,5 @@
 
 (def ongoing-game
   {:game-id 1
-   :user {:rules data/user-rules
-          :state data/user
-          :deck deck
-          :hand {[:card-id card-id] card}}})
+   :user (merge user
+          {:hand {[:card-id card-id] card}})})

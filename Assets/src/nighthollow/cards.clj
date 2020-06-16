@@ -97,5 +97,5 @@
 (defmethod core/handle-effect
   :set-can-play-card
   handle-set-can-play-card
-  [state {value :value, card-id :card-id}]
-  (update-in state [:game :user :hand card-id] assoc :can-play value))
+  [state {can-play :can-play, card-id :card-id}]
+  (update-in state [:game :user :hand card-id] assoc :can-play can-play))

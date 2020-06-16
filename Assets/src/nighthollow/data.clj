@@ -32,7 +32,7 @@
   default-can-play-card
   [card _]
   [{:effect :set-can-play-card
-    :value true
+    :can-play true
     :card-id [:card (:id card)]}])
 
 (def card
@@ -41,21 +41,35 @@
    :card-prefab "Content/Card"
    :rules [#'default-can-play-card]})
 
-(def wizard-card
+(def creature
   (merge card
+         {:base-damage {}
+          :speed 0
+          :health-regeneration 0
+          :starting-energy 0
+          :maximum-energy 0
+          :energy-regeneration 0
+          :crit-chance 0
+          :crit-multiplier 0
+          :accuracy 0
+          :evasion 0
+          :damage-resistance {}
+          :damage-reduction {}}))
+
+(def wizard-card
+  (merge creature
          {:name "Wizard"
-          :type :creature
           :image "CreatureImages/Wizard"
           :cost {:mana 100 :influence {:flame 1}}
           :creature-prefab "Creatures/Player/Wizard"
           :health 100
-          :damage {:physical 10}}))
+          :base-damage {:physical 10}}))
 
 (def user
   {:current-life 25
    :maximum-life 25
    :mana 0
-   :influence []})
+   :influence {}})
 
 (defn ^{:event :game-start}
   draw-opening-hand

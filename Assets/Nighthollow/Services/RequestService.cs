@@ -29,6 +29,7 @@ namespace Nighthollow.Services
     void Start()
     {
       Arcadia.Util.require(Namespace);
+      Clojure.var(Namespace, "on-connect").invoke();
       _onStartNewGame = Clojure.var(Namespace, "on-start-new-game");
       _onCardDrawn = Clojure.var(Namespace, "on-card-drawn");
       _onPlayedCard = Clojure.var(Namespace, "on-played-card");

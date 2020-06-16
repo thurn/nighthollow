@@ -15,17 +15,23 @@
 (ns nighthollow.main
   (:require
    [arcadia.core :as arcadia]
+   [clojure.spec.alpha :as s]
+   [clojure.spec.test.alpha :as stest]
+   [expound.alpha :as expound]
    [nighthollow.api]
    [nighthollow.cards]
    [nighthollow.core :as core]
    [nighthollow.data :as data]
    [nighthollow.test :as test]))
 
+(defn on-connect []
+  (arcadia/log "on-connect")
+  (alter-var-root #'s/*explain-out* (constantly expound/printer))
+  (s/check-asserts true))
+
 (defn on-start-new-game []
   (arcadia/log "on-start-new-game")
-  (core/start-game! test/new-game
-                    data/user-id
-                    [:user :rules])
+  (core/start-game! test/new-game data/user-id [:user :rules])
   (core/dispatch! {:event :game-start}))
 
 (defn on-card-drawn [card-id]
