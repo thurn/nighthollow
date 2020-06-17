@@ -19,10 +19,13 @@
    [clojure.spec.test.alpha :as stest]
    [expound.alpha :as expound]
    [nighthollow.api :as api]
+   [nighthollow.apply-event-commands]
    [nighthollow.cards]
    [nighthollow.core :as core]
-   [nighthollow.data :as data]
-   [nighthollow.test :as test]))
+   [nighthollow.effect-handlers]
+   [nighthollow.find-entity]
+   [nighthollow.test :as test]
+   [nighthollow.update-game-object]))
 
 (defn on-connect []
   (arcadia/log "on-connect")
@@ -31,7 +34,7 @@
 
 (defn on-start-new-game []
   (arcadia/log "on-start-new-game")
-  (core/start-game! test/new-game data/user-id [:user :rules])
+  (core/start-game! test/new-game [:user] [:user :rules])
   (core/dispatch! {:event :game-start}))
 
 (defn on-card-drawn [card-id]

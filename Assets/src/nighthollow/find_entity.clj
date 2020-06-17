@@ -12,30 +12,25 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.test
+(ns nighthollow.find-entity
   (:require
-   [nighthollow.gameplay.base :as base]
-   [nighthollow.gameplay.creatures :as creatures]))
+   [nighthollow.core :as core]))
 
-(def card-id [:card 0])
+(defmethod core/find-entity
+  :card
+  find-card
+  [card-id game]
+  (get-in game [:user :hand card-id]))
 
-(def card creatures/wizard-card)
+(defmethod core/find-entity :user find-user [_ game] (:user game))
 
-(def deck
-  (mapv #(vector % 4000) [creatures/wizard-card]))
+(ns nighthollow.find-entity.test
+  (:require
+   [clojure.test :refer [deftest is]]
+   [nighthollow.find-entity :as find-entity]
+   [nighthollow.core :as core]
+   [nighthollow.test :as t]))
 
-(def hand {card-id card})
-
-(def user (merge base/user {:deck deck}))
-
-(def enemy creatures/viking)
-
-(def new-game
-  {:game-id 1
-   :user user
-   :creatures {}})
-
-(def ongoing-game
-  {:game-id 1
-   :user (merge user {:hand hand})
-   :creatures {}})
+(deftest test-find-entity
+  (is (= t/card
+         (core/find-entity [:card t/card-id] t/ongoing-game))))

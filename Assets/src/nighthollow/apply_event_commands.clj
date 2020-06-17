@@ -12,30 +12,21 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.test
+(ns nighthollow.apply-event-commands
   (:require
-   [nighthollow.gameplay.base :as base]
-   [nighthollow.gameplay.creatures :as creatures]))
+   [nighthollow.api :as api]
+   [nighthollow.core :as core]))
 
-(def card-id [:card 0])
+(defmethod core/apply-event-commands!
+  :start-drawing-cards
+  apply-cards-drawn
+  [{cards :cards} _]
+  (Commands/DrawCards (mapv (fn [[card-id card]] (api/->card card-id card))
+                            cards)))
 
-(def card creatures/wizard-card)
-
-(def deck
-  (mapv #(vector % 4000) [creatures/wizard-card]))
-
-(def hand {card-id card})
-
-(def user (merge base/user {:deck deck}))
-
-(def enemy creatures/viking)
-
-(def new-game
-  {:game-id 1
-   :user user
-   :creatures {}})
-
-(def ongoing-game
-  {:game-id 1
-   :user (merge user {:hand hand})
-   :creatures {}})
+(defmethod core/apply-event-commands!
+  :create-enemy
+  apply-create-enemy
+  [{creature-id :creature-id, creature :creature, file :file} _]
+  (Commands/CreateEnemy (api/->creature creature-id creature)
+                        (api/->file-value file)))

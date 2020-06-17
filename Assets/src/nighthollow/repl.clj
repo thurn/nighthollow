@@ -17,14 +17,14 @@
    [clojure.pprint :as pprint]
    [clojure.repl]
    [clojure.string :as string]
-   [clojure.test :as test]))
+   [clojure.test :as test]
+   [nighthollow.test :as t]))
 
 (defn add-standard-functions
   []
   (use 'clojure.repl)
   (use 'clojure.pprint)
   (require '[nighthollow.test :as t])
-  (require '[nighthollow.data :as d])
   (require '[nighthollow.core :as c])
   (require '[nighthollow.api :as a])
   (require '[nighthollow.main :as m])
@@ -75,3 +75,8 @@
 
 (defn ?cr [id]
   (get-in @nighthollow.core/state [:game :creatures [:creature id]]))
+
+(defn !e []
+  (!d {:event :create-enemy
+       :creature-id [:creature 17]
+       :creature t/enemy, :file 3}))

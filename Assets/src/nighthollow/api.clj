@@ -16,15 +16,13 @@
   (:require
    [clojure.spec.alpha :as s]
    [nighthollow.core :as core]
-   [nighthollow.data :as data]
-   [nighthollow.specs :as specs])) 
+   [nighthollow.specs :as specs]))
 
-(s/fdef ->creature-id :args (s/cat :id int?))
-(defn ->creature-id [id]
-  (CreatureId. id))
+(s/fdef ->creature-id :args (s/cat :id :d/creature-id))
+(defn ->creature-id [[_ id]] (CreatureId. id))
 
-(s/fdef ->card-id :args (s/cat :id int?))
-(defn ->card-id [id] (CardId. id))
+(s/fdef ->card-id :args (s/cat :id :d/card-id))
+(defn ->card-id [[_ id]] (CardId. id))
 
 (s/fdef ->player-name :args (s/cat :name :d/player-name))
 (defn ->player-name [name]
@@ -94,7 +92,9 @@
     :prefab AssetType/Prefab
     :sprite AssetType/Sprite))
 
-(s/fdef ->asset-data :args (s/cat :type :d/asset-type :address string?))
+(s/fdef ->asset-data :args (s/cat :type :d/asset-type
+                                  :address (s/and string?
+                                                  (complement empty?))))
 (defn ->asset-data [type address]
   (AssetData. address (->asset-type type)))
 
@@ -113,43 +113,30 @@
 (defn ->attachment-data [address]
   (AttachmentData. (->asset-data address)))
 
-(s/fdef ->creature-data :args (s/cat :creature :d/creature))
-(defn ->creature-data [{creature-id :id
-                        address :creature-prefab
-                        owner :owner
-                        speed :speed
-                        attachments :attachments}]
+(s/fdef ->creature :args (s/cat :creature-id :d/creature-id
+                                :creature :d/creature))
+(defn ->creature [creature-id {address :creature-prefab
+                               owner :owner
+                               speed :speed
+                               attachments :attachments}]
   (CreatureData. (->creature-id creature-id)
                  (->asset-data :prefab address)
                  (->player-name owner)
                  (or speed 0)
                  (mapv ->attachment-data attachments)))
 
-(s/fdef ->creature :args (s/cat :creature-id :d/creature-id
-                                :creature :d/creature))
-(defn ->creature [[_ id] {address :creature-prefab
-                          owner :owner
-                          speed :speed
-                          attachments :attachments}]
-  (CreatureData. (->creature-id id)
-                 (->asset-data :prefab address)
-                 (->player-name owner)
-                 (or speed 0)
-                 (mapv ->attachment-data attachments)))
-
-(s/fdef ->card-data :args (s/cat :card :d/card))
-(defn ->card-data [{card-id :id
-                    address :card-prefab
-                    can-play :can-play
-                    cost :cost
-                    image-address :image
-                    :as card}]
+(s/fdef ->card :args (s/cat :card-id :d/card-id, :card :d/card))
+(defn ->card [card-id {address :card-prefab
+                       can-play :can-play
+                       cost :cost
+                       image-address :image
+                       creature :creature}]
   (CardData. (->card-id card-id)
              (->asset-data :prefab address)
              can-play
              (->cost cost)
              (->asset-data :sprite image-address)
-             (->creature-data card)))
+             (->creature [:creature (second card-id)] creature)))
 
 (defn ->skill-animation-number [skill-animation-number]
   (case skill-animation-number

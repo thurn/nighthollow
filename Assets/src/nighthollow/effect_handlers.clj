@@ -1,0 +1,58 @@
+;; Copyright © 2020-present Derek Thurn
+;;
+;; Licensed under the Apache License, Version 2.0 (the "License");
+;; you may not use this file except in compliance with the License.
+;; You may obtain a copy of the License at
+;;
+;; https://www.apache.org/licenses/LICENSE-2.0
+;;
+;; Unless required by applicable law or agreed to in writing, software
+;; distributed under the License is distributed on an "AS IS" BASIS,
+;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+;; See the License for the specific language governing permissions and
+;; limitations under the License.
+
+(ns nighthollow.effect-handlers
+  (:require
+   [nighthollow.core :as core]
+   [nighthollow.cards :as cards]))
+
+(defn register-card-rules
+  [state card-id card]
+  (core/register-rules state card-id (:rules card)))
+
+(defmethod core/handle-effect
+  :draw-cards
+  handle-draw-cards
+  [state {quantity :quantity}]
+  (let [input {:user (get-in state [:game :user]) :cards {}}
+        {user :user cards :cards} (nth (iterate cards/draw-card input) quantity)
+        state-with-rules (reduce-kv register-card-rules state cards)]
+    (-> state-with-rules
+        (assoc-in [:game :user] user)
+        (core/push-event {:event :start-drawing-cards, :cards cards}))))
+
+(defmethod core/handle-effect
+  :set-can-play-card
+  handle-set-can-play-card
+  [state {can-play :can-play, card-id :card-id}]
+  (update-in state [:game :user :hand card-id] assoc :can-play can-play))
+
+(defmethod core/handle-effect
+  :play-creature
+  handle-play-creature
+  [state {card-id :card-id
+          creature-id :creature-id
+          creature :creature
+          rank :rank
+          file :file}]
+  (let [with-position (assoc creature :rank rank :file file)]
+    (-> state
+        (update-in [:game :user :hand] dissoc card-id)
+        (update-in [:game :creatures] assoc creature-id with-position))))
+
+(defmethod core/handle-effect
+  :create-enemy
+  handle-create-enemy
+  [state {creature-id :creature-id, creature :creature, file :file}]
+  (update-in state [:game :creatures] assoc creature-id creature))

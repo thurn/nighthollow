@@ -58,7 +58,6 @@
                                 :d/deck
                                 :d/hand]))
 
-(s/def :id/id int?)
 (s/def :d/owner :d/player-name)
 (s/def :d/can-play boolean?)
 (s/def :d/card-prefab string?)
@@ -66,16 +65,14 @@
 (s/def :d/image string?)
 (s/def :d/cost (s/keys :req-un [:d/mana, :d/influence]))
 (s/def :d/card-id (s/tuple #{:card} int?))
-
 (s/def :d/card (s/keys :req-un [:d/rules
-                                :d/id
                                 :d/owner
                                 :d/can-play
                                 :d/card-prefab
-                                :d/name
                                 :d/image
-                                :d/cost]))
-(s/def :d/cards (s/coll-of :d/card))
+                                :d/cost
+                                :d/creature]))
+(s/def :d/cards (s/map-of :d/card-id :d/card))
 
 (s/def :d/creature-prefab string?)
 (s/def :d/health nat-int?)
@@ -93,7 +90,8 @@
 (s/def :d/damage-reduction (s/map-of :d/damage-type nat-int?))
 (s/def :d/creature-id (s/tuple #{:creature} int?))
 
-(s/def :d/creature (s/keys :req-un [:d/owner
+(s/def :d/creature (s/keys :req-un [:d/name
+                                    :d/owner
                                     :d/creature-prefab
                                     :d/health
                                     :d/base-damage
