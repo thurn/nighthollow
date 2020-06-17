@@ -14,8 +14,8 @@
 
 (ns nighthollow.core
   (:require
-   [arcadia.core :as arcadia]
    [clojure.spec.alpha :as s]
+   [nighthollow.prelude :refer :all]
    [nighthollow.specs :as specs]))
 
 (defonce ^:private previous-state (atom nil))

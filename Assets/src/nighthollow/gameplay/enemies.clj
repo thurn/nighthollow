@@ -12,30 +12,15 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.find-entity
+(ns nighthollow.gameplay.enemies
   (:require
-   [nighthollow.core :as core]
+   [nighthollow.gameplay.base :as base]
    [nighthollow.prelude :refer :all]))
 
-(defmethod core/find-entity :card find-card
-  [card-id game]
-  (get-in game [:user :hand card-id]))
-
-(defmethod core/find-entity :user find-user
-  [_ game]
-  (:user game))
-
-(defmethod core/find-entity :creature find-creature
-  [creature-id game]
-  (get-in game [:creatures creature-id]))
-
-(ns nighthollow.find-entity.test
-  (:require
-   [clojure.test :refer [deftest is]]
-   [nighthollow.find-entity :as find-entity]
-   [nighthollow.core :as core]
-   [nighthollow.test :as t]))
-
-(deftest test-find-entity
-  (is (= t/card
-         (core/find-entity [:card t/card-id] t/ongoing-game))))
+(def viking
+  (merge base/creature
+         {:name "Viking"
+          :creature-prefab "Creatures/Enemy/Viking"
+          :owner :enemy
+          :speed 2000
+          :health 200}))

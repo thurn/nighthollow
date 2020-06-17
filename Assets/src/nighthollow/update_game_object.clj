@@ -15,10 +15,16 @@
 (ns nighthollow.update-game-object
   (:require
    [nighthollow.api :as api]
-   [nighthollow.core :as core]))
+   [nighthollow.core :as core]
+   [nighthollow.prelude :refer :all]))
 
 (defmethod core/update-game-object!
   :card
   update-card
   [card-id card]
   (Commands/UpdateCard (api/->card card-id card)))
+
+(defmethod core/update-game-object!
+  :creature
+  update-creature
+  [creature-id card])

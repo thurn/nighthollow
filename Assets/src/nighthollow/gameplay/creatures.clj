@@ -13,23 +13,18 @@
 ;; limitations under the License.
 
 (ns nighthollow.gameplay.creatures
-  (:require [nighthollow.gameplay.base :as base]))
+  (:require
+   [nighthollow.gameplay.base :as base]
+   [nighthollow.prelude :refer :all]))
 
 (def wizard-card
   (merge base/card
          {:image "CreatureImages/Wizard"
           :cost {:mana 100 :influence {:flame 1}}
-          :creature (merge base/creature
+          :creature (merge base/melee-creature
                            {:name "Wizard"
                             :creature-prefab "Creatures/Player/Wizard"
                             :owner :user
                             :health 100
+                            :melee-skill :skill3
                             :base-damage {:physical 10}})}))
-
-(def viking
-  (merge base/creature
-         {:name "Viking"
-          :creature-prefab "Creatures/Enemy/Viking"
-          :owner :enemy
-          :speed 2000
-          :health 200}))

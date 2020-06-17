@@ -14,9 +14,9 @@
 
 (ns nighthollow.specs
   (:require
-   [arcadia.core :as arcadia]
    [clojure.spec.alpha :as s]
-   [clojure.spec.test.alpha :as stest]))
+   [clojure.spec.test.alpha :as stest]
+   [nighthollow.prelude :refer :all]))
 
 (defn validate
   "Wrapper around clojure spec assert that adds a custom failure message"
@@ -24,11 +24,10 @@
   (if (s/valid? spec x)
     x
     (let [m (str "\n>>>>>>>>>>\n"
-                 "Error in " message
+                 "Error in: " message
                  "\nSpec " spec " does not match value " x
                  "\n<<<<<<<<<<\n")]
-      (arcadia/log m)
-      (println m)
+      (log-error m)
       (s/assert spec x))))
 
 (defn instrument! [namespace]
@@ -90,7 +89,8 @@
 (s/def :d/damage-reduction (s/map-of :d/damage-type nat-int?))
 (s/def :d/creature-id (s/tuple #{:creature} int?))
 
-(s/def :d/creature (s/keys :req-un [:d/name
+(s/def :d/creature (s/keys :req-un [:d/rules
+                                    :d/name
                                     :d/owner
                                     :d/creature-prefab
                                     :d/health
@@ -107,12 +107,14 @@
                                     :d/damage-reduction]))
 
 (s/def :d/skill-animation-number #{:skill1 :skill2 :skill3 :skill4 :skill5})
+(s/def :d/skill-type #{:melee :ranged})
 
 (defn spec-for-entity-id
   [[entity-type & _]]
   (case entity-type
     :user :d/user
-    :card :d/card))
+    :card :d/card
+    :creature :d/creature))
 
 (s/def :d/creatures (s/map-of :d/creature-id :d/creature))
 (s/def :d/game-id int?)
@@ -132,6 +134,10 @@
                           :creature :d/creature-id
                           :card :d/card-id))
 (s/def :d/entities (s/coll-of :d/entity-id))
+(s/def :d/hit-creature-id :d/creature-id)
+(s/def :d/hit-creature-ids (s/coll-of :d/creature-id))
+(s/def :d/has-melee-collision boolean?)
+(s/def :d/melee-skill :d/skill-animation-number)
 
 (defmulti event-spec :event)
 (defmethod event-spec :game-start [_]
@@ -144,6 +150,18 @@
   (s/keys :req-un [:d/entities :d/rank :d/file]))
 (defmethod event-spec :create-enemy [_]
   (s/keys :req-un [:d/creature-id :d/creature :d/file]))
+(defmethod event-spec :creature-collision [_]
+  (s/keys :req-un [:d/entities :d/hit-creature-id]))
+(defmethod event-spec :ranged-skill-fire [_]
+  (s/keys :req-un [:d/entities]))
+(defmethod event-spec :melee-skill-impact [_]
+  (s/keys :req-un [:d/entities :d/hit-creature-ids]))
+(defmethod event-spec :projectile-impact [_]
+  (s/keys :req-un [:d/entities :d/hit-creature-ids]))
+(defmethod event-spec :skill-complete [_]
+  (s/keys :req-un [:d/entities :d/has-melee-collision]))
+(defmethod event-spec :use-skill [_]
+  (s/keys :req-un [:d/creature-id :d/skill-animation-number :d/skill-type]))
 (s/def :d/event (s/multi-spec event-spec :event))
 
 (s/def :d/quantity nat-int?)
@@ -161,4 +179,6 @@
                    :d/file]))
 (defmethod effect-spec :create-enemy [_]
   (s/keys :req-un [:d/creature-id :d/creature :d/file]))
+(defmethod effect-spec :use-skill [_]
+  (s/keys :req-un [:d/creature-id :d/skill-animation-number :d/skill-type]))
 (s/def :d/effect (s/multi-spec effect-spec :effect))

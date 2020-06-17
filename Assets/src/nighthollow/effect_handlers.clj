@@ -15,7 +15,8 @@
 (ns nighthollow.effect-handlers
   (:require
    [nighthollow.core :as core]
-   [nighthollow.cards :as cards]))
+   [nighthollow.cards :as cards]
+   [nighthollow.prelude :refer :all]))
 
 (defn register-card-rules
   [state card-id card]
@@ -49,10 +50,19 @@
   (let [with-position (assoc creature :rank rank :file file)]
     (-> state
         (update-in [:game :user :hand] dissoc card-id)
-        (update-in [:game :creatures] assoc creature-id with-position))))
+        (update-in [:game :creatures] assoc creature-id with-position)
+        (core/register-rules creature-id (:rules creature)))))
 
 (defmethod core/handle-effect
   :create-enemy
   handle-create-enemy
   [state {creature-id :creature-id, creature :creature, file :file}]
-  (update-in state [:game :creatures] assoc creature-id creature))
+  (-> state
+      (update-in [:game :creatures] assoc creature-id creature)
+      (core/register-rules creature-id (:rules creature))))
+
+(defmethod core/handle-effect
+  :use-skill
+  handle-use-skill
+  [state effect]
+  (core/push-event state (merge effect {:event :use-skill})))

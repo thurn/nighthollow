@@ -16,7 +16,8 @@
   (:require
    [clojure.spec.alpha :as s]
    [nighthollow.core :as core]
-   [nighthollow.specs :as specs]))
+   [nighthollow.specs :as specs]
+   [nighthollow.prelude :refer :all]))
 
 (s/fdef ->creature-id :args (s/cat :id :d/creature-id))
 (defn ->creature-id [[_ id]] (CreatureId. id))
@@ -138,6 +139,7 @@
              (->asset-data :sprite image-address)
              (->creature [:creature (second card-id)] creature)))
 
+(s/fdef ->skill-animation-number :args (s/cat :skill :d/skill-animation-number))
 (defn ->skill-animation-number [skill-animation-number]
   (case skill-animation-number
     :skill1 SkillAnimationNumber/Skill1
@@ -145,5 +147,11 @@
     :skill3 SkillAnimationNumber/Skill3
     :skill4 SkillAnimationNumber/Skill4
     :skill5 SkillAnimationNumber/Skill5))
+
+(s/fdef ->skill-type :args (s/cat :type :d/skill-type))
+(defn ->skill-type [skill-type]
+  (case skill-type
+    :melee SkillType/Melee
+    :ranged SkillType/Ranged))
 
 (specs/instrument! *ns*)

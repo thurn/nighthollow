@@ -12,5 +12,15 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.commands
-  (:require [nighthollow.core :as core]))
+(ns nighthollow.prelude
+  (:require
+   [clojure.string :as string])
+  (:import [UnityEngine Debug]))
+
+(defn lg [& args]
+  (apply prn args)
+  (Debug/Log (string/join " " args)))
+
+(defn log-error [& args]
+  (apply prn args)
+  (Debug/LogError (string/join " " args)))

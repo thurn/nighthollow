@@ -15,6 +15,8 @@
 using System.Collections;
 using System.Linq;
 using Nighthollow.Model;
+using UnityEngine;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Nighthollow.Services
@@ -51,6 +53,21 @@ namespace Nighthollow.Services
     public static void CreateEnemy(CreatureData creatureData, FileValue fileValue)
     {
       Root.Instance.CreatureService.CreateEnemyCreature(creatureData, FileValue.File3);
+    }
+
+    public static void UseSkill(CreatureId creatureId, SkillAnimationNumber animation, SkillType skillType)
+    {
+      Root.Instance.CreatureService.GetCreature(creatureId).UseSkill(animation, skillType);
+    }
+
+    public static void ReturnToActiveState(CreatureId creatureId)
+    {
+      Root.Instance.CreatureService.GetCreature(creatureId).ReturnToActiveState();
+    }
+
+    public static void PlayDeathAnimation(CreatureId creatureId)
+    {
+      Root.Instance.CreatureService.GetCreature(creatureId).PlayDeathAnimation();
     }
   }
 }

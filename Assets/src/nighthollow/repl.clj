@@ -18,6 +18,7 @@
    [clojure.repl]
    [clojure.string :as string]
    [clojure.test :as test]
+   [nighthollow.prelude :refer :all]
    [nighthollow.test :as t]))
 
 (defn add-standard-functions

@@ -15,7 +15,9 @@
 (ns nighthollow.test
   (:require
    [nighthollow.gameplay.base :as base]
-   [nighthollow.gameplay.creatures :as creatures]))
+   [nighthollow.gameplay.creatures :as creatures]
+   [nighthollow.gameplay.enemies :as enemies]
+   [nighthollow.prelude :refer :all]))
 
 (def card-id [:card 0])
 
@@ -28,7 +30,7 @@
 
 (def user (merge base/user {:deck deck}))
 
-(def enemy creatures/viking)
+(def enemy enemies/viking)
 
 (def new-game
   {:game-id 1

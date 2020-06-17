@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Model;
 using Nighthollow.Services;
@@ -41,6 +42,7 @@ namespace Nighthollow.Components
     [Header("State")] [SerializeField] bool _initialized;
     [SerializeField] CreatureData _creatureData;
     [SerializeField] CreatureState _state;
+    [SerializeField] SkillType _currentSkillType;
     [SerializeField] RankValue? _rankPosition;
     [SerializeField] FileValue? _filePosition;
     [SerializeField] Animator _animator;
@@ -150,7 +152,7 @@ namespace Nighthollow.Components
       _collider.enabled = true;
     }
 
-    public void UseSkill(SkillAnimationNumber skill)
+    public void UseSkill(SkillAnimationNumber skill, SkillType skillType)
     {
       if (!IsAlive())
       {
@@ -158,6 +160,7 @@ namespace Nighthollow.Components
       }
 
       _state = CreatureState.UsingSkill;
+      _currentSkillType = skillType;
 
       switch (skill)
       {
@@ -179,6 +182,11 @@ namespace Nighthollow.Components
         default:
           throw Errors.UnknownEnumValue(skill);
       }
+    }
+
+    public void ReturnToActiveState()
+    {
+      _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
     }
 
     public void SetHealthPercentage(float percentage)
@@ -204,7 +212,8 @@ namespace Nighthollow.Components
     void OnTriggerEnter2D(Collider2D other)
     {
       if (!IsAlive()) return;
-      UseSkill(Owner == PlayerName.User ? SkillAnimationNumber.Skill3 : SkillAnimationNumber.Skill1);
+      Root.Instance.RequestService.OnCreatureCollision(CreatureId,
+        ComponentUtils.GetComponent<Creature>(other).CreatureId);
     }
 
     // Called by skill animations on their 'start impact' frame
@@ -213,22 +222,29 @@ namespace Nighthollow.Components
     {
       if (!IsAlive()) return;
 
-      var hitCount = Physics2D.OverlapBoxNonAlloc(
-        _collider.bounds.center,
-        _collider.bounds.size,
-        angle: 0,
-        ColliderArray,
-        Constants.LayerMaskForPlayer(Owner.GetOpponent()));
-
-      for (var i = 0; i < hitCount; ++i)
+      switch (_currentSkillType)
       {
-        var creature = ComponentUtils.GetComponent<Creature>(ColliderArray[i]);
-        var damage = Owner == PlayerName.User ? 0.1f : 0.2f;
-        creature.SetHealthPercentage(creature._healthBar.Value - damage);
-        if (creature._healthBar.Value <= 0)
-        {
-          creature.PlayDeathAnimation();
-        }
+        case SkillType.Ranged:
+          Root.Instance.RequestService.OnRangedSkillFire(CreatureId);
+          break;
+        case SkillType.Melee:
+          var hitCount = Physics2D.OverlapBoxNonAlloc(
+            _collider.bounds.center,
+            _collider.bounds.size,
+            angle: 0,
+            ColliderArray,
+            Constants.LayerMaskForPlayer(Owner.GetOpponent()));
+          var hits = new List<int>(hitCount);
+          for (var i = 0; i < hitCount; ++i)
+          {
+            hits.Add(ComponentUtils.GetComponent<Creature>(ColliderArray[i]).CreatureId.Value);
+          }
+
+          Root.Instance.RequestService.OnMeleeSkillImpact(CreatureId, hits);
+
+          break;
+        default:
+          throw Errors.UnknownEnumValue(_currentSkillType);
       }
     }
 
@@ -241,14 +257,7 @@ namespace Nighthollow.Components
         _collider.bounds.size,
         angle: 0,
         Constants.LayerMaskForPlayer(Owner.GetOpponent()));
-      if (result)
-      {
-        UseSkill(Owner == PlayerName.User ? SkillAnimationNumber.Skill3 : SkillAnimationNumber.Skill1);
-      }
-      else
-      {
-        _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
-      }
+      Root.Instance.RequestService.OnSkillComplete(CreatureId, result);
     }
 
     public void OnDeathAnimationCompleted()

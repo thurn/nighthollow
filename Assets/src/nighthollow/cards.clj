@@ -14,9 +14,9 @@
 
 (ns nighthollow.cards
   (:require
-   [arcadia.core :as arcadia]
    [nighthollow.core :as core]
    [nighthollow.api :as api]
+   [nighthollow.prelude :refer :all]
    [nighthollow.test :as t]))
 
 (defn new-weight

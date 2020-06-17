@@ -12,7 +12,10 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.gameplay.base)
+(ns nighthollow.gameplay.base
+  (:require
+   [nighthollow.prelude :refer :all]
+   [nighthollow.specs :as specs]))
 
 (defn ^{:event :card-drawn}
   default-can-play-card
@@ -51,7 +54,21 @@
    :accuracy 0
    :evasion 0
    :damage-resistance {}
-   :damage-reduction {}})
+   :damage-reduction {}
+   :rules []})
+
+(defn ^{:event :creature-collision}
+  melee-creature-collision
+  [{creature-id :entity-id, {melee-skill :melee-skill} :entity}]
+  (specs/validate "creature melee skill" :d/melee-skill melee-skill)
+  [{:effect :use-skill
+    :creature-id creature-id
+    :skill-animation-number melee-skill
+    :skill-type :melee}])
+
+(def melee-creature
+  (merge creature
+         {:rules [#'melee-creature-collision]}))
 
 (defn ^{:event :game-start}
   draw-opening-hand

@@ -309,4 +309,10 @@ namespace Nighthollow.Model
     Skill4,
     Skill5
   }
+
+  public enum SkillType
+  {
+    Melee,
+    Ranged
+  }
 }

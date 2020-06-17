@@ -15,7 +15,8 @@
 (ns nighthollow.apply-event-commands
   (:require
    [nighthollow.api :as api]
-   [nighthollow.core :as core]))
+   [nighthollow.core :as core]
+   [nighthollow.prelude :refer :all]))
 
 (defmethod core/apply-event-commands!
   :start-drawing-cards
@@ -30,3 +31,13 @@
   [{creature-id :creature-id, creature :creature, file :file} _]
   (Commands/CreateEnemy (api/->creature creature-id creature)
                         (api/->file-value file)))
+
+(defmethod core/apply-event-commands!
+  :use-skill
+  apply-use-skill
+  [{creature-id :creature-id
+    skill :skill-animation-number
+    skill-type :skill-type} _]
+  (Commands/UseSkill (api/->creature-id creature-id)
+                     (api/->skill-animation-number skill)
+                     (api/->skill-type skill-type)))

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using clojure.clr.api;
 using clojure.lang;
 using Nighthollow.Model;
@@ -25,6 +26,11 @@ namespace Nighthollow.Services
     IFn _onStartNewGame;
     IFn _onCardDrawn;
     IFn _onPlayedCard;
+    IFn _onCreatureCollision;
+    IFn _onRangedSkillFire;
+    IFn _onMeleeSkillImpact;
+    IFn _onProjectileImpact;
+    IFn _onSkillComplete;
 
     void Start()
     {
@@ -33,6 +39,11 @@ namespace Nighthollow.Services
       _onStartNewGame = Clojure.var(Namespace, "on-start-new-game");
       _onCardDrawn = Clojure.var(Namespace, "on-card-drawn");
       _onPlayedCard = Clojure.var(Namespace, "on-played-card");
+      _onCreatureCollision = Clojure.var(Namespace, "on-creature-collision");
+      _onRangedSkillFire = Clojure.var(Namespace, "on-ranged-skill-fire");
+      _onMeleeSkillImpact = Clojure.var(Namespace, "on-melee-skill-impact");
+      _onProjectileImpact = Clojure.var(Namespace, "on-projectile-impact");
+      _onSkillComplete = Clojure.var(Namespace, "on-skill-complete");
     }
 
     public void OnStartNewGame()
@@ -48,6 +59,31 @@ namespace Nighthollow.Services
     public void OnPlayedCard(CardId cardId, RankValue targetRank, FileValue targetFile)
     {
       _onPlayedCard.invoke(cardId.Value, targetRank, targetFile);
+    }
+
+    public void OnCreatureCollision(CreatureId source, CreatureId other)
+    {
+      _onCreatureCollision.invoke(source.Value, other.Value);
+    }
+
+    public void OnRangedSkillFire(CreatureId sourceCreature)
+    {
+      _onRangedSkillFire.invoke(sourceCreature.Value);
+    }
+
+    public void OnMeleeSkillImpact(CreatureId sourceCreature, List<int> hitTargetIds)
+    {
+      _onMeleeSkillImpact.invoke(sourceCreature.Value, hitTargetIds);
+    }
+
+    public void OnProjectileImpact(CreatureId sourceCreature, List<int> hitTargetIds)
+    {
+      _onProjectileImpact.invoke(sourceCreature, hitTargetIds);
+    }
+
+    public void OnSkillComplete(CreatureId sourceCreature, bool hasMeleeCollision)
+    {
+      _onSkillComplete.invoke(sourceCreature.Value, hasMeleeCollision);
     }
   }
 }
