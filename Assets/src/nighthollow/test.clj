@@ -17,10 +17,10 @@
 
 (def card-id 0)
 
-(def card (assoc data/wizard-card :id card-id))
+(def card (assoc data/wizard :id card-id))
 
 (def deck
-  (mapv #(vector % 4000) [data/wizard-card]))
+  (mapv #(vector % 4000) [data/wizard]))
 
 (def hand [card])
 
@@ -31,11 +31,15 @@
           :deck deck
           :hand {}}))
 
+(def enemy data/viking)
+
 (def new-game
   {:game-id 1
-   :user user})
+   :user user
+   :creatures {}})
 
 (def ongoing-game
   {:game-id 1
    :user (merge user
-          {:hand {[:card-id card-id] card}})})
+                {:hand {[:card card-id] card}})
+   :creatures {}})

@@ -117,9 +117,9 @@
   run."
   [game event {rule :rule entity-id :entity-id index :index}]
   (when-let [entity (find-entity entity-id game)]
-    (specs/validate (str "Rule entity argument " rule)
+    (specs/validate (str "rule entity argument\n" rule)
                     (specs/spec-for-entity-id entity-id) entity)
-    (specs/validate (str "Rule returned effects" rule)
+    (specs/validate (str "rule returned effects\n" rule)
                     (s/coll-of :d/effect)
                     (rule {:entity entity
                            :entity-id entity-id

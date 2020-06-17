@@ -47,5 +47,10 @@ namespace Nighthollow.Services
         Root.Instance.CreatureService.GetCreature(creatureData.CreatureId).UpdateCreatureData(creatureData);
       }
     }
+
+    public static void CreateEnemy(CreatureData creatureData, FileValue fileValue)
+    {
+      Root.Instance.CreatureService.CreateEnemyCreature(creatureData, FileValue.File3);
+    }
   }
 }

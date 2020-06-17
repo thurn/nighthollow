@@ -103,6 +103,12 @@
 (defmethod core/handle-effect
   :play-creature
   handle-play-creature
-  [state {card-id :card-id, creature-id :creature-id, rank :rank, file :file}]
-  (arcadia/log "play-creature" card-id creature-id rank file)
-  state)
+  [state {card-id :card-id
+          creature-id :creature-id
+          creature :creature
+          rank :rank
+          file :file}]
+  (let [with-position (assoc creature :rank rank :file file)]
+    (-> state
+        (update-in [:game :user :hand] dissoc card-id)
+        (update-in [:game :creatures] assoc creature-id with-position))))

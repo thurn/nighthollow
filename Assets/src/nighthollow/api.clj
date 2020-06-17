@@ -35,14 +35,14 @@
 (s/fdef ->rank-value :args (s/cat :rank :d/rank))
 (defn ->rank-value [rank]
   (case :d/rank rank
-    1 RankValue/Rank1
-    2 RankValue/Rank2
-    3 RankValue/Rank3
-    4 RankValue/Rank4
-    5 RankValue/Rank5
-    6 RankValue/Rank6
-    7 RankValue/Rank7
-    8 RankValue/Rank8))
+        1 RankValue/Rank1
+        2 RankValue/Rank2
+        3 RankValue/Rank3
+        4 RankValue/Rank4
+        5 RankValue/Rank5
+        6 RankValue/Rank6
+        7 RankValue/Rank7
+        8 RankValue/Rank8))
 
 (def ranks {RankValue/Rank1 1
             RankValue/Rank2 2
@@ -120,6 +120,18 @@
                         speed :speed
                         attachments :attachments}]
   (CreatureData. (->creature-id creature-id)
+                 (->asset-data :prefab address)
+                 (->player-name owner)
+                 (or speed 0)
+                 (mapv ->attachment-data attachments)))
+
+(s/fdef ->creature :args (s/cat :creature-id :d/creature-id
+                                :creature :d/creature))
+(defn ->creature [[_ id] {address :creature-prefab
+                          owner :owner
+                          speed :speed
+                          attachments :attachments}]
+  (CreatureData. (->creature-id id)
                  (->asset-data :prefab address)
                  (->player-name owner)
                  (or speed 0)

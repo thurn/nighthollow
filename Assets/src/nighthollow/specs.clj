@@ -23,8 +23,10 @@
   [message spec x]
   (if (s/valid? spec x)
     x
-    (let [m (str "Error in " message "\n"
-                 "Spec " spec " does not match value " x)]
+    (let [m (str "\n>>>>>>>>>>\n"
+                 "Error in " message
+                 "\nSpec " spec " does not match value " x
+                 "\n<<<<<<<<<<\n")]
       (arcadia/log m)
       (println m)
       (s/assert spec x))))
@@ -47,7 +49,6 @@
 (s/def :d/influence (s/map-of :d/school nat-int?))
 (s/def :d/deck vector?)
 (s/def :d/hand (s/map-of :d/card-id :d/card))
-(s/def :d/creatures (s/map-of :d/creature-id :d/creature))
 
 (s/def :d/user (s/keys :req-un [:d/rules
                                 :d/current-life
@@ -92,7 +93,8 @@
 (s/def :d/damage-reduction (s/map-of :d/damage-type nat-int?))
 (s/def :d/creature-id (s/tuple #{:creature} int?))
 
-(s/def :d/creature (s/keys :req-un [:d/creature-prefab
+(s/def :d/creature (s/keys :req-un [:d/owner
+                                    :d/creature-prefab
                                     :d/health
                                     :d/base-damage
                                     :d/speed
@@ -114,9 +116,11 @@
     :user :d/user
     :card :d/card))
 
+(s/def :d/creatures (s/map-of :d/creature-id :d/creature))
 (s/def :d/game-id int?)
 (s/def :d/game (s/keys :req-un [:d/game-id
-                                :d/user]))
+                                :d/user
+                                :d/creatures]))
 
 (s/def :d/rules (s/coll-of var?))
 (s/def :d/rules-map (s/map-of keyword? map?))
@@ -125,7 +129,10 @@
                                  :d/rules-map
                                  :d/events]))
 
-(s/def :d/entity-id vector?)
+(s/def :d/user-id (s/tuple #{:user}))
+(s/def :d/entity-id (s/or :user :d/user-id
+                          :creature :d/creature-id
+                          :card :d/card-id))
 (s/def :d/entities (s/coll-of :d/entity-id))
 
 (defmulti event-spec :event)
@@ -137,6 +144,8 @@
   (s/keys :req-un [:d/entities]))
 (defmethod event-spec :card-played [_]
   (s/keys :req-un [:d/entities :d/rank :d/file]))
+(defmethod event-spec :create-enemy [_]
+  (s/keys :req-un [:d/creature-id :d/creature :d/file]))
 (s/def :d/event (s/multi-spec event-spec :event))
 
 (s/def :d/quantity nat-int?)
@@ -149,6 +158,9 @@
 (defmethod effect-spec :play-creature [_]
   (s/keys :req-un [:d/card-id
                    :d/creature-id
+                   :d/creature
                    :d/rank
                    :d/file]))
+(defmethod effect-spec :create-enemy [_]
+  (s/keys :req-un [:d/creature-id :d/creature :d/file]))
 (s/def :d/effect (s/multi-spec effect-spec :effect))

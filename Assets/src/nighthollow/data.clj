@@ -15,6 +15,7 @@
 (ns nighthollow.data
   (:require
    [arcadia.core :as arcadia]
+   [nighthollow.api :as api]
    [nighthollow.core :as core]))
 
 (def user-id [:user])
@@ -37,10 +38,13 @@
 
 (defn ^{:event :card-played}
   default-played-card
-  [{[_ id :as card-id] :entity-id, {rank :rank, file :file} :event}]
+  [{[_ id :as card-id] :entity-id
+    {rank :rank, file :file} :event
+    card :entity}]
   [{:effect :play-creature
     :card-id card-id
     :creature-id [:creature id]
+    :creature card
     :rank rank
     :file file}])
 
@@ -65,7 +69,7 @@
           :damage-resistance {}
           :damage-reduction {}}))
 
-(def wizard-card
+(def wizard
   (merge creature
          {:name "Wizard"
           :image "CreatureImages/Wizard"
@@ -74,18 +78,46 @@
           :health 100
           :base-damage {:physical 10}}))
 
+(def viking
+  (merge creature
+         {:name "Viking"
+          :creature-prefab "Creatures/Enemy/Viking"
+          :owner :enemy
+          :speed 2000
+          :health 200}))
+
 (def user
   {:current-life 25
    :maximum-life 25
    :mana 0
    :influence {}
-   :hand {}
-   :creatures {}})
+   :hand {}})
 
 (defn ^{:event :game-start}
   draw-opening-hand
   [_]
   [{:effect :draw-cards :quantity 5}])
 
+(defn ^{:event :create-enemy}
+  create-enemy
+  [{{creature-id :creature-id, creature :creature, file :file} :event}]
+  [{:effect :create-enemy
+    :creature-id creature-id
+    :creature creature
+    :file file}])
+
+(defmethod core/handle-effect
+  :create-enemy
+  handle-create-enemy
+  [state {creature-id :creature-id, creature :creature, file :file}]
+  (update-in state [:game :creatures] assoc creature-id creature))
+
+(defmethod core/apply-event-commands!
+  :create-enemy
+  apply-create-enemy
+  [{creature-id :creature-id, creature :creature, file :file} _]
+  (Commands/CreateEnemy (api/->creature creature-id creature)
+                        (api/->file-value file)))
+
 (def user-rules
-  [#'draw-opening-hand])
+  [#'draw-opening-hand, #'create-enemy])

@@ -50,13 +50,28 @@
             (println "Actual: " (:actual args)))
     nil))
 
-(defn !test []
+(defn !t []
   (binding [test/report report]
-    (test/run-tests)))
+    (doseq [n (map ns-name (all-ns))]
+      (when (string/starts-with? (name n) "nighthollow")
+        (println "Testing" n)
+        (test/run-tests n)))))
 
-(defn !restart []
+(defn !d [event]
+  (nighthollow.core/dispatch! event))
+
+(defn !r []
   (Commands/ResetState)
   (nighthollow.main/on-start-new-game))
 
-(defn ?hand []
-  (get-in @nighthollow.core/state [:game :user :hand]))
+(defn ?h []
+  (keys (get-in @nighthollow.core/state [:game :user :hand])))
+
+(defn ?ca [id]
+  (keys (get-in @nighthollow.core/state [:game :user :hand [:card id]])))
+
+(defn ?cs []
+  (keys (get-in @nighthollow.core/state [:game :creatures])))
+
+(defn ?cr [id]
+  (get-in @nighthollow.core/state [:game :creatures [:creature id]]))
