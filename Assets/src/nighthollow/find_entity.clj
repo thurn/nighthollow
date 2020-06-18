@@ -28,14 +28,3 @@
 (defmethod core/find-entity :creature find-creature
   [creature-id game]
   (get-in game [:creatures creature-id]))
-
-(ns nighthollow.find-entity.test
-  (:require
-   [clojure.test :refer [deftest is]]
-   [nighthollow.find-entity :as find-entity]
-   [nighthollow.core :as core]
-   [nighthollow.test :as t]))
-
-(deftest test-find-entity
-  (is (= t/card
-         (core/find-entity [:card t/card-id] t/ongoing-game))))

@@ -56,8 +56,7 @@
    :accuracy 0
    :evasion 0
    :damage-resistance {}
-   :damage-reduction {}
-   :rules []})
+   :damage-reduction {}})
 
 (defn ^{:event :creature-collision}
   melee-creature-collision
@@ -80,13 +79,16 @@
 (defn ^{:event :skill-complete}
   default-melee-skill-complete
   [{{has-melee-collision :has-melee-collision} :event :as args}]
-  (when has-melee-collision
-    (melee-creature-collision args)))
+  (if has-melee-collision
+    (melee-creature-collision args)
+    []))
 
 (def melee-creature
   (merge creature
-         {:rules [#'melee-creature-collision
-                  #'default-melee-skill-impact]}))
+         {:rules (concat (:rules creature)
+                         [#'melee-creature-collision
+                          #'default-melee-skill-impact
+                          #'default-melee-skill-complete])}))
 
 (defn ^{:event :game-start}
   draw-opening-hand

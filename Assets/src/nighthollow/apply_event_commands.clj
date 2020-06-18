@@ -41,3 +41,9 @@
   (Commands/UseSkill (api/->creature-id creature-id)
                      (api/->skill-animation-number skill)
                      (api/->skill-type skill-type)))
+
+(defmethod core/apply-event-commands!
+  :creature-killed
+  apply-creature-killed
+  [{creature-id :creature-id} _]
+  (Commands/PlayDeathAnimation (api/->creature-id creature-id)))

@@ -120,6 +120,8 @@ namespace Nighthollow.Components
 
     public void UpdateCreatureData(CreatureData newData)
     {
+      if (_state == CreatureState.Dying) return;
+
       transform.eulerAngles = newData.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
       _healthBar.Value = newData.HealthPercent;
@@ -189,9 +191,9 @@ namespace Nighthollow.Components
 
     public void PlayDeathAnimation()
     {
+      _healthBar.gameObject.SetActive(false);
       _animator.SetTrigger(Death);
       _collider.enabled = false;
-      _healthBar.gameObject.SetActive(false);
       _state = CreatureState.Dying;
     }
 

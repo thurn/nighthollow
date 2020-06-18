@@ -173,6 +173,8 @@
                    :d/heal-damage
                    :d/gain-energy
                    :d/lose-energy]))
+(defmethod event-spec :creature-killed [_]
+  (s/keys :req-un [:d/entities]))
 (s/def :d/event (s/multi-spec event-spec :event))
 
 (s/def :d/quantity nat-int?)

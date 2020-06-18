@@ -32,6 +32,10 @@
 
 (def enemy enemies/viking)
 
+(def creature-id [:creature 0])
+
+(def creature (:creature card))
+
 (def new-game
   {:game-id 1
    :user user
@@ -40,4 +44,14 @@
 (def ongoing-game
   {:game-id 1
    :user (merge user {:hand hand})
-   :creatures {}})
+   :creatures {creature-id creature}})
+
+(def state
+  {:game ongoing-game
+   :rules-map {}
+   :events []})
+
+(defn has-event-entity
+  [state event-name entity-id]
+  (let [e (filter (fn [{event :event}] (= event event-name)) (:events state))]
+    (some #{entity-id} (:entities (first e)))))

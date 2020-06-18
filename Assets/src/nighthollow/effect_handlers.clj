@@ -16,7 +16,7 @@
   (:require
    [nighthollow.core :as core]
    [nighthollow.cards :as cards]
-   [nighthollow.creature-mutations :as mutations]
+   [nighthollow.creature-mutations :as creature-mutations]
    [nighthollow.prelude :refer :all]))
 
 (defn register-card-rules
@@ -71,9 +71,5 @@
 (defmethod core/handle-effect
   :mutate-creature
   handle-mutate-creature
-  [state {creature-id :creature-id :as mutation}]
-  (-> state
-      (update-in [:game :creatures creature-id] mutations/mutate mutation)
-      (core/push-event {assoc mutation
-                        :event :creature-mutated
-                        :entities [creature-id]})))
+  [state mutation]
+  (creature-mutations/mutate state mutation))
