@@ -24,3 +24,6 @@
 (defn log-error [& args]
   (apply prn args)
   (Debug/LogError (string/join " " args)))
+
+(defn error! [& args]
+  (throw (Exception. (string/join " " args))))

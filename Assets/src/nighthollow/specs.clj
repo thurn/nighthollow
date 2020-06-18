@@ -75,8 +75,11 @@
 
 (s/def :d/creature-prefab string?)
 (s/def :d/health nat-int?)
+(s/def :d/damage nat-int?)
+(s/def :d/energy nat-int?)
 (s/def :d/damage-type #{:radiant :lightning :fire :cold :physical :necrotic})
-(s/def :d/base-damage (s/map-of :d/damage-type nat-int?))
+(s/def :d/damage-map (s/map-of :d/damage-type nat-int?))
+(s/def :d/base-attack :d/damage-map)
 (s/def :d/speed nat-int?)
 (s/def :d/starting-energy nat-int?)
 (s/def :d/maximum-energy nat-int?)
@@ -85,8 +88,8 @@
 (s/def :d/crit-multiplier nat-int?)
 (s/def :d/accuracy nat-int?)
 (s/def :d/evasion nat-int?)
-(s/def :d/damage-resistance (s/map-of :d/damage-type nat-int?))
-(s/def :d/damage-reduction (s/map-of :d/damage-type nat-int?))
+(s/def :d/damage-resistance :d/damage-map)
+(s/def :d/damage-reduction :d/damage-map)
 (s/def :d/creature-id (s/tuple #{:creature} int?))
 
 (s/def :d/creature (s/keys :req-un [:d/rules
@@ -94,7 +97,9 @@
                                     :d/owner
                                     :d/creature-prefab
                                     :d/health
-                                    :d/base-damage
+                                    :d/damage
+                                    :d/energy
+                                    :d/base-attack
                                     :d/speed
                                     :d/starting-energy
                                     :d/maximum-energy
@@ -162,9 +167,19 @@
   (s/keys :req-un [:d/entities :d/has-melee-collision]))
 (defmethod event-spec :use-skill [_]
   (s/keys :req-un [:d/creature-id :d/skill-animation-number :d/skill-type]))
+(defmethod event-spec :creature-mutated [_]
+  (s/keys :req-un [:d/entities]
+          :opt-un [:d/apply-damage
+                   :d/heal-damage
+                   :d/gain-energy
+                   :d/lose-energy]))
 (s/def :d/event (s/multi-spec event-spec :event))
 
 (s/def :d/quantity nat-int?)
+(s/def :d/heal-damage nat-int?)
+(s/def :d/apply-damage :d/damage-map)
+(s/def :d/gain-energy nat-int?)
+(s/def :d/lose-energy nat-int?)
 
 (defmulti effect-spec :effect)
 (defmethod effect-spec :draw-cards [_]
@@ -181,4 +196,11 @@
   (s/keys :req-un [:d/creature-id :d/creature :d/file]))
 (defmethod effect-spec :use-skill [_]
   (s/keys :req-un [:d/creature-id :d/skill-animation-number :d/skill-type]))
+(defmethod effect-spec :mutate-creature [_]
+  (s/keys :req-un [:d/creature-id]
+          :opt-un [:d/apply-damage
+                   :d/heal-damage
+                   :d/gain-energy
+                   :d/lose-energy]))
+
 (s/def :d/effect (s/multi-spec effect-spec :effect))

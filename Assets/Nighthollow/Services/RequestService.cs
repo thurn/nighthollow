@@ -31,6 +31,7 @@ namespace Nighthollow.Services
     IFn _onMeleeSkillImpact;
     IFn _onProjectileImpact;
     IFn _onSkillComplete;
+    IFn _onDebugCreateEnemy;
 
     void Start()
     {
@@ -44,6 +45,7 @@ namespace Nighthollow.Services
       _onMeleeSkillImpact = Clojure.var(Namespace, "on-melee-skill-impact");
       _onProjectileImpact = Clojure.var(Namespace, "on-projectile-impact");
       _onSkillComplete = Clojure.var(Namespace, "on-skill-complete");
+      _onDebugCreateEnemy = Clojure.var(Namespace, "on-debug-create-enemy");
     }
 
     public void OnStartNewGame()
@@ -84,6 +86,11 @@ namespace Nighthollow.Services
     public void OnSkillComplete(CreatureId sourceCreature, bool hasMeleeCollision)
     {
       _onSkillComplete.invoke(sourceCreature.Value, hasMeleeCollision);
+    }
+
+    public void OnDebugCreateEnemy()
+    {
+      _onDebugCreateEnemy.invoke();
     }
   }
 }

@@ -16,6 +16,7 @@ using System.Collections;
 using System.Linq;
 using Nighthollow.Model;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // ReSharper disable UnusedMember.Global
 
@@ -25,8 +26,7 @@ namespace Nighthollow.Services
   {
     public static void ResetState()
     {
-      Root.Instance.User.Hand.DestroyAllCards();
-      Root.Instance.CreatureService.DestroyAllCreatures();
+      SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
     public static void DrawCards(IEnumerable cards)

@@ -78,3 +78,8 @@
   (core/dispatch! {:event :skill-complete
                    :entities [[:creature creature-id]]
                    :has-melee-collision has-melee-collision}))
+
+(defn on-debug-create-enemy []
+  (core/dispatch! {:event :create-enemy
+                   :creature-id [:creature -1]
+                   :creature test/enemy, :file 3}))

@@ -43,7 +43,9 @@
    :rules [#'default-can-play-card #'default-played-card]})
 
 (def creature
-  {:base-damage {}
+  {:damage 0
+   :energy 0
+   :base-attack {}
    :speed 0
    :health-regeneration 0
    :starting-energy 0
@@ -66,9 +68,19 @@
     :skill-animation-number melee-skill
     :skill-type :melee}])
 
+(defn ^{:event :melee-skill-impact}
+  default-melee-skill-impact
+  [{{base-attack :base-attack} :entity
+    {hit-creature-ids :hit-creature-ids} :event}]
+  (lg "hit" hit-creature-ids)
+  (mapv (fn [creature-id] {:effect :mutate-creature
+                           :creature-id creature-id
+                           :apply-damage base-attack})
+        hit-creature-ids))
+
 (def melee-creature
   (merge creature
-         {:rules [#'melee-creature-collision]}))
+         {:rules [#'melee-creature-collision #'default-melee-skill-impact]}))
 
 (defn ^{:event :game-start}
   draw-opening-hand

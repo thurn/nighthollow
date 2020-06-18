@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-using Nighthollow.Model;
 using Nighthollow.Services;
 using UnityEngine;
 
@@ -45,51 +43,9 @@ namespace Nighthollow.Components
       Commands.ResetState();
     }
 
-    public void Draw()
-    {
-      var card = Wizard();
-      Root.Instance.User.Hand.DrawCards(new List<CardData> { card, card, card });
-    }
-
     public void Enemy()
     {
-      Root.Instance.CreatureService.CreateEnemyCreature(Viking(), FileValue.File3);
+      Root.Instance.RequestService.OnDebugCreateEnemy();
     }
-
-    CardData Wizard() => new CardData(
-      cardId: new CardId(_idCounter++),
-      prefab: Prefab("Content/Card"),
-      canPlay: true,
-      cost: Cost(100, School.Flame, 1),
-      image: Sprite("CreatureImages/Wizard"),
-      creatureData: new CreatureData
-      (
-        creatureId: new CreatureId(_idCounter++),
-        prefab: Prefab("Creatures/Player/Wizard"),
-        owner: PlayerName.User,
-        speed: 0,
-        attachments: new List<AttachmentData>()
-      )
-    );
-
-    CreatureData Viking() => new CreatureData
-    (
-      creatureId: new CreatureId(_idCounter++),
-      prefab: Prefab("Creatures/Enemy/Viking"),
-      owner: PlayerName.Enemy,
-      speed: 2000,
-      attachments: new List<AttachmentData>()
-    );
-
-    AssetData Prefab(string address) => new AssetData(address, AssetType.Prefab);
-
-    AssetData Sprite(string address) => new AssetData(address, AssetType.Sprite);
-
-    Cost Cost(int mana, School school, int influence) => new Cost(
-      mana,
-      new List<Influence>
-      {
-        new Influence(school, influence)
-      });
   }
 }

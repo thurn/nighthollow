@@ -122,6 +122,9 @@ namespace Nighthollow.Components
     {
       transform.eulerAngles = newData.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
+      _healthBar.Value = newData.HealthPercent;
+      _healthBar.gameObject.SetActive(_healthBar.Value < 1);
+
       if (newData.Attachments != null)
       {
         _attachmentDisplay.SetAttachments(newData.Attachments);

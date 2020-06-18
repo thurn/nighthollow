@@ -18,9 +18,11 @@
    [nighthollow.prelude :refer :all]))
 
 (def viking
-  (merge base/creature
+  (merge base/melee-creature
          {:name "Viking"
           :creature-prefab "Creatures/Enemy/Viking"
           :owner :enemy
+          :melee-skill :skill1
+          :base-attack {:physical 25}
           :speed 2000
-          :health 200}))
+          :health 100}))

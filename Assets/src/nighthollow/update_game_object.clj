@@ -27,4 +27,5 @@
 (defmethod core/update-game-object!
   :creature
   update-creature
-  [creature-id card])
+  [creature-id creature]
+  (Commands/UpdateCreature (api/->creature creature-id creature)))

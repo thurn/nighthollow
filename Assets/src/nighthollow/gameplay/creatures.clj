@@ -25,6 +25,6 @@
                            {:name "Wizard"
                             :creature-prefab "Creatures/Player/Wizard"
                             :owner :user
-                            :health 100
+                            :health 200
                             :melee-skill :skill3
-                            :base-damage {:physical 10}})}))
+                            :base-attack {:physical 25}})}))

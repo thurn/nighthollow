@@ -114,15 +114,20 @@
 (defn ->attachment-data [address]
   (AttachmentData. (->asset-data address)))
 
+(defn clamp01 [val] (max (min val 1) 0))
+
 (s/fdef ->creature :args (s/cat :creature-id :d/creature-id
                                 :creature :d/creature))
 (defn ->creature [creature-id {address :creature-prefab
                                owner :owner
+                               health :health
+                               damage :damage
                                speed :speed
                                attachments :attachments}]
   (CreatureData. (->creature-id creature-id)
                  (->asset-data :prefab address)
                  (->player-name owner)
+                 (clamp01 (/ (- health damage) health))
                  (or speed 0)
                  (mapv ->attachment-data attachments)))
 

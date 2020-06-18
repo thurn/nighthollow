@@ -278,16 +278,19 @@ namespace Nighthollow.Model
 
     public readonly PlayerName Owner;
 
+    public readonly float HealthPercent;
+
     public readonly int Speed;
 
     public readonly IEnumerable<AttachmentData> Attachments;
 
     public CreatureData(CreatureId creatureId, AssetData prefab, PlayerName owner,
-      int speed, IEnumerable attachments)
+      float healthPercent, int speed, IEnumerable attachments)
     {
       CreatureId = creatureId;
       Prefab = prefab;
       Owner = owner;
+      HealthPercent = healthPercent;
       Speed = speed;
       Attachments = attachments.Cast<AttachmentData>();
     }
