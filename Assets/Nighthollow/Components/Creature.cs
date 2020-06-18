@@ -187,17 +187,6 @@ namespace Nighthollow.Components
       }
     }
 
-    public void ReturnToActiveState()
-    {
-      _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
-    }
-
-    public void SetHealthPercentage(float percentage)
-    {
-      _healthBar.Value = percentage;
-      _healthBar.gameObject.SetActive(_healthBar.Value < 1);
-    }
-
     public void PlayDeathAnimation()
     {
       _animator.SetTrigger(Death);
@@ -214,7 +203,7 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      if (!IsAlive()) return;
+      if (!IsIdle()) return;
       Root.Instance.RequestService.OnCreatureCollision(CreatureId,
         ComponentUtils.GetComponent<Creature>(other).CreatureId);
     }
@@ -260,6 +249,7 @@ namespace Nighthollow.Components
         _collider.bounds.size,
         angle: 0,
         Constants.LayerMaskForPlayer(Owner.GetOpponent()));
+      _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
       Root.Instance.RequestService.OnSkillComplete(CreatureId, result);
     }
 
@@ -269,6 +259,8 @@ namespace Nighthollow.Components
     }
 
     bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
+
+    bool IsIdle() => _state == CreatureState.Idle || _state == CreatureState.Moving;
 
     void Update()
     {

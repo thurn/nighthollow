@@ -72,15 +72,21 @@
   default-melee-skill-impact
   [{{base-attack :base-attack} :entity
     {hit-creature-ids :hit-creature-ids} :event}]
-  (lg "hit" hit-creature-ids)
   (mapv (fn [creature-id] {:effect :mutate-creature
                            :creature-id creature-id
                            :apply-damage base-attack})
         hit-creature-ids))
 
+(defn ^{:event :skill-complete}
+  default-melee-skill-complete
+  [{{has-melee-collision :has-melee-collision} :event :as args}]
+  (when has-melee-collision
+    (melee-creature-collision args)))
+
 (def melee-creature
   (merge creature
-         {:rules [#'melee-creature-collision #'default-melee-skill-impact]}))
+         {:rules [#'melee-creature-collision
+                  #'default-melee-skill-impact]}))
 
 (defn ^{:event :game-start}
   draw-opening-hand

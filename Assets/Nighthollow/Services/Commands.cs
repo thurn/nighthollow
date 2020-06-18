@@ -60,11 +60,6 @@ namespace Nighthollow.Services
       Root.Instance.CreatureService.GetCreature(creatureId).UseSkill(animation, skillType);
     }
 
-    public static void ReturnToActiveState(CreatureId creatureId)
-    {
-      Root.Instance.CreatureService.GetCreature(creatureId).ReturnToActiveState();
-    }
-
     public static void PlayDeathAnimation(CreatureId creatureId)
     {
       Root.Instance.CreatureService.GetCreature(creatureId).PlayDeathAnimation();

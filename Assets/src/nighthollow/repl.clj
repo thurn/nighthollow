@@ -65,6 +65,9 @@
   (Commands/ResetState)
   (nighthollow.main/on-start-new-game))
 
+(defn ?s []
+  @nighthollow.core/state)
+
 (defn ?h []
   (keys (get-in @nighthollow.core/state [:game :user :hand])))
 

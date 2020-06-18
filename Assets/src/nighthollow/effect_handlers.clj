@@ -72,7 +72,6 @@
   :mutate-creature
   handle-mutate-creature
   [state {creature-id :creature-id :as mutation}]
-  (lg "handling" mutation)
   (-> state
       (update-in [:game :creatures creature-id] mutations/mutate mutation)
       (core/push-event {assoc mutation

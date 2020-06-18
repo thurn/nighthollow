@@ -34,7 +34,6 @@
              healing :heal-damage
              added-energy :gain-energy
              lost-energy :lose-energy}]
-  (lg "mutate" damage)
   (cond-> creature
     damage (update-key :damage + (damage-total damage) :error)
     healing (update-key :damage - healing :zero)
