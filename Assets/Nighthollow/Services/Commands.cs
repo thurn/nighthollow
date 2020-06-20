@@ -26,12 +26,17 @@ namespace Nighthollow.Services
   {
     public static void ResetState()
     {
-      SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+      SceneManager.LoadScene("Main", LoadSceneMode.Single);
     }
 
     public static void DrawCards(IEnumerable cards)
     {
       Root.Instance.User.Hand.DrawCards(cards.Cast<CardData>());
+    }
+
+    public static void UpdateUser(UserData userData)
+    {
+      Root.Instance.User.UpdateUserData(userData);
     }
 
     public static void UpdateCard(CardData cardData)

@@ -35,7 +35,10 @@
 (defn on-start-new-game []
   (lg "on-start-new-game")
   (core/start-game! test/new-game [:user] [:user :rules])
-  (core/dispatch! {:event :game-start}))
+  (core/dispatch! {:event :game-start, :entities [[:user]]}))
+
+(defn on-tick []
+  (core/on-tick!))
 
 (defn on-card-drawn [card-id]
   (lg "on-card-drawn" card-id)

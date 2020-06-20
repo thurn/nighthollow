@@ -102,3 +102,6 @@
   (!d {:event :create-enemy
        :creature-id [:creature 17]
        :creature t/enemy, :file 3}))
+
+(defn !clean []
+  (map #(ns-unmap *ns* %) (keys (ns-interns *ns*))))

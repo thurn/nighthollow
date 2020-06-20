@@ -20,7 +20,7 @@
 
 (defonce ^:private previous-state (atom nil))
 
-(defonce ^:private state (atom {:game nil, :rules-map {}, :events []}))
+(defonce ^:private state (atom nil))
 
 (defonce ^:private last-id-generated (atom 0))
 
@@ -74,7 +74,9 @@
 
 (defn- run-apply-event-commands!
   [event game]
-  (apply-event-commands! (s/assert :d/event event) (s/assert :d/game game)))
+  (specs/validate "apply-event-commands! event" :d/event event)
+  (specs/validate "apply-event-commands! game" :d/game game)
+  (apply-event-commands! event game))
 
 (defmethod apply-event-commands! :default [event game] nil)
 
@@ -255,6 +257,13 @@
   [state entity-id rules]
   (let [indices (map-indexed vector rules)]
     (reduce (partial register-rule entity-id) state indices)))
+
+(defn on-tick!
+  "Updates the global game timer and dispatches the :tick event."
+  []
+  (when @state
+    (let [updated (swap! state update-in [:game :tick] inc)]
+      (dispatch! {:event :tick, :tick (get-in updated [:game :tick])}))))
 
 (s/fdef start-game! :args (s/cat :game :d/game
                                  :entity-id some?

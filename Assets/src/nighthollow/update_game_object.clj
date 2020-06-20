@@ -29,3 +29,9 @@
   update-creature
   [creature-id creature]
   (Commands/UpdateCreature (api/->creature creature-id creature)))
+
+(defmethod core/update-game-object!
+  :user
+  update-user
+  [_ user]
+  (Commands/UpdateUser (api/->user user)))

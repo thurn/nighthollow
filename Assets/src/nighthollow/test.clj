@@ -21,10 +21,10 @@
 
 (def card-id [:card 0])
 
-(def card creatures/wizard-card)
+(def card creatures/acolyte-card)
 
 (def deck
-  (mapv #(vector % 4000) [creatures/wizard-card]))
+  (mapv #(vector % 4000) [card]))
 
 (def hand {card-id card})
 
@@ -37,12 +37,14 @@
 (def creature (:creature card))
 
 (def new-game
-  {:game-id 1
+  {:tick 0
+   :game-id 1
    :user user
    :creatures {}})
 
 (def ongoing-game
-  {:game-id 1
+  {:tick 0
+   :game-id 1
    :user (merge user {:hand hand})
    :creatures {creature-id creature}})
 

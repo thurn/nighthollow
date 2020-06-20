@@ -23,7 +23,9 @@ namespace Nighthollow.Services
   public sealed class RequestService : MonoBehaviour
   {
     const string Namespace = "nighthollow.main";
+    static Coroutine _ticker;
     IFn _onStartNewGame;
+    IFn _onTick;
     IFn _onCardDrawn;
     IFn _onPlayedCard;
     IFn _onCreatureCollision;
@@ -38,6 +40,7 @@ namespace Nighthollow.Services
       Arcadia.Util.require(Namespace);
       Clojure.var(Namespace, "on-connect").invoke();
       _onStartNewGame = Clojure.var(Namespace, "on-start-new-game");
+      _onTick = Clojure.var(Namespace, "on-tick");
       _onCardDrawn = Clojure.var(Namespace, "on-card-drawn");
       _onPlayedCard = Clojure.var(Namespace, "on-played-card");
       _onCreatureCollision = Clojure.var(Namespace, "on-creature-collision");
@@ -46,6 +49,22 @@ namespace Nighthollow.Services
       _onProjectileImpact = Clojure.var(Namespace, "on-projectile-impact");
       _onSkillComplete = Clojure.var(Namespace, "on-skill-complete");
       _onDebugCreateEnemy = Clojure.var(Namespace, "on-debug-create-enemy");
+
+      if (_ticker != null)
+      {
+        StopCoroutine(_ticker);
+      }
+      _ticker = StartCoroutine(RunTicker());
+    }
+
+    IEnumerator<YieldInstruction> RunTicker()
+    {
+      while (true)
+      {
+        yield return new WaitForSeconds(1);
+        _onTick.invoke();
+      }
+      // ReSharper disable once IteratorNeverReturns
     }
 
     public void OnStartNewGame()

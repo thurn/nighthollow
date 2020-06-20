@@ -180,15 +180,13 @@ namespace Nighthollow.Model
 
   public sealed class UserData
   {
-    public readonly int CurrentLife;
-    public readonly int MaximumLife;
+    public readonly int Life;
     public readonly int Mana;
     public readonly IEnumerable<Influence> Influence;
 
-    public UserData(int currentLife, int maximumLife, int mana, IEnumerable influence)
+    public UserData(int life, int mana, IEnumerable influence)
     {
-      CurrentLife = currentLife;
-      MaximumLife = maximumLife;
+      Life = life;
       Mana = mana;
       Influence = influence.Cast<Influence>();
     }
@@ -196,8 +194,7 @@ namespace Nighthollow.Model
     public override string ToString()
     {
       return
-        $"[UserData {nameof(CurrentLife)}: {CurrentLife},\n" +
-        $"{nameof(MaximumLife)}: {MaximumLife},\n" +
+        $"[UserData {nameof(Life)}: {Life},\n" +
         $"{nameof(Mana)}: {Mana},\n" +
         $"{nameof(Influence)}: {Influence}]";
     }

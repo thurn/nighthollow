@@ -16,6 +16,7 @@ using System.Linq;
 using DG.Tweening;
 using Nighthollow.Model;
 using Nighthollow.Services;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -25,26 +26,17 @@ namespace Nighthollow.Components
   public sealed class User : MonoBehaviour
   {
     [Header("Config")] [SerializeField] Hand _hand;
-    [SerializeField] Image _lifeBar;
-    [SerializeField] Text _lifeText;
-
-    [FormerlySerializedAs("_powerBar")] [SerializeField]
-    Image _manaBar;
-
-    [FormerlySerializedAs("_powerText")] [SerializeField]
-    Text _manaText;
-
+    [SerializeField] TextMeshProUGUI _lifeText;
+    [SerializeField] TextMeshProUGUI _manaText;
     [SerializeField] RectTransform _influenceRow;
 
     public Hand Hand => _hand;
 
     public void UpdateUserData(UserData newUserData)
     {
-      _lifeBar.DOFillAmount(
-        newUserData.MaximumLife == 0 ? 0 : newUserData.CurrentLife / (float) newUserData.MaximumLife, 0.3f); ;
-
-      _lifeText.text = $"{newUserData.CurrentLife}/{newUserData.MaximumLife}";
-      _manaText.text = $"{newUserData.Mana}";
+      gameObject.SetActive(true);
+      _lifeText.text = newUserData.Life.ToString();
+      _manaText.text = newUserData.Mana.ToString();
 
       foreach (Transform child in _influenceRow)
       {

@@ -16,7 +16,7 @@
   (:require
    [nighthollow.core :as core]
    [nighthollow.cards :as cards]
-   [nighthollow.creature-mutations :as creature-mutations]
+   [nighthollow.mutations :as mutations]
    [nighthollow.prelude :refer :all]))
 
 (defn register-card-rules
@@ -48,10 +48,13 @@
           creature :creature
           rank :rank
           file :file}]
-  (let [with-position (assoc creature :rank rank :file file)]
+  (let [updated (assoc creature
+                       :rank rank
+                       :file file
+                       :placed-time (get-in state [:game :tick]))]
     (-> state
         (update-in [:game :user :hand] dissoc card-id)
-        (update-in [:game :creatures] assoc creature-id with-position)
+        (update-in [:game :creatures] assoc creature-id updated)
         (core/register-rules creature-id (:rules creature)))))
 
 (defmethod core/handle-effect
@@ -72,4 +75,9 @@
   :mutate-creature
   handle-mutate-creature
   [state mutation]
-  (creature-mutations/mutate state mutation))
+  (mutations/mutate-creature state mutation))
+
+(defmethod core/handle-effect
+  :mutate-user
+  [state mutation]
+  (mutations/mutate-user state mutation))

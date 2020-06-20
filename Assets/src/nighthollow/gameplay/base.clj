@@ -17,6 +17,10 @@
    [nighthollow.prelude :refer :all]
    [nighthollow.specs :as specs]))
 
+(defn inherit [parent child]
+  (merge parent
+         (assoc child :rules (concat (:rules parent) (:rules child)))))
+
 (defn ^{:event :card-drawn}
   default-can-play-card
   [{card-id :entity-id}]
@@ -107,9 +111,8 @@
   [#'draw-opening-hand, #'create-enemy])
 
 (def user
-  {:current-life 25
-   :maximum-life 25
-   :mana 0
+  {:life 10
+   :mana 50
    :influence {}
    :hand {}
    :rules [#'draw-opening-hand #'create-enemy]})

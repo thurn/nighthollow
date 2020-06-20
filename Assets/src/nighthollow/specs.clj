@@ -23,8 +23,7 @@
   [message spec x]
   (if (s/valid? spec x)
     x
-    (let [m (str "\n>>>>>>>>>>\n"
-                 "Error in: " message
+    (let [m (str "Error in: " message
                  "\nSpec " spec " does not match value " x
                  "\n<<<<<<<<<<\n")]
       (log-error m)
@@ -42,16 +41,14 @@
 (s/def :d/school #{:light :sky :flame :ice :earth :shadow})
 (s/def :d/asset-type #{:prefab :sprite})
 
-(s/def :d/current-life nat-int?)
-(s/def :d/maximum-life nat-int?)
+(s/def :d/life nat-int?)
 (s/def :d/mana nat-int?)
 (s/def :d/influence (s/map-of :d/school nat-int?))
 (s/def :d/deck vector?)
 (s/def :d/hand (s/map-of :d/card-id :d/card))
 
 (s/def :d/user (s/keys :req-un [:d/rules
-                                :d/current-life
-                                :d/maximum-life
+                                :d/life
                                 :d/mana
                                 :d/influence
                                 :d/deck
@@ -91,6 +88,7 @@
 (s/def :d/damage-resistance :d/damage-map)
 (s/def :d/damage-reduction :d/damage-map)
 (s/def :d/creature-id (s/tuple #{:creature} int?))
+(s/def :d/placed-time nat-int?)
 
 (s/def :d/creature (s/keys :req-un [:d/rules
                                     :d/name
@@ -109,7 +107,10 @@
                                     :d/accuracy
                                     :d/evasion
                                     :d/damage-resistance
-                                    :d/damage-reduction]))
+                                    :d/damage-reduction]
+                           :opt-un [:d/rank
+                                    :d/file
+                                    :d/placed-time]))
 
 (s/def :d/skill-animation-number #{:skill1 :skill2 :skill3 :skill4 :skill5})
 (s/def :d/skill-type #{:melee :ranged})
@@ -123,7 +124,8 @@
 
 (s/def :d/creatures (s/map-of :d/creature-id :d/creature))
 (s/def :d/game-id int?)
-(s/def :d/game (s/keys :req-un [:d/game-id
+(s/def :d/game (s/keys :req-un [:d/tick
+                                :d/game-id
                                 :d/user
                                 :d/creatures]))
 
@@ -143,10 +145,17 @@
 (s/def :d/hit-creature-ids (s/coll-of :d/creature-id))
 (s/def :d/has-melee-collision boolean?)
 (s/def :d/melee-skill :d/skill-animation-number)
+(s/def :d/tick nat-int?)
+
+(def creature-mutation-keys)
+
+
+(def user-mutation-keys)
+
 
 (defmulti event-spec :event)
 (defmethod event-spec :game-start [_]
-  (s/keys))
+  (s/keys :req-un [:d/entities]))
 (defmethod event-spec :start-drawing-cards [_]
   (s/keys :req-un [:d/cards]))
 (defmethod event-spec :card-drawn [_]
@@ -167,21 +176,40 @@
   (s/keys :req-un [:d/entities :d/has-melee-collision]))
 (defmethod event-spec :use-skill [_]
   (s/keys :req-un [:d/creature-id :d/skill-animation-number :d/skill-type]))
+(defmethod event-spec :creature-killed [_]
+  (s/keys :req-un [:d/entities]))
+(defmethod event-spec :tick [_]
+  (s/keys :req-un [:d/tick]))
 (defmethod event-spec :creature-mutated [_]
   (s/keys :req-un [:d/entities]
           :opt-un [:d/apply-damage
                    :d/heal-damage
                    :d/gain-energy
-                   :d/lose-energy]))
-(defmethod event-spec :creature-killed [_]
-  (s/keys :req-un [:d/entities]))
+                   :d/spend-energy]))
+(defmethod event-spec :user-mutated [_]
+  (s/keys :req-un [:d/entities]
+          :opt-un [:d/lose-life
+                   :d/gain-life
+                   :d/spend-mana
+                   :d/lose-mana
+                   :d/gain-mana
+                   :d/lose-influence
+                   :d/gain-influence]))
+
 (s/def :d/event (s/multi-spec event-spec :event))
 
 (s/def :d/quantity nat-int?)
 (s/def :d/heal-damage nat-int?)
 (s/def :d/apply-damage :d/damage-map)
 (s/def :d/gain-energy nat-int?)
-(s/def :d/lose-energy nat-int?)
+(s/def :d/spend-energy nat-int?)
+(s/def :d/lose-life :d/life)
+(s/def :d/gain-life :d/life)
+(s/def :d/spend-mana :d/mana)
+(s/def :d/lose-mana :d/mana)
+(s/def :d/gain-mana :d/mana)
+(s/def :d/lose-influence :d/influence)
+(s/def :d/gain-influence :d/influence)
 
 (defmulti effect-spec :effect)
 (defmethod effect-spec :draw-cards [_]
@@ -203,6 +231,14 @@
           :opt-un [:d/apply-damage
                    :d/heal-damage
                    :d/gain-energy
-                   :d/lose-energy]))
+                   :d/spend-energy]))
+(defmethod effect-spec :mutate-user [_]
+  (s/keys :opt-un [:d/lose-life
+                   :d/gain-life
+                   :d/spend-mana
+                   :d/lose-mana
+                   :d/gain-mana
+                   :d/lose-influence
+                   :d/gain-influence]))
 
 (s/def :d/effect (s/multi-spec effect-spec :effect))

@@ -99,12 +99,11 @@
 (defn ->asset-data [type address]
   (AssetData. address (->asset-type type)))
 
-(s/fdef ->user-data :args (s/cat :user :d/user))
-(defn ->user-data [{current-life :current-life
-                    maximum-life :maximum-life
-                    mana :mana
-                    influence :influence}]
-  (UserData. current-life maximum-life mana (mapv ->influence (seq influence))))
+(s/fdef ->user :args (s/cat :user :d/user))
+(defn ->user [{life :life
+               mana :mana
+               influence :influence}]
+  (UserData. life mana (mapv ->influence (seq influence))))
 
 (s/fdef ->cost :args (s/cat :cst :d/cost))
 (defn ->cost [{mana :mana, influence :influence}]
