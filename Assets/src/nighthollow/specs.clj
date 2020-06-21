@@ -162,6 +162,8 @@
   (s/keys :req-un [:d/entities]))
 (defmethod event-spec :card-played [_]
   (s/keys :req-un [:d/entities :d/rank :d/file]))
+(defmethod event-spec :creature-played [_]
+  (s/keys :req-un [:d/entities :d/creature]))
 (defmethod event-spec :card-mutated [_]
   (s/keys :req-un [:d/entities]))
 (defmethod event-spec :create-enemy [_]

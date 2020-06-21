@@ -111,3 +111,7 @@
 
 (defn ?rules [key]
   (key (:rules-map @nighthollow.core/state)))
+
+(defn !$ []
+  (swap! nighthollow.core/state update-in [:game :user] assoc
+         :mana 999 :influence {:flame 5}))

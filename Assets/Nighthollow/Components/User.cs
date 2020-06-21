@@ -30,29 +30,38 @@ namespace Nighthollow.Components
     [SerializeField] TextMeshProUGUI _manaText;
     [SerializeField] RectTransform _influenceRow;
 
+    [Header("State")] [SerializeField] UserData _userData;
+
     public Hand Hand => _hand;
 
     public void UpdateUserData(UserData newUserData)
     {
       gameObject.SetActive(true);
+
       _lifeText.text = newUserData.Life.ToString();
       _manaText.text = newUserData.Mana.ToString();
 
-      foreach (Transform child in _influenceRow)
+      if (_userData == null || !_userData.Influence.SequenceEqual(newUserData.Influence))
       {
-        Destroy(child.gameObject);
-      }
-
-      foreach (var influence in newUserData.Influence)
-      {
-        for (var i = 0; i < influence.Value; ++i)
+        foreach (Transform child in _influenceRow)
         {
-          var image = Root.Instance.Prefabs.CreateInfluence();
-          image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.School);
-          image.transform.SetParent(_influenceRow);
-          image.transform.localPosition = new Vector3(i * 60, 0, 0);
+          Destroy(child.gameObject);
+        }
+
+        foreach (var influence in newUserData.Influence)
+        {
+          for (var i = 0; i < influence.Value; ++i)
+          {
+            var image = Root.Instance.Prefabs.CreateInfluence();
+            image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.School);
+            image.transform.SetParent(_influenceRow);
+            image.transform.localScale = Vector3.one;
+            image.transform.localPosition = new Vector3(i * 100, 0, 0);
+          }
         }
       }
+
+      _userData = newUserData;
     }
   }
 }

@@ -47,6 +47,11 @@
             :cost {:mana 100 :influence {:flame 1}}
             :creature wizard}))
 
+(defn ^{:event :creature-played}
+  gain-influence-on-play
+  [{{influence :influence-gain-amount} :entity}]
+  [{:effect :mutate-user, :gain-influence influence}])
+
 (def acolyte
   (inherit base/melee-creature
            {:name "Acolyte"
@@ -56,8 +61,10 @@
             :melee-skill :skill2
             :mana-gain-interval 5
             :mana-gain-amount 5
+            :influence-gain-amount {:flame 1}
             :base-attack {:physical 5}
-            :rules [#'base/gain-mana-over-time]}))
+            :rules [#'base/gain-mana-over-time
+                    #'gain-influence-on-play]}))
 
 (def acolyte-card
   (inherit base/card

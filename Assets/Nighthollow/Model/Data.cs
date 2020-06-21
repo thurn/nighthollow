@@ -136,7 +136,7 @@ namespace Nighthollow.Model
     Shadow
   }
 
-  public sealed class Influence
+  public sealed class Influence : IEquatable<Influence>
   {
     public readonly School School;
 
@@ -151,6 +151,36 @@ namespace Nighthollow.Model
     public override string ToString()
     {
       return $"[Influence {nameof(School)}: {School}, {nameof(Value)}: {Value}]";
+    }
+
+    public bool Equals(Influence other)
+    {
+      if (ReferenceEquals(null, other)) return false;
+      if (ReferenceEquals(this, other)) return true;
+      return School == other.School && Value == other.Value;
+    }
+
+    public override bool Equals(object obj)
+    {
+      return ReferenceEquals(this, obj) || obj is Influence other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      unchecked
+      {
+        return ((int) School * 397) ^ Value;
+      }
+    }
+
+    public static bool operator ==(Influence left, Influence right)
+    {
+      return Equals(left, right);
+    }
+
+    public static bool operator !=(Influence left, Influence right)
+    {
+      return !Equals(left, right);
     }
   }
 

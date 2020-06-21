@@ -57,7 +57,10 @@
     (-> state
         (update-in [:game :user :hand] dissoc card-id)
         (update-in [:game :creatures] assoc creature-id updated)
-        (core/register-rules creature-id (:rules creature)))))
+        (core/register-rules creature-id (:rules creature))
+        (core/push-event {:event :creature-played
+                          :entities [creature-id]
+                          :creature updated}))))
 
 (defmethod core/handle-effect
   :create-enemy
