@@ -128,9 +128,16 @@
 (defn ^{:event :tick}
   gain-mana-over-time
   [{entity :entity, {tick :tick} :event}]
-  (if (= 0 (mod (- tick (:placed-time entity))
-                (:mana-gain-interval entity)))
+  (if (= 0 (mod tick (:mana-gain-interval entity)))
     [{:effect :mutate-user :gain-mana (:mana-gain-amount entity)}]
+    []))
+
+(defn ^{:event :tick}
+  draw-cards-over-time
+  [{user :entity {tick :tick} :event}]
+  (if (and (= 0 (mod tick (:card-draw-interval user)))
+           (<= (count (:hand user)) 10))
+    [{:effect :draw-cards :quantity 1}]
     []))
 
 (def user
@@ -138,10 +145,14 @@
    :mana 50
    :placed-time 0
    :mana-gain-interval 5
-   :mana-gain-amount 5
+   :mana-gain-amount 10
+   :card-draw-interval 10
    :influence {}
    :hand {}
-   :rules [#'draw-opening-hand #'create-enemy #'gain-mana-over-time]})
+   :rules [#'draw-opening-hand
+           #'create-enemy
+           #'gain-mana-over-time
+           #'draw-cards-over-time]})
 
 (deftest test-influence<=
   (is (influence<= {:flame 1} {:flame 2}))
