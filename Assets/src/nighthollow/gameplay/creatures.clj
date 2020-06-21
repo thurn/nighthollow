@@ -17,6 +17,21 @@
    [nighthollow.gameplay.base :as base :refer [inherit]]
    [nighthollow.prelude :refer :all]))
 
+(def berserker
+  (inherit base/melee-creature
+           {:name "Berserker"
+            :creature-prefab "Creatures/User/Berserker"
+            :owner :user
+            :health 250
+            :melee-skill :skill2
+            :base-attack {:physical 50}}))
+
+(def berserker-card
+  (inherit base/card
+           {:image "CreatureImages/Berserker"
+            :cost {:mana 100 :influence {:flame 1}}
+            :creature berserker}))
+
 (def wizard
   (inherit base/melee-creature
            {:name "Wizard"
@@ -47,5 +62,5 @@
 (def acolyte-card
   (inherit base/card
            {:image "CreatureImages/Acolyte"
-            :cost {:mana 60, :influence {}}
+            :cost {:mana 50, :influence {}}
             :creature acolyte}))

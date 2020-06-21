@@ -40,6 +40,7 @@ namespace Nighthollow.Components
 
     public void ResetGame()
     {
+      Root.Instance.RequestService.OnEndGame();
       Commands.ResetState();
     }
 

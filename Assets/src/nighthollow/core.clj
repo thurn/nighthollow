@@ -280,4 +280,10 @@
                                 (get-in game rules-path)))
   nil)
 
+(defn end-game!
+  "Ends the current game, clearing out the value of 'state'."
+  []
+  (reset! state nil)
+  (reset! last-id-generated 0))
+
 (specs/instrument! *ns*)

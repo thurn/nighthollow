@@ -37,6 +37,11 @@
   (core/start-game! test/new-game [:user] [:user :rules])
   (core/dispatch! {:event :game-start, :entities [[:user]]}))
 
+
+(defn on-end-game []
+  (lg "on-end-game")
+  (core/end-game!))
+
 (defn on-tick []
   (core/on-tick!))
 

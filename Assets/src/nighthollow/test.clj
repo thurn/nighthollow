@@ -14,6 +14,7 @@
 
 (ns nighthollow.test
   (:require
+   [nighthollow.cards :as cards]
    [nighthollow.gameplay.base :as base]
    [nighthollow.gameplay.creatures :as creatures]
    [nighthollow.gameplay.enemies :as enemies]
@@ -23,12 +24,17 @@
 
 (def card creatures/acolyte-card)
 
-(def deck
-  (mapv #(vector % 4000) [card]))
+(defn make-deck
+  [cards]
+  {:cards cards :weights (zipmap (range (count cards)) (repeat 4000))})
 
 (def hand {card-id card})
 
-(def user (merge base/user {:deck deck}))
+(def user (merge base/user
+                 {:deck (cards/make-deck
+                         [creatures/acolyte-card
+                          creatures/wizard-card
+                          creatures/berserker-card])}))
 
 (def enemy enemies/viking)
 

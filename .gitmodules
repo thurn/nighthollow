@@ -7,3 +7,6 @@
 [submodule "Assets/vendor/clr.spec.alpha"]
 	path = Assets/vendor/clr.spec.alpha
 	url = https://github.com/clojure/clr.spec.alpha.git
+[submodule "Assets/vendor/clr.data.generators"]
+	path = Assets/vendor/clr.data.generators
+	url = https://github.com/clojure/clr.data.generators.git

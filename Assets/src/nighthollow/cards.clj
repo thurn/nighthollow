@@ -14,10 +14,14 @@
 
 (ns nighthollow.cards
   (:require
+   [clojure.data.generators :as generators]
    [nighthollow.core :as core]
    [nighthollow.api :as api]
-   [nighthollow.prelude :refer :all]
-   [nighthollow.test :as t]))
+   [nighthollow.prelude :refer :all]))
+
+(defn make-deck
+  [cards]
+  {:cards cards :weights (zipmap (range (count cards)) (repeat 4000))})
 
 (defn new-weight
   "Returns the next weight in sequence for a given card weight. The first 3
@@ -39,15 +43,22 @@
     4 2
     1))
 
+(defn- random-card
+  "Given a deck returns a tuple of a weighted random card from the deck and the
+   updated weight values."
+  [{cards :cards, weights :weights}]
+  (let [index (generators/weighted weights)]
+    [(nth cards index) (assoc weights index (new-weight (weights index)))]))
+
 (defn draw-card
   "Takes a map with a :user value and a :cards accumulator. Adds a new
   randomly-selected card from the user's deck to their hand, decrementing the
-  associated weight value for that card. Returns a map with the updated user
-  state and a map with the drawn card added to the user's hand."
+  associated weight value for that card. Returns a map with :user containing
+  the updated user state and :cards with a map of the drawn cards."
   [{{deck :deck, hand :hand, :as user} :user cards :cards}]
-  (let [[card weight] (first deck)
+  (let [[card new-weights] (random-card deck)
         card-id [:card (core/new-id)]]
     {:cards (assoc cards card-id card)
      :user (-> user
-               (update :hand assoc card-id card)
-               (update-in [:deck 0] assoc 1 (new-weight weight)))}))
+               (assoc-in [:hand card-id] card)
+               (assoc-in [:deck :weights] new-weights))}))

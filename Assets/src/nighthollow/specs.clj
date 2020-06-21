@@ -44,7 +44,7 @@
 (s/def :d/life nat-int?)
 (s/def :d/mana nat-int?)
 (s/def :d/influence (s/map-of :d/school nat-int?))
-(s/def :d/deck vector?)
+(s/def :d/deck map?)
 (s/def :d/hand (s/map-of :d/card-id :d/card))
 
 (s/def :d/user (s/keys :req-un [:d/rules
