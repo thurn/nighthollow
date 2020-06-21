@@ -105,3 +105,9 @@
 
 (defn !clean []
   (map #(ns-unmap *ns* %) (keys (ns-interns *ns*))))
+
+(defn ?rk []
+  (keys (:rules-map @nighthollow.core/state)))
+
+(defn ?rules [key]
+  (key (:rules-map @nighthollow.core/state)))

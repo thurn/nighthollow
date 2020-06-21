@@ -32,13 +32,6 @@
             :cost {:mana 100 :influence {:flame 1}}
             :creature wizard}))
 
-(defn ^{:event :tick}
-  gain-mana-over-time
-  [{creature :entity, creature-id :entity-id, {tick :tick} :event}]
-  (when (= 0 (mod (- tick (:placed-time creature))
-                  (:mana-gain-interval creature))))
-  [{:effect :mutate-user :gain-mana (:mana-gain-amount creature)}])
-
 (def acolyte
   (inherit base/melee-creature
            {:name "Acolyte"
@@ -49,10 +42,10 @@
             :mana-gain-interval 5
             :mana-gain-amount 5
             :base-attack {:physical 5}
-            :rules [#'gain-mana-over-time]}))
+            :rules [#'base/gain-mana-over-time]}))
 
 (def acolyte-card
   (inherit base/card
            {:image "CreatureImages/Acolyte"
-            :cost {:mana 25, :influence {}}
+            :cost {:mana 60, :influence {}}
             :creature acolyte}))

@@ -38,7 +38,9 @@
   :set-can-play-card
   handle-set-can-play-card
   [state {can-play :can-play, card-id :card-id}]
-  (update-in state [:game :user :hand card-id] assoc :can-play can-play))
+  (-> state
+      (update-in [:game :user :hand card-id] assoc :can-play can-play)
+      (core/push-event {:event :card-mutated, :entities [card-id]})))
 
 (defmethod core/handle-effect
   :play-creature

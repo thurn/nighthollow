@@ -35,7 +35,6 @@ namespace Nighthollow.Components
 
     public void StartGame()
     {
-      Commands.ResetState();
       Root.Instance.RequestService.OnStartNewGame();
     }
 

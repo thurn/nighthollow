@@ -14,6 +14,7 @@
 
 (ns nighthollow.gameplay.base
   (:require
+   [clojure.test :refer [deftest is]]
    [nighthollow.prelude :refer :all]
    [nighthollow.specs :as specs]))
 
@@ -21,19 +22,34 @@
   (merge parent
          (assoc child :rules (concat (:rules parent) (:rules child)))))
 
-(defn ^{:event :card-drawn}
-  default-can-play-card
-  [{card-id :entity-id}]
+(defn- influence<=
+  [cost current]
+  (every? (fn [[school value]] (<= value (get current school 0))) cost))
+
+(defn- calculate-can-play-card
+  [game card-id {{influence :influence, mana :mana} :cost}]
   [{:effect :set-can-play-card
-    :can-play true
-    :card-id card-id}])
+    :card-id card-id
+    :can-play (and (<= mana (get-in game [:user :mana]))
+                   (influence<= influence (get-in game [:user :influence])))}])
+
+(defn ^{:event :card-drawn}
+  drawn-can-play-card
+  [{game :game, card-id :entity-id, card :entity}]
+  (calculate-can-play-card game card-id card))
+
+(defn ^{:event :user-mutated, :trigger :global}
+  mutated-can-play-card
+  [{game :game, card-id :entity-id, card :entity}]
+  (calculate-can-play-card game card-id card))
 
 (defn ^{:event :card-played}
   default-played-card
   [{[_ id :as card-id] :entity-id
     {rank :rank, file :file} :event
-    {creature :creature} :entity}]
-  [{:effect :play-creature
+    {creature :creature, {mana :mana} :cost} :entity}]
+  [{:effect :mutate-user, :spend-mana mana}
+   {:effect :play-creature
     :card-id card-id
     :creature-id [:creature id]
     :creature creature
@@ -44,7 +60,9 @@
   {:owner :user
    :can-play false
    :card-prefab "Content/Card"
-   :rules [#'default-can-play-card #'default-played-card]})
+   :rules [#'drawn-can-play-card
+           #'mutated-can-play-card
+           #'default-played-card]})
 
 (def creature
   {:damage 0
@@ -107,12 +125,29 @@
     :creature creature
     :file file}])
 
-(def user-rules
-  [#'draw-opening-hand, #'create-enemy])
+(defn ^{:event :tick}
+  gain-mana-over-time
+  [{entity :entity, {tick :tick} :event}]
+  (if (= 0 (mod (- tick (:placed-time entity))
+                (:mana-gain-interval entity)))
+    [{:effect :mutate-user :gain-mana (:mana-gain-amount entity)}]
+    []))
 
 (def user
   {:life 10
    :mana 50
+   :placed-time 0
+   :mana-gain-interval 5
+   :mana-gain-amount 5
    :influence {}
    :hand {}
-   :rules [#'draw-opening-hand #'create-enemy]})
+   :rules [#'draw-opening-hand #'create-enemy #'gain-mana-over-time]})
+
+(deftest test-influence<=
+  (is (influence<= {:flame 1} {:flame 2}))
+  (is (influence<= {:flame 2} {:flame 2}))
+  (is (not (influence<= {:flame 3} {:flame 2})))
+  (is (not (influence<= {:flame 3, :light 1} {:flame 2})))
+  (is (influence<= {:flame 2} {:flame 2, :light 1}))
+  (is (influence<= {:flame 2, :light 1} {:flame 2, :light 1}))
+  (is (not (influence<= {:flame 2, :light 2} {:flame 2, :light 1}))))

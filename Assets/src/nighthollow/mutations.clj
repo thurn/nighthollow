@@ -66,7 +66,7 @@
         mutated (apply-creature-mutation creature mutation)
         killed (and was-alive (>= (:damage mutated) (:health mutated)))]
     (cond-> state
-      true (update-in [:game :creatures] assoc creature-id mutated)
+      true (assoc-in [:game :creatures creature-id] mutated)
       true (core/push-event (assoc mutation
                                    :event :creature-mutated
                                    :entities [creature-id]))
@@ -123,10 +123,10 @@
     (is (t/has-event-entity state :creature-killed t/creature-id))))
 
 (deftest test-mutate-user
-  (let [state (update-in t/state [:game :user] assoc
-                         :life 10
-                         :mana 50
-                         :influence {:flame 2})
+  (let [state (assoc-in t/state [:game :user]
+                        :life 10
+                        :mana 50
+                        :influence {:flame 2})
         value (fn [key] [:game :user key])]
     (is (= 8 (get-in (mutate-user state {:lose-life 2}) (value :life))))
     (is (= 0 (get-in (mutate-user state {:lose-life 20}) (value :life))))
