@@ -14,6 +14,7 @@
 
 (ns nighthollow.gameplay.creatures
   (:require
+   [nighthollow.core :as core]
    [nighthollow.gameplay.base :as base :refer [inherit]]
    [nighthollow.prelude :refer :all]))
 

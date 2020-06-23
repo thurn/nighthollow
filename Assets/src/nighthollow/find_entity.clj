@@ -17,14 +17,14 @@
    [nighthollow.core :as core]
    [nighthollow.prelude :refer :all]))
 
-(defmethod core/find-entity :card find-card
+(defmethod core/find-entity :card
   [card-id game]
   (get-in game [:user :hand card-id]))
 
-(defmethod core/find-entity :user find-user
+(defmethod core/find-entity :user
   [_ game]
   (:user game))
 
-(defmethod core/find-entity :creature find-creature
+(defmethod core/find-entity :creature
   [creature-id game]
   (get-in game [:creatures creature-id]))

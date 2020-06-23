@@ -25,7 +25,6 @@
 
 (defmethod core/handle-effect
   :draw-cards
-  handle-draw-cards
   [state {quantity :quantity}]
   (let [input {:user (get-in state [:game :user]) :cards {}}
         {user :user cards :cards} (nth (iterate cards/draw-card input) quantity)
@@ -36,7 +35,6 @@
 
 (defmethod core/handle-effect
   :set-can-play-card
-  handle-set-can-play-card
   [state {can-play :can-play, card-id :card-id}]
   (-> state
       (update-in [:game :user :hand card-id] assoc :can-play can-play)
@@ -44,7 +42,6 @@
 
 (defmethod core/handle-effect
   :play-creature
-  handle-play-creature
   [state {card-id :card-id
           creature-id :creature-id
           creature :creature
@@ -64,21 +61,19 @@
 
 (defmethod core/handle-effect
   :create-enemy
-  handle-create-enemy
   [state {creature-id :creature-id, creature :creature, file :file}]
   (-> state
-      (update-in [:game :creatures] assoc creature-id creature)
+      (update-in [:game :creatures] assoc creature-id
+                 (assoc creature :file file))
       (core/register-rules creature-id (:rules creature))))
 
 (defmethod core/handle-effect
   :use-skill
-  handle-use-skill
   [state effect]
   (core/push-event state (assoc effect :event :use-skill)))
 
 (defmethod core/handle-effect
   :mutate-creature
-  handle-mutate-creature
   [state mutation]
   (mutations/mutate-creature state mutation))
 

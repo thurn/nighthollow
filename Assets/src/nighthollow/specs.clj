@@ -16,7 +16,7 @@
   (:require
    [clojure.spec.alpha :as s]
    [clojure.spec.test.alpha :as stest]
-   [nighthollow.prelude :refer :all]))
+   [nighthollow.prelude :refer :all :as prelude]))
 
 (defn validate
   "Wrapper around clojure spec assert that adds a custom failure message"
@@ -26,7 +26,7 @@
     (let [m (str "Error in: " message
                  "\nSpec " spec " does not match value " x
                  "\n<<<<<<<<<<\n")]
-      (log-error m)
+      (prelude/log-error m)
       (s/assert spec x))))
 
 (defn instrument! [namespace]
@@ -146,12 +146,6 @@
 (s/def :d/has-melee-collision boolean?)
 (s/def :d/melee-skill :d/skill-animation-number)
 (s/def :d/tick nat-int?)
-
-(def creature-mutation-keys)
-
-
-(def user-mutation-keys)
-
 
 (defmulti event-spec :event)
 (defmethod event-spec :game-start [_]

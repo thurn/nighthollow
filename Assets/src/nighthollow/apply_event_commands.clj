@@ -20,21 +20,18 @@
 
 (defmethod core/apply-event-commands!
   :start-drawing-cards
-  apply-cards-drawn
   [{cards :cards} _]
   (Commands/DrawCards (mapv (fn [[card-id card]] (api/->card card-id card))
                             cards)))
 
 (defmethod core/apply-event-commands!
   :create-enemy
-  apply-create-enemy
   [{creature-id :creature-id, creature :creature, file :file} _]
   (Commands/CreateEnemy (api/->creature creature-id creature)
                         (api/->file-value file)))
 
 (defmethod core/apply-event-commands!
   :use-skill
-  apply-use-skill
   [{creature-id :creature-id
     skill :skill-animation-number
     skill-type :skill-type} _]
@@ -44,6 +41,5 @@
 
 (defmethod core/apply-event-commands!
   :creature-killed
-  apply-creature-killed
   [{creature-id :creature-id} _]
   (Commands/PlayDeathAnimation (api/->creature-id creature-id)))

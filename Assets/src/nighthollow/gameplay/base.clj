@@ -16,7 +16,8 @@
   (:require
    [clojure.test :refer [deftest is]]
    [nighthollow.prelude :refer :all]
-   [nighthollow.specs :as specs]))
+   [nighthollow.specs :as specs]
+   [nighthollow.core :as core]))
 
 (defn inherit [parent child]
   (merge parent

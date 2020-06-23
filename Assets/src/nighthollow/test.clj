@@ -24,10 +24,6 @@
 
 (def card creatures/acolyte-card)
 
-(defn make-deck
-  [cards]
-  {:cards cards :weights (zipmap (range (count cards)) (repeat 4000))})
-
 (def hand {card-id card})
 
 (def user (merge base/user

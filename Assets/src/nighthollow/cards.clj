@@ -16,7 +16,6 @@
   (:require
    [clojure.data.generators :as generators]
    [nighthollow.core :as core]
-   [nighthollow.api :as api]
    [nighthollow.prelude :refer :all]))
 
 (defn make-deck
@@ -55,7 +54,7 @@
   randomly-selected card from the user's deck to their hand, decrementing the
   associated weight value for that card. Returns a map with :user containing
   the updated user state and :cards with a map of the drawn cards."
-  [{{deck :deck, hand :hand, :as user} :user cards :cards}]
+  [{{deck :deck, :as user} :user cards :cards}]
   (let [[card new-weights] (random-card deck)
         card-id [:card (core/new-id)]]
     {:cards (assoc cards card-id card)

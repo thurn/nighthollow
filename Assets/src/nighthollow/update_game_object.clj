@@ -20,18 +20,15 @@
 
 (defmethod core/update-game-object!
   :card
-  update-card
   [card-id card]
   (Commands/UpdateCard (api/->card card-id card)))
 
 (defmethod core/update-game-object!
   :creature
-  update-creature
   [creature-id creature]
   (Commands/UpdateCreature (api/->creature creature-id creature)))
 
 (defmethod core/update-game-object!
   :user
-  update-user
   [_ user]
   (Commands/UpdateUser (api/->user user)))
