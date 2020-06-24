@@ -40,6 +40,11 @@
                      (api/->skill-type skill-type)))
 
 (defmethod core/apply-event-commands!
+  :fire-projectile
+  [{projectile :projectile} _]
+  (Commands/FireProjectile (api/->projectile projectile)))
+
+(defmethod core/apply-event-commands!
   :creature-killed
   [{creature-id :creature-id} _]
   (Commands/PlayDeathAnimation (api/->creature-id creature-id)))

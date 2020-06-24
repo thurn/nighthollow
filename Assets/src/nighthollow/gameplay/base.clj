@@ -16,8 +16,7 @@
   (:require
    [clojure.test :refer [deftest is]]
    [nighthollow.prelude :refer :all]
-   [nighthollow.specs :as specs]
-   [nighthollow.core :as core]))
+   [nighthollow.specs :as specs]))
 
 (defn inherit [parent child]
   (merge parent
@@ -81,14 +80,19 @@
    :damage-resistance {}
    :damage-reduction {}})
 
+(defn default-melee-skill-effect
+  [creature-id creature]
+  {:effect :use-skill
+   :creature-id creature-id
+   :skill-animation-number (specs/grab creature :d/melee-skill)
+   :skill-type :melee})
+
 (defn ^{:event :creature-collision}
   melee-creature-collision
-  [{creature-id :entity-id, {melee-skill :melee-skill} :entity}]
-  (specs/validate "creature melee skill" :d/melee-skill melee-skill)
-  [{:effect :use-skill
-    :creature-id creature-id
-    :skill-animation-number melee-skill
-    :skill-type :melee}])
+  [{creature-id :entity-id, creature :entity}]
+  (if (:current-skill creature)
+    []
+    [(default-melee-skill-effect creature-id creature)]))
 
 (defn ^{:event :melee-skill-impact}
   default-melee-skill-impact
@@ -101,17 +105,74 @@
 
 (defn ^{:event :skill-complete}
   default-melee-skill-complete
-  [{{has-melee-collision :has-melee-collision} :event :as args}]
+  [{creature-id :entity-id
+    creature :entity
+    {has-melee-collision :has-melee-collision} :event}]
   (if has-melee-collision
-    (melee-creature-collision args)
-    []))
+    [(default-melee-skill-effect creature-id creature)]
+    [{:effect :clear-current-skill, :creature-id creature-id}]))
 
 (def melee-creature
-  (merge creature
-         {:rules (concat (:rules creature)
-                         [#'melee-creature-collision
-                          #'default-melee-skill-impact
-                          #'default-melee-skill-complete])}))
+  (inherit creature
+           {:rules (concat (:rules creature)
+                           [#'melee-creature-collision
+                            #'default-melee-skill-impact
+                            #'default-melee-skill-complete])}))
+
+(defn use-projectile-skill-effect
+  [creature-id creature]
+  {:effect :use-skill
+      :creature-id creature-id
+      :skill-animation-number (specs/grab creature :d/projectile-skill)
+      :skill-type :ranged})
+
+(defn ^{:event :enemy-appeared, :trigger :global}
+  projectile-skill-on-appeared
+  [{creature-id :entity-id, creature :entity, {enemy :creature} :event}]
+  (if (or (:current-skill creature)
+          (not= (specs/grab creature :d/file) (specs/grab enemy :d/file)))
+    []
+    [(use-projectile-skill-effect creature-id creature)]))
+
+(defn fire-projectile-effect
+  [creature-id creature]
+  {:effect :fire-projectile
+    :projectile (assoc (specs/grab creature :d/default-projectile)
+                       :fired-by creature-id
+                       :owner (:owner creature))})
+
+(defn ^{:event :ranged-skill-fire}
+  default-ranged-skill-fire
+  [{creature-id :entity-id, creature :entity}]
+  [(fire-projectile-effect creature-id creature)])
+
+(defn ^{:event :projectile-impact}
+  default-projectile-skill-impact
+  [{{base-attack :base-attack} :entity
+    {hit-creature-ids :hit-creature-ids} :event}]
+  (mapv (fn [creature-id] {:effect :mutate-creature
+                           :creature-id creature-id
+                           :apply-damage base-attack})
+        hit-creature-ids))
+
+(defn has-creatures-on-file
+  [game file]
+  true)
+
+(defn ^{:event :skill-complete}
+  default-projectile-skill-complete
+  [{creature-id :entity-id, creature :entity, game :game}]
+  (if (has-creatures-on-file game (specs/grab creature :d/file))
+    [(use-projectile-skill-effect creature-id creature)]
+    [{:effect :clear-current-skill, :creature-id creature-id}]))
+
+(def projectile-creature
+  (inherit creature
+           {:rules (concat (:rules creature)
+                           [#'projectile-skill-on-appeared
+                            #'default-ranged-skill-fire
+                            #'default-projectile-skill-impact
+                            #'default-projectile-skill-complete])}))
 
 (defn ^{:event :game-start}
   draw-opening-hand
@@ -143,11 +204,11 @@
 
 (def user
   {:life 10
-   :mana 50
+   :mana 250
    :placed-time 0
    :mana-gain-interval 5
    :mana-gain-amount 10
-   :card-draw-interval 10
+   :card-draw-interval 25
    :influence {}
    :hand {}
    :rules [#'draw-opening-hand

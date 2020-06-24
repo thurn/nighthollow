@@ -29,6 +29,17 @@
       (prelude/log-error m)
       (s/assert spec x))))
 
+(defn grab
+  "Gets a value from an associative structure based on spec."
+  [m spec]
+  (let [key (keyword (name spec))]
+    (when-not (map? m)
+      (prelude/error! "Map argument missing"))
+    (when-not (keyword? spec)
+      (prelude/error! "Spec argument missing"))
+    (validate (str "Getting key " spec) spec (m key))
+    (m key)))
+
 (defn instrument! [namespace]
   (when (s/check-asserts?)
     (stest/instrument (map #(symbol (name (ns-name namespace)) (name %))
@@ -89,6 +100,9 @@
 (s/def :d/damage-reduction :d/damage-map)
 (s/def :d/creature-id (s/tuple #{:creature} int?))
 (s/def :d/placed-time nat-int?)
+(s/def :d/default-projectile (s/keys :req-un [:d/projectile-prefab
+                                              :d/speed
+                                              :d/hitbox-size]))
 
 (s/def :d/creature (s/keys :req-un [:d/rules
                                     :d/name
@@ -110,10 +124,20 @@
                                     :d/damage-reduction]
                            :opt-un [:d/rank
                                     :d/file
-                                    :d/placed-time]))
+                                    :d/placed-time
+                                    :d/default-projectile]))
 
 (s/def :d/skill-animation-number #{:skill1 :skill2 :skill3 :skill4 :skill5})
 (s/def :d/skill-type #{:melee :ranged})
+
+(s/def :d/projectile-prefab string?)
+(s/def :d/fired-by :d/creature-id)
+(s/def :d/hitbox-size nat-int?)
+(s/def :d/projectile (s/keys :req-un [:d/projectile-prefab
+                                      :d/fired-by
+                                      :d/owner
+                                      :d/speed
+                                      :d/hitbox-size]))
 
 (defn spec-for-entity-id
   [[entity-type & _]]
@@ -145,6 +169,8 @@
 (s/def :d/hit-creature-ids (s/coll-of :d/creature-id))
 (s/def :d/has-melee-collision boolean?)
 (s/def :d/melee-skill :d/skill-animation-number)
+(s/def :d/projectile-skill :d/skill-animation-number)
+(s/def :d/current-skill :d/skill-animation-number)
 (s/def :d/tick nat-int?)
 
 (defmulti event-spec :event)
@@ -157,6 +183,8 @@
 (defmethod event-spec :card-played [_]
   (s/keys :req-un [:d/entities :d/rank :d/file]))
 (defmethod event-spec :creature-played [_]
+  (s/keys :req-un [:d/entities :d/creature]))
+(defmethod event-spec :enemy-appeared [_]
   (s/keys :req-un [:d/entities :d/creature]))
 (defmethod event-spec :card-mutated [_]
   (s/keys :req-un [:d/entities]))
@@ -193,6 +221,8 @@
                    :d/gain-mana
                    :d/lose-influence
                    :d/gain-influence]))
+(defmethod event-spec :fire-projectile [_]
+  (s/keys :req-un [:d/projectile]))
 
 (s/def :d/event (s/multi-spec event-spec :event))
 
@@ -224,6 +254,8 @@
   (s/keys :req-un [:d/creature-id :d/creature :d/file]))
 (defmethod effect-spec :use-skill [_]
   (s/keys :req-un [:d/creature-id :d/skill-animation-number :d/skill-type]))
+(defmethod effect-spec :clear-current-skill [_]
+  (s/keys :req-un [:d/creature-id]))
 (defmethod effect-spec :mutate-creature [_]
   (s/keys :req-un [:d/creature-id]
           :opt-un [:d/apply-damage
@@ -238,5 +270,7 @@
                    :d/gain-mana
                    :d/lose-influence
                    :d/gain-influence]))
+(defmethod effect-spec :fire-projectile [_]
+  (s/keys :req-un [:d/projectile]))
 
 (s/def :d/effect (s/multi-spec effect-spec :effect))

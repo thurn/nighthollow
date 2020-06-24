@@ -14,7 +14,6 @@
 
 (ns nighthollow.gameplay.creatures
   (:require
-   [nighthollow.core :as core]
    [nighthollow.gameplay.base :as base :refer [inherit]]
    [nighthollow.prelude :refer :all]))
 
@@ -34,13 +33,17 @@
             :creature berserker}))
 
 (def wizard
-  (inherit base/melee-creature
+  (inherit base/projectile-creature
            {:name "Wizard"
             :creature-prefab "Creatures/User/Wizard"
             :owner :user
             :health 200
-            :melee-skill :skill3
-            :base-attack {:physical 25}}))
+            :projectile-skill :skill2
+            :base-attack {:physical 25}
+            :default-projectile
+            {:projectile-prefab "Projectiles/Projectile 1"
+             :speed 10000
+             :hitbox-size 1000}}))
 
 (def wizard-card
   (inherit base/card

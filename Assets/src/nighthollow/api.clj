@@ -158,4 +158,16 @@
     :melee SkillType/Melee
     :ranged SkillType/Ranged))
 
+(s/fdef ->projectile :args (s/cat :projectile :d/projectile))
+(defn ->projectile [{address :projectile-prefab
+                     fired-by :fired-by
+                     owner :owner
+                     speed :speed
+                     hitbox-size :hitbox-size}]
+  (ProjectileData. (->asset-data :prefab address)
+                   (->creature-id fired-by)
+                   (->player-name owner)
+                   speed
+                   hitbox-size))
+
 (specs/instrument! *ns*)

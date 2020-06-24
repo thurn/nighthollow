@@ -62,15 +62,33 @@
 (defmethod core/handle-effect
   :create-enemy
   [state {creature-id :creature-id, creature :creature, file :file}]
-  (-> state
-      (update-in [:game :creatures] assoc creature-id
-                 (assoc creature :file file))
-      (core/register-rules creature-id (:rules creature))))
+  (let [updated (assoc creature
+                       :file file
+                       :placed-time (get-in state [:game :tick]))]
+    (-> state
+        (update-in [:game :creatures] assoc creature-id updated)
+        (core/register-rules creature-id (:rules creature))
+        (core/push-event {:event :enemy-appeared
+                          :entities [creature-id]
+                          :creature updated}))))
 
 (defmethod core/handle-effect
   :use-skill
+  [state {creature-id :creature-id, skill :skill-animation-number :as effect}]
+  (-> state
+    (assoc-in [:game :creatures creature-id :current-skill] skill)
+    (core/push-event (assoc effect :event :use-skill))))
+
+(defmethod core/handle-effect
+  :fire-projectile
   [state effect]
-  (core/push-event state (assoc effect :event :use-skill)))
+  (core/push-event state (assoc effect :event :fire-projectile)))
+
+(defmethod core/handle-effect
+  :clear-current-skill
+  [state {creature-id :creature-id}]
+  (-> state
+    (update-in [:game :creatures creature-id] dissoc :current-skill)))
 
 (defmethod core/handle-effect
   :mutate-creature
