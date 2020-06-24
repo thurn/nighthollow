@@ -70,5 +70,18 @@ namespace Nighthollow.Utils
           throw Errors.UnknownEnumValue(playerName);
       }
     }
+
+    public static Vector3 ForwardDirectionForPlayer(PlayerName owner)
+    {
+      switch (owner)
+      {
+        case PlayerName.User:
+          return Vector3.right;
+        case PlayerName.Enemy:
+          return Vector3.left;
+        default:
+          throw Errors.UnknownEnumValue(owner);
+      }
+    }
   }
 }

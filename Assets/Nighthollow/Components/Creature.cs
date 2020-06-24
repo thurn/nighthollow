@@ -205,7 +205,7 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      if (!IsIdle()) return;
+      if (!IsAlive()) return;
 
       // Collision could be with a projectile or with a creature:
       var creature = other.GetComponent<Creature>();
@@ -250,14 +250,26 @@ namespace Nighthollow.Components
     public void OnSkillAnimationCompleted(SkillAnimationNumber animationNumber)
     {
       if (!IsAlive()) return;
+      _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
 
-      var result = Physics2D.OverlapBox(
+      var hit = Physics2D.BoxCast(
         _collider.bounds.center,
         _collider.bounds.size,
         angle: 0,
-        Constants.LayerMaskForPlayerCreatures(Owner.GetOpponent()));
-      _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
-      Root.Instance.RequestService.OnSkillComplete(CreatureId, result);
+        direction: Constants.ForwardDirectionForPlayer(Owner),
+        distance: 25f,
+        layerMask: Constants.LayerMaskForPlayerCreatures(Owner.GetOpponent()));
+      if (hit.collider)
+      {
+        Root.Instance.RequestService.OnSkillCompleteWithHit(
+          CreatureId,
+          ComponentUtils.GetComponent<Creature>(hit.collider).CreatureId,
+          Mathf.RoundToInt(hit.distance * 1000f));
+      }
+      else
+      {
+        Root.Instance.RequestService.OnSkillCompleteNoHit(CreatureId);
+      }
     }
 
     public void OnDeathAnimationCompleted()

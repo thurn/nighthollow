@@ -33,7 +33,8 @@ namespace Nighthollow.Services
     IFn _onRangedSkillFire;
     IFn _onMeleeSkillImpact;
     IFn _onProjectileImpact;
-    IFn _onSkillComplete;
+    IFn _onSkillCompleteNoHit;
+    IFn _onSkillCompleteWithHit;
     IFn _onDebugCreateEnemy;
 
     void Start()
@@ -49,7 +50,8 @@ namespace Nighthollow.Services
       _onRangedSkillFire = Clojure.var(Namespace, "on-ranged-skill-fire");
       _onMeleeSkillImpact = Clojure.var(Namespace, "on-melee-skill-impact");
       _onProjectileImpact = Clojure.var(Namespace, "on-projectile-impact");
-      _onSkillComplete = Clojure.var(Namespace, "on-skill-complete");
+      _onSkillCompleteNoHit = Clojure.var(Namespace, "on-skill-complete-no-hit");
+      _onSkillCompleteWithHit = Clojure.var(Namespace, "on-skill-complete-with-hit");
       _onDebugCreateEnemy = Clojure.var(Namespace, "on-debug-create-enemy");
 
       if (_ticker != null)
@@ -109,9 +111,14 @@ namespace Nighthollow.Services
       _onProjectileImpact.invoke(sourceCreature.Value, hitTargetIds);
     }
 
-    public void OnSkillComplete(CreatureId sourceCreature, bool hasMeleeCollision)
+    public void OnSkillCompleteWithHit(CreatureId sourceCreature, CreatureId closestEnemy, int closestEnemyDistance)
     {
-      _onSkillComplete.invoke(sourceCreature.Value, hasMeleeCollision);
+      _onSkillCompleteWithHit.invoke(sourceCreature.Value, closestEnemy.Value, closestEnemyDistance);
+    }
+
+    public void OnSkillCompleteNoHit(CreatureId sourceCreature)
+    {
+      _onSkillCompleteNoHit.invoke(sourceCreature.Value);
     }
 
     public void OnDebugCreateEnemy()

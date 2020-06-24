@@ -107,14 +107,16 @@
   default-melee-skill-complete
   [{creature-id :entity-id
     creature :entity
-    {has-melee-collision :has-melee-collision} :event}]
-  (if has-melee-collision
+    {hit-creature-distance :hit-creature-distance} :event}]
+  (if (and hit-creature-distance
+           (< hit-creature-distance (specs/grab creature :d/melee-range)))
     [(default-melee-skill-effect creature-id creature)]
     [{:effect :clear-current-skill, :creature-id creature-id}]))
 
 (def melee-creature
   (inherit creature
-           {:rules (concat (:rules creature)
+           {:melee-range 1000
+            :rules (concat (:rules creature)
                            [#'melee-creature-collision
                             #'default-melee-skill-impact
                             #'default-melee-skill-complete])}))
@@ -155,14 +157,10 @@
                            :apply-damage base-attack})
         hit-creature-ids))
 
-(defn has-creatures-on-file
-  [game file]
-  true)
-
 (defn ^{:event :skill-complete}
   default-projectile-skill-complete
-  [{creature-id :entity-id, creature :entity, game :game}]
-  (if (has-creatures-on-file game (specs/grab creature :d/file))
+  [{creature-id :entity-id, creature :entity, game :game, event :event}]
+  (if (:hit-creature-id event)
     [(use-projectile-skill-effect creature-id creature)]
     [{:effect :clear-current-skill, :creature-id creature-id}]))
 

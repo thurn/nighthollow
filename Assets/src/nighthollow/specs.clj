@@ -100,6 +100,7 @@
 (s/def :d/damage-reduction :d/damage-map)
 (s/def :d/creature-id (s/tuple #{:creature} int?))
 (s/def :d/placed-time nat-int?)
+(s/def :d/melee-range nat-int?)
 (s/def :d/default-projectile (s/keys :req-un [:d/projectile-prefab
                                               :d/speed
                                               :d/hitbox-size]))
@@ -125,7 +126,9 @@
                            :opt-un [:d/rank
                                     :d/file
                                     :d/placed-time
-                                    :d/default-projectile]))
+                                    :d/default-projectile
+                                    :d/current-skill
+                                    :d/melee-range]))
 
 (s/def :d/skill-animation-number #{:skill1 :skill2 :skill3 :skill4 :skill5})
 (s/def :d/skill-type #{:melee :ranged})
@@ -167,7 +170,7 @@
 (s/def :d/entities (s/coll-of :d/entity-id))
 (s/def :d/hit-creature-id :d/creature-id)
 (s/def :d/hit-creature-ids (s/coll-of :d/creature-id))
-(s/def :d/has-melee-collision boolean?)
+(s/def :d/hit-creature-distance nat-int?)
 (s/def :d/melee-skill :d/skill-animation-number)
 (s/def :d/projectile-skill :d/skill-animation-number)
 (s/def :d/current-skill :d/skill-animation-number)
@@ -199,7 +202,8 @@
 (defmethod event-spec :projectile-impact [_]
   (s/keys :req-un [:d/entities :d/hit-creature-ids]))
 (defmethod event-spec :skill-complete [_]
-  (s/keys :req-un [:d/entities :d/has-melee-collision]))
+  (s/keys :req-un [:d/entities]
+          :opt-un [:d/hit-creature-id :d/hit-creature-distance]))
 (defmethod event-spec :use-skill [_]
   (s/keys :req-un [:d/creature-id :d/skill-animation-number :d/skill-type]))
 (defmethod event-spec :creature-killed [_]

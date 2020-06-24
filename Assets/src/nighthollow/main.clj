@@ -80,11 +80,19 @@
                    :hit-creature-ids (mapv #(vector :creature %)
                                            hit-creature-ids)}))
 
-(defn on-skill-complete [creature-id has-melee-collision]
-  (prelude/lg "on-skill-complete" creature-id has-melee-collision)
+(defn on-skill-complete-with-hit
+  [creature-id hit-creature-id hit-creature-distance]
+  (prelude/lg "on-skill-complete-with-hit"
+              creature-id hit-creature-id hit-creature-distance)
   (core/dispatch! {:event :skill-complete
-                   :entities [[:creature creature-id]]
-                   :has-melee-collision has-melee-collision}))
+                   :hit-creature-id [:creature hit-creature-id]
+                   :hit-creature-distance hit-creature-distance
+                   :entities [[:creature creature-id]]}))
+
+(defn on-skill-complete-no-hit [creature-id]
+  (prelude/lg "on-skill-complete-no-hit" creature-id)
+  (core/dispatch! {:event :skill-complete
+                   :entities [[:creature creature-id]]}))
 
 (defn on-debug-create-enemy []
   (core/dispatch! {:event :create-enemy

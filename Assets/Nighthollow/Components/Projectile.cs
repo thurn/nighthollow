@@ -32,7 +32,7 @@ namespace Nighthollow.Components
     public void Initialize(ProjectileData projectileData, Transform firingPoint)
     {
       transform.position = new Vector3(firingPoint.position.x, firingPoint.position.y, 0);
-      transform.forward = FiringDirection(projectileData.Owner);
+      transform.forward = Constants.ForwardDirectionForPlayer(projectileData.Owner);
       gameObject.layer = Constants.LayerForPlayerProjectiles(projectileData.Owner);
 
       var flash = Root.Instance.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);
@@ -49,19 +49,6 @@ namespace Nighthollow.Components
         var main = ps.main;
         main.startLifetime = 3.0f;
         ps.GetComponent<Renderer>().sortingOrder = 500;
-      }
-    }
-
-    Vector3 FiringDirection(PlayerName owner)
-    {
-      switch (owner)
-      {
-        case PlayerName.User:
-          return Vector3.right;
-        case PlayerName.Enemy:
-          return Vector3.left;
-        default:
-          throw Errors.UnknownEnumValue(owner);
       }
     }
 
