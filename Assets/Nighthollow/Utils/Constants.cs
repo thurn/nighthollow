@@ -32,7 +32,20 @@ namespace Nighthollow.Utils
     static readonly LayerMask UserCreaturesLayerMask = LayerMask.GetMask("UserCreatures");
     static readonly LayerMask EnemyCreaturesLayerMask = LayerMask.GetMask("EnemyCreatures");
 
-    public static LayerMask LayerMaskForPlayer(PlayerName playerName)
+    public static int LayerForPlayerCreatures(PlayerName playerName)
+    {
+      switch (playerName)
+      {
+        case PlayerName.User:
+          return UserCreaturesLayer;
+        case PlayerName.Enemy:
+          return EnemyCreaturesLayer;
+        default:
+          throw Errors.UnknownEnumValue(playerName);
+      }
+    }
+
+    public static LayerMask LayerMaskForPlayerCreatures(PlayerName playerName)
     {
       switch (playerName)
       {
@@ -40,6 +53,19 @@ namespace Nighthollow.Utils
           return UserCreaturesLayerMask;
         case PlayerName.Enemy:
           return EnemyCreaturesLayerMask;
+        default:
+          throw Errors.UnknownEnumValue(playerName);
+      }
+    }
+
+    public static int LayerForPlayerProjectiles(PlayerName playerName)
+    {
+      switch (playerName)
+      {
+        case PlayerName.User:
+          return UserProjectilesLayer;
+        case PlayerName.Enemy:
+          return EnemyProjectilesLayer;
         default:
           throw Errors.UnknownEnumValue(playerName);
       }

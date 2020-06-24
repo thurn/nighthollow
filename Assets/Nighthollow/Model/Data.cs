@@ -345,4 +345,35 @@ namespace Nighthollow.Model
     Melee,
     Ranged
   }
+
+  public sealed class ProjectileData
+  {
+    public readonly AssetData Prefab;
+
+    public readonly CreatureId FiredBy;
+
+    public readonly PlayerName Owner;
+
+    public readonly int Speed;
+
+    public readonly int HitboxSize;
+
+    public ProjectileData(AssetData prefab, CreatureId firedBy, PlayerName owner, int speed, int hitboxSize)
+    {
+      Prefab = prefab;
+      FiredBy = firedBy;
+      Owner = owner;
+      Speed = speed;
+      HitboxSize = hitboxSize;
+    }
+
+    public override string ToString()
+    {
+      return $"[ProjectileData {nameof(Prefab)}: {Prefab},\n" +
+             $"{nameof(FiredBy)}: {FiredBy},\n" +
+             $"{nameof(Owner)}: {Owner},\n" +
+             $"{nameof(Speed)}: {Speed},\n" +
+             $"{nameof(HitboxSize)}: {HitboxSize}]";
+    }
+  }
 }

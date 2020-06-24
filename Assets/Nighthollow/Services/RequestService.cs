@@ -106,7 +106,8 @@ namespace Nighthollow.Services
 
     public void OnProjectileImpact(CreatureId sourceCreature, List<int> hitTargetIds)
     {
-      _onProjectileImpact.invoke(sourceCreature, hitTargetIds);
+      Debug.Log("On Projectile Impact: " + sourceCreature);
+      // _onProjectileImpact.invoke(sourceCreature.Value, hitTargetIds);
     }
 
     public void OnSkillComplete(CreatureId sourceCreature, bool hasMeleeCollision)

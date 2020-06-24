@@ -13,13 +13,10 @@
 // limitations under the License.
 
 using System.Linq;
-using DG.Tweening;
 using Nighthollow.Model;
 using Nighthollow.Services;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 namespace Nighthollow.Components
 {

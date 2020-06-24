@@ -15,7 +15,6 @@
 using System.Collections;
 using System.Linq;
 using Nighthollow.Model;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // ReSharper disable UnusedMember.Global
@@ -63,6 +62,11 @@ namespace Nighthollow.Services
     public static void UseSkill(CreatureId creatureId, SkillAnimationNumber animation, SkillType skillType)
     {
       Root.Instance.CreatureService.GetCreature(creatureId).UseSkill(animation, skillType);
+    }
+
+    public static void FireProjectile(ProjectileData projectileData)
+    {
+      Root.Instance.CreatureService.FireProjectile(projectileData);
     }
 
     public static void PlayDeathAnimation(CreatureId creatureId)

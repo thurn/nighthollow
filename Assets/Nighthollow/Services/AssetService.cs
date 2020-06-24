@@ -37,14 +37,33 @@ namespace Nighthollow.Services
       {
         AddCardAssets(card, assets);
       }
-      StartCoroutine(PopulateAssets(assets, onComplete));
+
+      if (assets.Count > 0)
+      {
+        StartCoroutine(PopulateAssets(assets, onComplete));
+      }
     }
 
     public void FetchCreatureAssets(CreatureData creature, Action onComplete)
     {
       var assets = new List<AssetData>();
       AddCreatureAssets(creature, assets);
-      StartCoroutine(PopulateAssets(assets, onComplete));
+
+      if (assets.Count > 0)
+      {
+        StartCoroutine(PopulateAssets(assets, onComplete));
+      }
+    }
+
+    public void FetchProjectileAssets(ProjectileData projectile, Action onComplete)
+    {
+      var assets = new List<AssetData>();
+      AddProjectileAssets(projectile, assets);
+
+      if (assets.Count > 0)
+      {
+        StartCoroutine(PopulateAssets(assets, onComplete));
+      }
     }
 
     void AddCardAssets(CardData card, List<AssetData> assets)
@@ -70,6 +89,11 @@ namespace Nighthollow.Services
     void AddAttachmentAssets(AttachmentData attachmentData, ICollection<AssetData> assets)
     {
       assets.Add(attachmentData.Image);
+    }
+
+    void AddProjectileAssets(ProjectileData projectile, List<AssetData> assets)
+    {
+      assets.Add(projectile.Prefab);
     }
 
     IEnumerator PopulateAssets(IReadOnlyList<AssetData> assets, Action onComplete)

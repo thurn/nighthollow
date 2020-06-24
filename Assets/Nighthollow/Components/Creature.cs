@@ -72,9 +72,7 @@ namespace Nighthollow.Components
       _sortingGroup = GetComponent<SortingGroup>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();
       _healthBar.gameObject.SetActive(false);
-      gameObject.layer = creatureData.Owner == PlayerName.User
-        ? Constants.UserCreaturesLayer
-        : Constants.EnemyCreaturesLayer;
+      gameObject.layer = Constants.LayerForPlayerCreatures(creatureData.Owner);
 
       // Slow down enemy animations a bit
       _animator.SetFloat(AnimationSpeed, creatureData.Owner == PlayerName.User ? 1.0f : 0.5f);
@@ -112,6 +110,8 @@ namespace Nighthollow.Components
         throw new InvalidOperationException("Creature does not have a file position");
       }
     }
+
+    public Transform ProjectileSource => _projectileSource;
 
     public bool AnimationPaused
     {
@@ -206,8 +206,13 @@ namespace Nighthollow.Components
     void OnTriggerEnter2D(Collider2D other)
     {
       if (!IsIdle()) return;
-      Root.Instance.RequestService.OnCreatureCollision(CreatureId,
-        ComponentUtils.GetComponent<Creature>(other).CreatureId);
+
+      // Collision could be with a projectile or with a creature:
+      var creature = other.GetComponent<Creature>();
+      if (creature)
+      {
+        Root.Instance.RequestService.OnCreatureCollision(CreatureId, creature.CreatureId);
+      }
     }
 
     // Called by skill animations on their 'start impact' frame
@@ -227,7 +232,7 @@ namespace Nighthollow.Components
             _collider.bounds.size,
             angle: 0,
             ColliderArray,
-            Constants.LayerMaskForPlayer(Owner.GetOpponent()));
+            Constants.LayerMaskForPlayerCreatures(Owner.GetOpponent()));
           var hits = new List<int>(hitCount);
           for (var i = 0; i < hitCount; ++i)
           {
@@ -250,7 +255,7 @@ namespace Nighthollow.Components
         _collider.bounds.center,
         _collider.bounds.size,
         angle: 0,
-        Constants.LayerMaskForPlayer(Owner.GetOpponent()));
+        Constants.LayerMaskForPlayerCreatures(Owner.GetOpponent()));
       _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
       Root.Instance.RequestService.OnSkillComplete(CreatureId, result);
     }

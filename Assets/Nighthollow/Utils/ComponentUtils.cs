@@ -66,7 +66,8 @@ namespace Nighthollow.Utils
       var result = component.GetComponent<T>();
       if (result == null)
       {
-        throw new NullReferenceException($"Expected a component of type {typeof(T).FullName}");
+        throw new NullReferenceException(
+          $"Expected a component of type {typeof(T).FullName} on {component.gameObject.name}");
       }
 
       return result;
@@ -78,7 +79,7 @@ namespace Nighthollow.Utils
       var result = gameObject.GetComponent<T>();
       if (!result)
       {
-        throw new NullReferenceException($"Expected a component of type {typeof(T).FullName}");
+        throw new NullReferenceException($"Expected a component of type {typeof(T).FullName} on {gameObject.name}");
       }
 
       return result;

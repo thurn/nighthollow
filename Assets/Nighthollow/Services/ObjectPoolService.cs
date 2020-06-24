@@ -22,12 +22,12 @@ namespace Nighthollow.Services
   {
     readonly Dictionary<int, List<GameObject>> _pools = new Dictionary<int, List<GameObject>>();
 
-    public GameObject Instantiate(AssetData prefab, Vector3 position)
+    public GameObject Create(AssetData prefab, Vector3 position)
     {
-      return Instantiate(Root.Instance.AssetService.Get<GameObject>(prefab));
+      return Create(Root.Instance.AssetService.Get<GameObject>(prefab), position);
     }
 
-    public GameObject Instantiate(GameObject prefab, Vector3 position)
+    public GameObject Create(GameObject prefab, Vector3 position)
     {
       var instanceId = prefab.GetInstanceID();
       if (_pools.ContainsKey(instanceId))

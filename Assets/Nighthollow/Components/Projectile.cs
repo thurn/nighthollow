@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -24,55 +25,76 @@ namespace Nighthollow.Components
   {
     [Header("Config")] [SerializeField] TimedEffect _flashEffect;
     [SerializeField] TimedEffect _hitEffect;
-    [SerializeField] float _speed;
+    ProjectileData _projectileData;
 
-    [Header("State")] Collider2D _target;
-    Action _onHit;
+    static readonly Collider2D[] ColliderArray = Enumerable.Repeat<Collider2D>(null, 128).ToArray();
 
-    public static void Instantiate(AssetData asset, Transform firingPoint, Collider2D target,
-      Action onHit)
+    public void Initialize(ProjectileData projectileData, Transform firingPoint)
     {
-      var projectile = Root.Instance.ObjectPoolService.Instantiate(asset, firingPoint.position);
-      ComponentUtils.GetComponent<Projectile>(projectile).Initialize(firingPoint, target, onHit);
-    }
-
-    void Initialize(Transform firingPoint, Collider2D target, Action onHit)
-    {
-      _target = target;
-      _onHit = onHit;
       transform.position = new Vector3(firingPoint.position.x, firingPoint.position.y, 0);
-      transform.rotation = Quaternion.LookRotation(target.bounds.center - transform.position, Vector3.up);
+      transform.forward = FiringDirection(projectileData.Owner);
+      gameObject.layer = Constants.LayerForPlayerProjectiles(projectileData.Owner);
 
-      var flash = Root.Instance.ObjectPoolService.Instantiate(_flashEffect.gameObject, transform.position);
+      var flash = Root.Instance.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);
       flash.transform.forward = transform.forward;
+      _projectileData = projectileData;
     }
 
     void OnValidate()
     {
       foreach (var ps in GetComponentsInChildren<ParticleSystem>())
       {
+        // We give projectiles a lifetime of 3 seconds, which is approximately enough
+        // time to get across the screen at a speed of 10,000.
+        var main = ps.main;
+        main.startLifetime = 3.0f;
         ps.GetComponent<Renderer>().sortingOrder = 500;
+      }
+    }
+
+    Vector3 FiringDirection(PlayerName owner)
+    {
+      switch (owner)
+      {
+        case PlayerName.User:
+          return Vector3.right;
+        case PlayerName.Enemy:
+          return Vector3.left;
+        default:
+          throw Errors.UnknownEnumValue(owner);
       }
     }
 
     void Update()
     {
-      transform.position += _speed * Time.deltaTime * transform.forward;
+      transform.position += (_projectileData.Speed / 1000f) * Time.deltaTime * transform.forward;
+      if (Mathf.Abs(transform.position.x) > 25)
+      {
+        gameObject.SetActive(false);
+      }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      if (other == _target)
+      var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
+      hit.transform.forward = -transform.forward;
+
+      var hitCount = Physics2D.OverlapBoxNonAlloc(
+        transform.position,
+        new Vector2(_projectileData.HitboxSize / 1000f, _projectileData.HitboxSize / 1000f),
+        angle: 0,
+        ColliderArray,
+        Constants.LayerMaskForPlayerCreatures(_projectileData.Owner.GetOpponent()));
+      var hits = new List<int>(hitCount);
+
+      for (var i = 0; i < hitCount; ++i)
       {
-        var hit = Root.Instance.ObjectPoolService.Instantiate(_hitEffect.gameObject, transform.position);
-        hit.transform.forward = -transform.forward;
-        _onHit?.Invoke();
-        gameObject.SetActive(false);
+        hits.Add(ComponentUtils.GetComponent<Creature>(ColliderArray[i]).CreatureId.Value);
       }
-      else
-      {
-        Debug.Log($"Projectile::OnTriggerEnter> Skipping {other.name}, not the target");
-      }
+
+      Root.Instance.RequestService.OnProjectileImpact(_projectileData.FiredBy, hits);
+
+      gameObject.SetActive(false);
     }
   }
 }

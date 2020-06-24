@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Model;
 using Nighthollow.Services;
 using UnityEngine;
 
@@ -47,6 +48,17 @@ namespace Nighthollow.Components
     public void Enemy()
     {
       Root.Instance.RequestService.OnDebugCreateEnemy();
+    }
+
+    public void FireProjectile()
+    {
+      var projectile = new ProjectileData(
+        new AssetData("Projectiles/Projectile 1", AssetType.Prefab),
+        new CreatureId(2),
+        PlayerName.User,
+        10000,
+        1000);
+      Root.Instance.CreatureService.FireProjectile(projectile);
     }
   }
 }

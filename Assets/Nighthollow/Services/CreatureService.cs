@@ -161,7 +161,6 @@ namespace Nighthollow.Services
       {
         if (creature && creature.gameObject)
         {
-          Debug.Log($"CreatureService::DestroyAllCreatures> Destroying {creature}");
           Destroy(creature.gameObject);
         }
         else
@@ -172,6 +171,16 @@ namespace Nighthollow.Services
 
       _creatures.Clear();
       InitializeFiles();
+    }
+
+    public void FireProjectile(ProjectileData projectileData)
+    {
+      Root.Instance.AssetService.FetchProjectileAssets(projectileData, () =>
+      {
+        var firingPoint = GetCreature(projectileData.FiredBy).ProjectileSource;
+        var projectile = Root.Instance.ObjectPoolService.Create(projectileData.Prefab, firingPoint.position);
+        ComponentUtils.GetComponent<Projectile>(projectile).Initialize(projectileData, firingPoint);
+      });
     }
 
     static IEnumerable<FileValue> Closest(FileValue f)
