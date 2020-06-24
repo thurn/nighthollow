@@ -56,7 +56,7 @@ namespace Nighthollow.Services
 
     public static void CreateEnemy(CreatureData creatureData, FileValue fileValue)
     {
-      Root.Instance.CreatureService.CreateEnemyCreature(creatureData, FileValue.File3);
+      Root.Instance.CreatureService.CreateEnemyCreature(creatureData, fileValue);
     }
 
     public static void UseSkill(CreatureId creatureId, SkillAnimationNumber animation, SkillType skillType)

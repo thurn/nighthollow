@@ -48,7 +48,7 @@
   [{cards :cards, weights :weights}]
   (let [index (generators/weighted weights)]
     [(nth cards index) (assoc weights index (new-weight (weights index)))]))
-
+ 
 (defn draw-card
   "Takes a map with a :user value and a :cards accumulator. Adds a new
   randomly-selected card from the user's deck to their hand, decrementing the

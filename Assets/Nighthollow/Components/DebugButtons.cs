@@ -24,6 +24,11 @@ namespace Nighthollow.Components
   {
     int _idCounter;
 
+    public void HideButtons()
+    {
+      gameObject.SetActive(false);
+    }
+
     public void Slow()
     {
       Time.timeScale = 0.1f;

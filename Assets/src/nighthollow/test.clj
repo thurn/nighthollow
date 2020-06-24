@@ -42,12 +42,16 @@
   {:tick 0
    :game-id 1
    :user user
+   :enemy (merge base/enemy
+                 {:creatures [enemies/viking]})
    :creatures {}})
 
 (def ongoing-game
   {:tick 0
    :game-id 1
    :user (merge user {:hand hand})
+   :enemy (merge base/enemy
+                 {:creatures [enemies/viking]})
    :creatures {creature-id creature}})
 
 (def state

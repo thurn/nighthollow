@@ -64,6 +64,7 @@
                                 :d/influence
                                 :d/deck
                                 :d/hand]))
+(s/def :d/enemy map?)
 
 (s/def :d/owner :d/player-name)
 (s/def :d/can-play boolean?)
@@ -146,6 +147,7 @@
   [[entity-type & _]]
   (case entity-type
     :user :d/user
+    :enemy :d/enemy
     :card :d/card
     :creature :d/creature))
 
@@ -175,6 +177,7 @@
 (s/def :d/projectile-skill :d/skill-animation-number)
 (s/def :d/current-skill :d/skill-animation-number)
 (s/def :d/tick nat-int?)
+(s/def :d/enemy-creation-interval nat-int?)
 
 (defmulti event-spec :event)
 (defmethod event-spec :game-start [_]
@@ -256,6 +259,7 @@
                    :d/file]))
 (defmethod effect-spec :create-enemy [_]
   (s/keys :req-un [:d/creature-id :d/creature :d/file]))
+(defmethod effect-spec :create-random-enemy [_] map?)
 (defmethod effect-spec :use-skill [_]
   (s/keys :req-un [:d/creature-id :d/skill-animation-number :d/skill-type]))
 (defmethod effect-spec :clear-current-skill [_]

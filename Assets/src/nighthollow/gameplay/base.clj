@@ -202,17 +202,28 @@
 
 (def user
   {:life 10
-   :mana 250
+   :mana 950
    :placed-time 0
    :mana-gain-interval 5
-   :mana-gain-amount 10
-   :card-draw-interval 25
-   :influence {}
+   :mana-gain-amount 50
+   :card-draw-interval 5
+   :influence {:flame 2}
    :hand {}
    :rules [#'draw-opening-hand
-           #'create-enemy
            #'gain-mana-over-time
            #'draw-cards-over-time]})
+
+(defn ^{:event :tick}
+  create-random-enemies
+  [{enemy :entity, {tick :tick} :event}]
+  (if (= 0 (mod tick (specs/grab enemy :d/enemy-creation-interval)))
+    [{:effect :create-random-enemy}]
+    []))
+
+(def enemy
+  {:enemy-creation-interval 5
+   :rules [#'create-enemy
+           #'create-random-enemies]})
 
 (deftest test-influence<=
   (is (influence<= {:flame 1} {:flame 2}))

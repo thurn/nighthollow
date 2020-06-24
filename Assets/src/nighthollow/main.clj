@@ -34,7 +34,7 @@
 
 (defn on-start-new-game []
   (prelude/lg "on-start-new-game")
-  (core/start-game! test/new-game [:user] [:user :rules])
+  (core/start-game! test/new-game)
   (core/dispatch! {:event :game-start, :entities [[:user]]}))
 
 (defn on-end-game []
@@ -50,6 +50,8 @@
 
 (defn on-played-card [card-id target-rank target-file]
   (prelude/lg "on-played-card" card-id target-rank target-file)
+  ;; TODO: Include raycast hit information here to trigger skills immediately
+  ;; on play.
   (core/dispatch! {:event :card-played
                    :rank (api/<-rank-value target-rank)
                    :file (api/<-file-value target-file)

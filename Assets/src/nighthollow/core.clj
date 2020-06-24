@@ -274,10 +274,10 @@
   'entity-id' by looking for the vector at the provided 'rules-path', which
   should follow the navigation syntax of the core 'get-in' function. Returns
   nil."
-  [game entity-id rules-path]
-  (reset! state (register-rules {:game game :events [] :rules-map {}}
-                                entity-id
-                                (get-in game rules-path)))
+  [game]
+  (reset! state (-> {:game game :events [] :rules-map {}}
+                    (register-rules [:user] (get-in game [:user :rules]))
+                    (register-rules [:enemy] (get-in game [:enemy :rules]))))
   nil)
 
 (defn end-game!

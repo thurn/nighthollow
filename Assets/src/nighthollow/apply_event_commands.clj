@@ -16,7 +16,8 @@
   (:require
    [nighthollow.api :as api]
    [nighthollow.core :as core]
-   [nighthollow.prelude :refer :all]))
+   [nighthollow.prelude :refer :all]
+   [nighthollow.specs :as specs]))
 
 (defmethod core/apply-event-commands!
   :start-drawing-cards
@@ -25,10 +26,10 @@
                             cards)))
 
 (defmethod core/apply-event-commands!
-  :create-enemy
-  [{creature-id :creature-id, creature :creature, file :file} _]
-  (Commands/CreateEnemy (api/->creature creature-id creature)
-                        (api/->file-value file)))
+  :enemy-appeared
+  [{entities :entities, creature :creature} _]
+  (Commands/CreateEnemy (api/->creature (first entities) creature)
+                        (api/->file-value (specs/grab creature :d/file))))
 
 (defmethod core/apply-event-commands!
   :use-skill

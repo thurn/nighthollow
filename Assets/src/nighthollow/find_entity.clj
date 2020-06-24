@@ -25,6 +25,10 @@
   [_ game]
   (:user game))
 
+(defmethod core/find-entity :enemy
+  [_ game]
+  (:enemy game))
+
 (defmethod core/find-entity :creature
   [creature-id game]
   (get-in game [:creatures creature-id]))

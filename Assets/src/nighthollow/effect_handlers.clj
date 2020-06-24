@@ -72,6 +72,22 @@
                           :entities [creature-id]
                           :creature updated}))))
 
+(def all-files [1 2 3 4 5])
+
+(defmethod core/handle-effect
+  :create-random-enemy
+  [state _]
+  (lg "create random enemy")
+  (let [creature (assoc (rand-nth (get-in state [:game :enemy :creatures]))
+                        :file (rand-nth all-files))
+        creature-id [:creature (core/new-id)]]
+    (-> state
+        (assoc-in [:game :creatures creature-id] creature)
+        (core/register-rules creature-id (:rules creature))
+        (core/push-event {:event :enemy-appeared
+                          :entities [creature-id]
+                          :creature creature}))))
+
 (defmethod core/handle-effect
   :use-skill
   [state {creature-id :creature-id, skill :skill-animation-number :as effect}]
