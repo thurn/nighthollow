@@ -16,9 +16,8 @@
   (:require
    [clojure.spec.alpha :as s]
    [nighthollow.prelude :refer :all]
+   [nighthollow.markers :as markers]
    [nighthollow.specs :as specs]))
-
-(defonce ^:private previous-state (atom nil))
 
 (defonce ^:private state (atom nil))
 
@@ -165,7 +164,9 @@
     (if event
       (let [effects (invoke-rules (:game @state) event)]
         (doseq [effect effects]
-          (swap! state run-handle-effect effect))
+          (markers/start (:effect effect))
+          (swap! state run-handle-effect effect)
+          (markers/stop (:effect effect)))
         (recur (pop-event!) (conj all-events event)))
       all-events)))
 
@@ -187,20 +188,27 @@
   Any registered rules for this event will be invoked to trigger mutations to
   the state of the game. Returns nil."
   [event]
-  (reset! previous-state @state)
+  (markers/start (:event event))
+
+  (markers/start :apply-effects)
   (let [events (apply-effects! event)
         game (:game @state)]
+    (markers/stop :apply-effects)
+
+    (markers/start :apply-event-commands)
     (doseq [event events]
-      (run-apply-event-commands! event game))
+      (markers/start :event-command)
+      (run-apply-event-commands! event game)
+      (markers/stop :event-command))
+    (markers/stop :apply-event-commands)
+    
+    (markers/start :update-game-objects)
     (doseq [entity-id (distinct (mapcat :entities events))]
       (when-let [entity (find-entity entity-id game)]
-        (run-update-game-object! entity-id entity)))))
+        (run-update-game-object! entity-id entity)))
+    (markers/stop :update-game-objects))
 
-(defn undo!
-  "Undoes the results of the last dispatch! command. Note that this rolls back
-  Clojure state only, it cannot change Unity state."
-  []
-  (reset! state @previous-state))
+  (markers/stop (:event event)))
 
 (s/fdef register-rule :args (s/cat :entity-id :d/entity-id
                                    :state :d/state

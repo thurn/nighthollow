@@ -21,7 +21,7 @@
 (defn validate
   "Wrapper around clojure spec assert that adds a custom failure message"
   [message spec x]
-  (if (s/valid? spec x)
+  (if (or (not (Commands/EnableAssertions)) (s/valid? spec x))
     x
     (let [m (str "Error in: " message
                  "\nSpec " spec " does not match value " x
@@ -30,13 +30,13 @@
       (s/assert spec x))))
 
 (defn grab
-  "Gets a value from an associative structure based on spec."
+  "Gets a value from an associative structure based on a spec."
   [m spec]
   (let [key (keyword (name spec))]
     (when-not (map? m)
-      (prelude/error! "Map argument missing"))
+      (prelude/error! (str "Map argument invalid" m)))
     (when-not (keyword? spec)
-      (prelude/error! "Spec argument missing"))
+      (prelude/error! (str "Spec argument invalid" spec)))
     (validate (str "Getting key " spec) spec (m key))
     (m key)))
 

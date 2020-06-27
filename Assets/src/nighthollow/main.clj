@@ -29,8 +29,11 @@
 
 (defn on-connect []
   (prelude/lg "on-connect")
-  (alter-var-root #'s/*explain-out* (constantly expound/printer))
-  (s/check-asserts true))
+  (if (Commands/EnableAssertions)
+    (do
+      (alter-var-root #'s/*explain-out* (constantly expound/printer))
+      (s/check-asserts true))
+    (s/check-asserts false)))
 
 (defn on-start-new-game []
   (prelude/lg "on-start-new-game")
@@ -45,7 +48,6 @@
   (core/on-tick!))
 
 (defn on-card-drawn [card-id]
-  (prelude/lg "on-card-drawn" card-id)
   (core/dispatch! {:event :card-drawn, :entities [[:card card-id]]}))
 
 (defn on-played-card [card-id target-rank target-file]
@@ -58,25 +60,21 @@
                    :entities [[:card card-id]]}))
 
 (defn on-creature-collision [creature-id hit-creature-id]
-  (prelude/lg "on-creature-collision" creature-id hit-creature-id)
   (core/dispatch! {:event :creature-collision
                    :entities [[:creature creature-id]]
                    :hit-creature-id [:creature hit-creature-id]}))
 
 (defn on-ranged-skill-fire [creature-id]
-  (prelude/lg "on-ranged-skill-fire" creature-id)
   (core/dispatch! {:event :ranged-skill-fire
                    :entities [[:creature creature-id]]}))
 
 (defn on-melee-skill-impact [creature-id hit-creature-ids]
-  (prelude/lg "on-melee-skill-impact" creature-id hit-creature-ids)
   (core/dispatch! {:event :melee-skill-impact
                    :entities [[:creature creature-id]]
                    :hit-creature-ids (mapv #(vector :creature %)
                                            hit-creature-ids)}))
 
 (defn on-projectile-impact [creature-id hit-creature-ids]
-  (prelude/lg "on-projectile-impact" creature-id hit-creature-ids)
   (core/dispatch! {:event :projectile-impact
                    :entities [[:creature creature-id]]
                    :hit-creature-ids (mapv #(vector :creature %)
@@ -84,15 +82,12 @@
 
 (defn on-skill-complete-with-hit
   [creature-id hit-creature-id hit-creature-distance]
-  (prelude/lg "on-skill-complete-with-hit"
-              creature-id hit-creature-id hit-creature-distance)
   (core/dispatch! {:event :skill-complete
                    :hit-creature-id [:creature hit-creature-id]
                    :hit-creature-distance hit-creature-distance
                    :entities [[:creature creature-id]]}))
 
 (defn on-skill-complete-no-hit [creature-id]
-  (prelude/lg "on-skill-complete-no-hit" creature-id)
   (core/dispatch! {:event :skill-complete
                    :entities [[:creature creature-id]]}))
 

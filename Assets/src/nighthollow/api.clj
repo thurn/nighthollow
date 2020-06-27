@@ -15,7 +15,6 @@
 (ns nighthollow.api
   (:require
    [clojure.spec.alpha :as s]
-   [nighthollow.core :as core]
    [nighthollow.specs :as specs]
    [nighthollow.prelude :refer :all]))
 

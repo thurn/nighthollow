@@ -15,6 +15,7 @@
 (ns nighthollow.apply-event-commands
   (:require
    [nighthollow.api :as api]
+   [nighthollow.markers :as markers]
    [nighthollow.core :as core]
    [nighthollow.prelude :refer :all]
    [nighthollow.specs :as specs]))
@@ -36,14 +37,18 @@
   [{creature-id :creature-id
     skill :skill-animation-number
     skill-type :skill-type} _]
+  (markers/start :use-skill-internal)
   (Commands/UseSkill (api/->creature-id creature-id)
                      (api/->skill-animation-number skill)
-                     (api/->skill-type skill-type)))
+                     (api/->skill-type skill-type))
+  (markers/stop :use-skill-internal))
 
 (defmethod core/apply-event-commands!
   :fire-projectile
   [{projectile :projectile} _]
-  (Commands/FireProjectile (api/->projectile projectile)))
+  (markers/start :fire-projectile-internal)
+  (Commands/FireProjectile (api/->projectile projectile))
+  (markers/stop :fire-projectile-internal))
 
 (defmethod core/apply-event-commands!
   :creature-killed

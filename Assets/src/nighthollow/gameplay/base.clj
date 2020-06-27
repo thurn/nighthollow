@@ -202,9 +202,9 @@
 
 (def user
   {:life 10
-   :mana 950
+   :mana 999
    :placed-time 0
-   :mana-gain-interval 5
+   :mana-gain-interval 15
    :mana-gain-amount 50
    :card-draw-interval 10
    :influence {}

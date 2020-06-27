@@ -15,6 +15,7 @@
 using System.Collections;
 using System.Linq;
 using Nighthollow.Model;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // ReSharper disable UnusedMember.Global
@@ -23,6 +24,11 @@ namespace Nighthollow.Services
 {
   public static class Commands
   {
+    public static bool EnableAssertions()
+    {
+      return Application.isEditor;
+    }
+
     public static void ResetState()
     {
       SceneManager.LoadScene("Main", LoadSceneMode.Single);
