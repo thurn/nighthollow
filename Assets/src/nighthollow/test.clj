@@ -14,6 +14,7 @@
 
 (ns nighthollow.test
   (:require
+   [nighthollow.core :as core]
    [nighthollow.cards :as cards]
    [nighthollow.gameplay.base :as base]
    [nighthollow.gameplay.creatures :as creatures]
@@ -48,11 +49,27 @@
 
 (def ongoing-game
   {:tick 0
-   :game-id 1
+   :game-id 2
    :user (merge user {:hand hand})
    :enemy (merge base/enemy
                  {:creatures [enemies/viking]})
    :creatures {creature-id creature}})
+
+(def perftest-game
+  {:tick 0
+   :game-id 3
+   :user (merge user {:hand hand
+                      :life 10
+                      :mana 999
+                      :mana-gain-interval 5
+                      :mana-gain-amount 10
+                      :card-draw-interval 9999
+                      :opening-hand-size 10})
+   :enemy (merge base/enemy
+                 {:enemy-creation-interval 1
+                  :enemy-creation-quantity 10
+                  :creatures [enemies/viking]})
+   :creatures {}})
 
 (def state
   {:game ongoing-game
@@ -63,3 +80,25 @@
   [state event-name entity-id]
   (let [e (filter (fn [{event :event}] (= event event-name)) (:events state))]
     (some #{entity-id} (:entities (first e)))))
+
+(defn make-perftest-creature
+  [creature rank]
+  (fn [file]
+    {:creature-id [:creature (core/new-id)]
+     :creature creature
+     :rank rank
+     :file file}))
+
+(defn perftest-creatures
+  []
+  (concat
+   (mapv (make-perftest-creature creatures/acolyte 1) (range 1 6))
+   (mapv (make-perftest-creature creatures/acolyte 2) (range 1 6))
+   (mapv (make-perftest-creature creatures/acolyte 3) (range 1 6))
+   (mapv (make-perftest-creature creatures/wizard 4) (range 1 4))
+   (mapv (make-perftest-creature creatures/berserker 4) (range 4 6))
+   (mapv (make-perftest-creature creatures/wizard 5) (range 1 4))
+   (mapv (make-perftest-creature creatures/berserker 5) (range 4 6))
+   (mapv (make-perftest-creature creatures/berserker 6) (range 1 6))
+   (mapv (make-perftest-creature creatures/berserker 7) (range 1 6))
+   (mapv (make-perftest-creature creatures/berserker 8) (range 1 6))))

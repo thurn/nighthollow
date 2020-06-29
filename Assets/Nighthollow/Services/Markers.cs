@@ -18,6 +18,8 @@ namespace Nighthollow.Services
 {
   public sealed class Markers
   {
+    public static readonly ProfilerMarker Unknown = new ProfilerMarker("Unknown");
+
     public static readonly ProfilerMarker Dispatch = new ProfilerMarker("Dispatch");
     public static readonly ProfilerMarker ApplyEffects = new ProfilerMarker("ApplyEffects");
     public static readonly ProfilerMarker ApplyEventCommands = new ProfilerMarker("ApplyEventCommands");

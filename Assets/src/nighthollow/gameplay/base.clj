@@ -174,8 +174,8 @@
 
 (defn ^{:event :game-start}
   draw-opening-hand
-  [_]
-  [{:effect :draw-cards :quantity 10}])
+  [{{quantity :opening-hand-size} :entity}]
+  [{:effect :draw-cards, :quantity quantity}])
 
 (defn ^{:event :create-enemy}
   create-enemy
@@ -200,29 +200,37 @@
     [{:effect :draw-cards :quantity 1}]
     []))
 
+(defn ^{:event :create-user-creatures, :trigger :global}
+  create-user-creatures
+  [{event :event}]
+  [(assoc event :effect :create-user-creatures)])
+
 (def user
   {:life 10
    :mana 999
    :placed-time 0
    :mana-gain-interval 15
    :mana-gain-amount 50
-   :card-draw-interval 10
+   :card-draw-interval 25
+   :opening-hand-size 6
    :influence {}
    :hand {}
    :rules [#'draw-opening-hand
            #'gain-mana-over-time
-           #'draw-cards-over-time]})
+           #'draw-cards-over-time
+           #'create-user-creatures]})
 
 (defn ^{:event :tick}
   create-random-enemies
   [{enemy :entity, {tick :tick} :event}]
-  (if (and (> tick 15)
-           (= 0 (mod tick (specs/grab enemy :d/enemy-creation-interval))))
-    [{:effect :create-random-enemy}]
+  (if (= 0 (mod tick (specs/grab enemy :d/enemy-creation-interval)))
+    [{:effect :create-random-enemies
+      :quantity (:enemy-creation-quantity enemy)}]
     []))
 
 (def enemy
-  {:enemy-creation-interval 1
+  {:enemy-creation-interval 5
+   :enemy-creation-quantity 1
    :rules [#'create-enemy
            #'create-random-enemies]})
 

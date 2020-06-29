@@ -80,14 +80,14 @@ namespace Nighthollow.Services
       return result;
     }
 
-    public void CreateEnemyCreature(CreatureData creatureData, FileValue file)
+    public void CreateCreature(CreatureData creatureData, RankValue? rank, FileValue file)
     {
       Root.Instance.AssetService.FetchCreatureAssets(creatureData, () =>
       {
         var result =
           ComponentUtils.Instantiate<Creature>(creatureData.Prefab);
         result.Initialize(creatureData);
-        result.ActivateEnemyCreature(file);
+        result.ActivateCreature(rank, file);
         _creatures[creatureData.CreatureId.Value] = result;
       });
     }
@@ -118,7 +118,7 @@ namespace Nighthollow.Services
 
     public void AddUserCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
     {
-      creature.ActivateUserCreature(rank, file);
+      creature.ActivateCreature(rank, file);
       _files[file.ToIndex()].AddCreature(creature, rank);
       _creatures[creature.CreatureId.Value] = creature;
       foreach (var f in _files)

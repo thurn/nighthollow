@@ -59,6 +59,24 @@
                           :entities [creature-id]
                           :creature updated}))))
 
+(defn create-creature
+  [state {creature :creature, creature-id :creature-id, rank :rank, file :file}]
+  (let [updated (assoc creature
+                       :rank rank
+                       :file file
+                       :placed-time (get-in state [:game :tick]))]
+    (-> state
+        (update-in [:game :creatures] assoc creature-id updated)
+        (core/register-rules creature-id (:rules creature))
+        (core/push-event {:event :creature-played
+                          :entities [creature-id]
+                          :creature updated}))))
+
+(defmethod core/handle-effect
+  :create-user-creatures
+  [state {create-creatures :create-creatures}]
+  (reduce create-creature state create-creatures))
+
 (defmethod core/handle-effect
   :create-enemy
   [state {creature-id :creature-id, creature :creature, file :file}]
@@ -74,10 +92,8 @@
 
 (def all-files [1 2 3 4 5])
 
-(defmethod core/handle-effect
-  :create-random-enemy
-  [state _]
-  (lg "create random enemy")
+(defn create-random-enemy
+  [state]
   (let [creature (assoc (rand-nth (get-in state [:game :enemy :creatures]))
                         :file (rand-nth all-files))
         creature-id [:creature (core/new-id)]]
@@ -89,11 +105,16 @@
                           :creature creature}))))
 
 (defmethod core/handle-effect
+  :create-random-enemies
+  [state {quantity :quantity}]
+  (nth (iterate create-random-enemy state) quantity))
+
+(defmethod core/handle-effect
   :use-skill
   [state {creature-id :creature-id, skill :skill-animation-number :as effect}]
   (-> state
-    (assoc-in [:game :creatures creature-id :current-skill] skill)
-    (core/push-event (assoc effect :event :use-skill))))
+      (assoc-in [:game :creatures creature-id :current-skill] skill)
+      (core/push-event (assoc effect :event :use-skill))))
 
 (defmethod core/handle-effect
   :fire-projectile
@@ -104,7 +125,7 @@
   :clear-current-skill
   [state {creature-id :creature-id}]
   (-> state
-    (update-in [:game :creatures creature-id] dissoc :current-skill)))
+      (update-in [:game :creatures creature-id] dissoc :current-skill)))
 
 (defmethod core/handle-effect
   :mutate-creature

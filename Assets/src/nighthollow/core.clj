@@ -19,9 +19,9 @@
    [nighthollow.markers :as markers]
    [nighthollow.specs :as specs]))
 
-(defonce ^:private state (atom nil))
+(defonce state (atom nil))
 
-(defonce ^:private last-id-generated (atom 0))
+(defonce last-id-generated (atom 0))
 
 (defn new-id
   "Returns a new unique integer ID"
@@ -273,9 +273,12 @@
     (let [updated (swap! state update-in [:game :tick] inc)]
       (dispatch! {:event :tick, :tick (get-in updated [:game :tick])}))))
 
-(s/fdef start-game! :args (s/cat :game :d/game
-                                 :entity-id some?
-                                 :rules-path (s/coll-of keyword?)))
+(defn connect!
+  "Clears the current state value."
+  []
+  (reset! state nil))
+
+(s/fdef start-game! :args (s/cat :game :d/game))
 (defn start-game!
   "Initiaties a new game by resetting the game state to the value provided in
   'game'. Registers initial game rules associated with the entity with id

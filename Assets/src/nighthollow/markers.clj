@@ -32,7 +32,6 @@
     :mutate-creature Markers/MutateCreature
     :mutate-user Markers/MutateUser
     :fire-projectile Markers/FireProjectile
-
     :game-start Markers/GameStart
     :tick Markers/Tick
     :start-drawing-cards Markers/ApplyStartDrawingCards
@@ -50,7 +49,8 @@
     :creature-mutated Markers/CreatureMutated
     :user-mutated Markers/UserMutated
     :fire-projectile-internal Markers/FireProjectileInternal
-    :use-skill-internal Markers/UseSkillInternal))
+    :use-skill-internal Markers/UseSkillInternal
+    Markers/Unknown))
 
 (defn start
   [key]

@@ -29,8 +29,18 @@
 (defmethod core/apply-event-commands!
   :enemy-appeared
   [{entities :entities, creature :creature} _]
-  (Commands/CreateEnemy (api/->creature (first entities) creature)
-                        (api/->file-value (specs/grab creature :d/file))))
+  (Commands/CreateCreature (api/->creature (first entities) creature)
+                           nil
+                           (api/->file-value (specs/grab creature :d/file))))
+
+(defmethod core/apply-event-commands!
+  :create-user-creatures
+  [{create-creatures :create-creatures} _]
+  (doseq [{creature-id :creature-id, creature :creature, rank :rank, file :file}
+          create-creatures]
+    (Commands/CreateCreature (api/->creature creature-id creature)
+                             (api/->rank-value rank)
+                             (api/->file-value file))))
 
 (defmethod core/apply-event-commands!
   :use-skill

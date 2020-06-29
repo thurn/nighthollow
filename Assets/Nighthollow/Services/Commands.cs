@@ -24,9 +24,16 @@ namespace Nighthollow.Services
 {
   public static class Commands
   {
-    public static bool EnableAssertions()
+    static bool s_enableAssertions = Application.isEditor;
+
+    public static bool AssertionsEnabled()
     {
-      return Application.isEditor;
+      return s_enableAssertions;
+    }
+
+    public static void DisableAssertions()
+    {
+      s_enableAssertions = false;
     }
 
     public static void ResetState()
@@ -60,9 +67,9 @@ namespace Nighthollow.Services
       }
     }
 
-    public static void CreateEnemy(CreatureData creatureData, FileValue fileValue)
+    public static void CreateCreature(CreatureData creatureData, RankValue? rankValue, FileValue fileValue)
     {
-      Root.Instance.CreatureService.CreateEnemyCreature(creatureData, fileValue);
+      Root.Instance.CreatureService.CreateCreature(creatureData, rankValue,fileValue);
     }
 
     public static void UseSkill(CreatureId creatureId, SkillAnimationNumber animation, SkillType skillType)

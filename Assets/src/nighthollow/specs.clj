@@ -14,14 +14,23 @@
 
 (ns nighthollow.specs
   (:require
+   [expound.alpha :as expound]
    [clojure.spec.alpha :as s]
    [clojure.spec.test.alpha :as stest]
    [nighthollow.prelude :refer :all :as prelude]))
 
+(defn on-connect
+  []
+  (if (Commands/AssertionsEnabled)
+    (do
+      (alter-var-root #'s/*explain-out* (constantly expound/printer))
+      (s/check-asserts true))
+    (s/check-asserts false)))
+
 (defn validate
   "Wrapper around clojure spec assert that adds a custom failure message"
   [message spec x]
-  (if (or (not (Commands/EnableAssertions)) (s/valid? spec x))
+  (if (or (not (Commands/AssertionsEnabled)) (s/valid? spec x))
     x
     (let [m (str "Error in: " message
                  "\nSpec " spec " does not match value " x
@@ -151,24 +160,25 @@
     :card :d/card
     :creature :d/creature))
 
+(s/def :d/entity-id (s/or :user :d/user-id
+                          :enemy :d/enemy-id
+                          :creature :d/creature-id
+                          :card :d/card-id))
+
 (s/def :d/creatures (s/map-of :d/creature-id :d/creature))
 (s/def :d/game-id int?)
 (s/def :d/game (s/keys :req-un [:d/tick
                                 :d/game-id
                                 :d/user
                                 :d/creatures]))
-
 (s/def :d/rules (s/coll-of var?))
 (s/def :d/rules-map (s/map-of keyword? map?))
 (s/def :d/events vector?)
 (s/def :d/state (s/keys :req-un [:d/game
                                  :d/rules-map
                                  :d/events]))
-
-(s/def :d/user-id (s/tuple #{:user}))
-(s/def :d/entity-id (s/or :user :d/user-id
-                          :creature :d/creature-id
-                          :card :d/card-id))
+(s/def :d/user-id (s/tuple #{:enemy}))
+(s/def :d/enemy-id (s/tuple #{:user}))
 (s/def :d/entities (s/coll-of :d/entity-id))
 (s/def :d/hit-creature-id :d/creature-id)
 (s/def :d/hit-creature-ids (s/coll-of :d/creature-id))
@@ -178,6 +188,11 @@
 (s/def :d/current-skill :d/skill-animation-number)
 (s/def :d/tick nat-int?)
 (s/def :d/enemy-creation-interval nat-int?)
+(s/def :d/create-creature (s/keys :req-un [:d/creature-id
+                                           :d/creature
+                                           :d/rank
+                                           :d/file]))
+(s/def :d/create-creatures (s/coll-of :d/create-creature))
 
 (defmulti event-spec :event)
 (defmethod event-spec :game-start [_]
@@ -230,6 +245,8 @@
                    :d/gain-influence]))
 (defmethod event-spec :fire-projectile [_]
   (s/keys :req-un [:d/projectile]))
+(defmethod event-spec :create-user-creatures [_]
+  (s/keys :req-un [:d/create-creatures]))
 
 (s/def :d/event (s/multi-spec event-spec :event))
 
@@ -257,9 +274,12 @@
                    :d/creature
                    :d/rank
                    :d/file]))
+(defmethod effect-spec :create-user-creatures [_]
+  (s/keys :req-un [:d/create-creatures]))
 (defmethod effect-spec :create-enemy [_]
   (s/keys :req-un [:d/creature-id :d/creature :d/file]))
-(defmethod effect-spec :create-random-enemy [_] map?)
+(defmethod effect-spec :create-random-enemies [_]
+  (s/keys :req-un [:d/quantity]))
 (defmethod effect-spec :use-skill [_]
   (s/keys :req-un [:d/creature-id :d/skill-animation-number :d/skill-type]))
 (defmethod effect-spec :clear-current-skill [_]

@@ -16,29 +16,35 @@
   (:require
    [clojure.spec.alpha :as s]
    [clojure.spec.test.alpha]
-   [expound.alpha :as expound]
    [nighthollow.api :as api]
    [nighthollow.apply-event-commands]
    [nighthollow.cards]
    [nighthollow.core :as core]
    [nighthollow.effect-handlers]
    [nighthollow.find-entity]
+   [nighthollow.gameplay.creatures :as creatures]
    [nighthollow.prelude :refer :all :as prelude]
+   [nighthollow.specs :as specs]
    [nighthollow.test :as test]
    [nighthollow.update-game-object]))
 
 (defn on-connect []
   (prelude/lg "on-connect")
-  (if (Commands/EnableAssertions)
-    (do
-      (alter-var-root #'s/*explain-out* (constantly expound/printer))
-      (s/check-asserts true))
-    (s/check-asserts false)))
+  (core/connect!)
+  (specs/on-connect))
 
 (defn on-start-new-game []
   (prelude/lg "on-start-new-game")
   (core/start-game! test/new-game)
   (core/dispatch! {:event :game-start, :entities [[:user]]}))
+
+(defn on-run-perftest []
+  (lg "on-run-pertest")
+  (s/check-asserts false)
+  (core/start-game! test/perftest-game)
+  (core/dispatch! {:event :game-start, :entities [[:user]]})
+  (core/dispatch! {:event :create-user-creatures
+                   :create-creatures (test/perftest-creatures)}))
 
 (defn on-end-game []
   (prelude/lg "on-end-game")

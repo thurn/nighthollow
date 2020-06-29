@@ -44,6 +44,12 @@ namespace Nighthollow.Components
       Root.Instance.RequestService.OnStartNewGame();
     }
 
+    public void RunPerftest()
+    {
+      Commands.DisableAssertions();
+      Root.Instance.RequestService.OnRunPerftest();
+    }
+
     public void ResetGame()
     {
       Root.Instance.RequestService.OnEndGame();

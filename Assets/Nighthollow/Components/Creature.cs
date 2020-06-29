@@ -135,25 +135,26 @@ namespace Nighthollow.Components
       _creatureData = newData;
     }
 
-    public void ActivateEnemyCreature(FileValue fileValue)
+    public void ActivateCreature(RankValue? rankValue, FileValue fileValue)
     {
       _filePosition = fileValue;
       _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
-      transform.position = new Vector2(
-        Constants.EnemyCreatureStartingX,
-        // We need to offset the Y position for enemy creatures because they are center-anchored:
-        fileValue.ToYPosition() + Constants.EnemyCreatureYOffset);
-      _collider.enabled = true;
-    }
 
-    public void ActivateUserCreature(RankValue rankValue, FileValue fileValue)
-    {
-      _rankPosition = rankValue;
-      _filePosition = fileValue;
-      _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
-      transform.position = new Vector2(
-        rankValue.ToXPosition(),
-        fileValue.ToYPosition());
+      if (rankValue.HasValue)
+      {
+        _rankPosition = rankValue;
+        transform.position = new Vector2(
+          rankValue.Value.ToXPosition(),
+          fileValue.ToYPosition());
+      }
+      else
+      {
+        transform.position = new Vector2(
+          Constants.EnemyCreatureStartingX,
+          // We need to offset the Y position for enemy creatures because they are center-anchored:
+          fileValue.ToYPosition() + Constants.EnemyCreatureYOffset);
+      }
+
       _collider.enabled = true;
     }
 

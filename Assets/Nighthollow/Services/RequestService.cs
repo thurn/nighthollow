@@ -25,6 +25,7 @@ namespace Nighthollow.Services
     const string Namespace = "nighthollow.main";
     static Coroutine _ticker;
     IFn _onStartNewGame;
+    IFn _onRunPerftest;
     IFn _onEndGame;
     IFn _onTick;
     IFn _onCardDrawn;
@@ -42,6 +43,7 @@ namespace Nighthollow.Services
       Arcadia.Util.require(Namespace);
       Clojure.var(Namespace, "on-connect").invoke();
       _onStartNewGame = Clojure.var(Namespace, "on-start-new-game");
+      _onRunPerftest = Clojure.var(Namespace, "on-run-perftest");
       _onEndGame = Clojure.var(Namespace, "on-end-game");
       _onTick = Clojure.var(Namespace, "on-tick");
       _onCardDrawn = Clojure.var(Namespace, "on-card-drawn");
@@ -74,6 +76,11 @@ namespace Nighthollow.Services
     public void OnStartNewGame()
     {
       _onStartNewGame.invoke();
+    }
+
+    public void OnRunPerftest()
+    {
+      _onRunPerftest.invoke();
     }
 
     public void OnEndGame()

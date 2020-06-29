@@ -32,7 +32,7 @@
 
 (s/fdef ->rank-value :args (s/cat :rank :d/rank))
 (defn ->rank-value [rank]
-  (case :d/rank rank
+  (case rank
         1 RankValue/Rank1
         2 RankValue/Rank2
         3 RankValue/Rank3
