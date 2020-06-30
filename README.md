@@ -1,8 +1,10 @@
 # Nighthollow
 
-Wanted: an all-powerful Supreme Necromancer to help defend the **Cursed Kingdom of Nighthollow** from the rampaging forces of Good!
+**Wanted:** an all-powerful Supreme Necromancer to help defend the **Cursed Kingdom of Nighthollow** from the rampaging forces of Good!
 
-**Nighthollow** is a work-in-progress tower defense game. The rough idea is to build a game with features like:
+## Overview
+
+**Nighthollow** is a work-in-progress 'tower defense' game in the style of games like Plants vs Zombies. The goal is to have features like:
 
 * Deck-building gameplay
 * RPG-style level progression
