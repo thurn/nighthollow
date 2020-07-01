@@ -57,8 +57,7 @@
         (core/register-rules creature-id (:rules creature))
         (core/push-event {:event :creature-played
                           :entities [creature-id]
-                          :creature updated}))
-    nil))
+                          :creature updated}))))
 
 (defn create-creature
   [state {creature :creature, creature-id :creature-id, rank :rank, file :file}]
