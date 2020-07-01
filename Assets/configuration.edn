@@ -27,8 +27,6 @@
  ;; If you wanted your sources as Assets/src/kittens/core.clj, rather than
  ;; the default Assets/kittens/core.clj, you could use the following.
  :source-paths ["Assets/src"
-                "Assets/vendor/clr.spec.alpha/src/main/clojure"
-                "Assets/vendor/clr.data.generators/src/clojure"
                 "Assets/vendor/expound"]
 
  ;; set to :error to throw an exception whenever a non-serializable hook is
@@ -76,6 +74,4 @@
  ;; - Autocomplete namespaces: The name of namespaces is also autocompleted.
  ;; - Autocomplete keywords: Any keywords used (i.e., interned) in the project
  ;;   are also autocompleted.
- :nrepl-auto-completion true
- }
-
+ :nrepl-auto-completion true}
