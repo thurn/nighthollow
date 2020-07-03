@@ -17,7 +17,6 @@
    [clojure.pprint :as pprint]
    [clojure.repl]
    [clojure.string :as string]
-   [clojure.test :as test]
    [nighthollow.prelude :refer :all]
    [nighthollow.test :as t]))
 
@@ -37,40 +36,6 @@
       (println "Adding to" n)
       (in-ns n)
       (add-standard-functions))))
-
-(defn report [{type :type :as args}]
-  (case type
-    :begin-test-var (println "Running" (:var args))
-    :fail (do
-            (test/inc-report-counter :fail)
-            (print "Failed! ")
-            (when-let [file (:file args)] (print "File: " file " "))
-            (when (> (:line args) 0) (print "Line: " (:line args) " "))
-            (when-let [message (:message args)] (print message))
-            (print "\n")
-            (println "Expected: " (:expected args))
-            (println "Actual: " (:actual args)))
-    :error (do
-             (test/inc-report-counter :error)
-             (print "Exception! ")
-             (when-let [file (:file args)] (print "File: " file " "))
-             (when (> (:line args) 0) (print "Line: " (:line args) " "))
-             (print "\n")
-             (println "Expected: " (:expected args))
-             (println "Actual: " (:actual args)))
-     :pass (test/inc-report-counter :pass)
-     nil))
-
-(defn !t []
-  (binding [test/report report]
-    (doseq [n (map ns-name (all-ns))]
-      (when (string/starts-with? (name n) "nighthollow")
-        (println "Testing" n)
-        (test/run-tests n)))))
-
-(defn !tn []
-  (binding [test/report report]
-    (test/run-tests)))
 
 (defn !d [event]
   (nighthollow.core/dispatch! event))

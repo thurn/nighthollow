@@ -26,12 +26,17 @@
    [nighthollow.prelude :refer :all :as prelude]
    [nighthollow.specs :as specs]
    [nighthollow.test :as test]
+   [nighthollow.testing :as testing]
    [nighthollow.update-game-object]))
 
 (defn on-connect []
-  (prelude/lg "on-connect")
+  (lg "on-connect")
   (core/connect!)
   (specs/on-connect))
+
+(defn on-run-tests []
+  (lg "on-run-tests")
+  (testing/run-all-tests))
 
 (defn on-start-new-game []
   (prelude/lg "on-start-new-game")

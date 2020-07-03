@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using clojure.clr.api;
 using clojure.lang;
@@ -22,8 +23,9 @@ namespace Nighthollow.Services
 {
   public sealed class RequestService : MonoBehaviour
   {
-    const string Namespace = "nighthollow.main";
+    public const string Namespace = "nighthollow.main";
     static Coroutine _ticker;
+    IFn _onRunTests;
     IFn _onStartNewGame;
     IFn _onRunPerftest;
     IFn _onEndGame;
@@ -42,6 +44,7 @@ namespace Nighthollow.Services
     {
       Arcadia.Util.require(Namespace);
       Clojure.var(Namespace, "on-connect").invoke();
+      _onRunTests = Clojure.var(Namespace, "on-run-tests");
       _onStartNewGame = Clojure.var(Namespace, "on-start-new-game");
       _onRunPerftest = Clojure.var(Namespace, "on-run-perftest");
       _onEndGame = Clojure.var(Namespace, "on-end-game");
@@ -71,6 +74,11 @@ namespace Nighthollow.Services
         _onTick.invoke();
       }
       // ReSharper disable once IteratorNeverReturns
+    }
+
+    public long OnRunTests()
+    {
+      return (long)_onRunTests.invoke();
     }
 
     public void OnStartNewGame()

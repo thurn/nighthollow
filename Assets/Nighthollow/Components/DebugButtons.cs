@@ -24,6 +24,12 @@ namespace Nighthollow.Components
   {
     int _idCounter;
 
+    public void RunTests()
+    {
+      var errorCount = Root.Instance.RequestService.OnRunTests();
+      Debug.Log($"Tests ran with {errorCount} failures");
+    }
+
     public void HideButtons()
     {
       gameObject.SetActive(false);
