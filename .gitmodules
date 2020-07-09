@@ -4,3 +4,9 @@
 [submodule "Assets/Arcadia"]
 	path = Assets/Arcadia
 	url = https://github.com/arcadia-unity/Arcadia.git
+[submodule "Assets/vendor/clr.tools.namespace"]
+	path = Assets/vendor/clr.tools.namespace
+	url = https://github.com/clojure/clr.tools.namespace.git
+[submodule "Assets/vendor/clr.tools.reader"]
+	path = Assets/vendor/clr.tools.reader
+	url = https://github.com/clojure/clr.tools.reader.git

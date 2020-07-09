@@ -14,8 +14,14 @@
 
 (ns nighthollow.prelude
   (:require
-   [clojure.string :as string])
+   [clojure.string :as string]
+   [clojure.pprint]
+   [clojure.tools.namespace.repl])
   (:import [UnityEngine Debug]))
+
+(defmacro re-export [ns vlist]
+  `(do ~@(for [i vlist]
+           `(def ~i ~(symbol (str ns "/" i))))))
 
 (defn lg [& args]
   (apply prn args)
@@ -27,3 +33,12 @@
 
 (defn error! [& args]
   (throw (Exception. (string/join " " args))))
+
+(defn refresh []
+  (clojure.tools.namespace.repl/refresh))
+
+(defmacro doc [arg]
+  `(clojure.repl/doc ~arg))
+
+(defn pprint [& args]
+  (apply clojure.pprint/pprint args))

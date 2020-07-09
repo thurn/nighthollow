@@ -62,7 +62,7 @@
   (core/dispatch! {:event :card-drawn, :entities [[:card card-id]]}))
 
 (defn on-played-card [card-id target-rank target-file]
-  (prelude/lg "on-played-card" card-id target-rank target-file)
+  (lg "on-played-card" card-id target-rank target-file)
   ;; TODO: Include raycast hit information here to trigger skills immediately
   ;; on play.
   (core/dispatch! {:event :card-played

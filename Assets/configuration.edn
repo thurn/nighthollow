@@ -20,14 +20,17 @@
 
  ;; set to true in user configuration.edn to enable automatic code
  ;; reloading when a clojure file is saved
- :reload-on-change true
+ ;; :reload-on-change true
+ :reload-on-change false
 
  ;; You can add custom load paths, for more control over your source
  ;; organization. Note that this is purely additive and the default is empty.
  ;; If you wanted your sources as Assets/src/kittens/core.clj, rather than
  ;; the default Assets/kittens/core.clj, you could use the following.
  :source-paths ["Assets/src"
-                "Assets/vendor/expound"]
+                "Assets/vendor/expound"
+                "Assets/vendor/clr.tools.namespace/src"
+                "Assets/vendor/clr.tools.reader/src"]
 
  ;; set to :error to throw an exception whenever a non-serializable hook is
  ;; attached to a gameObject

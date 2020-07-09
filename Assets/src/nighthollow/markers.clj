@@ -12,7 +12,9 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns nighthollow.markers)
+(ns nighthollow.markers
+  (:require
+   [nighthollow.prelude :refer :all]))
 
 (defn get-marker
   [key]
