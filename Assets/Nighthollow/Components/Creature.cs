@@ -92,6 +92,15 @@ namespace Nighthollow.Components
       }
     }
 
+    public void SetReferences(Transform projectileSource,
+      Transform healthbarAnchor,
+      AttachmentDisplay attachmentDisplay)
+    {
+      _projectileSource = projectileSource;
+      _healthbarAnchor = healthbarAnchor;
+      _attachmentDisplay = attachmentDisplay;
+    }
+
     public CreatureId CreatureId => _creatureData.CreatureId;
 
     public PlayerName Owner => _creatureData.Owner;
