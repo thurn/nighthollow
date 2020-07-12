@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.IO;
 using System.Linq;
 using Nighthollow.Components;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Rendering;
+using Object = UnityEngine.Object;
 
 namespace Nighthollow.Editor
 {
@@ -99,6 +101,11 @@ namespace Nighthollow.Editor
           attachmentDisplay = child.AddComponent<AttachmentDisplay>();
           break;
         }
+      }
+
+      if (!attachmentDisplay)
+      {
+        throw new InvalidOperationException("Buttock not found!");
       }
 
       var creature = prefab.AddComponent<Creature>();
