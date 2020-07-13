@@ -26,8 +26,8 @@ namespace Nighthollow.Editor
   public sealed class PixelCattleImporter
   {
     const string PixelCattleDirectory = "Assets/ThirdParty/Pixel Cattle Games";
-    string CreatureName;
-    string InternalCreatureName;
+    string _creatureName;
+    string _internalCreatureName;
 
     [MenuItem("Tools/Import/Pixel Cattle Creature %#p")]
     public static void Import()
@@ -49,8 +49,8 @@ namespace Nighthollow.Editor
 
         new PixelCattleImporter
         {
-          CreatureName = name,
-          InternalCreatureName = internalName
+          _creatureName = name,
+          _internalCreatureName = internalName
         }.Run();
       }
       else
@@ -62,15 +62,15 @@ namespace Nighthollow.Editor
     void Run()
     {
       var template = AssetDatabase.LoadAssetAtPath<GameObject>(
-        $"{PixelCattleDirectory}/{CreatureName}/{InternalCreatureName}/{InternalCreatureName}.prefab");
+        $"{PixelCattleDirectory}/{_creatureName}/{_internalCreatureName}/{_internalCreatureName}.prefab");
       var prefab = Object.Instantiate(template);
       UpdatePrefab(prefab);
-      var newPath = $"Assets/Resources/Creatures/User/{CreatureName}.prefab";
+      var newPath = $"Assets/Resources/Creatures/User/{_creatureName}.prefab";
       AssetDatabase.DeleteAsset(newPath);
       PrefabUtility.SaveAsPrefabAsset(prefab, newPath);
       Object.DestroyImmediate(prefab);
 
-      Debug.Log($"{CreatureName} imported. Please manually configure: " +
+      Debug.Log($"{_creatureName} imported. Please manually configure: " +
                 "1) box collider size & position " +
                 "2) attachment/projectile/healthbar positions.");
     }
@@ -140,7 +140,7 @@ namespace Nighthollow.Editor
       LoadClip(controller, "skill_4");
       LoadClip(controller, "skill_5");
 
-      var newPath = $"Assets/Animation/{CreatureName}.overrideController";
+      var newPath = $"Assets/Animation/{_creatureName}.overrideController";
       AssetDatabase.DeleteAsset(newPath);
       AssetDatabase.CreateAsset(controller, newPath);
       return AssetDatabase.LoadAssetAtPath<AnimatorOverrideController>(newPath);
@@ -149,7 +149,7 @@ namespace Nighthollow.Editor
     void LoadClip(AnimatorOverrideController controller, string name)
     {
       var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(
-        $"{PixelCattleDirectory}/{CreatureName}/{InternalCreatureName}/{name}.anim");
+        $"{PixelCattleDirectory}/{_creatureName}/{_internalCreatureName}/{name}.anim");
       controller[name] = clip;
     }
   }
