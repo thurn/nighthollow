@@ -52,6 +52,12 @@ namespace Nighthollow.Components
       }
     }
 
+    public void SetReferences(TimedEffect flashEffect, TimedEffect hitEffect)
+    {
+      _flashEffect = flashEffect;
+      _hitEffect = hitEffect;
+    }
+
     void Update()
     {
       transform.position += (_projectileData.Speed / 1000f) * Time.deltaTime * transform.forward;
