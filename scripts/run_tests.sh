@@ -17,8 +17,10 @@
 set -euo pipefail
 
 cd "$( dirname "${BASH_SOURCE[0]}" )/.."
+rsync -a --delete . /tmp/nighthollow
+cd /tmp/nighthollow/
 UNITY="/Applications/Unity/Hub/Editor/2019.3.15f1/Unity.app/Contents/MacOS/Unity"
 METHOD="Nighthollow.Services.Tests.RunTests"
-#TODO: Copy the project to a tmp directory so this can run while it is open?
+echo $UNITY -projectPath `pwd` -quit -batchmode -logFile out/log.txt -executeMethod $METHOD
 $UNITY -projectPath `pwd` -quit -batchmode -logFile out/log.txt -executeMethod $METHOD
 echo "All tests passed!"
