@@ -19,7 +19,8 @@ namespace Nighthollow.Components
 {
   public sealed class TimedEffect : MonoBehaviour
   {
-    [Header("Config")] [SerializeField] float _duration;
+    [Header("Config")]
+    [SerializeField] float _duration;
 
     void OnEnable()
     {

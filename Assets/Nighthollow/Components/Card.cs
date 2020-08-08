@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using TMPro;
@@ -26,7 +27,8 @@ namespace Nighthollow.Components
 {
   public sealed class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
   {
-    [Header("Config")] [SerializeField] bool _debugMode;
+    [Header("Config")]
+    [SerializeField] bool _debugMode;
     [SerializeField] float _debugCardScale = 0.65f;
     [SerializeField] RectTransform _cardBack;
     [SerializeField] RectTransform _cardFront;
@@ -35,24 +37,34 @@ namespace Nighthollow.Components
     [SerializeField] List<Image> _influence;
     [SerializeField] Image _outline;
 
-    [Header("State")] [SerializeField] CardData _cardData;
-    [SerializeField] Hand _hand;
+    [Header("State")]
+    [SerializeField] CardData _data;
+    [SerializeField] User _user;
     [SerializeField] bool _disableDragging;
     [SerializeField] bool _initialized;
-    [SerializeField] bool _isFaceUp;
     [SerializeField] bool _isDragging;
     [SerializeField] bool _overBoard;
     [SerializeField] int _initialDragSiblingIndex;
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
 
-    public CardId CardId => _cardData.CardId;
-
     public void Initialize(CardData cardData)
     {
       _cardFront.gameObject.SetActive(false);
       _cardBack.gameObject.SetActive(true);
-      UpdateCardData(cardData);
+      _user = Root.Instance.User;
+      _data = cardData;
+
+      DOTween.Sequence()
+        .Insert(atPosition: 0, _cardBack.transform.DOLocalRotate(new Vector3(x: 0, y: 90, z: 0), duration: 0.2f))
+        .InsertCallback(atPosition: 0.2f, () =>
+        {
+          _cardFront.gameObject.SetActive(true);
+          _cardFront.transform.localRotation = Quaternion.Euler(x: 0, y: 90, z: 0);
+          _cardBack.gameObject.SetActive(false);
+        })
+        .Insert(atPosition: 0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, duration: 0.3f));
+
       _initialized = true;
     }
 
@@ -62,8 +74,7 @@ namespace Nighthollow.Components
       {
         _cardBack.gameObject.SetActive(true);
         _cardFront.gameObject.SetActive(false);
-        Initialize(_cardData);
-        _isFaceUp = true;
+        Initialize(_data);
         transform.localScale = Vector2.one * _debugCardScale;
       }
 
@@ -72,51 +83,27 @@ namespace Nighthollow.Components
       Errors.CheckNotNull(_cardImage);
     }
 
-    public void UpdateCardData(CardData newCardData)
+    void Update()
     {
-      Errors.CheckNotNull(newCardData);
+      Errors.CheckNotNull(_data);
+      _cardImage.sprite = _data.Image;
 
-      _hand = Root.Instance.User.Hand;
+      _data.CanPlay = _data.Cost.ManaCost <= _user.Data.Mana.Value &&
+        _data.Cost.InfluenceCost.LessThanOrEqual(_user.Data.Influence);
 
-      if (!_isFaceUp)
-      {
-        _isFaceUp = true;
+      _outline.enabled = _data.CanPlay;
+      _cost.text = _data.Cost.ManaCost.ToString();
 
-        DOTween.Sequence()
-          .Insert(atPosition: 0, _cardBack.transform.DOLocalRotate(new Vector3(x: 0, y: 90, z: 0), duration: 0.2f))
-          .InsertCallback(atPosition: 0.2f, () =>
-          {
-            _cardFront.gameObject.SetActive(true);
-            _cardFront.transform.localRotation = Quaternion.Euler(x: 0, y: 90, z: 0);
-            _cardBack.gameObject.SetActive(false);
-          })
-          .Insert(atPosition: 0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, duration: 0.3f));
-      }
-
-      _cardImage.sprite = Root.Instance.AssetService.Get<Sprite>(newCardData.Image);
-
-      _outline.enabled = newCardData.CanPlay;
-      if ((_cardData == null || !_cardData.CanPlay) && newCardData.CanPlay)
-      {
-        var color = _outline.color;
-        color.a = 0;
-        _outline.color = color;
-        _outline.DOFade(1.0f, 0.1f);
-      }
-
-      _cost.text = newCardData.Cost.ManaCost.ToString();
       var addIndex = 0;
-      foreach (var influence in newCardData.Cost.InfluenceCost)
+      foreach (School school in Enum.GetValues(typeof(School)))
       {
-        AddInfluence(influence, ref addIndex);
+        AddInfluence(school, _data.Cost.InfluenceCost.Get(school).Value, ref addIndex);
       }
 
       while (addIndex < _influence.Count)
       {
         _influence[addIndex++].enabled = false;
       }
-
-      _cardData = newCardData;
     }
 
     public bool DisableDragging
@@ -126,16 +113,16 @@ namespace Nighthollow.Components
 
     public void OnPlayed()
     {
-      _hand.RemoveFromHand(this);
+      _user.Hand.RemoveFromHand(this);
       Destroy(gameObject);
     }
 
-    void AddInfluence(Influence influence, ref int addIndex)
+    void AddInfluence(School school, int influence, ref int addIndex)
     {
-      for (var i = 0; i < influence.Value; ++i)
+      for (var i = 0; i < influence; ++i)
       {
         _influence[addIndex].enabled = true;
-        _influence[addIndex].sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.School);
+        _influence[addIndex].sprite = Root.Instance.Prefabs.SpriteForInfluenceType(school);
         addIndex++;
       }
     }
@@ -159,13 +146,13 @@ namespace Nighthollow.Components
         var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         transform.position = Input.mousePosition;
 
-        if (_cardData.CanPlay && mousePosition.x < Constants.IndicatorRightX &&
+        if (_data.CanPlay && mousePosition.x < Constants.IndicatorRightX &&
             mousePosition.y > Constants.IndicatorBottomY)
         {
           if (!_overBoard)
           {
             gameObject.SetActive(false);
-            var creature = Root.Instance.CreatureService.CreateUserCreature(_cardData.CreatureData);
+            var creature = Root.Instance.CreatureService.CreateUserCreature(_data.Creature);
             creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
             _overBoard = true;
           }
@@ -175,7 +162,7 @@ namespace Nighthollow.Components
           var distanceDragged = Vector2.Distance(mousePosition, _initialDragPosition);
 
           var t = Mathf.Clamp01(distanceDragged / 5);
-          var scale = Mathf.Lerp(_hand.FinalCardScale, 1.2f, t);
+          var scale = Mathf.Lerp(_user.Hand.FinalCardScale, 1.2f, t);
           transform.localScale = scale * Vector3.one;
 
           var rotation = Quaternion.Slerp(_initialDragRotation, Quaternion.identity, t);
@@ -192,7 +179,7 @@ namespace Nighthollow.Components
       {
         _isDragging = false;
         transform.SetSiblingIndex(_initialDragSiblingIndex);
-        _hand.AnimateCardsToPosition();
+        _user.Hand.AnimateCardsToPosition();
       }
     }
   }

@@ -13,8 +13,6 @@
 // limitations under the License.
 
 using System;
-using Nighthollow.Model;
-using Nighthollow.Services;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -22,25 +20,6 @@ namespace Nighthollow.Utils
 {
   public static class ComponentUtils
   {
-    public static T Instantiate<T>(AssetData prefab, Transform parent = null) where T : Component
-    {
-      Errors.CheckNotNull(prefab);
-      var prefabObject = Object.Instantiate(Root.Instance.AssetService.Get<GameObject>(prefab), parent);
-      var result = prefabObject.GetComponent<T>();
-      if (!result)
-      {
-        throw new NullReferenceException($"Expected a component of type {typeof(T).FullName}");
-      }
-
-      if (!parent)
-      {
-        // Instantiate things safely out of view if there's no parent specified :)
-        prefabObject.transform.position = 1000f * Vector3.one;
-      }
-
-      return result;
-    }
-
     public static T Instantiate<T>(T prefabComponent, Transform parent = null) where T : Component
     {
       Errors.CheckNotNull(prefabComponent);

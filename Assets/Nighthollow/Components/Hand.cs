@@ -14,9 +14,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -55,45 +54,20 @@ namespace Nighthollow.Components
 
     public void DrawCards(IEnumerable<CardData> cards)
     {
-      Root.Instance.AssetService.FetchCardAssets(cards, () => { StartCoroutine(DrawsCardAsync(cards)); });
+      StartCoroutine(DrawsCardAsync(cards));
     }
 
     IEnumerator<YieldInstruction> DrawsCardAsync(IEnumerable<CardData> cards)
     {
       foreach (var cardData in cards)
       {
-        var card = ComponentUtils.Instantiate<Card>(cardData.Prefab, Root.Instance.MainCanvas);
+        var card = ComponentUtils.Instantiate(cardData.CardPrefab, Root.Instance.MainCanvas);
         card.Initialize(cardData);
         card.transform.position = _deckPosition.position;
         card.transform.localScale = Vector2.one * _initialCardScale;
         AddToHand(card);
-        Root.Instance.RequestService.OnCardDrawn(card.CardId);
         yield return new WaitForSeconds(0.2f);
       }
-    }
-
-    public bool HasCard(CardId cardId) => _cards.Any(c => c.CardId.Value == cardId.Value);
-
-    public Card GetCard(CardId cardId) =>
-      Errors.CheckNotNull(_cards.Find(c => c.CardId.Value == cardId.Value), $"Card {cardId} not found!");
-
-    public void DestroyById(CardId cardId, bool mustExist = false)
-    {
-      var index = _cards.FindIndex(c => c.CardId.Equals(cardId));
-      if (index == -1)
-      {
-        if (mustExist)
-        {
-          throw new ArgumentException($"Card id {cardId} not found");
-        }
-
-        return;
-      }
-
-      var card = _cards[index];
-      _cards.RemoveAt(index);
-      Destroy(card.gameObject);
-      AnimateCardsToPosition();
     }
 
     public void RemoveFromHand(Card card)

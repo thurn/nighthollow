@@ -971,6 +971,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4938854385079216864}
   - component: {fileID: 8201078851043189447}
+  - component: {fileID: 5813201179906829736}
+  - component: {fileID: 4811191690425738477}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -1025,13 +1027,45 @@ MonoBehaviour:
   _outline: {fileID: 5893235104549452333}
   _hand: {fileID: 0}
   _disableDragging: 0
-  _initialized: 0
+  _initialized: 1
   _isFaceUp: 0
   _isDragging: 0
   _overBoard: 0
   _initialDragSiblingIndex: 0
   _initialDragPosition: {x: 0, y: 0, z: 0}
   _initialDragRotation: {x: 0, y: 0, z: 0, w: 0}
+  _tcd: {fileID: 11400000, guid: a7a886caa7772ff47a4638c072dadb91, type: 2}
+--- !u!114 &5813201179906829736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4938854385079216865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1465209106, guid: c8d0ad23af520fe46aabe2b1fecf6462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"declarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"}}'
+    _objectReferences: []
+--- !u!114 &4811191690425738477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4938854385079216865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -57143145, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"nest":{"source":"Macro","macro":0,"embed":null}}'
+    _objectReferences:
+    - {fileID: 11400000, guid: e8910bf6c3cfd7f4da5fc0a3e9caddf2, type: 2}
 --- !u!1 &5539546903181134368
 GameObject:
   m_ObjectHideFlags: 0

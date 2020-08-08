@@ -1,4 +1,4 @@
-﻿// Copyright © 2020-present Derek Thurn
+// Copyright © 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -40,7 +40,7 @@ namespace Nighthollow.Components
     [SerializeField] Transform _healthbarAnchor;
 
     [Header("State")] [SerializeField] bool _initialized;
-    [SerializeField] CreatureData _creatureData;
+    [SerializeField] CreatureData _data;
     [SerializeField] CreatureState _state;
     [SerializeField] SkillType _currentSkillType;
     [SerializeField] RankValue? _rankPosition;
@@ -77,7 +77,7 @@ namespace Nighthollow.Components
       // Slow down enemy animations a bit
       _animator.SetFloat(AnimationSpeed, creatureData.Owner == PlayerName.User ? 1.0f : 0.5f);
 
-      UpdateCreatureData(creatureData);
+      _data = creatureData;
       _initialized = true;
     }
 
@@ -85,7 +85,7 @@ namespace Nighthollow.Components
     {
       if (!_initialized && _debugMode)
       {
-        Initialize(_creatureData);
+        Initialize(_data);
         _creatureService.AddUserCreatureAtPosition(this,
           BoardPositions.ClosestRankForXPosition(transform.position.x),
           BoardPositions.ClosestFileForYPosition(transform.position.y));
@@ -101,9 +101,7 @@ namespace Nighthollow.Components
       _attachmentDisplay = attachmentDisplay;
     }
 
-    public CreatureId CreatureId => _creatureData.CreatureId;
-
-    public PlayerName Owner => _creatureData.Owner;
+    public PlayerName Owner => _data.Owner;
 
     public RankValue? RankPosition => _rankPosition;
 
@@ -127,27 +125,10 @@ namespace Nighthollow.Components
       set => _animator.speed = value ? 0 : 1;
     }
 
-    public void UpdateCreatureData(CreatureData newData)
-    {
-      if (_state == CreatureState.Dying) return;
-
-      transform.eulerAngles = newData.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
-
-      _healthBar.Value = newData.HealthPercent;
-      _healthBar.gameObject.SetActive(newData.Owner == PlayerName.Enemy && _healthBar.Value < 1);
-
-      if (newData.Attachments != null)
-      {
-        _attachmentDisplay.SetAttachments(newData.Attachments);
-      }
-
-      _creatureData = newData;
-    }
-
     public void ActivateCreature(RankValue? rankValue, FileValue fileValue)
     {
       _filePosition = fileValue;
-      _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
+      _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
 
       if (rankValue.HasValue)
       {
@@ -221,20 +202,19 @@ namespace Nighthollow.Components
       var creature = other.GetComponent<Creature>();
       if (creature)
       {
-        Root.Instance.RequestService.OnCreatureCollision(CreatureId, creature.CreatureId);
+        Root.Instance.EventService.OnCreatureCollision(this, creature);
       }
     }
 
     // Called by skill animations on their 'start impact' frame
-    // ReSharper disable once UnusedMember.Local
-    void AttackStart()
+    public void AttackStart()
     {
       if (!IsAlive()) return;
 
       switch (_currentSkillType)
       {
         case SkillType.Ranged:
-          Root.Instance.RequestService.OnRangedSkillFire(CreatureId);
+          Root.Instance.EventService.OnRangedSkillFire(this);
           break;
         case SkillType.Melee:
           var hitCount = Physics2D.OverlapBoxNonAlloc(
@@ -243,13 +223,13 @@ namespace Nighthollow.Components
             angle: 0,
             ColliderArray,
             Constants.LayerMaskForPlayerCreatures(Owner.GetOpponent()));
-          var hits = new List<int>(hitCount);
+          var hits = new List<Creature>(hitCount);
           for (var i = 0; i < hitCount; ++i)
           {
-            hits.Add(ComponentUtils.GetComponent<Creature>(ColliderArray[i]).CreatureId.Value);
+            hits.Add(ComponentUtils.GetComponent<Creature>(ColliderArray[i]));
           }
 
-          Root.Instance.RequestService.OnMeleeSkillImpact(CreatureId, hits);
+          Root.Instance.EventService.OnMeleeSkillImpact(this, hits);
 
           break;
         default:
@@ -260,7 +240,7 @@ namespace Nighthollow.Components
     public void OnSkillAnimationCompleted(SkillAnimationNumber animationNumber)
     {
       if (!IsAlive()) return;
-      _state = _creatureData.Speed > 0 ? CreatureState.Moving : CreatureState.Idle;
+      _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
 
       var hit = Physics2D.BoxCast(
         _collider.bounds.center,
@@ -271,28 +251,32 @@ namespace Nighthollow.Components
         layerMask: Constants.LayerMaskForPlayerCreatures(Owner.GetOpponent()));
       if (hit.collider)
       {
-        Root.Instance.RequestService.OnSkillCompleteWithHit(
-          CreatureId,
-          ComponentUtils.GetComponent<Creature>(hit.collider).CreatureId,
+        Root.Instance.EventService.OnSkillCompleteWithHit(this,
+          ComponentUtils.GetComponent<Creature>(hit.collider),
           Mathf.RoundToInt(hit.distance * 1000f));
       }
       else
       {
-        Root.Instance.RequestService.OnSkillCompleteNoHit(CreatureId);
+        Root.Instance.EventService.OnSkillCompleteNoHit(this);
       }
     }
 
     public void OnDeathAnimationCompleted()
     {
-      Root.Instance.CreatureService.Destroy(_creatureData.CreatureId);
+      Root.Instance.CreatureService.DestroyCreature(this);
     }
 
     bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
 
-    bool IsIdle() => _state == CreatureState.Idle || _state == CreatureState.Moving;
-
     void Update()
     {
+      if (_state == CreatureState.Dying) return;
+
+      transform.eulerAngles = _data.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
+
+      _healthBar.Value = (_data.Health.Value - _data.DamageTaken) / _data.Health.Value;
+      _healthBar.gameObject.SetActive(_healthBar.Value < 1);
+
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _healthBar.transform.position = pos;
 
@@ -303,7 +287,7 @@ namespace Nighthollow.Components
       if (_state == CreatureState.Moving)
       {
         _animator.SetBool(Moving, true);
-        transform.Translate(Vector3.right * (Time.deltaTime * (_creatureData.Speed / 1000f)));
+        transform.Translate(Vector3.right * (Time.deltaTime * (_data.Speed.Value / 1000f)));
       }
       else
       {

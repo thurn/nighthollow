@@ -12,53 +12,79 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Linq;
-using Nighthollow.Model;
+using System;
+using Boo.Lang;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Nighthollow.Components
 {
   public sealed class User : MonoBehaviour
   {
-    [Header("Config")] [SerializeField] Hand _hand;
+    [Header("Config")]
+    [SerializeField] Hand _hand;
+    [SerializeField] Deck _deck;
     [SerializeField] TextMeshProUGUI _lifeText;
     [SerializeField] TextMeshProUGUI _manaText;
     [SerializeField] RectTransform _influenceRow;
 
-    [Header("State")] [SerializeField] UserData _userData;
+    [Header("State")]
+    [SerializeField] UserData _data;
+    [SerializeField] List<Image> _influenceImages;
 
     public Hand Hand => _hand;
 
-    public void UpdateUserData(UserData newUserData)
+    public UserData Data => _data;
+
+    void Awake()
+    {
+      _data = Instantiate(_data);
+    }
+
+    public void DrawOpeningHand()
     {
       gameObject.SetActive(true);
 
-      _lifeText.text = newUserData.Life.ToString();
-      _manaText.text = newUserData.Mana.ToString();
-
-      if (_userData == null || !_userData.Influence.SequenceEqual(newUserData.Influence))
+      var openingHand = new List<CardData>();
+      for (var i = 0; i < _data.StartingHandSize.Value; ++i)
       {
-        foreach (Transform child in _influenceRow)
-        {
-          Destroy(child.gameObject);
-        }
-
-        foreach (var influence in newUserData.Influence)
-        {
-          for (var i = 0; i < influence.Value; ++i)
-          {
-            var image = Root.Instance.Prefabs.CreateInfluence();
-            image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(influence.School);
-            image.transform.SetParent(_influenceRow);
-            image.transform.localScale = Vector3.one;
-            image.transform.localPosition = new Vector3(i * 100, 0, 0);
-          }
-        }
+        openingHand.Add(_deck.Draw());
       }
 
-      _userData = newUserData;
+      _hand.DrawCards(openingHand);
+    }
+
+    void Update()
+    {
+      _lifeText.text = _data.Life.Value.ToString();
+      _manaText.text = _data.Mana.Value.ToString();
+      
+      var index = 0;
+      foreach (School school in Enum.GetValues(typeof(School)))
+      {
+        for (var i = 0; i < _data.Influence.Get(school).Value; ++i)
+        {
+          Image image;
+          if (index < _influenceImages.Count)
+          {
+            image  = _influenceImages[index];
+          }
+          else
+          {
+            image = Root.Instance.Prefabs.CreateInfluence();
+            _influenceImages.Add(image);
+          }
+
+          image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(school);
+          image.transform.SetParent(_influenceRow);
+          image.transform.localScale = Vector3.one;
+          image.transform.localPosition = new Vector3(i * 100, 0, 0);
+          index++;
+        }       
+      }
     }
   }
 }

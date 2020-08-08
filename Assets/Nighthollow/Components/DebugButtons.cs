@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Model;
 using Nighthollow.Services;
 using UnityEngine;
 
@@ -22,14 +21,6 @@ namespace Nighthollow.Components
 {
   public sealed class DebugButtons : MonoBehaviour
   {
-    int _idCounter;
-
-    public void RunTests()
-    {
-      var errorCount = Root.Instance.RequestService.OnRunTests();
-      Debug.Log($"Tests ran with {errorCount} failures");
-    }
-
     public void HideButtons()
     {
       gameObject.SetActive(false);
@@ -47,35 +38,8 @@ namespace Nighthollow.Components
 
     public void StartGame()
     {
-      Root.Instance.RequestService.OnStartNewGame();
-    }
-
-    public void RunPerftest()
-    {
-      Commands.DisableAssertions();
-      Root.Instance.RequestService.OnRunPerftest();
-    }
-
-    public void ResetGame()
-    {
-      Root.Instance.RequestService.OnEndGame();
-      Commands.ResetState();
-    }
-
-    public void Enemy()
-    {
-      Root.Instance.RequestService.OnDebugCreateEnemy();
-    }
-
-    public void FireProjectile()
-    {
-      var projectile = new ProjectileData(
-        new AssetData("Projectiles/Projectile 1", AssetType.Prefab),
-        new CreatureId(2),
-        PlayerName.User,
-        10000,
-        1000);
-      Root.Instance.CreatureService.FireProjectile(projectile);
+      Debug.Log("Start");
+      Root.Instance.User.DrawOpeningHand();
     }
   }
 }

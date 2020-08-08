@@ -14,7 +14,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -23,17 +23,22 @@ namespace Nighthollow.Components
 {
   public sealed class Projectile : MonoBehaviour
   {
-    [Header("Config")] [SerializeField] TimedEffect _flashEffect;
+    [Header("Config")]
+    [SerializeField] TimedEffect _flashEffect;
     [SerializeField] TimedEffect _hitEffect;
     ProjectileData _projectileData;
 
+    [Header("State")]
+    [SerializeField] Creature _firedBy;
+
     static readonly Collider2D[] ColliderArray = Enumerable.Repeat<Collider2D>(null, 128).ToArray();
 
-    public void Initialize(ProjectileData projectileData, Transform firingPoint)
+    public void Initialize(Creature firedBy, ProjectileData projectileData, Transform firingPoint)
     {
+      _firedBy = firedBy;
       transform.position = new Vector3(firingPoint.position.x, firingPoint.position.y, 0);
-      transform.forward = Constants.ForwardDirectionForPlayer(projectileData.Owner);
-      gameObject.layer = Constants.LayerForPlayerProjectiles(projectileData.Owner);
+      transform.forward = Constants.ForwardDirectionForPlayer(firedBy.Owner);
+      gameObject.layer = Constants.LayerForPlayerProjectiles(firedBy.Owner);
 
       var flash = Root.Instance.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);
       flash.transform.forward = transform.forward;
@@ -77,16 +82,15 @@ namespace Nighthollow.Components
         new Vector2(_projectileData.HitboxSize / 1000f, _projectileData.HitboxSize / 1000f),
         angle: 0,
         ColliderArray,
-        Constants.LayerMaskForPlayerCreatures(_projectileData.Owner.GetOpponent()));
-      var hits = new List<int>(hitCount);
+        Constants.LayerMaskForPlayerCreatures(_firedBy.Owner.GetOpponent()));
 
+      var hits = new List<Creature>(hitCount);
       for (var i = 0; i < hitCount; ++i)
       {
-        hits.Add(ComponentUtils.GetComponent<Creature>(ColliderArray[i]).CreatureId.Value);
+        hits.Add(ComponentUtils.GetComponent<Creature>(ColliderArray[i]));
       }
 
-      Root.Instance.RequestService.OnProjectileImpact(_projectileData.FiredBy, hits);
-
+      Root.Instance.EventService.OnProjectileImpact(_firedBy, hits);
       gameObject.SetActive(false);
     }
   }

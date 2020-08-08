@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Model;
-using Nighthollow.Services;
+using Nighthollow.Data;
 using UnityEngine;
 
 namespace Nighthollow.Components
@@ -26,7 +25,7 @@ namespace Nighthollow.Components
     public void Initialize(AttachmentData attachmentData)
     {
       _attachmentData = attachmentData;
-      _spriteRenderer.sprite = Root.Instance.AssetService.Get<Sprite>(attachmentData.Image);
+      _spriteRenderer.sprite = attachmentData.Image;
       transform.localScale = 0.5f * Vector2.one;
     }
 

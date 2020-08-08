@@ -14,7 +14,7 @@
 
 using System.Collections.Generic;
 using DG.Tweening;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -53,16 +53,14 @@ namespace Nighthollow.Components
       if (!_card || (mousePosition.y >= Constants.IndicatorBottomY &&
                      mousePosition.x <= Constants.IndicatorRightX))
       {
-        var rank = BoardPositions.ClosestRankForXPosition(mousePosition.x);
-        var file = _creatureService.GetClosestAvailableFile(
-          BoardPositions.ClosestFileForYPosition(mousePosition.y), _creature.Owner);
+        var (rank, file) = _creatureService.GetClosestAvailablePosition(mousePosition);
 
         if (Input.GetMouseButtonUp(0))
         {
           if (_card)
           {
             _card.OnPlayed();
-            Root.Instance.RequestService.OnPlayedCard(_card.CardId, rank, file);
+            Root.Instance.EventService.OnPlayedCard(_card, rank, file);
           }
 
           Destroy(_cursor);
@@ -81,7 +79,6 @@ namespace Nighthollow.Components
         {
           if (rank != _rank || file != _file)
           {
-            _creatureService.ShiftPositions(rank, file);
             var position = new Vector3(rank.ToXPosition(), file.ToYPosition(), 0);
             _cursor.transform.position = position + new Vector3(0, 1, 0);
             _rank = rank;

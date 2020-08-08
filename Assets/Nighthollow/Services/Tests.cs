@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using clojure.clr.api;
 using UnityEngine;
 
 namespace Nighthollow.Services
@@ -23,16 +22,6 @@ namespace Nighthollow.Services
     public static void RunTests()
     {
       Debug.Log("Running Tests");
-
-      Arcadia.Util.require(RequestService.Namespace);
-      var errorCount = (long)Clojure.var(RequestService.Namespace, "on-run-tests").invoke();
-
-      if (errorCount > 0)
-      {
-        throw new InvalidOperationException($"Encountered {errorCount} test failures!");
-      }
-
-      Debug.Log("Ran all tests successfully");
     }
   }
 }

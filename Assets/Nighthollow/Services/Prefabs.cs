@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Components;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UI;
