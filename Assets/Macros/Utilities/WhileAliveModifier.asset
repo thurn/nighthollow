@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1893448595, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: WhileAliveModifier
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[{"key":"Add
+      Modifier","label":null,"summary":null,"hideLabel":false}],"controlOutputDefinitions":[],"valueInputDefinitions":[{"hasDefaultValue":false,"defaultValue":null,"_type":"Nighthollow.Data.Stat","key":"Stat","label":null,"summary":null,"hideLabel":false},{"hasDefaultValue":false,"defaultValue":{"$content":"Set","$type":"Nighthollow.Data.Operator"},"_type":"Nighthollow.Data.Operator","key":"Operator","label":null,"summary":null,"hideLabel":false},{"hasDefaultValue":false,"defaultValue":{"$content":0,"$type":"System.Int32"},"_type":"System.Int32","key":"Value","label":null,"summary":null,"hideLabel":false},{"hasDefaultValue":false,"defaultValue":null,"_type":"Nighthollow.Components.Creature","key":"Creature","label":null,"summary":null,"hideLabel":false}],"valueOutputDefinitions":[],"title":"Modify
+      While Creature is Alive","summary":null,"pan":{"x":0.0,"y":0.0},"zoom":1.0,"elements":[{"chainable":false,"member":{"name":"AddModifier","parameterTypes":["Nighthollow.Data.Modifier"],"targetType":"Nighthollow.Data.Stat","targetTypeName":"Nighthollow.Data.Stat","$version":"A"},"defaultValues":{},"position":{"x":-20.0,"y":-143.0},"guid":"2389c6a0-2b1d-4877-926e-4f516077e7cb","$version":"A","$type":"Bolt.InvokeMember","$id":"14"},{"chainable":false,"member":{"name":"WhileAlive","parameterTypes":["Nighthollow.Data.Operator","System.Int32","Nighthollow.Components.Creature"],"targetType":"Nighthollow.Data.Modifier","targetTypeName":"Nighthollow.Data.Modifier","$version":"A"},"defaultValues":{"%op":{"$content":"Set","$type":"Nighthollow.Data.Operator"},"%value":{"$content":0,"$type":"System.Int32"},"%creature":null},"position":{"x":-196.0,"y":-33.0},"guid":"f0310ee0-ed3c-48ef-9f14-36bb0cd0d943","$version":"A","$type":"Bolt.InvokeMember","$id":"17"},{"defaultValues":{},"position":{"x":-428.0,"y":-71.0},"guid":"6ef191dc-d92c-459d-a640-105bc3761750","$version":"A","$type":"Bolt.GraphInput","$id":"20"},{"sourceUnit":{"$ref":"17"},"sourceKey":"exit","destinationUnit":{"$ref":"14"},"destinationKey":"enter","guid":"401cb9f5-53ab-4e02-8188-388eb352301a","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"20"},"sourceKey":"Add
+      Modifier","destinationUnit":{"$ref":"17"},"destinationKey":"enter","guid":"0a583714-61c0-4ca4-a92a-4f654add12be","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"17"},"sourceKey":"result","destinationUnit":{"$ref":"14"},"destinationKey":"%modifier","guid":"e0c90525-d04e-4baf-80a5-c8d00974ccfa","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"20"},"sourceKey":"Stat","destinationUnit":{"$ref":"14"},"destinationKey":"target","guid":"62e46638-6ec6-46be-b256-f638cd791828","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"20"},"sourceKey":"Operator","destinationUnit":{"$ref":"17"},"destinationKey":"%op","guid":"14800453-7c43-444b-aa7a-4fcc7b4bf357","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"20"},"sourceKey":"Value","destinationUnit":{"$ref":"17"},"destinationKey":"%value","guid":"51baf113-39d8-4007-913d-7ebe71d02f6b","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"20"},"sourceKey":"Creature","destinationUnit":{"$ref":"17"},"destinationKey":"%creature","guid":"6d8ee2a3-1eb0-4a89-ae18-dc90cec08d81","$type":"Bolt.ValueConnection"}],"$version":"A"}}'
+    _objectReferences: []

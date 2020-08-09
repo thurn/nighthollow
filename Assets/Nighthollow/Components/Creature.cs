@@ -15,6 +15,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bolt;
+using Ludiq;
 using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -76,6 +78,13 @@ namespace Nighthollow.Components
 
       // Slow down enemy animations a bit
       _animator.SetFloat(AnimationSpeed, creatureData.Owner == PlayerName.User ? 1.0f : 0.5f);
+
+      if (creatureData.Behavior)
+      {
+        var machine = gameObject.AddComponent<FlowMachine>();
+        machine.nest.source = GraphSource.Macro;
+        machine.nest.macro = creatureData.Behavior;
+      }
 
       _data = creatureData;
       _initialized = true;

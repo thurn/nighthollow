@@ -17,6 +17,7 @@ MonoBehaviour:
   Name: Acolyte
   SkillType: 0
   Projectile: {fileID: 0}
+  Behavior: {fileID: 11400000, guid: e3b702a2d1859ca4a837d5e17b8b32a4, type: 2}
   Health:
     _value: 120
   DamageTaken: 0

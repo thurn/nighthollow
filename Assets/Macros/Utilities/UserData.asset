@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1893448595, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: UserData
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[{"_type":"Nighthollow.Data.UserData","key":"UserData","label":null,"summary":null,"hideLabel":false}],"title":"User
+      Data","summary":null,"pan":{"x":0.0,"y":0.0},"zoom":1.0,"elements":[{"member":{"name":"Instance","parameterTypes":null,"targetType":"Nighthollow.Services.Root","targetTypeName":"Nighthollow.Services.Root","$version":"A"},"defaultValues":{},"position":{"x":-295.0,"y":-60.0},"guid":"ddfccde2-9855-4e14-afae-c7ae1cb7b5c2","$version":"A","$type":"Bolt.GetMember","$id":"10"},{"member":{"name":"User","parameterTypes":null,"targetType":"Nighthollow.Services.Root","targetTypeName":"Nighthollow.Services.Root","$version":"A"},"defaultValues":{"target":null},"position":{"x":-89.0,"y":-57.0},"guid":"14ee680d-ed62-4ee1-a531-970d16ade50f","$version":"A","$type":"Bolt.GetMember","$id":"13"},{"member":{"name":"Data","parameterTypes":null,"targetType":"Nighthollow.Components.User","targetTypeName":"Nighthollow.Components.User","$version":"A"},"defaultValues":{"target":null},"position":{"x":97.0,"y":-63.0},"guid":"7c3a70ed-561b-4dc3-a9c1-2f39058344b0","$version":"A","$type":"Bolt.GetMember","$id":"16"},{"defaultValues":{},"position":{"x":260.0,"y":-67.0},"guid":"35ee0a21-7fc7-4b09-801a-5fcffc3c291f","$version":"A","$type":"Bolt.GraphOutput","$id":"19"},{"sourceUnit":{"$ref":"10"},"sourceKey":"value","destinationUnit":{"$ref":"13"},"destinationKey":"target","guid":"25114fe8-ec47-4a99-9172-7b54c5e70d4b","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"13"},"sourceKey":"value","destinationUnit":{"$ref":"16"},"destinationKey":"target","guid":"6b2f239a-d99e-4bca-a6ed-ff6993b8f48e","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"16"},"sourceKey":"value","destinationUnit":{"$ref":"19"},"destinationKey":"UserData","guid":"ce086404-c923-45be-8e07-eafb81909aae","$type":"Bolt.ValueConnection"}],"$version":"A"}}'
+    _objectReferences: []

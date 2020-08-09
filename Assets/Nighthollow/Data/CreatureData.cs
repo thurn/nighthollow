@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Bolt;
 using Nighthollow.Components;
 using UnityEngine;
 
@@ -45,6 +46,7 @@ namespace Nighthollow.Data
     public string Name;
     public SkillType SkillType;
     public Projectile Projectile;
+    public FlowMacro Behavior;
 
     public Stat Health;
     public int DamageTaken;
