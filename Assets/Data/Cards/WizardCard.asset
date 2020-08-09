@@ -19,22 +19,16 @@ MonoBehaviour:
     ManaCost: 50
     InfluenceCost:
       Light:
-        Value: 0
-        Modifiers: []
+        _value: 0
       Sky:
-        Value: 0
-        Modifiers: []
+        _value: 0
       Flame:
-        Value: 1
-        Modifiers: []
+        _value: 1
       Ice:
-        Value: 0
-        Modifiers: []
+        _value: 0
       Earth:
-        Value: 0
-        Modifiers: []
+        _value: 0
       Shadow:
-        Value: 0
-        Modifiers: []
+        _value: 0
   Image: {fileID: 21300000, guid: d2b8314f57f404141a1bfa2c8b86684d, type: 3}
   Creature: {fileID: 11400000, guid: 6af0054ef738c074fac463b74c49e3fd, type: 2}

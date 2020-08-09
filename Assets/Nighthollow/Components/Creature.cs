@@ -85,20 +85,11 @@ namespace Nighthollow.Components
     {
       if (!_initialized && _debugMode)
       {
-        Initialize(_data);
+        Initialize(Instantiate(_data));
         _creatureService.AddUserCreatureAtPosition(this,
           BoardPositions.ClosestRankForXPosition(transform.position.x),
           BoardPositions.ClosestFileForYPosition(transform.position.y));
       }
-    }
-
-    public void SetReferences(Transform projectileSource,
-      Transform healthbarAnchor,
-      AttachmentDisplay attachmentDisplay)
-    {
-      _projectileSource = projectileSource;
-      _healthbarAnchor = healthbarAnchor;
-      _attachmentDisplay = attachmentDisplay;
     }
 
     public PlayerName Owner => _data.Owner;
@@ -119,6 +110,15 @@ namespace Nighthollow.Components
     }
 
     public Transform ProjectileSource => _projectileSource;
+
+    public void EditorSetReferences(Transform projectileSource,
+      Transform healthbarAnchor,
+      AttachmentDisplay attachmentDisplay)
+    {
+      _projectileSource = projectileSource;
+      _healthbarAnchor = healthbarAnchor;
+      _attachmentDisplay = attachmentDisplay;
+    }
 
     public bool AnimationPaused
     {
@@ -146,6 +146,8 @@ namespace Nighthollow.Components
       }
 
       _collider.enabled = true;
+
+      Root.Instance.EventService.OnCreatureEntered(this);
     }
 
     public void UseSkill(SkillAnimationNumber skill, SkillType skillType)
@@ -266,7 +268,7 @@ namespace Nighthollow.Components
       Root.Instance.CreatureService.DestroyCreature(this);
     }
 
-    bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
+    public bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
 
     void Update()
     {

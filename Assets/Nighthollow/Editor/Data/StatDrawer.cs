@@ -28,7 +28,7 @@ namespace Nighthollow.Editor.Data
       var indent = EditorGUI.indentLevel;
       EditorGUI.indentLevel = 0;
 
-      EditorGUI.PropertyField(position, property.FindPropertyRelative("Value"), GUIContent.none);
+      EditorGUI.PropertyField(position, property.FindPropertyRelative("_value"), GUIContent.none);
 
       EditorGUI.indentLevel = indent;
       EditorGUI.EndProperty();

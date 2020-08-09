@@ -44,6 +44,12 @@ namespace Nighthollow.Services
       CustomEvent.Trigger(card.gameObject, "PlayedCard", targetRank, targetFile);
     }
 
+    public void OnCreatureEntered(Creature creature)
+    {
+      CustomEvent.Trigger(Root.Instance.User.gameObject, "CreatureEntered");
+      CustomEvent.Trigger(creature.gameObject, "CreatureEntered");
+    }
+
     public void OnCreatureCollision(Creature source, Creature other)
     {
       CustomEvent.Trigger(source.gameObject, "CreatureCollision", other);

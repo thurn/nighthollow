@@ -36,24 +36,22 @@ namespace Nighthollow.Data
     public Stat Earth;
     public Stat Shadow;
 
-    public Stat Get(School school) => GetRef(school);
-
-    ref Stat GetRef(School school)
+    public Stat Get(School school)
     {
       switch (school)
       {
         case School.Light:
-          return ref Light;
+          return Light;
         case School.Sky:
-          return ref Sky;
+          return Sky;
         case School.Flame:
-          return ref Flame;
+          return Flame;
         case School.Ice:
-          return ref Ice;
+          return Ice;
         case School.Earth:
-          return ref Earth;
+          return Earth;
         case School.Shadow:
-          return ref Shadow;
+          return Shadow;
         default:
           throw new ArgumentOutOfRangeException(nameof(school), school.ToString());
       }

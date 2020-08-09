@@ -19,9 +19,11 @@ namespace Nighthollow.Data
   [CreateAssetMenu(menuName = "Data/User")]
   public class UserData : ScriptableObject
   {
-    public Stat Life;
-    public Stat Mana;
+    public int Life;
+    public int Mana;
     public Influence Influence;
-    public Stat StartingHandSize;
+    public int StartingHandSize;
+    public Stat ManaGain;
+    public Stat ManaGainIntervalMs;
   }
 }

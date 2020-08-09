@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System;
-using Boo.Lang;
+using System.Collections.Generic;
 using Nighthollow.Data;
 using Nighthollow.Services;
 using TMPro;
@@ -44,12 +44,26 @@ namespace Nighthollow.Components
       _data = Instantiate(_data);
     }
 
+    void Start()
+    {
+      StartCoroutine(GainMana());
+    }
+
+    IEnumerator<YieldInstruction> GainMana()
+    {
+      while (true)
+      {
+        yield return new WaitForSeconds(_data.ManaGainIntervalMs.Value / 1000f);
+        _data.Mana += _data.ManaGain.Value;
+      }
+    }
+
     public void DrawOpeningHand()
     {
       gameObject.SetActive(true);
 
       var openingHand = new List<CardData>();
-      for (var i = 0; i < _data.StartingHandSize.Value; ++i)
+      for (var i = 0; i < _data.StartingHandSize; ++i)
       {
         openingHand.Add(_deck.Draw());
       }
@@ -59,9 +73,9 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      _lifeText.text = _data.Life.Value.ToString();
-      _manaText.text = _data.Mana.Value.ToString();
-      
+      _lifeText.text = _data.Life.ToString();
+      _manaText.text = _data.Mana.ToString();
+
       var index = 0;
       foreach (School school in Enum.GetValues(typeof(School)))
       {
@@ -70,7 +84,7 @@ namespace Nighthollow.Components
           Image image;
           if (index < _influenceImages.Count)
           {
-            image  = _influenceImages[index];
+            image = _influenceImages[index];
           }
           else
           {
@@ -83,7 +97,7 @@ namespace Nighthollow.Components
           image.transform.localScale = Vector3.one;
           image.transform.localPosition = new Vector3(i * 100, 0, 0);
           index++;
-        }       
+        }
       }
     }
   }

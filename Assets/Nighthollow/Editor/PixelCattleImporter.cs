@@ -109,7 +109,7 @@ namespace Nighthollow.Editor
       }
 
       var creature = prefab.AddComponent<Creature>();
-      creature.SetReferences(projectileSource.transform, healthbarPosition.transform, attachmentDisplay);
+      creature.EditorSetReferences(projectileSource.transform, healthbarPosition.transform, attachmentDisplay);
 
       var sortingGroup = prefab.AddComponent<SortingGroup>();
       sortingGroup.sortingOrder = 100;

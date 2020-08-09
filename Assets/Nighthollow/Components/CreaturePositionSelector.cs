@@ -71,9 +71,13 @@ namespace Nighthollow.Components
             spriteRenderer.color = Color.white;
           }
 
-          transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), 0), 0.3f);
-          _creature.AnimationPaused = false;
-          _creatureService.AddUserCreatureAtPosition(_creature, rank, file);
+          DOTween.Sequence()
+            .Append(transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), 0), 0.3f))
+            .AppendCallback(() =>
+            {
+              _creature.AnimationPaused = false;
+              _creatureService.AddUserCreatureAtPosition(_creature, rank, file);
+            });
         }
         else
         {

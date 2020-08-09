@@ -74,7 +74,7 @@ namespace Nighthollow.Components
       {
         _cardBack.gameObject.SetActive(true);
         _cardFront.gameObject.SetActive(false);
-        Initialize(_data);
+        Initialize(Instantiate(_data));
         transform.localScale = Vector2.one * _debugCardScale;
       }
 
@@ -88,7 +88,7 @@ namespace Nighthollow.Components
       Errors.CheckNotNull(_data);
       _cardImage.sprite = _data.Image;
 
-      _data.CanPlay = _data.Cost.ManaCost <= _user.Data.Mana.Value &&
+      _data.CanPlay = _data.Cost.ManaCost <= _user.Data.Mana &&
         _data.Cost.InfluenceCost.LessThanOrEqual(_user.Data.Influence);
 
       _outline.enabled = _data.CanPlay;
@@ -114,6 +114,7 @@ namespace Nighthollow.Components
     public void OnPlayed()
     {
       _user.Hand.RemoveFromHand(this);
+      _user.Data.Mana -= _data.Cost.ManaCost;
       Destroy(gameObject);
     }
 

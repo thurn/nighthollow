@@ -15,90 +15,63 @@ MonoBehaviour:
   Prefab: {fileID: 2225211046518890780, guid: 4c5f0ff7d5d42458d9cca5092335c4ba, type: 3}
   Owner: 0
   Name: Wizard
-  RankPosition: 0
-  FilePosition: 0
+  SkillType: 0
+  Projectile: {fileID: 0}
   Health:
-    Value: 100
-    Modifiers: []
+    _value: 150
   DamageTaken: 0
   BaseAttack:
     Radiant:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Lightning:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Fire:
-      Value: 10
-      Modifiers: []
+      _value: 0
     Cold:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Physical:
-      Value: 0
-      Modifiers: []
+      _value: 5
     Necrotic:
-      Value: 0
-      Modifiers: []
+      _value: 0
   Speed:
-    Value: 0
-    Modifiers: []
+    _value: 0
   StartingEnergy:
-    Value: 0
-    Modifiers: []
+    _value: 0
   MaximumEnergy:
-    Value: 0
-    Modifiers: []
+    _value: 0
   EnergyRegeneration:
-    Value: 0
-    Modifiers: []
+    _value: 0
   CritChance:
-    Value: 0
-    Modifiers: []
+    _value: 0
   CritMultiplier:
-    Value: 0
-    Modifiers: []
+    _value: 0
   Accuracy:
-    Value: 0
-    Modifiers: []
+    _value: 0
   Evasion:
-    Value: 0
-    Modifiers: []
+    _value: 0
   DamageResistance:
     Radiant:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Lightning:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Fire:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Cold:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Physical:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Necrotic:
-      Value: 0
-      Modifiers: []
+      _value: 0
   DamageReduction:
     Radiant:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Lightning:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Fire:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Cold:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Physical:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Necrotic:
-      Value: 0
-      Modifiers: []
+      _value: 0

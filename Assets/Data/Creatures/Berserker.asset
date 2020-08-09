@@ -15,90 +15,63 @@ MonoBehaviour:
   Prefab: {fileID: 3539740354515962369, guid: 5053f7e26655a4397a6f2575ed6d45c0, type: 3}
   Owner: 0
   Name: Berserker
-  RankPosition: 0
-  FilePosition: 0
+  SkillType: 0
+  Projectile: {fileID: 0}
   Health:
-    Value: 250
-    Modifiers: []
+    _value: 150
   DamageTaken: 0
   BaseAttack:
     Radiant:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Lightning:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Fire:
-      Value: 20
-      Modifiers: []
+      _value: 20
     Cold:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Physical:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Necrotic:
-      Value: 0
-      Modifiers: []
+      _value: 0
   Speed:
-    Value: 0
-    Modifiers: []
+    _value: 0
   StartingEnergy:
-    Value: 0
-    Modifiers: []
+    _value: 0
   MaximumEnergy:
-    Value: 0
-    Modifiers: []
+    _value: 0
   EnergyRegeneration:
-    Value: 0
-    Modifiers: []
+    _value: 0
   CritChance:
-    Value: 0
-    Modifiers: []
+    _value: 0
   CritMultiplier:
-    Value: 0
-    Modifiers: []
+    _value: 0
   Accuracy:
-    Value: 0
-    Modifiers: []
+    _value: 0
   Evasion:
-    Value: 0
-    Modifiers: []
+    _value: 0
   DamageResistance:
     Radiant:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Lightning:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Fire:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Cold:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Physical:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Necrotic:
-      Value: 0
-      Modifiers: []
+      _value: 0
   DamageReduction:
     Radiant:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Lightning:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Fire:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Cold:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Physical:
-      Value: 0
-      Modifiers: []
+      _value: 0
     Necrotic:
-      Value: 0
-      Modifiers: []
+      _value: 0
