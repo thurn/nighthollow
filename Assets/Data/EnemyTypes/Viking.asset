@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff2504cae81844678de062bb70bcacb3, type: 3}
+  m_Name: Viking
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 8686911368719005395, guid: 87037b937c18541969a033e71ab4978c, type: 3}
+  Owner: 1
+  Name: Viking
+  Events:
+    _enteredPlay: []
+    _died: []
+    _creatureCollision: []
+    _rangedSkillFired: []
+    _meleeSkillImpact: []
+    _projectileImpact: []
+    _skillComplete: []
+  DefaultMeleeSkill: 1
+  DefaultCastSkill: 0
+  Health:
+    _value: 100
+  BaseAttack:
+    Radiant:
+      _value: 0
+    Lightning:
+      _value: 0
+    Fire:
+      _value: 0
+    Cold:
+      _value: 0
+    Physical:
+      _value: 0
+    Necrotic:
+      _value: 0
+  Speed:
+    _value: 2000
+  StartingEnergy:
+    _value: 0
+  MaximumEnergy:
+    _value: 0
+  EnergyRegeneration:
+    _value: 0
+  CritChance:
+    _value: 0
+  CritMultiplier:
+    _value: 0
+  Accuracy:
+    _value: 0
+  Evasion:
+    _value: 0
+  DamageResistance:
+    Radiant:
+      _value: 0
+    Lightning:
+      _value: 0
+    Fire:
+      _value: 0
+    Cold:
+      _value: 0
+    Physical:
+      _value: 0
+    Necrotic:
+      _value: 0
+  DamageReduction:
+    Radiant:
+      _value: 0
+    Lightning:
+      _value: 0
+    Fire:
+      _value: 0
+    Cold:
+      _value: 0
+    Physical:
+      _value: 0
+    Necrotic:
+      _value: 0
+  Projectile: {fileID: 0}
+  ManaGained:
+    _value: 0
+  Influence:
+    Light:
+      _value: 0
+    Sky:
+      _value: 0
+    Flame:
+      _value: 0
+    Ice:
+      _value: 0
+    Earth:
+      _value: 0
+    Shadow:
+      _value: 0

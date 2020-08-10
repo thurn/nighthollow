@@ -43,6 +43,7 @@ namespace Nighthollow.Components
 
     [Header("State")] [SerializeField] bool _initialized;
     [SerializeField] CreatureData _data;
+    [SerializeField] int _damageTaken;
     [SerializeField] CreatureState _state;
     [SerializeField] SkillType _currentSkillType;
     [SerializeField] RankValue? _rankPosition;
@@ -79,13 +80,6 @@ namespace Nighthollow.Components
       // Slow down enemy animations a bit
       _animator.SetFloat(AnimationSpeed, creatureData.Owner == PlayerName.User ? 1.0f : 0.5f);
 
-      if (creatureData.Behavior)
-      {
-        var machine = gameObject.AddComponent<FlowMachine>();
-        machine.nest.source = GraphSource.Macro;
-        machine.nest.macro = creatureData.Behavior;
-      }
-
       _data = creatureData;
       _initialized = true;
     }
@@ -100,6 +94,8 @@ namespace Nighthollow.Components
           BoardPositions.ClosestFileForYPosition(transform.position.y));
       }
     }
+
+    public CreatureData Data => _data;
 
     public PlayerName Owner => _data.Owner;
 
@@ -156,7 +152,7 @@ namespace Nighthollow.Components
 
       _collider.enabled = true;
 
-      Root.Instance.EventService.OnCreatureEntered(this);
+      _data.Events.OnEnteredPlay(this);
     }
 
     public void UseSkill(SkillAnimationNumber skill, SkillType skillType)
@@ -213,7 +209,7 @@ namespace Nighthollow.Components
       var creature = other.GetComponent<Creature>();
       if (creature)
       {
-        Root.Instance.EventService.OnCreatureCollision(this, creature);
+        _data.Events.OnCollision(this, creature);
       }
     }
 
@@ -225,7 +221,7 @@ namespace Nighthollow.Components
       switch (_currentSkillType)
       {
         case SkillType.Ranged:
-          Root.Instance.EventService.OnRangedSkillFire(this);
+          _data.Events.OnRangedSkillFired(this);
           break;
         case SkillType.Melee:
           var hitCount = Physics2D.OverlapBoxNonAlloc(
@@ -240,7 +236,7 @@ namespace Nighthollow.Components
             hits.Add(ComponentUtils.GetComponent<Creature>(ColliderArray[i]));
           }
 
-          Root.Instance.EventService.OnMeleeSkillImpact(this, hits);
+          _data.Events.OnMeleeSkillImpact(this, hits);
 
           break;
         default:
@@ -260,16 +256,8 @@ namespace Nighthollow.Components
         direction: Constants.ForwardDirectionForPlayer(Owner),
         distance: 25f,
         layerMask: Constants.LayerMaskForPlayerCreatures(Owner.GetOpponent()));
-      if (hit.collider)
-      {
-        Root.Instance.EventService.OnSkillCompleteWithHit(this,
-          ComponentUtils.GetComponent<Creature>(hit.collider),
-          Mathf.RoundToInt(hit.distance * 1000f));
-      }
-      else
-      {
-        Root.Instance.EventService.OnSkillCompleteNoHit(this);
-      }
+
+      _data.Events.OnSkillComplete(this, hit.collider ? ComponentUtils.GetComponent<Creature>(hit.collider) : null);
     }
 
     public void OnDeathAnimationCompleted()
@@ -283,17 +271,19 @@ namespace Nighthollow.Components
     {
       if (_state == CreatureState.Dying) return;
 
+      // Ensure lower Y creatures are always rendered on top of higher Y creatures
+      _sortingGroup.sortingOrder =
+        100 - Mathf.RoundToInt(transform.position.y * 10) - Mathf.RoundToInt(transform.position.x);
+
+      if (_state == CreatureState.Placing) return;
+
       transform.eulerAngles = _data.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
-      _healthBar.Value = (_data.Health.Value - _data.DamageTaken) / _data.Health.Value;
+      _healthBar.Value = Mathf.RoundToInt((_data.Health.Value - _damageTaken) / (float) _data.Health.Value);
       _healthBar.gameObject.SetActive(_healthBar.Value < 1);
 
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _healthBar.transform.position = pos;
-
-      // Ensure lower Y creatures are always rendered on top of higher Y creatures
-      _sortingGroup.sortingOrder =
-        100 - Mathf.RoundToInt(transform.position.y * 10) - Mathf.RoundToInt(transform.position.x);
 
       if (_state == CreatureState.Moving)
       {

@@ -90,7 +90,7 @@ namespace Nighthollow.Components
         hits.Add(ComponentUtils.GetComponent<Creature>(ColliderArray[i]));
       }
 
-      Root.Instance.EventService.OnProjectileImpact(_firedBy, hits);
+      _firedBy.Data.Events.OnProjectileImpact(_firedBy, hits);
       gameObject.SetActive(false);
     }
   }

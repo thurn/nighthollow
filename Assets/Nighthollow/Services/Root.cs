@@ -33,17 +33,17 @@ namespace Nighthollow.Services
     [SerializeField] Prefabs _prefabs;
     public Prefabs Prefabs => _prefabs;
 
-    [SerializeField] EventService _eventService;
-    public EventService EventService => _eventService;
-
     [SerializeField] ObjectPoolService _objectPoolService;
     public ObjectPoolService ObjectPoolService => _objectPoolService;
 
     [SerializeField] CreatureService _creatureService;
     public CreatureService CreatureService => _creatureService;
 
-    [FormerlySerializedAs("_player")] [SerializeField] User _user;
+    [SerializeField] User _user;
     public User User => _user;
+
+    [SerializeField] Enemy _enemy;
+    public Enemy Enemy => _enemy;
 
     public static Root Instance
     {
@@ -63,10 +63,10 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_mainCamera);
       Errors.CheckNotNull(_mainCanvas);
       Errors.CheckNotNull(_prefabs);
-      Errors.CheckNotNull(_eventService);
       Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_creatureService);
       Errors.CheckNotNull(_user);
+      Errors.CheckNotNull(_enemy);
 
       _instance = this;
     }

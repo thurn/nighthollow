@@ -14,6 +14,7 @@
 
 using Bolt;
 using Nighthollow.Components;
+using Nighthollow.Events;
 using UnityEngine;
 
 namespace Nighthollow.Data
@@ -25,6 +26,7 @@ namespace Nighthollow.Data
 
   public enum SkillAnimationNumber
   {
+    Unknown,
     Skill1,
     Skill2,
     Skill3,
@@ -44,12 +46,11 @@ namespace Nighthollow.Data
     public Creature Prefab;
     public PlayerName Owner;
     public string Name;
-    public SkillType SkillType;
-    public Projectile Projectile;
-    public FlowMacro Behavior;
+    public CreatureEvents Events;
 
+    public SkillAnimationNumber DefaultMeleeSkill;
+    public SkillAnimationNumber DefaultCastSkill;
     public Stat Health;
-    public int DamageTaken;
     public Damage BaseAttack;
     public Stat Speed;
     public Stat StartingEnergy;
@@ -61,5 +62,9 @@ namespace Nighthollow.Data
     public Stat Evasion;
     public Damage DamageResistance;
     public Damage DamageReduction;
+
+    public Projectile Projectile;
+    public Stat ManaGained;
+    public Influence Influence;
   }
 }

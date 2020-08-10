@@ -40,6 +40,7 @@ namespace Nighthollow.Components
     {
       Debug.Log("Start");
       Root.Instance.User.DrawOpeningHand();
+      Root.Instance.Enemy.StartSpawningEnemies();
     }
   }
 }

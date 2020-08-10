@@ -45,7 +45,7 @@ namespace Nighthollow.Data
 
     public static Modifier Create(Operator op, int value)
     {
-      return new Modifier()
+      return new Modifier
       {
         _operator = op,
         _value = value
@@ -54,7 +54,7 @@ namespace Nighthollow.Data
 
     public static Modifier WithDurationMs(Operator op, int value, int durationMs)
     {
-      return new Modifier()
+      return new Modifier
       {
         _operator = op,
         _value = value,
@@ -64,7 +64,7 @@ namespace Nighthollow.Data
 
     public static Modifier WhileAlive(Operator op, int value, Creature creature)
     {
-      return new Modifier()
+      return new Modifier
       {
         _operator = op,
         _value = value,
@@ -77,6 +77,7 @@ namespace Nighthollow.Data
   public class Stat
   {
     [SerializeField] int _value;
+    bool _hasDynamicModifiers;
     int _cachedValue;
     Dictionary<Operator, List<Modifier>> _modifiers;
     int _lastCalculatedFrame;
@@ -84,6 +85,7 @@ namespace Nighthollow.Data
     public Stat(int value)
     {
       _value = value;
+      _cachedValue = value;
     }
 
     public int Value
@@ -94,9 +96,10 @@ namespace Nighthollow.Data
         {
           // Unity deserializer does not run constructors, need to lazily populate
           _modifiers = new Dictionary<Operator, List<Modifier>>();
+          _cachedValue = _value;
         }
 
-        if (_lastCalculatedFrame < Time.frameCount)
+        if (_hasDynamicModifiers && _lastCalculatedFrame < Time.frameCount)
         {
           Recalculate();
         }
@@ -119,6 +122,13 @@ namespace Nighthollow.Data
       }
 
       _modifiers[modifier.Operator].Add(modifier);
+
+      if (Math.Abs(modifier.EndTimeSeconds) > 0.0001f || modifier.ScopeCreature != null)
+      {
+        _hasDynamicModifiers = true;
+      }
+
+      Recalculate();
     }
 
     void Recalculate()
@@ -174,6 +184,7 @@ namespace Nighthollow.Data
             increaseBy += increaseValues[i].Value;
           }
         }
+
         result = Mathf.RoundToInt((result * increaseBy) / 100f);
       }
 
@@ -199,7 +210,7 @@ namespace Nighthollow.Data
 
     bool ActiveModifier(Modifier modifier)
     {
-      if (modifier.EndTimeSeconds != 0)
+      if (Math.Abs(modifier.EndTimeSeconds) > 0.0001f)
       {
         return modifier.EndTimeSeconds > Time.time;
       }
