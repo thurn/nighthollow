@@ -28,7 +28,7 @@ namespace Nighthollow.Events
     [SerializeField] List<CreatureEventHandler> _rangedSkillFired;
     [SerializeField] List<MultipleCreaturesEventHandler> _meleeSkillImpact;
     [SerializeField] List<MultipleCreaturesEventHandler> _projectileImpact;
-    [SerializeField] List<TwoCreaturesEventHandler> _skillComplete;
+    [SerializeField] List<CreatureEventHandler> _skillComplete;
 
     public void OnEnteredPlay(Creature source) =>
       _enteredPlay.ForEach(c => c.Execute(source));
@@ -48,7 +48,7 @@ namespace Nighthollow.Events
     public void OnProjectileImpact(Creature source, List<Creature> hitTargets) =>
       _projectileImpact.ForEach(c => c.Execute(source, hitTargets));
 
-    public void OnSkillComplete(Creature source, Creature closest) =>
-      _skillComplete.ForEach(c => c.Execute(source, closest));
+    public void OnSkillComplete(Creature source) =>
+      _skillComplete.ForEach(c => c.Execute(source));
   }
 }

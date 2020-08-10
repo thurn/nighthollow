@@ -17,10 +17,6 @@ MonoBehaviour:
     Weight: 4000
   - Card: {fileID: 11400000, guid: 1d591c29bd97c594c88b80b026d4bc16, type: 2}
     Weight: 4000
-  - Card: {fileID: 11400000, guid: 1d591c29bd97c594c88b80b026d4bc16, type: 2}
-    Weight: 4000
-  - Card: {fileID: 11400000, guid: df3e795cedd02412eb49f745b4ae4615, type: 2}
-    Weight: 4000
   - Card: {fileID: 11400000, guid: df3e795cedd02412eb49f745b4ae4615, type: 2}
     Weight: 4000
   - Card: {fileID: 11400000, guid: df3e795cedd02412eb49f745b4ae4615, type: 2}

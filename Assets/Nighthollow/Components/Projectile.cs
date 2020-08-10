@@ -38,7 +38,7 @@ namespace Nighthollow.Components
       _firedBy = firedBy;
       transform.position = new Vector3(firingPoint.position.x, firingPoint.position.y, 0);
       transform.forward = Constants.ForwardDirectionForPlayer(firedBy.Owner);
-      gameObject.layer = Constants.LayerForPlayerProjectiles(firedBy.Owner);
+      gameObject.layer = Constants.LayerForProjectiles(firedBy.Owner);
 
       var flash = Root.Instance.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);
       flash.transform.forward = transform.forward;
@@ -82,7 +82,7 @@ namespace Nighthollow.Components
         new Vector2(_projectileData.HitboxSize / 1000f, _projectileData.HitboxSize / 1000f),
         angle: 0,
         ColliderArray,
-        Constants.LayerMaskForPlayerCreatures(_firedBy.Owner.GetOpponent()));
+        Constants.LayerMaskForCreatures(_firedBy.Owner.GetOpponent()));
 
       var hits = new List<Creature>(hitCount);
       for (var i = 0; i < hitCount; ++i)

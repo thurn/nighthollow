@@ -75,7 +75,7 @@ namespace Nighthollow.Components
       _sortingGroup = GetComponent<SortingGroup>();
       _healthBar = Root.Instance.Prefabs.CreateHealthBar();
       _healthBar.gameObject.SetActive(false);
-      gameObject.layer = Constants.LayerForPlayerCreatures(creatureData.Owner);
+      gameObject.layer = Constants.LayerForCreatures(creatureData.Owner);
 
       // Slow down enemy animations a bit
       _animator.SetFloat(AnimationSpeed, creatureData.Owner == PlayerName.User ? 1.0f : 0.5f);
@@ -133,7 +133,6 @@ namespace Nighthollow.Components
     public void ActivateCreature(RankValue? rankValue, FileValue fileValue)
     {
       _filePosition = fileValue;
-      _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
 
       if (rankValue.HasValue)
       {
@@ -152,6 +151,10 @@ namespace Nighthollow.Components
 
       _collider.enabled = true;
 
+      _state = CreatureState.Idle;
+      SelectSkill();
+
+      // Must run after a state is selected.
       _data.Events.OnEnteredPlay(this);
     }
 
@@ -187,15 +190,16 @@ namespace Nighthollow.Components
       }
     }
 
-    public void PlayDeathAnimation()
+    void Kill()
     {
       _healthBar.gameObject.SetActive(false);
       _animator.SetTrigger(Death);
       _collider.enabled = false;
       _state = CreatureState.Dying;
+      _creatureService.RemoveCreature(this);
     }
 
-    public void Destroy()
+    public void DestroyCreature()
     {
       Destroy(gameObject);
       Destroy(_healthBar.gameObject);
@@ -203,13 +207,19 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      if (!IsAlive()) return;
+      if (!IsAlive() || _state == CreatureState.UsingSkill) return;
 
       // Collision could be with a projectile or with a creature:
       var creature = other.GetComponent<Creature>();
+
       if (creature)
       {
         _data.Events.OnCollision(this, creature);
+
+        if (_data.DefaultMeleeSkill != SkillAnimationNumber.Unknown)
+        {
+          UseSkill(_data.DefaultMeleeSkill, SkillType.Melee);
+        }
       }
     }
 
@@ -221,19 +231,17 @@ namespace Nighthollow.Components
       switch (_currentSkillType)
       {
         case SkillType.Ranged:
+          Debug.Log("Fire Projectile");
           _data.Events.OnRangedSkillFired(this);
           break;
         case SkillType.Melee:
-          var hitCount = Physics2D.OverlapBoxNonAlloc(
-            _collider.bounds.center,
-            _collider.bounds.size,
-            angle: 0,
-            ColliderArray,
-            Constants.LayerMaskForPlayerCreatures(Owner.GetOpponent()));
+          var hitCount = GetColliderOverlaps();
           var hits = new List<Creature>(hitCount);
           for (var i = 0; i < hitCount; ++i)
           {
-            hits.Add(ComponentUtils.GetComponent<Creature>(ColliderArray[i]));
+            var creature = ComponentUtils.GetComponent<Creature>(ColliderArray[i]);
+            creature.AddDamage(_data.BaseAttack.Total());
+            hits.Add(creature);
           }
 
           _data.Events.OnMeleeSkillImpact(this, hits);
@@ -244,28 +252,83 @@ namespace Nighthollow.Components
       }
     }
 
+    private int GetColliderOverlaps()
+    {
+      return Physics2D.OverlapBoxNonAlloc(
+                  _collider.bounds.center,
+                  _collider.bounds.size,
+                  angle: 0,
+                  ColliderArray,
+                  Constants.LayerMaskForCreatures(Owner.GetOpponent()));
+    }
+
+    public void AddDamage(int damage)
+    { 
+      _damageTaken += damage; 
+      if (_damageTaken >= _data.Health.Value)
+      {
+        Kill();
+      }
+    }
+
     public void OnSkillAnimationCompleted(SkillAnimationNumber animationNumber)
     {
       if (!IsAlive()) return;
-      _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
 
-      var hit = Physics2D.BoxCast(
-        _collider.bounds.center,
-        _collider.bounds.size,
-        angle: 0,
-        direction: Constants.ForwardDirectionForPlayer(Owner),
-        distance: 25f,
-        layerMask: Constants.LayerMaskForPlayerCreatures(Owner.GetOpponent()));
+      SelectSkill();
 
-      _data.Events.OnSkillComplete(this, hit.collider ? ComponentUtils.GetComponent<Creature>(hit.collider) : null);
+      _data.Events.OnSkillComplete(this);
+    }
+
+    void SelectSkill()
+    {
+      if (_data.DefaultMeleeSkill != SkillAnimationNumber.Unknown && GetColliderOverlaps() > 0)
+      {
+        UseSkill(_data.DefaultMeleeSkill, SkillType.Melee);
+      }
+      else if (HasProjectile())
+      {
+        var hit = Physics2D.BoxCast(
+          _collider.bounds.center,
+          _collider.bounds.size,
+          angle: 0,
+          direction: Constants.ForwardDirectionForPlayer(Owner),
+          distance: 25f,
+          layerMask: Constants.LayerMaskForCreatures(Owner.GetOpponent()));
+
+        if (hit.collider)
+        {
+          UseSkill(_data.DefaultCastSkill, SkillType.Ranged);
+        }
+        else
+        {
+          _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
+        }
+      }
+      else
+      {
+        _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
+      }
     }
 
     public void OnDeathAnimationCompleted()
     {
-      Root.Instance.CreatureService.DestroyCreature(this);
+      DestroyCreature();
+    }
+
+    public void OnOpponentCreaturePlayed(Creature enemy)
+    {
+      if (_state == CreatureState.Idle &&
+        HasProjectile() &&
+        enemy.FilePosition == FilePosition)
+      {
+        UseSkill(_data.DefaultCastSkill, SkillType.Ranged);
+      }
     }
 
     public bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
+
+    public bool HasProjectile() => _data.DefaultCastSkill != SkillAnimationNumber.Unknown && _data.Projectile;
 
     void Update()
     {
@@ -279,8 +342,8 @@ namespace Nighthollow.Components
 
       transform.eulerAngles = _data.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
-      _healthBar.Value = Mathf.RoundToInt((_data.Health.Value - _damageTaken) / (float) _data.Health.Value);
-      _healthBar.gameObject.SetActive(_healthBar.Value < 1);
+      _healthBar.Value = (_data.Health.Value - _damageTaken) / (float)_data.Health.Value;
+      _healthBar.gameObject.SetActive(_damageTaken > 0);
 
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _healthBar.transform.position = pos;

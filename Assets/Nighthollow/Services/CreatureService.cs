@@ -23,8 +23,9 @@ namespace Nighthollow.Services
 {
   public sealed class CreatureService : MonoBehaviour
   {
-    readonly Dictionary<(RankValue, FileValue), Creature> _board =
+    readonly Dictionary<(RankValue, FileValue), Creature> _userCreatures =
       new Dictionary<(RankValue, FileValue), Creature>();
+    readonly HashSet<Creature> _enemyCreatures = new HashSet<Creature>();
 
     public Creature CreateUserCreature(CreatureData creatureData)
     {
@@ -39,13 +40,37 @@ namespace Nighthollow.Services
       var result = ComponentUtils.Instantiate(creatureData.Prefab);
       result.Initialize(creatureData);
       result.ActivateCreature(null, file);
+      _enemyCreatures.Add(result);
+
+      foreach (var creature in _userCreatures.Values)
+      {
+        creature.OnOpponentCreaturePlayed(result);
+      }
+
       return result;
     }
 
     public void AddUserCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
     {
       creature.ActivateCreature(rank, file);
-      _board[(rank, file)] = creature;
+      _userCreatures[(rank, file)] = creature;
+
+      foreach (var enemy in _enemyCreatures)
+      {
+        enemy.OnOpponentCreaturePlayed(creature);
+      }
+    }
+
+    public void RemoveCreature(Creature creature)
+    {
+      if (creature.Owner == PlayerName.User)
+      {
+        _userCreatures.Remove((creature.RankPosition.Value, creature.FilePosition));
+      }
+      else
+      {
+        _enemyCreatures.Remove(creature);
+      }
     }
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
@@ -61,7 +86,7 @@ namespace Nighthollow.Services
         {
           if (rank == RankValue.Unknown ||
             file == FileValue.Unknown ||
-            _board.ContainsKey((rank, file)))
+            _userCreatures.ContainsKey((rank, file)))
           {
             continue;
           }
@@ -85,11 +110,6 @@ namespace Nighthollow.Services
       {
         throw new InvalidOperationException("Board is full!");
       }
-    }
-
-    public void DestroyCreature(Creature creature)
-    {
-      creature.Destroy();
     }
   }
 }

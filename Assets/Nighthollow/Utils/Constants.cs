@@ -32,7 +32,7 @@ namespace Nighthollow.Utils
     static readonly LayerMask UserCreaturesLayerMask = LayerMask.GetMask("UserCreatures");
     static readonly LayerMask EnemyCreaturesLayerMask = LayerMask.GetMask("EnemyCreatures");
 
-    public static int LayerForPlayerCreatures(PlayerName playerName)
+    public static int LayerForCreatures(PlayerName playerName)
     {
       switch (playerName)
       {
@@ -45,7 +45,7 @@ namespace Nighthollow.Utils
       }
     }
 
-    public static LayerMask LayerMaskForPlayerCreatures(PlayerName playerName)
+    public static LayerMask LayerMaskForCreatures(PlayerName playerName)
     {
       switch (playerName)
       {
@@ -58,7 +58,7 @@ namespace Nighthollow.Utils
       }
     }
 
-    public static int LayerForPlayerProjectiles(PlayerName playerName)
+    public static int LayerForProjectiles(PlayerName playerName)
     {
       switch (playerName)
       {

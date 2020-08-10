@@ -14,8 +14,7 @@
 
 using Nighthollow.Services;
 using UnityEngine;
-
-// ReSharper disable UnusedMember.Global
+using UnityEngine.SceneManagement;
 
 namespace Nighthollow.Components
 {
@@ -41,6 +40,11 @@ namespace Nighthollow.Components
       Debug.Log("Start");
       Root.Instance.User.DrawOpeningHand();
       Root.Instance.Enemy.StartSpawningEnemies();
+    }
+
+    public void ResetGame()
+    {
+      SceneManager.LoadScene("Main", LoadSceneMode.Single);
     }
   }
 }

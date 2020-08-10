@@ -37,7 +37,7 @@ MonoBehaviour:
     Cold:
       _value: 0
     Physical:
-      _value: 0
+      _value: 15
     Necrotic:
       _value: 0
   Speed:

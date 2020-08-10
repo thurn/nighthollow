@@ -103,7 +103,7 @@ namespace Nighthollow.Components
       _card.transform.position = Input.mousePosition;
 
       Destroy(_cursor);
-      _creature.Destroy();
+      _creature.DestroyCreature();
     }
   }
 }

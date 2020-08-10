@@ -21,6 +21,8 @@ namespace Nighthollow.Components
   public class Deck : MonoBehaviour
   {
     [SerializeField] DeckData _data;
+    [SerializeField] bool _debugOrderedDraws;
+    int _lastDraw;
 
     void Awake()
     {
@@ -29,17 +31,24 @@ namespace Nighthollow.Components
 
     public CardData Draw()
     {
-      var selector = new DynamicRandomSelector<int>();
-      for (var i = 0; i < _data.Cards.Count; ++i)
+      if (_debugOrderedDraws)
       {
-        selector.Add(i, _data.Cards[i].Weight);
+        return Instantiate(_data.Cards[_lastDraw++ % _data.Cards.Count].Card);
       }
-      selector.Build();
+      else
+      {
+        var selector = new DynamicRandomSelector<int>(-1, _data.Cards.Count);
+        for (var i = 0; i < _data.Cards.Count; ++i)
+        {
+          selector.Add(i, _data.Cards[i].Weight);
+        }
+        selector.Build();
 
-      var cardWithWeight = _data.Cards[selector.SelectRandomItem()];
-      DecrementWeight(cardWithWeight);
+        var cardWithWeight = _data.Cards[selector.SelectRandomItem()];
+        DecrementWeight(cardWithWeight);
 
-      return Instantiate(cardWithWeight.Card);
+        return Instantiate(cardWithWeight.Card);
+      }
     }
 
     void DecrementWeight(CardWithWeight card)

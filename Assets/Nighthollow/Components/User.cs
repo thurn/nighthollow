@@ -92,12 +92,18 @@ namespace Nighthollow.Components
             _influenceImages.Add(image);
           }
 
+          image.gameObject.SetActive(true);
           image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(school);
           image.transform.SetParent(_influenceRow);
           image.transform.localScale = Vector3.one;
           image.transform.localPosition = new Vector3(i * 100, 0, 0);
           index++;
         }
+      }
+
+      while (index < _influenceImages.Count)
+      {
+        _influenceImages[index++].gameObject.SetActive(false);
       }
     }
   }

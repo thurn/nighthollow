@@ -23,7 +23,7 @@ MonoBehaviour:
     _meleeSkillImpact: []
     _projectileImpact: []
     _skillComplete: []
-  DefaultMeleeSkill: 0
+  DefaultMeleeSkill: 3
   DefaultCastSkill: 2
   Health:
     _value: 150

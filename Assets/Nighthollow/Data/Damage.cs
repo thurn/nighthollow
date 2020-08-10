@@ -35,5 +35,38 @@ namespace Nighthollow.Data
     public Stat Cold;
     public Stat Physical;
     public Stat Necrotic;
+
+    public int Total()
+    {
+      var result = 0;
+
+      foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+      {
+        result += Get(damageType).Value;
+      }
+
+      return result;
+    }
+
+    public Stat Get(DamageType type)
+    {
+      switch (type)
+      {
+        case DamageType.Radiant:
+          return Radiant;
+        case DamageType.Lightning:
+          return Lightning;
+        case DamageType.Fire:
+          return Fire;
+        case DamageType.Cold:
+          return Cold;
+        case DamageType.Physical:
+          return Physical;
+        case DamageType.Necrotic:
+          return Necrotic;
+        default:
+          throw new ArgumentOutOfRangeException(nameof(type), type.ToString());
+      }
+    }
   }
 }
