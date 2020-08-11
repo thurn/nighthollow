@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,11 @@ namespace Nighthollow.Services
   public sealed class ObjectPoolService : MonoBehaviour
   {
     readonly Dictionary<int, List<GameObject>> _pools = new Dictionary<int, List<GameObject>>();
+
+    public T Create<T>(T prefab, Vector3 position) where T : Component
+    {
+      return ComponentUtils.GetComponent<T>(Create(prefab.gameObject, position));
+    }
 
     public GameObject Create(GameObject prefab, Vector3 position)
     {

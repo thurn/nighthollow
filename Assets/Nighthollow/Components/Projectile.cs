@@ -31,8 +31,6 @@ namespace Nighthollow.Components
     [Header("State")]
     [SerializeField] Creature _firedBy;
 
-    static readonly Collider2D[] ColliderArray = Enumerable.Repeat<Collider2D>(null, 128).ToArray();
-
     public void Initialize(Creature firedBy, ProjectileData projectileData, Transform firingPoint)
     {
       _firedBy = firedBy;
@@ -77,20 +75,16 @@ namespace Nighthollow.Components
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;
 
-      var hitCount = Physics2D.OverlapBoxNonAlloc(
+      var hits = Physics2D.OverlapBoxAll(
         transform.position,
         new Vector2(_projectileData.HitboxSize / 1000f, _projectileData.HitboxSize / 1000f),
         angle: 0,
-        ColliderArray,
         Constants.LayerMaskForCreatures(_firedBy.Owner.GetOpponent()));
 
-      var hits = new List<Creature>(hitCount);
-      for (var i = 0; i < hitCount; ++i)
-      {
-        hits.Add(ComponentUtils.GetComponent<Creature>(ColliderArray[i]));
-      }
+      var hitCreatures = new List<Creature>(hits.Length);
+      hitCreatures.AddRange(hits.Select(ComponentUtils.GetComponent<Creature>));
 
-      _firedBy.Data.Events.OnProjectileImpact(_firedBy, hits);
+      _firedBy.OnProjectileImpact(hitCreatures);
       gameObject.SetActive(false);
     }
   }

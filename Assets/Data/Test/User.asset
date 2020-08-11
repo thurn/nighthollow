@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: User
   m_EditorClassIdentifier: 
   Life: 20
-  Mana: 50
+  Mana: 150
   Influence:
     Light:
       _value: 0

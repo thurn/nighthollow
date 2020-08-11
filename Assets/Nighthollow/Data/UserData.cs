@@ -25,5 +25,6 @@ namespace Nighthollow.Data
     public int StartingHandSize;
     public Stat ManaGain;
     public Stat ManaGainIntervalMs;
+    public Stat CardDrawIntervalMs;
   }
 }

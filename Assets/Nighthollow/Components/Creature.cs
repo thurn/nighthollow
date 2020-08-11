@@ -14,9 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Bolt;
-using Ludiq;
 using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -53,8 +50,6 @@ namespace Nighthollow.Components
     [SerializeField] HealthBar _healthBar;
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SortingGroup _sortingGroup;
-
-    static readonly Collider2D[] ColliderArray = Enumerable.Repeat<Collider2D>(null, 128).ToArray();
 
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
@@ -152,7 +147,7 @@ namespace Nighthollow.Components
       _collider.enabled = true;
 
       _state = CreatureState.Idle;
-      SelectSkill();
+      SelectSkill(true);
 
       // Must run after a state is selected.
       _data.Events.OnEnteredPlay(this);
@@ -231,20 +226,21 @@ namespace Nighthollow.Components
       switch (_currentSkillType)
       {
         case SkillType.Ranged:
-          Debug.Log("Fire Projectile");
+          var projectile = Root.Instance.ObjectPoolService.Create(_data.Projectile.Prefab, _projectileSource.position);
+          projectile.Initialize(this, _data.Projectile, _projectileSource);
           _data.Events.OnRangedSkillFired(this);
           break;
         case SkillType.Melee:
-          var hitCount = GetColliderOverlaps();
-          var hits = new List<Creature>(hitCount);
-          for (var i = 0; i < hitCount; ++i)
+          var hits = GetColliderOverlaps();
+          var hitCreatures = new List<Creature>(hits.Length);
+          foreach (var hit in hits)
           {
-            var creature = ComponentUtils.GetComponent<Creature>(ColliderArray[i]);
+            var creature = ComponentUtils.GetComponent<Creature>(hit);
             creature.AddDamage(_data.BaseAttack.Total());
-            hits.Add(creature);
+            hitCreatures.Add(creature);
           }
 
-          _data.Events.OnMeleeSkillImpact(this, hits);
+          _data.Events.OnMeleeSkillImpact(this, hitCreatures);
 
           break;
         default:
@@ -252,37 +248,52 @@ namespace Nighthollow.Components
       }
     }
 
-    private int GetColliderOverlaps()
+    Collider2D[] GetColliderOverlaps()
     {
-      return Physics2D.OverlapBoxNonAlloc(
+      return Physics2D.OverlapBoxAll(
                   _collider.bounds.center,
                   _collider.bounds.size,
                   angle: 0,
-                  ColliderArray,
                   Constants.LayerMaskForCreatures(Owner.GetOpponent()));
     }
 
     public void AddDamage(int damage)
-    { 
-      _damageTaken += damage; 
+    {
+      _damageTaken += damage;
       if (_damageTaken >= _data.Health.Value)
       {
         Kill();
       }
     }
 
+    public void OnProjectileImpact(List<Creature> hits)
+    {
+      foreach (var creature in hits)
+      {
+        creature.AddDamage(_data.BaseAttack.Total());
+      }
+
+      _data.Events.OnProjectileImpact(this, hits);
+    }
+
     public void OnSkillAnimationCompleted(SkillAnimationNumber animationNumber)
     {
       if (!IsAlive()) return;
 
-      SelectSkill();
+      SelectSkill(false);
 
       _data.Events.OnSkillComplete(this);
     }
 
-    void SelectSkill()
+    void SelectSkill(bool activate)
     {
-      if (_data.DefaultMeleeSkill != SkillAnimationNumber.Unknown && GetColliderOverlaps() > 0)
+      var overlaps = GetColliderOverlaps();
+      if (activate)
+      {
+        Debug.Log($"Got overlaps: {overlaps}. My layer: {gameObject.layer}. My owner: {Owner}");
+      }
+
+      if (_data.DefaultMeleeSkill != SkillAnimationNumber.Unknown && overlaps.Length > 0)
       {
         UseSkill(_data.DefaultMeleeSkill, SkillType.Melee);
       }

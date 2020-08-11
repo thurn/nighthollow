@@ -63,7 +63,7 @@ namespace Nighthollow.Data
     public Damage DamageResistance;
     public Damage DamageReduction;
 
-    public Projectile Projectile;
+    public ProjectileData Projectile;
     public Stat ManaGained;
     public Influence Influence;
   }
