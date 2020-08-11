@@ -3797,6 +3797,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _data: {fileID: 11400000, guid: 6ba38c80e2af44b39a5f70a0d09ade45, type: 2}
   _debugOrderedDraws: 1
+  _cards: []
+  _weights: 
 --- !u!1 &1236180346
 GameObject:
   m_ObjectHideFlags: 0
@@ -3858,6 +3860,8 @@ MonoBehaviour:
   _influenceRow: {fileID: 1016913294}
   _data: {fileID: 11400000, guid: 871c67786cfdf4577b5d959b0c63d983, type: 2}
   _influenceImages: []
+  _life: 0
+  _mana: 0
 --- !u!1001 &1342586154
 PrefabInstance:
   m_ObjectHideFlags: 0

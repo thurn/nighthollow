@@ -40,6 +40,7 @@ namespace Nighthollow.Components
     [Header("State")]
     [SerializeField] CardData _data;
     [SerializeField] User _user;
+    [SerializeField] bool _canPlay;
     [SerializeField] bool _disableDragging;
     [SerializeField] bool _initialized;
     [SerializeField] bool _isDragging;
@@ -88,10 +89,10 @@ namespace Nighthollow.Components
       Errors.CheckNotNull(_data);
       _cardImage.sprite = _data.Image;
 
-      _data.CanPlay = _data.Cost.ManaCost <= _user.Data.Mana &&
-        _data.Cost.InfluenceCost.LessThanOrEqual(_user.Data.Influence);
+      _canPlay = _data.Cost.ManaCost <= _user.Mana &&
+        _data.Cost.InfluenceCost.LessThanOrEqual(_user.Influence);
 
-      _outline.enabled = _data.CanPlay;
+      _outline.enabled = _canPlay;
       _cost.text = _data.Cost.ManaCost.ToString();
 
       var addIndex = 0;
@@ -114,7 +115,7 @@ namespace Nighthollow.Components
     public void OnPlayed()
     {
       _user.Hand.RemoveFromHand(this);
-      _user.Data.Mana -= _data.Cost.ManaCost;
+      _user.SpendMana(_data.Cost.ManaCost);
       Destroy(gameObject);
     }
 
@@ -147,7 +148,7 @@ namespace Nighthollow.Components
         var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         transform.position = Input.mousePosition;
 
-        if (_data.CanPlay && mousePosition.x < Constants.IndicatorRightX &&
+        if (_canPlay && mousePosition.x < Constants.IndicatorRightX &&
             mousePosition.y > Constants.IndicatorBottomY)
         {
           if (!_overBoard)

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using System.Linq;
 using DataStructures.RandomSelector;
 using Nighthollow.Data;
 using UnityEngine;
@@ -22,50 +24,52 @@ namespace Nighthollow.Components
   {
     [SerializeField] DeckData _data;
     [SerializeField] bool _debugOrderedDraws;
+    [SerializeField] List<CardData> _cards;
+    [SerializeField] List<int> _weights;
     int _lastDraw;
 
     void Awake()
     {
       _data = Instantiate(_data);
+      _cards = _data.Cards.ToList();
+      _weights = Enumerable.Repeat(4000, _cards.Count).ToList();
     }
 
     public CardData Draw()
     {
       if (_debugOrderedDraws)
       {
-        return Instantiate(_data.Cards[_lastDraw++ % _data.Cards.Count].Card);
+        return Instantiate(_cards[_lastDraw++ % _cards.Count]);
       }
-      else
+
+      var selector = new DynamicRandomSelector<int>(-1, _cards.Count);
+      for (var i = 0; i < _cards.Count; ++i)
       {
-        var selector = new DynamicRandomSelector<int>(-1, _data.Cards.Count);
-        for (var i = 0; i < _data.Cards.Count; ++i)
-        {
-          selector.Add(i, _data.Cards[i].Weight);
-        }
-        selector.Build();
-
-        var cardWithWeight = _data.Cards[selector.SelectRandomItem()];
-        DecrementWeight(cardWithWeight);
-
-        return Instantiate(cardWithWeight.Card);
+        selector.Add(i, _weights[i]);
       }
+
+      selector.Build();
+
+      var index = selector.SelectRandomItem();
+      DecrementWeight(index);
+      return Instantiate(_cards[index]);
     }
 
-    void DecrementWeight(CardWithWeight card)
+    void DecrementWeight(int index)
     {
-      switch (card.Weight)
+      switch (_weights[index])
       {
         case 4000:
-          card.Weight = 3000;
+          _weights[index] = 3000;
           break;
         case 3000:
-          card.Weight = 2000;
+          _weights[index] = 2000;
           break;
         case 2000:
-          card.Weight = 1000;
+          _weights[index] = 1000;
           break;
         default:
-          card.Weight /= 2;
+          _weights[index] /= 2;
           break;
       }
     }

@@ -12,23 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e3fd8a2be5a4b46b4c220838c6c746, type: 3}
   m_Name: WizardCard
   m_EditorClassIdentifier: 
-  CardPrefab: {fileID: 8201078851043189447, guid: b10a80a90394244668d5089010634cd3,
+  _cardPrefab: {fileID: 8201078851043189447, guid: b10a80a90394244668d5089010634cd3,
     type: 3}
-  CanPlay: 0
-  Cost:
-    ManaCost: 50
+  _cost:
+    ManaCost: 25
     InfluenceCost:
-      Light:
+      _light:
         _value: 0
-      Sky:
+      _sky:
         _value: 0
-      Flame:
+      _flame:
         _value: 1
-      Ice:
+      _ice:
         _value: 0
-      Earth:
+      _earth:
         _value: 0
-      Shadow:
+      _shadow:
         _value: 0
-  Image: {fileID: 21300000, guid: d2b8314f57f404141a1bfa2c8b86684d, type: 3}
-  Creature: {fileID: 11400000, guid: 6af0054ef738c074fac463b74c49e3fd, type: 2}
+  _image: {fileID: 21300000, guid: d2b8314f57f404141a1bfa2c8b86684d, type: 3}
+  _creature: {fileID: 11400000, guid: 6af0054ef738c074fac463b74c49e3fd, type: 2}

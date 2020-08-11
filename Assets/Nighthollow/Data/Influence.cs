@@ -1,4 +1,4 @@
-// Copyright © 2020-present Derek Thurn
+// Copyright Â© 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using UnityEngine;
 
 namespace Nighthollow.Data
 {
@@ -29,12 +30,23 @@ namespace Nighthollow.Data
   [Serializable]
   public class Influence
   {
-    public Stat Light;
-    public Stat Sky;
-    public Stat Flame;
-    public Stat Ice;
-    public Stat Earth;
-    public Stat Shadow;
+    [SerializeField] Stat _light;
+    public Stat Light => _light;
+
+    [SerializeField] Stat _sky;
+    public Stat Sky => _sky;
+
+    [SerializeField] Stat _flame;
+    public Stat Flame => _flame;
+
+    [SerializeField] Stat _ice;
+    public Stat Ice => _ice;
+
+    [SerializeField] Stat _earth;
+    public Stat Earth => _earth;
+
+    [SerializeField] Stat _shadow;
+    public Stat Shadow => _shadow;
 
     public Stat Get(School school)
     {

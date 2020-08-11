@@ -47,12 +47,12 @@ namespace Nighthollow.Editor.Data
       EditorGUI.indentLevel = 0;
 
       var count = 0;
-      foreach (var type in Enum.GetValues(typeof(School)))
+      foreach (School type in Enum.GetValues(typeof(School)))
       {
         GUI.backgroundColor = Colors[count];
         var rect = new Rect(position.x + (count * 35), position.y, 30, position.height);
         EditorGUI.PropertyField(rect,
-          Errors.CheckNotNull(property.FindPropertyRelative(type.ToString())),
+          Errors.CheckNotNull(property.FindPropertyRelative(PropertyName(type))),
           GUIContent.none);
         count++;
       }
@@ -62,6 +62,27 @@ namespace Nighthollow.Editor.Data
       EditorGUI.indentLevel = indent;
 
       EditorGUI.EndProperty();
+    }
+
+    string PropertyName(School school)
+    {
+      switch (school)
+      {
+        case School.Light:
+          return "_light";
+        case School.Sky:
+          return "_sky";
+        case School.Flame:
+          return "_flame";
+        case School.Ice:
+          return "_ice";
+        case School.Earth:
+          return "_earth";
+        case School.Shadow:
+          return "_shadow";
+        default:
+          throw new ArgumentOutOfRangeException(nameof(school), school, null);
+      }
     }
   }
 }

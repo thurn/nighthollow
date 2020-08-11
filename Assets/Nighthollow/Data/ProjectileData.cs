@@ -6,8 +6,13 @@ namespace Nighthollow.Data
   [CreateAssetMenu(menuName = "Data/Projectile")]
   public class ProjectileData : ScriptableObject
   {
-    public Projectile Prefab;
-    public int Speed;
-    public int HitboxSize;
+    [SerializeField] Projectile _prefab;
+    public Projectile Prefab => _prefab;
+
+    [SerializeField] int _speed;
+    public int Speed => _speed;
+
+    [SerializeField] int _hitboxSize;
+    public int HitboxSize => _hitboxSize;
   }
 }

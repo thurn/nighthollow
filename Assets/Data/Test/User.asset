@@ -12,23 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3505539149fa43be8fd395d80c1b0214, type: 3}
   m_Name: User
   m_EditorClassIdentifier: 
-  Life: 20
-  Mana: 150
-  Influence:
-    Light:
+  _startingLife:
+    _value: 20
+  _startingMana:
+    _value: 100
+  _influence:
+    _light:
       _value: 0
-    Sky:
+    _sky:
       _value: 0
-    Flame:
+    _flame:
       _value: 0
-    Ice:
+    _ice:
       _value: 0
-    Earth:
+    _earth:
       _value: 0
-    Shadow:
+    _shadow:
       _value: 0
-  StartingHandSize: 6
-  ManaGain:
+  _startingHandSize:
+    _value: 6
+  _manaGain:
     _value: 5
-  ManaGainIntervalMs:
+  _manaGainIntervalMs:
     _value: 5000
+  _cardDrawIntervalMs:
+    _value: 25000

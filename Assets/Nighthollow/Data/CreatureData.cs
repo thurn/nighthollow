@@ -21,7 +21,8 @@ namespace Nighthollow.Data
 {
   public class AttachmentData : ScriptableObject
   {
-    public Sprite Image;
+    [SerializeField] Sprite _image;
+    public Sprite Image => _image;
   }
 
   public enum SkillAnimationNumber
@@ -43,28 +44,67 @@ namespace Nighthollow.Data
   [CreateAssetMenu(menuName = "Data/Creature")]
   public class CreatureData : ScriptableObject
   {
-    public Creature Prefab;
-    public PlayerName Owner;
-    public string Name;
-    public CreatureEvents Events;
+    [SerializeField] Creature _prefab;
+    public Creature Prefab => _prefab;
 
-    public SkillAnimationNumber DefaultMeleeSkill;
-    public SkillAnimationNumber DefaultCastSkill;
-    public Stat Health;
-    public Damage BaseAttack;
-    public Stat Speed;
-    public Stat StartingEnergy;
-    public Stat MaximumEnergy;
-    public Stat EnergyRegeneration;
-    public Stat CritChance;
-    public Stat CritMultiplier;
-    public Stat Accuracy;
-    public Stat Evasion;
-    public Damage DamageResistance;
-    public Damage DamageReduction;
+    [SerializeField] PlayerName _owner;
+    public PlayerName Owner => _owner;
 
-    public ProjectileData Projectile;
-    public Stat ManaGained;
-    public Influence Influence;
+    [SerializeField] string _name;
+    public string Name => _name;
+
+    [SerializeField] CreatureEvents _events;
+    public CreatureEvents Events => _events;
+
+    [SerializeField] SkillAnimationNumber _defaultMeleeSkill;
+    public SkillAnimationNumber DefaultMeleeSkill => _defaultMeleeSkill;
+
+    [SerializeField] SkillAnimationNumber _defaultCastSkill;
+    public SkillAnimationNumber DefaultCastSkill => _defaultCastSkill;
+
+    [SerializeField] Stat _health;
+    public Stat Health => _health;
+
+    [SerializeField] Damage _baseAttack;
+    public Damage BaseAttack => _baseAttack;
+
+    [SerializeField] Stat _speed;
+    public Stat Speed => _speed;
+
+    [SerializeField] Stat _startingEnergy;
+    public Stat StartingEnergy => _startingEnergy;
+
+    [SerializeField] Stat _maximumEnergy;
+    public Stat MaximumEnergy => _maximumEnergy;
+
+    [SerializeField] Stat _energyRegeneration;
+    public Stat EnergyRegeneration => _energyRegeneration;
+
+    [SerializeField] Stat _critChance;
+    public Stat CritChance => _critChance;
+
+    [SerializeField] Stat _critMultiplier;
+    public Stat CritMultiplier => _critMultiplier;
+
+    [SerializeField] Stat _accuracy;
+    public Stat Accuracy => _accuracy;
+
+    [SerializeField] Stat _evasion;
+    public Stat Evasion => _evasion;
+
+    [SerializeField] Damage _damageResistance;
+    public Damage DamageResistance => _damageResistance;
+
+    [SerializeField] Damage _damageReduction;
+    public Damage DamageReduction => _damageReduction;
+
+    [SerializeField] ProjectileData _projectile;
+    public ProjectileData Projectile => _projectile;
+
+    [SerializeField] Stat _manaGained;
+    public Stat ManaGained => _manaGained;
+
+    [SerializeField] Influence _influence;
+    public Influence Influence => _influence;
   }
 }

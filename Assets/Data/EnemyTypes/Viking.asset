@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2504cae81844678de062bb70bcacb3, type: 3}
   m_Name: Viking
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 8686911368719005395, guid: 87037b937c18541969a033e71ab4978c, type: 3}
-  Owner: 1
-  Name: Viking
-  Events:
+  _prefab: {fileID: 8686911368719005395, guid: 87037b937c18541969a033e71ab4978c, type: 3}
+  _owner: 1
+  _name: Viking
+  _events:
     _enteredPlay: []
     _died: []
     _creatureCollision: []
@@ -23,78 +23,78 @@ MonoBehaviour:
     _meleeSkillImpact: []
     _projectileImpact: []
     _skillComplete: []
-  DefaultMeleeSkill: 1
-  DefaultCastSkill: 0
-  Health:
+  _defaultMeleeSkill: 1
+  _defaultCastSkill: 0
+  _health:
     _value: 100
-  BaseAttack:
-    Radiant:
+  _baseAttack:
+    _radiant:
       _value: 0
-    Lightning:
+    _lightning:
       _value: 0
-    Fire:
+    _fire:
       _value: 0
-    Cold:
+    _cold:
       _value: 0
-    Physical:
+    _physical:
       _value: 15
-    Necrotic:
+    _necrotic:
       _value: 0
-  Speed:
+  _speed:
     _value: 2000
-  StartingEnergy:
+  _startingEnergy:
     _value: 0
-  MaximumEnergy:
+  _maximumEnergy:
     _value: 0
-  EnergyRegeneration:
+  _energyRegeneration:
     _value: 0
-  CritChance:
+  _critChance:
     _value: 0
-  CritMultiplier:
+  _critMultiplier:
     _value: 0
-  Accuracy:
+  _accuracy:
     _value: 0
-  Evasion:
+  _evasion:
     _value: 0
-  DamageResistance:
-    Radiant:
+  _damageResistance:
+    _radiant:
       _value: 0
-    Lightning:
+    _lightning:
       _value: 0
-    Fire:
+    _fire:
       _value: 0
-    Cold:
+    _cold:
       _value: 0
-    Physical:
+    _physical:
       _value: 0
-    Necrotic:
+    _necrotic:
       _value: 0
-  DamageReduction:
-    Radiant:
+  _damageReduction:
+    _radiant:
       _value: 0
-    Lightning:
+    _lightning:
       _value: 0
-    Fire:
+    _fire:
       _value: 0
-    Cold:
+    _cold:
       _value: 0
-    Physical:
+    _physical:
       _value: 0
-    Necrotic:
+    _necrotic:
       _value: 0
-  Projectile: {fileID: 0}
-  ManaGained:
+  _projectile: {fileID: 0}
+  _manaGained:
     _value: 0
-  Influence:
-    Light:
+  _influence:
+    _light:
       _value: 0
-    Sky:
+    _sky:
       _value: 0
-    Flame:
+    _flame:
       _value: 0
-    Ice:
+    _ice:
       _value: 0
-    Earth:
+    _earth:
       _value: 0
-    Shadow:
+    _shadow:
       _value: 0

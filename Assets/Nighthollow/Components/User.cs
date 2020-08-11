@@ -34,10 +34,13 @@ namespace Nighthollow.Components
     [Header("State")]
     [SerializeField] UserData _data;
     [SerializeField] List<Image> _influenceImages;
+    [SerializeField] int _life;
+    [SerializeField] int _mana;
 
     public Hand Hand => _hand;
-
-    public UserData Data => _data;
+    public int Mana => _mana;
+    public int Life => _life;
+    public Influence Influence => _data.Influence;
 
     void Awake()
     {
@@ -46,6 +49,8 @@ namespace Nighthollow.Components
 
     void Start()
     {
+      _life = _data.StartingLife.Value;
+      _mana = _data.StartingMana.Value;
       StartCoroutine(GainMana());
     }
 
@@ -54,7 +59,7 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(_data.ManaGainIntervalMs.Value / 1000f);
-        _data.Mana += _data.ManaGain.Value;
+        _mana += _data.ManaGain.Value;
       }
     }
 
@@ -63,7 +68,7 @@ namespace Nighthollow.Components
       gameObject.SetActive(true);
 
       var openingHand = new List<CardData>();
-      for (var i = 0; i < _data.StartingHandSize; ++i)
+      for (var i = 0; i < _data.StartingHandSize.Value; ++i)
       {
         openingHand.Add(_deck.Draw());
       }
@@ -71,10 +76,20 @@ namespace Nighthollow.Components
       _hand.DrawCards(openingHand);
     }
 
+    public void SpendMana(int amount)
+    {
+      _mana -= amount;
+    }
+
+    public void AddManaGain(Modifier modifier)
+    {
+      _data.ManaGain.AddModifier(modifier);
+    }
+
     void Update()
     {
-      _lifeText.text = _data.Life.ToString();
-      _manaText.text = _data.Mana.ToString();
+      _lifeText.text = _life.ToString();
+      _manaText.text = _mana.ToString();
 
       var index = 0;
       foreach (School school in Enum.GetValues(typeof(School)))

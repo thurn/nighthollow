@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d49bec019e345829ec3082336c51fbc, type: 3}
   m_Name: Deck
   m_EditorClassIdentifier: 
-  Cards:
-  - Card: {fileID: 11400000, guid: 308663d49af3be1448ee3a0f836c9e1d, type: 2}
-    Weight: 4000
-  - Card: {fileID: 11400000, guid: 1d591c29bd97c594c88b80b026d4bc16, type: 2}
-    Weight: 4000
-  - Card: {fileID: 11400000, guid: df3e795cedd02412eb49f745b4ae4615, type: 2}
-    Weight: 4000
-  - Card: {fileID: 11400000, guid: df3e795cedd02412eb49f745b4ae4615, type: 2}
-    Weight: 4000
+  _cards:
+  - {fileID: 11400000, guid: 1d591c29bd97c594c88b80b026d4bc16, type: 2}
+  - {fileID: 11400000, guid: 308663d49af3be1448ee3a0f836c9e1d, type: 2}
+  - {fileID: 11400000, guid: df3e795cedd02412eb49f745b4ae4615, type: 2}
+  - {fileID: 11400000, guid: df3e795cedd02412eb49f745b4ae4615, type: 2}

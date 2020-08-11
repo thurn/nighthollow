@@ -147,7 +147,7 @@ namespace Nighthollow.Components
       _collider.enabled = true;
 
       _state = CreatureState.Idle;
-      SelectSkill(true);
+      SelectSkill();
 
       // Must run after a state is selected.
       _data.Events.OnEnteredPlay(this);
@@ -280,18 +280,14 @@ namespace Nighthollow.Components
     {
       if (!IsAlive()) return;
 
-      SelectSkill(false);
+      SelectSkill();
 
       _data.Events.OnSkillComplete(this);
     }
 
-    void SelectSkill(bool activate)
+    void SelectSkill()
     {
       var overlaps = GetColliderOverlaps();
-      if (activate)
-      {
-        Debug.Log($"Got overlaps: {overlaps}. My layer: {gameObject.layer}. My owner: {Owner}");
-      }
 
       if (_data.DefaultMeleeSkill != SkillAnimationNumber.Unknown && overlaps.Length > 0)
       {

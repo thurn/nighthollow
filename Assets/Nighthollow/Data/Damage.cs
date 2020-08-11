@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using UnityEngine;
 
 namespace Nighthollow.Data
 {
@@ -29,12 +30,23 @@ namespace Nighthollow.Data
   [Serializable]
   public class Damage
   {
-    public Stat Radiant;
-    public Stat Lightning;
-    public Stat Fire;
-    public Stat Cold;
-    public Stat Physical;
-    public Stat Necrotic;
+    [SerializeField] Stat _radiant;
+    public Stat Radiant => _radiant;
+
+    [SerializeField] Stat _lightning;
+    public Stat Lightning => _lightning;
+
+    [SerializeField] Stat _fire;
+    public Stat Fire => _fire;
+
+    [SerializeField] Stat _cold;
+    public Stat Cold => _cold;
+
+    [SerializeField] Stat _physical;
+    public Stat Physical => _physical;
+
+    [SerializeField] Stat _necrotic;
+    public Stat Necrotic => _necrotic;
 
     public int Total()
     {

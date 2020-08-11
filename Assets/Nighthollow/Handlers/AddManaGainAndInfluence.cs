@@ -26,8 +26,8 @@ namespace Nighthollow.Handlers
   {
     public override void Execute(Creature creature)
     {
-      var user = Root.Instance.User.Data;
-      user.ManaGain.AddModifier(Modifier.WhileAlive(Operator.Add, creature.Data.ManaGained.Value, creature));
+      var user = Root.Instance.User;
+      user.AddManaGain(Modifier.WhileAlive(Operator.Add, creature.Data.ManaGained.Value, creature));
       foreach (School school in Enum.GetValues(typeof(School)))
       {
         var influence = creature.Data.Influence.Get(school).Value;

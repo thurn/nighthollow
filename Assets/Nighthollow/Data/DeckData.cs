@@ -14,20 +14,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 namespace Nighthollow.Data
 {
-  [Serializable]
-  public class CardWithWeight
-  {
-    public CardData Card;
-    public int Weight;
-  }
-
   [CreateAssetMenu(menuName = "Data/Deck")]
   public class DeckData : ScriptableObject
   {
-    public List<CardWithWeight> Cards;
+    [SerializeField] List<CardData> _cards;
+    public ReadOnlyCollection<CardData> Cards => _cards.AsReadOnly();
   }
 }

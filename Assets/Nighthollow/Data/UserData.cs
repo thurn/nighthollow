@@ -19,12 +19,25 @@ namespace Nighthollow.Data
   [CreateAssetMenu(menuName = "Data/User")]
   public class UserData : ScriptableObject
   {
-    public int Life;
-    public int Mana;
-    public Influence Influence;
-    public int StartingHandSize;
-    public Stat ManaGain;
-    public Stat ManaGainIntervalMs;
-    public Stat CardDrawIntervalMs;
+    [SerializeField] Stat _startingLife;
+    public Stat StartingLife => _startingLife;
+
+    [SerializeField] Stat _startingMana;
+    public Stat StartingMana => _startingMana;
+
+    [SerializeField] Influence _influence;
+    public Influence Influence => _influence;
+
+    [SerializeField] Stat _startingHandSize;
+    public Stat StartingHandSize => _startingHandSize;
+
+    [SerializeField] Stat _manaGain;
+    public Stat ManaGain => _manaGain;
+
+    [SerializeField] Stat _manaGainIntervalMs;
+    public Stat ManaGainIntervalMs => _manaGainIntervalMs;
+
+    [SerializeField] Stat _cardDrawIntervalMs;
+    public Stat CardDrawIntervalMs => _cardDrawIntervalMs;
   }
 }

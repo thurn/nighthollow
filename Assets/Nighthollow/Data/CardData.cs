@@ -28,10 +28,16 @@ namespace Nighthollow.Data
   [CreateAssetMenu(menuName = "Data/Card")]
   public class CardData : ScriptableObject
   {
-    public Card CardPrefab;
-    public bool CanPlay;
-    public Cost Cost;
-    public Sprite Image;
-    public CreatureData Creature;
+    [SerializeField] Card _cardPrefab;
+    public Card CardPrefab => _cardPrefab;
+
+    [SerializeField] Cost _cost;
+    public Cost Cost => _cost;
+
+    [SerializeField] Sprite _image;
+    public Sprite Image => _image;
+
+    [SerializeField] CreatureData _creature;
+    public CreatureData Creature => _creature;
   }
 }

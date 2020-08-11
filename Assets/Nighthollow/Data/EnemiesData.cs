@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 namespace Nighthollow.Data
@@ -20,8 +21,13 @@ namespace Nighthollow.Data
   [CreateAssetMenu(menuName = "Data/Enemies")]
   public class EnemiesData : ScriptableObject
   {
-    public List<CreatureData> Enemies;
-    public int InitialSpawnDelayMs;
-    public int SpawnDelayMs;
+    [SerializeField] List<CreatureData> _enemies;
+    public ReadOnlyCollection<CreatureData> Enemies => _enemies.AsReadOnly();
+
+    [SerializeField] int _initialSpawnDelayMs;
+    public int InitialSpawnDelayMs => _initialSpawnDelayMs;
+
+    [SerializeField] int _spawnDelayMs;
+    public int SpawnDelayMs => _spawnDelayMs;
   }
 }

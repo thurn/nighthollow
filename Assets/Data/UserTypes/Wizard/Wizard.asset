@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2504cae81844678de062bb70bcacb3, type: 3}
   m_Name: Wizard
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 2225211046518890780, guid: 4c5f0ff7d5d42458d9cca5092335c4ba, type: 3}
-  Owner: 0
-  Name: Wizard
-  Events:
+  _prefab: {fileID: 2225211046518890780, guid: 4c5f0ff7d5d42458d9cca5092335c4ba, type: 3}
+  _owner: 0
+  _name: Wizard
+  _events:
     _enteredPlay: []
     _died: []
     _creatureCollision: []
@@ -23,78 +23,78 @@ MonoBehaviour:
     _meleeSkillImpact: []
     _projectileImpact: []
     _skillComplete: []
-  DefaultMeleeSkill: 3
-  DefaultCastSkill: 2
-  Health:
+  _defaultMeleeSkill: 3
+  _defaultCastSkill: 2
+  _health:
     _value: 150
-  BaseAttack:
-    Radiant:
+  _baseAttack:
+    _radiant:
       _value: 0
-    Lightning:
+    _lightning:
       _value: 0
-    Fire:
+    _fire:
       _value: 5
-    Cold:
+    _cold:
       _value: 0
-    Physical:
+    _physical:
       _value: 5
-    Necrotic:
+    _necrotic:
       _value: 0
-  Speed:
+  _speed:
     _value: 0
-  StartingEnergy:
+  _startingEnergy:
     _value: 0
-  MaximumEnergy:
+  _maximumEnergy:
     _value: 0
-  EnergyRegeneration:
+  _energyRegeneration:
     _value: 0
-  CritChance:
+  _critChance:
     _value: 0
-  CritMultiplier:
+  _critMultiplier:
     _value: 0
-  Accuracy:
+  _accuracy:
     _value: 0
-  Evasion:
+  _evasion:
     _value: 0
-  DamageResistance:
-    Radiant:
+  _damageResistance:
+    _radiant:
       _value: 0
-    Lightning:
+    _lightning:
       _value: 0
-    Fire:
+    _fire:
       _value: 0
-    Cold:
+    _cold:
       _value: 0
-    Physical:
+    _physical:
       _value: 0
-    Necrotic:
+    _necrotic:
       _value: 0
-  DamageReduction:
-    Radiant:
+  _damageReduction:
+    _radiant:
       _value: 0
-    Lightning:
+    _lightning:
       _value: 0
-    Fire:
+    _fire:
       _value: 0
-    Cold:
+    _cold:
       _value: 0
-    Physical:
+    _physical:
       _value: 0
-    Necrotic:
+    _necrotic:
       _value: 0
-  Projectile: {fileID: 11400000, guid: 3b47c79d8f9e7b641a756117e6dfc4b8, type: 2}
-  ManaGained:
+  _projectile: {fileID: 11400000, guid: 3b47c79d8f9e7b641a756117e6dfc4b8, type: 2}
+  _manaGained:
     _value: 0
-  Influence:
-    Light:
+  _influence:
+    _light:
       _value: 0
-    Sky:
+    _sky:
       _value: 0
-    Flame:
+    _flame:
       _value: 0
-    Ice:
+    _ice:
       _value: 0
-    Earth:
+    _earth:
       _value: 0
-    Shadow:
+    _shadow:
       _value: 0
