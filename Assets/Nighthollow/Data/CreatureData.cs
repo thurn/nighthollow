@@ -16,6 +16,7 @@ using Nighthollow.Components;
 using Nighthollow.Delegate;
 using Nighthollow.Events;
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace Nighthollow.Data
@@ -120,5 +121,22 @@ namespace Nighthollow.Data
 
     [SerializeField] Damage _damageReduction;
     public Damage DamageReduction => _damageReduction;
+
+    public CreatureData Clone()
+    {
+      var result = Instantiate(this);
+
+      if (_delegate)
+      {
+        result._delegate = _delegate.Clone();
+      }
+
+      if (_projectile)
+      {
+        result._projectile = _projectile.Clone();
+      }
+
+      return result;
+    }
   }
 }

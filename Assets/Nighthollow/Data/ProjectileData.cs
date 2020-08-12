@@ -14,5 +14,10 @@ namespace Nighthollow.Data
 
     [SerializeField] int _hitboxSize;
     public int HitboxSize => _hitboxSize;
+
+    public ProjectileData Clone()
+    {
+      return Instantiate(this);
+    }
   }
 }

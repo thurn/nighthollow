@@ -15,8 +15,8 @@ MonoBehaviour:
   _cardPrefab: {fileID: 8201078851043189447, guid: b10a80a90394244668d5089010634cd3,
     type: 3}
   _cost:
-    ManaCost: 30
-    InfluenceCost:
+    _manaCost: 25
+    _influenceCost:
       _light:
         _value: 0
       _sky:

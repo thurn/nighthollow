@@ -15,7 +15,7 @@ MonoBehaviour:
   _prefab: {fileID: 6448519131692088552, guid: 518931ad86ca64fa79df159ca1bb4a0e, type: 3}
   _owner: 0
   _name: Blackguard
-  _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
+  _delegate: {fileID: 11400000, guid: 82f9099705b9c12418f4e0f1bf74bdbf, type: 2}
   _events:
     _enteredPlay: []
     _died: []
@@ -38,7 +38,7 @@ MonoBehaviour:
         _value: 0
       _shadow:
         _value: 0
-    _meleeHitSize: {x: 0, y: 0}
+    _meleeHitSize: {x: 5000, y: 6000}
   _health:
     _value: 150
   _baseAttack:
@@ -69,7 +69,7 @@ MonoBehaviour:
   _accuracy:
     _value: 0
   _evasion:
-    _value: 0
+    _value: 16846
   _damageResistance:
     _radiant:
       _value: 0

@@ -24,12 +24,15 @@ namespace Nighthollow.Components
 {
   public sealed class Hand : MonoBehaviour
   {
-    [Header("Config")] [SerializeField] bool _debugMode;
+    [Header("Config")]
+    [SerializeField] bool _debugMode;
     [SerializeField] Transform _deckPosition;
     [SerializeField] float _initialCardScale;
     [SerializeField] float _finalCardScale;
     [SerializeField] int _zRotationMultiplier;
-    [Header("State")] [SerializeField] Transform _controlPoint1;
+
+    [Header("State")]
+    [SerializeField] Transform _controlPoint1;
     [SerializeField] Transform _controlPoint2;
     [SerializeField] Transform _controlPoint3;
     [SerializeField] Transform _controlPoint4;

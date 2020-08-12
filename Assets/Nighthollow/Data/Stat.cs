@@ -73,6 +73,13 @@ namespace Nighthollow.Data
     }
   }
 
+  /// <summary>
+  /// Represents an integer value which can have its value changed by operations called Modifiers.
+  /// </summary>
+  /// 
+  /// Note: It is unsafe for unity ScriptableObjects to contain mutable state because they are
+  /// copied by reference, but normal serializable classes are safe because they are
+  /// copied by value during Instantiate().
   [Serializable]
   public class Stat
   {

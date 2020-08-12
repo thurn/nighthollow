@@ -21,8 +21,11 @@ namespace Nighthollow.Data
   [Serializable]
   public class Cost
   {
-    public int ManaCost;
-    public Influence InfluenceCost;
+    [SerializeField] int _manaCost;
+    public int ManaCost => _manaCost;
+
+    [SerializeField] Influence _influenceCost;
+    public Influence InfluenceCost => _influenceCost;
   }
 
   [CreateAssetMenu(menuName = "Data/Card")]
@@ -39,5 +42,17 @@ namespace Nighthollow.Data
 
     [SerializeField] CreatureData _creature;
     public CreatureData Creature => _creature;
+
+    public CardData Clone()
+    {
+      var result = Instantiate(this);
+
+      if (_creature)
+      {
+        result._creature = _creature.Clone();
+      }
+
+      return result;
+    }
   }
 }

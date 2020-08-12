@@ -39,7 +39,7 @@ namespace Nighthollow.Components
     {
       if (_debugOrderedDraws)
       {
-        return Instantiate(_cards[_lastDraw++ % _cards.Count]);
+        return _cards[_lastDraw++ % _cards.Count].Clone();
       }
 
       var selector = new DynamicRandomSelector<int>(-1, _cards.Count);
@@ -52,7 +52,7 @@ namespace Nighthollow.Components
 
       var index = selector.SelectRandomItem();
       DecrementWeight(index);
-      return Instantiate(_cards[index]);
+      return _cards[index].Clone();
     }
 
     void DecrementWeight(int index)
