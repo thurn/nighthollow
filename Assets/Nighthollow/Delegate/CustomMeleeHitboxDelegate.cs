@@ -20,7 +20,7 @@ namespace Nighthollow.Delegate
 {
   [CreateAssetMenu(menuName = "Delegate/CustomMeleeHitboxDelegate")]
   public sealed class CustomMeleeHitboxDelegate : CreatureDelegate
-  { 
+  {
     [Header("State")]
     [SerializeField] CustomTriggerCollider _collider;
 

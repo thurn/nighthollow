@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using DG.Tweening;
 using Nighthollow.Data;
 using Nighthollow.Services;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Nighthollow.Components

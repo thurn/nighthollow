@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Components;
 using System;
 using System.Collections.Generic;
-using Nighthollow.Components;
 using UnityEngine;
 
 namespace Nighthollow.Events
@@ -29,6 +29,6 @@ namespace Nighthollow.Events
       _enteredPlay.ForEach(c => c.Execute(source));
 
     public void OnDied(Creature source, Creature killedBy) =>
-      _died.ForEach(c => c.Execute(source, new List<Creature> {killedBy}));
+      _died.ForEach(c => c.Execute(source, new List<Creature> { killedBy }));
   }
 }

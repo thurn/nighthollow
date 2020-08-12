@@ -16,7 +16,6 @@ using Nighthollow.Components;
 using Nighthollow.Delegate;
 using Nighthollow.Events;
 using System;
-using TMPro;
 using UnityEngine;
 
 namespace Nighthollow.Data
@@ -57,7 +56,7 @@ namespace Nighthollow.Data
   }
 
   [CreateAssetMenu(menuName = "Data/Creature")]
-  public class CreatureData : ScriptableObject
+  public sealed class CreatureData : ScriptableObject
   {
     [SerializeField] Creature _prefab;
     public Creature Prefab => _prefab;

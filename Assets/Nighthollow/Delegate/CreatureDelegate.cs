@@ -32,7 +32,7 @@ namespace Nighthollow.Delegate
     public virtual CreatureDelegate Clone()
     {
       return Instantiate(this);
-    }   
+    }
 
     /// <summary>
     /// Called when a creature is ready to use a skill in order to determine which skill

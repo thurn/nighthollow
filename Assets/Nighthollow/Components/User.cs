@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using Nighthollow.Data;
 using Nighthollow.Services;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -67,7 +67,7 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(_data.CardDrawIntervalMs.Value / 1000f);
-        _hand.DrawCards(new List<CardData>{_deck.Draw()});
+        _hand.DrawCards(new List<CardData> { _deck.Draw() });
       }
     }
 
