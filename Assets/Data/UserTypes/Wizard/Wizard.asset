@@ -15,16 +15,30 @@ MonoBehaviour:
   _prefab: {fileID: 2225211046518890780, guid: 4c5f0ff7d5d42458d9cca5092335c4ba, type: 3}
   _owner: 0
   _name: Wizard
+  _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
   _events:
     _enteredPlay: []
     _died: []
-    _creatureCollision: []
-    _rangedSkillFired: []
-    _meleeSkillImpact: []
-    _projectileImpact: []
-    _skillComplete: []
   _defaultMeleeSkill: 3
   _defaultCastSkill: 2
+  _projectile: {fileID: 11400000, guid: 3b47c79d8f9e7b641a756117e6dfc4b8, type: 2}
+  _parameters:
+    _manaGained:
+      _value: 0
+    _influenceAdded:
+      _light:
+        _value: 0
+      _sky:
+        _value: 0
+      _flame:
+        _value: 0
+      _ice:
+        _value: 0
+      _earth:
+        _value: 0
+      _shadow:
+        _value: 0
+    _meleeHitSize: {x: 0, y: 0}
   _health:
     _value: 150
   _baseAttack:
@@ -81,20 +95,4 @@ MonoBehaviour:
     _physical:
       _value: 0
     _necrotic:
-      _value: 0
-  _projectile: {fileID: 11400000, guid: 3b47c79d8f9e7b641a756117e6dfc4b8, type: 2}
-  _manaGained:
-    _value: 0
-  _influence:
-    _light:
-      _value: 0
-    _sky:
-      _value: 0
-    _flame:
-      _value: 0
-    _ice:
-      _value: 0
-    _earth:
-      _value: 0
-    _shadow:
       _value: 0
