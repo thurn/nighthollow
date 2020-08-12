@@ -19,6 +19,9 @@ namespace Nighthollow.Events
 {
   public abstract class SkillSelectionHandler : ScriptableObject
   {
+    /// <summary>Invoked when this creature is first activated
+    public virtual void OnActivate(Creature creature) { }
+
     /// <summary>
     /// Invoked when this creature's box collider hits another creature while it is idle.
     /// </summary>

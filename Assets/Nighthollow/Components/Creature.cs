@@ -52,6 +52,7 @@ namespace Nighthollow.Components
     [SerializeField] HealthBar _healthBar;
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SortingGroup _sortingGroup;
+    [SerializeField] CustomTriggerCollider _projectileCollider;
 
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
@@ -113,6 +114,10 @@ namespace Nighthollow.Components
 
     public Transform ProjectileSource => _projectileSource;
 
+    public Collider2D Collider => _collider;
+
+    public CustomTriggerCollider ProjectileCollider => _projectileCollider;
+
     public void EditorSetReferences(Transform projectileSource,
       Transform healthbarAnchor,
       AttachmentDisplay attachmentDisplay)
@@ -147,15 +152,14 @@ namespace Nighthollow.Components
           fileValue.ToYPosition() + Constants.EnemyCreatureYOffset);
       }
       _collider.enabled = true;
-
       if (HasProjectile())
       {
-        CustomTriggerCollider.Add(this, new Vector2(15, 0), new Vector2(30, 1));
+        _projectileCollider = CustomTriggerCollider.Add(this, new Vector2(15, 0), new Vector2(30, 1));
       }
 
+      _data.Delegate.OnActivate(this);
       _state = CreatureState.Idle;
       _selectSkill = true;
-
       _data.Events.OnEnteredPlay(this);
     }
 
@@ -208,21 +212,18 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      if (!CanUseSkill()) return;
-
       // Collision could be with a Projectile or with a TriggerCollider:
-      var creature = other.GetComponent<Creature>();
-
-      if (creature)
+      if (CanUseSkill() && other.GetComponent<Creature>())
       {
-        if (_data.Handlers.SkillSelectionHandler)
-        {
-          _data.Handlers.SkillSelectionHandler.OnCollision(this, creature);
-        }
-        else if (_data.DefaultMeleeSkill != SkillAnimationNumber.Unknown)
-        {
-          UseSkill(_data.DefaultMeleeSkill, SkillType.Melee);
-        }
+        _selectSkill = true;
+      }
+    }
+
+    public void OnCustomTriggerCollision(Creature enemy)
+    {
+      if (CanUseSkill())
+      {
+        _selectSkill = true;
       }
     }
 
@@ -234,57 +235,17 @@ namespace Nighthollow.Components
       switch (_currentSkillType)
       {
         case SkillType.Ranged:
-          if (_data.Handlers.FireProjectileHandler)
-          {
-            _data.Handlers.FireProjectileHandler.Execute(this);
-          }
-          else
-          {
-            var projectile = Root.Instance.ObjectPoolService.Create(
-              _data.Projectile.Prefab, _projectileSource.position);
-            projectile.Initialize(this, _data.Projectile, _projectileSource);
-          }
+          _data.Delegate.OnFireProjectile(this);
           break;
         case SkillType.Melee:
-          if (_data.Handlers.MeleeHitHandler)
-          {
-            _data.Handlers.MeleeHitHandler.Execute(this);
-          }
-          else
-          {
-            foreach (var creature in GetColliderOverlaps())
-            {
-              creature.AddDamage(_data.BaseAttack.Total());
-            }
-          }
+          _data.Delegate.OnMeleeHit(this);
           break;
         default:
           throw Errors.UnknownEnumValue(_currentSkillType);
       }
     }
 
-    List<Creature> GetColliderOverlaps()
-    {
-      var hits = Physics2D.OverlapBoxAll(
-        _collider.bounds.center,
-        _collider.bounds.size,
-        angle: 0,
-        Constants.LayerMaskForCreatures(Owner.GetOpponent()));
-
-      var hitCreatures = new List<Creature>();
-      foreach (var hit in hits)
-      {
-        var creature = hit.GetComponent<Creature>();
-        if (creature)
-        {
-          hitCreatures.Add(creature);
-        }
-      }
-
-      return hitCreatures;
-    }
-
-    public void AddDamage(int damage)
+    public void ApplyDamage(int damage)
     {
       _damageTaken += damage;
       if (_damageTaken >= _data.Health.Value)
@@ -295,69 +256,33 @@ namespace Nighthollow.Components
 
     public void OnProjectileImpact(Projectile projectile)
     {
-      if (_data.Handlers.ProjectileImpactHandler)
-      {
-        _data.Handlers.ProjectileImpactHandler.OnProjectileImpact(this, projectile);
-      }
-      else
-      {
-        var hits = Physics2D.OverlapBoxAll(
-          projectile.transform.position,
-          new Vector2(_data.Projectile.HitboxSize / 1000f, _data.Projectile.HitboxSize / 1000f),
-          angle: 0,
-          Constants.LayerMaskForCreatures(Owner.GetOpponent()));
-
-        var hitCreatures = new List<Creature>(hits.Length);
-        hitCreatures.AddRange(hits.Select(ComponentUtils.GetComponent<Creature>));
-
-        foreach (var creature in hitCreatures)
-        {
-          creature.AddDamage(_data.BaseAttack.Total());
-        }
-      }
+      _data.Delegate.OnProjectileImpact(this, projectile);
     }
 
     public void OnSkillAnimationCompleted(SkillAnimationNumber animationNumber)
     {
       if (!IsAlive()) return;
-
       _selectSkill = true;
     }
 
     void SelectSkill()
     {
-      if (_data.Handlers.SkillSelectionHandler)
-      {
-        _data.Handlers.SkillSelectionHandler.OnSkillCompleted(this);
-        return;
-      }
+      if (!IsAlive()) return;
 
-      var overlaps = GetColliderOverlaps();
-
-      if (_data.DefaultMeleeSkill != SkillAnimationNumber.Unknown && overlaps.Count > 0)
+      if (_data.Delegate.ShouldUseMeleeSkill(this))
       {
         UseSkill(_data.DefaultMeleeSkill, SkillType.Melee);
         return;
       }
-      else if (HasProjectile())
+      else if (_data.Delegate.ShouldUseProjectileSkill(this))
       {
-        var hit = Physics2D.BoxCast(
-          _collider.bounds.center,
-          _collider.bounds.size,
-          angle: 0,
-          direction: Constants.ForwardDirectionForPlayer(Owner),
-          distance: 25f,
-          layerMask: Constants.LayerMaskForCreatures(Owner.GetOpponent()));
-
-        if (hit.collider)
-        {
-          UseSkill(_data.DefaultCastSkill, SkillType.Ranged);
-          return;
-        }
+        UseSkill(_data.DefaultCastSkill, SkillType.Ranged);
+        return;
       }
-
-      // Default state
-      _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
+      else
+      {
+        _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
+      }
     }
 
     public void OnDeathAnimationCompleted()
@@ -365,21 +290,9 @@ namespace Nighthollow.Components
       DestroyCreature();
     }
 
-    public void OnCustomTriggerCollision(Creature enemy)
-    {
-      if (!CanUseSkill()) return;
-
-      if (_data.Handlers.SkillSelectionHandler)
-      {
-        _data.Handlers.SkillSelectionHandler.OnCustomTriggerCollision(this, enemy);
-      }
-      else if (HasProjectile())
-      {
-        UseSkill(_data.DefaultCastSkill, SkillType.Ranged);
-      }
-    }
-
     public bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
+
+    public bool HasMelee() => _data.DefaultMeleeSkill != SkillAnimationNumber.Unknown;
 
     public bool HasProjectile() => _data.DefaultCastSkill != SkillAnimationNumber.Unknown && _data.Projectile;
 

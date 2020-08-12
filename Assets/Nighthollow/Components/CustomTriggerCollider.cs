@@ -20,8 +20,11 @@ namespace Nighthollow.Components
   public sealed class CustomTriggerCollider : MonoBehaviour
   {
     [SerializeField] Creature _creature;
+    [SerializeField] BoxCollider2D _collider;
 
-    public static void Add(Creature creature, Vector2 offset, Vector2 size)
+    public BoxCollider2D Collider => _collider;
+
+    public static CustomTriggerCollider Add(Creature creature, Vector2 offset, Vector2 size)
     {
       var trigger = new GameObject(creature.name + "Trigger")
       {
@@ -29,17 +32,20 @@ namespace Nighthollow.Components
       };
 
       trigger.transform.SetParent(creature.transform, worldPositionStays: false);
-      trigger.AddComponent<CustomTriggerCollider>()._creature = creature;
+      var result = trigger.AddComponent<CustomTriggerCollider>();
+      result._creature = creature;
 
       var body = trigger.AddComponent<Rigidbody2D>();
       body.mass = 1f;
       body.gravityScale = 0f;
 
-      var collide = trigger.AddComponent<BoxCollider2D>();
-      collide.isTrigger = true;
-      collide.offset = creature.transform.InverseTransformVector(offset) +
+      var collider = trigger.AddComponent<BoxCollider2D>();
+      collider.isTrigger = true;
+      collider.offset = creature.transform.InverseTransformVector(offset) +
         ((Vector3)creature.GetComponent<BoxCollider2D>().offset);
-      collide.size = creature.transform.InverseTransformVector(size);
+      collider.size = creature.transform.InverseTransformVector(size);
+      result._collider = collider;
+      return result;
     }
 
     void OnTriggerEnter2D(Collider2D other)

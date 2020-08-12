@@ -13,7 +13,9 @@
 // limitations under the License.
 
 using Nighthollow.Components;
+using Nighthollow.Delegate;
 using Nighthollow.Events;
+using System;
 using UnityEngine;
 
 namespace Nighthollow.Data
@@ -40,6 +42,19 @@ namespace Nighthollow.Data
     Ranged
   }
 
+  [Serializable]
+  public sealed class CreatureParameters
+  {
+    [SerializeField] Stat _manaGained;
+    public Stat ManaGained => _manaGained;
+
+    [SerializeField] Influence _influenceAdded;
+    public Influence InfluenceAdded => _influenceAdded;
+
+    [SerializeField] Vector2 _meleeHitSize;
+    public Vector2 MeleeHitSize => _meleeHitSize;
+  }
+
   [CreateAssetMenu(menuName = "Data/Creature")]
   public class CreatureData : ScriptableObject
   {
@@ -52,8 +67,8 @@ namespace Nighthollow.Data
     [SerializeField] string _name;
     public string Name => _name;
 
-    [SerializeField] CreatureHandlers _handlers;
-    public CreatureHandlers Handlers => _handlers;
+    [SerializeField] CreatureDelegate _delegate;
+    public CreatureDelegate Delegate => _delegate;
 
     [SerializeField] CreatureEvents _events;
     public CreatureEvents Events => _events;
@@ -63,6 +78,12 @@ namespace Nighthollow.Data
 
     [SerializeField] SkillAnimationNumber _defaultCastSkill;
     public SkillAnimationNumber DefaultCastSkill => _defaultCastSkill;
+
+    [SerializeField] ProjectileData _projectile;
+    public ProjectileData Projectile => _projectile;
+
+    [SerializeField] CreatureParameters _parameters;
+    public CreatureParameters Parameters => _parameters;
 
     [SerializeField] Stat _health;
     public Stat Health => _health;
@@ -99,14 +120,5 @@ namespace Nighthollow.Data
 
     [SerializeField] Damage _damageReduction;
     public Damage DamageReduction => _damageReduction;
-
-    [SerializeField] ProjectileData _projectile;
-    public ProjectileData Projectile => _projectile;
-
-    [SerializeField] Stat _manaGained;
-    public Stat ManaGained => _manaGained;
-
-    [SerializeField] Influence _influence;
-    public Influence Influence => _influence;
   }
 }

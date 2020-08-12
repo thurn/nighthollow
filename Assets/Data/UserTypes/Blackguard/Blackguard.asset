@@ -10,29 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff2504cae81844678de062bb70bcacb3, type: 3}
-  m_Name: Acolyte
+  m_Name: Blackguard
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 6973698551416525957, guid: 13d0ff59514c84c29abea23bb6c7fbad, type: 3}
+  _prefab: {fileID: 6448519131692088552, guid: 518931ad86ca64fa79df159ca1bb4a0e, type: 3}
   _owner: 0
-  _name: Acolyte
+  _name: Blackguard
   _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
   _events:
-    _enteredPlay:
-    - {fileID: 11400000, guid: 1f95f6bb3d3394d618fb8a5b40821254, type: 2}
+    _enteredPlay: []
     _died: []
-  _defaultMeleeSkill: 2
-  _defaultCastSkill: 0
+  _defaultMeleeSkill: 1
+  _defaultCastSkill: 2
   _projectile: {fileID: 0}
   _parameters:
     _manaGained:
-      _value: 5
+      _value: 0
     _influenceAdded:
       _light:
         _value: 0
       _sky:
         _value: 0
       _flame:
-        _value: 1
+        _value: 0
       _ice:
         _value: 0
       _earth:
@@ -41,7 +40,7 @@ MonoBehaviour:
         _value: 0
     _meleeHitSize: {x: 0, y: 0}
   _health:
-    _value: 120
+    _value: 150
   _baseAttack:
     _radiant:
       _value: 0
@@ -52,7 +51,7 @@ MonoBehaviour:
     _cold:
       _value: 0
     _physical:
-      _value: 5
+      _value: 25
     _necrotic:
       _value: 0
   _speed:
