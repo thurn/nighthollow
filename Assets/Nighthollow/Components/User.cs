@@ -51,7 +51,6 @@ namespace Nighthollow.Components
     {
       _life = _data.StartingLife.Value;
       _mana = _data.StartingMana.Value;
-      StartCoroutine(GainMana());
     }
 
     IEnumerator<YieldInstruction> GainMana()
@@ -63,9 +62,20 @@ namespace Nighthollow.Components
       }
     }
 
-    public void DrawOpeningHand()
+    IEnumerator<YieldInstruction> DrawCards()
+    {
+      while (true)
+      {
+        yield return new WaitForSeconds(_data.CardDrawIntervalMs.Value / 1000f);
+        _hand.DrawCards(new List<CardData>{_deck.Draw()});
+      }
+    }
+
+    public void OnStartGame()
     {
       gameObject.SetActive(true);
+      StartCoroutine(GainMana());
+      StartCoroutine(DrawCards());
 
       var openingHand = new List<CardData>();
       for (var i = 0; i < _data.StartingHandSize.Value; ++i)

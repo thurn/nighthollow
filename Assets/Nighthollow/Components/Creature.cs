@@ -40,6 +40,7 @@ namespace Nighthollow.Components
 
     [Header("State")] [SerializeField] bool _initialized;
     [SerializeField] CreatureData _data;
+    [SerializeField] bool _selectSkill;
     [SerializeField] int _damageTaken;
     [SerializeField] CreatureState _state;
     [SerializeField] SkillType _currentSkillType;
@@ -143,11 +144,10 @@ namespace Nighthollow.Components
           // We need to offset the Y position for enemy creatures because they are center-anchored:
           fileValue.ToYPosition() + Constants.EnemyCreatureYOffset);
       }
-
       _collider.enabled = true;
 
       _state = CreatureState.Idle;
-      SelectSkill();
+      _selectSkill = true;
 
       // Must run after a state is selected.
       _data.Events.OnEnteredPlay(this);
@@ -251,10 +251,10 @@ namespace Nighthollow.Components
     Collider2D[] GetColliderOverlaps()
     {
       return Physics2D.OverlapBoxAll(
-                  _collider.bounds.center,
-                  _collider.bounds.size,
-                  angle: 0,
-                  Constants.LayerMaskForCreatures(Owner.GetOpponent()));
+        _collider.bounds.center,
+        _collider.bounds.size,
+        angle: 0,
+        Constants.LayerMaskForCreatures(Owner.GetOpponent()));
     }
 
     public void AddDamage(int damage)
@@ -280,7 +280,7 @@ namespace Nighthollow.Components
     {
       if (!IsAlive()) return;
 
-      SelectSkill();
+      _selectSkill = true;
 
       _data.Events.OnSkillComplete(this);
     }
@@ -292,6 +292,7 @@ namespace Nighthollow.Components
       if (_data.DefaultMeleeSkill != SkillAnimationNumber.Unknown && overlaps.Length > 0)
       {
         UseSkill(_data.DefaultMeleeSkill, SkillType.Melee);
+        return;
       }
       else if (HasProjectile())
       {
@@ -306,16 +307,11 @@ namespace Nighthollow.Components
         if (hit.collider)
         {
           UseSkill(_data.DefaultCastSkill, SkillType.Ranged);
-        }
-        else
-        {
-          _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
+          return;
         }
       }
-      else
-      {
-        _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
-      }
+
+      _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
     }
 
     public void OnDeathAnimationCompleted()
@@ -326,8 +322,8 @@ namespace Nighthollow.Components
     public void OnOpponentCreaturePlayed(Creature enemy)
     {
       if (_state == CreatureState.Idle &&
-        HasProjectile() &&
-        enemy.FilePosition == FilePosition)
+          HasProjectile() &&
+          enemy.FilePosition == FilePosition)
       {
         UseSkill(_data.DefaultCastSkill, SkillType.Ranged);
       }
@@ -346,6 +342,15 @@ namespace Nighthollow.Components
         100 - Mathf.RoundToInt(transform.position.y * 10) - Mathf.RoundToInt(transform.position.x);
 
       if (_state == CreatureState.Placing) return;
+
+      if (_selectSkill)
+      {
+        // SelectSkill() is delayed until the next Update() call instead of being invoked
+        // immediately because it gives time for the physics system to correctly update
+        // collider positions after activation. This was extremely annoying to debug :)
+        SelectSkill();
+        _selectSkill = false;
+      }
 
       transform.eulerAngles = _data.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
