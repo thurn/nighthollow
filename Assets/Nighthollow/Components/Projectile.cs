@@ -74,17 +74,7 @@ namespace Nighthollow.Components
     {
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;
-
-      var hits = Physics2D.OverlapBoxAll(
-        transform.position,
-        new Vector2(_projectileData.HitboxSize / 1000f, _projectileData.HitboxSize / 1000f),
-        angle: 0,
-        Constants.LayerMaskForCreatures(_firedBy.Owner.GetOpponent()));
-
-      var hitCreatures = new List<Creature>(hits.Length);
-      hitCreatures.AddRange(hits.Select(ComponentUtils.GetComponent<Creature>));
-
-      _firedBy.OnProjectileImpact(hitCreatures);
+      _firedBy.OnProjectileImpact(this);
       gameObject.SetActive(false);
     }
   }

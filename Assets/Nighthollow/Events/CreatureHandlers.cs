@@ -13,22 +13,23 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using Nighthollow.Components;
 using UnityEngine;
 
 namespace Nighthollow.Events
 {
   [Serializable]
-  public sealed class CreatureEvents
+  public sealed class CreatureHandlers
   {
-    [SerializeField] List<CreatureEventHandler> _enteredPlay;
-    [SerializeField] List<MultipleCreaturesEventHandler> _died;
+    [SerializeField] SkillSelectionHandler _skillSelectionHandler;
+    public SkillSelectionHandler SkillSelectionHandler => _skillSelectionHandler;
+    
+    [SerializeField] CreatureEventHandler _fireProjectileHandler;
+    public CreatureEventHandler FireProjectileHandler => _fireProjectileHandler;
 
-    public void OnEnteredPlay(Creature source) =>
-      _enteredPlay.ForEach(c => c.Execute(source));
+    [SerializeField] CreatureEventHandler _meleeHitHandler;
+    public CreatureEventHandler MeleeHitHandler => _meleeHitHandler;
 
-    public void OnDied(Creature source, Creature killedBy) =>
-      _died.ForEach(c => c.Execute(source, new List<Creature> {killedBy}));
+    [SerializeField] ProjectImpactHandler _projectileImpactHandler;
+    public ProjectImpactHandler ProjectileImpactHandler => _projectileImpactHandler;
   }
 }

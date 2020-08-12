@@ -52,6 +52,9 @@ namespace Nighthollow.Data
     [SerializeField] string _name;
     public string Name => _name;
 
+    [SerializeField] CreatureHandlers _handlers;
+    public CreatureHandlers Handlers => _handlers;
+
     [SerializeField] CreatureEvents _events;
     public CreatureEvents Events => _events;
 

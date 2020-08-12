@@ -12,23 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using Nighthollow.Components;
 using UnityEngine;
 
 namespace Nighthollow.Events
 {
-  [Serializable]
-  public sealed class CreatureEvents
+  public abstract class SkillSelectionHandler : ScriptableObject
   {
-    [SerializeField] List<CreatureEventHandler> _enteredPlay;
-    [SerializeField] List<MultipleCreaturesEventHandler> _died;
+    /// <summary>
+    /// Invoked when this creature's box collider hits another creature while it is idle.
+    /// </summary>
+    public abstract void OnCollision(Creature source, Creature other);
 
-    public void OnEnteredPlay(Creature source) =>
-      _enteredPlay.ForEach(c => c.Execute(source));
+    /// <summary>
+    /// Invoked when this creature's custom trigger collider hits another creature
+    /// </summary>
+    public abstract void OnCustomTriggerCollision(Creature source, Creature other);
 
-    public void OnDied(Creature source, Creature killedBy) =>
-      _died.ForEach(c => c.Execute(source, new List<Creature> {killedBy}));
+    /// <summary>Invoked when this creature is first created or finishes a skill.</summary>
+    public abstract void OnSkillCompleted(Creature creature);
   }
 }

@@ -42,11 +42,6 @@ namespace Nighthollow.Services
       result.ActivateCreature(null, file);
       _enemyCreatures.Add(result);
 
-      foreach (var creature in _userCreatures.Values)
-      {
-        creature.OnOpponentCreaturePlayed(result);
-      }
-
       return result;
     }
 
@@ -54,11 +49,6 @@ namespace Nighthollow.Services
     {
       creature.ActivateCreature(rank, file);
       _userCreatures[(rank, file)] = creature;
-
-      foreach (var enemy in _enemyCreatures)
-      {
-        enemy.OnOpponentCreaturePlayed(creature);
-      }
     }
 
     public void RemoveCreature(Creature creature)
