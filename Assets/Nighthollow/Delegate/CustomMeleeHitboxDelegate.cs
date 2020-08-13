@@ -34,14 +34,14 @@ namespace Nighthollow.Delegate
 
     public override bool ShouldUseMeleeSkill(Creature self)
     {
-      return self.HasMelee() && GetCollidingCreatures(self.Owner, _collider.Collider).Any();
+      return self.HasMeleeSkill() && GetCollidingCreatures(self.Owner, _collider.Collider).Any();
     }
 
     public override void OnMeleeHit(Creature self)
     {
       foreach (var creature in GetCollidingCreatures(self.Owner, _collider.Collider))
       {
-        creature.ApplyDamage(self.Data.BaseAttack.Total());
+        creature.AddDamage(self.Data.BaseAttack.Total());
       }
     }
   }

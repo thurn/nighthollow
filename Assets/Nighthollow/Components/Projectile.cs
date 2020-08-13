@@ -29,6 +29,8 @@ namespace Nighthollow.Components
     [Header("State")]
     [SerializeField] Creature _firedBy;
 
+    public ProjectileData Data => _projectileData;
+
     public void Initialize(Creature firedBy, ProjectileData projectileData, Transform firingPoint)
     {
       _firedBy = firedBy;

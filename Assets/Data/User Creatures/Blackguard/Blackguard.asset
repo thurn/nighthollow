@@ -19,9 +19,15 @@ MonoBehaviour:
   _events:
     _enteredPlay: []
     _died: []
-  _defaultMeleeSkill: 1
-  _defaultCastSkill: 2
-  _projectile: {fileID: 0}
+  _skills:
+  - _energyCost: 0
+    _animation: 1
+    _skillType: 1
+    _projectile: {fileID: 0}
+  - _energyCost: 0
+    _animation: 2
+    _skillType: 2
+    _projectile: {fileID: 11400000, guid: 3b47c79d8f9e7b641a756117e6dfc4b8, type: 2}
   _parameters:
     _manaGained:
       _value: 0
@@ -60,7 +66,9 @@ MonoBehaviour:
     _value: 0
   _maximumEnergy:
     _value: 0
-  _energyRegeneration:
+  _energyGain:
+    _value: 0
+  _energyGainIntervalMs:
     _value: 0
   _critChance:
     _value: 0

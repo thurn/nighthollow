@@ -16,6 +16,8 @@ using Nighthollow.Components;
 using Nighthollow.Delegate;
 using Nighthollow.Events;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Nighthollow.Data
@@ -38,8 +40,9 @@ namespace Nighthollow.Data
 
   public enum SkillType
   {
+    Unknown,
     Melee,
-    Ranged
+    Projectile
   }
 
   [Serializable]
@@ -73,14 +76,8 @@ namespace Nighthollow.Data
     [SerializeField] CreatureEvents _events;
     public CreatureEvents Events => _events;
 
-    [SerializeField] SkillAnimationNumber _defaultMeleeSkill;
-    public SkillAnimationNumber DefaultMeleeSkill => _defaultMeleeSkill;
-
-    [SerializeField] SkillAnimationNumber _defaultCastSkill;
-    public SkillAnimationNumber DefaultCastSkill => _defaultCastSkill;
-
-    [SerializeField] ProjectileData _projectile;
-    public ProjectileData Projectile => _projectile;
+    [SerializeField] List<SkillData> _skills;
+    public IReadOnlyCollection<SkillData> Skills => _skills.AsReadOnly();
 
     [SerializeField] CreatureParameters _parameters;
     public CreatureParameters Parameters => _parameters;
@@ -100,8 +97,11 @@ namespace Nighthollow.Data
     [SerializeField] Stat _maximumEnergy;
     public Stat MaximumEnergy => _maximumEnergy;
 
-    [SerializeField] Stat _energyRegeneration;
-    public Stat EnergyRegeneration => _energyRegeneration;
+    [SerializeField] Stat _energyGain;
+    public Stat EnergyGain => _energyGain;
+
+    [SerializeField] Stat _energyGainIntervalMs;
+    public Stat EnergyGainIntervalMs => _energyGainIntervalMs;
 
     [SerializeField] Stat _critChance;
     public Stat CritChance => _critChance;
@@ -130,9 +130,9 @@ namespace Nighthollow.Data
         result._delegate = _delegate.Clone();
       }
 
-      if (_projectile)
+      if (_skills != null)
       {
-        result._projectile = _projectile.Clone();
+        result._skills = _skills.Select(s => s.Clone()).ToList();
       }
 
       return result;

@@ -16,6 +16,8 @@ using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -41,16 +43,18 @@ namespace Nighthollow.Components
     [SerializeField] CreatureData _data;
     [SerializeField] bool _selectSkill;
     [SerializeField] int _damageTaken;
+    [SerializeField] int _currentEnergy;
     [SerializeField] CreatureState _state;
-    [SerializeField] SkillType _currentSkillType;
+    [SerializeField] SkillData _currentSkill;
     [SerializeField] RankValue? _rankPosition;
     [SerializeField] FileValue? _filePosition;
     [SerializeField] Animator _animator;
     [SerializeField] Collider2D _collider;
-    [SerializeField] HealthBar _healthBar;
+    [SerializeField] StatusBarsHolder _statusBars;
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SortingGroup _sortingGroup;
     [SerializeField] CustomTriggerCollider _projectileCollider;
+    [SerializeField] Coroutine _coroutine;
 
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
@@ -69,8 +73,9 @@ namespace Nighthollow.Components
       _collider = GetComponent<Collider2D>();
       _collider.enabled = false;
       _sortingGroup = GetComponent<SortingGroup>();
-      _healthBar = Root.Instance.Prefabs.CreateHealthBar();
-      _healthBar.gameObject.SetActive(false);
+      _statusBars = Root.Instance.Prefabs.CreateStatusBars();
+      _statusBars.HealthBar.gameObject.SetActive(false);
+      _statusBars.EnergyBar.gameObject.SetActive(false);
       gameObject.layer = Constants.LayerForCreatures(creatureData.Owner);
 
       // Slow down enemy animations a bit
@@ -109,6 +114,10 @@ namespace Nighthollow.Components
         throw new InvalidOperationException("Creature does not have a file position");
       }
     }
+
+    public int DamageTaken => _damageTaken;
+
+    public int CurrentEnergy => _currentEnergy;
 
     public Transform ProjectileSource => _projectileSource;
 
@@ -149,8 +158,9 @@ namespace Nighthollow.Components
           // TODO handle this in a better way
           fileValue.ToYPosition() + Constants.EnemyCreatureYOffset);
       }
+
       _collider.enabled = true;
-      if (HasProjectile())
+      if (HasProjectileSkill())
       {
         _projectileCollider = CustomTriggerCollider.Add(this, new Vector2(15, 0), new Vector2(30, 1));
       }
@@ -159,9 +169,31 @@ namespace Nighthollow.Components
       _state = CreatureState.Idle;
       _selectSkill = true;
       _data.Events.OnEnteredPlay(this);
+
+      _coroutine = StartCoroutine(RunCoroutine());
     }
 
-    public void UseSkill(SkillAnimationNumber skill, SkillType skillType)
+    void SelectSkill()
+    {
+      if (!IsAlive()) return;
+
+      if (_data.Delegate.ShouldUseMeleeSkill(this))
+      {
+        UseSkill(SkillType.Melee);
+        return;
+      }
+      else if (_data.Delegate.ShouldUseProjectileSkill(this))
+      {
+        UseSkill(SkillType.Projectile);
+        return;
+      }
+      else
+      {
+        ToDefaultState();
+      }
+    }
+
+    void UseSkill(SkillType skillType)
     {
       if (!IsAlive())
       {
@@ -169,9 +201,14 @@ namespace Nighthollow.Components
       }
 
       _state = CreatureState.UsingSkill;
-      _currentSkillType = skillType;
+      _currentSkill = _data.Delegate.ChooseSkill(this, skillType);
+      if (_currentSkill == null)
+      {
+        ToDefaultState();
+        return;
+      }
 
-      switch (skill)
+      switch (_currentSkill.Animation)
       {
         case SkillAnimationNumber.Skill1:
           _animator.SetTrigger(Skill1);
@@ -189,13 +226,24 @@ namespace Nighthollow.Components
           _animator.SetTrigger(Skill5);
           break;
         default:
-          throw Errors.UnknownEnumValue(skill);
+          throw Errors.UnknownEnumValue(_currentSkill.Animation);
       }
+    }
+
+    void ToDefaultState()
+    {
+      _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
     }
 
     void Kill()
     {
-      _healthBar.gameObject.SetActive(false);
+      if (_coroutine != null)
+      {
+        StopCoroutine(_coroutine);
+      }
+
+      _statusBars.HealthBar.gameObject.SetActive(false);
+      _statusBars.EnergyBar.gameObject.SetActive(false);
       _animator.SetTrigger(Death);
       _collider.enabled = false;
       _state = CreatureState.Dying;
@@ -205,7 +253,7 @@ namespace Nighthollow.Components
     public void DestroyCreature()
     {
       Destroy(gameObject);
-      Destroy(_healthBar.gameObject);
+      Destroy(_statusBars.gameObject);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -230,26 +278,33 @@ namespace Nighthollow.Components
     {
       if (!IsAlive()) return;
 
-      switch (_currentSkillType)
+      switch (_currentSkill.SkillType)
       {
-        case SkillType.Ranged:
-          _data.Delegate.OnFireProjectile(this);
+        case SkillType.Projectile:
+          _data.Delegate.OnFireProjectile(this, _currentSkill.Projectile);
           break;
         case SkillType.Melee:
           _data.Delegate.OnMeleeHit(this);
           break;
         default:
-          throw Errors.UnknownEnumValue(_currentSkillType);
+          throw Errors.UnknownEnumValue(_currentSkill.SkillType);
       }
     }
 
-    public void ApplyDamage(int damage)
+    public void AddDamage(int damage)
     {
-      _damageTaken += damage;
+      var newDamage = _damageTaken + damage;
+      _damageTaken = Mathf.Clamp(0, newDamage, _data.Health.Value);
       if (_damageTaken >= _data.Health.Value)
       {
         Kill();
       }
+    }
+
+    public void AddEnergy(int energy)
+    {
+      var newEnergy = _currentEnergy + energy;
+      _currentEnergy = Mathf.Clamp(0, newEnergy, _data.MaximumEnergy.Value);
     }
 
     public void OnProjectileImpact(Projectile projectile)
@@ -263,26 +318,6 @@ namespace Nighthollow.Components
       _selectSkill = true;
     }
 
-    void SelectSkill()
-    {
-      if (!IsAlive()) return;
-
-      if (_data.Delegate.ShouldUseMeleeSkill(this))
-      {
-        UseSkill(_data.DefaultMeleeSkill, SkillType.Melee);
-        return;
-      }
-      else if (_data.Delegate.ShouldUseProjectileSkill(this))
-      {
-        UseSkill(_data.DefaultCastSkill, SkillType.Ranged);
-        return;
-      }
-      else
-      {
-        _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
-      }
-    }
-
     public void OnDeathAnimationCompleted()
     {
       DestroyCreature();
@@ -290,11 +325,27 @@ namespace Nighthollow.Components
 
     public bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
 
-    public bool HasMelee() => _data.DefaultMeleeSkill != SkillAnimationNumber.Unknown;
+    public bool HasMeleeSkill() => _data.Skills.Any(s => s.SkillType == SkillType.Melee);
 
-    public bool HasProjectile() => _data.DefaultCastSkill != SkillAnimationNumber.Unknown && _data.Projectile;
+    public bool HasProjectileSkill() => _data.Skills.Any(s => s.SkillType == SkillType.Projectile);
 
     bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
+
+    IEnumerator<YieldInstruction> RunCoroutine()
+    {
+      while (true)
+      {
+        var interval = _data.EnergyGainIntervalMs.Value;
+        if (interval <= 0)
+        {
+          break;
+        }
+
+        yield return new WaitForSeconds(interval / 1000f);
+
+        _currentEnergy += _data.EnergyGain.Value;
+      }
+    }
 
     void Update()
     {
@@ -317,11 +368,20 @@ namespace Nighthollow.Components
 
       transform.eulerAngles = _data.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
-      _healthBar.Value = (_data.Health.Value - _damageTaken) / (float)_data.Health.Value;
-      _healthBar.gameObject.SetActive(_damageTaken > 0);
+      if (_data.Health.Value > 0)
+      {
+        _statusBars.HealthBar.Value = (_data.Health.Value - _damageTaken) / (float)_data.Health.Value;
+      }
+      _statusBars.HealthBar.gameObject.SetActive(_damageTaken > 0);
+
+      if (_data.MaximumEnergy.Value > 0)
+      {
+        _statusBars.EnergyBar.Value = _currentEnergy / (float)_data.MaximumEnergy.Value;
+      }
+      _statusBars.EnergyBar.gameObject.SetActive(_currentEnergy > 0);
 
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
-      _healthBar.transform.position = pos;
+      _statusBars.transform.position = pos;
 
       if (_state == CreatureState.Moving)
       {

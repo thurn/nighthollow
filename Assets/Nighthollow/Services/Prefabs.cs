@@ -22,7 +22,7 @@ namespace Nighthollow.Services
 {
   public sealed class Prefabs : MonoBehaviour
   {
-    [SerializeField] HealthBar _healthBarPrefab;
+    [SerializeField] StatusBarsHolder _statusBars;
     [SerializeField] SpriteRenderer _cursorPrefab;
     [SerializeField] Image _influencePrefab;
     [SerializeField] Attachment _attachmentPrefab;
@@ -33,7 +33,7 @@ namespace Nighthollow.Services
     [SerializeField] Sprite _earthSymbol;
     [SerializeField] Sprite _shadowSymbol;
 
-    public HealthBar CreateHealthBar() => ComponentUtils.Instantiate(_healthBarPrefab,
+    public StatusBarsHolder CreateStatusBars() => ComponentUtils.Instantiate(_statusBars,
       Root.Instance.MainCanvas);
 
     public SpriteRenderer CreateCursor() => ComponentUtils.Instantiate(_cursorPrefab);

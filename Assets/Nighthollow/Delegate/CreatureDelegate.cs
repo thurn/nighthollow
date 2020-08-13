@@ -41,7 +41,7 @@ namespace Nighthollow.Delegate
     /// </summary>
     public virtual bool ShouldUseMeleeSkill(Creature self)
     {
-      return self.HasMelee() && GetCollidingCreatures(self.Owner, self.Collider).Any();
+      return self.HasMeleeSkill() && GetCollidingCreatures(self.Owner, self.Collider).Any();
     }
 
     /// <summary>
@@ -50,16 +50,28 @@ namespace Nighthollow.Delegate
     /// </summary>
     public virtual bool ShouldUseProjectileSkill(Creature self)
     {
-      return self.HasProjectile() &&
+      return self.HasProjectileSkill() &&
         GetCollidingCreatures(self.Owner, self.ProjectileCollider.Collider).Any();
     }
 
+    /// <summary>
+    /// Called in order to pick a skill to use once the SkillType has been decided. Should
+    /// return the skill to use or null to indicate that no appropriate skills are available.
+    /// </summary>
+    public SkillData ChooseSkill(Creature self, SkillType skillType)
+    {
+      return self.Data.Skills
+        .Where(s => s.SkillType == skillType && s.EnergyCost <= self.CurrentEnergy)
+        .OrderByDescending(s => s.EnergyCost)
+        .FirstOrDefault();
+    }
+
     /// <summary>Called when the creature reaches the firing frame of its cast animation.</summary>
-    public virtual void OnFireProjectile(Creature self)
+    public virtual void OnFireProjectile(Creature self, ProjectileData projectileData)
     {
       var projectile = Root.Instance.ObjectPoolService.Create(
-        self.Data.Projectile.Prefab, self.ProjectileSource.position);
-      projectile.Initialize(self, self.Data.Projectile, self.ProjectileSource);
+        projectileData.Prefab, self.ProjectileSource.position);
+      projectile.Initialize(self, projectileData, self.ProjectileSource);
     }
 
     /// <summary>Called when the creature reaches the hit frame of its attack animation.</summary>
@@ -67,7 +79,7 @@ namespace Nighthollow.Delegate
     {
       foreach (var creature in GetCollidingCreatures(self.Owner, self.Collider))
       {
-        creature.ApplyDamage(self.Data.BaseAttack.Total());
+        creature.AddDamage(self.Data.BaseAttack.Total());
       }
     }
 
@@ -77,9 +89,9 @@ namespace Nighthollow.Delegate
       foreach (var creature in OverlapBox(
         self.Owner,
         projectile.transform.position,
-        new Vector2(self.Data.Projectile.HitboxSize / 1000f, self.Data.Projectile.HitboxSize / 1000f)))
+        new Vector2(projectile.Data.HitboxSize / 1000f, projectile.Data.HitboxSize / 1000f)))
       {
-        creature.ApplyDamage(self.Data.BaseAttack.Total());
+        creature.AddDamage(self.Data.BaseAttack.Total());
       }
     }
 

@@ -17,9 +17,10 @@ using UnityEngine.UI;
 
 namespace Nighthollow.Components
 {
-  public sealed class HealthBar : MonoBehaviour
+  public sealed class StatusBar : MonoBehaviour
   {
-    [Header("Config")] [SerializeField] Slider _slider;
+    [Header("Config")]
+    [SerializeField] Slider _slider;
 
     public float Value
     {
