@@ -46,6 +46,7 @@ namespace Nighthollow.Components
     [SerializeField] int _currentEnergy;
     [SerializeField] CreatureState _state;
     [SerializeField] SkillData _currentSkill;
+    [SerializeField] ProjectileData _currentProjectile;
     [SerializeField] RankValue? _rankPosition;
     [SerializeField] FileValue? _filePosition;
     [SerializeField] Animator _animator;
@@ -165,6 +166,8 @@ namespace Nighthollow.Components
         _projectileCollider = CustomTriggerCollider.Add(this, new Vector2(15, 0), new Vector2(30, 1));
       }
 
+      _currentEnergy = _data.StartingEnergy.Value;
+
       _data.Delegate.OnActivate(this);
       _state = CreatureState.Idle;
       _selectSkill = true;
@@ -173,7 +176,7 @@ namespace Nighthollow.Components
       _coroutine = StartCoroutine(RunCoroutine());
     }
 
-    void SelectSkill()
+    void SelectSkillType()
     {
       if (!IsAlive()) return;
 
@@ -206,6 +209,14 @@ namespace Nighthollow.Components
       {
         ToDefaultState();
         return;
+      }
+
+      SpendEnergy(_currentSkill.EnergyCost);
+
+      if (_currentSkill.SkillType == SkillType.Projectile)
+      {
+        _currentProjectile = _data.Delegate.ChooseProjectile(this);
+        SpendEnergy(_currentProjectile.EnergyCost);
       }
 
       switch (_currentSkill.Animation)
@@ -281,7 +292,7 @@ namespace Nighthollow.Components
       switch (_currentSkill.SkillType)
       {
         case SkillType.Projectile:
-          _data.Delegate.OnFireProjectile(this, _currentSkill.Projectile);
+          _data.Delegate.OnFireProjectile(this, _currentProjectile);
           break;
         case SkillType.Melee:
           _data.Delegate.OnMeleeHit(this);
@@ -293,6 +304,7 @@ namespace Nighthollow.Components
 
     public void AddDamage(int damage)
     {
+      Errors.CheckArgument(damage >= 0, "Energy must be non-negative");
       var newDamage = _damageTaken + damage;
       _damageTaken = Mathf.Clamp(0, newDamage, _data.Health.Value);
       if (_damageTaken >= _data.Health.Value)
@@ -303,8 +315,16 @@ namespace Nighthollow.Components
 
     public void AddEnergy(int energy)
     {
+      Errors.CheckArgument(energy >= 0, "Energy must be non-negative");
       var newEnergy = _currentEnergy + energy;
       _currentEnergy = Mathf.Clamp(0, newEnergy, _data.MaximumEnergy.Value);
+    }
+
+    public void SpendEnergy(int energy)
+    {
+      Errors.CheckArgument(energy >= 0, "Spent energy must be non-negative");
+      Errors.CheckArgument(energy <= _currentEnergy, "Spent energy must be <= current energy");
+      _currentEnergy -= energy;
     }
 
     public void OnProjectileImpact(Projectile projectile)
@@ -327,7 +347,9 @@ namespace Nighthollow.Components
 
     public bool HasMeleeSkill() => _data.Skills.Any(s => s.SkillType == SkillType.Melee);
 
-    public bool HasProjectileSkill() => _data.Skills.Any(s => s.SkillType == SkillType.Projectile);
+    public bool HasProjectileSkill() =>
+      _data.Skills.Any(s => s.SkillType == SkillType.Projectile) &&
+      _data.Projectiles.Any();
 
     bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
 
@@ -362,7 +384,7 @@ namespace Nighthollow.Components
         // SelectSkill() is delayed until the next Update() call instead of being invoked
         // immediately because it gives time for the physics system to correctly update
         // collider positions after activation. This was extremely annoying to debug :)
-        SelectSkill();
+        SelectSkillType();
         _selectSkill = false;
       }
 

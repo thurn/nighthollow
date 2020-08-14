@@ -28,19 +28,5 @@ namespace Nighthollow.Data
 
     [SerializeField] SkillType _skillType;
     public SkillType SkillType => _skillType;
-
-    [SerializeField] ProjectileData _projectile;
-    public ProjectileData Projectile => _projectile;
-
-    public SkillData Clone()
-    {
-      return new SkillData
-      {
-        _energyCost = _energyCost,
-        _animation = _animation,
-        _skillType = _skillType,
-        _projectile = _projectile ? _projectile.Clone() : null
-      };
-    }
   }
 }

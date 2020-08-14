@@ -57,13 +57,29 @@ namespace Nighthollow.Delegate
     /// <summary>
     /// Called in order to pick a skill to use once the SkillType has been decided. Should
     /// return the skill to use or null to indicate that no appropriate skills are available.
+    /// Must return a skill with energy cost <= self.CurrentEnergy.
     /// </summary>
     public SkillData ChooseSkill(Creature self, SkillType skillType)
     {
       return self.Data.Skills
         .Where(s => s.SkillType == skillType && s.EnergyCost <= self.CurrentEnergy)
         .OrderByDescending(s => s.EnergyCost)
+        .ThenBy(s => Random.Range(0f, 1f))
         .FirstOrDefault();
+    }
+
+   /// <summary>
+    /// Called in order to pick a projectile to fire once skill animation reaches its 'cast'
+    /// frame. Should return the projectile to fire. Must return a projectile with energy cost
+    /// <= self.CurrentEnergy.
+    /// </summary>
+    public ProjectileData ChooseProjectile(Creature self)
+    {
+      return self.Data.Projectiles
+        .Where(p => p.EnergyCost <= self.CurrentEnergy)
+        .OrderByDescending(p => p.EnergyCost)
+        .ThenBy(p => Random.Range(0f, 1f))
+        .First();
     }
 
     /// <summary>Called when the creature reaches the firing frame of its cast animation.</summary>

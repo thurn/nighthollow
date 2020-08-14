@@ -79,6 +79,9 @@ namespace Nighthollow.Data
     [SerializeField] List<SkillData> _skills;
     public IReadOnlyCollection<SkillData> Skills => _skills.AsReadOnly();
 
+    [SerializeField] List<ProjectileData> _projectiles;
+    public IReadOnlyCollection<ProjectileData> Projectiles => _projectiles.AsReadOnly();
+
     [SerializeField] CreatureParameters _parameters;
     public CreatureParameters Parameters => _parameters;
 
@@ -130,12 +133,24 @@ namespace Nighthollow.Data
         result._delegate = _delegate.Clone();
       }
 
-      if (_skills != null)
+      if (_projectiles != null)
       {
-        result._skills = _skills.Select(s => s.Clone()).ToList();
+        result._projectiles = _projectiles.Select(p => p.Clone()).ToList();
       }
 
       return result;
+    }
+
+    void Reset()
+    {
+      _health = new Stat(100);
+      _energyGain = new Stat(5);
+      _energyGainIntervalMs = new Stat(5000);
+      _maximumEnergy = new Stat(100);
+      _critChance = new Stat(50);
+      _critMultiplier = new Stat(1000);
+      _accuracy = new Stat(100);
+      _evasion = new Stat(50);
     }
   }
 }
