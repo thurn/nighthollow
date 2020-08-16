@@ -1,4 +1,4 @@
-// Copyright � 2020-present Derek Thurn
+﻿// Copyright © 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,24 +15,15 @@
 using Nighthollow.Components;
 using UnityEngine;
 
-namespace Nighthollow.Data
+namespace Nighthollow.Modifiers
 {
-  [CreateAssetMenu(menuName = "Data/Projectile")]
-  public class ProjectileData : ScriptableObject
+  public abstract class CreatureModifier : ScriptableObject
   {
-    [SerializeField] Projectile _prefab;
-    public Projectile Prefab => _prefab;
+    public virtual void Activate(Creature self) { }
 
-    [SerializeField] int _speed;
-    public int Speed => _speed;
+    public virtual void OnDeath(Creature self) { }
 
-    [SerializeField] int _hitboxSize;
-    public int HitboxSize => _hitboxSize;
-
-    [SerializeField] int _energyCost;
-    public int EnergyCost => _energyCost;
-
-    public ProjectileData Clone()
+    public virtual CreatureModifier Clone()
     {
       return Instantiate(this);
     }

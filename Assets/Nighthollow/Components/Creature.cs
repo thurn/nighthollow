@@ -172,6 +172,7 @@ namespace Nighthollow.Components
       _state = CreatureState.Idle;
       _selectSkill = true;
       _data.Events.OnEnteredPlay(this);
+      Data.Modifiers.Activate(this);
 
       _coroutine = StartCoroutine(RunCoroutine());
     }
@@ -257,6 +258,9 @@ namespace Nighthollow.Components
       _statusBars.EnergyBar.gameObject.SetActive(false);
       _animator.SetTrigger(Death);
       _collider.enabled = false;
+
+      Data.Modifiers.OnDeath(this);
+
       _state = CreatureState.Dying;
       _creatureService.RemoveCreature(this);
     }

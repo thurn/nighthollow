@@ -1,4 +1,4 @@
-// Copyright � 2020-present Derek Thurn
+﻿// Copyright © 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,28 +13,18 @@
 // limitations under the License.
 
 using Nighthollow.Components;
+using Nighthollow.Data;
 using UnityEngine;
 
-namespace Nighthollow.Data
+namespace Nighthollow.Modifiers
 {
-  [CreateAssetMenu(menuName = "Data/Projectile")]
-  public class ProjectileData : ScriptableObject
+  [CreateAssetMenu(menuName = "Modifiers/BaseAttackModifier")]
+  public sealed class BaseAttackModifier : CreatureModifier
   {
-    [SerializeField] Projectile _prefab;
-    public Projectile Prefab => _prefab;
-
-    [SerializeField] int _speed;
-    public int Speed => _speed;
-
-    [SerializeField] int _hitboxSize;
-    public int HitboxSize => _hitboxSize;
-
-    [SerializeField] int _energyCost;
-    public int EnergyCost => _energyCost;
-
-    public ProjectileData Clone()
+    public override void Activate(Creature self)
     {
-      return Instantiate(this);
+      var modifier = Modifier.Create(self.Data.Parameters.Operator, self.Data.Parameters.Value);
+      self.Data.BaseAttack.Get(self.Data.Parameters.DamageType).AddModifier(modifier);
     }
   }
 }

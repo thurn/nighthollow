@@ -15,6 +15,7 @@
 using Nighthollow.Components;
 using Nighthollow.Delegate;
 using Nighthollow.Events;
+using Nighthollow.Modifiers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,14 +49,23 @@ namespace Nighthollow.Data
   [Serializable]
   public sealed class CreatureParameters
   {
-    [SerializeField] Stat _manaGained;
-    public Stat ManaGained => _manaGained;
+    [SerializeField] Stat _mana;
+    public Stat ManaGained => _mana;
 
-    [SerializeField] Influence _influenceAdded;
-    public Influence InfluenceAdded => _influenceAdded;
+    [SerializeField] Influence _influence;
+    public Influence InfluenceAdded => _influence;
 
     [SerializeField] Vector2 _meleeHitSize;
     public Vector2 MeleeHitSize => _meleeHitSize;
+
+    [SerializeField] DamageType _damageType;
+    public DamageType DamageType => _damageType;
+
+    [SerializeField] Operator _operator;
+    public Operator Operator => _operator;
+
+    [SerializeField] int _value;
+    public int Value => _value;
   }
 
   [CreateAssetMenu(menuName = "Data/Creature")]
@@ -72,6 +82,9 @@ namespace Nighthollow.Data
 
     [SerializeField] CreatureDelegate _delegate;
     public CreatureDelegate Delegate => _delegate;
+
+    [SerializeField] ModifierList _modifiers;
+    public ModifierList Modifiers => _modifiers;
 
     [SerializeField] CreatureEvents _events;
     public CreatureEvents Events => _events;
@@ -90,7 +103,7 @@ namespace Nighthollow.Data
 
     [SerializeField] Damage _baseAttack;
     public Damage BaseAttack => _baseAttack;
-
+    
     [SerializeField] Stat _speed;
     public Stat Speed => _speed;
 
@@ -131,6 +144,11 @@ namespace Nighthollow.Data
       if (_delegate)
       {
         result._delegate = _delegate.Clone();
+      }
+
+      if (_modifiers != null)
+      {
+        result._modifiers = _modifiers.Clone();
       }
 
       if (_projectiles != null)
