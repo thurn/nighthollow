@@ -351,6 +351,8 @@ namespace Nighthollow.Components
       _data.Skills.Any(s => s.SkillType == SkillType.Projectile) &&
       _data.Projectiles.Any();
 
+    public bool UsesEnergy() => _data.Skills.Any(s => s.EnergyCost > 0);
+
     bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
 
     IEnumerator<YieldInstruction> RunCoroutine()
@@ -400,7 +402,7 @@ namespace Nighthollow.Components
       {
         _statusBars.EnergyBar.Value = _currentEnergy / (float)_data.MaximumEnergy.Value;
       }
-      _statusBars.EnergyBar.gameObject.SetActive(_currentEnergy > 0);
+      _statusBars.EnergyBar.gameObject.SetActive(UsesEnergy() && _currentEnergy > 0);
 
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
