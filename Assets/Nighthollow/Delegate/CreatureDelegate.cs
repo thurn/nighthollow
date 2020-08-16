@@ -16,9 +16,11 @@ using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Nighthollow.Delegate
 {
@@ -68,7 +70,7 @@ namespace Nighthollow.Delegate
         .FirstOrDefault();
     }
 
-   /// <summary>
+    /// <summary>
     /// Called in order to pick a projectile to fire once skill animation reaches its 'cast'
     /// frame. Should return the projectile to fire. Must return a projectile with energy cost
     /// <= self.CurrentEnergy.
@@ -95,7 +97,7 @@ namespace Nighthollow.Delegate
     {
       foreach (var creature in GetCollidingCreatures(self.Owner, self.Collider))
       {
-        creature.AddDamage(self.Data.BaseAttack.Total());
+        ExecuteAttack(self, creature, self.Data.BaseAttack);
       }
     }
 
@@ -107,8 +109,19 @@ namespace Nighthollow.Delegate
         projectile.transform.position,
         new Vector2(projectile.Data.HitboxSize / 1000f, projectile.Data.HitboxSize / 1000f)))
       {
-        creature.AddDamage(self.Data.BaseAttack.Total());
+        ExecuteAttack(self, creature, self.Data.BaseAttack);
       }
+    }
+
+    public virtual void ExecuteAttack(Creature self, Creature target, Damage damage)
+    {
+      var multiplier = 1.0f;
+      if (Random.Range(0, 1000) < self.Data.CritChance.Value)
+      {
+        // Critical hit
+        multiplier = (1000 + self.Data.CritMultiplier.Value) / 1000f;
+      }
+      target.AddDamage(Mathf.RoundToInt(multiplier * damage.Total()));
     }
 
     /// <summary>Returns a list of the enemies of 'owner' overlapping wtih 'collider'.</summary>
