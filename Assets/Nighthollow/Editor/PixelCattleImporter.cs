@@ -105,7 +105,7 @@ namespace Nighthollow.Editor
 
       if (!attachmentDisplay)
       {
-        throw new InvalidOperationException("Buttock not found!");
+        Debug.LogError("Buttock not found!");
       }
 
       var creature = prefab.AddComponent<Creature>();
