@@ -16,6 +16,8 @@ MonoBehaviour:
   _owner: 0
   _name: Assassin
   _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
+  _modifiers:
+    _modifiers: []
   _events:
     _enteredPlay: []
     _died: []
@@ -31,9 +33,9 @@ MonoBehaviour:
     _skillType: 1
   _projectiles: []
   _parameters:
-    _manaGained:
+    _mana:
       _value: 0
-    _influenceAdded:
+    _influence:
       _light:
         _value: 0
       _sky:
@@ -47,6 +49,9 @@ MonoBehaviour:
       _shadow:
         _value: 0
     _meleeHitSize: {x: 0, y: 0}
+    _damageType: 0
+    _operator: 0
+    _value: 0
   _health:
     _value: 100
   _baseAttack:

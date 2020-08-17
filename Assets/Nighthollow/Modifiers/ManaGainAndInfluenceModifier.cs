@@ -1,4 +1,4 @@
-// Copyright © 2020-present Derek Thurn
+﻿// Copyright © 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,26 +14,30 @@
 
 using Nighthollow.Components;
 using Nighthollow.Data;
-using Nighthollow.Events;
 using Nighthollow.Services;
 using System;
 using UnityEngine;
 
-namespace Nighthollow.Handlers
+namespace Nighthollow.Modifiers
 {
-  [CreateAssetMenu(menuName = "Handlers/AddManaGainAndInfluence")]
-  public class AddManaGainAndInfluence : CreatureEventHandler
+  [CreateAssetMenu(menuName = "Modifiers/ManaGainAndInfluenceModifier")]
+  public sealed class ManaGainAndInfluenceModifier : CreatureModifier
   {
-    public override void Execute(Creature creature)
+    [SerializeField] int _manaGain;
+    [SerializeField] Influence _influence;
+
+    public override void Activate(Creature self)
     {
       var user = Root.Instance.User;
-      user.AddManaGain(Modifier.WhileAlive(Operator.Add, creature.Data.Parameters.ManaGained.Value, creature));
+      user.Data.ManaGain.AddModifier(Modifier.WhileAlive(Operator.Add, _manaGain, self));
+
       foreach (School school in Enum.GetValues(typeof(School)))
       {
-        var influence = creature.Data.Parameters.InfluenceAdded.Get(school).Value;
+        var influence = _influence.Get(school).Value;
         if (influence > 0)
         {
-          user.Influence.Get(school).AddModifier(Modifier.WhileAlive(Operator.Add, influence, creature));
+          user.Influence.Get(school)
+            .AddModifier(Modifier.WhileAlive(Operator.Add, influence, self));
         }
       }
     }

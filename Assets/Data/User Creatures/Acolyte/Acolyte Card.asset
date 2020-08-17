@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05e3fd8a2be5a4b46b4c220838c6c746, type: 3}
-  m_Name: BerserkerCard
+  m_Name: Acolyte Card
   m_EditorClassIdentifier: 
   _cardPrefab: {fileID: 8201078851043189447, guid: b10a80a90394244668d5089010634cd3,
     type: 3}
   _cost:
-    _manaCost: 50
+    _manaCost: 25
     _influenceCost:
       _light:
         _value: 0
       _sky:
         _value: 0
       _flame:
-        _value: 1
+        _value: 0
       _ice:
         _value: 0
       _earth:
         _value: 0
       _shadow:
         _value: 0
-  _image: {fileID: 21300000, guid: 662ebdb61e83443c48ab326b56ed7e81, type: 3}
-  _creature: {fileID: 11400000, guid: 2534abfeca314f342a4fc239b3707f19, type: 2}
+  _image: {fileID: 21300000, guid: e10a2dc75b477484083d7d6993f939d1, type: 3}
+  _creature: {fileID: 11400000, guid: 774fbcefd1ec8468cab9d06649c1cb05, type: 2}

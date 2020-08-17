@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05e3fd8a2be5a4b46b4c220838c6c746, type: 3}
-  m_Name: HagCard
+  m_Name: Ogre Card
   m_EditorClassIdentifier: 
   _cardPrefab: {fileID: 8201078851043189447, guid: b10a80a90394244668d5089010634cd3,
     type: 3}
@@ -29,5 +29,5 @@ MonoBehaviour:
         _value: 0
       _shadow:
         _value: 0
-  _image: {fileID: 21300000, guid: cc507762f52a442b8aebaaac7fb75137, type: 3}
-  _creature: {fileID: 11400000, guid: f4b65a424b5ed3044a67bff95929cc3d, type: 2}
+  _image: {fileID: 21300000, guid: 7b5f2989067a33f44b39f925edd29402, type: 3}
+  _creature: {fileID: 11400000, guid: 21d62bac507d4ae469d6d28ae5fd8527, type: 2}

@@ -9,6 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ed351626e582489e898b63ecd333c70, type: 3}
-  m_Name: Add Mana Gain And Influence
+  m_Script: {fileID: 11500000, guid: c0bd62571e6888b4c9cbb64c6322467b, type: 3}
+  m_Name: Blackguard Custom Melee Hitbox Delegate
   m_EditorClassIdentifier: 
+  _meleeHitSize: {x: 5000, y: 6000}
+  _collider: {fileID: 0}

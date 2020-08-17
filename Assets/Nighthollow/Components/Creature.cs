@@ -171,7 +171,6 @@ namespace Nighthollow.Components
       _data.Delegate.OnActivate(this);
       _state = CreatureState.Idle;
       _selectSkill = true;
-      _data.Events.OnEnteredPlay(this);
       Data.Modifiers.Activate(this);
 
       _coroutine = StartCoroutine(RunCoroutine());

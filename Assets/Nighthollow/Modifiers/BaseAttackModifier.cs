@@ -21,10 +21,19 @@ namespace Nighthollow.Modifiers
   [CreateAssetMenu(menuName = "Modifiers/BaseAttackModifier")]
   public sealed class BaseAttackModifier : CreatureModifier
   {
+    [SerializeField] DamageType _damageType;
+    public DamageType DamageType => _damageType;
+
+    [SerializeField] Operator _operator;
+    public Operator Operator => _operator;
+
+    [SerializeField] int _value;
+    public int Value => _value;
+
     public override void Activate(Creature self)
     {
-      var modifier = Modifier.Create(self.Data.Parameters.Operator, self.Data.Parameters.Value);
-      self.Data.BaseAttack.Get(self.Data.Parameters.DamageType).AddModifier(modifier);
+      var modifier = Modifier.Create(_operator, _value);
+      self.Data.BaseAttack.Get(_damageType).AddModifier(modifier);
     }
   }
 }

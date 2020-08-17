@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05e3fd8a2be5a4b46b4c220838c6c746, type: 3}
-  m_Name: AssassinCard
+  m_Name: Assassin Card
   m_EditorClassIdentifier: 
   _cardPrefab: {fileID: 8201078851043189447, guid: b10a80a90394244668d5089010634cd3,
     type: 3}

@@ -16,35 +16,16 @@ MonoBehaviour:
   _owner: 0
   _name: Blackguard
   _delegate: {fileID: 11400000, guid: 82f9099705b9c12418f4e0f1bf74bdbf, type: 2}
-  _events:
-    _enteredPlay: []
-    _died: []
+  _modifiers:
+    _modifiers: []
   _skills:
   - _energyCost: 0
     _animation: 1
     _skillType: 1
-    _projectile: {fileID: 0}
   - _energyCost: 0
     _animation: 2
     _skillType: 2
-    _projectile: {fileID: 11400000, guid: 3b47c79d8f9e7b641a756117e6dfc4b8, type: 2}
-  _parameters:
-    _manaGained:
-      _value: 0
-    _influenceAdded:
-      _light:
-        _value: 0
-      _sky:
-        _value: 0
-      _flame:
-        _value: 0
-      _ice:
-        _value: 0
-      _earth:
-        _value: 0
-      _shadow:
-        _value: 0
-    _meleeHitSize: {x: 5000, y: 6000}
+  _projectiles: []
   _health:
     _value: 150
   _baseAttack:

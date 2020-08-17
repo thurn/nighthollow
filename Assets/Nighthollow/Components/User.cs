@@ -41,6 +41,7 @@ namespace Nighthollow.Components
     public int Mana => _mana;
     public int Life => _life;
     public Influence Influence => _data.Influence;
+    public UserData Data => _data;
 
     void Awake()
     {
@@ -89,11 +90,6 @@ namespace Nighthollow.Components
     public void SpendMana(int amount)
     {
       _mana -= amount;
-    }
-
-    public void AddManaGain(Modifier modifier)
-    {
-      _data.ManaGain.AddModifier(modifier);
     }
 
     void Update()

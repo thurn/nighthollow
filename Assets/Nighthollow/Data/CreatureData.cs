@@ -14,9 +14,7 @@
 
 using Nighthollow.Components;
 using Nighthollow.Delegate;
-using Nighthollow.Events;
 using Nighthollow.Modifiers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -46,28 +44,6 @@ namespace Nighthollow.Data
     Projectile
   }
 
-  [Serializable]
-  public sealed class CreatureParameters
-  {
-    [SerializeField] Stat _mana;
-    public Stat ManaGained => _mana;
-
-    [SerializeField] Influence _influence;
-    public Influence InfluenceAdded => _influence;
-
-    [SerializeField] Vector2 _meleeHitSize;
-    public Vector2 MeleeHitSize => _meleeHitSize;
-
-    [SerializeField] DamageType _damageType;
-    public DamageType DamageType => _damageType;
-
-    [SerializeField] Operator _operator;
-    public Operator Operator => _operator;
-
-    [SerializeField] int _value;
-    public int Value => _value;
-  }
-
   [CreateAssetMenu(menuName = "Data/Creature")]
   public sealed class CreatureData : ScriptableObject
   {
@@ -86,17 +62,11 @@ namespace Nighthollow.Data
     [SerializeField] ModifierList _modifiers;
     public ModifierList Modifiers => _modifiers;
 
-    [SerializeField] CreatureEvents _events;
-    public CreatureEvents Events => _events;
-
     [SerializeField] List<SkillData> _skills;
     public IReadOnlyCollection<SkillData> Skills => _skills.AsReadOnly();
 
     [SerializeField] List<ProjectileData> _projectiles;
     public IReadOnlyCollection<ProjectileData> Projectiles => _projectiles.AsReadOnly();
-
-    [SerializeField] CreatureParameters _parameters;
-    public CreatureParameters Parameters => _parameters;
 
     [SerializeField] Stat _health;
     public Stat Health => _health;

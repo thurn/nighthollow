@@ -21,15 +21,17 @@ namespace Nighthollow.Delegate
   [CreateAssetMenu(menuName = "Delegate/CustomMeleeHitboxDelegate")]
   public sealed class CustomMeleeHitboxDelegate : CreatureDelegate
   {
+    [Header("Config")]
+    [SerializeField] Vector2 _meleeHitSize;
+
     [Header("State")]
     [SerializeField] CustomTriggerCollider _collider;
 
     public override void OnActivate(Creature self)
     {
-      var size = self.Data.Parameters.MeleeHitSize;
       _collider = CustomTriggerCollider.Add(self,
-        new Vector2(size.x / 2000f, 0),
-        new Vector2(size.x / 1000f, size.y / 1000f));
+        new Vector2(_meleeHitSize.x / 2000f, 0),
+        new Vector2(_meleeHitSize.x / 1000f, _meleeHitSize.y / 1000f));
     }
 
     public override bool ShouldUseMeleeSkill(Creature self)
