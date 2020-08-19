@@ -4893,6 +4893,7 @@ MonoBehaviour:
     type: 3}
   _hitEffect: {fileID: 5328799593939431191, guid: ba032b21906e046cb8dca113f5591942,
     type: 3}
+  _firedBy: {fileID: 0}
 --- !u!50 &2078397428667819066
 Rigidbody2D:
   serializedVersion: 4

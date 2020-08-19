@@ -10,36 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff2504cae81844678de062bb70bcacb3, type: 3}
-  m_Name: Wizard
+  m_Name: Defiler
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 2225211046518890780, guid: 4c5f0ff7d5d42458d9cca5092335c4ba, type: 3}
+  _prefab: {fileID: 6099651540689490467, guid: 1b3af0a205ae82c4f9718a6daa6310a4, type: 3}
   _owner: 0
-  _name: Wizard
-  _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
+  _name: Defiler
+  _delegate: {fileID: 11400000, guid: 485fb5381f4104747a5a6c31d814e0f9, type: 2}
   _modifiers:
     _modifiers: []
   _skills:
   - _energyCost: 0
-    _animation: 3
-    _skillType: 1
-  - _energyCost: 0
     _animation: 2
     _skillType: 2
+  - _energyCost: 0
+    _animation: 1
+    _skillType: 1
   _projectiles:
-  - {fileID: 11400000, guid: 6c121b8721bf8d041ad721e314b7a5e3, type: 2}
+  - {fileID: 11400000, guid: 3b47c79d8f9e7b641a756117e6dfc4b8, type: 2}
   _health:
-    _value: 150
+    _value: 100
   _baseAttack:
     _radiant:
       _value: 0
     _lightning:
       _value: 0
     _fire:
-      _value: 5
+      _value: 0
     _cold:
       _value: 0
     _physical:
-      _value: 5
+      _value: 10
     _necrotic:
       _value: 0
   _speed:
@@ -47,19 +47,19 @@ MonoBehaviour:
   _startingEnergy:
     _value: 0
   _maximumEnergy:
-    _value: 50
+    _value: 100
   _energyGain:
     _value: 5
   _energyGainIntervalMs:
     _value: 5000
   _critChance:
-    _value: 0
+    _value: 50
   _critMultiplier:
-    _value: 0
+    _value: 1000
   _accuracy:
-    _value: 0
+    _value: 100
   _evasion:
-    _value: 0
+    _value: 50
   _damageResistance:
     _radiant:
       _value: 0
