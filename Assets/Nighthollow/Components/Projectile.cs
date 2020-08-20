@@ -31,11 +31,17 @@ namespace Nighthollow.Components
 
     public ProjectileData Data => _projectileData;
 
-    public void Initialize(Creature firedBy, ProjectileData projectileData, Transform firingPoint)
+    public void Initialize(
+      Creature firedBy,
+      ProjectileData projectileData,
+      Vector2 firingPosition,
+      Vector2? direction = null)
     {
       _firedBy = firedBy;
-      transform.position = new Vector3(firingPoint.position.x, firingPoint.position.y, 0);
-      transform.forward = Constants.ForwardDirectionForPlayer(firedBy.Owner);
+      transform.position = firingPosition;
+      transform.forward = direction == null ?
+        Constants.ForwardDirectionForPlayer(firedBy.Owner) :
+        direction.Value;
       gameObject.layer = Constants.LayerForProjectiles(firedBy.Owner);
 
       var flash = Root.Instance.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);

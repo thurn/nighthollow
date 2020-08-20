@@ -85,11 +85,14 @@ namespace Nighthollow.Delegate
     }
 
     /// <summary>Called when the creature reaches the firing frame of its cast animation.</summary>
-    public virtual void OnFireProjectile(Creature self, ProjectileData projectileData)
+    public virtual void OnFireProjectile(
+      Creature self,
+      ProjectileData projectileData,
+      Vector2 firingPoint,
+      Vector2? direction = null)
     {
-      var projectile = Root.Instance.ObjectPoolService.Create(
-        projectileData.Prefab, self.ProjectileSource.position);
-      projectile.Initialize(self, projectileData, self.ProjectileSource);
+      var projectile = Root.Instance.ObjectPoolService.Create(projectileData.Prefab, firingPoint);
+      projectile.Initialize(self, projectileData, firingPoint, direction);
     }
 
     /// <summary>Called when the creature reaches the hit frame of its attack animation.</summary>

@@ -295,7 +295,7 @@ namespace Nighthollow.Components
       switch (_currentSkill.SkillType)
       {
         case SkillType.Projectile:
-          _data.Delegate.OnFireProjectile(this, _currentProjectile);
+          _data.Delegate.OnFireProjectile(this, _currentProjectile, ProjectileSource.position);
           break;
         case SkillType.Melee:
           _data.Delegate.OnMeleeHit(this);

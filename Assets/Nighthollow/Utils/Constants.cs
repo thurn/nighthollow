@@ -71,14 +71,14 @@ namespace Nighthollow.Utils
       }
     }
 
-    public static Vector3 ForwardDirectionForPlayer(PlayerName owner)
+    public static Vector2 ForwardDirectionForPlayer(PlayerName owner)
     {
       switch (owner)
       {
         case PlayerName.User:
-          return Vector3.right;
+          return Vector2.right;
         case PlayerName.Enemy:
-          return Vector3.left;
+          return Vector2.left;
         default:
           throw Errors.UnknownEnumValue(owner);
       }

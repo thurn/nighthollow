@@ -14,37 +14,32 @@
 
 using Nighthollow.Components;
 using Nighthollow.Data;
-using System.Collections.Generic;
+using Nighthollow.Utils;
 using UnityEngine;
 
 namespace Nighthollow.Delegate
 {
-  [CreateAssetMenu(menuName = "Delegate/FireMultipleProjectilesDelegate")]
-  public sealed class FireMultipleProjectilesDelegate : CreatureDelegate
+  [CreateAssetMenu(menuName = "Delegate/FireProjectileArcDelegate")]
+  public sealed class FireProjectileArcDelegate : CreatureDelegate
   {
-    [SerializeField] int _projectileCount;
-    [SerializeField] int _projectileDelayMs;
+    [SerializeField] float _yOffset;
 
     public override void OnFireProjectile(
       Creature self,
       ProjectileData projectileData,
       Vector2 firingPoint,
-      Vector2? direction = null)
+      Vector2? inputDirection = null)
     {
-      self.StartCoroutine(FireAsync(self, projectileData, firingPoint, direction));
-    }
+      var direction = inputDirection == null ?
+        Constants.ForwardDirectionForPlayer(self.Owner) :
+        inputDirection.Value;
 
-    IEnumerator<YieldInstruction> FireAsync(
-      Creature self,
-      ProjectileData projectileData,
-      Vector2 firingPoint,
-      Vector2? direction)
-    {
-      for (var i = 0; i < _projectileCount; ++i)
-      {
-        base.OnFireProjectile(self, projectileData, firingPoint, direction);
-        yield return new WaitForSeconds(_projectileDelayMs / 1000f);
-      }
+      direction.y = _yOffset;
+      base.OnFireProjectile(self, projectileData, firingPoint, direction);
+      direction.y = 0f;
+      base.OnFireProjectile(self, projectileData, firingPoint, direction);
+      direction.y = -(_yOffset);
+      base.OnFireProjectile(self, projectileData, firingPoint, direction);
     }
   }
 }
