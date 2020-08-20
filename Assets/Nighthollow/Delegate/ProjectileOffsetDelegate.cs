@@ -19,10 +19,12 @@ using UnityEngine;
 
 namespace Nighthollow.Delegate
 {
-  [CreateAssetMenu(menuName = "Delegate/FireProjectileArcDelegate")]
-  public sealed class FireProjectileArcDelegate : CreatureDelegate
+  [CreateAssetMenu(menuName = "Delegate/ProjectileOffsetDelegate")]
+  public sealed class ProjectileOffsetDelegate : CreatureDelegate
   {
-    [SerializeField] float _yOffset;
+    [SerializeField] Vector2 _positionOffset;
+    [SerializeField] Vector2 _rotationOffset;
+    [SerializeField] int _offsetsPerSide;
 
     public override void OnFireProjectile(
       Creature self,
@@ -34,11 +36,20 @@ namespace Nighthollow.Delegate
         Constants.ForwardDirectionForPlayer(self.Owner) :
         inputDirection.Value;
 
-      direction.y = _yOffset;
-      base.OnFireProjectile(self, projectileData, firingPoint, direction);
-      direction.y = 0f;
-      base.OnFireProjectile(self, projectileData, firingPoint, direction);
-      direction.y = -(_yOffset);
+      for (var i = 1; i <= _offsetsPerSide; ++i)
+      {
+        base.OnFireProjectile(
+          self,
+          projectileData,
+          firingPoint + (i * _positionOffset),
+          direction + (i * _rotationOffset));
+        base.OnFireProjectile(
+          self,
+          projectileData,
+          firingPoint - (i * _positionOffset),
+          direction - (i * _rotationOffset));
+      }
+
       base.OnFireProjectile(self, projectileData, firingPoint, direction);
     }
   }

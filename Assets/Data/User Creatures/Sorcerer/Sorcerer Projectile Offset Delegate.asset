@@ -10,6 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea887d80ae4538f409300b809ecbc99c, type: 3}
-  m_Name: Spectre Fire Projectile Arc Delegate
+  m_Name: Sorcerer Projectile Offset Delegate
   m_EditorClassIdentifier: 
-  _yOffset: 0.25
+  _positionOffset: {x: 0, y: 2.5}
+  _rotationOffset: {x: 0, y: 0}
+  _offsetsPerSide: 1
