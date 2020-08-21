@@ -100,7 +100,7 @@ namespace Nighthollow.Delegate
     {
       foreach (var creature in GetCollidingCreatures(self.Owner, self.Collider))
       {
-        ExecuteAttack(self, creature, self.Data.BaseAttack);
+        ExecuteAttack(self, creature, self.Data.BaseAttack, SkillType.Melee);
       }
     }
 
@@ -112,11 +112,15 @@ namespace Nighthollow.Delegate
         projectile.transform.position,
         new Vector2(projectile.Data.HitboxSize / 1000f, projectile.Data.HitboxSize / 1000f)))
       {
-        ExecuteAttack(self, creature, self.Data.BaseAttack);
+        ExecuteAttack(self, creature, self.Data.BaseAttack, SkillType.Projectile);
       }
     }
 
-    public virtual void ExecuteAttack(Creature self, Creature target, Damage damage)
+    public virtual void ExecuteAttack(
+      Creature self,
+      Creature target,
+      Damage damage,
+      SkillType skillType)
     {
       var multiplier = 1.0f;
       if (Random.Range(0, 1000) < self.Data.CritChance.Value)

@@ -126,6 +126,8 @@ namespace Nighthollow.Components
 
     public CustomTriggerCollider ProjectileCollider => _projectileCollider;
 
+    public SkillData CurrentSkill => _currentSkill;
+
     public void EditorSetReferences(Transform projectileSource,
       Transform healthbarAnchor,
       AttachmentDisplay attachmentDisplay)
@@ -354,7 +356,7 @@ namespace Nighthollow.Components
       _data.Skills.Any(s => s.SkillType == SkillType.Projectile) &&
       _data.Projectiles.Any();
 
-    public bool UsesEnergy() => _data.Skills.Any(s => s.EnergyCost > 0);
+    public bool UsesEnergy() => _data.Skills.Any(s => s.EnergyCost > Data.EnergyGain.Value);
 
     bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
 

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Components;
+using Nighthollow.Data;
 using System.Linq;
 using UnityEngine;
 
@@ -43,7 +44,7 @@ namespace Nighthollow.Delegate
     {
       foreach (var creature in GetCollidingCreatures(self.Owner, _collider.Collider))
       {
-        ExecuteAttack(self, creature, self.Data.BaseAttack);
+        ExecuteAttack(self, creature, self.Data.BaseAttack, SkillType.Melee);
       }
     }
   }
