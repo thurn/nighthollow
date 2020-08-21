@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05e3fd8a2be5a4b46b4c220838c6c746, type: 3}
+  m_Name: Adept Card
+  m_EditorClassIdentifier: 
+  _cardPrefab: {fileID: 8201078851043189447, guid: b10a80a90394244668d5089010634cd3,
+    type: 3}
+  _cost:
+    _manaCost: 25
+    _influenceCost:
+      _light:
+        _value: 0
+      _sky:
+        _value: 0
+      _flame:
+        _value: 0
+      _ice:
+        _value: 0
+      _earth:
+        _value: 0
+      _shadow:
+        _value: 0
+  _image: {fileID: 21300000, guid: cc78a22c7f81f45e4b9cf70a7819c071, type: 3}
+  _creature: {fileID: 11400000, guid: 9dd43742223bc9647ac703fef0f0065d, type: 2}
