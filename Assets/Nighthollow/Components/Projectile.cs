@@ -24,10 +24,12 @@ namespace Nighthollow.Components
     [Header("Config")]
     [SerializeField] TimedEffect _flashEffect;
     [SerializeField] TimedEffect _hitEffect;
-    ProjectileData _projectileData;
 
     [Header("State")]
     [SerializeField] Creature _firedBy;
+    [SerializeField] ProjectileData _projectileData;
+    [SerializeField] Collider2D _collider;
+    [SerializeField] float _activationTime;
 
     public ProjectileData Data => _projectileData;
 
@@ -43,6 +45,13 @@ namespace Nighthollow.Components
         Constants.ForwardDirectionForPlayer(firedBy.Owner) :
         direction.Value;
       gameObject.layer = Constants.LayerForProjectiles(firedBy.Owner);
+
+      _collider = GetComponent<Collider2D>();
+      _activationTime = Time.time;
+      if (projectileData.ActivationDelayMs > 0)
+      {
+        _collider.enabled = false;
+      }
 
       var flash = Root.Instance.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);
       flash.transform.forward = transform.forward;
@@ -70,6 +79,13 @@ namespace Nighthollow.Components
     void Update()
     {
       transform.position += (_projectileData.Speed / 1000f) * Time.deltaTime * transform.forward;
+
+      if (!_collider.enabled &&
+        Time.time > _activationTime + (_projectileData.ActivationDelayMs / 1000f))
+      {
+        _collider.enabled = true;
+      }
+
       if (Mathf.Abs(transform.position.x) > 25)
       {
         gameObject.SetActive(false);

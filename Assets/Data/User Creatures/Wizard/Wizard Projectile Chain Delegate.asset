@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6917823772a160a42b9b180d6fe14854, type: 3}
-  m_Name: Projectile1
+  m_Script: {fileID: 11500000, guid: 67daa5e0e149b264da74d8e9b38a6680, type: 3}
+  m_Name: Wizard Projectile Chain Delegate
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 2515091690654797763, guid: c1ad6406e0f914d8ea333232796d0207, type: 3}
-  _speed: 10000
-  _hitboxSize: 1000
-  _energyCost: 0
-  _activationDelayMs: 0
+  _projectilesFired: 6
+  _maxChains: 1
+  _chainActivationDelayMs: 200

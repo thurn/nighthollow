@@ -32,9 +32,25 @@ namespace Nighthollow.Data
     [SerializeField] int _energyCost;
     public int EnergyCost => _energyCost;
 
+    // Delay before the projectile's collider will be activated
+    [SerializeField] int _activationDelayMs;
+    public int ActivationDelayMs => _activationDelayMs;
+
+    // How many times this projectile has chained
+    [SerializeField] int _chainCount;
+    public int ChainCount => _chainCount;
+
     public ProjectileData Clone()
     {
       return Instantiate(this);
+    }
+
+    public ProjectileData Child(int activationDelayMs, int chainCount)
+    {
+      var result = Clone();
+      result._activationDelayMs = activationDelayMs;
+      result._chainCount = chainCount;
+      return result;
     }
   }
 }

@@ -37,7 +37,6 @@ namespace Nighthollow.Components
 
     public void StartGame()
     {
-      Debug.Log("Start");
       Root.Instance.User.OnStartGame();
       Root.Instance.Enemy.StartSpawningEnemies();
     }
