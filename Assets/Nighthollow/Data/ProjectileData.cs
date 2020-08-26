@@ -1,4 +1,4 @@
-// Copyright © 2020-present Derek Thurn
+// Copyright Â© 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ using UnityEngine;
 namespace Nighthollow.Data
 {
   [CreateAssetMenu(menuName = "Data/Projectile")]
-  public class ProjectileData : ScriptableObject
+  public sealed class ProjectileData : ScriptableObject
   {
     [SerializeField] Projectile _prefab;
     public Projectile Prefab => _prefab;

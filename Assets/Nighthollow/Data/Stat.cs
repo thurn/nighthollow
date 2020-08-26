@@ -29,7 +29,7 @@ namespace Nighthollow.Data
   }
 
   [Serializable]
-  public class Modifier
+  public sealed class Modifier
   {
     [SerializeField] Operator _operator;
     public Operator Operator => _operator;
@@ -76,12 +76,12 @@ namespace Nighthollow.Data
   /// <summary>
   /// Represents an integer value which can have its value changed by operations called Modifiers.
   /// </summary>
-  /// 
+  ///
   /// Note: It is unsafe for unity ScriptableObjects to contain mutable state because they are
   /// copied by reference, but normal serializable classes are safe because they are
   /// copied by value during Instantiate().
   [Serializable]
-  public class Stat
+  public sealed class Stat
   {
     [SerializeField] int _value;
     bool _hasDynamicModifiers;

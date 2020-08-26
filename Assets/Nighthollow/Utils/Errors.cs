@@ -76,5 +76,13 @@ namespace Nighthollow.Utils
         throw new ArgumentException(message);
       }
     }
+
+    public static void CheckState(bool expression, string message)
+    {
+      if (!expression)
+      {
+        throw new InvalidOperationException(message);
+      }
+    }
   }
 }

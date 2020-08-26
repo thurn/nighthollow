@@ -19,7 +19,7 @@ using UnityEngine;
 namespace Nighthollow.Data
 {
   [CreateAssetMenu(menuName = "Data/Enemies")]
-  public class EnemiesData : ScriptableObject
+  public sealed class EnemiesData : ScriptableObject
   {
     [SerializeField] List<CreatureData> _enemies;
     public ReadOnlyCollection<CreatureData> Enemies => _enemies.AsReadOnly();

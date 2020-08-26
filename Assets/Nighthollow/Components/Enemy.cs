@@ -15,6 +15,7 @@
 using DataStructures.RandomSelector;
 using Nighthollow.Data;
 using Nighthollow.Services;
+using Nighthollow.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,12 +39,20 @@ namespace Nighthollow.Components
     IEnumerator<YieldInstruction> SpawnAsync()
     {
       yield return new WaitForSeconds(_data.InitialSpawnDelayMs / 1000f);
-      Root.Instance.CreatureService.CreateEnemyCreature(RandomEnemy(), RandomFile());
+      Root.Instance.CreatureService.CreateMovingCreature(
+        RandomEnemy(),
+        RandomFile(),
+        Constants.EnemyCreatureStartingX,
+        Constants.EnemyCreatureYOffset);
 
       while (true)
       {
         yield return new WaitForSeconds(_data.SpawnDelayMs / 1000f);
-        Root.Instance.CreatureService.CreateEnemyCreature(RandomEnemy(), RandomFile());
+        Root.Instance.CreatureService.CreateMovingCreature(
+          RandomEnemy(),
+          RandomFile(),
+          Constants.EnemyCreatureStartingX,
+          Constants.EnemyCreatureYOffset);
       }
     }
 

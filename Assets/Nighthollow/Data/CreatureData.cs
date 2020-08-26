@@ -21,7 +21,7 @@ using UnityEngine;
 
 namespace Nighthollow.Data
 {
-  public class AttachmentData : ScriptableObject
+  public sealed class AttachmentData : ScriptableObject
   {
     [SerializeField] Sprite _image;
     public Sprite Image => _image;
@@ -41,7 +41,8 @@ namespace Nighthollow.Data
   {
     Unknown,
     Melee,
-    Projectile
+    Projectile,
+    Untargeted
   }
 
   [CreateAssetMenu(menuName = "Data/Creature")]
@@ -73,7 +74,7 @@ namespace Nighthollow.Data
 
     [SerializeField] Damage _baseAttack;
     public Damage BaseAttack => _baseAttack;
-    
+
     [SerializeField] Stat _speed;
     public Stat Speed => _speed;
 

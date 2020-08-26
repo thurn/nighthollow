@@ -28,7 +28,7 @@ namespace Nighthollow.Data
   }
 
   [Serializable]
-  public class Influence
+  public sealed class Influence
   {
     [SerializeField] Stat _light;
     public Stat Light => _light;

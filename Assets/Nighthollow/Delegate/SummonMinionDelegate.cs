@@ -1,4 +1,4 @@
-// Copyright © 2020-present Derek Thurn
+﻿// Copyright © 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using Nighthollow.Components;
+using Nighthollow.Data;
+using Nighthollow.Services;
 using UnityEngine;
 
-namespace Nighthollow.Data
+namespace Nighthollow.Delegate
 {
-  [CreateAssetMenu(menuName = "Data/Deck")]
-  public sealed class DeckData : ScriptableObject
+  [CreateAssetMenu(menuName = "Delegate/SummonMinionDelegate")]
+  public sealed class SummonMinionDelegate : CreatureDelegate
   {
-    [SerializeField] List<CardData> _cards;
-    public ReadOnlyCollection<CardData> Cards => _cards.AsReadOnly();
+    [SerializeField] CreatureData _creature;
+
+    public override void OnUseUntargetedSkill(Creature self, SkillData skill)
+    {
+      Root.Instance.CreatureService.CreateMovingCreature(
+        _creature.Clone(), self.FilePosition, self.transform.position.x + 2);
+    }
   }
 }

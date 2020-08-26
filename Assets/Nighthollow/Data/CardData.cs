@@ -29,7 +29,7 @@ namespace Nighthollow.Data
   }
 
   [CreateAssetMenu(menuName = "Data/Card")]
-  public class CardData : ScriptableObject
+  public sealed class CardData : ScriptableObject
   {
     [SerializeField] Card _cardPrefab;
     public Card CardPrefab => _cardPrefab;

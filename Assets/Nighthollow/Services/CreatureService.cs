@@ -25,7 +25,7 @@ namespace Nighthollow.Services
   {
     readonly Dictionary<(RankValue, FileValue), Creature> _userCreatures =
       new Dictionary<(RankValue, FileValue), Creature>();
-    readonly HashSet<Creature> _enemyCreatures = new HashSet<Creature>();
+    readonly HashSet<Creature> _movingCreatures = new HashSet<Creature>();
 
     public Creature CreateUserCreature(CreatureData creatureData)
     {
@@ -35,12 +35,16 @@ namespace Nighthollow.Services
       return result;
     }
 
-    public Creature CreateEnemyCreature(CreatureData creatureData, FileValue file)
+    public Creature CreateMovingCreature(
+      CreatureData creatureData,
+      FileValue file,
+      float startingX,
+      float yOffset = 0)
     {
       var result = ComponentUtils.Instantiate(creatureData.Prefab);
       result.Initialize(creatureData);
-      result.ActivateCreature(null, file);
-      _enemyCreatures.Add(result);
+      result.ActivateCreature(null, file, startingX, yOffset);
+      _movingCreatures.Add(result);
 
       return result;
     }
@@ -53,13 +57,13 @@ namespace Nighthollow.Services
 
     public void RemoveCreature(Creature creature)
     {
-      if (creature.Owner == PlayerName.User)
+      if (creature.IsMoving)
       {
-        _userCreatures.Remove((creature.RankPosition.Value, creature.FilePosition));
+        _movingCreatures.Remove(creature);
       }
       else
       {
-        _enemyCreatures.Remove(creature);
+        _userCreatures.Remove((creature.RankPosition.Value, creature.FilePosition));
       }
     }
 

@@ -102,6 +102,7 @@ namespace Nighthollow.Components
             default:
               return new Vector2(0.25f, 0f);
           }
+
         case 3:
           switch (index)
           {
@@ -112,6 +113,7 @@ namespace Nighthollow.Components
             default:
               return new Vector2(-0.2f, 0.2f);
           }
+
         default:
           switch (index)
           {

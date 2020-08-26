@@ -37,9 +37,20 @@ namespace Nighthollow.Delegate
     }
 
     /// <summary>
+    /// Called when a creature is ready to use a skill. Should return true if the creature should
+    /// use one of its untargeted skills before attacking.
+    /// </summary>
+    public virtual bool ShouldUseUntargetedSkill(Creature self)
+    {
+      return self.Data.Skills.Any(s =>
+        s.SkillType == SkillType.Untargeted &&
+        s.EnergyCost <= self.CurrentEnergy);
+    }
+
+    /// <summary>
     /// Called when a creature is ready to use a skill in order to determine which skill
-    /// to select. This happens on activation, when a previous skill completes, or on
-    /// collision while the creature is idle.
+    /// to select. Note that untargeted skills take precedence over targeted skills, so this is
+    /// only invoked if 'ShouldUseUntargetedSkill' returns false.
     /// </summary>
     public virtual bool ShouldUseMeleeSkill(Creature self)
     {
@@ -95,6 +106,14 @@ namespace Nighthollow.Delegate
       projectile.Initialize(self, projectileData, firingPoint, direction);
     }
 
+    /// <summary>
+    /// Called when the creature reaches the activation frame of an untargeted skill.
+    /// </summary>
+    public virtual void OnUseUntargetedSkill(Creature self, SkillData skill)
+    {
+      throw new InvalidOperationException($"No implementation for skill {skill}");
+    }
+
     /// <summary>Called when the creature reaches the hit frame of its attack animation.</summary>
     public virtual void OnMeleeHit(Creature self)
     {
@@ -132,7 +151,9 @@ namespace Nighthollow.Delegate
     }
 
     /// <summary>Returns a list of the enemies of 'owner' overlapping wtih 'collider'.</summary>
-    protected static IEnumerable<Creature> GetCollidingCreatures(PlayerName owner, Collider2D collider)
+    protected static IEnumerable<Creature> GetCollidingCreatures(
+      PlayerName owner,
+      Collider2D collider)
     {
       return OverlapBox(
         owner,
@@ -144,7 +165,10 @@ namespace Nighthollow.Delegate
     /// Returns a list of the enemies of 'owner' overlapping wtih a rectangle at 'center' of
     /// size 'size'.
     /// </summary>
-    protected static IEnumerable<Creature> OverlapBox(PlayerName owner, Vector2 center, Vector2 size)
+    protected static IEnumerable<Creature> OverlapBox(
+      PlayerName owner,
+      Vector2 center,
+      Vector2 size)
     {
       var hits = Physics2D.OverlapBoxAll(
         center,

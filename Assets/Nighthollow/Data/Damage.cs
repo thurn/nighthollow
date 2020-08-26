@@ -28,7 +28,7 @@ namespace Nighthollow.Data
   }
 
   [Serializable]
-  public class Damage
+  public sealed class Damage
   {
     [SerializeField] Stat _radiant;
     public Stat Radiant => _radiant;

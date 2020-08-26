@@ -36,22 +36,6 @@ namespace Nighthollow.Data
       }
     }
 
-    public static int ToIndex(this RankValue rank)
-    {
-      switch (rank)
-      {
-        case RankValue.Rank1: return 0;
-        case RankValue.Rank2: return 1;
-        case RankValue.Rank3: return 2;
-        case RankValue.Rank4: return 3;
-        case RankValue.Rank5: return 4;
-        case RankValue.Rank6: return 5;
-        case RankValue.Rank7: return 6;
-        case RankValue.Rank8: return 7;
-        default: throw Errors.UnknownEnumValue(rank);
-      }
-    }
-
     public static RankValue ClosestRankForXPosition(float xPosition)
     {
       var closestDistance = float.MaxValue;
@@ -69,22 +53,6 @@ namespace Nighthollow.Data
       return closestRank;
     }
 
-    public static RankValue RankForIndex(int index)
-    {
-      switch (index)
-      {
-        case 0: return RankValue.Rank1;
-        case 1: return RankValue.Rank2;
-        case 2: return RankValue.Rank3;
-        case 3: return RankValue.Rank4;
-        case 4: return RankValue.Rank5;
-        case 5: return RankValue.Rank6;
-        case 6: return RankValue.Rank7;
-        case 7: return RankValue.Rank8;
-        default: throw Errors.UnknownIntEnumValue(index, 0, 7);
-      }
-    }
-
     public static float ToYPosition(this FileValue file)
     {
       switch (file)
@@ -94,19 +62,6 @@ namespace Nighthollow.Data
         case FileValue.File3: return -4.8f;
         case FileValue.File4: return -2.3f;
         case FileValue.File5: return 0.2f;
-        default: throw Errors.UnknownEnumValue(file);
-      }
-    }
-
-    public static int ToIndex(this FileValue file)
-    {
-      switch (file)
-      {
-        case FileValue.File1: return 0;
-        case FileValue.File2: return 1;
-        case FileValue.File3: return 2;
-        case FileValue.File4: return 3;
-        case FileValue.File5: return 4;
         default: throw Errors.UnknownEnumValue(file);
       }
     }

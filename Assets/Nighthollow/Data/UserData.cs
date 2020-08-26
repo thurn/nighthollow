@@ -17,7 +17,7 @@ using UnityEngine;
 namespace Nighthollow.Data
 {
   [CreateAssetMenu(menuName = "Data/User")]
-  public class UserData : ScriptableObject
+  public sealed class UserData : ScriptableObject
   {
     [SerializeField] Stat _startingLife;
     public Stat StartingLife => _startingLife;

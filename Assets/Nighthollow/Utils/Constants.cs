@@ -23,6 +23,9 @@ namespace Nighthollow.Utils
     public const int IndicatorRightX = 14;
     public const float EnemyCreatureYOffset = 1.25f;
     public const float EnemyCreatureStartingX = 20.0f;
+    public const float EnemyCreatureEndingX = -15.0f;
+    public const float CreatureDespawnLeftX = -20.0f;
+    public const float CreatureDespawnRightX = 25.0f;
 
     public const int UserCreaturesLayer = 8;
     public const int EnemyCreaturesLayer = 9;
