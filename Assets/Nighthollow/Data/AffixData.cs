@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
 
 namespace Nighthollow.Data
 {
-  [CreateAssetMenu(menuName = "Data/Deck")]
-  public sealed class DeckData : ScriptableObject
+  public sealed class AffixData : ScriptableObject
   {
-    [SerializeField] List<CardItemData> _cards;
-    public ReadOnlyCollection<CardItemData> Cards => _cards.AsReadOnly();
+    [SerializeField] CardData _data;
+    public CardData Data => _data;
   }
 }

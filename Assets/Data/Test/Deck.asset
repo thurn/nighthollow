@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Deck
   m_EditorClassIdentifier: 
   _cards:
-  - {fileID: 11400000, guid: d9221f94a72ed9140921753a1b62963b, type: 2}
-  - {fileID: 11400000, guid: 308663d49af3be1448ee3a0f836c9e1d, type: 2}
-  - {fileID: 11400000, guid: cd80994888f02f249a1dc654b9c0359d, type: 2}
-  - {fileID: 11400000, guid: df3e795cedd02412eb49f745b4ae4615, type: 2}
+  - {fileID: 11400000, guid: 2aff49e21782e4045ab4ad257dfdd44c, type: 2}
+  - {fileID: 11400000, guid: 483b88be0c29f47c4a52dbbe72e6a186, type: 2}
+  - {fileID: 11400000, guid: 9d9f27ca3b5d146f1a41d50cccf33d68, type: 2}
+  - {fileID: 11400000, guid: b8dcc13ca51c24bf1b085c8931acbc52, type: 2}

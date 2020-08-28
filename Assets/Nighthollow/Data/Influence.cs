@@ -88,15 +88,20 @@ namespace Nighthollow.Data
       return AllSchools.All(school => Get(school).Value <= other.Get(school).Value);
     }
 
+    public void Merge(Influence other)
+    {
+      foreach (var type in AllSchools)
+      {
+        Get(type).Merge(other.Get(type));
+      }
+    }
+
     public override string ToString()
     {
       var builder = new StringBuilder("[ ");
-      foreach (var school in AllSchools)
+      foreach (var school in AllSchools.Where(school => Get(school).Value > 0))
       {
-        if (Get(school).Value > 0)
-        {
-          builder.Append($"{school}: {Get(school).Value} ");
-        }
+        builder.Append($"{school}: {Get(school).Value} ");
       }
 
       builder.Append("]");

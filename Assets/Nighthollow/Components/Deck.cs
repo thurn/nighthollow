@@ -24,7 +24,7 @@ namespace Nighthollow.Components
   {
     [SerializeField] DeckData _data;
     [SerializeField] bool _debugOrderedDraws;
-    [SerializeField] List<CardData> _cards;
+    [SerializeField] List<CardItemData> _cards;
     [SerializeField] List<int> _weights;
     int _lastDraw;
 
@@ -39,7 +39,7 @@ namespace Nighthollow.Components
     {
       if (_debugOrderedDraws)
       {
-        return _cards[_lastDraw++ % _cards.Count].Clone();
+        return _cards[_lastDraw++ % _cards.Count].Build();
       }
 
       var selector = new DynamicRandomSelector<int>(-1, _cards.Count);
@@ -52,7 +52,7 @@ namespace Nighthollow.Components
 
       var index = selector.SelectRandomItem();
       DecrementWeight(index);
-      return _cards[index].Clone();
+      return _cards[index].Build();
     }
 
     void DecrementWeight(int index)

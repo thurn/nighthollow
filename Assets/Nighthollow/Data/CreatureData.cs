@@ -71,6 +71,14 @@ namespace Nighthollow.Data
     [SerializeField] Damage _baseAttack;
     public Damage BaseAttack => _baseAttack;
 
+    [SerializeField] Stat _damageRange;
+
+    /// <summary>
+    /// Represents the size of a creature's damage range as a percentage of the average. For example, if a creature
+    /// has average damage of 50 and a range of 30, the range size is 50 * 30% = 15, and thus the damage range is 35-65.
+    /// </summary>
+    public Stat DamageRange => _damageRange;
+
     [SerializeField] Stat _speed;
     public Stat Speed => _speed;
 
@@ -121,9 +129,28 @@ namespace Nighthollow.Data
       return result;
     }
 
+    public void Merge(CreatureData other)
+    {
+      _health.Merge(other.Health);
+      _baseAttack.Merge(other.BaseAttack);
+      _damageRange.Merge(other.DamageRange);
+      _speed.Merge(other.Speed);
+      _startingEnergy.Merge(other.StartingEnergy);
+      _maximumEnergy.Merge(other.MaximumEnergy);
+      _energyGain.Merge(other.EnergyGain);
+      _energyGainIntervalMs.Merge(other.EnergyGainIntervalMs);
+      _critChance.Merge(other.CritChance);
+      _critMultiplier.Merge(other.CritMultiplier);
+      _accuracy.Merge(other.Accuracy);
+      _evasion.Merge(other.Evasion);
+      _damageResistance.Merge(other.DamageResistance);
+      _damageReduction.Merge(other.DamageReduction);
+    }
+
     void Reset()
     {
       _health = new Stat(100);
+      _damageRange = new Stat(30);
       _energyGain = new Stat(5);
       _energyGainIntervalMs = new Stat(5000);
       _maximumEnergy = new Stat(100);

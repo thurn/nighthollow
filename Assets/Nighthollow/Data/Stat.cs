@@ -122,6 +122,19 @@ namespace Nighthollow.Data
       Recalculate();
     }
 
+    public void Merge(Stat other)
+    {
+      if (other._value != 0)
+      {
+        AddModifier(Modifier.Create(Operator.Add, other._value));
+      }
+
+      foreach (var modifier in other._modifiers)
+      {
+        AddModifier(modifier);
+      }
+    }
+
     public override string ToString()
     {
       return _cachedValue != _value ? $"{_cachedValue} ({_value})" : _value.ToString();

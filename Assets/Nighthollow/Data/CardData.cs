@@ -19,13 +19,19 @@ using UnityEngine;
 namespace Nighthollow.Data
 {
   [Serializable]
-  public class Cost
+  public sealed class Cost
   {
     [SerializeField] int _manaCost;
     public int ManaCost => _manaCost;
 
     [SerializeField] Influence _influenceCost;
     public Influence InfluenceCost => _influenceCost;
+
+    public void Merge(Cost other)
+    {
+      _manaCost += other._manaCost;
+      _influenceCost.Merge(other._influenceCost);
+    }
   }
 
   [CreateAssetMenu(menuName = "Data/Card")]
@@ -53,6 +59,12 @@ namespace Nighthollow.Data
       }
 
       return result;
+    }
+
+    public void Merge(CardData other)
+    {
+      _cost.Merge(other.Cost);
+      _creature.Merge(other.Creature);
     }
   }
 }

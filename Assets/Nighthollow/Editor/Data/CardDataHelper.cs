@@ -12,22 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Linq;
 using Nighthollow.Data;
 using UnityEditor;
-using UnityEngine.UIElements;
+using UnityEngine;
 
 namespace Nighthollow.Editor.Data
 {
-//  [CustomEditor(typeof(CardData))]
-//  public sealed class CardDataEditor : UnityEditor.Editor
-//  {
-//    public override VisualElement CreateInspectorGUI()
-//    {
-//      var root = new VisualElement();
-//
-//      EditorHelper.AddDefaultInspector(root, serializedObject);
-//
-//      return root;
-//    }
-//  }
+  public static class CardDataHelper
+  {
+    [MenuItem("Tools/Data/Create Item %#i")]
+    public static void Import()
+    {
+      if (Selection.assetGUIDs.Length == 1)
+      {
+        var path = AssetDatabase.GUIDToAssetPath(Selection.assetGUIDs.First());
+        var card = AssetDatabase.LoadAssetAtPath<CardData>(path);
+        var item = ScriptableObject.CreateInstance<CardItemData>();
+        item.InitializeFromEditor(card);
+        AssetDatabase.CreateAsset(item, path.Replace(".asset", " Item.asset"));
+      }
+    }
+  }
 }
