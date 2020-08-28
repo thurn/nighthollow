@@ -130,6 +130,8 @@ namespace Nighthollow.Components
 
     public SkillData CurrentSkill => _currentSkill;
 
+    public CreatureState State => _state;
+
     public void EditorSetReferences(Transform projectileSource,
       Transform healthbarAnchor,
       AttachmentDisplay attachmentDisplay)
@@ -175,11 +177,10 @@ namespace Nighthollow.Components
       }
 
       _currentEnergy = _data.StartingEnergy.Value;
-
-      _data.Delegate.OnActivate(this);
       _state = CreatureState.Idle;
+
       _selectSkill = true;
-      Data.Modifiers.Activate(this);
+      _data.Delegate.OnActivate(this);
 
       _coroutine = StartCoroutine(RunCoroutine());
     }
@@ -272,7 +273,7 @@ namespace Nighthollow.Components
       _animator.SetTrigger(Death);
       _collider.enabled = false;
 
-      Data.Modifiers.OnDeath(this);
+      Data.Delegate.OnDeath(this);
 
       _state = CreatureState.Dying;
       _creatureService.RemoveCreature(this);

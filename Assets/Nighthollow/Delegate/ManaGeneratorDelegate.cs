@@ -1,4 +1,4 @@
-﻿// Copyright © 2020-present Derek Thurn
+// Copyright © 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,18 +15,17 @@
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Services;
-using System;
 using UnityEngine;
 
-namespace Nighthollow.Modifiers
+namespace Nighthollow.Delegate
 {
-  [CreateAssetMenu(menuName = "Modifiers/ManaGainAndInfluenceModifier")]
-  public sealed class ManaGainAndInfluenceModifier : CreatureModifier
+  [CreateAssetMenu(menuName = "Delegate/ManaGeneratorDelegate")]
+  public sealed class ManaGeneratorDelegate : CreatureDelegate
   {
     [SerializeField] int _manaGain;
     [SerializeField] Influence _influence;
 
-    public override void Activate(Creature self)
+    public override void OnActivate(Creature self)
     {
       var user = Root.Instance.User;
       user.Data.ManaGain.AddModifier(Modifier.WhileAlive(Operator.Add, _manaGain, self));

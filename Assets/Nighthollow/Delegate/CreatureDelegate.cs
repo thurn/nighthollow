@@ -31,6 +31,11 @@ namespace Nighthollow.Delegate
     {
     }
 
+    /// <summary>Called when a creature dies.</summary>
+    public virtual void OnDeath(Creature self)
+    {
+    }
+
     public virtual CreatureDelegate Clone()
     {
       return Instantiate(this);

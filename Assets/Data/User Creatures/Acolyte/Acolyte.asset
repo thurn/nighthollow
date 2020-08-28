@@ -15,10 +15,9 @@ MonoBehaviour:
   _prefab: {fileID: 6973698551416525957, guid: 13d0ff59514c84c29abea23bb6c7fbad, type: 3}
   _owner: 1
   _name: Acolyte
-  _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
+  _delegate: {fileID: 11400000, guid: b4b21a69fb9e443d2beba917bc215e89, type: 2}
   _modifiers:
-    _modifiers:
-    - {fileID: 11400000, guid: 875ecf1ab5ef39b468078c04f8723546, type: 2}
+    _modifiers: []
   _skills:
   - _energyCost: 0
     _animation: 2

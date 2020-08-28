@@ -111,6 +111,7 @@ namespace Nighthollow.Data
     public void AddModifier(Modifier modifier)
     {
       Errors.CheckNotNull(modifier);
+
       _modifiers.Add(modifier);
 
       if (Math.Abs(modifier.EndTimeSeconds) > 0.0001f || modifier.ScopeCreature != null)
@@ -130,7 +131,7 @@ namespace Nighthollow.Data
     {
       var result = _value;
 
-      _modifiers.RemoveAll(m => !ActiveModifier(m));
+      _modifiers.RemoveAll(InactiveModifier);
 
       result = _modifiers.FirstOrDefault(m => m.Operator == Operator.Set)?.Value ?? result;
 
@@ -147,20 +148,20 @@ namespace Nighthollow.Data
       _cachedValue = result;
     }
 
-    bool ActiveModifier(Modifier modifier)
+    bool InactiveModifier(Modifier modifier)
     {
       if (Math.Abs(modifier.EndTimeSeconds) > 0.0001f)
       {
-        return modifier.EndTimeSeconds > Time.time;
+        return Time.time > modifier.EndTimeSeconds;
       }
 
       if (modifier.ScopeCreature != null)
       {
         modifier.ScopeCreature.TryGetTarget(out var creature);
-        return creature && creature.IsAlive();
+        return !(creature && creature.IsAlive());
       }
 
-      return true;
+      return false;
     }
   }
 }

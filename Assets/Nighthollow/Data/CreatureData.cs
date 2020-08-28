@@ -14,7 +14,6 @@
 
 using Nighthollow.Components;
 using Nighthollow.Delegate;
-using Nighthollow.Modifiers;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -59,9 +58,6 @@ namespace Nighthollow.Data
 
     [SerializeField] CreatureDelegate _delegate;
     public CreatureDelegate Delegate => _delegate;
-
-    [SerializeField] ModifierList _modifiers;
-    public ModifierList Modifiers => _modifiers;
 
     [SerializeField] List<SkillData> _skills;
     public IReadOnlyCollection<SkillData> Skills => _skills.AsReadOnly();
@@ -115,11 +111,6 @@ namespace Nighthollow.Data
       if (_delegate)
       {
         result._delegate = _delegate.Clone();
-      }
-
-      if (_modifiers != null)
-      {
-        result._modifiers = _modifiers.Clone();
       }
 
       if (_projectiles != null)

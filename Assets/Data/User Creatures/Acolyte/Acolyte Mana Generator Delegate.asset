@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dd309827b5554a448a18b22d06c6367, type: 3}
-  m_Name: Acolyte Mana Gain And Influence Modifier
+  m_Script: {fileID: 11500000, guid: c6725659b8d541ae88fc57251d64aa6e, type: 3}
+  m_Name: Acolyte Mana Generator Delegate
   m_EditorClassIdentifier: 
   _manaGain: 5
   _influence:
