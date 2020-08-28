@@ -16,6 +16,7 @@ namespace Nighthollow.Data
 {
   public enum PlayerName
   {
+    Unknown,
     User,
     Enemy
   }

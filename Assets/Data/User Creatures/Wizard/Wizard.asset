@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wizard
   m_EditorClassIdentifier: 
   _prefab: {fileID: 2225211046518890780, guid: 4c5f0ff7d5d42458d9cca5092335c4ba, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Wizard
   _delegate: {fileID: 11400000, guid: e2d20f1c4ce80ec43a5823c85bb398fc, type: 2}
   _modifiers:

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Blackguard
   m_EditorClassIdentifier: 
   _prefab: {fileID: 6448519131692088552, guid: 518931ad86ca64fa79df159ca1bb4a0e, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Blackguard
   _delegate: {fileID: 11400000, guid: 82f9099705b9c12418f4e0f1bf74bdbf, type: 2}
   _modifiers:
@@ -58,7 +58,7 @@ MonoBehaviour:
   _accuracy:
     _value: 0
   _evasion:
-    _value: 16846
+    _value: 50
   _damageResistance:
     _radiant:
       _value: 0

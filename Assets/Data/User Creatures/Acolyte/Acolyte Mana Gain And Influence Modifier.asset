@@ -16,13 +16,19 @@ MonoBehaviour:
   _influence:
     _light:
       _value: 0
+      _modifiers: []
     _sky:
       _value: 0
+      _modifiers: []
     _flame:
       _value: 1
+      _modifiers: []
     _ice:
       _value: 0
+      _modifiers: []
     _earth:
       _value: 0
+      _modifiers: []
     _shadow:
       _value: 0
+      _modifiers: []

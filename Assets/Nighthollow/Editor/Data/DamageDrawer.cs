@@ -12,68 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Nighthollow.Data;
-using Nighthollow.Utils;
 using UnityEditor;
-using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Nighthollow.Editor.Data
 {
   [CustomPropertyDrawer(typeof(Damage))]
-  public class DamageDrawer : PropertyDrawer
+  public sealed class DamageDrawer : PropertyDrawer
   {
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {
-      // Using BeginProperty / EndProperty on the parent property means that
-      // prefab override logic works on the entire property.
-      EditorGUI.BeginProperty(position, label, property);
-
-      // Draw label
-      position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-
-      // Don't make child fields be indented
-      var indent = EditorGUI.indentLevel;
-      EditorGUI.indentLevel = 0;
-
-      var count = 0;
-      foreach (DamageType type in Enum.GetValues(typeof(DamageType)))
+      var foldout = new Foldout
       {
-        GUI.backgroundColor = InfluenceDrawer.Colors[count];
-        var rect = new Rect(position.x + (count * 35), position.y, 30, position.height);
-        EditorGUI.PropertyField(rect,
-          Errors.CheckNotNull(property.FindPropertyRelative(PropertyName(type))),
-          GUIContent.none);
-        count++;
-      }
-
-      GUI.backgroundColor = Color.white;
-
-      // Set indent back to what it was
-      EditorGUI.indentLevel = indent;
-
-      EditorGUI.EndProperty();
-    }
-
-    string PropertyName(DamageType damageType)
-    {
-      switch (damageType)
-      {
-        case DamageType.Radiant:
-          return "_radiant";
-        case DamageType.Lightning:
-          return "_lightning";
-        case DamageType.Fire:
-          return "_fire";
-        case DamageType.Cold:
-          return "_cold";
-        case DamageType.Physical:
-          return "_physical";
-        case DamageType.Necrotic:
-          return "_necrotic";
-        default:
-          throw new ArgumentOutOfRangeException(nameof(damageType), damageType, null);
-      }
+        text = property.displayName + " " + EditorHelper.GetSerializedPropertyValue<Damage>(property)
+      };
+      EditorHelper.AddDefaultPropertyInspector(foldout, property);
+      foldout.value = false;
+      return foldout;
     }
   }
 }

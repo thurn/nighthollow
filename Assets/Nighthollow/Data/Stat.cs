@@ -16,12 +16,14 @@ using Nighthollow.Components;
 using Nighthollow.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Nighthollow.Data
 {
   public enum Operator
   {
+    Unknown,
     Set,
     Add,
     Increase,
@@ -37,10 +39,10 @@ namespace Nighthollow.Data
     [SerializeField] int _value;
     public int Value => _value;
 
-    [SerializeField] float _endTimeSeconds;
+    float _endTimeSeconds;
     public float EndTimeSeconds => _endTimeSeconds;
 
-    [SerializeField] WeakReference<Creature> _scopeCreature;
+    WeakReference<Creature> _scopeCreature;
     public WeakReference<Creature> ScopeCreature => _scopeCreature;
 
     public static Modifier Create(Operator op, int value)
@@ -76,17 +78,14 @@ namespace Nighthollow.Data
   /// <summary>
   /// Represents an integer value which can have its value changed by operations called Modifiers.
   /// </summary>
-  ///
-  /// Note: It is unsafe for unity ScriptableObjects to contain mutable state because they are
-  /// copied by reference, but normal serializable classes are safe because they are
-  /// copied by value during Instantiate().
   [Serializable]
   public sealed class Stat
   {
     [SerializeField] int _value;
+    [SerializeField] List<Modifier> _modifiers;
+    bool _hasBeenRead;
     bool _hasDynamicModifiers;
     int _cachedValue;
-    Dictionary<Operator, List<Modifier>> _modifiers;
     int _lastCalculatedFrame;
 
     public Stat(int value)
@@ -99,16 +98,10 @@ namespace Nighthollow.Data
     {
       get
       {
-        if (_modifiers == null)
-        {
-          // Unity deserializer does not run constructors, need to lazily populate
-          _modifiers = new Dictionary<Operator, List<Modifier>>();
-          _cachedValue = _value;
-        }
-
-        if (_hasDynamicModifiers && _lastCalculatedFrame < Time.frameCount)
+        if (!_hasBeenRead || (_hasDynamicModifiers && _lastCalculatedFrame < Time.frameCount))
         {
           Recalculate();
+          _hasBeenRead = true;
         }
 
         return _cachedValue;
@@ -118,17 +111,7 @@ namespace Nighthollow.Data
     public void AddModifier(Modifier modifier)
     {
       Errors.CheckNotNull(modifier);
-      if (_modifiers == null)
-      {
-        _modifiers = new Dictionary<Operator, List<Modifier>>();
-      }
-
-      if (!_modifiers.ContainsKey(modifier.Operator))
-      {
-        _modifiers[modifier.Operator] = new List<Modifier>();
-      }
-
-      _modifiers[modifier.Operator].Add(modifier);
+      _modifiers.Add(modifier);
 
       if (Math.Abs(modifier.EndTimeSeconds) > 0.0001f || modifier.ScopeCreature != null)
       {
@@ -138,78 +121,27 @@ namespace Nighthollow.Data
       Recalculate();
     }
 
+    public override string ToString()
+    {
+      return _cachedValue != _value ? $"{_cachedValue} ({_value})" : _value.ToString();
+    }
+
     void Recalculate()
     {
       var result = _value;
 
-      if (_modifiers.ContainsKey(Operator.Set))
-      {
-        var setValues = _modifiers[Operator.Set];
-        var foundSetter = false;
-        for (var i = setValues.Count - 1; i >= 0; --i)
-        {
-          if (!ActiveModifier(setValues[i]))
-          {
-            setValues.RemoveAt(i);
-          }
-          else if (!foundSetter)
-          {
-            result = setValues[i].Value;
-            foundSetter = true;
-          }
-        }
-      }
+      _modifiers.RemoveAll(m => !ActiveModifier(m));
 
-      if (_modifiers.ContainsKey(Operator.Add))
-      {
-        var addValues = _modifiers[Operator.Add];
-        for (var i = addValues.Count - 1; i >= 0; --i)
-        {
-          if (!ActiveModifier(addValues[i]))
-          {
-            addValues.RemoveAt(i);
-          }
-          else
-          {
-            result += addValues[i].Value;
-          }
-        }
-      }
+      result = _modifiers.FirstOrDefault(m => m.Operator == Operator.Set)?.Value ?? result;
 
-      if (_modifiers.ContainsKey(Operator.Increase))
-      {
-        var increaseValues = _modifiers[Operator.Increase];
-        var increaseBy = 100;
-        for (var i = increaseValues.Count - 1; i >= 0; --i)
-        {
-          if (!ActiveModifier(increaseValues[i]))
-          {
-            increaseValues.RemoveAt(i);
-          }
-          else
-          {
-            increaseBy += increaseValues[i].Value;
-          }
-        }
+      result += _modifiers.Where(m => m.Operator == Operator.Add).Sum(modifier => modifier.Value);
 
-        result = Mathf.RoundToInt((result * increaseBy) / 100f);
-      }
+      var increaseBy = 100 + _modifiers.Where(m => m.Operator == Operator.Increase).Sum(modifier => modifier.Value);
+      result = Mathf.RoundToInt((result * increaseBy) / 100f);
 
-      if (_modifiers.ContainsKey(Operator.Multiply))
-      {
-        var multiplyValues = _modifiers[Operator.Multiply];
-        for (var i = multiplyValues.Count - 1; i >= 0; --i)
-        {
-          if (!ActiveModifier(multiplyValues[i]))
-          {
-            multiplyValues.RemoveAt(i);
-          }
-          else
-          {
-            result = Mathf.RoundToInt((result * (100 + multiplyValues[i].Value)) / 100f);
-          }
-        }
-      }
+      result = _modifiers
+        .Where(m => m.Operator == Operator.Multiply)
+        .Aggregate(result, (current, modifier) => Mathf.RoundToInt((current * (100 + modifier.Value)) / 100f));
 
       _lastCalculatedFrame = Time.frameCount;
       _cachedValue = result;

@@ -13,13 +13,34 @@
 // limitations under the License.
 
 using Nighthollow.Utils;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Nighthollow.Data
 {
   public static class BoardPositions
   {
+    public static readonly IEnumerable<RankValue> AllRanks = new List<RankValue>
+    {
+      RankValue.Rank1,
+      RankValue.Rank2,
+      RankValue.Rank3,
+      RankValue.Rank4,
+      RankValue.Rank5,
+      RankValue.Rank6,
+      RankValue.Rank7,
+      RankValue.Rank8
+    };
+
+    public static readonly IEnumerable<FileValue> AllFiles = new List<FileValue>
+    {
+      FileValue.File1,
+      FileValue.File2,
+      FileValue.File3,
+      FileValue.File4,
+      FileValue.File5
+    };
+
     public static float ToXPosition(this RankValue rank)
     {
       switch (rank)
@@ -40,7 +61,7 @@ namespace Nighthollow.Data
     {
       var closestDistance = float.MaxValue;
       var closestRank = RankValue.Rank1;
-      foreach (RankValue rank in Enum.GetValues(typeof(RankValue)))
+      foreach (var rank in AllRanks)
       {
         var distance = Mathf.Abs(rank.ToXPosition() - xPosition);
         if (distance < closestDistance)
@@ -70,7 +91,7 @@ namespace Nighthollow.Data
     {
       var closestDistance = float.MaxValue;
       var closestFile = FileValue.File1;
-      foreach (FileValue file in Enum.GetValues(typeof(FileValue)))
+      foreach (var file in AllFiles)
       {
         var distance = Mathf.Abs(file.ToYPosition() - yPosition);
         if (distance < closestDistance)

@@ -14,23 +14,20 @@
 
 using Nighthollow.Data;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Editor.Data
 {
-  [CustomPropertyDrawer(typeof(Stat))]
-  public sealed class StatDrawer : PropertyDrawer
-  {
-    public override VisualElement CreatePropertyGUI(SerializedProperty property)
-    {
-      var root = new VisualElement();
-      root.Add(new PropertyField(property.FindPropertyRelative("_value"), property.displayName));
-      var modifiers = new PropertyField(property.FindPropertyRelative("_modifiers"));
-      modifiers.style.marginLeft = 20;
-      root.Add(modifiers);
-      root.style.marginLeft = -14;
-      return root;
-    }
-  }
+//  [CustomEditor(typeof(CardData))]
+//  public sealed class CardDataEditor : UnityEditor.Editor
+//  {
+//    public override VisualElement CreateInspectorGUI()
+//    {
+//      var root = new VisualElement();
+//
+//      EditorHelper.AddDefaultInspector(root, serializedObject);
+//
+//      return root;
+//    }
+//  }
 }

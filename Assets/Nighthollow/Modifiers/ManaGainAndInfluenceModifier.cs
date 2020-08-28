@@ -31,7 +31,7 @@ namespace Nighthollow.Modifiers
       var user = Root.Instance.User;
       user.Data.ManaGain.AddModifier(Modifier.WhileAlive(Operator.Add, _manaGain, self));
 
-      foreach (School school in Enum.GetValues(typeof(School)))
+      foreach (var school in Influence.AllSchools)
       {
         var influence = _influence.Get(school).Value;
         if (influence > 0)

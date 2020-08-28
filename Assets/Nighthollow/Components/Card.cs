@@ -96,7 +96,7 @@ namespace Nighthollow.Components
       _cost.text = _data.Cost.ManaCost.ToString();
 
       var addIndex = 0;
-      foreach (School school in Enum.GetValues(typeof(School)))
+      foreach (School school in Influence.AllSchools)
       {
         AddInfluence(school, _data.Cost.InfluenceCost.Get(school).Value, ref addIndex);
       }

@@ -12,24 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
 using UnityEditor;
-using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Editor.Data
 {
-  [CustomPropertyDrawer(typeof(Stat))]
-  public sealed class StatDrawer : PropertyDrawer
+  [CustomEditor(typeof(Object), true, isFallback = true)]
+  [CanEditMultipleObjects]
+  public sealed class GlobalEditor : UnityEditor.Editor
   {
-    public override VisualElement CreatePropertyGUI(SerializedProperty property)
+    public override VisualElement CreateInspectorGUI()
     {
       var root = new VisualElement();
-      root.Add(new PropertyField(property.FindPropertyRelative("_value"), property.displayName));
-      var modifiers = new PropertyField(property.FindPropertyRelative("_modifiers"));
-      modifiers.style.marginLeft = 20;
-      root.Add(modifiers);
-      root.style.marginLeft = -14;
+
+      EditorHelper.AddDefaultInspector(root, serializedObject);
+
       return root;
     }
   }

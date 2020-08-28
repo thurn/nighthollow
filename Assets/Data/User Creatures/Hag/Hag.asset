@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: Hag
   m_EditorClassIdentifier: 
   _prefab: {fileID: 4558924909554618272, guid: 1815ab531cd334b6e938e30c1fa60873, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Hag
   _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
-  _events:
-    _enteredPlay: []
-    _died: []
+  _modifiers:
+    _modifiers: []
   _skills:
   - _energyCost: 0
     _animation: 2
@@ -33,23 +32,6 @@ MonoBehaviour:
     _animation: 1
     _skillType: 1
   _projectiles: []
-  _parameters:
-    _manaGained:
-      _value: 0
-    _influenceAdded:
-      _light:
-        _value: 0
-      _sky:
-        _value: 0
-      _flame:
-        _value: 0
-      _ice:
-        _value: 0
-      _earth:
-        _value: 0
-      _shadow:
-        _value: 0
-    _meleeHitSize: {x: 0, y: 0}
   _health:
     _value: 100
   _baseAttack:

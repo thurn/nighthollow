@@ -13,14 +13,11 @@ MonoBehaviour:
   m_Name: Assassin
   m_EditorClassIdentifier: 
   _prefab: {fileID: 4798629742224918122, guid: 581d3c0d3b8e2404c9242cea834a420e, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Assassin
   _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
   _modifiers:
     _modifiers: []
-  _events:
-    _enteredPlay: []
-    _died: []
   _skills:
   - _energyCost: 0
     _animation: 1
@@ -32,26 +29,6 @@ MonoBehaviour:
     _animation: 3
     _skillType: 1
   _projectiles: []
-  _parameters:
-    _mana:
-      _value: 0
-    _influence:
-      _light:
-        _value: 0
-      _sky:
-        _value: 0
-      _flame:
-        _value: 0
-      _ice:
-        _value: 0
-      _earth:
-        _value: 0
-      _shadow:
-        _value: 0
-    _meleeHitSize: {x: 0, y: 0}
-    _damageType: 0
-    _operator: 0
-    _value: 0
   _health:
     _value: 100
   _baseAttack:

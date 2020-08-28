@@ -233,11 +233,6 @@ namespace Nighthollow.Components
         SpendEnergy(_currentProjectile.EnergyCost);
       }
 
-      if (Data.Name.Equals("Skeleton Minion"))
-      {
-        Debug.Log($"Using skill: {_currentSkill.Animation}");
-      }
-
       switch (_currentSkill.Animation)
       {
         case SkillAnimationNumber.Skill1:

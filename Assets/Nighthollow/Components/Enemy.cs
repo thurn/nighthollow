@@ -22,7 +22,7 @@ using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public class Enemy : MonoBehaviour
+  public sealed class Enemy : MonoBehaviour
   {
     [SerializeField] EnemiesData _data;
 
@@ -63,6 +63,7 @@ namespace Nighthollow.Components
       {
         selector.Add(enemy, 1.0f);
       }
+
       selector.Build();
 
       return Instantiate(selector.SelectRandomItem());
@@ -71,13 +72,11 @@ namespace Nighthollow.Components
     FileValue RandomFile()
     {
       var selector = new DynamicRandomSelector<FileValue>();
-      foreach (FileValue file in Enum.GetValues(typeof(FileValue)))
+      foreach (var file in BoardPositions.AllFiles)
       {
-        if (file != FileValue.Unknown)
-        {
-          selector.Add(file, 1.0f);
-        }
+        selector.Add(file, 1.0f);
       }
+
       selector.Build();
 
       return selector.SelectRandomItem();

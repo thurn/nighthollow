@@ -20,7 +20,7 @@ using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public class Deck : MonoBehaviour
+  public sealed class Deck : MonoBehaviour
   {
     [SerializeField] DeckData _data;
     [SerializeField] bool _debugOrderedDraws;

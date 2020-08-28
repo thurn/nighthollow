@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Skeleton Minion
   m_EditorClassIdentifier: 
   _prefab: {fileID: 7623161619200576407, guid: 03ee46dc81f05714cbb44295ed8464c4, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Skeleton Minion
   _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
   _modifiers:

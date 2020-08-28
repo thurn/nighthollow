@@ -13,97 +13,101 @@ MonoBehaviour:
   m_Name: Acolyte
   m_EditorClassIdentifier: 
   _prefab: {fileID: 6973698551416525957, guid: 13d0ff59514c84c29abea23bb6c7fbad, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Acolyte
   _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
   _modifiers:
     _modifiers:
     - {fileID: 11400000, guid: 875ecf1ab5ef39b468078c04f8723546, type: 2}
-  _events:
-    _enteredPlay:
-    - {fileID: 0}
-    _died: []
   _skills:
   - _energyCost: 0
     _animation: 2
     _skillType: 1
   _projectiles: []
-  _parameters:
-    _mana:
-      _value: 0
-    _influence:
-      _light:
-        _value: 0
-      _sky:
-        _value: 0
-      _flame:
-        _value: 0
-      _ice:
-        _value: 0
-      _earth:
-        _value: 0
-      _shadow:
-        _value: 0
-    _meleeHitSize: {x: 0, y: 0}
-    _damageType: 0
-    _operator: 0
-    _value: 0
   _health:
     _value: 120
+    _modifiers: []
   _baseAttack:
     _radiant:
       _value: 0
+      _modifiers: []
     _lightning:
       _value: 0
+      _modifiers: []
     _fire:
       _value: 0
+      _modifiers: []
     _cold:
       _value: 0
+      _modifiers: []
     _physical:
       _value: 5
+      _modifiers: []
     _necrotic:
       _value: 0
+      _modifiers: []
   _speed:
     _value: 0
+    _modifiers: []
   _startingEnergy:
     _value: 0
+    _modifiers: []
   _maximumEnergy:
     _value: 0
+    _modifiers: []
   _energyGain:
     _value: 0
+    _modifiers: []
   _energyGainIntervalMs:
     _value: 0
+    _modifiers: []
   _critChance:
     _value: 0
+    _modifiers: []
   _critMultiplier:
     _value: 0
+    _modifiers: []
   _accuracy:
     _value: 0
+    _modifiers: []
   _evasion:
     _value: 0
+    _modifiers: []
   _damageResistance:
     _radiant:
       _value: 0
+      _modifiers: []
     _lightning:
-      _value: 0
+      _value: 1
+      _modifiers: []
     _fire:
       _value: 0
+      _modifiers: []
     _cold:
       _value: 0
+      _modifiers: []
     _physical:
       _value: 0
+      _modifiers: []
     _necrotic:
       _value: 0
+      _modifiers: []
   _damageReduction:
     _radiant:
       _value: 0
+      _modifiers: []
     _lightning:
       _value: 0
+      _modifiers: []
     _fire:
-      _value: 0
+      _value: 1
+      _modifiers: []
     _cold:
       _value: 0
+      _modifiers: []
     _physical:
       _value: 0
+      _modifiers: []
     _necrotic:
       _value: 0
+      _modifiers: []

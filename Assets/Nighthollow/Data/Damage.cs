@@ -13,12 +13,16 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace Nighthollow.Data
 {
   public enum DamageType
   {
+    Unknown,
     Radiant,
     Lightning,
     Fire,
@@ -48,16 +52,19 @@ namespace Nighthollow.Data
     [SerializeField] Stat _necrotic;
     public Stat Necrotic => _necrotic;
 
+    public static readonly IEnumerable<DamageType> AllTypes = new List<DamageType>
+    {
+      DamageType.Radiant,
+      DamageType.Lightning,
+      DamageType.Fire,
+      DamageType.Cold,
+      DamageType.Physical,
+      DamageType.Necrotic
+    };
+
     public int Total()
     {
-      var result = 0;
-
-      foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
-      {
-        result += Get(damageType).Value;
-      }
-
-      return result;
+      return AllTypes.Sum(damageType => Get(damageType).Value);
     }
 
     public Stat Get(DamageType type)
@@ -79,6 +86,21 @@ namespace Nighthollow.Data
         default:
           throw new ArgumentOutOfRangeException(nameof(type), type.ToString());
       }
+    }
+
+    public override string ToString()
+    {
+      var builder = new StringBuilder("[ ");
+      foreach (var type in AllTypes)
+      {
+        if (Get(type).Value > 0)
+        {
+          builder.Append($"{type}: {Get(type)} ");
+        }
+      }
+
+      builder.Append("]");
+      return builder.ToString();
     }
   }
 }

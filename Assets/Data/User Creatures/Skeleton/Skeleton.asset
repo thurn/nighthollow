@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Skeleton
   m_EditorClassIdentifier: 
   _prefab: {fileID: 3018714074523599162, guid: add4b191a328046c9ad6ac09e7587d06, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Skeleton
   _delegate: {fileID: 11400000, guid: 443baf37d1753bf429eeff1e91064982, type: 2}
   _modifiers:

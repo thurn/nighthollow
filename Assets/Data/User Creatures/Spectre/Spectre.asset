@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Spectre
   m_EditorClassIdentifier: 
   _prefab: {fileID: 7342909165800776614, guid: 61f9213e868376140bcf1e49606f708c, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Spectre
   _delegate: {fileID: 11400000, guid: 302350c43ad2e6b438df6ba34088ddfb, type: 2}
   _modifiers:

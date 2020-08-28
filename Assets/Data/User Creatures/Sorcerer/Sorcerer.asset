@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Sorcerer
   m_EditorClassIdentifier: 
   _prefab: {fileID: 3353862874705738718, guid: 5f46e0034f8ea1843982ae27e4f0fa57, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Sorcerer
   _delegate: {fileID: 11400000, guid: 3742d54fba58272489ba9996b6f7aac7, type: 2}
   _modifiers:

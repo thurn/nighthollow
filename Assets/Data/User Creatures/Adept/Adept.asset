@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Adept
   m_EditorClassIdentifier: 
   _prefab: {fileID: 6260144864458001917, guid: 590d411a4adb844f7a3f897c1a1c5408, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Adept
   _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
   _modifiers:
@@ -26,60 +26,90 @@ MonoBehaviour:
   _projectiles: []
   _health:
     _value: 100
+    _modifiers: []
   _baseAttack:
     _radiant:
       _value: 0
+      _modifiers: []
     _lightning:
       _value: 0
+      _modifiers: []
     _fire:
       _value: 0
+      _modifiers: []
     _cold:
       _value: 0
+      _modifiers: []
     _physical:
       _value: 10
+      _modifiers: []
     _necrotic:
       _value: 0
+      _modifiers: []
   _speed:
     _value: 0
+    _modifiers: []
   _startingEnergy:
     _value: 0
+    _modifiers: []
   _maximumEnergy:
     _value: 100
+    _modifiers: []
   _energyGain:
     _value: 5
+    _modifiers: []
   _energyGainIntervalMs:
     _value: 5000
+    _modifiers: []
   _critChance:
     _value: 50
+    _modifiers:
+    - _operator: 1
+      _value: 5
   _critMultiplier:
     _value: 1000
+    _modifiers: []
   _accuracy:
     _value: 100
+    _modifiers: []
   _evasion:
     _value: 50
+    _modifiers: []
   _damageResistance:
     _radiant:
       _value: 0
+      _modifiers: []
     _lightning:
       _value: 0
+      _modifiers: []
     _fire:
       _value: 0
+      _modifiers: []
     _cold:
       _value: 0
+      _modifiers: []
     _physical:
       _value: 0
+      _modifiers: []
     _necrotic:
       _value: 0
+      _modifiers: []
   _damageReduction:
     _radiant:
       _value: 0
+      _modifiers: []
     _lightning:
       _value: 0
+      _modifiers: []
     _fire:
       _value: 0
+      _modifiers: []
     _cold:
       _value: 0
+      _modifiers: []
     _physical:
       _value: 0
+      _modifiers: []
     _necrotic:
       _value: 0
+      _modifiers: []

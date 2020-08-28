@@ -98,7 +98,7 @@ namespace Nighthollow.Components
       _manaText.text = _mana.ToString();
 
       var index = 0;
-      foreach (School school in Enum.GetValues(typeof(School)))
+      foreach (var school in Influence.AllSchools)
       {
         for (var i = 0; i < _data.Influence.Get(school).Value; ++i)
         {

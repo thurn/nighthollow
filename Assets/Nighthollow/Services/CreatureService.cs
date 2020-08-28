@@ -74,9 +74,9 @@ namespace Nighthollow.Services
       FileValue? closestFile = null;
       var closestDistance = float.MaxValue;
 
-      foreach (RankValue rank in Enum.GetValues(typeof(RankValue)))
+      foreach (var rank in BoardPositions.AllRanks)
       {
-        foreach (FileValue file in Enum.GetValues(typeof(FileValue)))
+        foreach (var file in BoardPositions.AllFiles)
         {
           if (rank == RankValue.Unknown ||
             file == FileValue.Unknown ||

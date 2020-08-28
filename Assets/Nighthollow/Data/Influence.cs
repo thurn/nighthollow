@@ -13,12 +13,16 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace Nighthollow.Data
 {
   public enum School
   {
+    Unknown,
     Light,
     Sky,
     Flame,
@@ -48,6 +52,16 @@ namespace Nighthollow.Data
     [SerializeField] Stat _shadow;
     public Stat Shadow => _shadow;
 
+    public static readonly IEnumerable<School> AllSchools = new List<School>
+    {
+      School.Light,
+      School.Sky,
+      School.Flame,
+      School.Ice,
+      School.Earth,
+      School.Shadow
+    };
+
     public Stat Get(School school)
     {
       switch (school)
@@ -65,21 +79,28 @@ namespace Nighthollow.Data
         case School.Shadow:
           return Shadow;
         default:
-          throw new ArgumentOutOfRangeException(nameof(school), school.ToString());
+            throw new ArgumentOutOfRangeException(nameof(school), school.ToString());
       }
     }
 
     public bool LessThanOrEqual(Influence other)
     {
-      foreach (School school in Enum.GetValues(typeof(School)))
+      return AllSchools.All(school => Get(school).Value <= other.Get(school).Value);
+    }
+
+    public override string ToString()
+    {
+      var builder = new StringBuilder("[ ");
+      foreach (var school in AllSchools)
       {
-        if (Get(school).Value > other.Get(school).Value)
+        if (Get(school).Value > 0)
         {
-          return false;
+          builder.Append($"{school}: {Get(school).Value} ");
         }
       }
 
-      return true;
+      builder.Append("]");
+      return builder.ToString();
     }
   }
 }

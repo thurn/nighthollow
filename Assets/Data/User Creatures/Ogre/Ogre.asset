@@ -13,15 +13,11 @@ MonoBehaviour:
   m_Name: Ogre
   m_EditorClassIdentifier: 
   _prefab: {fileID: 519837370388071442, guid: adcd4fe82c7718c4e93f96a0b9580db8, type: 3}
-  _owner: 0
+  _owner: 1
   _name: Ogre
   _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
   _modifiers:
-    _modifiers:
-    - {fileID: 11400000, guid: 475bab03cb5ce0c4192da1f176e9da4b, type: 2}
-  _events:
-    _enteredPlay: []
-    _died: []
+    _modifiers: []
   _skills:
   - _energyCost: 0
     _animation: 1
@@ -30,82 +26,92 @@ MonoBehaviour:
     _animation: 2
     _skillType: 2
   _projectiles: []
-  _parameters:
-    _mana:
-      _value: 0
-    _influence:
-      _light:
-        _value: 0
-      _sky:
-        _value: 0
-      _flame:
-        _value: 0
-      _ice:
-        _value: 0
-      _earth:
-        _value: 0
-      _shadow:
-        _value: 0
-    _meleeHitSize: {x: 0, y: 0}
-    _damageType: 4
-    _operator: 3
-    _value: 200
   _health:
     _value: 100
+    _modifiers: []
   _baseAttack:
     _radiant:
       _value: 0
+      _modifiers: []
     _lightning:
       _value: 0
+      _modifiers: []
     _fire:
       _value: 0
+      _modifiers: []
     _cold:
       _value: 0
+      _modifiers: []
     _physical:
       _value: 10
+      _modifiers:
+      - _operator: 4
+        _value: 200
     _necrotic:
       _value: 0
+      _modifiers: []
   _speed:
     _value: 0
+    _modifiers: []
   _startingEnergy:
     _value: 0
+    _modifiers: []
   _maximumEnergy:
     _value: 100
+    _modifiers: []
   _energyGain:
     _value: 5
+    _modifiers: []
   _energyGainIntervalMs:
     _value: 5000
+    _modifiers: []
   _critChance:
     _value: 0
+    _modifiers: []
   _critMultiplier:
     _value: 0
+    _modifiers: []
   _accuracy:
     _value: 100
+    _modifiers: []
   _evasion:
     _value: 50
+    _modifiers: []
   _damageResistance:
     _radiant:
       _value: 0
+      _modifiers: []
     _lightning:
       _value: 0
+      _modifiers: []
     _fire:
       _value: 0
+      _modifiers: []
     _cold:
       _value: 0
+      _modifiers: []
     _physical:
       _value: 0
+      _modifiers: []
     _necrotic:
       _value: 0
+      _modifiers: []
   _damageReduction:
     _radiant:
       _value: 0
+      _modifiers: []
     _lightning:
       _value: 0
+      _modifiers: []
     _fire:
       _value: 0
+      _modifiers: []
     _cold:
       _value: 0
+      _modifiers: []
     _physical:
       _value: 0
+      _modifiers: []
     _necrotic:
       _value: 0
+      _modifiers: []
