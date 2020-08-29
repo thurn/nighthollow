@@ -12,13 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Nighthollow.Data
 {
+  [Serializable]
+  public sealed class AffixModifier
+  {
+    [SerializeField] StatName _stat;
+    public StatName Stat => _stat;
+
+    [SerializeField] Modifier _modifier;
+    public Modifier Modifier => _modifier;
+
+    [SerializeField] int _range;
+    public int Range => _range;
+  }
+
+  [CreateAssetMenu(menuName = "Data/AffixData")]
   public sealed class AffixData : ScriptableObject
   {
-    [SerializeField] CardData _data;
-    public CardData Data => _data;
+    [SerializeField] List<AffixModifier> _modifiers;
+    public IReadOnlyCollection<AffixModifier> Modifiers => _modifiers;
+
+    public void ApplyTo(CardData result)
+    {
+      foreach (var affixModifier in _modifiers)
+      {
+        result.Creature.Get(affixModifier.Stat).AddModifier(affixModifier.Modifier);
+      }
+    }
   }
 }

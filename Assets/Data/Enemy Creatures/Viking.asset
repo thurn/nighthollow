@@ -16,8 +16,6 @@ MonoBehaviour:
   _owner: 2
   _name: Viking
   _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
-  _modifiers:
-    _modifiers: []
   _skills:
   - _energyCost: 0
     _animation: 1
@@ -25,60 +23,120 @@ MonoBehaviour:
   _projectiles: []
   _health:
     _value: 100
+    _modifiers: []
+    _range: 0
   _baseAttack:
     _radiant:
       _value: 0
+      _modifiers: []
+      _range: 0
     _lightning:
       _value: 0
+      _modifiers: []
+      _range: 0
     _fire:
       _value: 0
+      _modifiers: []
+      _range: 0
     _cold:
       _value: 0
+      _modifiers: []
+      _range: 0
     _physical:
       _value: 15
+      _modifiers: []
+      _range: 0
     _necrotic:
       _value: 0
+      _modifiers: []
+      _range: 0
+  _damageRange:
+    _value: 0
+    _modifiers: []
+    _range: 0
   _speed:
     _value: 2000
+    _modifiers: []
+    _range: 0
   _startingEnergy:
     _value: 0
+    _modifiers: []
+    _range: 0
   _maximumEnergy:
     _value: 0
+    _modifiers: []
+    _range: 0
   _energyGain:
     _value: 0
+    _modifiers: []
+    _range: 0
   _energyGainIntervalMs:
     _value: 0
+    _modifiers: []
+    _range: 0
   _critChance:
     _value: 0
+    _modifiers: []
+    _range: 0
   _critMultiplier:
     _value: 0
+    _modifiers: []
+    _range: 0
   _accuracy:
     _value: 0
+    _modifiers: []
+    _range: 0
   _evasion:
     _value: 0
+    _modifiers: []
+    _range: 0
   _damageResistance:
     _radiant:
       _value: 0
+      _modifiers: []
+      _range: 0
     _lightning:
       _value: 0
+      _modifiers: []
+      _range: 0
     _fire:
       _value: 0
+      _modifiers: []
+      _range: 0
     _cold:
       _value: 0
+      _modifiers: []
+      _range: 0
     _physical:
       _value: 0
+      _modifiers: []
+      _range: 0
     _necrotic:
       _value: 0
+      _modifiers: []
+      _range: 0
   _damageReduction:
     _radiant:
       _value: 0
+      _modifiers: []
+      _range: 0
     _lightning:
       _value: 0
+      _modifiers: []
+      _range: 0
     _fire:
       _value: 0
+      _modifiers: []
+      _range: 0
     _cold:
       _value: 0
+      _modifiers: []
+      _range: 0
     _physical:
       _value: 0
+      _modifiers: []
+      _range: 0
     _necrotic:
       _value: 0
+      _modifiers: []
+      _range: 0

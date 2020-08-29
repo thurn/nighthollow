@@ -29,7 +29,10 @@ namespace Nighthollow.Editor.Data
       var modifiers = new PropertyField(property.FindPropertyRelative("_modifiers"));
       modifiers.style.marginLeft = 20;
       root.Add(modifiers);
-      root.style.marginLeft = -14;
+      var range = new PropertyField(property.FindPropertyRelative("_range"));
+      range.style.marginLeft = 18;
+      root.Add(range);
+      root.style.marginLeft = -15;
       return root;
     }
   }

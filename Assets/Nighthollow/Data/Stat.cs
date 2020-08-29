@@ -83,6 +83,13 @@ namespace Nighthollow.Data
   {
     [SerializeField] int _value;
     [SerializeField] List<Modifier> _modifiers;
+
+    /// <summary>
+    /// The maximum value randomly added to this stat when "Roll" is called. The Roll() method returns the value of a
+    /// Stat modified by adding an integer between 0 and _range (inclusive), selected uniformly at random.
+    /// </summary>
+    [SerializeField] int _range;
+
     bool _hasBeenRead;
     bool _hasDynamicModifiers;
     int _cachedValue;
@@ -120,19 +127,6 @@ namespace Nighthollow.Data
       }
 
       Recalculate();
-    }
-
-    public void Merge(Stat other)
-    {
-      if (other._value != 0)
-      {
-        AddModifier(Modifier.Create(Operator.Add, other._value));
-      }
-
-      foreach (var modifier in other._modifiers)
-      {
-        AddModifier(modifier);
-      }
     }
 
     public override string ToString()

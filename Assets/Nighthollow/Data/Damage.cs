@@ -88,14 +88,6 @@ namespace Nighthollow.Data
       }
     }
 
-    public void Merge(Damage other)
-    {
-      foreach (var type in AllTypes)
-      {
-        Get(type).Merge(other.Get(type));
-      }
-    }
-
     public override string ToString()
     {
       var builder = new StringBuilder("[ ");

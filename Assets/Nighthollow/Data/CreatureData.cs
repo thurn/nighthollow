@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Nighthollow.Components;
 using Nighthollow.Delegate;
 using System.Collections.Generic;
@@ -42,6 +43,47 @@ namespace Nighthollow.Data
     Melee,
     Projectile,
     Untargeted
+  }
+
+  public enum StatName
+  {
+    Unknown,
+    Health,
+
+    // Base Attack
+    BaseAttackRadiantDamage,
+    BaseAttackLightningDamage,
+    BaseAttackFireDamage,
+    BaseAttackColdDamage,
+    BaseAttackPhysicalDamage,
+    BaseAttackNecroticDamage,
+
+    DamageRange,
+    Speed,
+    StartingEnergy,
+    MaximumEnergy,
+    EnergyGain,
+    EnergyGainIntervalMs,
+    CritChance,
+    CritMultiplier,
+    Accuracy,
+    Evasion,
+
+    // Damage Resistance
+    RadiantDamageResistance,
+    LightningDamageResistance,
+    FireDamageResistance,
+    ColdDamageResistance,
+    PhysicalDamageResistance,
+    NecroticDamageResistance,
+
+    // Damage Reduction
+    RadiantDamageReduction,
+    LightningDamageReduction,
+    FireDamageReduction,
+    ColdDamageReduction,
+    PhysicalDamageReduction,
+    NecroticDamageReduction
   }
 
   [CreateAssetMenu(menuName = "Data/Creature")]
@@ -129,22 +171,71 @@ namespace Nighthollow.Data
       return result;
     }
 
-    public void Merge(CreatureData other)
+    public Stat Get(StatName statName)
     {
-      _health.Merge(other.Health);
-      _baseAttack.Merge(other.BaseAttack);
-      _damageRange.Merge(other.DamageRange);
-      _speed.Merge(other.Speed);
-      _startingEnergy.Merge(other.StartingEnergy);
-      _maximumEnergy.Merge(other.MaximumEnergy);
-      _energyGain.Merge(other.EnergyGain);
-      _energyGainIntervalMs.Merge(other.EnergyGainIntervalMs);
-      _critChance.Merge(other.CritChance);
-      _critMultiplier.Merge(other.CritMultiplier);
-      _accuracy.Merge(other.Accuracy);
-      _evasion.Merge(other.Evasion);
-      _damageResistance.Merge(other.DamageResistance);
-      _damageReduction.Merge(other.DamageReduction);
+      switch (statName)
+      {
+        case StatName.Health:
+          return Health;
+        case StatName.BaseAttackRadiantDamage:
+          return BaseAttack.Radiant;
+        case StatName.BaseAttackLightningDamage:
+          return BaseAttack.Lightning;
+        case StatName.BaseAttackFireDamage:
+          return BaseAttack.Fire;
+        case StatName.BaseAttackColdDamage:
+          return BaseAttack.Cold;
+        case StatName.BaseAttackPhysicalDamage:
+          return BaseAttack.Physical;
+        case StatName.BaseAttackNecroticDamage:
+          return BaseAttack.Necrotic;
+        case StatName.DamageRange:
+          return DamageRange;
+        case StatName.Speed:
+          return Speed;
+        case StatName.StartingEnergy:
+          return StartingEnergy;
+        case StatName.MaximumEnergy:
+          return MaximumEnergy;
+        case StatName.EnergyGain:
+          return EnergyGain;
+        case StatName.EnergyGainIntervalMs:
+          return EnergyGainIntervalMs;
+        case StatName.CritChance:
+          return CritChance;
+        case StatName.CritMultiplier:
+          return CritMultiplier;
+        case StatName.Accuracy:
+          return Accuracy;
+        case StatName.Evasion:
+          return Evasion;
+        case StatName.RadiantDamageResistance:
+          return DamageResistance.Radiant;
+        case StatName.LightningDamageResistance:
+          return DamageResistance.Lightning;
+        case StatName.FireDamageResistance:
+          return DamageResistance.Fire;
+        case StatName.ColdDamageResistance:
+          return DamageResistance.Cold;
+        case StatName.PhysicalDamageResistance:
+          return DamageResistance.Physical;
+        case StatName.NecroticDamageResistance:
+          return _damageResistance.Necrotic;
+        case StatName.RadiantDamageReduction:
+          return DamageReduction.Radiant;
+        case StatName.LightningDamageReduction:
+          return DamageReduction.Lightning;
+        case StatName.FireDamageReduction:
+          return DamageReduction.Fire;
+        case StatName.ColdDamageReduction:
+          return DamageReduction.Cold;
+        case StatName.PhysicalDamageReduction:
+          return DamageReduction.Physical;
+        case StatName.NecroticDamageReduction:
+          return DamageReduction.Necrotic;
+        default:
+          throw new ArgumentOutOfRangeException(nameof(statName), statName, null);
+      }
     }
 
     void Reset()

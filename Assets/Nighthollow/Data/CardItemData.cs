@@ -36,7 +36,7 @@ namespace Nighthollow.Data
       var result = _baseCard.Clone();
       foreach (var affix in _affixes)
       {
-        result.Merge(affix.Data);
+        affix.ApplyTo(result);
       }
 
       return result;
