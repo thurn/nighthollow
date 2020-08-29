@@ -31,7 +31,7 @@ namespace Nighthollow.Data
     public int Range => _range;
   }
 
-  [CreateAssetMenu(menuName = "Data/AffixData")]
+  [CreateAssetMenu(menuName = "Data/Affix")]
   public sealed class AffixData : ScriptableObject
   {
     [SerializeField] List<AffixModifier> _modifiers;

@@ -326,12 +326,17 @@ namespace Nighthollow.Components
     public void AddDamage(int damage)
     {
       Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
-      var newDamage = _damageTaken + damage;
-      _damageTaken = Mathf.Clamp(0, newDamage, _data.Health.Value);
+      _damageTaken = Mathf.Clamp(0, _damageTaken + damage, _data.Health.Value);
       if (_damageTaken >= _data.Health.Value)
       {
         Kill();
       }
+    }
+
+    public void Heal(int healing)
+    {
+      Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
+      _damageTaken = Mathf.Clamp(0, _damageTaken - healing, _data.Health.Value);
     }
 
     public void AddEnergy(int energy)

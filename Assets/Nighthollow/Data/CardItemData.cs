@@ -22,7 +22,7 @@ namespace Nighthollow.Data
   /// into <see cref="CardData"/>, which is the card representation used while a game is in progress, by calling the
   /// <see cref="Build"/> method.
   /// </summary>
-  [CreateAssetMenu(menuName = "Data/CardItemData")]
+  [CreateAssetMenu(menuName = "Data/CardItem")]
   public sealed class CardItemData : ScriptableObject
   {
     [SerializeField] CardData _baseCard;

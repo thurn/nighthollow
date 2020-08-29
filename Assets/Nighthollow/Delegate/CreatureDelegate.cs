@@ -69,7 +69,7 @@ namespace Nighthollow.Delegate
     public virtual bool ShouldUseProjectileSkill(Creature self)
     {
       return self.HasProjectileSkill() &&
-        GetCollidingCreatures(self.Owner, self.ProjectileCollider.Collider).Any();
+             GetCollidingCreatures(self.Owner, self.ProjectileCollider.Collider).Any();
     }
 
     /// <summary>
@@ -152,7 +152,15 @@ namespace Nighthollow.Delegate
         // Critical hit
         multiplier = (1000 + self.Data.CritMultiplier.Value) / 1000f;
       }
-      target.AddDamage(Mathf.RoundToInt(multiplier * damage.Total()));
+
+      var total = Mathf.RoundToInt(multiplier * damage.Total());
+      target.AddDamage(total);
+
+      if (skillType == SkillType.Melee)
+      {
+        var lifeDrain = Constants.FractionBasisPoints(total, self.Data.MeleeLifeDrainBp.Value);
+        self.Heal(lifeDrain);
+      }
     }
 
     /// <summary>Returns a list of the enemies of 'owner' overlapping wtih 'collider'.</summary>

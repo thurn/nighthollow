@@ -83,7 +83,9 @@ namespace Nighthollow.Data
     FireDamageReduction,
     ColdDamageReduction,
     PhysicalDamageReduction,
-    NecroticDamageReduction
+    NecroticDamageReduction,
+
+    MeleeLifeDrain
   }
 
   [CreateAssetMenu(menuName = "Data/Creature")]
@@ -113,13 +115,14 @@ namespace Nighthollow.Data
     [SerializeField] Damage _baseAttack;
     public Damage BaseAttack => _baseAttack;
 
-    [SerializeField] Stat _damageRange;
+    [SerializeField] Stat _damageRangeBp;
 
     /// <summary>
     /// Represents the size of a creature's damage range as a percentage of the average. For example, if a creature
-    /// has average damage of 50 and a range of 30, the range size is 50 * 30% = 15, and thus the damage range is 35-65.
+    /// has average damage of 50 and a range of 30%, the range size is 50 * 30% = 15, and thus the damage range is
+    /// 35-65. Expressed in units of basis points.
     /// </summary>
-    public Stat DamageRange => _damageRange;
+    public Stat DamageRangeBp => _damageRangeBp;
 
     [SerializeField] Stat _speed;
     public Stat Speed => _speed;
@@ -136,6 +139,7 @@ namespace Nighthollow.Data
     [SerializeField] Stat _energyGainIntervalMs;
     public Stat EnergyGainIntervalMs => _energyGainIntervalMs;
 
+    // TODO: basis points
     [SerializeField] Stat _critChance;
     public Stat CritChance => _critChance;
 
@@ -153,6 +157,10 @@ namespace Nighthollow.Data
 
     [SerializeField] Damage _damageReduction;
     public Damage DamageReduction => _damageReduction;
+
+    /// <summary>Gain a fraction of life per damage point dealt, in basis points.</summary>
+    [SerializeField] Stat _meleeLifeDrainBp;
+    public Stat MeleeLifeDrainBp => _meleeLifeDrainBp;
 
     public CreatureData Clone()
     {
@@ -190,7 +198,7 @@ namespace Nighthollow.Data
         case StatName.BaseAttackNecroticDamage:
           return BaseAttack.Necrotic;
         case StatName.DamageRange:
-          return DamageRange;
+          return DamageRangeBp;
         case StatName.Speed:
           return Speed;
         case StatName.StartingEnergy:
@@ -220,7 +228,7 @@ namespace Nighthollow.Data
         case StatName.PhysicalDamageResistance:
           return DamageResistance.Physical;
         case StatName.NecroticDamageResistance:
-          return _damageResistance.Necrotic;
+          return DamageResistance.Necrotic;
         case StatName.RadiantDamageReduction:
           return DamageReduction.Radiant;
         case StatName.LightningDamageReduction:
@@ -233,6 +241,8 @@ namespace Nighthollow.Data
           return DamageReduction.Physical;
         case StatName.NecroticDamageReduction:
           return DamageReduction.Necrotic;
+        case StatName.MeleeLifeDrain:
+          return MeleeLifeDrainBp;
         default:
           throw new ArgumentOutOfRangeException(nameof(statName), statName, null);
       }
@@ -241,7 +251,7 @@ namespace Nighthollow.Data
     void Reset()
     {
       _health = new Stat(100);
-      _damageRange = new Stat(30);
+      _damageRangeBp = new Stat(30000);
       _energyGain = new Stat(5);
       _energyGainIntervalMs = new Stat(5000);
       _maximumEnergy = new Stat(100);
