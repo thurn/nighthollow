@@ -15,7 +15,10 @@ MonoBehaviour:
   _prefab: {fileID: 3353862874705738718, guid: 5f46e0034f8ea1843982ae27e4f0fa57, type: 3}
   _owner: 1
   _name: Sorcerer
-  _delegate: {fileID: 11400000, guid: 3742d54fba58272489ba9996b6f7aac7, type: 2}
+  _derek:
+    id: 0
+  _delegates:
+  - {fileID: 11400000, guid: 3742d54fba58272489ba9996b6f7aac7, type: 2}
   _skills:
   - _energyCost: 0
     _animation: 2
@@ -152,3 +155,7 @@ MonoBehaviour:
     _value: 10000
     _modifiers: []
     _range: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }

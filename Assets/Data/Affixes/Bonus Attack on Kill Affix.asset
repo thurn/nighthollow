@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cacc741775f4771bc5066ff3ad6e0bf, type: 3}
-  m_Name: Enemies
+  m_Script: {fileID: 11500000, guid: c24bc7f888934202bccca5ee3966b15d, type: 3}
+  m_Name: Bonus Attack on Kill Affix
   m_EditorClassIdentifier: 
-  _enemies:
-  - {fileID: 11400000, guid: 02c3be51a3fba49be97aee1f5ea4269b, type: 2}
-  _initialSpawnDelayMs: 1000
-  _spawnDelayMs: 1000
+  _delegate: {fileID: 11400000, guid: 08ce88c08585d46868ef86d25db3dff1, type: 2}

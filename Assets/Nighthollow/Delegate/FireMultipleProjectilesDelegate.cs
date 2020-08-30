@@ -20,7 +20,7 @@ using UnityEngine;
 namespace Nighthollow.Delegate
 {
   [CreateAssetMenu(menuName = "Delegate/FireMultipleProjectilesDelegate")]
-  public sealed class FireMultipleProjectilesDelegate : CreatureDelegate
+  public sealed class FireMultipleProjectilesDelegate : AbstractCreatureDelegate
   {
     [SerializeField] int _projectileCount;
     [SerializeField] int _projectileDelayMs;
@@ -42,7 +42,7 @@ namespace Nighthollow.Delegate
     {
       for (var i = 0; i < _projectileCount; ++i)
       {
-        base.OnFireProjectile(self, projectileData, firingPoint, direction);
+        Parent.OnFireProjectile(self, projectileData, firingPoint, direction);
         yield return new WaitForSeconds(_projectileDelayMs / 1000f);
       }
     }

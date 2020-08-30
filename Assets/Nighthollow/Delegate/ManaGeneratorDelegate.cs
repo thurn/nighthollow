@@ -20,13 +20,15 @@ using UnityEngine;
 namespace Nighthollow.Delegate
 {
   [CreateAssetMenu(menuName = "Delegate/ManaGeneratorDelegate")]
-  public sealed class ManaGeneratorDelegate : CreatureDelegate
+  public sealed class ManaGeneratorDelegate : AbstractCreatureDelegate
   {
     [SerializeField] int _manaGain;
     [SerializeField] Influence _influence;
 
     public override void OnActivate(Creature self)
     {
+      Parent.OnActivate(self);
+
       var user = Root.Instance.User;
       user.Data.ManaGain.AddModifier(Modifier.WhileAlive(Operator.Add, _manaGain, self));
 

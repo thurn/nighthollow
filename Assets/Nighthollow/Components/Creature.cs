@@ -320,12 +320,13 @@ namespace Nighthollow.Components
       }
     }
 
-    public void AddDamage(int damage)
+    public void AddDamage(Creature appliedBy, int damage)
     {
       Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
       _damageTaken = Mathf.Clamp(0, _damageTaken + damage, _data.Health.Value);
       if (_damageTaken >= _data.Health.Value)
       {
+        appliedBy.Data.Delegate.OnKilledEnemy(appliedBy, this, damage);
         Kill();
       }
     }

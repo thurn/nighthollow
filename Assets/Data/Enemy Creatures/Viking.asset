@@ -15,14 +15,16 @@ MonoBehaviour:
   _prefab: {fileID: 8686911368719005395, guid: 87037b937c18541969a033e71ab4978c, type: 3}
   _owner: 2
   _name: Viking
-  _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
+  _derek:
+    id: 0
+  _delegates: []
   _skills:
   - _energyCost: 0
     _animation: 1
     _skillType: 1
   _projectiles: []
   _health:
-    _value: 1000
+    _value: 100
     _modifiers: []
     _range: 0
   _baseAttack:
@@ -148,3 +150,7 @@ MonoBehaviour:
     _value: 10000
     _modifiers: []
     _range: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }

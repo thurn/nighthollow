@@ -1,4 +1,4 @@
-﻿// Copyright © 2020-present Derek Thurn
+// Copyright © 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Components;
-using Nighthollow.Data;
-using Nighthollow.Services;
+using Nighthollow.Delegate;
 using UnityEngine;
 
-namespace Nighthollow.Delegate
+namespace Nighthollow.Data
 {
-  [CreateAssetMenu(menuName = "Delegate/SummonMinionDelegate")]
-  public sealed class SummonMinionDelegate : AbstractCreatureDelegate
+  [CreateAssetMenu(menuName = "Data/Delegate Affix")]
+  public sealed class DelegateAffixData : AffixData
   {
-    [SerializeField] CreatureData _creature;
+    [SerializeField] AbstractCreatureDelegate _delegate;
+    public AbstractCreatureDelegate Delegate => _delegate;
 
-    public override void OnUseUntargetedSkill(Creature self, SkillData skill)
+    public override void ApplyTo(CardData result)
     {
-      Root.Instance.CreatureService.CreateMovingCreature(
-        _creature.Clone(), self.FilePosition, self.transform.position.x + 2);
+      result.Creature.Delegate.AddDelegate(_delegate);
     }
   }
 }

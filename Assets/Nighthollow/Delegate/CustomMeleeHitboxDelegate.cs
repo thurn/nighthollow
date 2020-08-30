@@ -20,29 +20,30 @@ using UnityEngine;
 namespace Nighthollow.Delegate
 {
   [CreateAssetMenu(menuName = "Delegate/CustomMeleeHitboxDelegate")]
-  public sealed class CustomMeleeHitboxDelegate : CreatureDelegate
+  public sealed class CustomMeleeHitboxDelegate : AbstractCreatureDelegate
   {
-    [Header("Config")]
-    [SerializeField] Vector2 _meleeHitSize;
+    [Header("Config")] [SerializeField] Vector2 _meleeHitSize;
 
-    [Header("State")]
-    [SerializeField] CustomTriggerCollider _collider;
+    [Header("State")] [SerializeField] CustomTriggerCollider _collider;
 
     public override void OnActivate(Creature self)
     {
       _collider = CustomTriggerCollider.Add(self,
         new Vector2(_meleeHitSize.x / 2000f, 0),
         new Vector2(_meleeHitSize.x / 1000f, _meleeHitSize.y / 1000f));
+
+      Parent.OnActivate(self);
     }
 
     public override bool ShouldUseMeleeSkill(Creature self)
     {
-      return self.HasMeleeSkill() && GetCollidingCreatures(self.Owner, _collider.Collider).Any();
+      return self.HasMeleeSkill() &&
+             DefaultCreatureDelegate.GetCollidingCreatures(self.Owner, _collider.Collider).Any();
     }
 
     public override void OnMeleeHit(Creature self)
     {
-      foreach (var creature in GetCollidingCreatures(self.Owner, _collider.Collider))
+      foreach (var creature in DefaultCreatureDelegate.GetCollidingCreatures(self.Owner, _collider.Collider))
       {
         ExecuteMeleeAttack(self, creature, self.Data.BaseAttack);
       }

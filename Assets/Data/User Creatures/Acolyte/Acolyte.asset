@@ -15,7 +15,10 @@ MonoBehaviour:
   _prefab: {fileID: 6973698551416525957, guid: 13d0ff59514c84c29abea23bb6c7fbad, type: 3}
   _owner: 1
   _name: Acolyte
-  _delegate: {fileID: 11400000, guid: b4b21a69fb9e443d2beba917bc215e89, type: 2}
+  _derek:
+    id: 0
+  _delegates:
+  - {fileID: 11400000, guid: b4b21a69fb9e443d2beba917bc215e89, type: 2}
   _skills:
   - _energyCost: 0
     _animation: 2
@@ -96,7 +99,7 @@ MonoBehaviour:
       _modifiers: []
       _range: 0
     _lightning:
-      _value: 1
+      _value: 0
       _modifiers: []
       _range: 0
     _fire:
@@ -125,7 +128,7 @@ MonoBehaviour:
       _modifiers: []
       _range: 0
     _fire:
-      _value: 1
+      _value: 0
       _modifiers: []
       _range: 0
     _cold:
@@ -148,3 +151,7 @@ MonoBehaviour:
     _value: 10000
     _modifiers: []
     _range: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }

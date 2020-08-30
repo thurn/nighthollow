@@ -89,6 +89,11 @@ namespace Nighthollow.Data
     AttackSpeed
   }
 
+  public interface IDerek
+  {
+    int Hello();
+  }
+
   [CreateAssetMenu(menuName = "Data/Creature")]
   public sealed class CreatureData : ScriptableObject
   {
@@ -101,8 +106,24 @@ namespace Nighthollow.Data
     [SerializeField] string _name;
     public string Name => _name;
 
-    [SerializeField] CreatureDelegate _delegate;
-    public CreatureDelegate Delegate => _delegate;
+    [SerializeField] [SerializeReference] IDerek _derek;
+
+    [SerializeField] List<AbstractCreatureDelegate> _delegates;
+    CreatureDelegateList _delegateList;
+
+    public CreatureDelegateList Delegate
+    {
+      get
+      {
+        if (!_delegateList)
+        {
+          _delegateList = CreateInstance<CreatureDelegateList>();
+          _delegateList.Initialize(_delegates);
+        }
+
+        return _delegateList;
+      }
+    }
 
     [SerializeField] List<SkillData> _skills;
     public IReadOnlyCollection<SkillData> Skills => _skills.AsReadOnly();
@@ -176,9 +197,9 @@ namespace Nighthollow.Data
     {
       var result = Instantiate(this);
 
-      if (_delegate)
+      if (_delegates != null)
       {
-        result._delegate = _delegate.Clone();
+        result._delegates = _delegates.Select(d => d.Clone()).ToList();
       }
 
       if (_projectiles != null)

@@ -21,7 +21,7 @@ using UnityEngine;
 namespace Nighthollow.Delegate
 {
   [CreateAssetMenu(menuName = "Delegate/KnockbackOnMeleeHitDelegate")]
-  public sealed class KnockbackOnMeleeHitDelegate : CreatureDelegate
+  public sealed class KnockbackOnMeleeHitDelegate : AbstractCreatureDelegate
   {
     [SerializeField] Vector2 _knockback;
     [SerializeField] float _durationMs;
@@ -32,6 +32,8 @@ namespace Nighthollow.Delegate
       Creature target,
       Damage damage)
     {
+      Parent.ExecuteMeleeAttack(self, target, damage);
+
       if (self.CurrentSkill.Animation == _forSkill)
       {
         target.transform.DOMove(
@@ -40,8 +42,6 @@ namespace Nighthollow.Delegate
             Constants.ForwardDirectionForPlayer(target.Owner.GetOpponent())),
           _durationMs / 1000f);
       }
-
-      base.ExecuteMeleeAttack(self, target, damage);
     }
   }
 }

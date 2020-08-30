@@ -20,7 +20,7 @@ using UnityEngine;
 namespace Nighthollow.Delegate
 {
   [CreateAssetMenu(menuName = "Delegate/ProjectileOffsetDelegate")]
-  public sealed class ProjectileOffsetDelegate : CreatureDelegate
+  public sealed class ProjectileOffsetDelegate : AbstractCreatureDelegate
   {
     [SerializeField] Vector2 _positionOffset;
     [SerializeField] Vector2 _rotationOffset;
@@ -32,25 +32,23 @@ namespace Nighthollow.Delegate
       Vector2 firingPoint,
       Vector2? inputDirection = null)
     {
-      var direction = inputDirection == null ?
-        Constants.ForwardDirectionForPlayer(self.Owner) :
-        inputDirection.Value;
+      var direction = inputDirection ?? Constants.ForwardDirectionForPlayer(self.Owner);
 
       for (var i = 1; i <= _offsetsPerSide; ++i)
       {
-        base.OnFireProjectile(
+        Parent.OnFireProjectile(
           self,
           projectileData,
           firingPoint + (i * _positionOffset),
           direction + (i * _rotationOffset));
-        base.OnFireProjectile(
+        Parent.OnFireProjectile(
           self,
           projectileData,
           firingPoint - (i * _positionOffset),
           direction - (i * _rotationOffset));
       }
 
-      base.OnFireProjectile(self, projectileData, firingPoint, direction);
+      Parent.OnFireProjectile(self, projectileData, firingPoint, direction);
     }
   }
 }

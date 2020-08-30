@@ -18,7 +18,7 @@ using UnityEngine;
 namespace Nighthollow.Delegate
 {
   [CreateAssetMenu(menuName = "Delegate/ProjectileChainDelegate")]
-  public sealed class ProjectileChainDelegate : CreatureDelegate
+  public sealed class ProjectileChainDelegate : AbstractCreatureDelegate
   {
     [SerializeField] int _projectilesFired;
     [SerializeField] int _maxChains;
@@ -26,7 +26,7 @@ namespace Nighthollow.Delegate
 
     public override void OnProjectileImpact(Creature self, Projectile projectile)
     {
-      base.OnProjectileImpact(self, projectile);
+      Parent.OnProjectileImpact(self, projectile);
 
       if (projectile.Data.ChainCount < _maxChains)
       {
@@ -37,7 +37,7 @@ namespace Nighthollow.Delegate
             Vector2.left;
           var data = projectile.Data.Child(_chainActivationDelayMs,
             projectile.Data.ChainCount + 1);
-          OnFireProjectile(self, data, projectile.transform.position, direction);
+          Parent.OnFireProjectile(self, data, projectile.transform.position, direction);
         }
       }
     }

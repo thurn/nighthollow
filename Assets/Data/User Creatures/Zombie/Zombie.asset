@@ -15,7 +15,10 @@ MonoBehaviour:
   _prefab: {fileID: 6768216234854598557, guid: ca4bcce0ac9d4ef4c9662c9b58e36851, type: 3}
   _owner: 0
   _name: Zombie
-  _delegate: {fileID: 11400000, guid: aa2f49eda7c8c4a44b411ad10e2e6b86, type: 2}
+  _derek:
+    id: 0
+  _delegates:
+  - {fileID: 11400000, guid: aa2f49eda7c8c4a44b411ad10e2e6b86, type: 2}
   _skills:
   - _energyCost: 0
     _animation: 1
@@ -154,3 +157,7 @@ MonoBehaviour:
     _value: 10000
     _modifiers: []
     _range: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }
