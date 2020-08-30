@@ -109,7 +109,7 @@ namespace Nighthollow.Delegate
       Creature target,
       Damage damage)
     {
-      var total = Mathf.RoundToInt(damage.Total());
+      var total = Mathf.RoundToInt(damage.Total(target.Data.DamageResistance));
       target.AddDamage(self, total);
     }
 
@@ -149,7 +149,7 @@ namespace Nighthollow.Delegate
         }
       }
 
-      var total = Mathf.RoundToInt(multiplier * damage.Total());
+      var total = Mathf.RoundToInt(multiplier * damage.Total(target.Data.DamageResistance));
       target.AddDamage(self, total);
 
       var lifeDrain = Constants.FractionBasisPoints(total, self.Data.MeleeLifeDrainBp.Value);

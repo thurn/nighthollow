@@ -37,7 +37,7 @@ MonoBehaviour:
       _modifiers: []
       _range: 0
     _fire:
-      _value: 0
+      _value: 20
       _modifiers: []
       _range: 0
     _cold:
@@ -45,7 +45,7 @@ MonoBehaviour:
       _modifiers: []
       _range: 0
     _physical:
-      _value: 15
+      _value: 0
       _modifiers: []
       _range: 0
     _necrotic:

@@ -62,9 +62,20 @@ namespace Nighthollow.Data
       DamageType.Necrotic
     };
 
-    public int Total()
+    public int Total(Damage resistances)
     {
-      return AllTypes.Sum(damageType => Get(damageType).Value);
+      return Mathf.RoundToInt(AllTypes.Sum(damageType =>
+      {
+        var damage = Get(damageType).Value;
+        if (damage == 0)
+        {
+          return 0;
+        }
+
+        var resistance = (float) resistances.Get(damageType).Value;
+        var reduction = resistance / (resistance + (2.0f * damage));
+        return Mathf.Clamp(1f - reduction, 0.25f, 1.0f) * damage;
+      }));
     }
 
     public Stat Get(DamageType type)
