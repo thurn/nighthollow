@@ -16,8 +16,6 @@ MonoBehaviour:
   _owner: 1
   _name: Wizard
   _delegate: {fileID: 11400000, guid: e2d20f1c4ce80ec43a5823c85bb398fc, type: 2}
-  _modifiers:
-    _modifiers: []
   _skills:
   - _energyCost: 0
     _animation: 3
@@ -28,61 +26,129 @@ MonoBehaviour:
   _projectiles:
   - {fileID: 11400000, guid: 3b47c79d8f9e7b641a756117e6dfc4b8, type: 2}
   _health:
-    _value: 150
+    _value: 100
+    _modifiers: []
+    _range: 0
   _baseAttack:
     _radiant:
       _value: 0
+      _modifiers: []
+      _range: 0
     _lightning:
       _value: 0
+      _modifiers: []
+      _range: 0
     _fire:
       _value: 5
+      _modifiers: []
+      _range: 0
     _cold:
       _value: 0
+      _modifiers: []
+      _range: 0
     _physical:
       _value: 5
+      _modifiers: []
+      _range: 0
     _necrotic:
       _value: 0
+      _modifiers: []
+      _range: 0
+  _damageRangeBp:
+    _value: 30000
+    _modifiers: []
+    _range: 0
   _speed:
     _value: 0
+    _modifiers: []
+    _range: 0
   _startingEnergy:
     _value: 0
+    _modifiers: []
+    _range: 0
   _maximumEnergy:
-    _value: 50
+    _value: 100
+    _modifiers: []
+    _range: 0
   _energyGain:
     _value: 5
+    _modifiers: []
+    _range: 0
   _energyGainIntervalMs:
     _value: 5000
+    _modifiers: []
+    _range: 0
   _critChance:
-    _value: 0
+    _value: 50
+    _modifiers: []
+    _range: 0
   _critMultiplier:
-    _value: 0
+    _value: 1000
+    _modifiers: []
+    _range: 0
   _accuracy:
-    _value: 0
+    _value: 100
+    _modifiers: []
+    _range: 0
   _evasion:
-    _value: 0
+    _value: 50
+    _modifiers: []
+    _range: 0
   _damageResistance:
     _radiant:
       _value: 0
+      _modifiers: []
+      _range: 0
     _lightning:
       _value: 0
+      _modifiers: []
+      _range: 0
     _fire:
       _value: 0
+      _modifiers: []
+      _range: 0
     _cold:
       _value: 0
+      _modifiers: []
+      _range: 0
     _physical:
       _value: 0
+      _modifiers: []
+      _range: 0
     _necrotic:
       _value: 0
+      _modifiers: []
+      _range: 0
   _damageReduction:
     _radiant:
       _value: 0
+      _modifiers: []
+      _range: 0
     _lightning:
       _value: 0
+      _modifiers: []
+      _range: 0
     _fire:
       _value: 0
+      _modifiers: []
+      _range: 0
     _cold:
       _value: 0
+      _modifiers: []
+      _range: 0
     _physical:
       _value: 0
+      _modifiers: []
+      _range: 0
     _necrotic:
       _value: 0
+      _modifiers: []
+      _range: 0
+  _meleeLifeDrainBp:
+    _value: 0
+    _modifiers: []
+    _range: 0
+  _attackSpeedBp:
+    _value: 10000
+    _modifiers: []
+    _range: 0

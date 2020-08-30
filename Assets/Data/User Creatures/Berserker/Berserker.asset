@@ -18,11 +18,17 @@ MonoBehaviour:
   _delegate: {fileID: 11400000, guid: af9fc6bd804bedb4da4c91048ceb1cfd, type: 2}
   _skills:
   - _energyCost: 0
+    _animation: 1
+    _skillType: 1
+  - _energyCost: 0
     _animation: 2
+    _skillType: 1
+  - _energyCost: 0
+    _animation: 3
     _skillType: 1
   _projectiles: []
   _health:
-    _value: 150
+    _value: 100
     _modifiers: []
     _range: 0
   _baseAttack:
@@ -51,7 +57,7 @@ MonoBehaviour:
       _modifiers: []
       _range: 0
   _damageRangeBp:
-    _value: 0
+    _value: 30000
     _modifiers: []
     _range: 0
   _speed:
@@ -63,23 +69,23 @@ MonoBehaviour:
     _modifiers: []
     _range: 0
   _maximumEnergy:
-    _value: 0
+    _value: 100
     _modifiers: []
     _range: 0
   _energyGain:
-    _value: 0
+    _value: 5
     _modifiers: []
     _range: 0
   _energyGainIntervalMs:
-    _value: 0
+    _value: 5000
     _modifiers: []
     _range: 0
   _critChance:
-    _value: 0
+    _value: 50
     _modifiers: []
     _range: 0
   _critMultiplier:
-    _value: 0
+    _value: 1000
     _modifiers: []
     _range: 0
   _accuracy:
@@ -142,5 +148,9 @@ MonoBehaviour:
       _range: 0
   _meleeLifeDrainBp:
     _value: 0
+    _modifiers: []
+    _range: 0
+  _attackSpeedBp:
+    _value: 10000
     _modifiers: []
     _range: 0

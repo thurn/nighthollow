@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ed670b632a04961b2f28c273f24530d, type: 3}
-  m_Name: Added Evasion Affix
+  m_Name: Added Attack Speed
   m_EditorClassIdentifier: 
   _modifiers:
-  - _stat: 17
+  - _stat: 31
     _modifier:
       _operator: 2
-      _value: 25
-    _range: 50
+      _value: 5000
+    _range: 5000

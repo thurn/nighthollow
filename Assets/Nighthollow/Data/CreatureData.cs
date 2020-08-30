@@ -85,7 +85,8 @@ namespace Nighthollow.Data
     PhysicalDamageReduction,
     NecroticDamageReduction,
 
-    MeleeLifeDrain
+    MeleeLifeDrain,
+    AttackSpeed
   }
 
   [CreateAssetMenu(menuName = "Data/Creature")]
@@ -160,7 +161,13 @@ namespace Nighthollow.Data
 
     /// <summary>Gain a fraction of life per damage point dealt, in basis points.</summary>
     [SerializeField] Stat _meleeLifeDrainBp;
+
     public Stat MeleeLifeDrainBp => _meleeLifeDrainBp;
+
+    /// <summary>Multiplier for attack speed, in units of basis points.</summary>
+    [SerializeField] Stat _attackSpeedBp;
+
+    public Stat AttackSpeedBp => _attackSpeedBp;
 
     public CreatureData Clone()
     {
@@ -243,12 +250,14 @@ namespace Nighthollow.Data
           return DamageReduction.Necrotic;
         case StatName.MeleeLifeDrain:
           return MeleeLifeDrainBp;
+        case StatName.AttackSpeed:
+          return AttackSpeedBp;
         default:
           throw new ArgumentOutOfRangeException(nameof(statName), statName, null);
       }
     }
 
-    void Reset()
+    public void SetDefaults()
     {
       _health = new Stat(100);
       _damageRangeBp = new Stat(30000);
@@ -259,6 +268,12 @@ namespace Nighthollow.Data
       _critMultiplier = new Stat(1000);
       _accuracy = new Stat(100);
       _evasion = new Stat(50);
+      _attackSpeedBp = new Stat(10000);
+    }
+
+    void Reset()
+    {
+      SetDefaults();
     }
   }
 }

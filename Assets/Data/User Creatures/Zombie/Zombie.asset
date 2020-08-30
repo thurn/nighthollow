@@ -16,8 +16,6 @@ MonoBehaviour:
   _owner: 0
   _name: Zombie
   _delegate: {fileID: 11400000, guid: aa2f49eda7c8c4a44b411ad10e2e6b86, type: 2}
-  _modifiers:
-    _modifiers: []
   _skills:
   - _energyCost: 0
     _animation: 1
@@ -30,61 +28,129 @@ MonoBehaviour:
     _skillType: 1
   _projectiles: []
   _health:
-    _value: 300
+    _value: 100
+    _modifiers: []
+    _range: 0
   _baseAttack:
     _radiant:
       _value: 0
+      _modifiers: []
+      _range: 0
     _lightning:
       _value: 0
+      _modifiers: []
+      _range: 0
     _fire:
       _value: 0
+      _modifiers: []
+      _range: 0
     _cold:
       _value: 0
+      _modifiers: []
+      _range: 0
     _physical:
       _value: 10
+      _modifiers: []
+      _range: 0
     _necrotic:
       _value: 0
+      _modifiers: []
+      _range: 0
+  _damageRangeBp:
+    _value: 30000
+    _modifiers: []
+    _range: 0
   _speed:
     _value: 0
+    _modifiers: []
+    _range: 0
   _startingEnergy:
     _value: 0
+    _modifiers: []
+    _range: 0
   _maximumEnergy:
     _value: 100
+    _modifiers: []
+    _range: 0
   _energyGain:
     _value: 5
+    _modifiers: []
+    _range: 0
   _energyGainIntervalMs:
     _value: 5000
+    _modifiers: []
+    _range: 0
   _critChance:
     _value: 50
+    _modifiers: []
+    _range: 0
   _critMultiplier:
     _value: 1000
+    _modifiers: []
+    _range: 0
   _accuracy:
     _value: 100
+    _modifiers: []
+    _range: 0
   _evasion:
     _value: 50
+    _modifiers: []
+    _range: 0
   _damageResistance:
     _radiant:
       _value: 0
+      _modifiers: []
+      _range: 0
     _lightning:
       _value: 0
+      _modifiers: []
+      _range: 0
     _fire:
       _value: 0
+      _modifiers: []
+      _range: 0
     _cold:
       _value: 0
+      _modifiers: []
+      _range: 0
     _physical:
       _value: 0
+      _modifiers: []
+      _range: 0
     _necrotic:
       _value: 0
+      _modifiers: []
+      _range: 0
   _damageReduction:
     _radiant:
       _value: 0
+      _modifiers: []
+      _range: 0
     _lightning:
       _value: 0
+      _modifiers: []
+      _range: 0
     _fire:
       _value: 0
+      _modifiers: []
+      _range: 0
     _cold:
       _value: 0
+      _modifiers: []
+      _range: 0
     _physical:
       _value: 0
+      _modifiers: []
+      _range: 0
     _necrotic:
       _value: 0
+      _modifiers: []
+      _range: 0
+  _meleeLifeDrainBp:
+    _value: 0
+    _modifiers: []
+    _range: 0
+  _attackSpeedBp:
+    _value: 10000
+    _modifiers: []
+    _range: 0

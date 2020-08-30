@@ -79,9 +79,6 @@ namespace Nighthollow.Components
       _statusBars.EnergyBar.gameObject.SetActive(false);
       gameObject.layer = Constants.LayerForCreatures(creatureData.Owner);
 
-      // Slow down enemy animations a bit
-      _animator.SetFloat(AnimationSpeed, creatureData.Owner == PlayerName.User ? 1.0f : 0.5f);
-
       _data = creatureData;
       _initialized = true;
     }
@@ -440,6 +437,8 @@ namespace Nighthollow.Components
       }
 
       _statusBars.EnergyBar.gameObject.SetActive(UsesEnergy() && _currentEnergy > 0);
+
+      _animator.speed = Constants.MultiplierBasisPoints(_data.AttackSpeedBp.Value);
 
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
