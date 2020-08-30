@@ -34,6 +34,7 @@ namespace Nighthollow.Services
     [SerializeField] Sprite _shadowSymbol;
     [SerializeField] TimedEffect _missEffect;
     [SerializeField] TimedEffect _evadeEffect;
+    [SerializeField] TimedEffect _critEffect;
 
     public StatusBarsHolder CreateStatusBars() => ComponentUtils.Instantiate(_statusBars,
       Root.Instance.MainCanvas);
@@ -49,6 +50,9 @@ namespace Nighthollow.Services
 
     public GameObject CreateEvade(Vector3 position) =>
       Root.Instance.ObjectPoolService.Create(_evadeEffect.gameObject, position);
+
+    public GameObject CreateCrit(Vector3 position) =>
+      Root.Instance.ObjectPoolService.Create(_critEffect.gameObject, position);
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {

@@ -161,23 +161,28 @@ namespace Nighthollow.Delegate
         0.95f);
       if (Random.Range(0f, 1f) > hitChance)
       {
+        // Miss
         if (self.Owner == PlayerName.User)
         {
-          // Miss
-          Root.Instance.Prefabs.CreateMiss(self.Collider.bounds.center);
+          Root.Instance.Prefabs.CreateMiss(RandomEffectPoint(self));
         }
         else
         {
-          Root.Instance.Prefabs.CreateEvade(target.Collider.bounds.center);
+          Root.Instance.Prefabs.CreateEvade(RandomEffectPoint(target));
         }
+
         return;
       }
 
       var multiplier = 1.0f;
-      if (Random.Range(0, 1000) < self.Data.CritChance.Value)
+      if (Random.Range(0f, 1f) < Constants.MultiplierBasisPoints(self.Data.CritChance.Value))
       {
         // Critical hit
-        multiplier = (1000 + self.Data.CritMultiplier.Value) / 1000f;
+        multiplier = Constants.MultiplierBasisPoints(self.Data.CritMultiplier.Value);
+        if (self.Owner == PlayerName.User)
+        {
+          Root.Instance.Prefabs.CreateCrit(RandomEffectPoint(self));
+        }
       }
 
       var total = Mathf.RoundToInt(multiplier * damage.Total());
@@ -221,6 +226,16 @@ namespace Nighthollow.Delegate
           yield return creature;
         }
       }
+    }
+
+    static Vector3 RandomEffectPoint(Creature creature)
+    {
+      var bounds = creature.Collider.bounds;
+      return bounds.center + new Vector3(
+               (Random.value - 0.5f) * bounds.size.x,
+               (Random.value - 0.5f) * bounds.size.y,
+               0
+             );
     }
   }
 }

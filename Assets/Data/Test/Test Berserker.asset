@@ -16,4 +16,5 @@ MonoBehaviour:
   _affixes:
   - {fileID: 11400000, guid: 94ae1c6afc80a4d9fa4b36bf7cd03cca, type: 2}
   - {fileID: 11400000, guid: 20d78536028954c758782246985f2762, type: 2}
-  - {fileID: 11400000, guid: 859183bd83050434e91069866cb98ad0, type: 2}
+  - {fileID: 11400000, guid: d1f9e23deee1d4285b93e62a24245c1a, type: 2}
+  - {fileID: 11400000, guid: 8481fd76161ce491f91c8d9dd6a429d0, type: 2}

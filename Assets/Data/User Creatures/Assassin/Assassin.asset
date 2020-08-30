@@ -81,11 +81,11 @@ MonoBehaviour:
     _modifiers: []
     _range: 0
   _critChance:
-    _value: 200
+    _value: 2000
     _modifiers: []
     _range: 0
   _critMultiplier:
-    _value: 4000
+    _value: 40000
     _modifiers: []
     _range: 0
   _accuracy:

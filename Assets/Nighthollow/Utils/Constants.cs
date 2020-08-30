@@ -36,10 +36,10 @@ namespace Nighthollow.Utils
     static readonly LayerMask EnemyCreaturesLayerMask = LayerMask.GetMask("EnemyCreatures");
 
     public static float MultiplierBasisPoints(int basisPoints) =>
-      basisPoints / 10000.0f;
+      basisPoints / 10_000.0f;
 
     public static int FractionBasisPoints(int input, int basisPoints) =>
-      Mathf.RoundToInt((input * basisPoints) / 10000.0f);
+      Mathf.RoundToInt((input * basisPoints) / 10_000.0f);
 
     public static int LayerForCreatures(PlayerName playerName)
     {

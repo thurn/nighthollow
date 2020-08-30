@@ -577,6 +577,8 @@ MonoBehaviour:
     type: 3}
   _evadeEffect: {fileID: 1304145510318854551, guid: 6204c6647af1547919e67f3b99f2b289,
     type: 3}
+  _critEffect: {fileID: 5716348870987761432, guid: 49e39cdf286b44911abfb0923f7c4668,
+    type: 3}
 --- !u!213 &192261797
 Sprite:
   m_ObjectHideFlags: 0

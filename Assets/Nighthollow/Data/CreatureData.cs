@@ -140,11 +140,14 @@ namespace Nighthollow.Data
     [SerializeField] Stat _energyGainIntervalMs;
     public Stat EnergyGainIntervalMs => _energyGainIntervalMs;
 
-    // TODO: basis points
+    /// <summary>Chance of obtaining a critical hit, in basis points.</summary>
     [SerializeField] Stat _critChance;
+
     public Stat CritChance => _critChance;
 
+    /// <summary>Damage multiplier for critical hits, in basis points.</summary>
     [SerializeField] Stat _critMultiplier;
+
     public Stat CritMultiplier => _critMultiplier;
 
     [SerializeField] Stat _accuracy;
@@ -264,8 +267,8 @@ namespace Nighthollow.Data
       _energyGain = new Stat(5);
       _energyGainIntervalMs = new Stat(5000);
       _maximumEnergy = new Stat(100);
-      _critChance = new Stat(50);
-      _critMultiplier = new Stat(1000);
+      _critChance = new Stat(500);
+      _critMultiplier = new Stat(20_000);
       _accuracy = new Stat(100);
       _evasion = new Stat(50);
       _attackSpeedBp = new Stat(10000);
