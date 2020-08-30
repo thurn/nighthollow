@@ -44,7 +44,7 @@ namespace Nighthollow.Delegate
     {
       foreach (var creature in GetCollidingCreatures(self.Owner, _collider.Collider))
       {
-        ExecuteAttack(self, creature, self.Data.BaseAttack, SkillType.Melee);
+        ExecuteMeleeAttack(self, creature, self.Data.BaseAttack);
       }
     }
   }

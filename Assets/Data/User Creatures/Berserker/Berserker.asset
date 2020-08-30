@@ -50,7 +50,7 @@ MonoBehaviour:
       _value: 0
       _modifiers: []
       _range: 0
-  _damageRange:
+  _damageRangeBp:
     _value: 0
     _modifiers: []
     _range: 0
@@ -83,11 +83,11 @@ MonoBehaviour:
     _modifiers: []
     _range: 0
   _accuracy:
-    _value: 0
+    _value: 100
     _modifiers: []
     _range: 0
   _evasion:
-    _value: 0
+    _value: 50
     _modifiers: []
     _range: 0
   _damageResistance:
@@ -140,3 +140,7 @@ MonoBehaviour:
       _value: 0
       _modifiers: []
       _range: 0
+  _meleeLifeDrainBp:
+    _value: 0
+    _modifiers: []
+    _range: 0

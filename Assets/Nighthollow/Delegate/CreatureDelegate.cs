@@ -124,7 +124,7 @@ namespace Nighthollow.Delegate
     {
       foreach (var creature in GetCollidingCreatures(self.Owner, self.Collider))
       {
-        ExecuteAttack(self, creature, self.Data.BaseAttack, SkillType.Melee);
+        ExecuteMeleeAttack(self, creature, self.Data.BaseAttack);
       }
     }
 
@@ -136,16 +136,43 @@ namespace Nighthollow.Delegate
         projectile.transform.position,
         new Vector2(projectile.Data.HitboxSize / 1000f, projectile.Data.HitboxSize / 1000f)))
       {
-        ExecuteAttack(self, creature, self.Data.BaseAttack, SkillType.Projectile);
+        ExecuteSpellAttack(self, creature, self.Data.BaseAttack);
       }
     }
 
-    public virtual void ExecuteAttack(
+    public virtual void ExecuteSpellAttack(
       Creature self,
       Creature target,
-      Damage damage,
-      SkillType skillType)
+      Damage damage)
     {
+      var total = Mathf.RoundToInt(damage.Total());
+      target.AddDamage(total);
+    }
+
+    public virtual void ExecuteMeleeAttack(
+      Creature self,
+      Creature target,
+      Damage damage)
+    {
+      var accuracy = self.Data.Accuracy.Value;
+      var hitChance = Mathf.Clamp(
+        0.1f,
+        accuracy / (accuracy + Mathf.Pow((target.Data.Evasion.Value / 4.0f), 0.8f)),
+        0.95f);
+      if (Random.Range(0f, 1f) > hitChance)
+      {
+        if (self.Owner == PlayerName.User)
+        {
+          // Miss
+          Root.Instance.Prefabs.CreateMiss(self.Collider.bounds.center);
+        }
+        else
+        {
+          Root.Instance.Prefabs.CreateEvade(target.Collider.bounds.center);
+        }
+        return;
+      }
+
       var multiplier = 1.0f;
       if (Random.Range(0, 1000) < self.Data.CritChance.Value)
       {
@@ -156,14 +183,11 @@ namespace Nighthollow.Delegate
       var total = Mathf.RoundToInt(multiplier * damage.Total());
       target.AddDamage(total);
 
-      if (skillType == SkillType.Melee)
-      {
-        var lifeDrain = Constants.FractionBasisPoints(total, self.Data.MeleeLifeDrainBp.Value);
-        self.Heal(lifeDrain);
-      }
+      var lifeDrain = Constants.FractionBasisPoints(total, self.Data.MeleeLifeDrainBp.Value);
+      self.Heal(lifeDrain);
     }
 
-    /// <summary>Returns a list of the enemies of 'owner' overlapping wtih 'collider'.</summary>
+    /// <summary>Returns a list of the enemies of 'owner' overlapping with 'collider'.</summary>
     protected static IEnumerable<Creature> GetCollidingCreatures(
       PlayerName owner,
       Collider2D collider)
@@ -175,7 +199,7 @@ namespace Nighthollow.Delegate
     }
 
     /// <summary>
-    /// Returns a list of the enemies of 'owner' overlapping wtih a rectangle at 'center' of
+    /// Returns a list of the enemies of 'owner' overlapping with a rectangle at 'center' of
     /// size 'size'.
     /// </summary>
     protected static IEnumerable<Creature> OverlapBox(

@@ -573,6 +573,10 @@ MonoBehaviour:
   _iceSymbol: {fileID: 21300000, guid: 36b6fee8b9070456db3ca0e8f22ac8f7, type: 3}
   _earthSymbol: {fileID: 21300000, guid: e495ad3e4f66b44abbda9b7be6f7c2f1, type: 3}
   _shadowSymbol: {fileID: 21300000, guid: fa318006fb24c4218a8a0333debbd534, type: 3}
+  _missEffect: {fileID: 2012587658305951445, guid: 081d26798fc454023bda4da0b45a8763,
+    type: 3}
+  _evadeEffect: {fileID: 1304145510318854551, guid: 6204c6647af1547919e67f3b99f2b289,
+    type: 3}
 --- !u!213 &192261797
 Sprite:
   m_ObjectHideFlags: 0

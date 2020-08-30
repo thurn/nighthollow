@@ -32,6 +32,8 @@ namespace Nighthollow.Services
     [SerializeField] Sprite _iceSymbol;
     [SerializeField] Sprite _earthSymbol;
     [SerializeField] Sprite _shadowSymbol;
+    [SerializeField] TimedEffect _missEffect;
+    [SerializeField] TimedEffect _evadeEffect;
 
     public StatusBarsHolder CreateStatusBars() => ComponentUtils.Instantiate(_statusBars,
       Root.Instance.MainCanvas);
@@ -41,6 +43,12 @@ namespace Nighthollow.Services
     public Image CreateInfluence() => ComponentUtils.Instantiate(_influencePrefab);
 
     public Attachment CreateAttachment() => ComponentUtils.Instantiate(_attachmentPrefab);
+
+    public GameObject CreateMiss(Vector3 position) =>
+      Root.Instance.ObjectPoolService.Create(_missEffect.gameObject, position);
+
+    public GameObject CreateEvade(Vector3 position) =>
+      Root.Instance.ObjectPoolService.Create(_evadeEffect.gameObject, position);
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {

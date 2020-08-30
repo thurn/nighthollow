@@ -27,13 +27,12 @@ namespace Nighthollow.Delegate
     [SerializeField] float _durationMs;
     [SerializeField] SkillAnimationNumber _forSkill;
 
-    public override void ExecuteAttack(
+    public override void ExecuteMeleeAttack(
       Creature self,
       Creature target,
-      Damage damage,
-      SkillType skillType)
+      Damage damage)
     {
-      if (skillType == SkillType.Melee && self.CurrentSkill.Animation == _forSkill)
+      if (self.CurrentSkill.Animation == _forSkill)
       {
         target.transform.DOMove(
             (Vector2)target.transform.position +
@@ -42,7 +41,7 @@ namespace Nighthollow.Delegate
           _durationMs / 1000f);
       }
 
-      base.ExecuteAttack(self, target, damage, skillType);
+      base.ExecuteMeleeAttack(self, target, damage);
     }
   }
 }

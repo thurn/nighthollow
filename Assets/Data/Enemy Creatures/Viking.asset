@@ -83,11 +83,11 @@ MonoBehaviour:
     _modifiers: []
     _range: 0
   _accuracy:
-    _value: 0
+    _value: 100
     _modifiers: []
     _range: 0
   _evasion:
-    _value: 0
+    _value: 50
     _modifiers: []
     _range: 0
   _damageResistance:
