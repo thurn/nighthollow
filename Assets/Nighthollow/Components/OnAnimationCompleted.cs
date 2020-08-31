@@ -18,13 +18,20 @@ using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public sealed class OnSkillAnimationCompleted : StateMachineBehaviour
+  public enum CompletedAnimationType
   {
-    [SerializeField] SkillAnimationNumber _animationNumber;
+    Unknown,
+    Stun,
+    Skill
+  }
+
+  public sealed class OnAnimationCompleted : StateMachineBehaviour
+  {
+    [SerializeField] CompletedAnimationType _completedAnimationType;
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-      ComponentUtils.GetComponent<Creature>(animator).OnSkillAnimationCompleted(_animationNumber);
+      ComponentUtils.GetComponent<Creature>(animator).OnAnimationCompleted(_completedAnimationType);
     }
   }
 }

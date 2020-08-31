@@ -27,7 +27,7 @@ namespace Nighthollow.Components
 
     public void Slow()
     {
-      Time.timeScale = 0.1f;
+      Time.timeScale = 0.05f;
     }
 
     public void Fast()

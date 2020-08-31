@@ -29,7 +29,8 @@ namespace Nighthollow.Components
     Idle,
     Moving,
     UsingSkill,
-    Dying
+    Dying,
+    Stunned
   }
 
   public sealed class Creature : MonoBehaviour
@@ -64,12 +65,12 @@ namespace Nighthollow.Components
     static readonly int Skill5 = Animator.StringToHash("Skill5");
     static readonly int Death = Animator.StringToHash("Death");
     static readonly int Moving = Animator.StringToHash("Moving");
-    static readonly int AnimationSpeed = Animator.StringToHash("AnimationSpeed");
+    static readonly int Hit = Animator.StringToHash("Hit");
 
     public void Initialize(CreatureData creatureData)
     {
       _creatureService = Root.Instance.CreatureService;
-      _state = CreatureState.Placing;
+      SetState(CreatureState.Placing);
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
       _collider.enabled = false;
@@ -174,7 +175,7 @@ namespace Nighthollow.Components
       }
 
       _currentEnergy = _data.StartingEnergy.Value;
-      _state = CreatureState.Idle;
+      SetState(CreatureState.Idle);
 
       _selectSkill = true;
       _data.Delegate.OnActivate(this);
@@ -195,12 +196,10 @@ namespace Nighthollow.Components
       if (_data.Delegate.ShouldUseMeleeSkill(this))
       {
         UseSkill(SkillType.Melee);
-        return;
       }
       else if (_data.Delegate.ShouldUseProjectileSkill(this))
       {
         UseSkill(SkillType.Projectile);
-        return;
       }
       else
       {
@@ -210,12 +209,9 @@ namespace Nighthollow.Components
 
     void UseSkill(SkillType skillType)
     {
-      if (!IsAlive())
-      {
-        throw new InvalidOperationException("Attempted to use skill on non-living creature");
-      }
+      Errors.CheckState(CanUseSkill(), "Cannot use skill");
 
-      _state = CreatureState.UsingSkill;
+      SetState(CreatureState.UsingSkill);
       _currentSkill = _data.Delegate.ChooseSkill(this, skillType);
       if (_currentSkill == null)
       {
@@ -255,7 +251,7 @@ namespace Nighthollow.Components
 
     void ToDefaultState()
     {
-      _state = _data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle;
+      SetState(_data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle);
     }
 
     void Kill()
@@ -272,7 +268,7 @@ namespace Nighthollow.Components
 
       Data.Delegate.OnDeath(this);
 
-      _state = CreatureState.Dying;
+      SetState(CreatureState.Dying);
       _creatureService.RemoveCreature(this);
     }
 
@@ -357,9 +353,14 @@ namespace Nighthollow.Components
       _data.Delegate.OnProjectileImpact(this, projectile);
     }
 
-    public void OnSkillAnimationCompleted(SkillAnimationNumber animationNumber)
+    public void OnAnimationCompleted(CompletedAnimationType completedAnimationType)
     {
-      if (!IsAlive()) return;
+      if (!IsAlive() || (IsStunned() && completedAnimationType != CompletedAnimationType.Stun))
+      {
+        // Ignore exit states from skills that ended early due to stun
+        return;
+      }
+
       ToDefaultState();
       _selectSkill = true;
     }
@@ -369,7 +370,16 @@ namespace Nighthollow.Components
       DestroyCreature();
     }
 
+    public void Stun()
+    {
+      if (!IsAlive()) return;
+      _animator.SetTrigger(Hit);
+      SetState(CreatureState.Stunned);
+    }
+
     public bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
+
+    public bool IsStunned() => _state == CreatureState.Stunned;
 
     public bool HasMeleeSkill() => _data.Skills.Any(s => s.SkillType == SkillType.Melee);
 
@@ -453,6 +463,11 @@ namespace Nighthollow.Components
       {
         _animator.SetBool(Moving, false);
       }
+    }
+
+    void SetState(CreatureState newState)
+    {
+      _state = newState;
     }
   }
 }

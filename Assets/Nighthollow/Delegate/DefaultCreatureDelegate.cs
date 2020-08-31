@@ -123,7 +123,7 @@ namespace Nighthollow.Delegate
         0.1f,
         accuracy / (accuracy + Mathf.Pow((target.Data.Evasion.Value / 4.0f), 0.8f)),
         0.95f);
-      if (Random.Range(0f, 1f) > hitChance)
+      if (Random.value > hitChance)
       {
         // Miss
         if (self.Owner == PlayerName.User)
@@ -139,7 +139,7 @@ namespace Nighthollow.Delegate
       }
 
       var multiplier = 1.0f;
-      if (Random.Range(0f, 1f) < Constants.MultiplierBasisPoints(self.Data.CritChance.Value))
+      if (Random.value < Constants.MultiplierBasisPoints(self.Data.CritChance.Value))
       {
         // Critical hit
         multiplier = Constants.MultiplierBasisPoints(self.Data.CritMultiplier.Value);
@@ -154,6 +154,15 @@ namespace Nighthollow.Delegate
 
       var lifeDrain = Constants.FractionBasisPoints(total, self.Data.MeleeLifeDrainBp.Value);
       self.Heal(lifeDrain);
+
+      if (target.IsAlive() && !target.IsStunned() && Random.value < (total / (float) target.Data.Health.Value))
+      {
+        target.Stun();
+        if (self.Owner == PlayerName.User)
+        {
+          Root.Instance.Prefabs.CreateStun(RandomEffectPoint(target));
+        }
+      }
     }
 
     public override void OnKilledEnemy(Creature self, Creature enemy, int damageAmount)

@@ -24,7 +24,7 @@ MonoBehaviour:
     _skillType: 1
   _projectiles: []
   _health:
-    _value: 100
+    _value: 200
     _modifiers: []
     _range: 0
   _baseAttack:
@@ -37,7 +37,7 @@ MonoBehaviour:
       _modifiers: []
       _range: 0
     _fire:
-      _value: 20
+      _value: 10
       _modifiers: []
       _range: 0
     _cold:

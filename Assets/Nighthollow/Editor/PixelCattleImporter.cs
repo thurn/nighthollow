@@ -139,6 +139,7 @@ namespace Nighthollow.Editor
       LoadClip(controller, "skill_3");
       LoadClip(controller, "skill_4");
       LoadClip(controller, "skill_5");
+      LoadClip(controller, "hit_1");
 
       var newPath = $"Assets/Animation/{_creatureName}.overrideController";
       AssetDatabase.DeleteAsset(newPath);
