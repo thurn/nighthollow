@@ -36,6 +36,9 @@ namespace Nighthollow.Services
     [SerializeField] TimedEffect _evadeEffect;
     [SerializeField] TimedEffect _critEffect;
     [SerializeField] TimedEffect _stunEffect;
+    [SerializeField] DamageText _hitSmall;
+    [SerializeField] DamageText _hitMedium;
+    [SerializeField] DamageText _hitBig;
 
     public StatusBarsHolder CreateStatusBars() => ComponentUtils.Instantiate(_statusBars,
       Root.Instance.MainCanvas);
@@ -57,6 +60,15 @@ namespace Nighthollow.Services
 
     public GameObject CreateStun(Vector3 position) =>
       Root.Instance.ObjectPoolService.Create(_stunEffect.gameObject, position);
+
+    public DamageText CreateHitSmall() =>
+      Root.Instance.ObjectPoolService.Create(_hitSmall, Constants.OffScreen, Root.Instance.MainCanvas);
+
+    public DamageText CreateHitMedium() =>
+      Root.Instance.ObjectPoolService.Create(_hitMedium, Constants.OffScreen, Root.Instance.MainCanvas);
+
+    public DamageText CreateHitBig() =>
+      Root.Instance.ObjectPoolService.Create(_hitBig, Constants.OffScreen, Root.Instance.MainCanvas);
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {

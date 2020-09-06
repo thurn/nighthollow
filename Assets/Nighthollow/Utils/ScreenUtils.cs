@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Services;
 using UnityEngine;
 
 namespace Nighthollow.Utils
@@ -23,6 +24,15 @@ namespace Nighthollow.Utils
     public static Vector2 WorldToCanvasPosition(Vector2 worldPosition)
     {
       return ReferencePixelsPerUnit * worldPosition;
+    }
+
+    public static Vector2 WorldToCanvasAnchorPosition(Vector2 worldPosition)
+    {
+      var canvasRect = Root.Instance.MainCanvas.GetComponent<RectTransform>();
+      var viewportPosition = Root.Instance.MainCamera.WorldToViewportPoint(worldPosition);
+      return new Vector2(
+        ((viewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f)),
+        ((viewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f)));
     }
   }
 }

@@ -109,8 +109,10 @@ namespace Nighthollow.Delegate
       Creature target,
       Damage damage)
     {
-      var total = Mathf.RoundToInt(damage.Total(target.Data.DamageResistance));
+      var total = Mathf.RoundToInt(damage.Total(self.Data.DamageRange.Value, target.Data.DamageResistance));
       target.AddDamage(self, total);
+
+      Root.Instance.DamageTextService.ShowDamageText(target, total);
     }
 
     public override void ExecuteMeleeAttack(
@@ -149,8 +151,11 @@ namespace Nighthollow.Delegate
         }
       }
 
-      var total = Mathf.RoundToInt(multiplier * damage.Total(target.Data.DamageResistance));
+      var total = Mathf.RoundToInt(multiplier *
+                                   damage.Total(self.Data.DamageRange.Value, target.Data.DamageResistance));
       target.AddDamage(self, total);
+
+      Root.Instance.DamageTextService.ShowDamageText(target, total);
 
       var lifeDrain = Constants.FractionBasisPoints(total, self.Data.MeleeLifeDrainBp.Value);
       self.Heal(lifeDrain);

@@ -22,12 +22,12 @@ namespace Nighthollow.Services
   {
     readonly Dictionary<int, List<GameObject>> _pools = new Dictionary<int, List<GameObject>>();
 
-    public T Create<T>(T prefab, Vector3 position) where T : Component
+    public T Create<T>(T prefab, Vector3 position, Transform parent = null) where T : Component
     {
-      return ComponentUtils.GetComponent<T>(Create(prefab.gameObject, position));
+      return ComponentUtils.GetComponent<T>(Create(prefab.gameObject, position, parent));
     }
 
-    public GameObject Create(GameObject prefab, Vector3 position)
+    public GameObject Create(GameObject prefab, Vector3 position, Transform parent = null)
     {
       var instanceId = prefab.GetInstanceID();
       if (_pools.ContainsKey(instanceId))
@@ -37,7 +37,7 @@ namespace Nighthollow.Services
         {
           if (!pooledObject.activeSelf)
           {
-            pooledObject.transform.parent = null;
+            pooledObject.transform.SetParent(parent, false);
             pooledObject.transform.position = position;
             pooledObject.SetActive(true);
             return pooledObject;
@@ -49,7 +49,7 @@ namespace Nighthollow.Services
         _pools[instanceId] = new List<GameObject>();
       }
 
-      var result = Instantiate(prefab);
+      var result = Instantiate(prefab, parent, false);
       result.transform.position = position;
       _pools[instanceId].Add(result.gameObject);
       return result;

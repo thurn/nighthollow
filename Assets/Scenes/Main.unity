@@ -323,7 +323,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11496292, guid: 0abab5bb77339e4428787a870eb31bd3, type: 3}
       propertyPath: m_fpsModuleState
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22415034, guid: 0abab5bb77339e4428787a870eb31bd3, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -483,6 +483,7 @@ GameObject:
   - component: {fileID: 169299299}
   - component: {fileID: 169299296}
   - component: {fileID: 169299295}
+  - component: {fileID: 169299298}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -547,6 +548,24 @@ MonoBehaviour:
   _creatureService: {fileID: 169299295}
   _user: {fileID: 1236180348}
   _enemy: {fileID: 1160944780}
+  _damageTextService: {fileID: 169299298}
+--- !u!114 &169299298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169299293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5ea9639728d4848b6d41639c9d3c1f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _alpha: 2000
+  _mediumHitThreshold: 10500
+  _bigHitThreshold: 12000
+  _count: 0
+  _averageDamage: 0
 --- !u!114 &169299299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,6 +600,11 @@ MonoBehaviour:
     type: 3}
   _stunEffect: {fileID: 4215465921997792044, guid: 8f0fec89cd3714cd180b6144b253f816,
     type: 3}
+  _hitSmall: {fileID: 6139980395528366990, guid: 6100e411b42344478970932f86a29b4d,
+    type: 3}
+  _hitMedium: {fileID: 4156763128437783360, guid: 060ac338305404949985c5076cc2f74e,
+    type: 3}
+  _hitBig: {fileID: 6052047142294731675, guid: bf308869e57754400bb92a6d8f95dc54, type: 3}
 --- !u!213 &192261797
 Sprite:
   m_ObjectHideFlags: 0

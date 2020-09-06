@@ -41,6 +41,8 @@ namespace Nighthollow.Utils
     public static int FractionBasisPoints(int input, int basisPoints) =>
       Mathf.RoundToInt((input * basisPoints) / 10_000.0f);
 
+    public static readonly Vector2 OffScreen = new Vector2(-9999, -9999);
+
     public static int LayerForCreatures(PlayerName playerName)
     {
       switch (playerName)

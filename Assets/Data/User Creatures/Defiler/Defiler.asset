@@ -57,8 +57,8 @@ MonoBehaviour:
       _value: 0
       _modifiers: []
       _range: 0
-  _damageRangeBp:
-    _value: 30000
+  _damageRange:
+    _value: 3000
     _modifiers: []
     _range: 0
   _speed:

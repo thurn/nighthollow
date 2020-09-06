@@ -137,14 +137,14 @@ namespace Nighthollow.Data
     [SerializeField] Damage _baseAttack;
     public Damage BaseAttack => _baseAttack;
 
-    [SerializeField] Stat _damageRangeBp;
-
     /// <summary>
     /// Represents the size of a creature's damage range as a percentage of the average. For example, if a creature
     /// has average damage of 50 and a range of 30%, the range size is 50 * 30% = 15, and thus the damage range is
     /// 35-65. Expressed in units of basis points.
     /// </summary>
-    public Stat DamageRangeBp => _damageRangeBp;
+    [SerializeField] Stat _damageRange;
+
+    public Stat DamageRange => _damageRange;
 
     [SerializeField] Stat _speed;
     public Stat Speed => _speed;
@@ -229,7 +229,7 @@ namespace Nighthollow.Data
         case StatName.BaseAttackNecroticDamage:
           return BaseAttack.Necrotic;
         case StatName.DamageRange:
-          return DamageRangeBp;
+          return DamageRange;
         case StatName.Speed:
           return Speed;
         case StatName.StartingEnergy:
@@ -284,7 +284,7 @@ namespace Nighthollow.Data
     public void SetDefaults()
     {
       _health = new Stat(100);
-      _damageRangeBp = new Stat(30000);
+      _damageRange = new Stat(3000);
       _energyGain = new Stat(5);
       _energyGainIntervalMs = new Stat(5000);
       _maximumEnergy = new Stat(100);

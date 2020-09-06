@@ -16,7 +16,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Nighthollow.Utils;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Nighthollow.Data
 {
@@ -62,7 +64,7 @@ namespace Nighthollow.Data
       DamageType.Necrotic
     };
 
-    public int Total(Damage resistances)
+    public int Total(int damageRange, Damage resistances)
     {
       return Mathf.RoundToInt(AllTypes.Sum(damageType =>
       {
@@ -72,9 +74,12 @@ namespace Nighthollow.Data
           return 0;
         }
 
+        var range = Constants.FractionBasisPoints(damage, damageRange);
+        var randomDamage = Random.Range(damage - range, damage + range);
+
         var resistance = (float) resistances.Get(damageType).Value;
-        var reduction = resistance / (resistance + (2.0f * damage));
-        return Mathf.Clamp(1f - reduction, 0.25f, 1.0f) * damage;
+        var reduction = resistance / (resistance + (2.0f * randomDamage));
+        return Mathf.Clamp(1f - reduction, 0.25f, 1.0f) * randomDamage;
       }));
     }
 
