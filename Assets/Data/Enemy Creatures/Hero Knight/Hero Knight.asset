@@ -21,14 +21,11 @@ MonoBehaviour:
     _animation: 1
     _skillType: 1
   - _energyCost: 0
-    _animation: 2
-    _skillType: 1
-  - _energyCost: 0
     _animation: 3
     _skillType: 1
   _projectiles: []
   _health:
-    _value: 100
+    _value: 1000
     _modifiers: []
     _range: 0
   _baseAttack:
@@ -150,7 +147,15 @@ MonoBehaviour:
     _value: 0
     _modifiers: []
     _range: 0
-  _attackSpeedBp:
+  _skillSpeedMultiplier:
     _value: 10000
+    _modifiers: []
+    _range: 0
+  _stunDuration:
+    _value: 1000
+    _modifiers: []
+    _range: 0
+  _addedStunChance:
+    _value: 0
     _modifiers: []
     _range: 0

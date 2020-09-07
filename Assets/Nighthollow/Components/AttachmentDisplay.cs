@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using DG.Tweening;
-using Nighthollow.Data;
 using Nighthollow.Services;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,19 +22,31 @@ namespace Nighthollow.Components
   {
     [Header("State")] [SerializeField] List<Transform> _attachments;
 
-    public void AddAttachment(Attachment attachment, Action onComplete = null, bool animate = true)
+    public void AddAttachment(Attachment attachment)
     {
-      attachment.transform.SetParent(transform, worldPositionStays: true);
+      attachment.transform.SetParent(transform);
       foreach (var child in attachment.GetComponentsInChildren<SpriteRenderer>())
       {
         child.sortingOrder = 0;
       }
 
       _attachments.Add(attachment.transform);
-      UpdatePositions(onComplete, animate);
+      UpdatePositions();
     }
 
-    public void SetAttachments(IEnumerable<AttachmentData> attachments)
+    public void SetAttachments(IEnumerable<Sprite> attachments)
+    {
+      ClearAttachments();
+
+      foreach (var attachment in attachments)
+      {
+        var newInstance = Root.Instance.Prefabs.CreateAttachment();
+        newInstance.Initialize(attachment);
+        AddAttachment(newInstance);
+      }
+    }
+
+    public void ClearAttachments()
     {
       foreach (var attachment in _attachments)
       {
@@ -45,34 +54,15 @@ namespace Nighthollow.Components
       }
 
       _attachments.Clear();
-
-      foreach (var attachment in attachments)
-      {
-        var newInstance = Root.Instance.Prefabs.CreateAttachment();
-        newInstance.Initialize(attachment);
-        AddAttachment(newInstance, null, false);
-      }
     }
 
-    void UpdatePositions(Action onComplete = null, bool animate = true)
+    void UpdatePositions()
     {
-      var sequence = DOTween.Sequence();
       for (var i = 0; i < _attachments.Count; ++i)
       {
-        if (animate)
-        {
-          sequence.Insert(0, _attachments[i].transform.DOLocalMove(PositionForAttachment(i % 4), 0.2f));
-          sequence.Insert(0,
-            _attachments[i].DOScale(new Vector2(ScaleForAttachmentCount(), ScaleForAttachmentCount()), 0.2f));
-        }
-        else
-        {
-          _attachments[i].transform.localPosition = PositionForAttachment(i % 4);
-          _attachments[i].localScale = new Vector2(ScaleForAttachmentCount(), ScaleForAttachmentCount());
-        }
+        _attachments[i].transform.localPosition = PositionForAttachment(i % 4);
+        _attachments[i].localScale = new Vector2(ScaleForAttachmentCount(), ScaleForAttachmentCount());
       }
-
-      sequence.AppendCallback(() => onComplete?.Invoke());
     }
 
     float ScaleForAttachmentCount()

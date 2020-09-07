@@ -67,6 +67,7 @@ namespace Nighthollow.Components
     static readonly int Death = Animator.StringToHash("Death");
     static readonly int Moving = Animator.StringToHash("Moving");
     static readonly int Hit = Animator.StringToHash("Hit");
+    static readonly int SkillSpeed = Animator.StringToHash("SkillSpeedMultiplier");
 
     public void Initialize(CreatureData creatureData)
     {
@@ -80,6 +81,7 @@ namespace Nighthollow.Components
       _statusBars.HealthBar.gameObject.SetActive(false);
       _statusBars.EnergyBar.gameObject.SetActive(false);
       gameObject.layer = Constants.LayerForCreatures(creatureData.Owner);
+      _animator.speed = _animationSpeedMultiplier;
 
       _data = creatureData;
       _initialized = true;
@@ -354,9 +356,9 @@ namespace Nighthollow.Components
       _data.Delegate.OnProjectileImpact(this, projectile);
     }
 
-    public void OnAnimationCompleted(CompletedAnimationType completedAnimationType)
+    public void OnActionAnimationCompleted()
     {
-      if (!IsAlive() || (IsStunned() && completedAnimationType != CompletedAnimationType.Stun))
+      if (!IsAlive() || IsStunned())
       {
         // Ignore exit states from skills that ended early due to stun
         return;
@@ -371,11 +373,25 @@ namespace Nighthollow.Components
       DestroyCreature();
     }
 
-    public void Stun()
+    public void Stun(int durationMs)
     {
-      if (!IsAlive()) return;
+      if (!IsAlive() || IsStunned()) return;
+      StartCoroutine(StunAsync(durationMs));
+    }
+
+    IEnumerator<YieldInstruction> StunAsync(int durationMs)
+    {
       _animator.SetTrigger(Hit);
       SetState(CreatureState.Stunned);
+      var attachment = Root.Instance.Prefabs.CreateAttachment();
+      attachment.Initialize(Root.Instance.Prefabs.StunIcon());
+      _attachmentDisplay.AddAttachment(attachment);
+
+      yield return new WaitForSeconds(durationMs / 1000f);
+
+      _attachmentDisplay.ClearAttachments();
+      ToDefaultState();
+      _selectSkill = true;
     }
 
     public bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
@@ -450,10 +466,10 @@ namespace Nighthollow.Components
 
       _statusBars.EnergyBar.gameObject.SetActive(UsesEnergy() && _currentEnergy > 0);
 
-      _animator.speed = Constants.MultiplierBasisPoints(_data.AttackSpeedBp.Value) * _animationSpeedMultiplier;
-
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
+
+      _animator.SetFloat(SkillSpeed, Constants.MultiplierBasisPoints(_data.SkillSpeedMultiplier.Value));
 
       if (_state == CreatureState.Moving)
       {

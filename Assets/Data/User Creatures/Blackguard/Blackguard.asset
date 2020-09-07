@@ -15,8 +15,6 @@ MonoBehaviour:
   _prefab: {fileID: 6448519131692088552, guid: 518931ad86ca64fa79df159ca1bb4a0e, type: 3}
   _owner: 1
   _name: Blackguard
-  _derek:
-    id: 0
   _delegates:
   - {fileID: 11400000, guid: 82f9099705b9c12418f4e0f1bf74bdbf, type: 2}
   _skills:
@@ -56,8 +54,8 @@ MonoBehaviour:
       _value: 0
       _modifiers: []
       _range: 0
-  _damageRangeBp:
-    _value: 30000
+  _damageRange:
+    _value: 0
     _modifiers: []
     _range: 0
   _speed:
@@ -150,11 +148,15 @@ MonoBehaviour:
     _value: 0
     _modifiers: []
     _range: 0
-  _attackSpeedBp:
+  _skillSpeedMultiplier:
     _value: 10000
     _modifiers: []
     _range: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: , ns: , asm: }
+  _stunDuration:
+    _value: 1000
+    _modifiers: []
+    _range: 0
+  _addedStunChance:
+    _value: 0
+    _modifiers: []
+    _range: 0

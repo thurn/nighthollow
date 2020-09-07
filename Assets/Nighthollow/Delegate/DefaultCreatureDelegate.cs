@@ -160,14 +160,26 @@ namespace Nighthollow.Delegate
       var lifeDrain = Constants.FractionBasisPoints(total, self.Data.MeleeLifeDrainBp.Value);
       self.Heal(lifeDrain);
 
-      if (target.IsAlive() && !target.IsStunned() && Random.value < (total / (float) target.Data.Health.Value))
+      if (target.IsAlive() && !target.IsStunned() && ShouldStun(self, target, total))
       {
-        target.Stun();
+        target.Stun(self.Data.StunDuration.Value);
         if (self.Owner == PlayerName.User)
         {
           Root.Instance.Prefabs.CreateStun(RandomEffectPoint(target));
         }
       }
+    }
+
+    public override bool ShouldStun(Creature self, Creature target, int damageAmount)
+    {
+      var baseStunChance = damageAmount / (float) target.Data.Health.Value;
+
+      // Max stun chance is 50%
+      var stunChance = Mathf.Clamp(
+        baseStunChance + Constants.MultiplierBasisPoints(self.Data.AddedStunChance.Value),
+        0,
+        0.5f);
+      return Random.value <= stunChance;
     }
 
     public override void OnKilledEnemy(Creature self, Creature enemy, int damageAmount)

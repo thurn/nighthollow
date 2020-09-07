@@ -39,6 +39,7 @@ namespace Nighthollow.Services
     [SerializeField] DamageText _hitSmall;
     [SerializeField] DamageText _hitMedium;
     [SerializeField] DamageText _hitBig;
+    [SerializeField] Sprite _stunIcon;
 
     public StatusBarsHolder CreateStatusBars() => ComponentUtils.Instantiate(_statusBars,
       Root.Instance.MainCanvas);
@@ -69,6 +70,8 @@ namespace Nighthollow.Services
 
     public DamageText CreateHitBig() =>
       Root.Instance.ObjectPoolService.Create(_hitBig, Constants.OffScreen, Root.Instance.MainCanvas);
+
+    public Sprite StunIcon() => Instantiate(_stunIcon);
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {

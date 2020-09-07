@@ -15,8 +15,6 @@ MonoBehaviour:
   _prefab: {fileID: 3018714074523599162, guid: add4b191a328046c9ad6ac09e7587d06, type: 3}
   _owner: 1
   _name: Skeleton
-  _derek:
-    id: 0
   _delegates:
   - {fileID: 11400000, guid: 443baf37d1753bf429eeff1e91064982, type: 2}
   _skills:
@@ -53,8 +51,8 @@ MonoBehaviour:
       _value: 0
       _modifiers: []
       _range: 0
-  _damageRangeBp:
-    _value: 30000
+  _damageRange:
+    _value: 0
     _modifiers: []
     _range: 0
   _speed:
@@ -147,11 +145,15 @@ MonoBehaviour:
     _value: 0
     _modifiers: []
     _range: 0
-  _attackSpeedBp:
+  _skillSpeedMultiplier:
     _value: 10000
     _modifiers: []
     _range: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: , ns: , asm: }
+  _stunDuration:
+    _value: 1000
+    _modifiers: []
+    _range: 0
+  _addedStunChance:
+    _value: 0
+    _modifiers: []
+    _range: 0

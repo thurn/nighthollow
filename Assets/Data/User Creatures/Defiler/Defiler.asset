@@ -15,8 +15,6 @@ MonoBehaviour:
   _prefab: {fileID: 6099651540689490467, guid: 1b3af0a205ae82c4f9718a6daa6310a4, type: 3}
   _owner: 1
   _name: Defiler
-  _derek:
-    id: 0
   _delegates:
   - {fileID: 11400000, guid: 485fb5381f4104747a5a6c31d814e0f9, type: 2}
   _skills:
@@ -151,11 +149,15 @@ MonoBehaviour:
     _value: 0
     _modifiers: []
     _range: 0
-  _attackSpeedBp:
+  _skillSpeedMultiplier:
     _value: 10000
     _modifiers: []
     _range: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: , ns: , asm: }
+  _stunDuration:
+    _value: 1000
+    _modifiers: []
+    _range: 0
+  _addedStunChance:
+    _value: 0
+    _modifiers: []
+    _range: 0

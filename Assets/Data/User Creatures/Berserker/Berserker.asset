@@ -15,8 +15,6 @@ MonoBehaviour:
   _prefab: {fileID: 3539740354515962369, guid: 5053f7e26655a4397a6f2575ed6d45c0, type: 3}
   _owner: 1
   _name: Berserker
-  _derek:
-    id: 0
   _delegates: []
   _skills:
   - _energyCost: 0
@@ -152,11 +150,15 @@ MonoBehaviour:
     _value: 0
     _modifiers: []
     _range: 0
-  _attackSpeedBp:
+  _skillSpeedMultiplier:
     _value: 10000
     _modifiers: []
     _range: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: , ns: , asm: }
+  _stunDuration:
+    _value: 1000
+    _modifiers: []
+    _range: 0
+  _addedStunChance:
+    _value: 0
+    _modifiers: []
+    _range: 0

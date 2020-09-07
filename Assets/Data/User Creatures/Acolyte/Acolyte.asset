@@ -15,8 +15,6 @@ MonoBehaviour:
   _prefab: {fileID: 6973698551416525957, guid: 13d0ff59514c84c29abea23bb6c7fbad, type: 3}
   _owner: 1
   _name: Acolyte
-  _derek:
-    id: 0
   _delegates:
   - {fileID: 11400000, guid: b4b21a69fb9e443d2beba917bc215e89, type: 2}
   _skills:
@@ -147,11 +145,15 @@ MonoBehaviour:
     _value: 0
     _modifiers: []
     _range: 0
-  _attackSpeedBp:
+  _skillSpeedMultiplier:
     _value: 10000
     _modifiers: []
     _range: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: , ns: , asm: }
+  _stunDuration:
+    _value: 1000
+    _modifiers: []
+    _range: 0
+  _addedStunChance:
+    _value: 0
+    _modifiers: []
+    _range: 0

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
 using UnityEngine;
 
 namespace Nighthollow.Components
@@ -20,16 +19,12 @@ namespace Nighthollow.Components
   public sealed class Attachment : MonoBehaviour
   {
     [Header("Config")] [SerializeField] SpriteRenderer _spriteRenderer;
-    [Header("State")] [SerializeField] AttachmentData _attachmentData;
 
-    public void Initialize(AttachmentData attachmentData)
+    public void Initialize(Sprite sprite)
     {
-      _attachmentData = attachmentData;
-      _spriteRenderer.sprite = attachmentData.Image;
+      _spriteRenderer.sprite = sprite;
       transform.localScale = 0.5f * Vector2.one;
     }
-
-    public AttachmentData AttachmentData => _attachmentData;
 
     public void SetColor(Color color)
     {

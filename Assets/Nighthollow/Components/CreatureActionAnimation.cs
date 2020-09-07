@@ -12,26 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
 using Nighthollow.Utils;
 using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public enum CompletedAnimationType
+  public sealed class CreatureActionAnimation : StateMachineBehaviour
   {
-    Unknown,
-    Stun,
-    Skill
-  }
-
-  public sealed class OnAnimationCompleted : StateMachineBehaviour
-  {
-    [SerializeField] CompletedAnimationType _completedAnimationType;
-
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-      ComponentUtils.GetComponent<Creature>(animator).OnAnimationCompleted(_completedAnimationType);
+      base.OnStateExit(animator, stateInfo, layerIndex);
+      ComponentUtils.GetComponent<Creature>(animator).OnActionAnimationCompleted();
     }
   }
 }

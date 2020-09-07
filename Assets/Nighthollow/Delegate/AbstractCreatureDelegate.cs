@@ -146,6 +146,12 @@ namespace Nighthollow.Delegate
       Parent.ExecuteMeleeAttack(self, target, damage);
     }
 
+    /// <summary>Should return true if a melee hit on 'enemy' for 'damageAmount' damage should cause a stun.</summary>
+    public virtual bool ShouldStun(Creature self, Creature enemy, int damageAmount)
+    {
+      return Parent.ShouldStun(self, enemy, damageAmount);
+    }
+
     /// <summary>Called when a creature kills an enemy creature.</summary>
     public virtual void OnKilledEnemy(Creature self, Creature enemy, int damageAmount)
     {

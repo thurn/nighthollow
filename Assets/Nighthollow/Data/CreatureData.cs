@@ -21,12 +21,6 @@ using UnityEngine;
 
 namespace Nighthollow.Data
 {
-  public sealed class AttachmentData : ScriptableObject
-  {
-    [SerializeField] Sprite _image;
-    public Sprite Image => _image;
-  }
-
   public enum SkillAnimationNumber
   {
     Unknown,
@@ -86,7 +80,9 @@ namespace Nighthollow.Data
     NecroticDamageReduction,
 
     MeleeLifeDrain,
-    AttackSpeed
+    SkillSpeedMultiplier,
+    StunDuration,
+    AddedStunChance
   }
 
   [CreateAssetMenu(menuName = "Data/Creature")]
@@ -181,10 +177,23 @@ namespace Nighthollow.Data
 
     public Stat MeleeLifeDrainBp => _meleeLifeDrainBp;
 
-    /// <summary>Multiplier for attack speed, in units of basis points.</summary>
-    [SerializeField] Stat _attackSpeedBp;
+    /// <summary>Multiplier for skill animation speed, in basis points.</summary>
+    [SerializeField] Stat _skillSpeedMultiplier;
 
-    public Stat AttackSpeedBp => _attackSpeedBp;
+    public Stat SkillSpeedMultiplier => _skillSpeedMultiplier;
+
+    /// <summary>Duration for inflicted stuns, in milliseconds.</summary>
+    [SerializeField] Stat _stunDuration;
+
+    public Stat StunDuration => _stunDuration;
+
+    /// <summary>
+    /// Additional % chance to stun added to the base stun chance on melee hit, in units of
+    /// basis points
+    /// </summary>
+    [SerializeField] Stat _addedStunChance;
+
+    public Stat AddedStunChance => _addedStunChance;
 
     public CreatureData Clone()
     {
@@ -267,8 +276,12 @@ namespace Nighthollow.Data
           return DamageReduction.Necrotic;
         case StatName.MeleeLifeDrain:
           return MeleeLifeDrainBp;
-        case StatName.AttackSpeed:
-          return AttackSpeedBp;
+        case StatName.SkillSpeedMultiplier:
+          return SkillSpeedMultiplier;
+        case StatName.StunDuration:
+          return StunDuration;
+        case StatName.AddedStunChance:
+          return AddedStunChance;
         default:
           throw new ArgumentOutOfRangeException(nameof(statName), statName, null);
       }
@@ -285,7 +298,8 @@ namespace Nighthollow.Data
       _critMultiplier = new Stat(20_000);
       _accuracy = new Stat(100);
       _evasion = new Stat(50);
-      _attackSpeedBp = new Stat(10000);
+      _skillSpeedMultiplier = new Stat(10000);
+      _stunDuration = new Stat(1000);
     }
 
     void Reset()
