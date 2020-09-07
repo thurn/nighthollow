@@ -39,6 +39,7 @@ namespace Nighthollow.Components
     [SerializeField] Transform _projectileSource;
     [SerializeField] AttachmentDisplay _attachmentDisplay;
     [SerializeField] Transform _healthbarAnchor;
+    [SerializeField] float _animationSpeedMultiplier;
 
     [Header("State")] [SerializeField] bool _initialized;
     [SerializeField] CreatureData _data;
@@ -449,7 +450,7 @@ namespace Nighthollow.Components
 
       _statusBars.EnergyBar.gameObject.SetActive(UsesEnergy() && _currentEnergy > 0);
 
-      _animator.speed = Constants.MultiplierBasisPoints(_data.AttackSpeedBp.Value);
+      _animator.speed = Constants.MultiplierBasisPoints(_data.AttackSpeedBp.Value) * _animationSpeedMultiplier;
 
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;

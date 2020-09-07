@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Enemies
   m_EditorClassIdentifier: 
   _enemies:
-  - {fileID: 11400000, guid: 02c3be51a3fba49be97aee1f5ea4269b, type: 2}
+  - {fileID: 11400000, guid: ed7dd370ca5894f5ea12ddce7da4bbde, type: 2}
   _initialSpawnDelayMs: 0
   _spawnDelayMs: 5000

@@ -2011,14 +2011,24 @@ MonoBehaviour:
   _projectileSource: {fileID: 1614936900440550375}
   _attachmentDisplay: {fileID: 6785938497051873696}
   _healthbarAnchor: {fileID: 6924948796023152906}
+  _animationSpeedMultiplier: 1
   _initialized: 0
+  _data: {fileID: 0}
+  _selectSkill: 0
+  _damageTaken: 0
+  _currentEnergy: 0
   _state: 0
-  _currentSkillType: 0
+  _currentSkill:
+    _energyCost: 0
+    _animation: 0
+    _skillType: 0
+  _currentProjectile: {fileID: 0}
   _animator: {fileID: 0}
   _collider: {fileID: 0}
-  _healthBar: {fileID: 0}
+  _statusBars: {fileID: 0}
   _creatureService: {fileID: 0}
   _sortingGroup: {fileID: 0}
+  _projectileCollider: {fileID: 0}
 --- !u!210 &3834246665580320794
 SortingGroup:
   m_ObjectHideFlags: 0

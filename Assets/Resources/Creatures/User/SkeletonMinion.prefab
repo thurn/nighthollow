@@ -1937,6 +1937,7 @@ MonoBehaviour:
   _projectileSource: {fileID: 79413633195604028}
   _attachmentDisplay: {fileID: 3185233001308623368}
   _healthbarAnchor: {fileID: 4034545593723988108}
+  _animationSpeedMultiplier: 1
   _initialized: 0
   _data: {fileID: 0}
   _selectSkill: 0

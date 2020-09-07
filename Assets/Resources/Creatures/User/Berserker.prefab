@@ -3581,14 +3581,24 @@ MonoBehaviour:
   _projectileSource: {fileID: 3538176479443463364}
   _attachmentDisplay: {fileID: 4012880722773413956}
   _healthbarAnchor: {fileID: 3538176481071037010}
+  _animationSpeedMultiplier: 1
   _initialized: 0
+  _data: {fileID: 0}
+  _selectSkill: 0
+  _damageTaken: 0
+  _currentEnergy: 0
   _state: 0
-  _currentSkillType: 0
+  _currentSkill:
+    _energyCost: 0
+    _animation: 0
+    _skillType: 0
+  _currentProjectile: {fileID: 0}
   _animator: {fileID: 0}
   _collider: {fileID: 0}
-  _healthBar: {fileID: 0}
+  _statusBars: {fileID: 0}
   _creatureService: {fileID: 0}
   _sortingGroup: {fileID: 0}
+  _projectileCollider: {fileID: 0}
 --- !u!95 &3480816785551142562
 Animator:
   serializedVersion: 3

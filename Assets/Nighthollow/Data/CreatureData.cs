@@ -89,11 +89,6 @@ namespace Nighthollow.Data
     AttackSpeed
   }
 
-  public interface IDerek
-  {
-    int Hello();
-  }
-
   [CreateAssetMenu(menuName = "Data/Creature")]
   public sealed class CreatureData : ScriptableObject
   {
@@ -105,8 +100,6 @@ namespace Nighthollow.Data
 
     [SerializeField] string _name;
     public string Name => _name;
-
-    [SerializeField] [SerializeReference] IDerek _derek;
 
     [SerializeField] List<AbstractCreatureDelegate> _delegates;
     CreatureDelegateList _delegateList;

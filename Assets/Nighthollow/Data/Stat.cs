@@ -136,6 +136,11 @@ namespace Nighthollow.Data
 
     void Recalculate()
     {
+      if (_modifiers == null)
+      {
+        return;
+      }
+
       var result = _value;
 
       _modifiers.RemoveAll(InactiveModifier);

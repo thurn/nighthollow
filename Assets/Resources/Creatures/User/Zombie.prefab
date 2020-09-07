@@ -1642,6 +1642,7 @@ MonoBehaviour:
   _projectileSource: {fileID: 3859218692964718764}
   _attachmentDisplay: {fileID: 371129596568085322}
   _healthbarAnchor: {fileID: 6629882224677654805}
+  _animationSpeedMultiplier: 1
   _initialized: 0
   _data: {fileID: 0}
   _selectSkill: 0
