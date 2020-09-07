@@ -18,6 +18,7 @@ using Nighthollow.Delegate;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Nighthollow.Data
 {
@@ -57,7 +58,7 @@ namespace Nighthollow.Data
     StartingEnergy,
     MaximumEnergy,
     EnergyGain,
-    EnergyGainIntervalMs,
+    RegenerationInterval,
     CritChance,
     CritMultiplier,
     Accuracy,
@@ -82,7 +83,9 @@ namespace Nighthollow.Data
     MeleeLifeDrain,
     SkillSpeedMultiplier,
     StunDuration,
-    AddedStunChance
+    AddedStunChance,
+    MeleeReflect,
+    HealthRegeneration
   }
 
   [CreateAssetMenu(menuName = "Data/Creature")]
@@ -147,8 +150,10 @@ namespace Nighthollow.Data
     [SerializeField] Stat _energyGain;
     public Stat EnergyGain => _energyGain;
 
-    [SerializeField] Stat _energyGainIntervalMs;
-    public Stat EnergyGainIntervalMs => _energyGainIntervalMs;
+    [FormerlySerializedAs("_energyGainIntervalMs")] [SerializeField]
+    Stat _regenerationIntervalMs;
+
+    public Stat RegenerationIntervalMs => _regenerationIntervalMs;
 
     /// <summary>Chance of obtaining a critical hit, in basis points.</summary>
     [SerializeField] Stat _critChance;
@@ -173,9 +178,10 @@ namespace Nighthollow.Data
     public Damage DamageReduction => _damageReduction;
 
     /// <summary>Gain a fraction of life per damage point dealt, in basis points.</summary>
-    [SerializeField] Stat _meleeLifeDrainBp;
+    [FormerlySerializedAs("_meleeLifeDrainBp")] [SerializeField]
+    Stat _meleeLifeDrain;
 
-    public Stat MeleeLifeDrainBp => _meleeLifeDrainBp;
+    public Stat MeleeLifeDrain => _meleeLifeDrain;
 
     /// <summary>Multiplier for skill animation speed, in basis points.</summary>
     [SerializeField] Stat _skillSpeedMultiplier;
@@ -194,6 +200,16 @@ namespace Nighthollow.Data
     [SerializeField] Stat _addedStunChance;
 
     public Stat AddedStunChance => _addedStunChance;
+
+    /// <summary>Health regenerated every regeneration interval.</summary>
+    [SerializeField] Stat _healthRegeneration;
+
+    public Stat HealthRegeneration => _healthRegeneration;
+
+    /// <summary>Fraction of melee damage to reflect back on attackers.</summary>
+    [SerializeField] Stat _meleeReflect;
+
+    public Stat MeleeReflect => _meleeReflect;
 
     public CreatureData Clone()
     {
@@ -240,8 +256,8 @@ namespace Nighthollow.Data
           return MaximumEnergy;
         case StatName.EnergyGain:
           return EnergyGain;
-        case StatName.EnergyGainIntervalMs:
-          return EnergyGainIntervalMs;
+        case StatName.RegenerationInterval:
+          return RegenerationIntervalMs;
         case StatName.CritChance:
           return CritChance;
         case StatName.CritMultiplier:
@@ -275,13 +291,17 @@ namespace Nighthollow.Data
         case StatName.NecroticDamageReduction:
           return DamageReduction.Necrotic;
         case StatName.MeleeLifeDrain:
-          return MeleeLifeDrainBp;
+          return MeleeLifeDrain;
         case StatName.SkillSpeedMultiplier:
           return SkillSpeedMultiplier;
         case StatName.StunDuration:
           return StunDuration;
         case StatName.AddedStunChance:
           return AddedStunChance;
+        case StatName.MeleeReflect:
+          return MeleeReflect;
+        case StatName.HealthRegeneration:
+          return HealthRegeneration;
         default:
           throw new ArgumentOutOfRangeException(nameof(statName), statName, null);
       }
@@ -292,7 +312,7 @@ namespace Nighthollow.Data
       _health = new Stat(100);
       _damageRange = new Stat(3000);
       _energyGain = new Stat(5);
-      _energyGainIntervalMs = new Stat(5000);
+      _regenerationIntervalMs = new Stat(5000);
       _maximumEnergy = new Stat(100);
       _critChance = new Stat(500);
       _critMultiplier = new Stat(20_000);

@@ -28,7 +28,7 @@ MonoBehaviour:
     _skillType: 1
   _projectiles: []
   _health:
-    _value: 1000
+    _value: 50
     _modifiers: []
     _range: 0
   _baseAttack:
@@ -76,7 +76,7 @@ MonoBehaviour:
     _value: 5
     _modifiers: []
     _range: 0
-  _energyGainIntervalMs:
+  _regenerationIntervalMs:
     _value: 5000
     _modifiers: []
     _range: 0
@@ -146,7 +146,7 @@ MonoBehaviour:
       _value: 0
       _modifiers: []
       _range: 0
-  _meleeLifeDrainBp:
+  _meleeLifeDrain:
     _value: 0
     _modifiers: []
     _range: 0
@@ -159,6 +159,14 @@ MonoBehaviour:
     _modifiers: []
     _range: 0
   _addedStunChance:
+    _value: 0
+    _modifiers: []
+    _range: 0
+  _healthRegeneration:
+    _value: 0
+    _modifiers: []
+    _range: 0
+  _meleeReflect:
     _value: 0
     _modifiers: []
     _range: 0

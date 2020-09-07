@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseCard: {fileID: 11400000, guid: 1d591c29bd97c594c88b80b026d4bc16, type: 2}
   _affixes:
-  - {fileID: 11400000, guid: 94ae1c6afc80a4d9fa4b36bf7cd03cca, type: 2}
-  - {fileID: 11400000, guid: 20d78536028954c758782246985f2762, type: 2}
-  - {fileID: 11400000, guid: 2600f8add8b1b406797f37ee44a3f6e6, type: 2}
+  - {fileID: 11400000, guid: 88abcfb748cc543e1a8843ed2a1e483b, type: 2}
+  - {fileID: 11400000, guid: 88c0f59aa2d8a406681ed84d7f9ef62b, type: 2}
+  - {fileID: 11400000, guid: 0f97fce236ae74ea9ac6eb4c8eea6bda, type: 2}

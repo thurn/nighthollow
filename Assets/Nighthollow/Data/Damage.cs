@@ -64,7 +64,7 @@ namespace Nighthollow.Data
       DamageType.Necrotic
     };
 
-    public int Total(int damageRange, Damage resistances)
+    public int Total(int damageRange, Damage resistances, Damage reduction)
     {
       return Mathf.RoundToInt(AllTypes.Sum(damageType =>
       {
@@ -77,9 +77,15 @@ namespace Nighthollow.Data
         var range = Constants.FractionBasisPoints(damage, damageRange);
         var randomDamage = Random.Range(damage - range, damage + range);
 
+        // Maximum reduction is 75%
+        var reduced = Math.Max(
+          Mathf.RoundToInt(randomDamage * 0.25f),
+          randomDamage - reduction.Get(damageType).Value);
+
+        // Maximum resistance is 75%
         var resistance = (float) resistances.Get(damageType).Value;
-        var reduction = resistance / (resistance + (2.0f * randomDamage));
-        return Mathf.Clamp(1f - reduction, 0.25f, 1.0f) * randomDamage;
+        var reduceFraction = resistance / (resistance + (2.0f * reduced));
+        return Mathf.Clamp(1f - reduceFraction, 0.25f, 1.0f) * reduced;
       }));
     }
 

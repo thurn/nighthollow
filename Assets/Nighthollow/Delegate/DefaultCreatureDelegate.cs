@@ -109,7 +109,10 @@ namespace Nighthollow.Delegate
       Creature target,
       Damage damage)
     {
-      var total = Mathf.RoundToInt(damage.Total(self.Data.DamageRange.Value, target.Data.DamageResistance));
+      var total = Mathf.RoundToInt(
+        damage.Total(self.Data.DamageRange.Value,
+        target.Data.DamageResistance,
+        target.Data.DamageReduction));
       target.AddDamage(self, total);
 
       Root.Instance.DamageTextService.ShowDamageText(target, total);
@@ -152,13 +155,24 @@ namespace Nighthollow.Delegate
       }
 
       var total = Mathf.RoundToInt(multiplier *
-                                   damage.Total(self.Data.DamageRange.Value, target.Data.DamageResistance));
+                                   damage.Total(self.Data.DamageRange.Value,
+                                     target.Data.DamageResistance,
+                                     target.Data.DamageReduction));
       target.AddDamage(self, total);
 
       Root.Instance.DamageTextService.ShowDamageText(target, total);
 
-      var lifeDrain = Constants.FractionBasisPoints(total, self.Data.MeleeLifeDrainBp.Value);
+      var lifeDrain = Constants.FractionBasisPoints(total, self.Data.MeleeLifeDrain.Value);
       self.Heal(lifeDrain);
+
+      if (target.IsAlive())
+      {
+        var meleeReflect = Constants.FractionBasisPoints(total, target.Data.MeleeReflect.Value);
+        if (meleeReflect > 0)
+        {
+          self.AddDamage(target, meleeReflect);
+        }
+      }
 
       if (target.IsAlive() && !target.IsStunned() && ShouldStun(self, target, total))
       {

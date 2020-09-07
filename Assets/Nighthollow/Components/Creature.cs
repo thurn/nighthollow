@@ -412,7 +412,7 @@ namespace Nighthollow.Components
     {
       while (true)
       {
-        var interval = _data.EnergyGainIntervalMs.Value;
+        var interval = _data.RegenerationIntervalMs.Value;
         if (interval <= 0)
         {
           break;
@@ -421,6 +421,7 @@ namespace Nighthollow.Components
         yield return new WaitForSeconds(interval / 1000f);
 
         AddEnergy(_data.EnergyGain.Value);
+        Heal(_data.HealthRegeneration.Value);
       }
     }
 
