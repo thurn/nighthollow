@@ -55,7 +55,7 @@ MonoBehaviour:
       _modifiers: []
       _range: 0
   _damageRange:
-    _value: 0
+    _value: 3000
     _modifiers: []
     _range: 0
   _speed:
@@ -74,7 +74,7 @@ MonoBehaviour:
     _value: 5
     _modifiers: []
     _range: 0
-  _energyGainIntervalMs:
+  _regenerationIntervalMs:
     _value: 5000
     _modifiers: []
     _range: 0
@@ -144,7 +144,7 @@ MonoBehaviour:
       _value: 0
       _modifiers: []
       _range: 0
-  _meleeLifeDrainBp:
+  _meleeLifeDrain:
     _value: 0
     _modifiers: []
     _range: 0
@@ -157,6 +157,14 @@ MonoBehaviour:
     _modifiers: []
     _range: 0
   _addedStunChance:
+    _value: 0
+    _modifiers: []
+    _range: 0
+  _healthRegeneration:
+    _value: 0
+    _modifiers: []
+    _range: 0
+  _meleeReflect:
     _value: 0
     _modifiers: []
     _range: 0

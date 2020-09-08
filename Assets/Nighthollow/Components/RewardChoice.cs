@@ -12,43 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
+using Nighthollow.Data;
+using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Nighthollow.Components
 {
-  public sealed class DebugButtons : MonoBehaviour
+  public sealed class RewardChoice : MonoBehaviour
   {
-    public void HideButtons()
+    [SerializeField] Image _image;
+    [SerializeField] TextMeshProUGUI _text;
+
+    public void Initialize(CardItemData card)
     {
-      gameObject.SetActive(false);
+      _image.sprite = card.BaseCard.Image;
+      _text.text = DescriptiveTextHelper.TextForCardItem(card);
     }
 
-    public void Slow()
+    public void OnSelected()
     {
-      Time.timeScale = 0.05f;
-    }
-
-    public void Fast()
-    {
-      Time.timeScale = 1.0f;
-    }
-
-    public void StartGame()
-    {
-      Root.Instance.User.OnStartGame();
-      Root.Instance.Enemy.StartSpawningEnemies();
-    }
-
-    public void ResetGame()
-    {
-      SceneManager.LoadScene("Main", LoadSceneMode.Single);
-    }
-
-    public void Draft()
-    {
-      Root.Instance.RewardService.DraftRewards();
+      Debug.Log("On Selected");
     }
   }
 }

@@ -13,39 +13,35 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Nighthollow.Data
 {
-  /// <summary>
-  /// Represents the model for card and its associated affixes while it is not actively part of a game. Can be converted
-  /// into <see cref="CardData"/>, which is the card representation used while a game is in progress, by calling the
-  /// <see cref="Build"/> method.
-  /// </summary>
-  [CreateAssetMenu(menuName = "Data/CardItem")]
-  public sealed class CardItemData : ScriptableObject
+  [CreateAssetMenu(menuName = "Data/Reward Pool")]
+  public sealed class RewardPoolData : ScriptableObject
   {
-    [SerializeField] CardData _baseCard;
-    public CardData BaseCard => _baseCard;
+    [SerializeField] List<CardData> _baseCards;
+    public IReadOnlyCollection<CardData> BaseCards => _baseCards.AsReadOnly();
 
     [SerializeField] List<AffixData> _affixes;
     public IReadOnlyCollection<AffixData> Affixes => _affixes.AsReadOnly();
 
-    public CardData Build()
+    public RewardPoolData Clone()
     {
-      var result = _baseCard.Clone();
-      foreach (var affix in _affixes)
+      var result = CreateInstance<RewardPoolData>();
+
+      if (_baseCards != null)
       {
-        affix.ApplyTo(result);
+        result._baseCards = _baseCards.Select(c => c.Clone()).ToList();
+      }
+
+      if (_affixes != null)
+      {
+        result._affixes = _affixes.Select(a => a.Clone()).ToList();
       }
 
       return result;
-    }
-
-    public void Initialize(CardData baseCard, List<AffixData> affixes)
-    {
-      _baseCard = baseCard;
-      _affixes = affixes;
     }
   }
 }

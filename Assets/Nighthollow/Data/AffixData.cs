@@ -19,5 +19,7 @@ namespace Nighthollow.Data
   public abstract class AffixData : ScriptableObject
   {
     public abstract void ApplyTo(CardData result);
+
+    public virtual AffixData Clone() => Instantiate(this);
   }
 }

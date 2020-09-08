@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
 using UnityEditor;
@@ -29,7 +30,7 @@ namespace Nighthollow.Editor.Data
         var path = AssetDatabase.GUIDToAssetPath(Selection.assetGUIDs.First());
         var card = AssetDatabase.LoadAssetAtPath<CardData>(path);
         var item = ScriptableObject.CreateInstance<CardItemData>();
-        item.InitializeFromEditor(card);
+        item.Initialize(card, new List<AffixData>());
         AssetDatabase.CreateAsset(item, path.Replace(".asset", " Item.asset"));
       }
     }

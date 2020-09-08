@@ -47,6 +47,9 @@ namespace Nighthollow.Services
     [SerializeField] DamageTextService _damageTextService;
     public DamageTextService DamageTextService => _damageTextService;
 
+    [SerializeField] RewardService _rewardService;
+    public RewardService RewardService => _rewardService;
+
     public static Root Instance
     {
       get
@@ -70,6 +73,7 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_user);
       Errors.CheckNotNull(_enemy);
       Errors.CheckNotNull(_damageTextService);
+      Errors.CheckNotNull(_rewardService);
 
       _instance = this;
     }

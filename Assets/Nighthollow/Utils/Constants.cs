@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Nighthollow.Data;
 using UnityEngine;
 
@@ -40,6 +41,12 @@ namespace Nighthollow.Utils
 
     public static int FractionBasisPoints(int input, int basisPoints) =>
       Mathf.RoundToInt((input * basisPoints) / 10_000.0f);
+
+    public static string PercentageStringBasisPoints(int basisPoints) =>
+      $"{Mathf.RoundToInt(basisPoints / 100.0f)}%";
+
+    public static string MultiplierStringBasisPoints(int basisPoints) =>
+      $"{MultiplierBasisPoints(basisPoints):0.##}x";
 
     public static readonly Vector2 OffScreen = new Vector2(-9999, -9999);
 

@@ -12,43 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Nighthollow.Components
 {
-  public sealed class DebugButtons : MonoBehaviour
+  public sealed class RewardSelector : MonoBehaviour
   {
-    public void HideButtons()
+    [SerializeField] Transform _choices;
+
+    public void Initialize(IEnumerable<CardItemData> cards)
     {
-      gameObject.SetActive(false);
+      foreach (var card in cards)
+      {
+        var choice = Root.Instance.Prefabs.CreateRewardChoice(_choices);
+        choice.Initialize(card);
+      }
     }
 
-    public void Slow()
+    public void Close()
     {
-      Time.timeScale = 0.05f;
-    }
-
-    public void Fast()
-    {
-      Time.timeScale = 1.0f;
-    }
-
-    public void StartGame()
-    {
-      Root.Instance.User.OnStartGame();
-      Root.Instance.Enemy.StartSpawningEnemies();
-    }
-
-    public void ResetGame()
-    {
-      SceneManager.LoadScene("Main", LoadSceneMode.Single);
-    }
-
-    public void Draft()
-    {
-      Root.Instance.RewardService.DraftRewards();
+      Destroy(gameObject);
     }
   }
 }

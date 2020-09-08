@@ -40,6 +40,8 @@ namespace Nighthollow.Services
     [SerializeField] DamageText _hitMedium;
     [SerializeField] DamageText _hitBig;
     [SerializeField] Sprite _stunIcon;
+    [SerializeField] RewardSelector _rewardSelector;
+    [SerializeField] RewardChoice _rewardChoice;
 
     public StatusBarsHolder CreateStatusBars() => ComponentUtils.Instantiate(_statusBars,
       Root.Instance.MainCanvas);
@@ -72,6 +74,12 @@ namespace Nighthollow.Services
       Root.Instance.ObjectPoolService.Create(_hitBig, Constants.OffScreen, Root.Instance.MainCanvas);
 
     public Sprite StunIcon() => Instantiate(_stunIcon);
+
+    public RewardSelector CreateRewardSelector() =>
+      ComponentUtils.Instantiate(_rewardSelector, Root.Instance.MainCanvas);
+
+    public RewardChoice CreateRewardChoice(Transform parent) =>
+      ComponentUtils.Instantiate(_rewardChoice, parent);
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {

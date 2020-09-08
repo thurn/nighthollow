@@ -28,7 +28,7 @@ namespace Nighthollow.Utils
 
     public static Vector2 WorldToCanvasAnchorPosition(Vector2 worldPosition)
     {
-      var canvasRect = Root.Instance.MainCanvas.GetComponent<RectTransform>();
+      var canvasRect = Root.Instance.MainCanvas;
       var viewportPosition = Root.Instance.MainCamera.WorldToViewportPoint(worldPosition);
       return new Vector2(
         ((viewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f)),
