@@ -42,6 +42,9 @@ namespace Nighthollow.Services
     [SerializeField] Sprite _stunIcon;
     [SerializeField] RewardSelector _rewardSelector;
     [SerializeField] RewardChoice _rewardChoice;
+    [SerializeField] DeckBuilder _deckBuilder;
+    [SerializeField] CardRow _cardRow;
+    [SerializeField] CardTooltip _tooltip;
 
     public StatusBarsHolder CreateStatusBars() => ComponentUtils.Instantiate(_statusBars,
       Root.Instance.MainCanvas);
@@ -80,6 +83,14 @@ namespace Nighthollow.Services
 
     public RewardChoice CreateRewardChoice(Transform parent) =>
       ComponentUtils.Instantiate(_rewardChoice, parent);
+
+    public DeckBuilder CreateDeckBuilder() =>
+      ComponentUtils.Instantiate(_deckBuilder, Root.Instance.MainCanvas);
+
+    public CardRow CreateCardRow(Transform parent) =>
+      ComponentUtils.Instantiate(_cardRow, parent);
+
+    public CardTooltip CreateTooltip() => ComponentUtils.Instantiate(_tooltip, Root.Instance.MainCanvas);
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {

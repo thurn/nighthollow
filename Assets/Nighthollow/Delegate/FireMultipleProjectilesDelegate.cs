@@ -25,6 +25,8 @@ namespace Nighthollow.Delegate
     [SerializeField] int _projectileCount;
     [SerializeField] int _projectileDelayMs;
 
+    public override string Description() => $"Fires {_projectileCount} projectiles";
+
     public override void OnFireProjectile(
       Creature self,
       ProjectileData projectileData,

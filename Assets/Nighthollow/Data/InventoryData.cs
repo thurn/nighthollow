@@ -12,16 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Nighthollow.Data
 {
-  public abstract class AffixData : ScriptableObject
+  [CreateAssetMenu(menuName = "Data/Inventory")]
+  public sealed class InventoryData : ScriptableObject
   {
-    public abstract void ApplyTo(CardData result);
+    [SerializeField] List<CardItemData> _cards;
 
-    public abstract void Roll();
+    public IReadOnlyCollection<CardItemData> Cards => _cards;
 
-    public virtual AffixData Clone() => Instantiate(this);
+    public void AddCard(CardItemData card)
+    {
+      _cards.Add(card);
+    }
+
+    public void RemoveCard(CardItemData card)
+    {
+      _cards.Remove(card);
+    }
   }
 }

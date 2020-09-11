@@ -27,5 +27,9 @@ namespace Nighthollow.Data
     {
       result.Creature.Delegate.AddDelegate(_delegate);
     }
+
+    public override void Roll()
+    {
+    }
   }
 }

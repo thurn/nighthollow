@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Services;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,16 +24,21 @@ namespace Nighthollow.Components
   {
     [SerializeField] Image _image;
     [SerializeField] TextMeshProUGUI _text;
+    [SerializeField] CardItemData _card;
+    [SerializeField] RewardSelector _rewardSelector;
 
-    public void Initialize(CardItemData card)
+    public void Initialize(CardItemData card, RewardSelector rewardSelector)
     {
       _image.sprite = card.BaseCard.Image;
       _text.text = DescriptiveTextHelper.TextForCardItem(card);
+      _card = card;
+      _rewardSelector = rewardSelector;
     }
 
     public void OnSelected()
     {
-      Debug.Log("On Selected");
+      Root.Instance.User.Inventory.AddCard(_card);
+      Destroy(_rewardSelector.gameObject);
     }
   }
 }

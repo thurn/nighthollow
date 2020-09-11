@@ -26,26 +26,34 @@ namespace Nighthollow.Components
   {
     [Header("Config")]
     [SerializeField] Hand _hand;
+    public Hand Hand => _hand;
+
     [SerializeField] Deck _deck;
+    public Deck Deck => _deck;
+
     [SerializeField] TextMeshProUGUI _lifeText;
     [SerializeField] TextMeshProUGUI _manaText;
     [SerializeField] RectTransform _influenceRow;
 
+    [SerializeField] InventoryData _inventory;
+    public InventoryData Inventory => _inventory;
+
     [Header("State")]
     [SerializeField] UserData _data;
+    public UserData Data => _data;
+
     [SerializeField] List<Image> _influenceImages;
     [SerializeField] int _life;
     [SerializeField] int _mana;
 
-    public Hand Hand => _hand;
     public int Mana => _mana;
     public int Life => _life;
     public Influence Influence => _data.Influence;
-    public UserData Data => _data;
 
     void Awake()
     {
       _data = Instantiate(_data);
+      _inventory = Instantiate(_inventory);
     }
 
     void Start()

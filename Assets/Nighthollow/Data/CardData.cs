@@ -54,5 +54,12 @@ namespace Nighthollow.Data
 
       return result;
     }
+
+    public CardData Roll()
+    {
+      var result = Clone();
+      result._creature = result.Creature.Roll();
+      return result;
+    }
   }
 }

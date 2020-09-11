@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Nighthollow.Data
@@ -46,6 +47,14 @@ namespace Nighthollow.Data
     {
       _baseCard = baseCard;
       _affixes = affixes;
+    }
+
+    public CardItemData Roll()
+    {
+      var result = CreateInstance<CardItemData>();
+      result._baseCard = _baseCard.Roll();
+      result._affixes = _affixes.Select(a => a.Clone()).ToList();
+      return result;
     }
   }
 }

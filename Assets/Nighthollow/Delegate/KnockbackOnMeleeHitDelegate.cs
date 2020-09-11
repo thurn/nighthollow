@@ -27,6 +27,8 @@ namespace Nighthollow.Delegate
     [SerializeField] float _durationMs;
     [SerializeField] SkillAnimationNumber _forSkill;
 
+    public override string Description() => "Knocks Back Enemies on Melee Hit";
+
     public override void ExecuteMeleeAttack(
       Creature self,
       Creature target,

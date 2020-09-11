@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Services;
@@ -24,6 +25,14 @@ namespace Nighthollow.Delegate
   {
     [SerializeField] int _manaGain;
     [SerializeField] Influence _influence;
+
+    public override string Description() => $"Adds Mana and {InfluenceType()} Influence";
+
+    string InfluenceType()
+    {
+      var schools = Influence.AllSchools.Where(s => _influence.Get(s).Value > 0).ToList();
+      return schools.Count == 1 ? schools.First().ToString() : string.Join(",", schools);
+    }
 
     public override void OnActivate(Creature self)
     {

@@ -26,6 +26,8 @@ namespace Nighthollow.Delegate
     [SerializeField] Vector2 _rotationOffset;
     [SerializeField] int _offsetsPerSide;
 
+    public override string Description() => $"Fires Additional Projectiles on Adjacent Files";
+
     public override void OnFireProjectile(
       Creature self,
       ProjectileData projectileData,

@@ -36,6 +36,8 @@ namespace Nighthollow.Delegate
       Parent = parent;
     }
 
+    public abstract string Description();
+
     public virtual AbstractCreatureDelegate Clone() => Instantiate(this);
 
     /// <summary>Called when a creature is first placed.</summary>

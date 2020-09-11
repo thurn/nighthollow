@@ -25,7 +25,7 @@ MonoBehaviour:
   _health:
     _value: 100
     _modifiers: []
-    _range: 0
+    _range: 200
   _baseAttack:
     _radiant:
       _value: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
     _physical:
       _value: 10
       _modifiers: []
-      _range: 0
+      _range: 10
     _necrotic:
       _value: 0
       _modifiers: []
@@ -78,7 +78,7 @@ MonoBehaviour:
   _critChance:
     _value: 500
     _modifiers: []
-    _range: 0
+    _range: 500
   _critMultiplier:
     _value: 20000
     _modifiers: []

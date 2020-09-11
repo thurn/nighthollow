@@ -58,8 +58,34 @@ namespace Nighthollow.Services
 
       var baseCard = _data.BaseCards.ElementAt(resultIndex).Clone();
       var item = ScriptableObject.CreateInstance<CardItemData>();
-      item.Initialize(baseCard, new List<AffixData>());
-      return item;
+
+      var affixes = new List<AffixData>();
+      for (var i = 0; i < Random.Range(3, 7); ++i)
+      {
+        affixes.Add(RandomAffix());
+      }
+
+      item.Initialize(baseCard, affixes);
+      return item.Roll();
+    }
+
+    AffixData RandomAffix()
+    {
+      var affixSelector = new DynamicRandomSelector<int>();
+      for (var i = 0; i < _data.Affixes.Count; ++i)
+      {
+        var weight = GetValueOrDefault(_affixWeights, i, 1.0f);
+        affixSelector.Add(i, weight * 1000000f);
+      }
+
+      affixSelector.Build();
+
+      var resultIndex = affixSelector.SelectRandomItem();
+      _affixWeights[resultIndex] = GetValueOrDefault(_affixWeights, resultIndex, 1.0f) * 0.1f;
+
+      var affix = _data.Affixes.ElementAt(resultIndex).Clone();
+      affix.Roll();
+      return affix;
     }
 
     public static TValue GetValueOrDefault<TKey, TValue>(

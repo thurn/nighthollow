@@ -19,6 +19,8 @@ namespace Nighthollow.Delegate
 {
   public sealed class CreatureDelegateList : AbstractCreatureDelegate
   {
+    public override string Description() => null;
+
     public void Initialize(List<AbstractCreatureDelegate> delegates)
     {
       if (delegates != null && delegates.Count > 0)

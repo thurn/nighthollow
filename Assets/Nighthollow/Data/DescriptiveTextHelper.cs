@@ -1,5 +1,5 @@
+using System.Linq;
 using System.Text;
-using Nighthollow.Components;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Data
@@ -12,7 +12,9 @@ namespace Nighthollow.Data
       var creature = card.Creature;
       var result = new StringBuilder($"<u><b>{creature.Name}</b></u>");
 
-      AppendParagraph(result, $"<b>Health:</b> {creature.Health.Value}");
+      AppendLine(result, "");
+
+      AppendLine(result, $"<b>Health:</b> {creature.Health.Value}");
       foreach (var type in Damage.AllTypes)
       {
         var damage = creature.BaseAttack.Get(type).Value;
@@ -28,18 +30,33 @@ namespace Nighthollow.Data
 
       AppendLine(result, $"<b>Accuracy/Evasion:</b> {creature.Accuracy.Value}/{creature.Evasion.Value}");
 
+      AppendLine(result, "");
+
+      if (creature.CustomAffixDescription != null && !creature.CustomAffixDescription.Equals(""))
+      {
+        AppendLine(result, creature.CustomAffixDescription);
+      }
+
+      foreach (var description in creature.AllDelegates
+        .Select(creatureDelegate => creatureDelegate.Description())
+        .Where(description => description != null))
+      {
+        AppendLine(result, description);
+      }
+
+      foreach (var description in StatNames.AllStats
+        .Select(statName => creature.Get(statName).DescribeModifiers(statName))
+        .Where(description => description != null))
+      {
+        AppendLine(result, description);
+      }
+
       return result.ToString();
     }
 
     static void AppendLine(StringBuilder result, string text)
     {
       result.Append("\n");
-      result.Append(text);
-    }
-
-    static void AppendParagraph(StringBuilder result, string text)
-    {
-      result.Append("\n\n");
       result.Append(text);
     }
 

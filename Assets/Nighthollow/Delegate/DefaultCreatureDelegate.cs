@@ -26,6 +26,8 @@ namespace Nighthollow.Delegate
 {
   public sealed class DefaultCreatureDelegate : AbstractCreatureDelegate
   {
+    public override string Description() => null;
+
     public override void OnActivate(Creature self)
     {
     }

@@ -28,7 +28,7 @@ namespace Nighthollow.Components
       foreach (var card in cards)
       {
         var choice = Root.Instance.Prefabs.CreateRewardChoice(_choices);
-        choice.Initialize(card);
+        choice.Initialize(card, this);
       }
     }
 

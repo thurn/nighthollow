@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Nighthollow.Data
 {
@@ -29,6 +30,11 @@ namespace Nighthollow.Data
 
     [SerializeField] int _range;
     public int Range => _range;
+
+    public void Roll()
+    {
+      _modifier = _modifier.CloneWithValue(Random.Range(_modifier.Value, _modifier.Value + _range + 1));
+    }
   }
 
   [CreateAssetMenu(menuName = "Data/Stat Affix")]
@@ -43,6 +49,11 @@ namespace Nighthollow.Data
       {
         result.Creature.Get(affixModifier.Stat).AddModifier(affixModifier.Modifier);
       }
+    }
+
+    public override void Roll()
+    {
+      _modifiers.ForEach(m => m.Roll());
     }
   }
 }

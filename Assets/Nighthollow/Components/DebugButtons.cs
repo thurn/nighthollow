@@ -48,7 +48,29 @@ namespace Nighthollow.Components
 
     public void Draft()
     {
-      Root.Instance.RewardService.DraftRewards();
+
+      var rewardSelector = FindObjectOfType<RewardSelector>();
+      if (rewardSelector)
+      {
+        Destroy(rewardSelector.gameObject);
+      }
+      else
+      {
+        Root.Instance.RewardService.DraftRewards();
+      }
+    }
+
+    public void DeckBuilder()
+    {
+      var deckBuilder = FindObjectOfType<DeckBuilder>();
+      if (deckBuilder)
+      {
+        Destroy(deckBuilder.gameObject);
+      }
+      else
+      {
+        Root.Instance.Prefabs.CreateDeckBuilder();
+      }
     }
   }
 }

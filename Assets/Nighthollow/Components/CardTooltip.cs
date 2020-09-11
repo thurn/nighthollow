@@ -12,16 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Data;
+using TMPro;
 using UnityEngine;
 
-namespace Nighthollow.Data
+namespace Nighthollow.Components
 {
-  public abstract class AffixData : ScriptableObject
+  public sealed class CardTooltip : MonoBehaviour
   {
-    public abstract void ApplyTo(CardData result);
+    [SerializeField] TextMeshProUGUI _text;
 
-    public abstract void Roll();
-
-    public virtual AffixData Clone() => Instantiate(this);
+    public void Initialize(CardItemData card)
+    {
+      _text.text = DescriptiveTextHelper.TextForCardItem(card);
+    }
   }
 }

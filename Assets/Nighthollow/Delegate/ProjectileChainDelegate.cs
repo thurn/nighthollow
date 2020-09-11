@@ -24,6 +24,8 @@ namespace Nighthollow.Delegate
     [SerializeField] int _maxChains;
     [SerializeField] int _chainActivationDelayMs;
 
+    public override string Description() => "Projectiles Chain on Hit";
+
     public override void OnProjectileImpact(Creature self, Projectile projectile)
     {
       Parent.OnProjectileImpact(self, projectile);

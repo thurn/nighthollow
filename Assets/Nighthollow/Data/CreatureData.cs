@@ -103,6 +103,8 @@ namespace Nighthollow.Data
     [SerializeField] List<AbstractCreatureDelegate> _delegates;
     CreatureDelegateList _delegateList;
 
+    public IReadOnlyCollection<AbstractCreatureDelegate> AllDelegates => _delegates.AsReadOnly();
+
     public CreatureDelegateList Delegate
     {
       get
@@ -122,6 +124,9 @@ namespace Nighthollow.Data
 
     [SerializeField] List<ProjectileData> _projectiles;
     public IReadOnlyCollection<ProjectileData> Projectiles => _projectiles.AsReadOnly();
+
+    [SerializeField] string _customAffixDescription;
+    public string CustomAffixDescription => _customAffixDescription;
 
     [SerializeField] Stat _health;
     public Stat Health => _health;
@@ -325,6 +330,18 @@ namespace Nighthollow.Data
     void Reset()
     {
       SetDefaults();
+    }
+
+    public CreatureData Roll()
+    {
+      var result = Clone();
+
+      foreach (var stat in StatNames.AllStats)
+      {
+          result.Get(stat).Roll();
+      }
+
+      return result;
     }
   }
 }

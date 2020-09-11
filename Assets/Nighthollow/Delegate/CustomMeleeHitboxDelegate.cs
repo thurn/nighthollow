@@ -26,6 +26,8 @@ namespace Nighthollow.Delegate
 
     [Header("State")] [SerializeField] CustomTriggerCollider _collider;
 
+    public override string Description() => "Splash Damage on Melee Hits";
+
     public override void OnActivate(Creature self)
     {
       _collider = CustomTriggerCollider.Add(self,

@@ -612,6 +612,12 @@ MonoBehaviour:
     type: 3}
   _rewardChoice: {fileID: 7993808672826808358, guid: d6dfcb8fbb55146d0a088b50c62f9767,
     type: 3}
+  _deckBuilder: {fileID: 2130635127249649850, guid: e8407937457b64d789ab5e5a5cc55caf,
+    type: 3}
+  _cardRow: {fileID: 3600882448598180050, guid: f89dbf3132677439d84ed94b8e008e25,
+    type: 3}
+  _tooltip: {fileID: 2050844702568962716, guid: 0bc29e3950697438a8c538c85952f722,
+    type: 3}
 --- !u!114 &169299300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3774,6 +3780,7 @@ RectTransform:
   - {fileID: 1693755274}
   - {fileID: 1342586155}
   - {fileID: 259392386}
+  - {fileID: 1171294648}
   m_Father: {fileID: 1736363420}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3968,6 +3975,181 @@ MonoBehaviour:
   _debugOrderedDraws: 1
   _cards: []
   _weights: 
+--- !u!1001 &1171294647
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1147349105}
+    m_Modifications:
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350861, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_Name
+      value: Deck Builder
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350867, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350867, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350867, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350867, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1147349109}
+    - target: {fileID: 1263093478192350867, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DeckBuilder
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093478192350867, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093479396093394, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_Text
+      value: Deck Builder
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093479396093394, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093479396093394, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263093479396093394, guid: 48f490adc4d54483b9f8c818686887fd,
+        type: 3}
+      propertyPath: m_FontData.m_FontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 48f490adc4d54483b9f8c818686887fd, type: 3}
+--- !u!224 &1171294648 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1263093478192350860, guid: 48f490adc4d54483b9f8c818686887fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 1171294647}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1236180346
 GameObject:
   m_ObjectHideFlags: 0
@@ -3984,7 +4166,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1236180347
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4027,6 +4209,7 @@ MonoBehaviour:
   _lifeText: {fileID: 984673014}
   _manaText: {fileID: 34500149}
   _influenceRow: {fileID: 1016913294}
+  _inventory: {fileID: 11400000, guid: 34a4d0579b4234153b02ce7673c72ba3, type: 2}
   _data: {fileID: 11400000, guid: 871c67786cfdf4577b5d959b0c63d983, type: 2}
   _influenceImages: []
   _life: 0

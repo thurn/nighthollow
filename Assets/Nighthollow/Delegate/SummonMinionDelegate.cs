@@ -24,6 +24,8 @@ namespace Nighthollow.Delegate
   {
     [SerializeField] CreatureData _creature;
 
+    public override string Description() => $"Summons Minions";
+
     public override void OnUseUntargetedSkill(Creature self, SkillData skill)
     {
       Root.Instance.CreatureService.CreateMovingCreature(

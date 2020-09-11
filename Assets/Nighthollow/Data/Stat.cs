@@ -17,17 +17,19 @@ using Nighthollow.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Nighthollow.Data
 {
   public enum Operator
   {
-    Unknown,
-    Set,
-    Add,
-    Increase,
-    Multiply
+    Unknown = 0,
+    Set = 1,
+    Add = 2,
+    Increase = 3,
+    Multiply = 4
   }
 
   [Serializable]
@@ -71,6 +73,17 @@ namespace Nighthollow.Data
         _operator = op,
         _value = value,
         _scopeCreature = new WeakReference<Creature>(Errors.CheckNotNull(creature))
+      };
+    }
+
+    public Modifier CloneWithValue(int value)
+    {
+      return new Modifier
+      {
+        _operator = _operator,
+        _value = value,
+        _endTimeSeconds = _endTimeSeconds,
+        _scopeCreature = _scopeCreature
       };
     }
   }
@@ -129,9 +142,43 @@ namespace Nighthollow.Data
       Recalculate();
     }
 
+    /// <summary>Randomizes the value of this Stat based on its range.</summary>
+    public void Roll()
+    {
+      _value = Random.Range(_value, _value + _range + 1);
+      Recalculate();
+    }
+
     public override string ToString()
     {
       return _cachedValue != _value ? $"{_cachedValue} ({_value})" : _value.ToString();
+    }
+
+    public string DescribeModifiers(StatName name)
+    {
+      if (_modifiers.Count == 0)
+      {
+        return null;
+      }
+
+      var result = new List<string>();
+
+      foreach (var modifier in _modifiers.Where(m => m.Operator == Operator.Add))
+      {
+        result.Add($"{StatNames.FormatStatValue(name, modifier.Value)} Added {StatNames.DisplayName(name)}");
+      }
+
+      foreach (var modifier in _modifiers.Where(m => m.Operator == Operator.Increase))
+      {
+        result.Add($"{StatNames.FormatStatValue(name, modifier.Value)} Increased {StatNames.DisplayName(name)}");
+      }
+
+      foreach (var modifier in _modifiers.Where(m => m.Operator == Operator.Multiply))
+      {
+        result.Add($"{StatNames.FormatStatValue(name, modifier.Value)} More {StatNames.DisplayName(name)}");
+      }
+
+      return string.Join("\n", result);
     }
 
     void Recalculate()
