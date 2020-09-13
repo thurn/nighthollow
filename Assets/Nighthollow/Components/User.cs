@@ -83,6 +83,7 @@ namespace Nighthollow.Components
     public void OnStartGame()
     {
       gameObject.SetActive(true);
+      _deck.OnStartGame();
       StartCoroutine(GainMana());
       StartCoroutine(DrawCards());
 

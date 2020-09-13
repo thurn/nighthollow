@@ -14,26 +14,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startingLife:
     _value: 20
+    _modifiers: []
+    _range: 0
   _startingMana:
     _value: 100
+    _modifiers: []
+    _range: 0
   _influence:
     _light:
       _value: 0
+      _modifiers: []
+      _range: 0
     _sky:
       _value: 0
+      _modifiers: []
+      _range: 0
     _flame:
       _value: 0
+      _modifiers: []
+      _range: 0
     _ice:
       _value: 0
+      _modifiers: []
+      _range: 0
     _earth:
       _value: 0
+      _modifiers: []
+      _range: 0
     _shadow:
       _value: 0
+      _modifiers: []
+      _range: 0
   _startingHandSize:
     _value: 6
+    _modifiers: []
+    _range: 0
   _manaGain:
     _value: 5
+    _modifiers: []
+    _range: 0
   _manaGainIntervalMs:
     _value: 5000
+    _modifiers: []
+    _range: 0
   _cardDrawIntervalMs:
-    _value: 25000
+    _value: 10000
+    _modifiers: []
+    _range: 0

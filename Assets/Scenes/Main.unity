@@ -3971,8 +3971,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60cded59db750c64990647609e09307c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: 6ba38c80e2af44b39a5f70a0d09ade45, type: 2}
-  _debugOrderedDraws: 1
+  _initialCards: {fileID: 11400000, guid: 6ba38c80e2af44b39a5f70a0d09ade45, type: 2}
+  _debugOrderedDraws: 0
   _cards: []
   _weights: 
 --- !u!1001 &1171294647

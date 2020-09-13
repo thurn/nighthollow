@@ -24,7 +24,9 @@ namespace Nighthollow.Components
 {
   public sealed class Deck : MonoBehaviour
   {
-    [FormerlySerializedAs("_data")] [SerializeField] DeckData _initialCards;
+    [FormerlySerializedAs("_data")] [SerializeField]
+    DeckData _initialCards;
+
     [SerializeField] bool _debugOrderedDraws;
 
     [SerializeField] List<CardItemData> _cards;
@@ -37,13 +39,20 @@ namespace Nighthollow.Components
     {
       _initialCards = Instantiate(_initialCards);
       _cards = _initialCards.Cards.ToList();
-      _weights = Enumerable.Repeat(4000, _cards.Count).ToList();
+    }
+
+    public void OnStartGame()
+    {
+      foreach (var card in _cards)
+      {
+        _weights.Add(card.BaseCard.Creature.IsManaCreature ? 24000 : 4000);
+      }
     }
 
     public void AddCard(CardItemData card)
     {
       var existing = _cards.FindIndex(c => c.BaseCard.Creature.Name.Equals(card.BaseCard.Creature.Name));
-      
+
       if (existing != -1)
       {
         Root.Instance.User.Inventory.AddCard(_cards[existing]);
@@ -80,21 +89,7 @@ namespace Nighthollow.Components
 
     void DecrementWeight(int index)
     {
-      switch (_weights[index])
-      {
-        case 4000:
-          _weights[index] = 3000;
-          break;
-        case 3000:
-          _weights[index] = 2000;
-          break;
-        case 2000:
-          _weights[index] = 1000;
-          break;
-        default:
-          _weights[index] /= 2;
-          break;
-      }
+      _weights[index] = _weights[index] > 1000 ? _weights[index] - 1000 : _weights[index] / 2;
     }
   }
 }

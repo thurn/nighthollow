@@ -125,6 +125,14 @@ namespace Nighthollow.Data
     [SerializeField] List<ProjectileData> _projectiles;
     public IReadOnlyCollection<ProjectileData> Projectiles => _projectiles.AsReadOnly();
 
+    /// <summary>
+    /// If true, this creature will use the special "mana generator" rules for calculating its draw probability
+    /// from the deck.
+    /// </summary>
+    [SerializeField] bool _isManaCreature;
+
+    public bool IsManaCreature => _isManaCreature;
+
     [SerializeField] string _customAffixDescription;
     public string CustomAffixDescription => _customAffixDescription;
 
@@ -338,7 +346,7 @@ namespace Nighthollow.Data
 
       foreach (var stat in StatNames.AllStats)
       {
-          result.Get(stat).Roll();
+        result.Get(stat).Roll();
       }
 
       return result;

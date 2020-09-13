@@ -22,6 +22,8 @@ MonoBehaviour:
     _animation: 1
     _skillType: 2
   _projectiles: []
+  _isManaCreature: 1
+  _customAffixDescription: 
   _health:
     _value: 100
     _modifiers: []

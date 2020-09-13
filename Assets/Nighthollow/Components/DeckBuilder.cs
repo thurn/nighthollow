@@ -20,6 +20,7 @@ namespace Nighthollow.Components
   public sealed class DeckBuilder : MonoBehaviour
   {
     [SerializeField] RectTransform _inventory;
+    [SerializeField] RectTransform _deckMana;
     [SerializeField] RectTransform _deck;
 
     void OnEnable()
@@ -39,6 +40,11 @@ namespace Nighthollow.Components
         Destroy(child.gameObject);
       }
 
+      foreach (Transform child in _deckMana)
+      {
+        Destroy(child.gameObject);
+      }
+
       foreach (var card in Root.Instance.User.Inventory.Cards)
       {
         Root.Instance.Prefabs.CreateCardRow(_inventory).Initialize(card, CardRow.ButtonAction.MoveToDeck, this);
@@ -46,7 +52,13 @@ namespace Nighthollow.Components
 
       foreach (var card in Root.Instance.User.Deck.Cards)
       {
-        Root.Instance.Prefabs.CreateCardRow(_deck).Initialize(card, CardRow.ButtonAction.MoveToInventory, this);
+        var manaCreature = card.BaseCard.Creature.IsManaCreature;
+        var row = Root.Instance.Prefabs.CreateCardRow(manaCreature ? _deckMana : _deck);
+        row.Initialize(card, CardRow.ButtonAction.MoveToInventory, this);
+        if (manaCreature)
+        {
+          row.GetComponent<RectTransform>().anchoredPosition = new Vector2(315, 75);
+        }
       }
     }
 
