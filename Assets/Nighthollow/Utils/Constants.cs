@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Nighthollow.Data;
 using UnityEngine;
 
@@ -27,6 +26,7 @@ namespace Nighthollow.Utils
     public const float EnemyCreatureEndingX = -15.0f;
     public const float CreatureDespawnLeftX = -20.0f;
     public const float CreatureDespawnRightX = 25.0f;
+    public const float EnemyCreatureRemoveLifeX = -11.0f;
 
     public const int UserCreaturesLayer = 8;
     public const int EnemyCreaturesLayer = 9;

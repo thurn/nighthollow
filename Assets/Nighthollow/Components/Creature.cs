@@ -58,6 +58,7 @@ namespace Nighthollow.Components
     [SerializeField] SortingGroup _sortingGroup;
     [SerializeField] CustomTriggerCollider _projectileCollider;
     [SerializeField] Coroutine _coroutine;
+    [SerializeField] bool _appliedLifeLoss;
 
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
@@ -450,6 +451,13 @@ namespace Nighthollow.Components
           transform.position.x < Constants.CreatureDespawnLeftX)
       {
         DestroyCreature();
+      }
+      else if (Owner == PlayerName.Enemy &&
+               !_appliedLifeLoss &&
+               transform.position.x < Constants.EnemyCreatureRemoveLifeX)
+      {
+        Root.Instance.User.LoseLife(1);
+        _appliedLifeLoss = true;
       }
 
       if (_data.Health.Value > 0)

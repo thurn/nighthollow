@@ -549,6 +549,7 @@ MonoBehaviour:
   _creatureService: {fileID: 169299295}
   _user: {fileID: 1236180348}
   _enemy: {fileID: 1160944780}
+  _inventoryService: {fileID: 1089198656}
   _damageTextService: {fileID: 169299298}
   _rewardService: {fileID: 169299300}
 --- !u!114 &169299298
@@ -618,6 +619,7 @@ MonoBehaviour:
     type: 3}
   _tooltip: {fileID: 2050844702568962716, guid: 0bc29e3950697438a8c538c85952f722,
     type: 3}
+  _dialog: {fileID: 8397404786072499538, guid: ebf39abfca6dd4cef984e028f04c6a14, type: 3}
 --- !u!114 &169299300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -979,7 +981,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &217527509
 MonoBehaviour:
@@ -3550,7 +3552,7 @@ Transform:
   - {fileID: 421384585}
   - {fileID: 232572679}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &984673012
 GameObject:
@@ -3608,7 +3610,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: 5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 872851581eefc47b39a48f0821ce141a, type: 2}
   m_sharedMaterial: {fileID: -5793805892377041443, guid: 872851581eefc47b39a48f0821ce141a,
@@ -3678,7 +3680,7 @@ MonoBehaviour:
   m_margin: {x: 1.3375196, y: 0, z: 56.17604, w: 0}
   m_textInfo:
     textComponent: {fileID: 984673014}
-    characterCount: 2
+    characterCount: 1
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -3744,6 +3746,60 @@ RectTransform:
   m_AnchoredPosition: {x: 270, y: -5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1089198654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1089198655}
+  - component: {fileID: 1089198656}
+  m_Layer: 0
+  m_Name: Inventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1089198655
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089198654}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4, y: -4, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1089198656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089198654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c9bf1605b9b4e52acc6bfb25ea99c0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inventory: []
+  _deck:
+  - {fileID: 11400000, guid: 9d9f27ca3b5d146f1a41d50cccf33d68, type: 2}
+  - {fileID: 11400000, guid: ead50e52e06ce4f2ca65a12554044e3d, type: 2}
+  - {fileID: 11400000, guid: 2aff49e21782e4045ab4ad257dfdd44c, type: 2}
+  - {fileID: 11400000, guid: 6403e932988dc4739ae1320dc1f1856f, type: 2}
+  - {fileID: 11400000, guid: 483b88be0c29f47c4a52dbbe72e6a186, type: 2}
+  - {fileID: 11400000, guid: 0c0b7c9e304674906ab3d2dc66846c15, type: 2}
+  - {fileID: 11400000, guid: f39d312788a2849a6b575197e53b311e, type: 2}
+  - {fileID: 11400000, guid: 336f3527063864942a435535a9a3f4d3, type: 2}
+  - {fileID: 11400000, guid: c7c43c13563ee41899fca8f297bd1206, type: 2}
 --- !u!1 &1147349104
 GameObject:
   m_ObjectHideFlags: 0
@@ -3971,7 +4027,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60cded59db750c64990647609e09307c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialCards: {fileID: 11400000, guid: 6ba38c80e2af44b39a5f70a0d09ade45, type: 2}
   _debugOrderedDraws: 0
   _cards: []
   _weights: 
@@ -4209,7 +4264,6 @@ MonoBehaviour:
   _lifeText: {fileID: 984673014}
   _manaText: {fileID: 34500149}
   _influenceRow: {fileID: 1016913294}
-  _inventory: {fileID: 11400000, guid: 34a4d0579b4234153b02ce7673c72ba3, type: 2}
   _data: {fileID: 11400000, guid: 871c67786cfdf4577b5d959b0c63d983, type: 2}
   _influenceImages: []
   _life: 0
@@ -5117,7 +5171,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1687258586
 MonoBehaviour:
@@ -5421,7 +5475,7 @@ RectTransform:
   - {fileID: 1147349105}
   - {fileID: 1160944779}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using DataStructures.RandomSelector;
 using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Nighthollow.Components
 {
   public sealed class Enemy : MonoBehaviour
   {
     [SerializeField] EnemiesData _data;
+    [SerializeField] int _spawnCount;
+    [SerializeField] int _deathCount;
 
     void Awake()
     {
@@ -36,6 +38,16 @@ namespace Nighthollow.Components
       StartCoroutine(SpawnAsync());
     }
 
+    /// <summary>Called when an enemy is killed or reaches the victory line.</summary>
+    public void OnEnemyCreatureKilled()
+    {
+      _deathCount++;
+      if (_deathCount >= _data.EnemiesToSpawn)
+      {
+        Root.Instance.Prefabs.ShowDialog("Victory!", () => { SceneManager.LoadScene("Main", LoadSceneMode.Single); });
+      }
+    }
+
     IEnumerator<YieldInstruction> SpawnAsync()
     {
       yield return new WaitForSeconds(_data.InitialSpawnDelayMs / 1000f);
@@ -44,8 +56,9 @@ namespace Nighthollow.Components
         RandomFile(),
         Constants.EnemyCreatureStartingX,
         Constants.EnemyCreatureYOffset);
+      _spawnCount = 1;
 
-      while (true)
+      while (_spawnCount < _data.EnemiesToSpawn)
       {
         yield return new WaitForSeconds(_data.SpawnDelayMs / 1000f);
         Root.Instance.CreatureService.CreateMovingCreature(
@@ -53,6 +66,7 @@ namespace Nighthollow.Components
           RandomFile(),
           Constants.EnemyCreatureStartingX,
           Constants.EnemyCreatureYOffset);
+        _spawnCount++;
       }
     }
 

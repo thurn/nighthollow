@@ -37,7 +37,7 @@ namespace Nighthollow.Components
 
     public void OnSelected()
     {
-      Root.Instance.User.Inventory.AddCard(_card);
+      InventoryService.Instance.AddToInventory(_card);
       Destroy(_rewardSelector.gameObject);
     }
   }

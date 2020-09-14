@@ -14,18 +14,20 @@
 
 using Nighthollow.Data;
 using Nighthollow.Services;
-using System;
 using System.Collections.Generic;
+using Nighthollow.Utils;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+// ReSharper disable IteratorNeverReturns
 
 namespace Nighthollow.Components
 {
   public sealed class User : MonoBehaviour
   {
-    [Header("Config")]
-    [SerializeField] Hand _hand;
+    [Header("Config")] [SerializeField] Hand _hand;
     public Hand Hand => _hand;
 
     [SerializeField] Deck _deck;
@@ -35,11 +37,7 @@ namespace Nighthollow.Components
     [SerializeField] TextMeshProUGUI _manaText;
     [SerializeField] RectTransform _influenceRow;
 
-    [SerializeField] InventoryData _inventory;
-    public InventoryData Inventory => _inventory;
-
-    [Header("State")]
-    [SerializeField] UserData _data;
+    [Header("State")] [SerializeField] UserData _data;
     public UserData Data => _data;
 
     [SerializeField] List<Image> _influenceImages;
@@ -53,7 +51,6 @@ namespace Nighthollow.Components
     void Awake()
     {
       _data = Instantiate(_data);
-      _inventory = Instantiate(_inventory);
     }
 
     void Start()
@@ -76,14 +73,14 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(_data.CardDrawIntervalMs.Value / 1000f);
-        _hand.DrawCards(new List<CardData> { _deck.Draw() });
+        _hand.DrawCards(new List<CardData> {_deck.Draw()});
       }
     }
 
     public void OnStartGame()
     {
       gameObject.SetActive(true);
-      _deck.OnStartGame();
+      _deck.OnStartGame(InventoryService.Instance.Deck);
       StartCoroutine(GainMana());
       StartCoroutine(DrawCards());
 
@@ -99,6 +96,20 @@ namespace Nighthollow.Components
     public void SpendMana(int amount)
     {
       _mana -= amount;
+    }
+
+    public void LoseLife(int amount)
+    {
+      Errors.CheckArgument(amount >= 0, "Cannot lose a negative amount of life");
+      _life -= amount;
+      if (_life <= 0)
+      {
+        Root.Instance.Prefabs.ShowDialog("Game Over", () => { SceneManager.LoadScene("Main", LoadSceneMode.Single); });
+      }
+      else
+      {
+        Root.Instance.Enemy.OnEnemyCreatureKilled();
+      }
     }
 
     void Update()

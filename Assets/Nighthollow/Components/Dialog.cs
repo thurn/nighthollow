@@ -12,26 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
+using System;
+using TMPro;
 using UnityEngine;
 
-namespace Nighthollow.Data
+namespace Nighthollow.Components
 {
-  [CreateAssetMenu(menuName = "Data/Inventory")]
-  public sealed class InventoryData : ScriptableObject
+  public sealed class Dialog : MonoBehaviour
   {
-    [SerializeField] List<CardItemData> _cards;
+    [SerializeField] TextMeshProUGUI _text;
+    float _oldTimeScale;
+    Action _onClose;
 
-    public IReadOnlyCollection<CardItemData> Cards => _cards;
-
-    public void AddCard(CardItemData card)
+    public void Initialize(string text, Action onClose)
     {
-      _cards.Add(card);
+      _text.text = text;
+      _onClose = onClose;
+      _oldTimeScale = Time.timeScale;
+      Time.timeScale = 0f;
     }
 
-    public void RemoveCard(CardItemData card)
+    public void OnClose()
     {
-      _cards.Remove(card);
+      Time.timeScale = _oldTimeScale;
+      Destroy(gameObject);
+      _onClose?.Invoke();
     }
   }
 }

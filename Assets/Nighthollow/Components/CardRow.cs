@@ -61,17 +61,13 @@ namespace Nighthollow.Components
 
     public void OnButtonClick()
     {
-      var deck = Root.Instance.User.Deck;
-      var inventory = Root.Instance.User.Inventory;
       switch (_action)
       {
         case ButtonAction.MoveToDeck:
-          inventory.RemoveCard(_card);
-          deck.AddCard(_card);
+          InventoryService.Instance.MoveToDeck(_card);
           break;
         case ButtonAction.MoveToInventory:
-          deck.RemoveCard(_card);
-          inventory.AddCard(_card);
+          InventoryService.Instance.MoveToInventory(_card);
           break;
         default:
           throw new ArgumentOutOfRangeException(nameof(_action), _action, null);

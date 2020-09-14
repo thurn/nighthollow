@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Utils;
@@ -45,6 +46,7 @@ namespace Nighthollow.Services
     [SerializeField] DeckBuilder _deckBuilder;
     [SerializeField] CardRow _cardRow;
     [SerializeField] CardTooltip _tooltip;
+    [SerializeField] Dialog _dialog;
 
     public StatusBarsHolder CreateStatusBars() => ComponentUtils.Instantiate(_statusBars,
       Root.Instance.MainCanvas);
@@ -91,6 +93,9 @@ namespace Nighthollow.Services
       ComponentUtils.Instantiate(_cardRow, parent);
 
     public CardTooltip CreateTooltip() => ComponentUtils.Instantiate(_tooltip, Root.Instance.MainCanvas);
+
+    public void ShowDialog(string text, Action onClose) =>
+      ComponentUtils.Instantiate(_dialog, Root.Instance.MainCanvas).Initialize(text, onClose);
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {

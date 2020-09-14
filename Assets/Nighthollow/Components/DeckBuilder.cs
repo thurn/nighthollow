@@ -45,12 +45,12 @@ namespace Nighthollow.Components
         Destroy(child.gameObject);
       }
 
-      foreach (var card in Root.Instance.User.Inventory.Cards)
+      foreach (var card in InventoryService.Instance.Inventory)
       {
         Root.Instance.Prefabs.CreateCardRow(_inventory).Initialize(card, CardRow.ButtonAction.MoveToDeck, this);
       }
 
-      foreach (var card in Root.Instance.User.Deck.Cards)
+      foreach (var card in InventoryService.Instance.Deck)
       {
         var manaCreature = card.BaseCard.Creature.IsManaCreature;
         var row = Root.Instance.Prefabs.CreateCardRow(manaCreature ? _deckMana : _deck);

@@ -34,6 +34,10 @@ namespace Nighthollow.Delegate
 
     public override void OnDeath(Creature self)
     {
+      if (self.Owner == PlayerName.Enemy)
+      {
+        Root.Instance.Enemy.OnEnemyCreatureKilled();
+      }
     }
 
     public override bool ShouldUseUntargetedSkill(Creature self)

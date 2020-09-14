@@ -43,6 +43,14 @@ namespace Nighthollow.Data
       return result;
     }
 
+    public CardItemData Clone()
+    {
+      var card = Instantiate(this);
+      card._baseCard = _baseCard.Clone();
+      card._affixes = _affixes.Select(a => a.Clone()).ToList();
+      return card;
+    }
+
     public void Initialize(CardData baseCard, List<AffixData> affixes)
     {
       _baseCard = baseCard;

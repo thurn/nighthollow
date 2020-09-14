@@ -16,55 +16,28 @@ using DataStructures.RandomSelector;
 using Nighthollow.Data;
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Services;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Nighthollow.Components
 {
   public sealed class Deck : MonoBehaviour
   {
-    [FormerlySerializedAs("_data")] [SerializeField]
-    DeckData _initialCards;
-
     [SerializeField] bool _debugOrderedDraws;
 
     [SerializeField] List<CardItemData> _cards;
-    public IReadOnlyCollection<CardItemData> Cards => _cards;
 
     [SerializeField] List<int> _weights;
     int _lastDraw;
 
-    void Awake()
+    public void OnStartGame(IEnumerable<CardItemData> cards)
     {
-      _initialCards = Instantiate(_initialCards);
-      _cards = _initialCards.Cards.ToList();
-    }
+      _weights.Clear();
+      _cards = cards.ToList();
 
-    public void OnStartGame()
-    {
       foreach (var card in _cards)
       {
         _weights.Add(card.BaseCard.Creature.IsManaCreature ? 24000 : 4000);
       }
-    }
-
-    public void AddCard(CardItemData card)
-    {
-      var existing = _cards.FindIndex(c => c.BaseCard.Creature.Name.Equals(card.BaseCard.Creature.Name));
-
-      if (existing != -1)
-      {
-        Root.Instance.User.Inventory.AddCard(_cards[existing]);
-        _cards.RemoveAt(existing);
-      }
-
-      _cards.Add(card);
-    }
-
-    public void RemoveCard(CardItemData card)
-    {
-      _cards.Remove(card);
     }
 
     public CardData Draw()

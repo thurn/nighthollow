@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: User
   m_EditorClassIdentifier: 
   _startingLife:
-    _value: 20
+    _value: 5
     _modifiers: []
     _range: 0
   _startingMana:

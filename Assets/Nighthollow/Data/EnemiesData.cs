@@ -29,5 +29,8 @@ namespace Nighthollow.Data
 
     [SerializeField] int _spawnDelayMs;
     public int SpawnDelayMs => _spawnDelayMs;
+
+    [SerializeField] int _enemiesToSpawn;
+    public int EnemiesToSpawn => _enemiesToSpawn;
   }
 }
