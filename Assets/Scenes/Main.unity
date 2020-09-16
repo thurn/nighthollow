@@ -549,7 +549,6 @@ MonoBehaviour:
   _creatureService: {fileID: 169299295}
   _user: {fileID: 1236180348}
   _enemy: {fileID: 1160944780}
-  _inventoryService: {fileID: 1089198656}
   _damageTextService: {fileID: 169299298}
   _rewardService: {fileID: 169299300}
 --- !u!114 &169299298
@@ -3939,6 +3938,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data: {fileID: 11400000, guid: 485eab3b3bdd3462a8b55971d34f0396, type: 2}
+  _spawnCount: 0
+  _deathCount: 0
 --- !u!1 &1166200425
 GameObject:
   m_ObjectHideFlags: 0

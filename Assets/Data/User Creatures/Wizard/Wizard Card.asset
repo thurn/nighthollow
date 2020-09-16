@@ -15,19 +15,31 @@ MonoBehaviour:
   _cardPrefab: {fileID: 8201078851043189447, guid: b10a80a90394244668d5089010634cd3,
     type: 3}
   _cost:
-    _manaCost: 50
+    _manaCost: 10
     _influenceCost:
       _light:
         _value: 0
+        _modifiers: []
+        _range: 0
       _sky:
         _value: 0
+        _modifiers: []
+        _range: 0
       _flame:
-        _value: 1
+        _value: 0
+        _modifiers: []
+        _range: 0
       _ice:
         _value: 0
+        _modifiers: []
+        _range: 0
       _earth:
         _value: 0
+        _modifiers: []
+        _range: 0
       _shadow:
         _value: 0
+        _modifiers: []
+        _range: 0
   _image: {fileID: 21300000, guid: d2b8314f57f404141a1bfa2c8b86684d, type: 3}
   _creature: {fileID: 11400000, guid: 6af0054ef738c074fac463b74c49e3fd, type: 2}
