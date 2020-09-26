@@ -36,7 +36,7 @@ namespace Nighthollow.Delegate
     {
       if (self.Owner == PlayerName.Enemy)
       {
-        Root.Instance.Enemy.OnEnemyCreatureKilled();
+        Root.Instance.Enemy.OnEnemyCreatureRemoved();
       }
     }
 

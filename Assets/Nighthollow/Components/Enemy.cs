@@ -39,7 +39,7 @@ namespace Nighthollow.Components
     }
 
     /// <summary>Called when an enemy is killed or reaches the victory line.</summary>
-    public void OnEnemyCreatureKilled()
+    public void OnEnemyCreatureRemoved()
     {
       _deathCount++;
       if (_deathCount >= _data.EnemiesToSpawn)

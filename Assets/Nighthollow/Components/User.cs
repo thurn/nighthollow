@@ -108,7 +108,7 @@ namespace Nighthollow.Components
       }
       else
       {
-        Root.Instance.Enemy.OnEnemyCreatureKilled();
+        Root.Instance.Enemy.OnEnemyCreatureRemoved();
       }
     }
 
