@@ -14,33 +14,11 @@
 
 using Nighthollow.Utils;
 using System.Collections.Generic;
+using Nighthollow.Generated;
 using UnityEngine;
 
 namespace Nighthollow.Model
 {
-  public enum RankValue
-  {
-    Unknown,
-    Rank1,
-    Rank2,
-    Rank3,
-    Rank4,
-    Rank5,
-    Rank6,
-    Rank7,
-    Rank8
-  }
-
-  public enum FileValue
-  {
-    Unknown,
-    File1,
-    File2,
-    File3,
-    File4,
-    File5
-  }
-
   public static class BoardPositions
   {
     public static readonly IEnumerable<RankValue> AllRanks = new List<RankValue>

@@ -13,14 +13,15 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Stats;
 
 namespace Nighthollow.Model
 {
-  public sealed class EnemyData
+  public sealed class EnemyData : AbstractGameEntity
   {
     public IReadOnlyCollection<CreatureData> Enemies { get; }
-    public StatTable Stats { get; }
+    public override StatTable Stats { get; }
 
     public EnemyData(
       IReadOnlyCollection<CreatureData> enemies,
@@ -29,5 +30,7 @@ namespace Nighthollow.Model
       Enemies = enemies;
       Stats = stats;
     }
+
+    public EnemyData Clone() => new EnemyData(Enemies.Select(e => e.Clone()).ToList(), Stats.Clone());
   }
 }

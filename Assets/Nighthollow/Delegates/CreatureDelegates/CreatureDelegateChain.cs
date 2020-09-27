@@ -51,15 +51,6 @@ namespace Nighthollow.Delegates.CreatureDelegates
       return Optional<SkillData>.None();
     }
 
-    public void OnFireProjectile(Creature self, FireProjectileEffect effect) =>
-      Execute(self, (d, c) => d.OnFireProjectile(c, effect));
-
-    public void OnMeleeHit(Creature self, ApplyMeleeHitEffect effect) =>
-      Execute(self, (d, c) => d.OnMeleeHit(c, effect));
-
-    public void OnProjectileImpact(Creature self, Projectile projectile) =>
-      Execute(self, (d, c) => d.OnProjectileImpact(c, projectile));
-
     public void OnKilledEnemy(Creature self, Creature enemy, int damageAmount) =>
       Execute(self, (d, c) => d.OnKilledEnemy(c, enemy, damageAmount));
 

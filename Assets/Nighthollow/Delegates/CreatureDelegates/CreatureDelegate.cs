@@ -36,21 +36,6 @@ namespace Nighthollow.Delegates.CreatureDelegates
     /// </summary>
     public virtual Optional<SkillData> SelectSkill(Creature self) => Optional<SkillData>.None();
 
-    /// <summary>Called when the creature has fired a projectile.</summary>
-    public virtual void OnFireProjectile(CreatureContext c, FireProjectileEffect effect)
-    {
-    }
-
-    /// <summary>Called when the creature has hit an enemy with a melee attack.</summary>
-    public virtual void OnMeleeHit(CreatureContext c, ApplyMeleeHitEffect effect)
-    {
-    }
-
-    /// <summary>Called when the creature's projectile has hit an enemy.</summary>
-    public virtual void OnProjectileImpact(CreatureContext c, Projectile projectile)
-    {
-    }
-
     /// <summary>Called when a creature kills an enemy creature.</summary>
     public virtual void OnKilledEnemy(CreatureContext c, Creature enemy, int damageAmount)
     {

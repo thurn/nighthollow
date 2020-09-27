@@ -34,7 +34,7 @@ namespace Nighthollow.Stats
     public IntStat Deserialize(string value) => new IntStat(int.Parse(value));
   }
 
-  public sealed class IntStat : IStat
+  public sealed class IntStat : IStat<IntStat>
   {
     readonly int _initialValue;
     readonly Dictionary<Operator, List<IModifier>> _modifiers = new Dictionary<Operator, List<IModifier>>();
@@ -47,6 +47,14 @@ namespace Nighthollow.Stats
       _computedValue = initialValue;
       _modifiers[Operator.Add] = new List<IModifier>();
       _modifiers[Operator.Increase] = new List<IModifier>();
+    }
+
+    IntStat(int initialValue, Dictionary<Operator, List<IModifier>> modifiers, bool hasDynamicModifiers)
+    {
+      _initialValue = initialValue;
+      _modifiers = modifiers.ToDictionary(e => e.Key, e => e.Value.Select(m => m.Clone()).ToList());
+      _hasDynamicModifiers = hasDynamicModifiers;
+      Recalculate();
     }
 
     public int Value
@@ -68,6 +76,8 @@ namespace Nighthollow.Stats
       _hasDynamicModifiers |= modifier.IsDynamic();
       Recalculate();
     }
+
+    public IntStat Clone() => new IntStat(_initialValue, _modifiers, _hasDynamicModifiers);
 
     void Recalculate()
     {

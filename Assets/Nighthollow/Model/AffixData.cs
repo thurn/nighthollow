@@ -13,16 +13,17 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
 namespace Nighthollow.Model
 {
-  public sealed class AffixData
+  public sealed class AffixData : AbstractGameEntity
   {
     public string Description { get; }
     public IReadOnlyCollection<SkillData> AddedSkills { get; }
-    public StatTable Stats { get; }
+    public override StatTable Stats { get; }
     public List<CreatureDelegateId> AddedDelegates { get; }
 
     public AffixData(
@@ -36,5 +37,11 @@ namespace Nighthollow.Model
       AddedDelegates = addedDelegates;
       AddedSkills = addedSkills;
     }
+
+    public AffixData Clone() =>
+      new AffixData(Description,
+        AddedSkills.Select(s => s.Clone()).ToList(),
+        Stats.Clone(),
+        AddedDelegates);
   }
 }

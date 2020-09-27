@@ -29,6 +29,8 @@ namespace Nighthollow.Stats
 
     public StaticModifier Modifier => _modifier;
 
+    public IModifier Clone() => this;
+
     public bool IsDynamic() => true;
 
     public bool IsValid() => Time.time < _endTimeSeconds;

@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using DG.Tweening;
-using Nighthollow.Data;
-using Nighthollow.Services;
-using Nighthollow.Utils;
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
+using Nighthollow.Model;
+using Nighthollow.Services;
 using UnityEngine;
 
 namespace Nighthollow.Components
@@ -64,7 +63,8 @@ namespace Nighthollow.Components
     {
       foreach (var cardData in cards)
       {
-        var card = ComponentUtils.Instantiate(cardData.CardPrefab, Root.Instance.MainCanvas);
+        var card = Root.Instance.AssetService.InstantiatePrefab<Card>(
+          cardData.CardPrefabAddress, Root.Instance.MainCanvas);
         card.Initialize(cardData);
         card.transform.position = _deckPosition.position;
         card.transform.localScale = Vector2.one * _initialCardScale;

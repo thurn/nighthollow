@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Generated;
 using Nighthollow.Services;
 using UnityEngine;
 
@@ -52,7 +53,7 @@ namespace Nighthollow.Components
 
       foreach (var card in InventoryService.Instance.Deck)
       {
-        var manaCreature = card.BaseCard.Creature.IsManaCreature;
+        var manaCreature = card.Card.GetBool(Stat.IsManaCreature);
         var row = Root.Instance.Prefabs.CreateCardRow(manaCreature ? _deckMana : _deck);
         row.Initialize(card, CardRow.ButtonAction.MoveToInventory, this);
         if (manaCreature)

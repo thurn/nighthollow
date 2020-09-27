@@ -87,7 +87,7 @@ namespace Nighthollow.Delegates.SkillDelegates
 
       if (c.Skill.Delegate.CheckForStun(c, target, damage))
       {
-        results.Add(new StunEffect(target, c.Self.Data.StunDuration.Value));
+        results.Add(new StunEffect(target, c.Self.Data.GetInt(Stat.StunDuration)));
         results.Add(new SkillEventEffect(SkillEventEffect.Event.Stun));
       }
     }

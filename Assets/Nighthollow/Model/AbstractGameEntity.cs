@@ -1,4 +1,4 @@
-﻿// Copyright © 2020-present Derek Thurn
+// Copyright © 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,21 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using UnityEngine;
+using Nighthollow.Stats;
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
-  [Serializable]
-  public sealed class SkillData
+  public abstract class AbstractGameEntity
   {
-    [SerializeField] int _energyCost;
-    public int EnergyCost => _energyCost;
-    
-    [SerializeField] SkillAnimationNumber _animation;
-    public SkillAnimationNumber Animation => _animation;
+    public abstract StatTable Stats { get; }
 
-    [SerializeField] SkillType _skillType;
-    public SkillType SkillType => _skillType;
+    public int GetInt(IntStatId statId) => Stats.Get(statId).Value;
+
+    public bool GetBool(BoolStatId statId) => Stats.Get(statId).Value;
   }
 }

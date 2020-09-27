@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System;
-using Nighthollow.Data;
+using Nighthollow.Model;
 using Nighthollow.Services;
 using TMPro;
 using UnityEngine;
@@ -38,11 +38,11 @@ namespace Nighthollow.Components
       MoveToInventory
     }
 
-    public void Initialize(CardItemData card, ButtonAction action, DeckBuilder deckBuilder)
+    public void Initialize(CardItemData item, ButtonAction action, DeckBuilder deckBuilder)
     {
-      _text.text = card.BaseCard.Creature.Name;
-      _image.sprite = card.BaseCard.Image;
-      _card = card;
+      _text.text = item.Card.Creature.Name;
+      _image.sprite = Root.Instance.AssetService.GetImage(item.Card.ImageAddress);
+      _card = item;
       _action = action;
       _deckBuilder = deckBuilder;
 

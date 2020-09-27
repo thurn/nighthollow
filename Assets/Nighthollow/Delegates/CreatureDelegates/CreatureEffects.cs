@@ -82,11 +82,6 @@ namespace Nighthollow.Delegates.CreatureDelegates
       FiringDirectionOffset = firingDirectionOffset;
     }
 
-    public override void InvokeEvent(CreatureDelegateChain chain, Creature self)
-    {
-      chain.OnFireProjectile(self, this);
-    }
-
     public override void Execute(Creature self)
     {
       throw new System.NotImplementedException();

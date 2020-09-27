@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
-using Nighthollow.Services;
 using System.Collections.Generic;
+using Nighthollow.Generated;
+using Nighthollow.Model;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using TMPro;
 using UnityEngine;
@@ -46,25 +47,24 @@ namespace Nighthollow.Components
 
     public int Mana => _mana;
     public int Life => _life;
-    public Influence Influence => _data.Influence;
 
     void Awake()
     {
-      _data = Instantiate(_data);
+      _data = _data.Clone();
     }
 
     void Start()
     {
-      _life = _data.StartingLife.Value;
-      _mana = _data.StartingMana.Value;
+      _life = _data.GetInt(Stat.StartingLife);
+      _mana = _data.GetInt(Stat.StartingMana);
     }
 
     IEnumerator<YieldInstruction> GainMana()
     {
       while (true)
       {
-        yield return new WaitForSeconds(_data.ManaGainIntervalMs.Value / 1000f);
-        _mana += _data.ManaGain.Value;
+        yield return new WaitForSeconds(_data.GetInt(Stat.ManaGainInterval) / 1000f);
+        _mana += _data.GetInt(Stat.ManaGain);
       }
     }
 
@@ -72,7 +72,7 @@ namespace Nighthollow.Components
     {
       while (true)
       {
-        yield return new WaitForSeconds(_data.CardDrawIntervalMs.Value / 1000f);
+        yield return new WaitForSeconds(_data.GetInt(Stat.CardDrawInterval)/ 1000f);
         _hand.DrawCards(new List<CardData> {_deck.Draw()});
       }
     }
@@ -85,7 +85,7 @@ namespace Nighthollow.Components
       StartCoroutine(DrawCards());
 
       var openingHand = new List<CardData>();
-      for (var i = 0; i < _data.StartingHandSize.Value; ++i)
+      for (var i = 0; i < _data.GetInt(Stat.StartingHandSize); ++i)
       {
         openingHand.Add(_deck.Draw());
       }
@@ -118,9 +118,9 @@ namespace Nighthollow.Components
       _manaText.text = _mana.ToString();
 
       var index = 0;
-      foreach (var school in Influence.AllSchools)
+      foreach (var pair in _data.Stats.Get(Stat.Influence).AllEntries)
       {
-        for (var i = 0; i < _data.Influence.Get(school).Value; ++i)
+        for (var i = 0; i < pair.Value.Value; ++i)
         {
           Image image;
           if (index < _influenceImages.Count)
@@ -134,7 +134,7 @@ namespace Nighthollow.Components
           }
 
           image.gameObject.SetActive(true);
-          image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(school);
+          image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(pair.Key);
           image.transform.SetParent(_influenceRow);
           image.transform.localScale = Vector3.one;
           image.transform.localPosition = new Vector3(i * 100, 0, 0);

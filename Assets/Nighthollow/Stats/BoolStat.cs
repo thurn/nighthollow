@@ -30,7 +30,7 @@ namespace Nighthollow.Stats
     public BoolStat Deserialize(string value) => new BoolStat(bool.Parse(value));
   }
 
-  public sealed class BoolStat : IStat
+  public sealed class BoolStat : IStat<BoolStat>
   {
     public bool Value { get; }
 
@@ -38,5 +38,7 @@ namespace Nighthollow.Stats
     {
       Value = value;
     }
+
+    public BoolStat Clone() => this;
   }
 }

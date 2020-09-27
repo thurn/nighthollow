@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Model;
 using Nighthollow.Services;
 using TMPro;
 using UnityEngine;
@@ -29,7 +30,7 @@ namespace Nighthollow.Components
 
     public void Initialize(CardItemData card, RewardSelector rewardSelector)
     {
-      _image.sprite = card.BaseCard.Image;
+      _image.sprite = Root.Instance.AssetService.GetImage(card.Card.ImageAddress);
       _text.text = DescriptiveTextHelper.TextForCardItem(card);
       _card = card;
       _rewardSelector = rewardSelector;

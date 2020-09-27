@@ -13,10 +13,10 @@
 // limitations under the License.
 
 using Nighthollow.Components;
-using Nighthollow.Data;
-using Nighthollow.Utils;
 using System;
 using System.Collections.Generic;
+using Nighthollow.Generated;
+using Nighthollow.Model;
 using UnityEngine;
 
 namespace Nighthollow.Services
@@ -29,8 +29,7 @@ namespace Nighthollow.Services
 
     public Creature CreateUserCreature(CreatureData creatureData)
     {
-      var result =
-        ComponentUtils.Instantiate(creatureData.Prefab);
+      var result = Root.Instance.AssetService.InstantiatePrefab<Creature>(creatureData.PrefabAddress);
       result.Initialize(creatureData);
       return result;
     }
@@ -41,7 +40,7 @@ namespace Nighthollow.Services
       float startingX,
       float yOffset = 0)
     {
-      var result = ComponentUtils.Instantiate(creatureData.Prefab);
+      var result = Root.Instance.AssetService.InstantiatePrefab<Creature>(creatureData.PrefabAddress);
       result.Initialize(creatureData);
       result.ActivateCreature(null, file, startingX, yOffset);
       _movingCreatures.Add(result);
@@ -61,7 +60,7 @@ namespace Nighthollow.Services
       {
         _movingCreatures.Remove(creature);
       }
-      else
+      else if (creature.RankPosition.HasValue)
       {
         _userCreatures.Remove((creature.RankPosition.Value, creature.FilePosition));
       }
@@ -96,14 +95,13 @@ namespace Nighthollow.Services
         }
       }
 
-      if (closestRank != null && closestFile != null)
-      {
-        return (closestRank.Value, closestFile.Value);
-      }
-      else
+      if (closestRank == null || closestFile == null)
       {
         throw new InvalidOperationException("Board is full!");
       }
+
+      return (closestRank.Value, closestFile.Value);
+
     }
   }
 }

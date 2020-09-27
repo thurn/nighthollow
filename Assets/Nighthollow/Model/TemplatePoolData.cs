@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Nighthollow.Model
 {
@@ -20,10 +21,16 @@ namespace Nighthollow.Model
   public sealed class TemplatePoolData
   {
     public IReadOnlyList<CardTemplateData> Cards { get; }
+    public IReadOnlyList<AffixTemplateData> Affixes { get; }
 
-    public TemplatePoolData(IReadOnlyList<CardTemplateData> cards)
+    public TemplatePoolData(IReadOnlyList<CardTemplateData> cards, IReadOnlyList<AffixTemplateData> affixes)
     {
       Cards = cards;
+      Affixes = affixes;
     }
+
+    public TemplatePoolData Clone() => new TemplatePoolData(
+      Cards.Select(c => c.Clone()).ToList(),
+      Affixes.Select(a => a.Clone()).ToList());
   }
 }

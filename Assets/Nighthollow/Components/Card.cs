@@ -13,11 +13,11 @@
 // limitations under the License.
 
 using DG.Tweening;
-using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
-using System;
 using System.Collections.Generic;
+using Nighthollow.Generated;
+using Nighthollow.Model;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -75,7 +75,7 @@ namespace Nighthollow.Components
       {
         _cardBack.gameObject.SetActive(true);
         _cardFront.gameObject.SetActive(false);
-        Initialize(Instantiate(_data));
+        Initialize(_data.Clone());
         transform.localScale = Vector2.one * _debugCardScale;
       }
 
@@ -87,18 +87,20 @@ namespace Nighthollow.Components
     void Update()
     {
       Errors.CheckNotNull(_data);
-      _cardImage.sprite = _data.Image;
+      _cardImage.sprite = Root.Instance.AssetService.GetImage(_data.ImageAddress);
 
-      _canPlay = _data.Cost.ManaCost <= _user.Mana &&
-        _data.Cost.InfluenceCost.LessThanOrEqual(_user.Influence);
+      var manaCost = _data.GetInt(Stat.ManaCost);
+      var influence = _data.Stats.Get(Stat.Influence);
+      _canPlay = manaCost <= _user.Mana &&
+        influence.LessThanOrEqualTo(_user.Data.Stats.Get(Stat.Influence));
 
       _outline.enabled = _canPlay;
-      _cost.text = _data.Cost.ManaCost.ToString();
+      _cost.text = manaCost.ToString();
 
       var addIndex = 0;
-      foreach (School school in Influence.AllSchools)
+      foreach (var pair in influence.AllEntries)
       {
-        AddInfluence(school, _data.Cost.InfluenceCost.Get(school).Value, ref addIndex);
+        AddInfluence(pair.Key, pair.Value.Value, ref addIndex);
       }
 
       while (addIndex < _influence.Count)
@@ -115,7 +117,7 @@ namespace Nighthollow.Components
     public void OnPlayed()
     {
       _user.Hand.RemoveFromHand(this);
-      _user.SpendMana(_data.Cost.ManaCost);
+      _user.SpendMana(_data.GetInt(Stat.ManaCost));
       Destroy(gameObject);
     }
 

@@ -13,19 +13,20 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Delegates.CreatureDelegates;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
 namespace Nighthollow.Model
 {
-  public sealed class CreatureData
+  public sealed class CreatureData : AbstractGameEntity
   {
     public string PrefabAddress { get; }
     public PlayerName Owner { get; }
     public string Name { get; }
     public IReadOnlyCollection<SkillData> Skills { get; }
-    public StatTable Stats { get; }
+    public override StatTable Stats { get; }
     public CreatureDelegateChain Delegate { get; }
 
     public CreatureData(
@@ -43,5 +44,24 @@ namespace Nighthollow.Model
       Stats = stats;
       Delegate = new CreatureDelegateChain(delegates);
     }
+
+    CreatureData(
+      string prefabAddress,
+      PlayerName owner,
+      string name,
+      IReadOnlyCollection<SkillData> skills,
+      StatTable stats,
+      CreatureDelegateChain delegates)
+    {
+      PrefabAddress = prefabAddress;
+      Owner = owner;
+      Name = name;
+      Skills = skills;
+      Stats = stats;
+      Delegate = delegates;
+    }
+
+    public CreatureData Clone() => new CreatureData(
+      PrefabAddress, Owner, Name, Skills.Select(s => s.Clone()).ToList(), Stats.Clone(), Delegate);
   }
 }

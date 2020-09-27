@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Data;
+using Nighthollow.Model;
 using UnityEngine;
 
 namespace Nighthollow.Services
@@ -32,7 +32,7 @@ namespace Nighthollow.Services
 
     public void MoveToDeck(CardItemData card)
     {
-      var existing = _deck.FindIndex(c => c.BaseCard.Creature.Name.Equals(card.BaseCard.Creature.Name));
+      var existing = _deck.FindIndex(c => c.Card.Creature.Name.Equals(card.Card.Creature.Name));
       if (existing != -1)
       {
         AddToInventory(_deck[existing]);

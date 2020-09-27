@@ -13,26 +13,25 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using System.Linq;
-using Nighthollow.Data;
-using UnityEditor;
+using Nighthollow.Utils;
 using UnityEngine;
 
-namespace Nighthollow.Editor.Data
+namespace Nighthollow.Services
 {
-  public static class CardDataHelper
+  public sealed class AssetService : MonoBehaviour
   {
-    [MenuItem("Tools/Data/Create Item %#i")]
-    public static void Import()
+    readonly Dictionary<string, Object> _assets = new Dictionary<string, Object>();
+
+    public Sprite GetImage(string address)
     {
-      if (Selection.assetGUIDs.Length == 1)
-      {
-        var path = AssetDatabase.GUIDToAssetPath(Selection.assetGUIDs.First());
-        var card = AssetDatabase.LoadAssetAtPath<CardData>(path);
-        var item = ScriptableObject.CreateInstance<CardItemData>();
-        item.Initialize(card, new List<AffixData>());
-        AssetDatabase.CreateAsset(item, path.Replace(".asset", " Item.asset"));
-      }
+      Errors.CheckArgument(_assets.ContainsKey(address), $"Asset not found: {address}");
+      return (Sprite) _assets[address];
+    }
+
+    public T InstantiatePrefab<T>(string address, Transform parent = null) where T : Component
+    {
+      Errors.CheckArgument(_assets.ContainsKey(address), $"Asset not found: {address}");
+      return ComponentUtils.InstantiateGameObject<T>((GameObject) _assets[address], parent);
     }
   }
 }

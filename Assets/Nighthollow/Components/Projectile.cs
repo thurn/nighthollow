@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
+using Nighthollow.Delegates.SkillDelegates;
+using Nighthollow.Generated;
+using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -27,35 +29,27 @@ namespace Nighthollow.Components
 
     [Header("State")]
     [SerializeField] Creature _firedBy;
-    [SerializeField] ProjectileData _projectileData;
+    [SerializeField] SkillData _skillData;
     [SerializeField] Collider2D _collider;
-    [SerializeField] float _activationTime;
 
-    public ProjectileData Data => _projectileData;
+    public SkillData Data => _skillData;
 
     public void Initialize(
       Creature firedBy,
-      ProjectileData projectileData,
+      SkillData skillData,
       Vector2 firingPosition,
       Vector2? direction = null)
     {
       _firedBy = firedBy;
       transform.position = firingPosition;
-      transform.forward = direction == null ?
-        Constants.ForwardDirectionForPlayer(firedBy.Owner) :
-        direction.Value;
+      transform.forward = direction ?? Constants.ForwardDirectionForPlayer(firedBy.Owner);
       gameObject.layer = Constants.LayerForProjectiles(firedBy.Owner);
 
       _collider = GetComponent<Collider2D>();
-      _activationTime = Time.time;
-      if (projectileData.ActivationDelayMs > 0)
-      {
-        _collider.enabled = false;
-      }
 
       var flash = Root.Instance.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);
       flash.transform.forward = transform.forward;
-      _projectileData = projectileData;
+      _skillData = skillData;
     }
 
     void OnValidate()
@@ -78,13 +72,7 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      transform.position += (_projectileData.Speed / 1000f) * Time.deltaTime * transform.forward;
-
-      if (!_collider.enabled &&
-        Time.time > _activationTime + (_projectileData.ActivationDelayMs / 1000f))
-      {
-        _collider.enabled = true;
-      }
+      transform.position += (_skillData.GetInt(Stat.Speed)/ 1000f) * Time.deltaTime * transform.forward;
 
       if (Mathf.Abs(transform.position.x) > 25)
       {
@@ -96,7 +84,7 @@ namespace Nighthollow.Components
     {
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;
-      _firedBy.OnProjectileImpact(this);
+      _skillData.Delegate.OnImpact(new SkillContext(_firedBy, _skillData));
       gameObject.SetActive(false);
     }
   }

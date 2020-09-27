@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
@@ -26,6 +27,11 @@ namespace Nighthollow.Stats
       _stats = builder.Stats;
     }
 
+    public StatTable(StatTable other)
+    {
+      _stats = other._stats.ToDictionary(e => e.Key, e => e.Value);
+    }
+
     public T Get<T>(IStatId<T> statId) where T : IStat
     {
       if (!_stats.ContainsKey(statId.Value))
@@ -35,6 +41,8 @@ namespace Nighthollow.Stats
 
       return (T) _stats[statId.Value];
     }
+
+    public StatTable Clone() => new StatTable(this);
 
     public sealed class Builder
     {

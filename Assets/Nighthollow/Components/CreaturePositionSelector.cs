@@ -13,10 +13,11 @@
 // limitations under the License.
 
 using DG.Tweening;
-using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using System.Collections.Generic;
+using Nighthollow.Generated;
+using Nighthollow.Model;
 using UnityEngine;
 
 namespace Nighthollow.Components

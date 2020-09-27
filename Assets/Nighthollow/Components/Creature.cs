@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
+using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Delegates.SkillDelegates;
+using Nighthollow.Generated;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -45,10 +47,8 @@ namespace Nighthollow.Components
     [SerializeField] CreatureData _data;
     [SerializeField] bool _selectSkill;
     [SerializeField] int _damageTaken;
-    [SerializeField] int _currentEnergy;
     [SerializeField] CreatureState _state;
     [SerializeField] SkillData _currentSkill;
-    [SerializeField] ProjectileData _currentProjectile;
     [SerializeField] RankValue? _rankPosition;
     [SerializeField] FileValue? _filePosition;
     [SerializeField] Animator _animator;
@@ -80,7 +80,6 @@ namespace Nighthollow.Components
       _sortingGroup = GetComponent<SortingGroup>();
       _statusBars = Root.Instance.Prefabs.CreateStatusBars();
       _statusBars.HealthBar.gameObject.SetActive(false);
-      _statusBars.EnergyBar.gameObject.SetActive(false);
       gameObject.layer = Constants.LayerForCreatures(creatureData.Owner);
       _animator.speed = _animationSpeedMultiplier;
 
@@ -92,7 +91,7 @@ namespace Nighthollow.Components
     {
       if (!_initialized && _debugMode)
       {
-        Initialize(Instantiate(_data));
+        Initialize(_data.Clone());
         _creatureService.AddUserCreatureAtPosition(this,
           BoardPositions.ClosestRankForXPosition(transform.position.x),
           BoardPositions.ClosestFileForYPosition(transform.position.y));
@@ -121,8 +120,6 @@ namespace Nighthollow.Components
     public bool IsMoving => !_rankPosition.HasValue;
 
     public int DamageTaken => _damageTaken;
-
-    public int CurrentEnergy => _currentEnergy;
 
     public Transform ProjectileSource => _projectileSource;
 
@@ -178,7 +175,6 @@ namespace Nighthollow.Components
           this, new Vector2(15, 0), new Vector2(30, 1));
       }
 
-      _currentEnergy = _data.StartingEnergy.Value;
       SetState(CreatureState.Idle);
 
       _selectSkill = true;
@@ -187,23 +183,38 @@ namespace Nighthollow.Components
       _coroutine = StartCoroutine(RunCoroutine());
     }
 
-    void SelectSkillType()
+    void UseSkill()
     {
       Errors.CheckState(CanUseSkill(), "Cannot use skill");
 
-      if (_data.Delegate.ShouldUseUntargetedSkill(this))
+      var skill = _data.Delegate.SelectSkill(this);
+      if (skill.HasValue)
       {
-        UseSkill(SkillType.Untargeted);
-        return;
-      }
+        SetState(CreatureState.UsingSkill);
+        _currentSkill = skill.Value;
 
-      if (_data.Delegate.ShouldUseMeleeSkill(this))
-      {
-        UseSkill(SkillType.Melee);
-      }
-      else if (_data.Delegate.ShouldUseProjectileSkill(this))
-      {
-        UseSkill(SkillType.Projectile);
+        switch (_currentSkill.Animation)
+        {
+          case SkillAnimationNumber.Skill1:
+            _animator.SetTrigger(Skill1);
+            break;
+          case SkillAnimationNumber.Skill2:
+            _animator.SetTrigger(Skill2);
+            break;
+          case SkillAnimationNumber.Skill3:
+            _animator.SetTrigger(Skill3);
+            break;
+          case SkillAnimationNumber.Skill4:
+            _animator.SetTrigger(Skill4);
+            break;
+          case SkillAnimationNumber.Skill5:
+            _animator.SetTrigger(Skill5);
+            break;
+          default:
+            throw Errors.UnknownEnumValue(_currentSkill.Animation);
+        }
+
+        _currentSkill.Delegate.OnStart(new SkillContext(this, _currentSkill));
       }
       else
       {
@@ -211,51 +222,9 @@ namespace Nighthollow.Components
       }
     }
 
-    void UseSkill(SkillType skillType)
-    {
-      Errors.CheckState(CanUseSkill(), "Cannot use skill");
-
-      SetState(CreatureState.UsingSkill);
-      _currentSkill = _data.Delegate.ChooseSkill(this, skillType);
-      if (_currentSkill == null)
-      {
-        ToDefaultState();
-        return;
-      }
-
-      SpendEnergy(_currentSkill.EnergyCost);
-
-      if (_currentSkill.SkillType == SkillType.Projectile)
-      {
-        _currentProjectile = _data.Delegate.ChooseProjectile(this);
-        SpendEnergy(_currentProjectile.EnergyCost);
-      }
-
-      switch (_currentSkill.Animation)
-      {
-        case SkillAnimationNumber.Skill1:
-          _animator.SetTrigger(Skill1);
-          break;
-        case SkillAnimationNumber.Skill2:
-          _animator.SetTrigger(Skill2);
-          break;
-        case SkillAnimationNumber.Skill3:
-          _animator.SetTrigger(Skill3);
-          break;
-        case SkillAnimationNumber.Skill4:
-          _animator.SetTrigger(Skill4);
-          break;
-        case SkillAnimationNumber.Skill5:
-          _animator.SetTrigger(Skill5);
-          break;
-        default:
-          throw Errors.UnknownEnumValue(_currentSkill.Animation);
-      }
-    }
-
     void ToDefaultState()
     {
-      SetState(_data.Speed.Value > 0 ? CreatureState.Moving : CreatureState.Idle);
+      SetState(_data.GetInt(Stat.Speed)> 0 ? CreatureState.Moving : CreatureState.Idle);
     }
 
     void Kill()
@@ -266,7 +235,6 @@ namespace Nighthollow.Components
       }
 
       _statusBars.HealthBar.gameObject.SetActive(false);
-      _statusBars.EnergyBar.gameObject.SetActive(false);
       _animator.SetTrigger(Death);
       _collider.enabled = false;
 
@@ -303,28 +271,19 @@ namespace Nighthollow.Components
     public void AttackStart()
     {
       if (!IsAlive()) return;
-
-      switch (_currentSkill.SkillType)
+      _currentSkill.Delegate.OnUse(new SkillContext(this, _currentSkill));
+      if (_currentSkill.SkillType == SkillType.Melee)
       {
-        case SkillType.Projectile:
-          _data.Delegate.OnFireProjectile(this, _currentProjectile, ProjectileSource.position);
-          break;
-        case SkillType.Melee:
-          _data.Delegate.OnMeleeHit(this);
-          break;
-        case SkillType.Untargeted:
-          _data.Delegate.OnUseUntargetedSkill(this, _currentSkill);
-          break;
-        default:
-          throw Errors.UnknownEnumValue(_currentSkill.SkillType);
+        _currentSkill.Delegate.OnImpact(new SkillContext(this, _currentSkill));
       }
     }
 
     public void AddDamage(Creature appliedBy, int damage)
     {
       Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
-      _damageTaken = Mathf.Clamp(0, _damageTaken + damage, _data.Health.Value);
-      if (_damageTaken >= _data.Health.Value)
+      var health = _data.GetInt(Stat.Health);
+      _damageTaken = Mathf.Clamp(0, _damageTaken + damage, health);
+      if (_damageTaken >= health)
       {
         appliedBy.Data.Delegate.OnKilledEnemy(appliedBy, this, damage);
         Kill();
@@ -334,27 +293,8 @@ namespace Nighthollow.Components
     public void Heal(int healing)
     {
       Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
-      _damageTaken = Mathf.Clamp(0, _damageTaken - healing, _data.Health.Value);
-    }
-
-    public void AddEnergy(int energy)
-    {
-      Errors.CheckArgument(energy >= 0, "Energy must be non-negative");
-      var newEnergy = _currentEnergy + energy;
-      _currentEnergy = Mathf.Clamp(0, newEnergy, _data.MaximumEnergy.Value);
-      _selectSkill = true;
-    }
-
-    public void SpendEnergy(int energy)
-    {
-      Errors.CheckArgument(energy >= 0, "Spent energy must be non-negative");
-      Errors.CheckArgument(energy <= _currentEnergy, "Spent energy must be <= current energy");
-      _currentEnergy -= energy;
-    }
-
-    public void OnProjectileImpact(Projectile projectile)
-    {
-      _data.Delegate.OnProjectileImpact(this, projectile);
+      var health = _data.GetInt(Stat.Health);
+      _damageTaken = Mathf.Clamp(0, _damageTaken - healing, health);
     }
 
     public void OnActionAnimationCompleted()
@@ -399,13 +339,7 @@ namespace Nighthollow.Components
 
     public bool IsStunned() => _state == CreatureState.Stunned;
 
-    public bool HasMeleeSkill() => _data.Skills.Any(s => s.SkillType == SkillType.Melee);
-
-    public bool HasProjectileSkill() =>
-      _data.Skills.Any(s => s.SkillType == SkillType.Projectile) &&
-      _data.Projectiles.Any();
-
-    public bool UsesEnergy() => _data.Skills.Any(s => s.EnergyCost > Data.EnergyGain.Value);
+    bool HasProjectileSkill() => _data.Skills.Any(s => s.SkillType == SkillType.Projectile);
 
     bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
 
@@ -413,7 +347,7 @@ namespace Nighthollow.Components
     {
       while (true)
       {
-        var interval = _data.RegenerationIntervalMs.Value;
+        var interval = _data.GetInt(Stat.RegenerationInterval);
         if (interval <= 0)
         {
           break;
@@ -421,8 +355,7 @@ namespace Nighthollow.Components
 
         yield return new WaitForSeconds(interval / 1000f);
 
-        AddEnergy(_data.EnergyGain.Value);
-        Heal(_data.HealthRegeneration.Value);
+        Heal(_data.GetInt(Stat.HealthRegeneration));
       }
     }
 
@@ -441,7 +374,7 @@ namespace Nighthollow.Components
         // SelectSkill() is delayed until the next Update() call instead of being invoked
         // immediately because it gives time for the physics system to correctly update
         // collider positions after activation. This was extremely annoying to debug :)
-        SelectSkillType();
+        UseSkill();
         _selectSkill = false;
       }
 
@@ -460,30 +393,23 @@ namespace Nighthollow.Components
         _appliedLifeLoss = true;
       }
 
-      if (_data.Health.Value > 0)
+      var health = _data.GetInt(Stat.Health);
+      if (health > 0)
       {
-        _statusBars.HealthBar.Value =
-          (_data.Health.Value - _damageTaken) / (float) _data.Health.Value;
+        _statusBars.HealthBar.Value = (health - _damageTaken) / (float) health;
       }
 
       _statusBars.HealthBar.gameObject.SetActive(_damageTaken > 0);
 
-      if (_data.MaximumEnergy.Value > 0)
-      {
-        _statusBars.EnergyBar.Value = _currentEnergy / (float) _data.MaximumEnergy.Value;
-      }
-
-      _statusBars.EnergyBar.gameObject.SetActive(UsesEnergy() && _currentEnergy > 0);
-
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
 
-      _animator.SetFloat(SkillSpeed, Constants.MultiplierBasisPoints(_data.SkillSpeedMultiplier.Value));
+      _animator.SetFloat(SkillSpeed, Constants.MultiplierBasisPoints(_data.GetInt(Stat.SkillSpeedMultiplier)));
 
       if (_state == CreatureState.Moving)
       {
         _animator.SetBool(Moving, true);
-        transform.Translate(Vector3.right * (Time.deltaTime * (_data.Speed.Value / 1000f)));
+        transform.Translate(Vector3.right * (Time.deltaTime * (_data.GetInt(Stat.Speed) / 1000f)));
       }
       else
       {

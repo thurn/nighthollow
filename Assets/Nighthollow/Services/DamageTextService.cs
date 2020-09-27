@@ -13,8 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Components;
-using Nighthollow.Data;
-using Nighthollow.Delegate;
+using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -42,7 +41,8 @@ namespace Nighthollow.Services
       var alpha = Constants.MultiplierBasisPoints(_alpha);
       _averageDamage = _count == 0 ? amount : alpha * amount + (1 - alpha) * _averageDamage;
       _count++;
-      var point = ScreenUtils.WorldToCanvasAnchorPosition(DefaultCreatureDelegate.RandomEffectPoint(target));
+//      var point = ScreenUtils.WorldToCanvasAnchorPosition(DefaultCreatureDelegate.RandomEffectPoint(target));
+      var point = target.transform.position;
 
       DamageText result;
       if (_count < 4 || amount < _averageDamage * Constants.MultiplierBasisPoints(_mediumHitThreshold))

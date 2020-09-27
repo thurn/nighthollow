@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Data;
+using Nighthollow.Model;
 using Nighthollow.Services;
 using UnityEngine;
 

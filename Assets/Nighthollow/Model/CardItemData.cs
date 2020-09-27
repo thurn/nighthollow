@@ -13,19 +13,24 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
+using Nighthollow.Stats;
 
 namespace Nighthollow.Model
 {
   /// <summary>Represents a card in the inventory.</summary>
-  public sealed class CardItemData
+  public sealed class CardItemData : AbstractGameEntity
   {
-    public IReadOnlyList<CardData> Card { get; }
+    public CardData Card { get; }
     public IReadOnlyList<AffixData> Affixes { get; }
+    public override StatTable Stats => Card.Stats;
 
-    public CardItemData(IReadOnlyList<CardData> card, IReadOnlyList<AffixData> affixes)
+    public CardItemData(CardData card, IReadOnlyList<AffixData> affixes)
     {
       Card = card;
       Affixes = affixes;
     }
+
+    public CardItemData Clone() => new CardItemData(Card.Clone(), Affixes.Select(a => a.Clone()).ToList());
   }
 }

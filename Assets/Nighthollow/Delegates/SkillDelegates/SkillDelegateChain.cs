@@ -29,18 +29,15 @@ namespace Nighthollow.Delegates.SkillDelegates
       _delegateIds.Add(SkillDelegateId.DefaultSkillDelegate);
     }
 
-    /// <summary>
-    /// Called when a skill's initial animation reaches its impact frame. For spells, this is the place to create and
-    /// fire projectiles. For melee skills, this will be called immediately before <see cref="OnImpact"/>.
-    /// </summary>
-    public void OnUse(SkillContext c, Results<TargetedSkillEffect> results)
+    public void OnStart(SkillContext c)
     {
     }
 
-    /// <summary>
-    /// Called to apply the effect of a skill, either on melee hit or on projectile impact.
-    /// </summary>
-    public void OnImpact(SkillContext c, Results<TargetedSkillEffect> results)
+    public void OnUse(SkillContext c)
+    {
+    }
+
+    public void OnImpact(SkillContext c)
     {
     }
 

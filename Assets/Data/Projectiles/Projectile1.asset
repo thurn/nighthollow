@@ -17,3 +17,4 @@ MonoBehaviour:
   _hitboxSize: 1000
   _energyCost: 0
   _activationDelayMs: 0
+  _chainCount: 0

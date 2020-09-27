@@ -22,8 +22,13 @@ namespace Nighthollow.Utils
   {
     public static T Instantiate<T>(T prefabComponent, Transform parent = null) where T : Component
     {
-      Errors.CheckNotNull(prefabComponent);
-      var prefabObject = Object.Instantiate(prefabComponent.gameObject, parent);
+      return InstantiateGameObject<T>(Errors.CheckNotNull(prefabComponent).gameObject, parent);
+    }
+
+    public static T InstantiateGameObject<T>(GameObject prefab, Transform parent = null) where T : Component
+    {
+      Errors.CheckNotNull(prefab);
+      var prefabObject = Object.Instantiate(prefab, parent);
       var result = prefabObject.GetComponent<T>();
       if (!result)
       {

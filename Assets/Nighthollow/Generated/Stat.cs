@@ -52,5 +52,6 @@ namespace Nighthollow.Generated
     public static readonly BoolStatId CanCrit = new BoolStatId(32);
     public static readonly BoolStatId CanStun = new BoolStatId(33);
     public static readonly BoolStatId MeleeAreaDamage = new BoolStatId(34);
+    public static readonly BoolStatId IsManaCreature = new BoolStatId(35);
   }
 }

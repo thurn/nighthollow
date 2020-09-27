@@ -16,13 +16,14 @@ using System.Collections.Generic;
 using System.Linq;
 using DataStructures.RandomSelector;
 using Nighthollow.Data;
+using Nighthollow.Model;
 using UnityEngine;
 
 namespace Nighthollow.Services
 {
   public sealed class RewardService : MonoBehaviour
   {
-    [SerializeField] RewardPoolData _data;
+    [SerializeField] TemplatePoolData _data;
     readonly Dictionary<int, float> _cardWeights = new Dictionary<int, float>();
     readonly Dictionary<int, float> _affixWeights = new Dictionary<int, float>();
 
@@ -45,7 +46,7 @@ namespace Nighthollow.Services
     CardItemData RandomCard()
     {
       var cardSelector = new DynamicRandomSelector<int>();
-      for (var i = 0; i < _data.BaseCards.Count; ++i)
+      for (var i = 0; i < _data.Cards.Count; ++i)
       {
         var weight = GetValueOrDefault(_cardWeights, i, 1.0f);
         cardSelector.Add(i, weight * 1000000f);
@@ -56,20 +57,18 @@ namespace Nighthollow.Services
       var resultIndex = cardSelector.SelectRandomItem();
       _cardWeights[resultIndex] = GetValueOrDefault(_cardWeights, resultIndex, 1.0f) * 0.1f;
 
-      var baseCard = _data.BaseCards.ElementAt(resultIndex).Clone();
-      var item = ScriptableObject.CreateInstance<CardItemData>();
+      var baseCard = _data.Cards.ElementAt(resultIndex).Clone();
 
-      var affixes = new List<AffixData>();
+      var affixes = new List<AffixTemplateData>();
       for (var i = 0; i < Random.Range(3, 7); ++i)
       {
         affixes.Add(RandomAffix());
       }
 
-      item.Initialize(baseCard, affixes);
-      return item.Roll();
+      return CardBuilder.RollStats(baseCard, affixes);
     }
 
-    AffixData RandomAffix()
+    AffixTemplateData RandomAffix()
     {
       var affixSelector = new DynamicRandomSelector<int>();
       for (var i = 0; i < _data.Affixes.Count; ++i)
@@ -84,7 +83,6 @@ namespace Nighthollow.Services
       _affixWeights[resultIndex] = GetValueOrDefault(_affixWeights, resultIndex, 1.0f) * 0.1f;
 
       var affix = _data.Affixes.ElementAt(resultIndex).Clone();
-      affix.Roll();
       return affix;
     }
 

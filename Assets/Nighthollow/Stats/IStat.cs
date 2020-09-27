@@ -17,4 +17,9 @@ namespace Nighthollow.Stats
   public interface IStat
   {
   }
+
+  public interface IStat<out T> : IStat
+  {
+    T Clone();
+  }
 }

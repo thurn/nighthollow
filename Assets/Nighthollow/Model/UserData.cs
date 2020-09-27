@@ -13,14 +13,15 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Stats;
 
 namespace Nighthollow.Model
 {
-  public sealed class UserData
+  public sealed class UserData : AbstractGameEntity
   {
     public IReadOnlyCollection<CardData> Deck { get; }
-    public StatTable Stats { get; }
+    public override StatTable Stats { get; }
 
     public UserData(
       IReadOnlyCollection<CardData> deck,
@@ -29,5 +30,7 @@ namespace Nighthollow.Model
       Deck = deck;
       Stats = stats;
     }
+
+    public UserData Clone() => new UserData(Deck.Select(d => d.Clone()).ToList(), Stats.Clone());
   }
 }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Model;
 using TMPro;
 using UnityEngine;
 

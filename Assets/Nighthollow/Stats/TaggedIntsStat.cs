@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
@@ -37,11 +38,21 @@ namespace Nighthollow.Stats
     }
   }
 
-  public sealed class TaggedIntsStat<T> : IStat where T : Enum
+  public sealed class TaggedIntsStat<T> : IStat<TaggedIntsStat<T>> where T : Enum
   {
-    readonly Dictionary<T, IntStat> _stats = new Dictionary<T, IntStat>();
+    readonly Dictionary<T, IntStat> _stats;
 
-    public IEnumerator<KeyValuePair<T, IntStat>> AllEntries => _stats.GetEnumerator();
+    public IEnumerable<KeyValuePair<T, IntStat>> AllEntries => _stats;
+
+    public TaggedIntsStat()
+    {
+      _stats = new Dictionary<T, IntStat>();
+    }
+
+    TaggedIntsStat(Dictionary<T, IntStat> stats)
+    {
+      _stats = stats.ToDictionary(e => e.Key, e => e.Value.Clone());
+    }
 
     public void Add(T key, int value)
     {
@@ -49,6 +60,11 @@ namespace Nighthollow.Stats
       Errors.CheckState(!_stats.ContainsKey(key), $"Key {key} already added");
       _stats[key] = new IntStat(value);
     }
+
+    public TaggedIntsStat<T> Clone() => new TaggedIntsStat<T>(_stats);
+
+    public bool LessThanOrEqualTo(TaggedIntsStat<T> other) =>
+      _stats.All(pair => pair.Value.Value <= other._stats[pair.Key].Value);
 
     public IntStat Get(T key)
     {

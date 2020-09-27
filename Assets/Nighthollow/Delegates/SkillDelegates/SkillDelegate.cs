@@ -23,6 +23,13 @@ namespace Nighthollow.Delegates.SkillDelegates
   public abstract class SkillDelegate
   {
     /// <summary>
+    /// Called when a skill's animation begins.
+    /// </summary>
+    public virtual void OnStart(SkillContext c, Results<TargetedSkillEffect> results)
+    {
+    }
+
+    /// <summary>
     /// Called when a skill's initial animation reaches its impact frame. For spells, this is the place to create and
     /// fire projectiles. For melee skills, this will be called immediately before <see cref="OnImpact"/>.
     /// </summary>

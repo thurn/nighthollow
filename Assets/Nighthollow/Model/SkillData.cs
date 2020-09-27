@@ -22,26 +22,42 @@ using SkillType = Nighthollow.Generated.SkillType;
 
 namespace Nighthollow.Model
 {
-  public sealed class SkillData
+  public sealed class SkillData : AbstractGameEntity
   {
     public Optional<string> Address { get; }
     public SkillType SkillType { get; }
     public SkillAnimationNumber Animation { get; }
-    public StatTable Stats { get; }
+    public override StatTable Stats { get; }
     public SkillDelegateChain Delegate { get; }
 
     public SkillData(
       Optional<string> address,
       SkillType skillType,
       SkillAnimationNumber animation,
-      StatTable.Builder stats,
+      StatTable stats,
       List<SkillDelegateId> delegateIds)
     {
       Address = address;
       SkillType = skillType;
       Animation = animation;
-      Stats = new StatTable(stats);
+      Stats = stats;
       Delegate = new SkillDelegateChain(delegateIds);
     }
+
+    SkillData(
+      Optional<string> address,
+      SkillType skillType,
+      SkillAnimationNumber animation,
+      StatTable stats,
+      SkillDelegateChain delegates)
+    {
+      Address = address;
+      SkillType = skillType;
+      Animation = animation;
+      Stats = stats;
+      Delegate = delegates;
+    }
+
+    public SkillData Clone() => new SkillData(Address, SkillType, Animation, Stats.Clone(), Delegate);
   }
 }

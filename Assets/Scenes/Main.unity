@@ -485,6 +485,7 @@ GameObject:
   - component: {fileID: 169299295}
   - component: {fileID: 169299298}
   - component: {fileID: 169299300}
+  - component: {fileID: 169299301}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -551,6 +552,7 @@ MonoBehaviour:
   _enemy: {fileID: 1160944780}
   _damageTextService: {fileID: 169299298}
   _rewardService: {fileID: 169299300}
+  _assetService: {fileID: 169299301}
 --- !u!114 &169299298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,7 +633,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27be1282c6b244ec9cba97e1aca24c16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: 415899ca0139f4f9aab8ad4df93a2079, type: 2}
+--- !u!114 &169299301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169299293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39ad83b7ecb14f009a9ef7dde3855f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!213 &192261797
 Sprite:
   m_ObjectHideFlags: 0
@@ -3788,17 +3801,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c9bf1605b9b4e52acc6bfb25ea99c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inventory: []
-  _deck:
-  - {fileID: 11400000, guid: 9d9f27ca3b5d146f1a41d50cccf33d68, type: 2}
-  - {fileID: 11400000, guid: ead50e52e06ce4f2ca65a12554044e3d, type: 2}
-  - {fileID: 11400000, guid: 2aff49e21782e4045ab4ad257dfdd44c, type: 2}
-  - {fileID: 11400000, guid: 6403e932988dc4739ae1320dc1f1856f, type: 2}
-  - {fileID: 11400000, guid: 483b88be0c29f47c4a52dbbe72e6a186, type: 2}
-  - {fileID: 11400000, guid: 0c0b7c9e304674906ab3d2dc66846c15, type: 2}
-  - {fileID: 11400000, guid: f39d312788a2849a6b575197e53b311e, type: 2}
-  - {fileID: 11400000, guid: 336f3527063864942a435535a9a3f4d3, type: 2}
-  - {fileID: 11400000, guid: c7c43c13563ee41899fca8f297bd1206, type: 2}
 --- !u!1 &1147349104
 GameObject:
   m_ObjectHideFlags: 0
@@ -3937,7 +3939,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27ce61f4cf6e4c7a9ffdfe4b7f4f5a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: 485eab3b3bdd3462a8b55971d34f0396, type: 2}
   _spawnCount: 0
   _deathCount: 0
 --- !u!1 &1166200425
@@ -4029,7 +4030,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debugOrderedDraws: 0
-  _cards: []
   _weights: 
 --- !u!1001 &1171294647
 PrefabInstance:
@@ -4265,7 +4265,6 @@ MonoBehaviour:
   _lifeText: {fileID: 984673014}
   _manaText: {fileID: 34500149}
   _influenceRow: {fileID: 1016913294}
-  _data: {fileID: 11400000, guid: 871c67786cfdf4577b5d959b0c63d983, type: 2}
   _influenceImages: []
   _life: 0
   _mana: 0

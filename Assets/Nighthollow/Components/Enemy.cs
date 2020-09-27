@@ -14,7 +14,8 @@
 
 using System.Collections.Generic;
 using DataStructures.RandomSelector;
-using Nighthollow.Data;
+using Nighthollow.Generated;
+using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -24,13 +25,13 @@ namespace Nighthollow.Components
 {
   public sealed class Enemy : MonoBehaviour
   {
-    [SerializeField] EnemiesData _data;
+    [SerializeField] EnemyData _data;
     [SerializeField] int _spawnCount;
     [SerializeField] int _deathCount;
 
     void Awake()
     {
-      _data = Instantiate(_data);
+      _data = _data.Clone();
     }
 
     public void StartSpawningEnemies()
@@ -42,7 +43,7 @@ namespace Nighthollow.Components
     public void OnEnemyCreatureRemoved()
     {
       _deathCount++;
-      if (_deathCount >= _data.EnemiesToSpawn)
+      if (_deathCount >= _data.GetInt(Stat.TotalEnemiesToSpawn))
       {
         Root.Instance.Prefabs.ShowDialog("Victory!", () => { SceneManager.LoadScene("Main", LoadSceneMode.Single); });
       }
@@ -50,7 +51,9 @@ namespace Nighthollow.Components
 
     IEnumerator<YieldInstruction> SpawnAsync()
     {
-      yield return new WaitForSeconds(_data.InitialSpawnDelayMs / 1000f);
+      var spawnDelay = _data.GetInt(Stat.EnemySpawnDelay);
+      yield return new WaitForSeconds(spawnDelay / 1000f);
+
       Root.Instance.CreatureService.CreateMovingCreature(
         RandomEnemy(),
         RandomFile(),
@@ -58,9 +61,9 @@ namespace Nighthollow.Components
         Constants.EnemyCreatureYOffset);
       _spawnCount = 1;
 
-      while (_spawnCount < _data.EnemiesToSpawn)
+      while (_spawnCount < _data.GetInt(Stat.TotalEnemiesToSpawn))
       {
-        yield return new WaitForSeconds(_data.SpawnDelayMs / 1000f);
+        yield return new WaitForSeconds(spawnDelay / 1000f);
         Root.Instance.CreatureService.CreateMovingCreature(
           RandomEnemy(),
           RandomFile(),
@@ -80,7 +83,7 @@ namespace Nighthollow.Components
 
       selector.Build();
 
-      return Instantiate(selector.SelectRandomItem());
+      return selector.SelectRandomItem().Clone();
     }
 
     FileValue RandomFile()

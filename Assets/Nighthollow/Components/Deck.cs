@@ -13,9 +13,11 @@
 // limitations under the License.
 
 using DataStructures.RandomSelector;
-using Nighthollow.Data;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
+using Nighthollow.Generated;
+using Nighthollow.Model;
 using UnityEngine;
 
 namespace Nighthollow.Components
@@ -36,7 +38,7 @@ namespace Nighthollow.Components
 
       foreach (var card in _cards)
       {
-        _weights.Add(card.BaseCard.Creature.IsManaCreature ? 24000 : 4000);
+        _weights.Add(card.Card.GetBool(Stat.IsManaCreature) ? 24000 : 4000);
       }
     }
 
@@ -44,7 +46,7 @@ namespace Nighthollow.Components
     {
       if (_debugOrderedDraws)
       {
-        return _cards[_lastDraw++ % _cards.Count].Build();
+        return CardBuilder.Build(_cards[_lastDraw++ % _cards.Count]);
       }
 
       var selector = new DynamicRandomSelector<int>(-1, _cards.Count);
@@ -57,7 +59,7 @@ namespace Nighthollow.Components
 
       var index = selector.SelectRandomItem();
       DecrementWeight(index);
-      return _cards[index].Build();
+      return CardBuilder.Build(_cards[index]);
     }
 
     void DecrementWeight(int index)

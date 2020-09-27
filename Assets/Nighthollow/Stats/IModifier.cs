@@ -18,6 +18,8 @@ namespace Nighthollow.Stats
   {
     StaticModifier Modifier { get; }
 
+    IModifier Clone();
+
     bool IsDynamic();
 
     bool IsValid();

@@ -20,8 +20,5 @@ namespace Nighthollow.Components
   {
     [SerializeField] StatusBar _healthBar;
     public StatusBar HealthBar => _healthBar;
-
-    [SerializeField] StatusBar _energyBar;
-    public StatusBar EnergyBar => _energyBar;
   }
 }

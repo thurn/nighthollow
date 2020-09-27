@@ -16,23 +16,23 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Model
 {
-  public sealed class CardData
+  public sealed class CardData : AbstractGameEntity
   {
     public string CardPrefabAddress { get; }
     public string ImageAddress { get; }
     public CreatureData Creature { get; }
-    public StatTable Stats { get; }
+    public override StatTable Stats => Creature.Stats;
 
     public CardData(
       string cardPrefabAddress,
       string imageAddress,
-      CreatureData creature,
-      StatTable stats)
+      CreatureData creature)
     {
       CardPrefabAddress = cardPrefabAddress;
       ImageAddress = imageAddress;
       Creature = creature;
-      Stats = stats;
     }
+
+    public CardData Clone() => new CardData(CardPrefabAddress, ImageAddress, Creature.Clone());
   }
 }
