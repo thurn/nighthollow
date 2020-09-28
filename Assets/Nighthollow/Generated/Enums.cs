@@ -79,9 +79,10 @@ namespace Nighthollow.Generated
   public enum StatType
   {
     Unknown = 0,
-    IntStat = 1,
-    BoolStat = 2,
-    TaggedIntsStat = 3,
+    Int = 1,
+    Bool = 2,
+    SchoolInts = 3,
+    DamageTypeInts = 4,
   }
 
   public enum SkillAnimationNumber

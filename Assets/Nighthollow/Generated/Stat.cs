@@ -14,6 +14,7 @@
 
 using Nighthollow.Stats;
 
+// Generated Code - Do Not Modify!
 namespace Nighthollow.Generated
 {
   public static class Stat
