@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Nighthollow.Generated;
 using Nighthollow.Model;
 using Nighthollow.Services;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using TMPro;
 using UnityEngine;
@@ -50,7 +51,7 @@ namespace Nighthollow.Components
 
     void Awake()
     {
-      _data = _data.Clone();
+      _data = new UserData(new List<CardData>(), new StatTable(new StatTable.Builder()));
     }
 
     void Start()

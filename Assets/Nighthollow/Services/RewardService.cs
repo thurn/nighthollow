@@ -29,7 +29,7 @@ namespace Nighthollow.Services
 
     void Awake()
     {
-      _data = _data.Clone();
+//      _data = _data.Clone();
     }
 
     public void DraftRewards()

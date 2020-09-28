@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Generated Code - Do Not Modify!
 namespace Nighthollow.Generated
 {
   public enum PlayerName
   {
     Unknown = 0,
     User = 1,
-    Enemy = 2
+    Enemy = 2,
   }
 
   public enum School
@@ -29,7 +30,7 @@ namespace Nighthollow.Generated
     Flame = 3,
     Ice = 4,
     Earth = 5,
-    Shadow = 6
+    Shadow = 6,
   }
 
   public enum DamageType
@@ -41,7 +42,7 @@ namespace Nighthollow.Generated
     Fire = 4,
     Cold = 5,
     Physical = 6,
-    Necrotic = 7
+    Necrotic = 7,
   }
 
   public enum SkillType
@@ -49,17 +50,7 @@ namespace Nighthollow.Generated
     Unknown = 0,
     Untargeted = 1,
     Melee = 2,
-    Projectile = 3
-  }
-
-  public enum SkillAnimationNumber
-  {
-    Unknown = 0,
-    Skill1 = 1,
-    Skill2 = 2,
-    Skill3 = 3,
-    Skill4 = 4,
-    Skill5 = 5
+    Projectile = 3,
   }
 
   public enum RankValue
@@ -72,16 +63,35 @@ namespace Nighthollow.Generated
     Rank5 = 5,
     Rank6 = 6,
     Rank7 = 7,
-    Rank8 = 8
+    Rank8 = 8,
   }
 
   public enum FileValue
   {
-    Unknown,
+    Unknown = 0,
     File1 = 1,
     File2 = 2,
     File3 = 3,
     File4 = 4,
-    File5 = 5
+    File5 = 5,
   }
+
+  public enum StatType
+  {
+    Unknown = 0,
+    IntStat = 1,
+    BoolStat = 2,
+    TaggedIntsStat = 3,
+  }
+
+  public enum SkillAnimationNumber
+  {
+    Unknown = 0,
+    Skill1 = 1,
+    Skill2 = 2,
+    Skill3 = 3,
+    Skill4 = 4,
+    Skill5 = 5,
+  }
+
 }

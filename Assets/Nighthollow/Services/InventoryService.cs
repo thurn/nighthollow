@@ -17,17 +17,17 @@ namespace Nighthollow.Services
 
     void Awake()
     {
-      if (Instance)
-      {
-        Destroy(gameObject);
-      }
-      else
-      {
-        _inventory = _inventory.Select(c => c.Clone()).ToList();
-        _deck = _deck.Select(c => c.Clone()).ToList();
-        DontDestroyOnLoad(this);
-        Instance = this;
-      }
+//      if (Instance)
+//      {
+//        Destroy(gameObject);
+//      }
+//      else
+//      {
+//        _inventory = _inventory.Select(c => c.Clone()).ToList();
+//        _deck = _deck.Select(c => c.Clone()).ToList();
+//        DontDestroyOnLoad(this);
+//        Instance = this;
+//      }
     }
 
     public void MoveToDeck(CardItemData card)

@@ -17,8 +17,6 @@ using Nighthollow.Data;
 using Nighthollow.Delegates.SkillDelegates;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
-using SkillAnimationNumber = Nighthollow.Generated.SkillAnimationNumber;
-using SkillType = Nighthollow.Generated.SkillType;
 
 namespace Nighthollow.Model
 {
