@@ -16,21 +16,22 @@ using System.Collections.Generic;
 using Nighthollow.Delegates.CreatureDelegates;
 using Nighthollow.Delegates.SkillDelegates;
 
+// Generated Code - Do Not Modify!
 namespace Nighthollow.Generated
 {
   public enum CreatureDelegateId
   {
     Unknown = 0,
-    DefaultCreatureDelegate = 1
+    DefaultCreatureDelegate = 1,
   }
 
   public static class CreatureDelegateMap
   {
     static readonly Dictionary<CreatureDelegateId, CreatureDelegate> Delegates = new
-      Dictionary<CreatureDelegateId, CreatureDelegate>
-      {
-        {CreatureDelegateId.DefaultCreatureDelegate, new DefaultCreatureDelegate()}
-      };
+        Dictionary<CreatureDelegateId, CreatureDelegate>
+    {
+      {CreatureDelegateId.DefaultCreatureDelegate, new DefaultCreatureDelegate()},
+    };
 
     public static CreatureDelegate Get(CreatureDelegateId id) => Delegates[id];
   }
@@ -38,17 +39,18 @@ namespace Nighthollow.Generated
   public enum SkillDelegateId
   {
     Unknown = 0,
-    DefaultSkillDelegate = 1
+    DefaultSkillDelegate = 1,
   }
 
   public static class SkillDelegateMap
   {
     static readonly Dictionary<SkillDelegateId, SkillDelegate> Delegates = new
-      Dictionary<SkillDelegateId, SkillDelegate>
-      {
-        {SkillDelegateId.DefaultSkillDelegate, new DefaultSkillDelegate()}
-      };
+        Dictionary<SkillDelegateId, SkillDelegate>
+    {
+      {SkillDelegateId.DefaultSkillDelegate, new DefaultSkillDelegate()},
+    };
 
     public static SkillDelegate Get(SkillDelegateId id) => Delegates[id];
   }
+
 }

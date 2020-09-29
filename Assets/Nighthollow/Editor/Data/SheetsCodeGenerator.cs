@@ -29,6 +29,7 @@ namespace Nighthollow.Editor.Data
   {
     const string SheetId = "1n1tpIsouYgoPiiY5gEJ5lHzpBFpjX1poHMNseUpojFE";
     const string ApiKey = "AIzaSyAh7HQu6r9J55bMAqW60IvX_oZ5RIIwO7g";
+
     const string LicenseHeader = @"// Copyright © 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the ""License"");
@@ -50,7 +51,7 @@ namespace Nighthollow.Editor.Data
     {
       var request = UnityWebRequest.Get(
         $"https://sheets.googleapis.com/v4/spreadsheets/{SheetId}/values:batchGet" +
-        $"?ranges=Enums&ranges=Stats&key={ApiKey}");
+        $"?ranges=Enums&ranges=Stats&ranges=Delegates&key={ApiKey}");
 
       _request = request.SendWebRequest();
       EditorApplication.update += EditorUpdate;
@@ -83,12 +84,71 @@ namespace Nighthollow.Editor.Data
         {
           GenerateStats(range["values"]);
         }
+        else if (SheetName(range).Equals("Delegates"))
+        {
+          GenerateDelegates(range["values"]);
+        }
       }
 
       EditorApplication.update -= EditorUpdate;
     }
 
     static string SheetName(JSONNode range) => range["range"].Value.Split('!').First();
+
+    static void GenerateDelegates(JSONNode rows)
+    {
+      var builder = CreateHeader("\nusing System.Collections.Generic;\n" +
+                                 "using Nighthollow.Delegates.CreatureDelegates;\n" +
+                                 "using Nighthollow.Delegates.SkillDelegates;\n");
+
+      var typeRow = rows[1];
+      var typeNames = new Dictionary<int, string>();
+      var enums = new Dictionary<string, List<(string, string)>>();
+
+      for (var i = 0; i < typeRow.Count; i += 2)
+      {
+        typeNames[i] = typeRow[i + 1].Value;
+        enums[typeNames[i]] = new List<(string, string)>();
+      }
+
+      for (var i = 2; i < rows.Count; ++i)
+      {
+        var row = rows[i];
+        for (var j = 0; j < row.Count; j += 2)
+        {
+          enums[typeNames[j]].Add((row[j].Value, row[j + 1].Value));
+        }
+      }
+
+      foreach (var pair in enums)
+      {
+        builder.Append($"  public enum {pair.Key}DelegateId\n");
+        builder.Append("  {\n");
+        builder.Append("    Unknown = 0,\n");
+        foreach (var (valueName, integer) in pair.Value)
+        {
+          builder.Append($"    {valueName} = {integer},\n");
+        }
+        builder.Append("  }\n\n");
+
+        builder.Append($"  public static class {pair.Key}DelegateMap\n");
+        builder.Append("  {\n");
+        builder.Append(
+          $"    static readonly Dictionary<{pair.Key}DelegateId, {pair.Key}Delegate> Delegates = new\n");
+        builder.Append($"        Dictionary<{pair.Key}DelegateId, {pair.Key}Delegate>\n");
+        builder.Append("    {\n");
+        foreach (var (valueName, _) in pair.Value)
+        {
+          builder.Append($"      {{{pair.Key}DelegateId.{valueName}, new {valueName}()}},\n");
+        }
+        builder.Append("    };\n\n");
+        builder.Append($"    public static {pair.Key}Delegate Get({pair.Key}DelegateId id) => Delegates[id];\n");
+        builder.Append("  }\n\n");
+      }
+
+      builder.Append("}\n");
+      File.WriteAllText("Assets/Nighthollow/Generated/Delegates.cs", builder.ToString());
+    }
 
     static void GenerateStats(JSONNode rows)
     {
@@ -203,6 +263,7 @@ namespace Nighthollow.Editor.Data
         {
           dictionary[keys[j]] = row[j].Value;
         }
+
         result.Add(dictionary);
       }
 
