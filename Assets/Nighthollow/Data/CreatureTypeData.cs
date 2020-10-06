@@ -18,11 +18,20 @@ namespace Nighthollow.Data
 {
   public sealed class CreatureTypeData
   {
+    public uint Id { get; }
     public string Name { get; }
     public string PrefabAddress { get; }
     public int HealthLow  { get; }
     public int HealthHigh { get; }
     public PlayerName Owner { get; }
-    public string ImageAddress { get; }
+    public Optional<string> ImageAddress { get; }
+    public Optional<AffixTypeData> ImplicitAffix { get; }
+    public Optional<SkillTypeData> ImplicitSkill { get; }
+    public SkillAnimationType? Skill1Type { get; }
+    public SkillAnimationType? Skill2Type { get; }
+    public SkillAnimationType? Skill3Type { get; }
+    public SkillAnimationType? Skill4Type { get; }
+    public SkillAnimationType? Skill5Type { get; }
+    public bool IsManaCreature { get; }
   }
 }

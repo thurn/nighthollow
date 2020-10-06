@@ -12,27 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Generated;
-
-namespace Nighthollow.Stats
+namespace Nighthollow.Data
 {
-  public readonly struct StaticModifier : IModifier
+  public sealed class SkillTypeData
   {
-    public readonly int Value;
-    public readonly Operator Operator;
-
-    public StaticModifier(int value, Operator @operator)
-    {
-      Value = value;
-      Operator = @operator;
-    }
-
-    public StaticModifier Modifier => this;
-
-    public IModifier Clone() => this;
-
-    public bool IsDynamic() => false;
-
-    public bool IsValid() => true;
+    public uint Id { get; }
+    public string Name { get; }
   }
 }

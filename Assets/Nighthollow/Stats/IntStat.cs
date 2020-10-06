@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Generated;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Stats

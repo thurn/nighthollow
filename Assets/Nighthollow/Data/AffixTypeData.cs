@@ -12,12 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using Nighthollow.Generated;
+using Nighthollow.Stats;
+
 namespace Nighthollow.Data
 {
+  public sealed class ModifierRange
+  {
+    public ModifierData Modifier { get; }
+    public Optional<IStat> Low { get; }
+    public Optional<IStat> High { get; }
+  }
+
   public sealed class AffixTypeData
   {
-    public int Id { get; }
-    public int MinLevel { get; }
-    public int Weight { get; }
+    public uint Id { get; }
+    public uint MinLevel { get; }
+    public uint Weight { get; }
+    public AffixPool AffixPool { get; }
+    public List<ModifierRange> Modifiers { get; }
   }
 }

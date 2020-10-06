@@ -12,12 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Nighthollow.Stats
+using Nighthollow.Delegates.CreatureDelegates;
+using Nighthollow.Generated;
+using Nighthollow.Stats;
+
+namespace Nighthollow.Data
 {
-  public enum Operator
+  public sealed class ModifierData
   {
-    Unknown = 0,
-    Add = 1,
-    Increase = 2
+    public uint Id { get; }
+    public string Description { get; }
+    public Optional<IStat> Stat { get; }
+    public Operator? Operator { get; }
+    public Optional<CreatureDelegate> Delegate { get; }
+    public DamageType? DamageType { get; }
   }
 }
