@@ -87,7 +87,7 @@ namespace Nighthollow.Delegates.SkillDelegates
 
       if (c.Skill.Delegate.CheckForStun(c, target, damage))
       {
-        results.Add(new StunEffect(target, c.Self.Data.GetInt(Stat.StunDuration)));
+        results.Add(new StunEffect(target, c.Self.Data.GetDurationSeconds(Stat.StunDurationOnEnemies)));
         results.Add(new SkillEventEffect(SkillEventEffect.Event.Stun));
       }
     }
@@ -96,9 +96,11 @@ namespace Nighthollow.Delegates.SkillDelegates
 
     public override bool CheckForCrit(SkillContext c, Creature target) => false;
 
-    public override int ComputeDamage(SkillContext c, Creature target, TaggedIntsStat<DamageType> damage) => 0;
+    public override int ComputeDamage(SkillContext c, Creature target,
+      TaggedStats<DamageType, IntRangeStat> damage) => 0;
 
-    public override int ComputeCritDamage(SkillContext c, Creature target, TaggedIntsStat<DamageType> damage) => 0;
+    public override int ComputeCritDamage(SkillContext c, Creature target,
+      TaggedStats<DamageType, IntRangeStat> damage) => 0;
 
     public override int ComputeLifeDrain(SkillContext c, Creature creature, int damageAmount) => 0;
 

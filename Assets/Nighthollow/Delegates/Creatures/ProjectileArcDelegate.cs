@@ -12,18 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Stats;
+using Nighthollow.Delegates.CreatureDelegates;
 
-namespace Nighthollow.Model
+namespace Nighthollow.Delegates.Creatures
 {
-  public abstract class AbstractGameEntity
+  public sealed class ProjectileArcDelegate : CreatureDelegate
   {
-    public abstract StatTable Stats { get; }
 
-    public int GetInt(IntStatId statId) => Stats.Get(statId).Value;
-
-    public bool GetBool(BoolStatId statId) => Stats.Get(statId).Value;
-
-    public float GetDurationSeconds(DurationStatId statId) => Stats.Get(statId).ValueSeconds;
   }
 }

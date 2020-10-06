@@ -83,6 +83,10 @@ namespace Nighthollow.Generated
     Bool = 2,
     SchoolInts = 3,
     DamageTypeInts = 4,
+    Percentage = 5,
+    Duration = 6,
+    IntRange = 7,
+    DamageTypeIntRanges = 8,
   }
 
   public enum SkillAnimationNumber
@@ -93,6 +97,34 @@ namespace Nighthollow.Generated
     Skill3 = 3,
     Skill4 = 4,
     Skill5 = 5,
+  }
+
+  public enum Operator
+  {
+    Unknown = 0,
+    Add = 1,
+    Increase = 2,
+    SetFalse = 3,
+  }
+
+  public enum StaticCardList
+  {
+    Unknown = 0,
+    StartingDeck = 1,
+  }
+
+  public enum AffixPool
+  {
+    Unknown = 0,
+    CreatureImplicits = 1,
+  }
+
+  public enum SkillAnimationType
+  {
+    Unknown = 0,
+    MeleeSkill = 1,
+    CastSkill = 2,
+    ImplicitSkill = 3,
   }
 
 }

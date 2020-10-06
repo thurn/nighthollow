@@ -12,30 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Text;
+using System.Linq;
 using Nighthollow.Generated;
-using Nighthollow.Model;
+using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
-  public static class DescriptiveTextHelper
+  public static class Influence
   {
-    public static string TextForCardItem(CardItemData item)
-    {
-      var card = CardBuilder.Build(item);
-      var creature = card.Creature;
-      var result = new StringBuilder($"<u><b>{creature.Name}</b></u>");
-
-      AppendLine(result, "");
-      AppendLine(result, $"<b>Health:</b> {creature.GetInt(Stat.Health)}");
-
-      return result.ToString();
-    }
-
-    static void AppendLine(StringBuilder result, string text)
-    {
-      result.Append("\n");
-      result.Append(text);
-    }
+    public static bool LessThanOrEqualTo(TaggedStats<School, IntStat> a, TaggedStats<School, IntStat> b) =>
+      a.AllEntries.All(pair => pair.Value.Value <= b.Get(pair.Key).Value);
   }
 }

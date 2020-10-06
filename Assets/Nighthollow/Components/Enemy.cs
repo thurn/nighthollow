@@ -51,8 +51,8 @@ namespace Nighthollow.Components
 
     IEnumerator<YieldInstruction> SpawnAsync()
     {
-      var spawnDelay = _data.GetInt(Stat.EnemySpawnDelay);
-      yield return new WaitForSeconds(spawnDelay / 1000f);
+      var spawnDelay = _data.GetDurationSeconds(Stat.EnemySpawnDelay);
+      yield return new WaitForSeconds(spawnDelay);
 
       Root.Instance.CreatureService.CreateMovingCreature(
         RandomEnemy(),
@@ -63,7 +63,7 @@ namespace Nighthollow.Components
 
       while (_spawnCount < _data.GetInt(Stat.TotalEnemiesToSpawn))
       {
-        yield return new WaitForSeconds(spawnDelay / 1000f);
+        yield return new WaitForSeconds(spawnDelay);
         Root.Instance.CreatureService.CreateMovingCreature(
           RandomEnemy(),
           RandomFile(),

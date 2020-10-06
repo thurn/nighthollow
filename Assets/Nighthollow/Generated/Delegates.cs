@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Delegates.CreatureDelegates;
+using Nighthollow.Delegates.Creatures;
 using Nighthollow.Delegates.SkillDelegates;
 
 // Generated Code - Do Not Modify!
@@ -23,6 +24,13 @@ namespace Nighthollow.Generated
   {
     Unknown = 0,
     DefaultCreatureDelegate = 1,
+    MultipleProjectilesDelegate = 2,
+    ProjectileArcDelegate = 3,
+    AdjacentFileProjectilesDelegate = 4,
+    ChainingProjectilesDelegate = 5,
+    MeleeKnockbackDelegate = 6,
+    ManaGenerationDelegate = 7,
+    InfluenceAddedDelegate = 8,
   }
 
   public static class CreatureDelegateMap
@@ -31,6 +39,13 @@ namespace Nighthollow.Generated
         Dictionary<CreatureDelegateId, CreatureDelegate>
     {
       {CreatureDelegateId.DefaultCreatureDelegate, new DefaultCreatureDelegate()},
+      {CreatureDelegateId.MultipleProjectilesDelegate, new MultipleProjectilesDelegate()},
+      {CreatureDelegateId.ProjectileArcDelegate, new ProjectileArcDelegate()},
+      {CreatureDelegateId.AdjacentFileProjectilesDelegate, new AdjacentFileProjectilesDelegate()},
+      {CreatureDelegateId.ChainingProjectilesDelegate, new ChainingProjectilesDelegate()},
+      {CreatureDelegateId.MeleeKnockbackDelegate, new MeleeKnockbackDelegate()},
+      {CreatureDelegateId.ManaGenerationDelegate, new ManaGenerationDelegate()},
+      {CreatureDelegateId.InfluenceAddedDelegate, new InfluenceAddedDelegate()},
     };
 
     public static CreatureDelegate Get(CreatureDelegateId id) => Delegates[id];

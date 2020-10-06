@@ -64,8 +64,8 @@ namespace Nighthollow.Components
     {
       while (true)
       {
-        yield return new WaitForSeconds(_data.GetInt(Stat.ManaGainInterval) / 1000f);
-        _mana += _data.GetInt(Stat.ManaGain);
+        yield return new WaitForSeconds(1);
+        _mana += _data.GetInt(Stat.ManaGainPerSecond);
       }
     }
 
@@ -73,7 +73,7 @@ namespace Nighthollow.Components
     {
       while (true)
       {
-        yield return new WaitForSeconds(_data.GetInt(Stat.CardDrawInterval)/ 1000f);
+        yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.CardDrawInterval));
         _hand.DrawCards(new List<CardData> {_deck.Draw()});
       }
     }

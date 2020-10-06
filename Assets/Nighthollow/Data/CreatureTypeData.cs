@@ -12,30 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Text;
 using Nighthollow.Generated;
-using Nighthollow.Model;
 
 namespace Nighthollow.Data
 {
-  public static class DescriptiveTextHelper
+  public sealed class CreatureTypeData
   {
-    public static string TextForCardItem(CardItemData item)
-    {
-      var card = CardBuilder.Build(item);
-      var creature = card.Creature;
-      var result = new StringBuilder($"<u><b>{creature.Name}</b></u>");
-
-      AppendLine(result, "");
-      AppendLine(result, $"<b>Health:</b> {creature.GetInt(Stat.Health)}");
-
-      return result.ToString();
-    }
-
-    static void AppendLine(StringBuilder result, string text)
-    {
-      result.Append("\n");
-      result.Append(text);
-    }
+    public string Name { get; }
+    public string PrefabAddress { get; }
+    public int HealthLow  { get; }
+    public int HealthHigh { get; }
+    public PlayerName Owner { get; }
+    public string ImageAddress { get; }
   }
 }

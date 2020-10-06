@@ -19,58 +19,57 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct TaggedIntsStatId<T> : IStatId<TaggedIntsStat<T>> where T : Enum
+  public readonly struct TaggedStatsId<TKey, TValue> : IStatId<TaggedStats<TKey, TValue>>
+    where TKey : Enum where TValue : IStat<TValue>, new()
   {
     readonly uint _value;
 
-    public TaggedIntsStatId(uint value)
+    public TaggedStatsId(uint value)
     {
       _value = value;
     }
 
     public uint Value => _value;
 
-    public TaggedIntsStat<T> NotFoundValue() => new TaggedIntsStat<T>();
+    public TaggedStats<TKey, TValue> NotFoundValue() => new TaggedStats<TKey, TValue>();
 
-    public TaggedIntsStat<T> Deserialize(string value)
+    public TaggedStats<TKey, TValue> Deserialize(string value)
     {
       throw new NotImplementedException();
     }
   }
 
-  public sealed class TaggedIntsStat<T> : IStat<TaggedIntsStat<T>> where T : Enum
+  public sealed class TaggedStats<TKey, TValue> : IStat<TaggedStats<TKey, TValue>>
+    where TKey : Enum where TValue : IStat<TValue>, new()
   {
-    readonly Dictionary<T, IntStat> _stats;
+    readonly Dictionary<TKey, TValue> _stats;
 
-    public IEnumerable<KeyValuePair<T, IntStat>> AllEntries => _stats;
+    public IEnumerable<KeyValuePair<TKey, TValue>> AllEntries => _stats;
 
-    public TaggedIntsStat()
+    public TaggedStats()
     {
-      _stats = new Dictionary<T, IntStat>();
+      _stats = new Dictionary<TKey, TValue>();
     }
 
-    TaggedIntsStat(Dictionary<T, IntStat> stats)
+    TaggedStats(Dictionary<TKey, TValue> stats)
     {
       _stats = stats.ToDictionary(e => e.Key, e => e.Value.Clone());
     }
 
-    public void Add(T key, int value)
+    public void Add(TKey key, TValue value)
     {
-      Errors.CheckArgument(!key.Equals(default(T)), $"Cannot add default value {key} as a key");
+      Errors.CheckArgument(!key.Equals(default(TKey)), $"Cannot add default value {key} as a key");
       Errors.CheckState(!_stats.ContainsKey(key), $"Key {key} already added");
-      _stats[key] = new IntStat(value);
+      _stats[key] = value;
     }
 
-    public TaggedIntsStat<T> Clone() => new TaggedIntsStat<T>(_stats);
+    public TaggedStats<TKey, TValue> Clone() => new TaggedStats<TKey, TValue>(_stats);
 
-    public bool LessThanOrEqualTo(TaggedIntsStat<T> other) =>
-      _stats.All(pair => pair.Value.Value <= other._stats[pair.Key].Value);
-
-    public IntStat Get(T key)
+    public TValue Get(TKey key)
     {
       if (!_stats.ContainsKey(key))
       {
-        _stats[key] = new IntStat(0);
+        _stats[key] = new TValue();
       }
 
       return _stats[key];

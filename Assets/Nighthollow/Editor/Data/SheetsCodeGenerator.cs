@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using SimpleJSON;
 using UnityEditor;
@@ -51,8 +52,9 @@ namespace Nighthollow.Editor.Data
     {
       var request = UnityWebRequest.Get(
         $"https://sheets.googleapis.com/v4/spreadsheets/{SheetId}/values:batchGet" +
-        $"?ranges=Enums&ranges=Stats&ranges=Delegates&key={ApiKey}");
+        $"?ranges='Enums'&ranges='Stats'&ranges='Delegates'&key={ApiKey}");
 
+      Debug.Log("Running Code Generation...");
       _request = request.SendWebRequest();
       EditorApplication.update += EditorUpdate;
     }
@@ -64,33 +66,39 @@ namespace Nighthollow.Editor.Data
         return;
       }
 
-      var request = _request.webRequest;
-      if (request.isNetworkError || request.isHttpError)
+      try
       {
-        Debug.LogError(request.error);
+        var request = _request.webRequest;
+        if (request.isNetworkError || request.isHttpError)
+        {
+          Debug.LogError(request.error);
+          EditorApplication.update -= EditorUpdate;
+          return;
+        }
+
+        Debug.Log("Got Database Response...");
+        var parsed = JSON.Parse(request.downloadHandler.text);
+
+        foreach (var range in parsed["valueRanges"].Children)
+        {
+          if (SheetName(range).Equals("Enums"))
+          {
+            GenerateEnums(range["values"]);
+          }
+          else if (SheetName(range).Equals("Stats"))
+          {
+            GenerateStats(range["values"]);
+          }
+          else if (SheetName(range).Equals("Delegates"))
+          {
+            GenerateDelegates(range["values"]);
+          }
+        }
+      }
+      finally
+      {
         EditorApplication.update -= EditorUpdate;
-        return;
       }
-
-      var parsed = JSON.Parse(request.downloadHandler.text);
-
-      foreach (var range in parsed["valueRanges"].Children)
-      {
-        if (SheetName(range).Equals("Enums"))
-        {
-          GenerateEnums(range["values"]);
-        }
-        else if (SheetName(range).Equals("Stats"))
-        {
-          GenerateStats(range["values"]);
-        }
-        else if (SheetName(range).Equals("Delegates"))
-        {
-          GenerateDelegates(range["values"]);
-        }
-      }
-
-      EditorApplication.update -= EditorUpdate;
     }
 
     static string SheetName(JSONNode range) => range["range"].Value.Split('!').First();
@@ -99,6 +107,7 @@ namespace Nighthollow.Editor.Data
     {
       var builder = CreateHeader("\nusing System.Collections.Generic;\n" +
                                  "using Nighthollow.Delegates.CreatureDelegates;\n" +
+                                 "using Nighthollow.Delegates.Creatures;\n" +
                                  "using Nighthollow.Delegates.SkillDelegates;\n");
 
       var typeRow = rows[1];
@@ -129,6 +138,7 @@ namespace Nighthollow.Editor.Data
         {
           builder.Append($"    {valueName} = {integer},\n");
         }
+
         builder.Append("  }\n\n");
 
         builder.Append($"  public static class {pair.Key}DelegateMap\n");
@@ -141,6 +151,7 @@ namespace Nighthollow.Editor.Data
         {
           builder.Append($"      {{{pair.Key}DelegateId.{valueName}, new {valueName}()}},\n");
         }
+
         builder.Append("    };\n\n");
         builder.Append($"    public static {pair.Key}Delegate Get({pair.Key}DelegateId id) => Delegates[id];\n");
         builder.Append("  }\n\n");
@@ -152,7 +163,8 @@ namespace Nighthollow.Editor.Data
 
     static void GenerateStats(JSONNode rows)
     {
-      var input = AsHeaderIdentifiedRows(rows);
+      var input = SpreadsheetHelper.AsHeaderIdentifiedRows(rows);
+
       var builder = CreateHeader("\nusing Nighthollow.Stats;\n");
       builder.Append("  public static class Stat\n");
       builder.Append("  {\n");
@@ -160,30 +172,43 @@ namespace Nighthollow.Editor.Data
       foreach (var stat in input)
       {
         string idType;
-        switch ((StatType) int.Parse(stat["Type ID"]))
+        switch ((StatType) int.Parse(stat["Type"]))
         {
           case StatType.Int:
             idType = "IntStatId";
+            break;
+          case StatType.Percentage:
+            idType = "PercentageStatId";
+            break;
+          case StatType.Duration:
+            idType = "DurationStatId";
+            break;
+          case StatType.IntRange:
+            idType = "IntRangeStatId";
             break;
           case StatType.Bool:
             idType = "BoolStatId";
             break;
           case StatType.SchoolInts:
-            idType = "TaggedIntsStatId<School>";
+            idType = "TaggedStatsId<School, IntStat>";
             break;
           case StatType.DamageTypeInts:
-            idType = "TaggedIntsStatId<DamageType>";
+            idType = "TaggedStatsId<DamageType, IntStat>";
+            break;
+          case StatType.DamageTypeIntRanges:
+            idType = "TaggedStatsId<DamageType, IntRangeStat>";
             break;
           case StatType.Unknown:
           default:
             throw new ArgumentOutOfRangeException();
         }
 
-        builder.Append($"    public static readonly {idType} {stat["Name"]} = new {idType}({stat["ID"]});\n");
+        builder.Append($"    public static readonly {idType} {stat["Name"]} = new {idType}({stat["Stat ID"]});\n");
       }
 
       builder.Append("  }\n");
       builder.Append("}\n");
+
       File.WriteAllText("Assets/Nighthollow/Generated/Stat.cs", builder.ToString());
     }
 
@@ -239,35 +264,6 @@ namespace Nighthollow.Editor.Data
       builder.Append("\nnamespace Nighthollow.Generated\n");
       builder.Append("{\n");
       return builder;
-    }
-
-    /// <summary>
-    /// Converts a sheets JSON response into a list of dictionaries where each item is a row and the keys are provided
-    /// by the first row of the response.
-    /// </summary>
-    static List<Dictionary<string, string>> AsHeaderIdentifiedRows(JSONNode rows)
-    {
-      var firstRow = rows[0];
-      var keys = new Dictionary<int, string>();
-      for (var i = 0; i < firstRow.Count; ++i)
-      {
-        keys[i] = firstRow[i].Value;
-      }
-
-      var result = new List<Dictionary<string, string>>();
-      for (var i = 1; i < rows.Count; ++i)
-      {
-        var row = rows[i];
-        var dictionary = new Dictionary<string, string>();
-        for (var j = 0; j < row.Count; ++j)
-        {
-          dictionary[keys[j]] = row[j].Value;
-        }
-
-        result.Add(dictionary);
-      }
-
-      return result;
     }
   }
 }

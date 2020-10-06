@@ -41,6 +41,10 @@ namespace Nighthollow.Stats
     bool _hasDynamicModifiers;
     int _computedValue;
 
+    public IntStat()
+    {
+    }
+
     public IntStat(int initialValue)
     {
       _initialValue = initialValue;

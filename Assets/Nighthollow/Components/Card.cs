@@ -15,6 +15,7 @@
 using DG.Tweening;
 using Nighthollow.Services;
 using Nighthollow.Utils;
+using Nighthollow.Data;
 using System.Collections.Generic;
 using Nighthollow.Generated;
 using Nighthollow.Model;
@@ -92,7 +93,7 @@ namespace Nighthollow.Components
       var manaCost = _data.GetInt(Stat.ManaCost);
       var influence = _data.Stats.Get(Stat.Influence);
       _canPlay = manaCost <= _user.Mana &&
-        influence.LessThanOrEqualTo(_user.Data.Stats.Get(Stat.Influence));
+        Influence.LessThanOrEqualTo(influence, _user.Data.Stats.Get(Stat.Influence));
 
       _outline.enabled = _canPlay;
       _cost.text = manaCost.ToString();

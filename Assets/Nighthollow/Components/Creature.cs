@@ -314,13 +314,13 @@ namespace Nighthollow.Components
       DestroyCreature();
     }
 
-    public void Stun(int durationMs)
+    public void Stun(float durationSeconds)
     {
       if (!IsAlive() || IsStunned()) return;
-      StartCoroutine(StunAsync(durationMs));
+      StartCoroutine(StunAsync(durationSeconds));
     }
 
-    IEnumerator<YieldInstruction> StunAsync(int durationMs)
+    IEnumerator<YieldInstruction> StunAsync(float durationSeconds)
     {
       _animator.SetTrigger(Hit);
       SetState(CreatureState.Stunned);
@@ -328,7 +328,7 @@ namespace Nighthollow.Components
       attachment.Initialize(Root.Instance.Prefabs.StunIcon());
       _attachmentDisplay.AddAttachment(attachment);
 
-      yield return new WaitForSeconds(durationMs / 1000f);
+      yield return new WaitForSeconds(durationSeconds);
 
       _attachmentDisplay.ClearAttachments();
       ToDefaultState();
@@ -347,16 +347,10 @@ namespace Nighthollow.Components
     {
       while (true)
       {
-        var interval = _data.GetInt(Stat.RegenerationInterval);
-        if (interval <= 0)
-        {
-          break;
-        }
-
-        yield return new WaitForSeconds(interval / 1000f);
-
-        Heal(_data.GetInt(Stat.HealthRegeneration));
+        yield return new WaitForSeconds(1);
+        Heal(_data.GetInt(Stat.HealthRegenerationPerSecond));
       }
+      // ReSharper disable once IteratorNeverReturns
     }
 
     void Update()
@@ -404,7 +398,7 @@ namespace Nighthollow.Components
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
 
-      _animator.SetFloat(SkillSpeed, Constants.MultiplierBasisPoints(_data.GetInt(Stat.SkillSpeedMultiplier)));
+      _animator.SetFloat(SkillSpeed, _data.Stats.Get(Stat.SkillSpeedMultiplier).AsMultplier());
 
       if (_state == CreatureState.Moving)
       {

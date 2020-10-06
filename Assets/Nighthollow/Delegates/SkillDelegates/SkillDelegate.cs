@@ -56,9 +56,11 @@ namespace Nighthollow.Delegates.SkillDelegates
 
     public virtual bool CheckForCrit(SkillContext c, Creature target) => false;
 
-    public virtual int ComputeDamage(SkillContext c, Creature target, TaggedIntsStat<DamageType> damage) => 0;
+    public virtual int ComputeDamage(SkillContext c, Creature target,
+      TaggedStats<DamageType, IntRangeStat> damage) => 0;
 
-    public virtual int ComputeCritDamage(SkillContext c, Creature target, TaggedIntsStat<DamageType> damage) => 0;
+    public virtual int ComputeCritDamage(SkillContext c, Creature target,
+      TaggedStats<DamageType, IntRangeStat> damage) => 0;
 
     public virtual int ComputeLifeDrain(SkillContext c, Creature creature, int damageAmount) => 0;
 

@@ -55,17 +55,17 @@ namespace Nighthollow.Delegates.CreatureDelegates
   public sealed class StunEffect : CreatureEffect
   {
     public Creature Target { get; }
-    public int DurationMs { get; }
+    public float DurationSeconds { get; }
 
-    public StunEffect(Creature target, int durationMs)
+    public StunEffect(Creature target, float durationSeconds)
     {
       Target = target;
-      DurationMs = durationMs;
+      DurationSeconds = durationSeconds;
     }
 
     public override void Execute(Creature self)
     {
-      Target.Stun(DurationMs);
+      Target.Stun(DurationSeconds);
     }
   }
 
