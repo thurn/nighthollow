@@ -15,11 +15,18 @@
 #nullable enable
 
 using Nighthollow.Delegates.Core;
+using Nighthollow.Generated;
 
 namespace Nighthollow.Delegates.Creatures
 {
-  public sealed class AdjacentFileProjectilesDelegate : CreatureDelegate
+  public sealed class DefaultCreatureDelegate : CreatureDelegate
   {
-
+    public override void OnDeath(CreatureContext c)
+    {
+      if (c.Self.Owner == PlayerName.Enemy)
+      {
+        c.Results.Add(new EnemyRemovedEffect());
+      }
+    }
   }
 }

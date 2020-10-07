@@ -14,12 +14,16 @@
 
 #nullable enable
 
-using Nighthollow.Delegates.Core;
+using System.Collections.Generic;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Core
 {
-  public sealed class AdjacentFileProjectilesDelegate : CreatureDelegate
+  public sealed class Results<T>
   {
+    readonly List<T> _results = new List<T>();
 
+    public void Add(T result) => _results.Add(result);
+
+    public IEnumerable<T> Values => _results;
   }
 }

@@ -16,8 +16,8 @@ using DG.Tweening;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using System.Collections.Generic;
+using Nighthollow.Data;
 using Nighthollow.Generated;
-using Nighthollow.Model;
 using UnityEngine;
 
 namespace Nighthollow.Components

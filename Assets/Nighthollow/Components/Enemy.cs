@@ -14,8 +14,8 @@
 
 using System.Collections.Generic;
 using DataStructures.RandomSelector;
+using Nighthollow.Data;
 using Nighthollow.Generated;
-using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;

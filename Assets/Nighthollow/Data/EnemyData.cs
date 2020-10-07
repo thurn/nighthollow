@@ -14,12 +14,25 @@
 
 #nullable enable
 
-using Nighthollow.Delegates.Core;
+using System.Collections.Generic;
+using System.Linq;
+using Nighthollow.Stats;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Data
 {
-  public sealed class AdjacentFileProjectilesDelegate : CreatureDelegate
+  public sealed class EnemyData : AbstractGameEntity
   {
+    public IReadOnlyCollection<CreatureData> Enemies { get; }
+    public override StatTable Stats { get; }
 
+    public EnemyData(
+      IReadOnlyCollection<CreatureData> enemies,
+      StatTable stats)
+    {
+      Enemies = enemies;
+      Stats = stats;
+    }
+
+    public EnemyData Clone() => new EnemyData(Enemies.Select(e => e.Clone()).ToList(), Stats.Clone());
   }
 }

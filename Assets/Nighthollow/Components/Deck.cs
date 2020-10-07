@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
-using Nighthollow.Model;
 using UnityEngine;
 
 namespace Nighthollow.Components
@@ -26,27 +25,27 @@ namespace Nighthollow.Components
   {
     [SerializeField] bool _debugOrderedDraws;
 
-    [SerializeField] List<CardItemData> _cards;
+    [SerializeField] List<CreatureData> _cards;
 
     [SerializeField] List<int> _weights;
     int _lastDraw;
 
-    public void OnStartGame(IEnumerable<CardItemData> cards)
+    public void OnStartGame(IEnumerable<CreatureData> cards)
     {
       _weights.Clear();
       _cards = cards.ToList();
 
       foreach (var card in _cards)
       {
-        _weights.Add(card.Card.GetBool(Stat.IsManaCreature) ? 24000 : 4000);
+        _weights.Add(card.GetBool(Stat.IsManaCreature) ? 24000 : 4000);
       }
     }
 
-    public CardData Draw()
+    public CreatureData Draw()
     {
       if (_debugOrderedDraws)
       {
-        return CardBuilder.Build(_cards[_lastDraw++ % _cards.Count]);
+        return _cards[_lastDraw++ % _cards.Count].Clone();
       }
 
       var selector = new DynamicRandomSelector<int>(-1, _cards.Count);
@@ -59,7 +58,7 @@ namespace Nighthollow.Components
 
       var index = selector.SelectRandomItem();
       DecrementWeight(index);
-      return CardBuilder.Build(_cards[index]);
+      return _cards[index].Clone();
     }
 
     void DecrementWeight(int index)

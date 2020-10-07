@@ -23,6 +23,7 @@ namespace Nighthollow.Services
 {
   public sealed class Prefabs : MonoBehaviour
   {
+    [SerializeField] Card _cardPrefab;
     [SerializeField] StatusBarsHolder _statusBars;
     [SerializeField] SpriteRenderer _cursorPrefab;
     [SerializeField] Image _influencePrefab;
@@ -41,12 +42,9 @@ namespace Nighthollow.Services
     [SerializeField] DamageText _hitMedium;
     [SerializeField] DamageText _hitBig;
     [SerializeField] Sprite _stunIcon;
-    [SerializeField] RewardSelector _rewardSelector;
-    [SerializeField] RewardChoice _rewardChoice;
-    [SerializeField] DeckBuilder _deckBuilder;
-    [SerializeField] CardRow _cardRow;
-    [SerializeField] CardTooltip _tooltip;
     [SerializeField] Dialog _dialog;
+
+    public Card CreateCard() => ComponentUtils.Instantiate(_cardPrefab, Root.Instance.MainCanvas);
 
     public StatusBarsHolder CreateStatusBars() => ComponentUtils.Instantiate(_statusBars,
       Root.Instance.MainCanvas);
@@ -79,20 +77,6 @@ namespace Nighthollow.Services
       Root.Instance.ObjectPoolService.Create(_hitBig, Constants.OffScreen, Root.Instance.MainCanvas);
 
     public Sprite StunIcon() => Instantiate(_stunIcon);
-
-    public RewardSelector CreateRewardSelector() =>
-      ComponentUtils.Instantiate(_rewardSelector, Root.Instance.MainCanvas);
-
-    public RewardChoice CreateRewardChoice(Transform parent) =>
-      ComponentUtils.Instantiate(_rewardChoice, parent);
-
-    public DeckBuilder CreateDeckBuilder() =>
-      ComponentUtils.Instantiate(_deckBuilder, Root.Instance.MainCanvas);
-
-    public CardRow CreateCardRow(Transform parent) =>
-      ComponentUtils.Instantiate(_cardRow, parent);
-
-    public CardTooltip CreateTooltip() => ComponentUtils.Instantiate(_tooltip, Root.Instance.MainCanvas);
 
     public void ShowDialog(string text, Action onClose) =>
       ComponentUtils.Instantiate(_dialog, Root.Instance.MainCanvas).Initialize(text, onClose);

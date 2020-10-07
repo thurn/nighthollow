@@ -14,12 +14,15 @@
 
 #nullable enable
 
-using Nighthollow.Delegates.Core;
+using Nighthollow.Services;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Core
 {
-  public sealed class AdjacentFileProjectilesDelegate : CreatureDelegate
+  public sealed class EnemyRemovedEffect : DefaultEffect
   {
-
+    public override void Execute()
+    {
+      Root.Instance.Enemy.OnEnemyCreatureRemoved();
+    }
   }
 }

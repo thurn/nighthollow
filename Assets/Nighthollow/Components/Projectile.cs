@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Delegates.SkillDelegates;
+using Nighthollow.Data;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
-using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;

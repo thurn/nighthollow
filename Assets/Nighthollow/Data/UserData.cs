@@ -14,12 +14,25 @@
 
 #nullable enable
 
-using Nighthollow.Delegates.Core;
+using System.Collections.Generic;
+using System.Linq;
+using Nighthollow.Stats;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Data
 {
-  public sealed class AdjacentFileProjectilesDelegate : CreatureDelegate
+  public sealed class UserData : AbstractGameEntity
   {
+    public IReadOnlyCollection<CreatureData> Deck { get; }
+    public override StatTable Stats { get; }
 
+    public UserData(
+      IReadOnlyCollection<CreatureData> deck,
+      StatTable stats)
+    {
+      Deck = deck;
+      Stats = stats;
+    }
+
+    public UserData Clone() => new UserData(Deck.Select(d => d.Clone()).ToList(), Stats.Clone());
   }
 }

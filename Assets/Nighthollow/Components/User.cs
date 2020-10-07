@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using Nighthollow.Data;
 using Nighthollow.Generated;
-using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
@@ -29,7 +29,8 @@ namespace Nighthollow.Components
 {
   public sealed class User : MonoBehaviour
   {
-    [Header("Config")] [SerializeField] Hand _hand;
+    [Header("Config")]
+    [SerializeField] Hand _hand;
     public Hand Hand => _hand;
 
     [SerializeField] Deck _deck;
@@ -39,7 +40,8 @@ namespace Nighthollow.Components
     [SerializeField] TextMeshProUGUI _manaText;
     [SerializeField] RectTransform _influenceRow;
 
-    [Header("State")] [SerializeField] UserData _data;
+    [Header("State")]
+    UserData _data;
     public UserData Data => _data;
 
     [SerializeField] List<Image> _influenceImages;
@@ -51,7 +53,7 @@ namespace Nighthollow.Components
 
     void Awake()
     {
-      _data = new UserData(new List<CardData>(), new StatTable(new StatTable.Builder()));
+      _data = new UserData(new List<CreatureData>(), new StatTable(new StatTable.Builder()));
     }
 
     void Start()
@@ -74,18 +76,17 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.CardDrawInterval));
-        _hand.DrawCards(new List<CardData> {_deck.Draw()});
+        _hand.DrawCards(new List<CreatureData> {_deck.Draw()});
       }
     }
 
     public void OnStartGame()
     {
       gameObject.SetActive(true);
-      _deck.OnStartGame(InventoryService.Instance.Deck);
       StartCoroutine(GainMana());
       StartCoroutine(DrawCards());
 
-      var openingHand = new List<CardData>();
+      var openingHand = new List<CreatureData>();
       for (var i = 0; i < _data.GetInt(Stat.StartingHandSize); ++i)
       {
         openingHand.Add(_deck.Draw());

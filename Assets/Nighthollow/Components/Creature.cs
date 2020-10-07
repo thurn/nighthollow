@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Delegates.SkillDelegates;
+using Nighthollow.Data;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using UnityEngine;
 using UnityEngine.Rendering;

@@ -14,12 +14,27 @@
 
 #nullable enable
 
-using Nighthollow.Delegates.Core;
-
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Core
 {
-  public sealed class AdjacentFileProjectilesDelegate : CreatureDelegate
+  public sealed class SkillEventEffect : DefaultEffect
   {
+    public enum Event
+    {
+      Missed,
+      Crit,
+      Stun
+    }
 
+    public Event EventName { get; }
+
+    public SkillEventEffect(Event eventName)
+    {
+      EventName = eventName;
+    }
+
+    public override void Execute()
+    {
+      throw new System.NotImplementedException();
+    }
   }
 }

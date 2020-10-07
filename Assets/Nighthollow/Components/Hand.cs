@@ -15,7 +15,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using UnityEngine;
 
@@ -54,17 +54,16 @@ namespace Nighthollow.Components
       }
     }
 
-    public void DrawCards(IEnumerable<CardData> cards)
+    public void DrawCards(IEnumerable<CreatureData> cards)
     {
       StartCoroutine(DrawsCardAsync(cards));
     }
 
-    IEnumerator<YieldInstruction> DrawsCardAsync(IEnumerable<CardData> cards)
+    IEnumerator<YieldInstruction> DrawsCardAsync(IEnumerable<CreatureData> cards)
     {
       foreach (var cardData in cards)
       {
-        var card = Root.Instance.AssetService.InstantiatePrefab<Card>(
-          cardData.CardPrefabAddress, Root.Instance.MainCanvas);
+        var card = Root.Instance.Prefabs.CreateCard();
         card.Initialize(cardData);
         card.transform.position = _deckPosition.position;
         card.transform.localScale = Vector2.one * _initialCardScale;

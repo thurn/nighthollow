@@ -17,8 +17,8 @@
 using Nighthollow.Components;
 using System;
 using System.Collections.Generic;
+using Nighthollow.Data;
 using Nighthollow.Generated;
-using Nighthollow.Model;
 using UnityEngine;
 
 namespace Nighthollow.Services

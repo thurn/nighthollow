@@ -102,9 +102,9 @@ namespace Nighthollow.Editor.Data
     static void GenerateDelegates(JSONNode rows)
     {
       var builder = CreateHeader("\nusing System.Collections.Generic;\n" +
-                                 "using Nighthollow.Delegates.CreatureDelegates;\n" +
+                                 "using Nighthollow.Delegates.Core;\n" +
                                  "using Nighthollow.Delegates.Creatures;\n" +
-                                 "using Nighthollow.Delegates.SkillDelegates;\n");
+                                 "using Nighthollow.Delegates.Skills;\n");
 
       var typeRow = rows[1];
       var typeNames = new Dictionary<int, string>();

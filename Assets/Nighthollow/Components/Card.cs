@@ -18,7 +18,6 @@ using Nighthollow.Utils;
 using Nighthollow.Data;
 using System.Collections.Generic;
 using Nighthollow.Generated;
-using Nighthollow.Model;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -39,7 +38,7 @@ namespace Nighthollow.Components
     [SerializeField] Image _outline;
 
     [Header("State")]
-    [SerializeField] CardData _data;
+    CreatureData _data;
     [SerializeField] User _user;
     [SerializeField] bool _canPlay;
     [SerializeField] bool _disableDragging;
@@ -50,7 +49,7 @@ namespace Nighthollow.Components
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
 
-    public void Initialize(CardData cardData)
+    public void Initialize(CreatureData cardData)
     {
       _cardFront.gameObject.SetActive(false);
       _cardBack.gameObject.SetActive(true);
@@ -88,7 +87,7 @@ namespace Nighthollow.Components
     void Update()
     {
       Errors.CheckNotNull(_data);
-      _cardImage.sprite = Root.Instance.AssetService.GetImage(_data.ImageAddress);
+      _cardImage.sprite = Root.Instance.AssetService.GetImage(Errors.CheckNotNull(_data.ImageAddress));
 
       var manaCost = _data.GetInt(Stat.ManaCost);
       var influence = _data.Stats.Get(Stat.Influence);
@@ -157,7 +156,7 @@ namespace Nighthollow.Components
           if (!_overBoard)
           {
             gameObject.SetActive(false);
-            var creature = Root.Instance.CreatureService.CreateUserCreature(_data.Creature);
+            var creature = Root.Instance.CreatureService.CreateUserCreature(_data);
             creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
             _overBoard = true;
           }

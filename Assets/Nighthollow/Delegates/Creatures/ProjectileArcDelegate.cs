@@ -14,7 +14,7 @@
 
 #nullable enable
 
-using Nighthollow.Delegates.CreatureDelegates;
+using Nighthollow.Delegates.Core;
 
 namespace Nighthollow.Delegates.Creatures
 {

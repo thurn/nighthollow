@@ -14,12 +14,19 @@
 
 #nullable enable
 
-using Nighthollow.Delegates.Core;
+using Nighthollow.Components;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Core
 {
-  public sealed class AdjacentFileProjectilesDelegate : CreatureDelegate
+  public sealed class CreatureContext
   {
+    public Creature Self { get; }
+    public Results<CreatureEffect> Results { get; }
 
+    public CreatureContext(Creature self)
+    {
+      Self = self;
+      Results = new Results<CreatureEffect>();
+    }
   }
 }

@@ -55,6 +55,7 @@ namespace Nighthollow.Services
       yield return request.SendWebRequest();
       var node = JSON.Parse(request.downloadHandler.text);
       var parsed = SpreadsheetHelper.ParseResponse(node);
+      Debug.Log("Got Response");
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierData(row)))
       {

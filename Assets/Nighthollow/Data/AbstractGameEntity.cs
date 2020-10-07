@@ -14,12 +14,18 @@
 
 #nullable enable
 
-using Nighthollow.Delegates.Core;
+using Nighthollow.Stats;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Data
 {
-  public sealed class AdjacentFileProjectilesDelegate : CreatureDelegate
+  public abstract class AbstractGameEntity
   {
+    public abstract StatTable Stats { get; }
 
+    public int GetInt(IntStatId statId) => Stats.Get(statId).Value;
+
+    public bool GetBool(BoolStatId statId) => Stats.Get(statId).Value;
+
+    public float GetDurationSeconds(DurationStatId statId) => Stats.Get(statId).ValueSeconds;
   }
 }

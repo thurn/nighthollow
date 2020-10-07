@@ -14,12 +14,20 @@
 
 #nullable enable
 
-using Nighthollow.Delegates.Core;
+using Nighthollow.Components;
+using Nighthollow.Data;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Core
 {
-  public sealed class AdjacentFileProjectilesDelegate : CreatureDelegate
+  public sealed class SkillContext
   {
+    public Creature Self { get; }
+    public SkillData Skill { get; }
 
+    public SkillContext(Creature self, SkillData skill)
+    {
+      Self = self;
+      Skill = skill;
+    }
   }
 }

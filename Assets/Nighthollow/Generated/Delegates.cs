@@ -13,9 +13,9 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Delegates.CreatureDelegates;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Creatures;
-using Nighthollow.Delegates.SkillDelegates;
+using Nighthollow.Delegates.Skills;
 
 // Generated Code - Do Not Modify!
 namespace Nighthollow.Generated

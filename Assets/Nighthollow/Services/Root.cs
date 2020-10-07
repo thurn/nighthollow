@@ -47,9 +47,6 @@ namespace Nighthollow.Services
     [SerializeField] DamageTextService _damageTextService;
     public DamageTextService DamageTextService => _damageTextService;
 
-    [SerializeField] RewardService _rewardService;
-    public RewardService RewardService => _rewardService;
-
     [SerializeField] AssetService _assetService;
     public AssetService AssetService => _assetService;
 
@@ -79,7 +76,6 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_user);
       Errors.CheckNotNull(_enemy);
       Errors.CheckNotNull(_damageTextService);
-      Errors.CheckNotNull(_rewardService);
       Errors.CheckNotNull(_assetService);
       Errors.CheckNotNull(_dataService);
 

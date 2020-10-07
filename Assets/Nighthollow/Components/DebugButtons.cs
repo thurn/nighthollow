@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Nighthollow.Services;
-using SimpleJSON;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 namespace Nighthollow.Components
@@ -52,28 +49,12 @@ namespace Nighthollow.Components
 
     public void Draft()
     {
-      var rewardSelector = FindObjectOfType<RewardSelector>();
-      if (rewardSelector)
-      {
-        Destroy(rewardSelector.gameObject);
-      }
-      else
-      {
-        Root.Instance.RewardService.DraftRewards();
-      }
+
     }
 
     public void DeckBuilder()
     {
-      var deckBuilder = FindObjectOfType<DeckBuilder>();
-      if (deckBuilder)
-      {
-        Destroy(deckBuilder.gameObject);
-      }
-      else
-      {
-        Root.Instance.Prefabs.CreateDeckBuilder();
-      }
+
     }
   }
 }
