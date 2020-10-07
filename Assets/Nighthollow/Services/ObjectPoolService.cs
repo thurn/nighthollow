@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using Nighthollow.Utils;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,12 +24,12 @@ namespace Nighthollow.Services
   {
     readonly Dictionary<int, List<GameObject>> _pools = new Dictionary<int, List<GameObject>>();
 
-    public T Create<T>(T prefab, Vector3 position, Transform parent = null) where T : Component
+    public T Create<T>(T prefab, Vector3 position, Transform? parent = null) where T : Component
     {
       return ComponentUtils.GetComponent<T>(Create(prefab.gameObject, position, parent));
     }
 
-    public GameObject Create(GameObject prefab, Vector3 position, Transform parent = null)
+    public GameObject Create(GameObject prefab, Vector3 position, Transform? parent = null)
     {
       var instanceId = prefab.GetInstanceID();
       if (_pools.ContainsKey(instanceId))

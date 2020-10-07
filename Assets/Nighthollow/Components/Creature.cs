@@ -44,11 +44,11 @@ namespace Nighthollow.Components
     [SerializeField] float _animationSpeedMultiplier;
 
     [Header("State")] [SerializeField] bool _initialized;
-    [SerializeField] CreatureData _data;
+    CreatureData _data;
     [SerializeField] bool _selectSkill;
     [SerializeField] int _damageTaken;
     [SerializeField] CreatureState _state;
-    [SerializeField] SkillData _currentSkill;
+    SkillData _currentSkill;
     [SerializeField] RankValue? _rankPosition;
     [SerializeField] FileValue? _filePosition;
     [SerializeField] Animator _animator;
@@ -57,7 +57,7 @@ namespace Nighthollow.Components
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SortingGroup _sortingGroup;
     [SerializeField] CustomTriggerCollider _projectileCollider;
-    [SerializeField] Coroutine _coroutine;
+    Coroutine _coroutine;
     [SerializeField] bool _appliedLifeLoss;
 
     static readonly int Skill1 = Animator.StringToHash("Skill1");
@@ -188,10 +188,10 @@ namespace Nighthollow.Components
       Errors.CheckState(CanUseSkill(), "Cannot use skill");
 
       var skill = _data.Delegate.SelectSkill(this);
-      if (skill.HasValue)
+      if (skill != null)
       {
         SetState(CreatureState.UsingSkill);
-        _currentSkill = skill.Value;
+        _currentSkill = skill;
 
         switch (_currentSkill.Animation)
         {

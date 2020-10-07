@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using Nighthollow.Components;
-using Nighthollow.Data;
 using SkillData = Nighthollow.Model.SkillData;
 
 namespace Nighthollow.Delegates.CreatureDelegates
@@ -34,7 +35,7 @@ namespace Nighthollow.Delegates.CreatureDelegates
     /// Called when a creature wants to decide which skill to use. The *first* delegate to return a non-empty
     /// value will have its value be used, other delegates in the sequence will not be invoked.
     /// </summary>
-    public virtual Optional<SkillData> SelectSkill(Creature self) => Optional<SkillData>.None();
+    public virtual SkillData? SelectSkill(Creature self) => null;
 
     /// <summary>Called when a creature kills an enemy creature.</summary>
     public virtual void OnKilledEnemy(CreatureContext c, Creature enemy, int damageAmount)

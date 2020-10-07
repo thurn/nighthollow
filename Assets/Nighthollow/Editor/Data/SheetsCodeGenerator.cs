@@ -28,9 +28,6 @@ namespace Nighthollow.Editor.Data
 {
   public static class SheetsCodeGenerator
   {
-    const string SheetId = "1n1tpIsouYgoPiiY5gEJ5lHzpBFpjX1poHMNseUpojFE";
-    const string ApiKey = "AIzaSyAh7HQu6r9J55bMAqW60IvX_oZ5RIIwO7g";
-
     const string LicenseHeader = @"// Copyright © 2020-present Derek Thurn
 
 // Licensed under the Apache License, Version 2.0 (the ""License"");
@@ -50,10 +47,7 @@ namespace Nighthollow.Editor.Data
     [MenuItem("Tools/Run Code Generation %#g")]
     public static void RunCodeGeneration()
     {
-      var request = UnityWebRequest.Get(
-        $"https://sheets.googleapis.com/v4/spreadsheets/{SheetId}/values:batchGet" +
-        $"?ranges='Enums'&ranges='Stats'&ranges='Delegates'&key={ApiKey}");
-
+      var request = SpreadsheetHelper.SpreadsheetRequest(new List<string> {"Enums", "Stats", "Delegates"});
       Debug.Log("Running Code Generation...");
       _request = request.SendWebRequest();
       EditorApplication.update += EditorUpdate;
@@ -69,7 +63,9 @@ namespace Nighthollow.Editor.Data
       try
       {
         var request = _request.webRequest;
-        if (request.isNetworkError || request.isHttpError)
+        if (request.result == UnityWebRequest.Result.ConnectionError ||
+            request.result == UnityWebRequest.Result.DataProcessingError ||
+            request.result == UnityWebRequest.Result.ProtocolError)
         {
           Debug.LogError(request.error);
           EditorApplication.update -= EditorUpdate;
@@ -165,7 +161,7 @@ namespace Nighthollow.Editor.Data
     {
       var input = SpreadsheetHelper.AsHeaderIdentifiedRows(rows);
 
-      var builder = CreateHeader("\nusing Nighthollow.Stats;\n");
+      var builder = CreateHeader("\nusing Nighthollow.Stats;\nusing System;\n");
       builder.Append("  public static class Stat\n");
       builder.Append("  {\n");
 
@@ -205,6 +201,19 @@ namespace Nighthollow.Editor.Data
 
         builder.Append($"    public static readonly {idType} {stat["Name"]} = new {idType}({stat["Stat ID"]});\n");
       }
+
+      builder.Append("\n    public static StatType GetType(uint statId)\n");
+      builder.Append("    {\n");
+      builder.Append("      switch (statId)\n");
+      builder.Append("      {\n");
+      foreach (var stat in input)
+      {
+        var type = (StatType) int.Parse(stat["Type"]);
+        builder.Append($"        case {stat["Stat ID"]}: return StatType.{type};\n");
+      }
+      builder.Append($"        default: throw new ArgumentOutOfRangeException();\n");
+      builder.Append("      }\n");
+      builder.Append("    }\n");
 
       builder.Append("  }\n");
       builder.Append("}\n");

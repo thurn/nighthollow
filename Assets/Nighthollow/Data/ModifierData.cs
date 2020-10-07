@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Delegates.CreatureDelegates;
+#nullable enable
+
+using System.Collections.Generic;
 using Nighthollow.Generated;
-using Nighthollow.Stats;
+using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
@@ -22,9 +24,19 @@ namespace Nighthollow.Data
   {
     public uint Id { get; }
     public string Description { get; }
-    public Optional<IStat> Stat { get; }
+    public uint? StatId { get; }
     public Operator? Operator { get; }
-    public Optional<CreatureDelegate> Delegate { get; }
+    public uint? DelegateId { get; }
     public DamageType? DamageType { get; }
+
+    public ModifierData(IReadOnlyDictionary<string, string> row)
+    {
+      Id = Parse.UIntRequired(row, "Modifier ID");
+      Description = Parse.StringRequired(row, "Description");
+      StatId = Parse.UInt(row, "Stat");
+      Operator = (Operator?) Parse.UInt(row, "Operator");
+      DelegateId = Parse.UInt(row, "Delegate");
+      DamageType = (DamageType?) Parse.UInt(row, "Damage Type");
+    }
   }
 }

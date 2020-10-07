@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System;
 
 namespace Nighthollow.Utils
 {
   public static class Errors
   {
-    public static T CheckNotNull<T>(T value, string message = "") where T : class
+    public static T CheckNotNull<T>(T? value, string message = "") where T : class
     {
       switch (value)
       {

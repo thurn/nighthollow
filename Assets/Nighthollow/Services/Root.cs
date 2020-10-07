@@ -53,11 +53,14 @@ namespace Nighthollow.Services
     [SerializeField] AssetService _assetService;
     public AssetService AssetService => _assetService;
 
+    [SerializeField] DataService _dataService;
+    public DataService DataService => _dataService;
+
     public static Root Instance
     {
       get
       {
-        if (_instance == null)
+        if (!_instance)
         {
           throw new NullReferenceException("Attempted to access Root before Awake!");
         }
@@ -78,6 +81,7 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_damageTextService);
       Errors.CheckNotNull(_rewardService);
       Errors.CheckNotNull(_assetService);
+      Errors.CheckNotNull(_dataService);
 
       _instance = this;
     }

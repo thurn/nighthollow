@@ -13,12 +13,36 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using SimpleJSON;
+using UnityEngine.Networking;
 
 namespace Nighthollow.Data
 {
   public static class SpreadsheetHelper
   {
+    const string SheetId = "1n1tpIsouYgoPiiY5gEJ5lHzpBFpjX1poHMNseUpojFE";
+    const string ApiKey = "AIzaSyAh7HQu6r9J55bMAqW60IvX_oZ5RIIwO7g";
+
+    public static UnityWebRequest SpreadsheetRequest(IEnumerable<string> names)
+    {
+      var ranges = string.Join("&ranges=", names.Select(name => $"'{name}'").ToArray());
+      return UnityWebRequest.Get(
+        $"https://sheets.googleapis.com/v4/spreadsheets/{SheetId}/values:batchGet?ranges={ranges}&key={ApiKey}");
+    }
+
+    public static Dictionary<string, List<Dictionary<string, string>>> ParseResponse(JSONNode response)
+    {
+      var result = new Dictionary<string, List<Dictionary<string, string>>>();
+
+      foreach (var range in response["valueRanges"].Children)
+      {
+        result[range["range"].Value.Split('!').First()] = AsHeaderIdentifiedRows(range["values"]);
+      }
+
+      return result;
+    }
+
     /// <summary>
     /// Converts a sheets JSON response into a list of dictionaries where each item is a row and the keys are provided
     /// by the first row of the response.

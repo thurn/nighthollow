@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System.Collections.Generic;
-using Nighthollow.Data;
 using Nighthollow.Delegates.SkillDelegates;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
@@ -22,14 +23,14 @@ namespace Nighthollow.Model
 {
   public sealed class SkillData : AbstractGameEntity
   {
-    public Optional<string> Address { get; }
+    public string? Address { get; }
     public SkillType SkillType { get; }
     public SkillAnimationNumber Animation { get; }
     public override StatTable Stats { get; }
     public SkillDelegateChain Delegate { get; }
 
     public SkillData(
-      Optional<string> address,
+      string? address,
       SkillType skillType,
       SkillAnimationNumber animation,
       StatTable stats,
@@ -43,7 +44,7 @@ namespace Nighthollow.Model
     }
 
     SkillData(
-      Optional<string> address,
+      string? address,
       SkillType skillType,
       SkillAnimationNumber animation,
       StatTable stats,

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Stats;
+using System;
 
 // Generated Code - Do Not Modify!
 namespace Nighthollow.Generated
@@ -60,5 +61,54 @@ namespace Nighthollow.Generated
     public static readonly PercentageStatId ChainProjectileDamageMultiplier = new PercentageStatId(39);
     public static readonly DurationStatId SkillCooldownRecovery = new DurationStatId(40);
     public static readonly DurationStatId MeleeKnockbackDuration = new DurationStatId(41);
+
+    public static StatType GetType(uint statId)
+    {
+      switch (statId)
+      {
+        case 1: return StatType.Int;
+        case 2: return StatType.DamageTypeIntRanges;
+        case 3: return StatType.Int;
+        case 4: return StatType.Percentage;
+        case 5: return StatType.Percentage;
+        case 6: return StatType.Int;
+        case 7: return StatType.Int;
+        case 8: return StatType.DamageTypeInts;
+        case 9: return StatType.DamageTypeInts;
+        case 10: return StatType.Percentage;
+        case 11: return StatType.Int;
+        case 12: return StatType.Percentage;
+        case 13: return StatType.Duration;
+        case 14: return StatType.Duration;
+        case 15: return StatType.Percentage;
+        case 16: return StatType.Percentage;
+        case 17: return StatType.Int;
+        case 18: return StatType.Int;
+        case 19: return StatType.Int;
+        case 20: return StatType.SchoolInts;
+        case 21: return StatType.Int;
+        case 22: return StatType.Int;
+        case 23: return StatType.Int;
+        case 24: return StatType.Int;
+        case 25: return StatType.SchoolInts;
+        case 26: return StatType.Int;
+        case 27: return StatType.Int;
+        case 28: return StatType.Duration;
+        case 29: return StatType.Duration;
+        case 30: return StatType.Duration;
+        case 31: return StatType.Int;
+        case 32: return StatType.Bool;
+        case 33: return StatType.Bool;
+        case 34: return StatType.Bool;
+        case 35: return StatType.Bool;
+        case 36: return StatType.DamageTypeInts;
+        case 37: return StatType.Int;
+        case 38: return StatType.Percentage;
+        case 39: return StatType.Percentage;
+        case 40: return StatType.Duration;
+        case 41: return StatType.Duration;
+        default: throw new ArgumentOutOfRangeException();
+      }
+    }
   }
 }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Delegates.CreatureDelegates;
@@ -22,7 +24,6 @@ using Nighthollow.Data;
 using SkillType = Nighthollow.Generated.SkillType;
 using Stat = Nighthollow.Generated.Stat;
 using DamageType = Nighthollow.Generated.DamageType;
-
 
 namespace Nighthollow.Delegates.SkillDelegates
 {

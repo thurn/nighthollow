@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using Nighthollow.Components;
-using Nighthollow.Data;
 using Nighthollow.Generated;
-using SkillData = Nighthollow.Model.SkillData;
+using Nighthollow.Model;
 
 namespace Nighthollow.Delegates.CreatureDelegates
 {
@@ -37,18 +38,18 @@ namespace Nighthollow.Delegates.CreatureDelegates
     public void OnDeath(Creature self) =>
       Execute(self, (d, c) => d.OnDeath(c));
 
-    public Optional<SkillData> SelectSkill(Creature self)
+    public SkillData? SelectSkill(Creature self)
     {
       foreach (var id in _delegateIds)
       {
         var skill = CreatureDelegateMap.Get(id).SelectSkill(self);
-        if (skill.HasValue)
+        if (skill == null)
         {
           return skill;
         }
       }
 
-      return Optional<SkillData>.None();
+      return null;
     }
 
     public void OnKilledEnemy(Creature self, Creature enemy, int damageAmount) =>

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -20,12 +22,12 @@ namespace Nighthollow.Utils
 {
   public static class ComponentUtils
   {
-    public static T Instantiate<T>(T prefabComponent, Transform parent = null) where T : Component
+    public static T Instantiate<T>(T prefabComponent, Transform? parent = null) where T : Component
     {
       return InstantiateGameObject<T>(Errors.CheckNotNull(prefabComponent).gameObject, parent);
     }
 
-    public static T InstantiateGameObject<T>(GameObject prefab, Transform parent = null) where T : Component
+    public static T InstantiateGameObject<T>(GameObject prefab, Transform? parent = null) where T : Component
     {
       Errors.CheckNotNull(prefab);
       var prefabObject = Object.Instantiate(prefab, parent);

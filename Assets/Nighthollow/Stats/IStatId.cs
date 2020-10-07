@@ -12,12 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Nighthollow.Stats
 {
-  public interface IStatId<out T> where T : IStat
+  public interface IStatId
   {
     uint Value { get; }
+  }
 
+  public interface IStatId<out T> : IStatId where T : IStat
+  {
     T NotFoundValue();
 
     T Deserialize(string value);

@@ -28,11 +28,11 @@ namespace Nighthollow.Services
     [SerializeField] Image _influencePrefab;
     [SerializeField] Attachment _attachmentPrefab;
     [SerializeField] Sprite _lightSymbol;
-    [SerializeField] Sprite _skySymbol;
+    [SerializeField] Sprite _skySymbol = null!;
     [SerializeField] Sprite _flameSymbol;
-    [SerializeField] Sprite _iceSymbol;
+    [SerializeField] Sprite _iceSymbol = null!;
     [SerializeField] Sprite _earthSymbol;
-    [SerializeField] Sprite _shadowSymbol;
+    [SerializeField] Sprite _shadowSymbol = null!;
     [SerializeField] TimedEffect _missEffect;
     [SerializeField] TimedEffect _evadeEffect;
     [SerializeField] TimedEffect _critEffect;

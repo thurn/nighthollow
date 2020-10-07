@@ -12,11 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using Nighthollow.Services;
+using Nighthollow.Utils;
+
 namespace Nighthollow.Data
 {
   public sealed class SkillTypeData
   {
     public uint Id { get; }
     public string Name { get; }
+
+    public SkillTypeData(DataService service, IReadOnlyDictionary<string, string> row)
+    {
+      Id = Parse.UIntRequired(row, "Skill ID");
+      Name = Parse.StringRequired(row, "Name");
+    }
   }
 }

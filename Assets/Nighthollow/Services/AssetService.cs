@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System.Collections.Generic;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -28,7 +30,7 @@ namespace Nighthollow.Services
       return (Sprite) _assets[address];
     }
 
-    public T InstantiatePrefab<T>(string address, Transform parent = null) where T : Component
+    public T InstantiatePrefab<T>(string address, Transform? parent = null) where T : Component
     {
       Errors.CheckArgument(_assets.ContainsKey(address), $"Asset not found: {address}");
       return ComponentUtils.InstantiateGameObject<T>((GameObject) _assets[address], parent);
