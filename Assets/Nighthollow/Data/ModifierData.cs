@@ -22,21 +22,23 @@ namespace Nighthollow.Data
 {
   public sealed class ModifierData
   {
-    public uint Id { get; }
+    public int Id { get; }
     public string Description { get; }
-    public uint? StatId { get; }
+    public int? StatId { get; }
     public Operator? Operator { get; }
-    public uint? DelegateId { get; }
+    public CreatureDelegateId? DelegateId { get; }
     public DamageType? DamageType { get; }
+    public School? School { get; }
 
     public ModifierData(IReadOnlyDictionary<string, string> row)
     {
-      Id = Parse.UIntRequired(row, "Modifier ID");
+      Id = Parse.IntRequired(row, "Modifier ID");
       Description = Parse.StringRequired(row, "Description");
-      StatId = Parse.UInt(row, "Stat");
-      Operator = (Operator?) Parse.UInt(row, "Operator");
-      DelegateId = Parse.UInt(row, "Delegate");
-      DamageType = (DamageType?) Parse.UInt(row, "Damage Type");
+      StatId = Parse.Int(row, "Stat");
+      Operator = (Operator?) Parse.Int(row, "Operator");
+      DelegateId = (CreatureDelegateId?) Parse.Int(row, "Delegate");
+      DamageType = (DamageType?) Parse.Int(row, "Damage Type");
+      School = (School?) Parse.Int(row, "School");
     }
   }
 }

@@ -23,13 +23,14 @@ namespace Nighthollow.Data
 {
   public sealed class CreatureTypeData
   {
-    public uint Id { get; }
+    public int Id { get; }
     public string Name { get; }
     public string PrefabAddress { get; }
-    public uint HealthLow { get; }
-    public uint HealthHigh { get; }
+    public int HealthLow { get; }
+    public int HealthHigh { get; }
     public PlayerName Owner { get; }
     public string? ImageAddress { get; }
+    public int BaseManaCost { get; }
     public AffixTypeData? ImplicitAffix { get; }
     public SkillTypeData? ImplicitSkill { get; }
     public SkillAnimationType? Skill1Type { get; }
@@ -41,31 +42,32 @@ namespace Nighthollow.Data
 
     public CreatureTypeData(DataService service, IReadOnlyDictionary<string, string> row)
     {
-      Id = Parse.UIntRequired(row, "Creature ID");
+      Id = Parse.IntRequired(row, "Creature ID");
       Name = Parse.StringRequired(row, "Name");
       PrefabAddress = Parse.StringRequired(row, "Prefab Address");
-      HealthLow = Parse.UIntRequired(row, "Health Low");
-      HealthHigh = Parse.UIntRequired(row, "Health High");
-      Owner = (PlayerName) Parse.UIntRequired(row, "Owner ID");
+      HealthLow = Parse.IntRequired(row, "Health Low");
+      HealthHigh = Parse.IntRequired(row, "Health High");
+      Owner = (PlayerName) Parse.IntRequired(row, "Owner ID");
       ImageAddress = Parse.String(row, "Image Address");
+      BaseManaCost = Parse.IntRequired(row, "Base Mana Cost");
 
-      var affixId = Parse.UInt(row, "Implicit Affix ID");
+      var affixId = Parse.Int(row, "Implicit Affix ID");
       if (affixId.HasValue)
       {
         ImplicitAffix = service.GetAffixType(affixId.Value);
       }
 
-      var skillId = Parse.UInt(row, "Implicit Skill");
+      var skillId = Parse.Int(row, "Implicit Skill");
       if (skillId.HasValue)
       {
         ImplicitSkill = service.GetSkillType(skillId.Value);
       }
 
-      Skill1Type = (SkillAnimationType?) Parse.UInt(row, "Skill 1");
-      Skill2Type = (SkillAnimationType?) Parse.UInt(row, "Skill 2");
-      Skill3Type = (SkillAnimationType?) Parse.UInt(row, "Skill 3");
-      Skill4Type = (SkillAnimationType?) Parse.UInt(row, "Skill 4");
-      Skill5Type = (SkillAnimationType?) Parse.UInt(row, "Skill 5");
+      Skill1Type = (SkillAnimationType?) Parse.Int(row, "Skill 1");
+      Skill2Type = (SkillAnimationType?) Parse.Int(row, "Skill 2");
+      Skill3Type = (SkillAnimationType?) Parse.Int(row, "Skill 3");
+      Skill4Type = (SkillAnimationType?) Parse.Int(row, "Skill 4");
+      Skill5Type = (SkillAnimationType?) Parse.Int(row, "Skill 5");
       IsManaCreature = Parse.Boolean(row, "Mana Creature?");
     }
   }

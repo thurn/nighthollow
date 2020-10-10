@@ -18,12 +18,15 @@ namespace Nighthollow.Stats
 {
   public interface IModifier
   {
-    StaticModifier Modifier { get; }
-
-    IModifier Clone();
-
     bool IsDynamic();
 
     bool IsValid();
+
+    IModifier<T> Clone<T>() where T : IStatValue;
+  }
+
+  public interface IModifier<TValue> : IModifier where TValue : IStatValue
+  {
+    StaticModifier<TValue> Modifier { get; }
   }
 }

@@ -16,6 +16,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
+using Nighthollow.Generated;
+using Nighthollow.Stats;
+using Nighthollow.Utils;
 using SimpleJSON;
 using UnityEngine;
 
@@ -25,32 +28,41 @@ namespace Nighthollow.Services
 {
   public sealed class DataService : MonoBehaviour
   {
-    readonly Dictionary<uint, ModifierData> _modifiers = new Dictionary<uint, ModifierData>();
-    readonly Dictionary<uint, AffixTypeData> _affixes = new Dictionary<uint, AffixTypeData>();
-    readonly Dictionary<uint, SkillTypeData> _skills = new Dictionary<uint, SkillTypeData>();
-    readonly Dictionary<uint, CreatureTypeData> _creatures = new Dictionary<uint, CreatureTypeData>();
+    readonly Dictionary<int, ModifierData> _modifiers = new Dictionary<int, ModifierData>();
+    readonly Dictionary<int, AffixTypeData> _affixes = new Dictionary<int, AffixTypeData>();
+    readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
+    readonly Dictionary<int, CreatureTypeData> _creatures = new Dictionary<int, CreatureTypeData>();
+
+    readonly Dictionary<StaticCardList, List<CreatureItemData>> _staticCardLists =
+      new Dictionary<StaticCardList, List<CreatureItemData>>();
 
     public void FetchData(Action onComplete)
     {
       StartCoroutine(FetchDataAsync(onComplete));
     }
 
-    public ModifierData GetModifier(uint modifierId) => Lookup(_modifiers, modifierId);
+    public ModifierData GetModifier(int modifierId) => Lookup(_modifiers, modifierId);
 
-    public AffixTypeData GetAffixType(uint affixId) => Lookup(_affixes, affixId);
+    public AffixTypeData GetAffixType(int affixId) => Lookup(_affixes, affixId);
 
-    public SkillTypeData GetSkillType(uint skillId) => Lookup(_skills, skillId);
+    public SkillTypeData GetSkillType(int skillId) => Lookup(_skills, skillId);
 
-    public CreatureTypeData GetCreatureType(uint creatureId) => Lookup(_creatures, creatureId);
+    public CreatureTypeData GetCreatureType(int creatureId) => Lookup(_creatures, creatureId);
 
-    static T Lookup<T>(IReadOnlyDictionary<uint, T> dictionary, uint id) where T : class =>
+    public IReadOnlyList<CreatureItemData> GetStaticCardList(StaticCardList listName)
+    {
+      Errors.CheckState(_staticCardLists.ContainsKey(listName), $"List {listName} not found");
+      return _staticCardLists[listName];
+    }
+
+    static T Lookup<T>(IReadOnlyDictionary<int, T> dictionary, int id) where T : class =>
       dictionary.ContainsKey(id) ? dictionary[id] : throw new ArgumentException($"ID not found: {id}");
 
     IEnumerator<YieldInstruction> FetchDataAsync(Action onComplete)
     {
       Debug.Log("Fetching Data...");
       var request = SpreadsheetHelper.SpreadsheetRequest(new List<string>
-        {"Creatures", "Skills", "Modifiers", "Affixes"}
+        {"Creatures", "Skills", "Modifiers", "Affixes", "CardLists"}
       );
       yield return request.SendWebRequest();
       var node = JSON.Parse(request.downloadHandler.text);
@@ -72,9 +84,35 @@ namespace Nighthollow.Services
         _skills[skill.Id] = skill;
       }
 
-      foreach (var creature in parsed["Creatures"].Select(row => new CreatureTypeData(this, row)))
+      foreach (var row in parsed["Creatures"])
       {
-        _creatures[creature.Id] = creature;
+        if (row.ContainsKey("Prefab Address"))
+        {
+          var creature = new CreatureTypeData(this, row);
+          _creatures[creature.Id] = creature;
+        }
+      }
+
+      foreach (var row in parsed["CardLists"])
+      {
+        var list = (StaticCardList) Parse.IntRequired(row, "Card List");
+        if (!_staticCardLists.ContainsKey(list))
+        {
+          _staticCardLists[list] = new List<CreatureItemData>();
+        }
+
+        var influenceCost = new TaggedStats<School, IntStat>();
+        influenceCost.Add((School) Parse.IntRequired(row, "School"),
+          new IntStat((int) Parse.IntRequired(row, "Influence Cost")));
+
+        _staticCardLists[list].Add(new CreatureItemData(
+          Parse.StringRequired(row, "Card Name"),
+          GetCreatureType(Parse.IntRequired(row, "Base Creature")),
+          Parse.IntRequired(row, "Health"),
+          Parse.IntRequired(row, "Mana Cost"),
+          influenceCost,
+          new List<SkillData>(),
+          new List<AffixData>()));
       }
 
       onComplete();

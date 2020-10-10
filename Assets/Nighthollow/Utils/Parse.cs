@@ -46,9 +46,9 @@ namespace Nighthollow.Utils
       return row[key];
     }
 
-    public static uint? UInt(IReadOnlyDictionary<string, string> row, string key)
+    public static int? Int(IReadOnlyDictionary<string, string> row, string key)
     {
-      if (row.ContainsKey(key) && uint.TryParse(row[key], out var result))
+      if (row.ContainsKey(key) && int.TryParse(row[key], out var result))
       {
         return result;
       }
@@ -56,9 +56,9 @@ namespace Nighthollow.Utils
       return null;
     }
 
-    public static uint UIntRequired(IReadOnlyDictionary<string, string> row, string key)
+    public static int IntRequired(IReadOnlyDictionary<string, string> row, string key)
     {
-      if (row.ContainsKey(key) && uint.TryParse(row[key], out var result))
+      if (row.ContainsKey(key) && int.TryParse(row[key], out var result))
       {
         return result;
       }

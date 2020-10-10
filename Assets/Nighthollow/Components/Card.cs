@@ -87,7 +87,7 @@ namespace Nighthollow.Components
     void Update()
     {
       Errors.CheckNotNull(_data);
-      _cardImage.sprite = Root.Instance.AssetService.GetImage(Errors.CheckNotNull(_data.ImageAddress));
+      _cardImage.sprite = Root.Instance.AssetService.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
 
       var manaCost = _data.GetInt(Stat.ManaCost);
       var influence = _data.Stats.Get(Stat.Influence);

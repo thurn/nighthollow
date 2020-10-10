@@ -202,7 +202,7 @@ namespace Nighthollow.Editor.Data
         builder.Append($"    public static readonly {idType} {stat["Name"]} = new {idType}({stat["Stat ID"]});\n");
       }
 
-      builder.Append("\n    public static StatType GetType(uint statId)\n");
+      builder.Append("\n    public static StatType GetType(int statId)\n");
       builder.Append("    {\n");
       builder.Append("      switch (statId)\n");
       builder.Append("      {\n");

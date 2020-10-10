@@ -12,24 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 #nullable enable
 
 namespace Nighthollow.Stats
 {
   public readonly struct DurationStatId : IStatId<DurationStat>
   {
-    readonly uint _value;
+    readonly int _value;
 
-    public DurationStatId(uint value)
+    public DurationStatId(int value)
     {
       _value = value;
     }
 
-    public uint Value => _value;
+    public int Value => _value;
 
     public DurationStat NotFoundValue() => new DurationStat(new IntStat(0));
-
-    public DurationStat Deserialize(string value) => new DurationStat(new IntStat(int.Parse(value)));
   }
 
   public sealed class DurationStat : IStat<DurationStat>
@@ -44,5 +44,13 @@ namespace Nighthollow.Stats
     }
 
     public DurationStat Clone() => new DurationStat(_stat.Clone());
+
+    public void AddAddedModifier(IModifier<DurationValue> value)
+    {
+    }
+
+    public void AddIncreaseModifier(IModifier<PercentageValue> value)
+    {
+    }
   }
 }

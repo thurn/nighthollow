@@ -20,18 +20,16 @@ namespace Nighthollow.Stats
 {
   public readonly struct PercentageStatId : IStatId<PercentageStat>
   {
-    readonly uint _value;
+    readonly int _value;
 
-    public PercentageStatId(uint value)
+    public PercentageStatId(int value)
     {
       _value = value;
     }
 
-    public uint Value => _value;
+    public int Value => _value;
 
     public PercentageStat NotFoundValue() => new PercentageStat(new IntStat(0));
-
-    public PercentageStat Deserialize(string value) => new PercentageStat(new IntStat(int.Parse(value)));
   }
 
   public sealed class PercentageStat : IStat<PercentageStat>
@@ -50,5 +48,10 @@ namespace Nighthollow.Stats
       Mathf.RoundToInt((input * _stat.Value) / BasisPoints);
 
     public PercentageStat Clone() => new PercentageStat(_stat.Clone());
+
+    public void AddAddedModifier(IModifier<PercentageValue> value)
+    {
+
+    }
   }
 }

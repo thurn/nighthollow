@@ -53,13 +53,16 @@ namespace Nighthollow.Services
     [SerializeField] DataService _dataService;
     public DataService DataService => _dataService;
 
+    [SerializeField] InventoryService _inventoryService;
+    public InventoryService InventoryService => _inventoryService;
+
     public static Root Instance
     {
       get
       {
         if (!_instance)
         {
-          throw new NullReferenceException("Attempted to access Root before Awake!");
+          throw new NullReferenceException("Attempted to access Root before OnEnable!");
         }
 
         return _instance;
@@ -68,6 +71,7 @@ namespace Nighthollow.Services
 
     void OnEnable()
     {
+      DontDestroyOnLoad(this);
       Errors.CheckNotNull(_mainCamera);
       Errors.CheckNotNull(_mainCanvas);
       Errors.CheckNotNull(_prefabs);

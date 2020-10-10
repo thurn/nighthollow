@@ -18,13 +18,11 @@ namespace Nighthollow.Stats
 {
   public interface IStatId
   {
-    uint Value { get; }
+    int Value { get; }
   }
 
   public interface IStatId<out T> : IStatId where T : IStat
   {
     T NotFoundValue();
-
-    T Deserialize(string value);
   }
 }

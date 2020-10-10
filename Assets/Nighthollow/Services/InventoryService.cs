@@ -13,20 +13,26 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Services;
-using Nighthollow.Utils;
+using Nighthollow.Data;
+using Nighthollow.Generated;
+using UnityEngine;
 
-namespace Nighthollow.Data
+#nullable enable
+
+namespace Nighthollow.Services
 {
-  public sealed class SkillTypeData
+  public sealed class InventoryService : MonoBehaviour
   {
-    public int Id { get; }
-    public string Name { get; }
+    [SerializeField] List<CreatureItemData> _deck;
+    public IReadOnlyList<CreatureItemData> Deck => _deck;
 
-    public SkillTypeData(DataService service, IReadOnlyDictionary<string, string> row)
+    [SerializeField] List<CreatureItemData> _inventory;
+    public IReadOnlyList<CreatureItemData> Inventory => _inventory;
+
+    public void LoadStartingDeck()
     {
-      Id = Parse.IntRequired(row, "Skill ID");
-      Name = Parse.StringRequired(row, "Name");
+      _deck.Clear();
+      _deck.AddRange(Root.Instance.DataService.GetStaticCardList(StaticCardList.StartingDeck));;
     }
   }
 }

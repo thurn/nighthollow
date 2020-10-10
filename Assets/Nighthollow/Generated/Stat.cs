@@ -62,7 +62,7 @@ namespace Nighthollow.Generated
     public static readonly DurationStatId SkillCooldownRecovery = new DurationStatId(40);
     public static readonly DurationStatId MeleeKnockbackDuration = new DurationStatId(41);
 
-    public static StatType GetType(uint statId)
+    public static StatType GetType(int statId)
     {
       switch (statId)
       {

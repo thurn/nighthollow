@@ -20,20 +20,20 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public class WhileAliveModifier : IModifier
+  public class WhileAliveModifier<TValue> : IModifier<TValue> where TValue : IStatValue
   {
-    readonly StaticModifier _modifier;
+    readonly StaticModifier<TValue> _modifier;
     readonly WeakReference<Creature> _scopeCreature;
 
-    public WhileAliveModifier(StaticModifier modifier, Creature creature)
+    public WhileAliveModifier(StaticModifier<TValue> modifier, Creature creature)
     {
       _modifier = modifier;
       _scopeCreature = new WeakReference<Creature>(Errors.CheckNotNull(creature));
     }
 
-    public StaticModifier Modifier => _modifier;
+    public StaticModifier<TValue> Modifier => _modifier;
 
-    public IModifier Clone() => this;
+    public IModifier<T> Clone<T>() where T : IStatValue => Errors.CheckNotNull(this as IModifier<T>);
 
     public bool IsDynamic() => true;
 

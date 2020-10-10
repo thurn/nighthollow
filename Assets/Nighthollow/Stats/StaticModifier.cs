@@ -15,26 +15,29 @@
 #nullable enable
 
 using Nighthollow.Generated;
+using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct StaticModifier : IModifier
+  public readonly struct StaticModifier<TValue> : IModifier<TValue> where TValue : IStatValue
   {
-    public readonly int Value;
+    public readonly TValue Value;
     public readonly Operator Operator;
 
-    public StaticModifier(int value, Operator @operator)
+    public StaticModifier(TValue value, Operator @operator)
     {
       Value = value;
       Operator = @operator;
     }
 
-    public StaticModifier Modifier => this;
+    public StaticModifier<TValue> Modifier => this;
 
-    public IModifier Clone() => this;
+    public IModifier<TValue> WithValue(TValue value) => new StaticModifier<TValue>(value, Operator);
 
     public bool IsDynamic() => false;
 
     public bool IsValid() => true;
+
+    public IModifier<T> Clone<T>() where T : IStatValue => Errors.CheckNotNull(this as IModifier<T>);
   }
 }

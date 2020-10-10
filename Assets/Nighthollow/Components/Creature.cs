@@ -80,7 +80,7 @@ namespace Nighthollow.Components
       _sortingGroup = GetComponent<SortingGroup>();
       _statusBars = Root.Instance.Prefabs.CreateStatusBars();
       _statusBars.HealthBar.gameObject.SetActive(false);
-      gameObject.layer = Constants.LayerForCreatures(creatureData.Owner);
+      gameObject.layer = Constants.LayerForCreatures(creatureData.BaseType.Owner);
       _animator.speed = _animationSpeedMultiplier;
 
       _data = creatureData;
@@ -100,7 +100,7 @@ namespace Nighthollow.Components
 
     public CreatureData Data => _data;
 
-    public PlayerName Owner => _data.Owner;
+    public PlayerName Owner => _data.BaseType.Owner;
 
     public RankValue? RankPosition => _rankPosition;
 
@@ -372,7 +372,7 @@ namespace Nighthollow.Components
         _selectSkill = false;
       }
 
-      transform.eulerAngles = _data.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
+      transform.eulerAngles = _data.BaseType.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
 
       if (transform.position.x > Constants.CreatureDespawnRightX ||
           transform.position.x < Constants.CreatureDespawnLeftX)

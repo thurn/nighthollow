@@ -14,67 +14,71 @@
 
 #nullable enable
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct TaggedStatsId<TKey, TValue> : IStatId<TaggedStats<TKey, TValue>>
-    where TKey : Enum where TValue : IStat<TValue>, new()
+  public readonly struct TaggedStatsId<TKey, TStat> : IStatId<TaggedStats<TKey, TStat>>
+    where TKey : struct where TStat : IStat<TStat>, new()
   {
-    readonly uint _value;
+    readonly int _value;
 
-    public TaggedStatsId(uint value)
+    public TaggedStatsId(int value)
     {
       _value = value;
     }
 
-    public uint Value => _value;
+    public int Value => _value;
 
-    public TaggedStats<TKey, TValue> NotFoundValue() => new TaggedStats<TKey, TValue>();
-
-    public TaggedStats<TKey, TValue> Deserialize(string value)
-    {
-      throw new NotImplementedException();
-    }
+    public TaggedStats<TKey, TStat> NotFoundValue() => new TaggedStats<TKey, TStat>();
   }
 
-  public sealed class TaggedStats<TKey, TValue> : IStat<TaggedStats<TKey, TValue>>
-    where TKey : Enum where TValue : IStat<TValue>, new()
+  public sealed class TaggedStats<TKey, TStat> : IStat<TaggedStats<TKey, TStat>>
+    where TKey : struct where TStat : IStat<TStat>, new()
   {
-    readonly Dictionary<TKey, TValue> _stats;
+    readonly Dictionary<TKey, TStat> _stats;
 
-    public IEnumerable<KeyValuePair<TKey, TValue>> AllEntries => _stats;
+    public IEnumerable<KeyValuePair<TKey, TStat>> AllEntries => _stats;
 
     public TaggedStats()
     {
-      _stats = new Dictionary<TKey, TValue>();
+      _stats = new Dictionary<TKey, TStat>();
     }
 
-    TaggedStats(Dictionary<TKey, TValue> stats)
+    TaggedStats(Dictionary<TKey, TStat> stats)
     {
       _stats = stats.ToDictionary(e => e.Key, e => e.Value.Clone());
     }
 
-    public void Add(TKey key, TValue value)
+    public void Add(TKey key, TStat value)
     {
       Errors.CheckArgument(!key.Equals(default(TKey)), $"Cannot add default value {key} as a key");
       Errors.CheckState(!_stats.ContainsKey(key), $"Key {key} already added");
       _stats[key] = value;
     }
 
-    public TaggedStats<TKey, TValue> Clone() => new TaggedStats<TKey, TValue>(_stats);
+    public TaggedStats<TKey, TStat> Clone() => new TaggedStats<TKey, TStat>(_stats);
 
-    public TValue Get(TKey key)
+    public TStat Get(TKey key)
     {
       if (!_stats.ContainsKey(key))
       {
-        _stats[key] = new TValue();
+        _stats[key] = new TStat();
       }
 
       return _stats[key];
+    }
+
+    public void AddAddedModifier<TValue>(IModifier<TaggedStatValue<TKey, TValue>> modifier) where TValue : IStatValue
+    {
+      var stat = _stats[modifier.Modifier.Value.Tag];
+    }
+
+    public void AddIncreaseModifier(IModifier<TaggedStatValue<TKey, PercentageValue>> modifier)
+    {
+      var stat = _stats[modifier.Modifier.Value.Tag];
     }
   }
 }

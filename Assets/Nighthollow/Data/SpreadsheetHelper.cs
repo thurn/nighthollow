@@ -77,7 +77,10 @@ namespace Nighthollow.Data
             continue;
           }
 
-          dictionary[columnNames[j]] = row[j].Value;
+          if (!string.IsNullOrWhiteSpace(row[j].Value))
+          {
+            dictionary[columnNames[j]] = row[j].Value;
+          }
         }
 
         result.Add(dictionary);

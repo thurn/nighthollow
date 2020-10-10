@@ -105,6 +105,7 @@ namespace Nighthollow.Generated
     Add = 1,
     Increase = 2,
     SetFalse = 3,
+    SetTrue = 4
   }
 
   public enum StaticCardList

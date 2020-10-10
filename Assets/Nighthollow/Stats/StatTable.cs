@@ -22,7 +22,7 @@ namespace Nighthollow.Stats
 {
   public sealed class StatTable
   {
-    readonly Dictionary<uint, IStat> _stats;
+    readonly Dictionary<int, IStat> _stats;
 
     public StatTable(Builder builder)
     {
@@ -48,9 +48,9 @@ namespace Nighthollow.Stats
 
     public sealed class Builder
     {
-      readonly Dictionary<uint, IStat> _stats = new Dictionary<uint, IStat>();
+      readonly Dictionary<int, IStat> _stats = new Dictionary<int, IStat>();
 
-      public Dictionary<uint, IStat> Stats => _stats;
+      public Dictionary<int, IStat> Stats => _stats;
 
       public void AddStat<T>(IStatId<T> statId, T value) where T : IStat
       {

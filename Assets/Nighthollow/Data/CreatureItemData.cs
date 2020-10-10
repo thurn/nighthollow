@@ -15,50 +15,37 @@
 #nullable enable
 
 using System.Collections.Generic;
-using System.Linq;
-using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
-  public sealed class CreatureData : AbstractGameEntity
+  public sealed class CreatureItemData
   {
     public string Name { get; }
     public CreatureTypeData BaseType { get; }
+    public int Health { get; }
+    public int ManaCost { get; }
+    public TaggedStats<School, IntStat> InfluenceCost { get; }
     public IReadOnlyList<SkillData> Skills { get; }
-    public override StatTable Stats { get; }
-    public CreatureDelegateChain Delegate { get; }
+    public IReadOnlyList<AffixData> Affixes { get; }
 
-    public CreatureData(
+    public CreatureItemData(
       string name,
       CreatureTypeData baseType,
+      int health,
+      int manaCost,
+      TaggedStats<School, IntStat> influenceCost,
       IReadOnlyList<SkillData> skills,
-      StatTable stats,
-      List<CreatureDelegateId> delegates)
+      IReadOnlyList<AffixData> affixes)
     {
       Name = name;
       BaseType = baseType;
+      Health = health;
+      ManaCost = manaCost;
+      InfluenceCost = influenceCost;
       Skills = skills;
-      Stats = stats;
-      Delegate = new CreatureDelegateChain(delegates);
+      Affixes = affixes;
     }
-
-    CreatureData(
-      string name,
-      CreatureTypeData baseType,
-      IReadOnlyList<SkillData> skills,
-      StatTable stats,
-      CreatureDelegateChain delegates)
-    {
-      Name = name;
-      BaseType = baseType;
-      Skills = skills;
-      Stats = stats;
-      Delegate = delegates;
-    }
-
-    public CreatureData Clone() => new CreatureData(
-      Name, BaseType, Skills.Select(s => s.Clone()).ToList(), Stats.Clone(), Delegate);
   }
 }

@@ -13,20 +13,33 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Services;
-using Nighthollow.Utils;
+using Nighthollow.Stats;
+
+#nullable enable
 
 namespace Nighthollow.Data
 {
-  public sealed class SkillTypeData
+  public sealed class Modifier
   {
-    public int Id { get; }
-    public string Name { get; }
+    public ModifierData Data { get; }
+    public IStatValue Value { get; }
 
-    public SkillTypeData(DataService service, IReadOnlyDictionary<string, string> row)
+    public Modifier(ModifierData modifierData, IStatValue value)
     {
-      Id = Parse.IntRequired(row, "Skill ID");
-      Name = Parse.StringRequired(row, "Name");
+      Data = modifierData;
+      Value = value;
+    }
+  }
+
+  public sealed class AffixData
+  {
+    public int AffixTypeId { get; }
+    public IReadOnlyList<Modifier> Modifiers { get; }
+
+    public AffixData(int affixTypeId, IReadOnlyList<Modifier> modifiers)
+    {
+      AffixTypeId = affixTypeId;
+      Modifiers = modifiers;
     }
   }
 }

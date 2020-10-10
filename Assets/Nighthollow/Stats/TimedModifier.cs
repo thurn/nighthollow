@@ -14,24 +14,25 @@
 
 #nullable enable
 
+using Nighthollow.Utils;
 using UnityEngine;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct TimedModifier : IModifier
+  public readonly struct TimedModifier<TValue> : IModifier<TValue> where TValue : IStatValue
   {
-    readonly StaticModifier _modifier;
+    readonly StaticModifier<TValue> _modifier;
     readonly float _endTimeSeconds;
 
-    public TimedModifier(StaticModifier modifier, int durationMilliseconds)
+    public TimedModifier(StaticModifier<TValue> modifier, int durationMilliseconds)
     {
       _modifier = modifier;
       _endTimeSeconds = Time.time + (durationMilliseconds / 1000f);
     }
 
-    public StaticModifier Modifier => _modifier;
+    public StaticModifier<TValue> Modifier => _modifier;
 
-    public IModifier Clone() => this;
+    public IModifier<T> Clone<T>() where T : IStatValue => Errors.CheckNotNull(this as IModifier<T>);
 
     public bool IsDynamic() => true;
 

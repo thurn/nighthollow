@@ -12,35 +12,81 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using System.Linq;
+
 #nullable enable
 
 namespace Nighthollow.Stats
 {
   public readonly struct BoolStatId : IStatId<BoolStat>
   {
-    readonly uint _value;
+    readonly int _value;
 
-    public BoolStatId(uint value)
+    public BoolStatId(int value)
     {
       _value = value;
     }
 
-    public uint Value => _value;
+    public int Value => _value;
 
-    public BoolStat NotFoundValue() => new BoolStat(false);
-
-    public BoolStat Deserialize(string value) => new BoolStat(bool.Parse(value));
+    public BoolStat NotFoundValue() => new BoolStat();
   }
 
   public sealed class BoolStat : IStat<BoolStat>
   {
-    public bool Value { get; }
+    readonly List<IModifier<BoolValue>> _setTrueModifiers = new List<IModifier<BoolValue>>();
+    readonly List<IModifier<BoolValue>> _setFalseModifiers = new List<IModifier<BoolValue>>();
+    bool _hasDynamicModifiers;
+    bool _computedValue;
 
-    public BoolStat(bool value)
+    public BoolStat()
     {
-      Value = value;
+      _computedValue = false;
     }
 
-    public BoolStat Clone() => this;
+    BoolStat(
+      IEnumerable<IModifier<BoolValue>> setTrueModifiers,
+      IEnumerable<IModifier<BoolValue>> setFalseModifiers,
+      bool hasDynamicModifiers)
+    {
+      _setTrueModifiers = setTrueModifiers.Select(m => m.Clone<BoolValue>()).ToList();
+      _setFalseModifiers = setFalseModifiers.Select(m => m.Clone<BoolValue>()).ToList();
+      _hasDynamicModifiers = hasDynamicModifiers;
+    }
+
+    public BoolStat Clone() => new BoolStat(_setTrueModifiers, _setFalseModifiers, _hasDynamicModifiers);
+
+    public bool Value
+    {
+      get
+      {
+        if (_hasDynamicModifiers)
+        {
+          Recalculate();
+        }
+
+        return _computedValue;
+      }
+    }
+
+    public void AddSetTrueModifier(IModifier<BoolValue> modifier)
+    {
+      _setTrueModifiers.Add(modifier);
+      _hasDynamicModifiers |= modifier.IsDynamic();
+      Recalculate();
+    }
+
+    public void AddSetFalseModifier(IModifier<BoolValue> modifier)
+    {
+      _setFalseModifiers.Add(modifier);
+      _hasDynamicModifiers |= modifier.IsDynamic();
+      Recalculate();
+    }
+
+    void Recalculate()
+    {
+      _computedValue = _setTrueModifiers.Count > 0 && _setFalseModifiers.Count == 0;
+    }
   }
 }

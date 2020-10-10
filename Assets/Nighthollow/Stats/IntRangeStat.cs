@@ -18,22 +18,16 @@ namespace Nighthollow.Stats
 {
   public readonly struct IntRangeStatId : IStatId<IntRangeStat>
   {
-    readonly uint _value;
+    readonly int _value;
 
-    public IntRangeStatId(uint value)
+    public IntRangeStatId(int value)
     {
       _value = value;
     }
 
-    public uint Value => _value;
+    public int Value => _value;
 
     public IntRangeStat NotFoundValue() => new IntRangeStat(new IntStat(0), new IntStat(0));
-
-    public IntRangeStat Deserialize(string value)
-    {
-      var split = value.Split(',');
-      return new IntRangeStat(new IntStat(int.Parse(split[0])), new IntStat(int.Parse(split[1])));
-    }
   }
 
   public sealed class IntRangeStat : IStat<IntRangeStat>
@@ -54,5 +48,15 @@ namespace Nighthollow.Stats
     }
 
     public IntRangeStat Clone() => new IntRangeStat(_low.Clone(), _high.Clone());
+
+    public void AddAddedModifier(IModifier<IntRangeValue> modifier)
+    {
+
+    }
+
+    public void AddIncreaseModifier(IModifier<PercentageValue> modifier)
+    {
+
+    }
   }
 }
