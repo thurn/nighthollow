@@ -28,7 +28,7 @@ namespace Nighthollow.Data
     public IStatValue? Low { get; }
     public IStatValue? High { get; }
 
-    public ModifierRange(DataService service, IReadOnlyDictionary<string, string> row, int number)
+    public ModifierRange(GameDataService service, IReadOnlyDictionary<string, string> row, int number)
     {
       ModifierData = service.GetModifier(Parse.IntRequired(row, $"Modifier {number}"));
 
@@ -51,7 +51,7 @@ namespace Nighthollow.Data
     public AffixPool AffixPool { get; }
     public IReadOnlyList<ModifierRange> ModifierRanges { get; }
 
-    public AffixTypeData(DataService service, IReadOnlyDictionary<string, string> row)
+    public AffixTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
     {
       Id = Parse.IntRequired(row, "Affix ID");
       MinLevel = Parse.IntRequired(row, "Min Level");

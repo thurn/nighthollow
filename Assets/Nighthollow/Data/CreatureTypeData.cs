@@ -40,7 +40,7 @@ namespace Nighthollow.Data
     public SkillAnimationType? Skill5Type { get; }
     public bool IsManaCreature { get; }
 
-    public CreatureTypeData(DataService service, IReadOnlyDictionary<string, string> row)
+    public CreatureTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
     {
       Id = Parse.IntRequired(row, "Creature ID");
       Name = Parse.StringRequired(row, "Name");

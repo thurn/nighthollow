@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Services;
@@ -51,40 +52,16 @@ namespace Nighthollow.Components
     public int Mana => _mana;
     public int Life => _life;
 
-    void Awake()
+    public void OnStartGame(UserData data)
     {
-      _data = new UserData(new List<CreatureData>(), new StatTable());
-    }
-
-    void Start()
-    {
-      _life = _data.GetInt(Stat.StartingLife);
-      _mana = _data.GetInt(Stat.StartingMana);
-    }
-
-    IEnumerator<YieldInstruction> GainMana()
-    {
-      while (true)
-      {
-        yield return new WaitForSeconds(1);
-        _mana += _data.GetInt(Stat.ManaGainPerSecond);
-      }
-    }
-
-    IEnumerator<YieldInstruction> DrawCards()
-    {
-      while (true)
-      {
-        yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.CardDrawInterval));
-        _hand.DrawCards(new List<CreatureData> {_deck.Draw()});
-      }
-    }
-
-    public void OnStartGame()
-    {
+      _data = data;
       gameObject.SetActive(true);
       StartCoroutine(GainMana());
       StartCoroutine(DrawCards());
+
+      _life = _data.GetInt(Stat.StartingLife);
+      _mana = _data.GetInt(Stat.StartingMana);
+      _deck.OnStartGame(data.Deck);
 
       var openingHand = new List<CreatureData>();
       for (var i = 0; i < _data.GetInt(Stat.StartingHandSize); ++i)
@@ -111,6 +88,25 @@ namespace Nighthollow.Components
       else
       {
         Root.Instance.Enemy.OnEnemyCreatureRemoved();
+      }
+    }
+
+    IEnumerator<YieldInstruction> GainMana()
+    {
+      while (true)
+      {
+        yield return new WaitForSeconds(1);
+        _mana += _data.GetInt(Stat.ManaGainPerSecond);
+      }
+    }
+
+    IEnumerator<YieldInstruction> DrawCards()
+    {
+      while (true)
+      {
+        Errors.CheckArgument(_data.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
+        yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.CardDrawInterval));
+        _hand.DrawCards(new List<CreatureData> {_deck.Draw()});
       }
     }
 

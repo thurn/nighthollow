@@ -37,9 +37,10 @@ namespace Nighthollow.Components
 
     public void StartGame()
     {
-      Root.Instance.DataService.FetchData(() =>
+      Root.Instance.GameDataService.FetchData(() =>
       {
-        Root.Instance.InventoryService.LoadStartingDeck();
+        Root.Instance.UserDataService.OnNewGame(Root.Instance.GameDataService);
+        Root.Instance.UserDataService.StartGame();
       });
     }
 

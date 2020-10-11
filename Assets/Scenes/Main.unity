@@ -534,8 +534,8 @@ MonoBehaviour:
   _enemy: {fileID: 1160944780}
   _damageTextService: {fileID: 169299298}
   _assetService: {fileID: 169299301}
-  _dataService: {fileID: 169299302}
-  _inventoryService: {fileID: 169299303}
+  _gameDataService: {fileID: 169299302}
+  _userDataService: {fileID: 169299303}
 --- !u!114 &169299298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4612,7 +4612,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1236180347
 RectTransform:
   m_ObjectHideFlags: 0

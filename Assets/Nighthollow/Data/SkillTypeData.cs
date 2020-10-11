@@ -23,7 +23,7 @@ namespace Nighthollow.Data
     public int Id { get; }
     public string Name { get; }
 
-    public SkillTypeData(DataService service, IReadOnlyDictionary<string, string> row)
+    public SkillTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
     {
       Id = Parse.IntRequired(row, "Skill ID");
       Name = Parse.StringRequired(row, "Name");

@@ -50,11 +50,11 @@ namespace Nighthollow.Services
     [SerializeField] AssetService _assetService;
     public AssetService AssetService => _assetService;
 
-    [SerializeField] DataService _dataService;
-    public DataService DataService => _dataService;
+    [SerializeField] GameDataService _gameDataService;
+    public GameDataService GameDataService => _gameDataService;
 
-    [SerializeField] InventoryService _inventoryService;
-    public InventoryService InventoryService => _inventoryService;
+    [SerializeField] UserDataService _userDataService;
+    public UserDataService UserDataService => _userDataService;
 
     public static Root Instance
     {
@@ -81,7 +81,7 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_enemy);
       Errors.CheckNotNull(_damageTextService);
       Errors.CheckNotNull(_assetService);
-      Errors.CheckNotNull(_dataService);
+      Errors.CheckNotNull(_gameDataService);
 
       _instance = this;
     }

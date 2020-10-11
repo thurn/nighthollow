@@ -40,5 +40,23 @@ namespace Nighthollow.Data
       DamageType = (DamageType?) Parse.Int(row, "Damage Type");
       School = (School?) Parse.Int(row, "School");
     }
+
+    public ModifierTypeData(
+      int id,
+      string description,
+      int? statId,
+      Operator? @operator,
+      CreatureDelegateId? delegateId,
+      DamageType? damageType,
+      School? school)
+    {
+      Id = id;
+      Description = description;
+      StatId = statId;
+      Operator = @operator;
+      DelegateId = delegateId;
+      DamageType = damageType;
+      School = school;
+    }
   }
 }

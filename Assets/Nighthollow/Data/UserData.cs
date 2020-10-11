@@ -22,11 +22,11 @@ namespace Nighthollow.Data
 {
   public sealed class UserData : AbstractGameEntity
   {
-    public IReadOnlyCollection<CreatureData> Deck { get; }
+    public IReadOnlyList<CreatureData> Deck { get; }
     public override StatTable Stats { get; }
 
     public UserData(
-      IReadOnlyCollection<CreatureData> deck,
+      IReadOnlyList<CreatureData> deck,
       StatTable stats)
     {
       Deck = deck;

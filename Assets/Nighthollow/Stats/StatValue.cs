@@ -23,6 +23,11 @@ namespace Nighthollow.Stats
     IModifier AsStaticModifier();
   }
 
+  public readonly struct NoValue : IStatValue
+  {
+    public IModifier AsStaticModifier() => new StaticModifier<NoValue>(this);
+  }
+
   public readonly struct IntValue : IStatValue
   {
     public readonly int Value;
@@ -33,11 +38,6 @@ namespace Nighthollow.Stats
     }
 
     public IModifier AsStaticModifier() => new StaticModifier<IntValue>(this);
-  }
-
-  public readonly struct NoValue : IStatValue
-  {
-    public IModifier AsStaticModifier() => new StaticModifier<NoValue>(this);
   }
 
   public readonly struct DurationValue : IStatValue

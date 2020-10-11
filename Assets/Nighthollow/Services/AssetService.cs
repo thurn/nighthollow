@@ -14,15 +14,23 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Utils;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Nighthollow.Services
 {
   public sealed class AssetService : MonoBehaviour
   {
     readonly Dictionary<string, Object> _assets = new Dictionary<string, Object>();
+
+    public void FetchAssets(GameDataService gameDataService, Action onComplete)
+    {
+      StartCoroutine(FetchAssetsAsync(gameDataService, onComplete));
+    }
 
     public Sprite GetImage(string address)
     {
@@ -34,6 +42,30 @@ namespace Nighthollow.Services
     {
       Errors.CheckArgument(_assets.ContainsKey(address), $"Asset not found: {address}");
       return ComponentUtils.InstantiateGameObject<T>((GameObject) _assets[address], parent);
+    }
+
+    IEnumerator<WaitUntil> FetchAssetsAsync(GameDataService gameDataService, Action onComplete)
+    {
+      Debug.Log("Fetching Assets...");
+      var requests = new Dictionary<string, ResourceRequest>();
+      foreach (var creature in gameDataService.AllCreatureTypes)
+      {
+        requests[creature.PrefabAddress] = Resources.LoadAsync<GameObject>(creature.PrefabAddress);
+        if (creature.ImageAddress != null)
+        {
+          requests[creature.ImageAddress] = Resources.LoadAsync<Sprite>(creature.ImageAddress);
+        }
+      }
+
+      yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
+      Debug.Log("Got Asset Responses...");
+
+      foreach (var request in requests)
+      {
+        _assets[request.Key] = request.Value.asset;
+      }
+
+      onComplete();
     }
   }
 }

@@ -26,8 +26,9 @@ using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class DataService : MonoBehaviour
+  public sealed class GameDataService : MonoBehaviour
   {
+    readonly StatTable _userDefaults = new StatTable();
     readonly Dictionary<int, ModifierTypeData> _modifiers = new Dictionary<int, ModifierTypeData>();
     readonly Dictionary<int, AffixTypeData> _affixes = new Dictionary<int, AffixTypeData>();
     readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
@@ -36,10 +37,16 @@ namespace Nighthollow.Services
     readonly Dictionary<StaticCardList, List<CreatureItemData>> _staticCardLists =
       new Dictionary<StaticCardList, List<CreatureItemData>>();
 
+    public IEnumerable<CreatureTypeData> AllCreatureTypes => _creatures.Values;
+
+    public IEnumerable<SkillTypeData> AllSkillTypes => _skills.Values;
+
     public void FetchData(Action onComplete)
     {
       StartCoroutine(FetchDataAsync(onComplete));
     }
+
+    public StatTable UserDefaults() => _userDefaults.Clone();
 
     public ModifierTypeData GetModifier(int modifierId) => Lookup(_modifiers, modifierId);
 
@@ -62,7 +69,7 @@ namespace Nighthollow.Services
     {
       Debug.Log("Fetching Data...");
       var request = SpreadsheetHelper.SpreadsheetRequest(new List<string>
-        {"Creatures", "Skills", "Modifiers", "Affixes", "CardLists"}
+        {"Creatures", "Skills", "User", "Modifiers", "Affixes", "CardLists"}
       );
       yield return request.SendWebRequest();
       var node = JSON.Parse(request.downloadHandler.text);
@@ -74,6 +81,15 @@ namespace Nighthollow.Services
       _skills.Clear();
       _creatures.Clear();
       _staticCardLists.Clear();
+
+      foreach (var stat in parsed["User"])
+      {
+        var statId = Parse.IntRequired(stat, "Stat");
+        StatUtil.ParseAndAdd(
+          _userDefaults.UnsafeGet(Stat.GetStat(statId)),
+          Stat.GetType(statId),
+          Parse.StringRequired(stat, "Value"));
+      }
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))
       {
@@ -105,12 +121,7 @@ namespace Nighthollow.Services
         _staticCardLists[list].Add(result);
       }
 
-      foreach (var tmp in _staticCardLists[StaticCardList.StartingDeck])
-      {
-        Creatures.Build(tmp);
-      }
-
-      onComplete();
+      Root.Instance.AssetService.FetchAssets(this, onComplete);
     }
 
     (StaticCardList, CreatureItemData) ParseStaticCard(IReadOnlyDictionary<string, string> row)

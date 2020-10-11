@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using DataStructures.RandomSelector;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,7 @@ namespace Nighthollow.Components
   public sealed class Deck : MonoBehaviour
   {
     [SerializeField] bool _debugOrderedDraws;
-
     [SerializeField] List<CreatureData> _cards;
-
     [SerializeField] List<int> _weights;
     int _lastDraw;
 
@@ -35,9 +34,12 @@ namespace Nighthollow.Components
       _weights.Clear();
       _cards = cards.ToList();
 
+      var manaCreatureCount = _cards.Count(c => c.GetBool(Stat.IsManaCreature));
+      var manaCreatureWeight = 4000 * ((2.0 * _cards.Count - manaCreatureCount) / 3.0);
+
       foreach (var card in _cards)
       {
-        _weights.Add(card.GetBool(Stat.IsManaCreature) ? 24000 : 4000);
+        _weights.Add(card.GetBool(Stat.IsManaCreature) ? (int) Math.Round(manaCreatureWeight) : 4000);
       }
     }
 

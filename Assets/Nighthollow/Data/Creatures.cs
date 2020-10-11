@@ -31,6 +31,10 @@ namespace Nighthollow.Data
 
       stats.Get(Stat.Health).Add(item.Health);
       stats.Get(Stat.ManaCost).Add(item.ManaCost);
+      if (item.BaseType.IsManaCreature)
+      {
+        stats.Get(Stat.IsManaCreature).AddSetTrueModifier(new StaticModifier<NoValue>());
+      }
 
       foreach (var cost in item.InfluenceCost)
       {

@@ -12,27 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
+using Nighthollow.Stats;
 using UnityEngine;
-
-#nullable enable
 
 namespace Nighthollow.Services
 {
-  public sealed class InventoryService : MonoBehaviour
+  public sealed class UserDataService : MonoBehaviour
   {
     readonly List<CreatureItemData> _deck = new List<CreatureItemData>();
     public IReadOnlyList<CreatureItemData> Deck => _deck;
 
-    readonly List<CreatureItemData> _inventory = new List<CreatureItemData>();
-    public IReadOnlyList<CreatureItemData> Inventory => _inventory;
+    public StatTable UserStats { get; private set; } = new StatTable();
 
-    public void LoadStartingDeck()
+    public void OnNewGame(GameDataService gameDataService)
     {
+      UserStats = gameDataService.UserDefaults();
       _deck.Clear();
-      _deck.AddRange(Root.Instance.DataService.GetStaticCardList(StaticCardList.StartingDeck));;
+      _deck.AddRange(gameDataService.GetStaticCardList(StaticCardList.StartingDeck));;
+    }
+
+    public void StartGame()
+    {
+      Root.Instance.User.OnStartGame(new UserData(Deck.Select(Creatures.Build).ToList(), UserStats.Clone()));
     }
   }
 }
