@@ -21,10 +21,10 @@ namespace Nighthollow.Data
 {
   public sealed class Modifier
   {
-    public ModifierData Data { get; }
-    public IStatValue Value { get; }
+    public ModifierTypeData Data { get; }
+    public IStatValue? Value { get; }
 
-    public Modifier(ModifierData modifierData, IStatValue value)
+    public Modifier(ModifierTypeData modifierData, IStatValue? value)
     {
       Data = modifierData;
       Value = value;

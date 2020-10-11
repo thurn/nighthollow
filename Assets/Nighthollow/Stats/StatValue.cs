@@ -20,6 +20,7 @@ namespace Nighthollow.Stats
 {
   public interface IStatValue
   {
+    IModifier AsStaticModifier();
   }
 
   public readonly struct IntValue : IStatValue
@@ -30,51 +31,61 @@ namespace Nighthollow.Stats
     {
       Value = value;
     }
+
+    public IModifier AsStaticModifier() => new StaticModifier<IntValue>(this);
   }
 
-  public readonly struct BoolValue : IStatValue
+  public readonly struct NoValue : IStatValue
   {
-    public readonly bool Value;
-
-    public BoolValue(bool value)
-    {
-      Value = value;
-    }
+    public IModifier AsStaticModifier() => new StaticModifier<NoValue>(this);
   }
 
   public readonly struct DurationValue : IStatValue
   {
-    public readonly int Value;
+    public readonly IntValue Value;
 
     public DurationValue(double valueSeconds)
     {
-      Value = (int) Math.Round(valueSeconds * 1000.0);
+      Value = new IntValue((int) Math.Round(valueSeconds * 1000.0));
     }
+
+    public IModifier AsStaticModifier() => new StaticModifier<DurationValue>(this);
   }
 
   public readonly struct PercentageValue : IStatValue
   {
-    public readonly int Value;
+    public readonly IntValue Value;
 
     public PercentageValue(double value)
     {
-      Value = (int) Math.Round(value * 100.0);
+      Value = new IntValue((int) Math.Round(value * 100.0));
     }
+
+    public IModifier AsStaticModifier() => new StaticModifier<PercentageValue>(this);
   }
 
   public readonly struct IntRangeValue : IStatValue
   {
-    public readonly int Low;
-    public readonly int High;
+    public readonly IntValue Low;
+    public readonly IntValue High;
 
     public IntRangeValue(int low, int high)
     {
-      Low = low;
-      High = high;
+      Low = new IntValue(low);
+      High = new IntValue(high);
     }
+
+    public IModifier AsStaticModifier() => new StaticModifier<IntRangeValue>(this);
   }
 
-  public readonly struct TaggedStatValue<TTag, TValue> : IStatValue where TTag : struct where TValue : IStatValue
+  public interface ITaggedStatValue
+  {
+    Enum GetTag();
+    IStatValue GetValue();
+  }
+
+  public readonly struct TaggedStatValue<TTag, TValue> : IStatValue, ITaggedStatValue
+    where TTag : Enum where TValue : IStatValue
   {
     public TTag Tag { get; }
     public TValue Value { get; }
@@ -84,5 +95,11 @@ namespace Nighthollow.Stats
       Tag = tag;
       Value = value;
     }
+
+    public IModifier AsStaticModifier() => new StaticModifier<TaggedStatValue<TTag, TValue>>(this);
+
+    public Enum GetTag() => Tag;
+
+    public IStatValue GetValue() => Value;
   }
 }

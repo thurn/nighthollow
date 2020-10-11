@@ -14,14 +14,16 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
   public readonly struct TaggedStatsId<TKey, TStat> : IStatId<TaggedStats<TKey, TStat>>
-    where TKey : struct where TStat : IStat<TStat>, new()
+    where TKey : Enum where TStat : IStat<TStat>, new()
   {
     readonly int _value;
 
@@ -32,11 +34,18 @@ namespace Nighthollow.Stats
 
     public int Value => _value;
 
-    public TaggedStats<TKey, TStat> NotFoundValue() => new TaggedStats<TKey, TStat>();
+    public IStat NotFoundValue() => new TaggedStats<TKey, TStat>();
   }
 
-  public sealed class TaggedStats<TKey, TStat> : IStat<TaggedStats<TKey, TStat>>
-    where TKey : struct where TStat : IStat<TStat>, new()
+  public interface ITaggedStats
+  {
+    void AddAddedModifierUnchecked(IModifier modifier);
+
+    void AddIncreaseModifierUnchecked(IModifier modifier);
+  }
+
+  public sealed class TaggedStats<TKey, TStat> : IStat<TaggedStats<TKey, TStat>>, ITaggedStats
+    where TKey : Enum where TStat : IStat<TStat>, new()
   {
     readonly Dictionary<TKey, TStat> _stats;
 
@@ -73,12 +82,30 @@ namespace Nighthollow.Stats
 
     public void AddAddedModifier<TValue>(IModifier<TaggedStatValue<TKey, TValue>> modifier) where TValue : IStatValue
     {
-      var stat = _stats[modifier.Modifier.Value.Tag];
+      var updated = modifier.WithValue(modifier.BaseModifier.Argument.Value);
+      Modifiers.AddAddedModifierUnchecked(Get(modifier.BaseModifier.Argument.Tag), updated);
+    }
+
+    public void AddAddedModifierUnchecked(IModifier modifier)
+    {
+      var taggedValue = (ITaggedStatValue) modifier.GetArgument();
+      Modifiers.AddAddedModifierUnchecked(
+        Get((TKey) taggedValue.GetTag()),
+        modifier.WithValue(taggedValue.GetValue()));
     }
 
     public void AddIncreaseModifier(IModifier<TaggedStatValue<TKey, PercentageValue>> modifier)
     {
-      var stat = _stats[modifier.Modifier.Value.Tag];
+      var updated = modifier.WithValue(modifier.BaseModifier.Argument.Value);
+      Modifiers.AddIncreaseModifierUnchecked(Get(modifier.BaseModifier.Argument.Tag), updated);
+    }
+
+    public void AddIncreaseModifierUnchecked(IModifier modifier)
+    {
+      var taggedValue = (ITaggedStatValue) modifier.GetArgument();
+      Modifiers.AddIncreaseModifierUnchecked(
+        Get((TKey) taggedValue.GetTag()),
+        modifier.WithValue(taggedValue.GetValue()));
     }
   }
 }

@@ -14,25 +14,24 @@
 
 #nullable enable
 
-using Nighthollow.Generated;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
   public readonly struct StaticModifier<TValue> : IModifier<TValue> where TValue : IStatValue
   {
-    public readonly TValue Value;
-    public readonly Operator Operator;
+    public readonly TValue Argument;
 
-    public StaticModifier(TValue value, Operator @operator)
+    public StaticModifier(TValue argument)
     {
-      Value = value;
-      Operator = @operator;
+      Argument = argument;
     }
 
-    public StaticModifier<TValue> Modifier => this;
+    public StaticModifier<TValue> BaseModifier => this;
 
-    public IModifier<TValue> WithValue(TValue value) => new StaticModifier<TValue>(value, Operator);
+    public IModifier WithValue<TNew>(TNew value) where TNew : IStatValue => value.AsStaticModifier();
+
+    public IStatValue GetArgument() => Argument;
 
     public bool IsDynamic() => false;
 

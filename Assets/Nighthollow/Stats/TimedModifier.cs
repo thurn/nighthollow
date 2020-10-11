@@ -30,9 +30,20 @@ namespace Nighthollow.Stats
       _endTimeSeconds = Time.time + (durationMilliseconds / 1000f);
     }
 
-    public StaticModifier<TValue> Modifier => _modifier;
+    TimedModifier(StaticModifier<TValue> modifier, float endTimeSeconds)
+    {
+      _modifier = modifier;
+      _endTimeSeconds = endTimeSeconds;
+    }
+
+    public StaticModifier<TValue> BaseModifier => _modifier;
 
     public IModifier<T> Clone<T>() where T : IStatValue => Errors.CheckNotNull(this as IModifier<T>);
+
+    public IModifier WithValue<TNew>(TNew value) where TNew : IStatValue =>
+      new TimedModifier<TNew>((StaticModifier<TNew>) _modifier.WithValue(value), _endTimeSeconds);
+
+    public IStatValue GetArgument() => BaseModifier.GetArgument();
 
     public bool IsDynamic() => true;
 

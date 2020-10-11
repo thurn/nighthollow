@@ -467,6 +467,7 @@ GameObject:
   - component: {fileID: 169299300}
   - component: {fileID: 169299301}
   - component: {fileID: 169299302}
+  - component: {fileID: 169299303}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -532,9 +533,9 @@ MonoBehaviour:
   _user: {fileID: 1236180348}
   _enemy: {fileID: 1160944780}
   _damageTextService: {fileID: 169299298}
-  _rewardService: {fileID: 169299300}
   _assetService: {fileID: 169299301}
   _dataService: {fileID: 169299302}
+  _inventoryService: {fileID: 169299303}
 --- !u!114 &169299298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -594,16 +595,6 @@ MonoBehaviour:
     type: 3}
   _hitBig: {fileID: 6052047142294731675, guid: bf308869e57754400bb92a6d8f95dc54, type: 3}
   _stunIcon: {fileID: 21300000, guid: d09b4b4cdd159c74d809b3baec2b47a1, type: 3}
-  _rewardSelector: {fileID: 5677712204762813000, guid: b2387ab8ef9ae47079e8f4e71c1f8cd2,
-    type: 3}
-  _rewardChoice: {fileID: 7993808672826808358, guid: d6dfcb8fbb55146d0a088b50c62f9767,
-    type: 3}
-  _deckBuilder: {fileID: 2130635127249649850, guid: e8407937457b64d789ab5e5a5cc55caf,
-    type: 3}
-  _cardRow: {fileID: 3600882448598180050, guid: f89dbf3132677439d84ed94b8e008e25,
-    type: 3}
-  _tooltip: {fileID: 2050844702568962716, guid: 0bc29e3950697438a8c538c85952f722,
-    type: 3}
   _dialog: {fileID: 8397404786072499538, guid: ebf39abfca6dd4cef984e028f04c6a14, type: 3}
 --- !u!114 &169299300
 MonoBehaviour:
@@ -639,6 +630,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 78f741185de94ac7a5d233a63ebc8dcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &169299303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169299293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 700595cf361c44379eeed2316ce43ee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!213 &192261797

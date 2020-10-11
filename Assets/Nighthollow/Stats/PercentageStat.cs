@@ -29,7 +29,7 @@ namespace Nighthollow.Stats
 
     public int Value => _value;
 
-    public PercentageStat NotFoundValue() => new PercentageStat(new IntStat(0));
+    public IStat NotFoundValue() => new PercentageStat(new IntStat());
   }
 
   public sealed class PercentageStat : IStat<PercentageStat>
@@ -49,9 +49,9 @@ namespace Nighthollow.Stats
 
     public PercentageStat Clone() => new PercentageStat(_stat.Clone());
 
-    public void AddAddedModifier(IModifier<PercentageValue> value)
+    public void AddAddedModifier(IModifier<PercentageValue> modifier)
     {
-
+      _stat.AddAddedModifier((IModifier<IntValue>) modifier.WithValue(modifier.BaseModifier.Argument.Value));
     }
   }
 }

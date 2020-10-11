@@ -41,8 +41,6 @@ namespace Nighthollow.Components
       {
         Root.Instance.InventoryService.LoadStartingDeck();
       });
-      // Root.Instance.User.OnStartGame();
-      // Root.Instance.Enemy.StartSpawningEnemies();
     }
 
     public void ResetGame()

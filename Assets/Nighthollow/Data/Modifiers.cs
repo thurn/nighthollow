@@ -23,7 +23,7 @@ namespace Nighthollow.Data
 {
   public static class Modifiers
   {
-    public static IStatValue? ParseArgument(ModifierData modifierData, string? value)
+    public static IStatValue? ParseArgument(ModifierTypeData modifierData, string? value)
     {
       if (value == null)
       {
@@ -38,8 +38,6 @@ namespace Nighthollow.Data
           {
             case StatType.Int:
               return new IntValue(int.Parse(value));
-            case StatType.Bool:
-              return new BoolValue(bool.Parse(value));
             case StatType.SchoolInts:
               return new TaggedStatValue<School, IntValue>(
                 Errors.CheckNotNull(modifierData.School),
@@ -60,6 +58,8 @@ namespace Nighthollow.Data
               return new TaggedStatValue<DamageType, IntRangeValue>(
                 Errors.CheckNotNull(modifierData.DamageType),
                 new IntRangeValue(int.Parse(split2[0]), int.Parse(split2[1])));
+            case StatType.Bool:
+              throw new InvalidOperationException("Cannot add boolean stats");
             case StatType.Unknown:
             default:
               throw new ArgumentOutOfRangeException();
@@ -82,12 +82,80 @@ namespace Nighthollow.Data
             return new PercentageValue(double.Parse(value));
           }
         case Operator.SetFalse:
-          throw new InvalidOperationException("SetFalse operator should not have an associated value.");
+        case Operator.SetTrue:
+          throw new InvalidOperationException("Boolean set operator should not have an associated value.");
         case Operator.Unknown:
         case null:
         default:
           throw new ArgumentOutOfRangeException(nameof(modifierData.Operator),
             "Modifiers with a value must have an operator");
+      }
+    }
+
+    public static void ApplyModifierUnchecked(Operator @operator, IStat stat, IModifier modifier)
+    {
+      switch (@operator)
+      {
+        case Operator.Add:
+          AddAddedModifierUnchecked(stat, modifier);
+          break;
+        case Operator.Increase:
+          AddIncreaseModifierUnchecked(stat, modifier);
+          break;
+        case Operator.SetFalse:
+          ((BoolStat) stat).AddSetFalseModifier((IModifier<NoValue>) modifier);
+          break;
+        case Operator.SetTrue:
+          ((BoolStat) stat).AddSetTrueModifier((IModifier<NoValue>) modifier);
+          break;
+        case Operator.Unknown:
+        default:
+          throw new ArgumentOutOfRangeException(nameof(@operator), @operator, null);
+      }
+    }
+
+    public static void AddAddedModifierUnchecked(IStat stat, IModifier modifier)
+    {
+      switch (stat)
+      {
+        case IntStat intStat:
+          intStat.AddAddedModifier((IModifier<IntValue>) modifier);
+          break;
+        case DurationStat durationStat:
+          durationStat.AddAddedModifier((IModifier<DurationValue>) modifier);
+          break;
+        case PercentageStat percentageStat:
+          percentageStat.AddAddedModifier((IModifier<PercentageValue>) modifier);
+          break;
+        case IntRangeStat intRangeStat:
+          intRangeStat.AddAddedModifier((IModifier<IntRangeValue>) modifier);
+          break;
+        case ITaggedStats taggedStats:
+          taggedStats.AddAddedModifierUnchecked(modifier);
+          break;
+        default:
+          throw new InvalidOperationException($"Add operator is not supported for {stat}");
+      }
+    }
+
+    public static void AddIncreaseModifierUnchecked(IStat stat, IModifier modifier)
+    {
+      switch (stat)
+      {
+        case IntStat intStat:
+          intStat.AddIncreaseModifier((IModifier<PercentageValue>) modifier);
+          break;
+        case DurationStat durationStat:
+          durationStat.AddIncreaseModifier((IModifier<PercentageValue>) modifier);
+          break;
+        case IntRangeStat intRangeStat:
+          intRangeStat.AddIncreaseModifier((IModifier<PercentageValue>) modifier);
+          break;
+        case ITaggedStats taggedStats:
+          taggedStats.AddIncreaseModifierUnchecked(modifier);
+          break;
+        default:
+          throw new InvalidOperationException($"Increase operator is not supported for {stat}");
       }
     }
   }

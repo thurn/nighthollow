@@ -23,10 +23,10 @@ namespace Nighthollow.Services
 {
   public sealed class InventoryService : MonoBehaviour
   {
-    [SerializeField] List<CreatureItemData> _deck;
+    readonly List<CreatureItemData> _deck = new List<CreatureItemData>();
     public IReadOnlyList<CreatureItemData> Deck => _deck;
 
-    [SerializeField] List<CreatureItemData> _inventory;
+    readonly List<CreatureItemData> _inventory = new List<CreatureItemData>();
     public IReadOnlyList<CreatureItemData> Inventory => _inventory;
 
     public void LoadStartingDeck()

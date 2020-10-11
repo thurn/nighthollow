@@ -23,10 +23,14 @@ namespace Nighthollow.Stats
     bool IsValid();
 
     IModifier<T> Clone<T>() where T : IStatValue;
+
+    public IModifier WithValue<TNew>(TNew value) where TNew : IStatValue;
+
+    public IStatValue GetArgument();
   }
 
   public interface IModifier<TValue> : IModifier where TValue : IStatValue
   {
-    StaticModifier<TValue> Modifier { get; }
+    StaticModifier<TValue> BaseModifier { get; }
   }
 }

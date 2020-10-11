@@ -31,9 +31,7 @@ namespace Nighthollow.Stats
 
     public int Value => _value;
 
-    public IntStat NotFoundValue() => new IntStat(0);
-
-    public IntStat Deserialize(string value) => new IntStat(int.Parse(value));
+    public IStat NotFoundValue() => new IntStat();
   }
 
   public sealed class IntStat : IStat<IntStat>
@@ -44,16 +42,9 @@ namespace Nighthollow.Stats
     bool _hasDynamicModifiers;
     int _computedValue;
 
-    public IntStat() : this(0)
+    public IntStat()
     {
     }
-
-    public IntStat(int initialValue)
-    {
-      _initialValue = initialValue;
-      _computedValue = initialValue;
-    }
-
 
     IntStat(int initialValue,
       IEnumerable<IModifier<IntValue>> addedModifiers,
@@ -80,6 +71,8 @@ namespace Nighthollow.Stats
       }
     }
 
+    public void Add(int value) => AddAddedModifier(new StaticModifier<IntValue>(new IntValue(value)));
+
     public void AddAddedModifier(IModifier<IntValue> modifier)
     {
       _addedModifiers.Add(modifier);
@@ -103,9 +96,9 @@ namespace Nighthollow.Stats
       _addedModifiers.RemoveAll(m => !m.IsValid());
       _increaseModifiers.RemoveAll(m => !m.IsValid());
 
-      result += _addedModifiers.Sum(m => m.Modifier.Value.Value);
+      result += _addedModifiers.Sum(m => m.BaseModifier.Argument.Value);
 
-      var increaseBy = 10000 + _increaseModifiers.Sum(m => m.Modifier.Value.Value);
+      var increaseBy = 10000 + _increaseModifiers.Sum(m => m.BaseModifier.Argument.Value.Value);
       result = Constants.FractionBasisPoints(result, increaseBy);
 
       _computedValue = result;

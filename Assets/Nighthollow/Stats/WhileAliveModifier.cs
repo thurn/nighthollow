@@ -31,9 +31,20 @@ namespace Nighthollow.Stats
       _scopeCreature = new WeakReference<Creature>(Errors.CheckNotNull(creature));
     }
 
-    public StaticModifier<TValue> Modifier => _modifier;
+    WhileAliveModifier(StaticModifier<TValue> modifier, WeakReference<Creature> scopeCreature)
+    {
+      _modifier = modifier;
+      _scopeCreature = scopeCreature;
+    }
+
+    public StaticModifier<TValue> BaseModifier => _modifier;
 
     public IModifier<T> Clone<T>() where T : IStatValue => Errors.CheckNotNull(this as IModifier<T>);
+
+    public IModifier WithValue<TNew>(TNew value) where TNew : IStatValue =>
+      new WhileAliveModifier<TNew>((StaticModifier<TNew>) _modifier.WithValue(value), _scopeCreature);
+
+    public IStatValue GetArgument() => BaseModifier.GetArgument();
 
     public bool IsDynamic() => true;
 

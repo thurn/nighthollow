@@ -53,7 +53,7 @@ namespace Nighthollow.Components
 
     void Awake()
     {
-      _data = new UserData(new List<CreatureData>(), new StatTable(new StatTable.Builder()));
+      _data = new UserData(new List<CreatureData>(), new StatTable());
     }
 
     void Start()

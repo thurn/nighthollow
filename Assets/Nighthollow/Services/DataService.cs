@@ -28,7 +28,7 @@ namespace Nighthollow.Services
 {
   public sealed class DataService : MonoBehaviour
   {
-    readonly Dictionary<int, ModifierData> _modifiers = new Dictionary<int, ModifierData>();
+    readonly Dictionary<int, ModifierTypeData> _modifiers = new Dictionary<int, ModifierTypeData>();
     readonly Dictionary<int, AffixTypeData> _affixes = new Dictionary<int, AffixTypeData>();
     readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
     readonly Dictionary<int, CreatureTypeData> _creatures = new Dictionary<int, CreatureTypeData>();
@@ -41,7 +41,7 @@ namespace Nighthollow.Services
       StartCoroutine(FetchDataAsync(onComplete));
     }
 
-    public ModifierData GetModifier(int modifierId) => Lookup(_modifiers, modifierId);
+    public ModifierTypeData GetModifier(int modifierId) => Lookup(_modifiers, modifierId);
 
     public AffixTypeData GetAffixType(int affixId) => Lookup(_affixes, affixId);
 
@@ -69,7 +69,13 @@ namespace Nighthollow.Services
       var parsed = SpreadsheetHelper.ParseResponse(node);
       Debug.Log("Got Response");
 
-      foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierData(row)))
+      _modifiers.Clear();
+      _affixes.Clear();
+      _skills.Clear();
+      _creatures.Clear();
+      _staticCardLists.Clear();
+
+      foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))
       {
         _modifiers[modifier.Id] = modifier;
       }
@@ -95,27 +101,61 @@ namespace Nighthollow.Services
 
       foreach (var row in parsed["CardLists"])
       {
-        var list = (StaticCardList) Parse.IntRequired(row, "Card List");
-        if (!_staticCardLists.ContainsKey(list))
-        {
-          _staticCardLists[list] = new List<CreatureItemData>();
-        }
+        var (list, result) = ParseStaticCard(row);
+        _staticCardLists[list].Add(result);
+      }
 
-        var influenceCost = new TaggedStats<School, IntStat>();
-        influenceCost.Add((School) Parse.IntRequired(row, "School"),
-          new IntStat((int) Parse.IntRequired(row, "Influence Cost")));
-
-        _staticCardLists[list].Add(new CreatureItemData(
-          Parse.StringRequired(row, "Card Name"),
-          GetCreatureType(Parse.IntRequired(row, "Base Creature")),
-          Parse.IntRequired(row, "Health"),
-          Parse.IntRequired(row, "Mana Cost"),
-          influenceCost,
-          new List<SkillData>(),
-          new List<AffixData>()));
+      foreach (var tmp in _staticCardLists[StaticCardList.StartingDeck])
+      {
+        Creatures.Build(tmp);
       }
 
       onComplete();
+    }
+
+    (StaticCardList, CreatureItemData) ParseStaticCard(IReadOnlyDictionary<string, string> row)
+    {
+      var list = (StaticCardList) Parse.IntRequired(row, "Card List");
+      if (!_staticCardLists.ContainsKey(list))
+      {
+        _staticCardLists[list] = new List<CreatureItemData>();
+      }
+
+      var influenceCost = new List<TaggedStatValue<School, IntValue>>
+      {
+        new TaggedStatValue<School, IntValue>(
+          (School) Parse.IntRequired(row, "School"),
+          new IntValue(Parse.IntRequired(row, "Influence Cost")))
+      };
+
+      var creatureType = GetCreatureType(Parse.IntRequired(row, "Base Creature"));
+
+      var affixes = new List<AffixData>();
+      if (creatureType.ImplicitAffix != null)
+      {
+        var modifierList = new List<Modifier>();
+
+        for (var i = 1; i <= creatureType.ImplicitAffix.ModifierRanges.Count; i++)
+        {
+          var modifier = creatureType.ImplicitAffix.ModifierRanges[i - 1];
+          modifierList.Add(new Modifier(
+            modifier.ModifierData,
+            Modifiers.ParseArgument(modifier.ModifierData, Parse.String(row, $"Implicit Arg {i}"))));
+        }
+
+        affixes.Add(new AffixData(creatureType.ImplicitAffix.Id, modifierList));
+      }
+
+      var result = new CreatureItemData(
+        Parse.StringRequired(row, "Card Name"),
+        creatureType,
+        Parse.IntRequired(row, "Health"),
+        Parse.IntRequired(row, "Mana Cost"),
+        influenceCost,
+        new List<SkillData>(),
+        affixes);
+
+      return (list, result);
     }
   }
 }

@@ -110,5 +110,54 @@ namespace Nighthollow.Generated
         default: throw new ArgumentOutOfRangeException();
       }
     }
+
+    public static IStatId GetStat(int statId)
+    {
+      switch (statId)
+      {
+        case 1: return Health;
+        case 2: return BaseDamage;
+        case 3: return Speed;
+        case 4: return CritChance;
+        case 5: return CritMultiplier;
+        case 6: return Accuracy;
+        case 7: return Evasion;
+        case 8: return DamageResistance;
+        case 9: return DamageReduction;
+        case 10: return MeleeHealthDrainPercent;
+        case 11: return HealthGainOnMeleeHit;
+        case 12: return SkillSpeedMultiplier;
+        case 13: return StunDurationOnEnemies;
+        case 14: return StunRecoveryTime;
+        case 15: return StunChance;
+        case 16: return StunAvoidanceChance;
+        case 17: return MeleeReflect;
+        case 18: return HealthRegenerationPerSecond;
+        case 19: return ManaCost;
+        case 20: return InfluenceCost;
+        case 21: return ProjectileSpeed;
+        case 22: return HitboxRadius;
+        case 23: return StartingLife;
+        case 24: return StartingMana;
+        case 25: return Influence;
+        case 26: return StartingHandSize;
+        case 27: return ManaGainPerSecond;
+        case 28: return CardDrawInterval;
+        case 29: return InitialEnemySpawnDelay;
+        case 30: return EnemySpawnDelay;
+        case 31: return TotalEnemiesToSpawn;
+        case 32: return CanCrit;
+        case 33: return CanStun;
+        case 34: return MeleeAreaDamage;
+        case 35: return IsManaCreature;
+        case 36: return GainedDamageOnKill;
+        case 37: return MeleeSplashMaxTargets;
+        case 38: return ProjectileDamageMultiplier;
+        case 39: return ChainProjectileDamageMultiplier;
+        case 40: return SkillCooldownRecovery;
+        case 41: return MeleeKnockbackDuration;
+        default: throw new ArgumentOutOfRangeException();
+      }
+    }
   }
 }

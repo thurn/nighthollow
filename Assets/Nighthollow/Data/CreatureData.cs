@@ -35,13 +35,8 @@ namespace Nighthollow.Data
       CreatureTypeData baseType,
       IReadOnlyList<SkillData> skills,
       StatTable stats,
-      List<CreatureDelegateId> delegates)
+      List<CreatureDelegateId> delegates) : this(name, baseType, skills, stats, new CreatureDelegateChain(delegates))
     {
-      Name = name;
-      BaseType = baseType;
-      Skills = skills;
-      Stats = stats;
-      Delegate = new CreatureDelegateChain(delegates);
     }
 
     CreatureData(

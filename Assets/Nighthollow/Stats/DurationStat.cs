@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 #nullable enable
 
 namespace Nighthollow.Stats
@@ -29,7 +27,7 @@ namespace Nighthollow.Stats
 
     public int Value => _value;
 
-    public DurationStat NotFoundValue() => new DurationStat(new IntStat(0));
+    public IStat NotFoundValue() => new DurationStat(new IntStat());
   }
 
   public sealed class DurationStat : IStat<DurationStat>
@@ -45,12 +43,14 @@ namespace Nighthollow.Stats
 
     public DurationStat Clone() => new DurationStat(_stat.Clone());
 
-    public void AddAddedModifier(IModifier<DurationValue> value)
+    public void AddAddedModifier(IModifier<DurationValue> modifier)
     {
+      _stat.AddAddedModifier((IModifier<IntValue>) modifier.WithValue(modifier.BaseModifier.Argument.Value));
     }
 
-    public void AddIncreaseModifier(IModifier<PercentageValue> value)
+    public void AddIncreaseModifier(IModifier<PercentageValue> modifier)
     {
+      _stat.AddIncreaseModifier(modifier);
     }
   }
 }

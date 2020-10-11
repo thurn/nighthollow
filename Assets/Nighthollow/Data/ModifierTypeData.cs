@@ -20,7 +20,7 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
-  public sealed class ModifierData
+  public sealed class ModifierTypeData
   {
     public int Id { get; }
     public string Description { get; }
@@ -30,7 +30,7 @@ namespace Nighthollow.Data
     public DamageType? DamageType { get; }
     public School? School { get; }
 
-    public ModifierData(IReadOnlyDictionary<string, string> row)
+    public ModifierTypeData(IReadOnlyDictionary<string, string> row)
     {
       Id = Parse.IntRequired(row, "Modifier ID");
       Description = Parse.StringRequired(row, "Description");

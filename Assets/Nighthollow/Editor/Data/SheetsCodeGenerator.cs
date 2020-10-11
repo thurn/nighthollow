@@ -215,6 +215,18 @@ namespace Nighthollow.Editor.Data
       builder.Append("      }\n");
       builder.Append("    }\n");
 
+      builder.Append("\n    public static IStatId GetStat(int statId)\n");
+      builder.Append("    {\n");
+      builder.Append("      switch (statId)\n");
+      builder.Append("      {\n");
+      foreach (var stat in input)
+      {
+        builder.Append($"        case {stat["Stat ID"]}: return {stat["Name"]};\n");
+      }
+      builder.Append($"        default: throw new ArgumentOutOfRangeException();\n");
+      builder.Append("      }\n");
+      builder.Append("    }\n");
+
       builder.Append("  }\n");
       builder.Append("}\n");
 

@@ -27,7 +27,7 @@ namespace Nighthollow.Stats
 
     public int Value => _value;
 
-    public IntRangeStat NotFoundValue() => new IntRangeStat(new IntStat(0), new IntStat(0));
+    public IStat NotFoundValue() => new IntRangeStat(new IntStat(), new IntStat());
   }
 
   public sealed class IntRangeStat : IStat<IntRangeStat>
@@ -51,12 +51,14 @@ namespace Nighthollow.Stats
 
     public void AddAddedModifier(IModifier<IntRangeValue> modifier)
     {
-
+      _low.AddAddedModifier((IModifier<IntValue>) modifier.WithValue(modifier.BaseModifier.Argument.Low));
+      _high.AddAddedModifier((IModifier<IntValue>) modifier.WithValue(modifier.BaseModifier.Argument.High));
     }
 
     public void AddIncreaseModifier(IModifier<PercentageValue> modifier)
     {
-
+      _low.AddIncreaseModifier(modifier);
+      _high.AddIncreaseModifier(modifier);
     }
   }
 }

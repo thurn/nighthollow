@@ -19,10 +19,11 @@ namespace Nighthollow.Stats
   public interface IStatId
   {
     int Value { get; }
+
+    IStat NotFoundValue();
   }
 
   public interface IStatId<out T> : IStatId where T : IStat
   {
-    T NotFoundValue();
   }
 }

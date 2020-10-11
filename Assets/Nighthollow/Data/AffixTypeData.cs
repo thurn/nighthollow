@@ -24,18 +24,18 @@ namespace Nighthollow.Data
 {
   public sealed class ModifierRange
   {
-    public ModifierData Modifier { get; }
+    public ModifierTypeData ModifierData { get; }
     public IStatValue? Low { get; }
     public IStatValue? High { get; }
 
     public ModifierRange(DataService service, IReadOnlyDictionary<string, string> row, int number)
     {
-      Modifier = service.GetModifier(Parse.IntRequired(row, $"Modifier {number}"));
+      ModifierData = service.GetModifier(Parse.IntRequired(row, $"Modifier {number}"));
 
       if (row.ContainsKey($"Low {number}") && row.ContainsKey($"High {number}"))
       {
-        Low = Modifiers.ParseArgument(Modifier, Parse.String(row, $"Low {number}"));
-        High = Modifiers.ParseArgument(Modifier, Parse.String(row, $"High {number}"));
+        Low = Modifiers.ParseArgument(ModifierData, Parse.String(row, $"Low {number}"));
+        High = Modifiers.ParseArgument(ModifierData, Parse.String(row, $"High {number}"));
       }
     }
   }
@@ -49,7 +49,7 @@ namespace Nighthollow.Data
     public int ManaCostHigh { get; }
     public School? InfluenceType { get; }
     public AffixPool AffixPool { get; }
-    public IReadOnlyList<ModifierRange> Modifiers { get; }
+    public IReadOnlyList<ModifierRange> ModifierRanges { get; }
 
     public AffixTypeData(DataService service, IReadOnlyDictionary<string, string> row)
     {
@@ -77,7 +77,7 @@ namespace Nighthollow.Data
         modifiers.Add(new ModifierRange(service, row, 3));
       }
 
-      Modifiers = modifiers;
+      ModifierRanges = modifiers;
     }
   }
 }

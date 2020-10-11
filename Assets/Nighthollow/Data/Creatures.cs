@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
@@ -25,13 +26,16 @@ namespace Nighthollow.Data
   {
     public static CreatureData Build(CreatureItemData item)
     {
-      var stats = new StatTable.Builder();
+      var stats = new StatTable();
       var delegates = new List<CreatureDelegateId>();
 
-      stats.AddStat(Stat.Health, new IntStat((int) item.Health));
-      stats.AddStat(Stat.ManaCost, new IntStat((int) item.ManaCost));
-      stats.AddStat(Stat.InfluenceCost, item.InfluenceCost);
-      var statTable = new StatTable(stats);
+      stats.Get(Stat.Health).Add(item.Health);
+      stats.Get(Stat.ManaCost).Add(item.ManaCost);
+
+      foreach (var cost in item.InfluenceCost)
+      {
+        stats.Get(Stat.InfluenceCost).AddAddedModifier(new StaticModifier<TaggedStatValue<School, IntValue>>(cost));
+      }
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
       {
@@ -42,21 +46,23 @@ namespace Nighthollow.Data
 
         if (modifier.Data.StatId.HasValue)
         {
-          ApplyStatModifier(statTable, modifier.Data.StatId.Value, modifier.Data, modifier.Value);
+          ApplyStatModifier(
+            stats,
+            modifier.Data.StatId.Value,
+            modifier.Data,
+            modifier.Value);
         }
       }
 
-      return new CreatureData(
-        item.Name,
-        item.BaseType,
-        item.Skills,
-        statTable,
-        delegates);
+      return new CreatureData(item.Name, item.BaseType, item.Skills, stats, delegates);
     }
 
-    static void ApplyStatModifier(StatTable table, int statId, ModifierData data, IStatValue value)
+    static void ApplyStatModifier(StatTable table, int statId, ModifierTypeData data, IStatValue? value)
     {
-
+      Modifiers.ApplyModifierUnchecked(
+        Errors.CheckNotNull(data.Operator),
+        table.UnsafeGet(Stat.GetStat(statId)),
+        value?.AsStaticModifier() ?? new StaticModifier<NoValue>());
     }
   }
 }

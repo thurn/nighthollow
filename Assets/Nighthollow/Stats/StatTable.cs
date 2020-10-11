@@ -16,7 +16,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
@@ -24,9 +23,9 @@ namespace Nighthollow.Stats
   {
     readonly Dictionary<int, IStat> _stats;
 
-    public StatTable(Builder builder)
+    public StatTable()
     {
-      _stats = builder.Stats;
+      _stats = new Dictionary<int, IStat>();
     }
 
     public StatTable(StatTable other)
@@ -34,29 +33,18 @@ namespace Nighthollow.Stats
       _stats = other._stats.ToDictionary(e => e.Key, e => e.Value);
     }
 
-    public T Get<T>(IStatId<T> statId) where T : IStat
+    public T Get<T>(IStatId<T> statId) where T : IStat => (T) UnsafeGet(statId);
+
+    public IStat UnsafeGet(IStatId statId)
     {
       if (!_stats.ContainsKey(statId.Value))
       {
         _stats[statId.Value] = statId.NotFoundValue();
       }
 
-      return (T) _stats[statId.Value];
+      return _stats[statId.Value];
     }
 
     public StatTable Clone() => new StatTable(this);
-
-    public sealed class Builder
-    {
-      readonly Dictionary<int, IStat> _stats = new Dictionary<int, IStat>();
-
-      public Dictionary<int, IStat> Stats => _stats;
-
-      public void AddStat<T>(IStatId<T> statId, T value) where T : IStat
-      {
-        Errors.CheckState(!_stats.ContainsKey(statId.Value), $"Stat {statId.Value} already added!");
-        _stats[statId.Value] = value;
-      }
-    }
   }
 }

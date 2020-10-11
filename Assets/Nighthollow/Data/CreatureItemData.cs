@@ -26,7 +26,7 @@ namespace Nighthollow.Data
     public CreatureTypeData BaseType { get; }
     public int Health { get; }
     public int ManaCost { get; }
-    public TaggedStats<School, IntStat> InfluenceCost { get; }
+    public List<TaggedStatValue<School, IntValue>> InfluenceCost { get; }
     public IReadOnlyList<SkillData> Skills { get; }
     public IReadOnlyList<AffixData> Affixes { get; }
 
@@ -35,7 +35,7 @@ namespace Nighthollow.Data
       CreatureTypeData baseType,
       int health,
       int manaCost,
-      TaggedStats<School, IntStat> influenceCost,
+      List<TaggedStatValue<School, IntValue>> influenceCost,
       IReadOnlyList<SkillData> skills,
       IReadOnlyList<AffixData> affixes)
     {
