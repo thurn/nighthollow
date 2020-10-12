@@ -58,7 +58,7 @@ namespace Nighthollow.Data
         }
       }
 
-      return new CreatureData(item.Name, item.BaseType, item.Skills, stats, delegates);
+      return new CreatureData(item.Name, item.BaseType, item.School, item.Skills, stats, delegates);
     }
 
     static void ApplyStatModifier(StatTable table, int statId, ModifierTypeData data, IStatValue? value)

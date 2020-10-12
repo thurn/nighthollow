@@ -22,12 +22,12 @@ namespace Nighthollow.Delegates.Core
   public abstract class CreatureDelegate
   {
     /// <summary>Called when a creature is first placed.</summary>
-    public virtual void OnActivate(CreatureContext c)
+    public virtual void OnActivate(CreatureContext c, Results<CreatureEffect> results)
     {
     }
 
     /// <summary>Called when a creature dies.</summary>
-    public virtual void OnDeath(CreatureContext c)
+    public virtual void OnDeath(CreatureContext c, Results<CreatureEffect> results)
     {
     }
 
@@ -38,7 +38,11 @@ namespace Nighthollow.Delegates.Core
     public virtual SkillData? SelectSkill(Creature self) => null;
 
     /// <summary>Called when a creature kills an enemy creature.</summary>
-    public virtual void OnKilledEnemy(CreatureContext c, Creature enemy, int damageAmount)
+    public virtual void OnKilledEnemy(
+      CreatureContext c,
+      Creature enemy,
+      int damageAmount,
+      Results<CreatureEffect> results)
     {
     }
   }

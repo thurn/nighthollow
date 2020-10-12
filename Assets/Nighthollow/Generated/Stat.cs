@@ -46,7 +46,7 @@ namespace Nighthollow.Generated
     public static readonly IntStatId StartingMana = new IntStatId(24);
     public static readonly TaggedStatsId<School, IntStat> Influence = new TaggedStatsId<School, IntStat>(25);
     public static readonly IntStatId StartingHandSize = new IntStatId(26);
-    public static readonly IntStatId ManaGainPerSecond = new IntStatId(27);
+    public static readonly IntStatId ManaGainPerMinute = new IntStatId(27);
     public static readonly DurationStatId CardDrawInterval = new DurationStatId(28);
     public static readonly DurationStatId InitialEnemySpawnDelay = new DurationStatId(29);
     public static readonly DurationStatId EnemySpawnDelay = new DurationStatId(30);
@@ -141,7 +141,7 @@ namespace Nighthollow.Generated
         case 24: return StartingMana;
         case 25: return Influence;
         case 26: return StartingHandSize;
-        case 27: return ManaGainPerSecond;
+        case 27: return ManaGainPerMinute;
         case 28: return CardDrawInterval;
         case 29: return InitialEnemySpawnDelay;
         case 30: return EnemySpawnDelay;

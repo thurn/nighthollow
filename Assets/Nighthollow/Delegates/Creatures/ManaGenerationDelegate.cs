@@ -15,11 +15,20 @@
 #nullable enable
 
 using Nighthollow.Delegates.Core;
+using Nighthollow.Generated;
+using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Creatures
 {
   public sealed class ManaGenerationDelegate : CreatureDelegate
   {
-
+    public override void OnActivate(CreatureContext c, Results<CreatureEffect> results)
+    {
+      results.Add(new ApplyModifierToOwner(
+        Operator.Add,
+        Stat.ManaGainPerMinute,
+        new WhileAliveModifier<IntValue>(
+          new StaticModifier<IntValue>(new IntValue(c.Self.Data.GetInt(Stat.ManaGainPerMinute))), c.Self)));
+    }
   }
 }

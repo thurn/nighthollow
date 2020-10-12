@@ -132,10 +132,11 @@ namespace Nighthollow.Services
         _staticCardLists[list] = new List<CreatureItemData>();
       }
 
+      var school = (School) Parse.IntRequired(row, "School");
       var influenceCost = new List<TaggedStatValue<School, IntValue>>
       {
         new TaggedStatValue<School, IntValue>(
-          (School) Parse.IntRequired(row, "School"),
+          school,
           new IntValue(Parse.IntRequired(row, "Influence Cost")))
       };
 
@@ -160,6 +161,7 @@ namespace Nighthollow.Services
       var result = new CreatureItemData(
         Parse.StringRequired(row, "Card Name"),
         creatureType,
+        school,
         Parse.IntRequired(row, "Health"),
         Parse.IntRequired(row, "Mana Cost"),
         influenceCost,

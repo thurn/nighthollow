@@ -25,7 +25,9 @@ namespace Nighthollow.Components
 {
   public sealed class Enemy : MonoBehaviour
   {
-    [SerializeField] EnemyData _data;
+    EnemyData _data;
+    public EnemyData Data => _data;
+
     [SerializeField] int _spawnCount;
     [SerializeField] int _deathCount;
 

@@ -14,12 +14,46 @@
 
 #nullable enable
 
+using System;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Generated;
+using Nighthollow.Services;
+using Nighthollow.Stats;
 using UnityEngine;
 
 namespace Nighthollow.Delegates.Core
 {
+  public sealed class ApplyModifierToOwner : CreatureEffect
+  {
+    public Operator Operator { get; }
+    public IStatId StatId { get; }
+    public IModifier Modifier { get; }
+
+    public ApplyModifierToOwner(Operator @operator, IStatId statId, IModifier modifier)
+    {
+      Operator = @operator;
+      Modifier = modifier;
+      StatId = statId;
+    }
+
+    public override void Execute(Creature self)
+    {
+      switch (self.Owner)
+      {
+        case PlayerName.User:
+          Modifiers.ApplyModifierUnchecked(Operator, Root.Instance.User.Data.Stats.UnsafeGet(StatId), Modifier);
+          break;
+        case PlayerName.Enemy:
+          Modifiers.ApplyModifierUnchecked(Operator, Root.Instance.Enemy.Data.Stats.UnsafeGet(StatId), Modifier);
+          break;
+        case PlayerName.Unknown:
+        default:
+          throw new ArgumentOutOfRangeException();
+      }
+    }
+  }
+
   public sealed class ApplyDamageEffect : CreatureEffect
   {
     public Creature Target { get; }

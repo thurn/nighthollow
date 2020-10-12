@@ -26,6 +26,7 @@ namespace Nighthollow.Data
   {
     public string Name { get; }
     public CreatureTypeData BaseType { get; }
+    public School School { get; }
     public IReadOnlyList<SkillData> Skills { get; }
     public override StatTable Stats { get; }
     public CreatureDelegateChain Delegate { get; }
@@ -33,27 +34,30 @@ namespace Nighthollow.Data
     public CreatureData(
       string name,
       CreatureTypeData baseType,
+      School school,
       IReadOnlyList<SkillData> skills,
       StatTable stats,
-      List<CreatureDelegateId> delegates) : this(name, baseType, skills, stats, new CreatureDelegateChain(delegates))
+      List<CreatureDelegateId> delegates) : this(name, baseType, school, skills, stats, new CreatureDelegateChain(delegates))
     {
     }
 
     CreatureData(
       string name,
       CreatureTypeData baseType,
+      School school,
       IReadOnlyList<SkillData> skills,
       StatTable stats,
       CreatureDelegateChain delegates)
     {
       Name = name;
       BaseType = baseType;
+      School = school;
       Skills = skills;
       Stats = stats;
       Delegate = delegates;
     }
 
     public CreatureData Clone() => new CreatureData(
-      Name, BaseType, Skills.Select(s => s.Clone()).ToList(), Stats.Clone(), Delegate);
+      Name, BaseType, School, Skills.Select(s => s.Clone()).ToList(), Stats.Clone(), Delegate);
   }
 }

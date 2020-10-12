@@ -13,11 +13,9 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Services;
-using Nighthollow.Stats;
 using Nighthollow.Utils;
 using TMPro;
 using UnityEngine;
@@ -96,7 +94,7 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(1);
-        _mana += _data.GetInt(Stat.ManaGainPerSecond);
+        _mana += Mathf.RoundToInt(_data.GetInt(Stat.ManaGainPerMinute) / 60f);
       }
     }
 

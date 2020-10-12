@@ -90,9 +90,9 @@ namespace Nighthollow.Components
       _cardImage.sprite = Root.Instance.AssetService.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
 
       var manaCost = _data.GetInt(Stat.ManaCost);
-      var influence = _data.Stats.Get(Stat.Influence);
+      var influence = _data.Stats.Get(Stat.InfluenceCost);
       _canPlay = manaCost <= _user.Mana &&
-        Influence.LessThanOrEqualTo(influence, _user.Data.Stats.Get(Stat.Influence));
+        Influence.LessThanOrEqualTo(influence, _user.Data.Stats.Get(Stat.InfluenceCost));
 
       _outline.enabled = _canPlay;
       _cost.text = manaCost.ToString();

@@ -33,10 +33,10 @@ namespace Nighthollow.Delegates.Core
     }
 
     public void OnActivate(Creature self) =>
-      Execute(self, (d, c) => d.OnActivate(c));
+      Execute(self, (d, c, r) => d.OnActivate(c, r));
 
     public void OnDeath(Creature self) =>
-      Execute(self, (d, c) => d.OnDeath(c));
+      Execute(self, (d, c, r) => d.OnDeath(c, r));
 
     public SkillData? SelectSkill(Creature self)
     {
@@ -53,23 +53,24 @@ namespace Nighthollow.Delegates.Core
     }
 
     public void OnKilledEnemy(Creature self, Creature enemy, int damageAmount) =>
-      Execute(self, (d, c) => d.OnKilledEnemy(c, enemy, damageAmount));
+      Execute(self, (d, c, r) => d.OnKilledEnemy(c, enemy, damageAmount, r));
 
-    void Execute(Creature self, Action<CreatureDelegate, CreatureContext> action)
+    void Execute(Creature self, Action<CreatureDelegate, CreatureContext, Results<CreatureEffect>> action)
     {
       var context = new CreatureContext(self);
+      var results = new Results<CreatureEffect>();
 
       foreach (var id in _delegateIds)
       {
-        action(CreatureDelegateMap.Get(id), context);
+        action(CreatureDelegateMap.Get(id), context, results);
       }
 
-      foreach (var effect in context.Results.Values)
+      foreach (var effect in results.Values)
       {
         effect.Execute(self);
       }
 
-      foreach (var effect in context.Results.Values)
+      foreach (var effect in results.Values)
       {
         effect.InvokeEvent(this, self);
       }

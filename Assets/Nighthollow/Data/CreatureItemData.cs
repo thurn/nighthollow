@@ -24,6 +24,7 @@ namespace Nighthollow.Data
   {
     public string Name { get; }
     public CreatureTypeData BaseType { get; }
+    public School School { get; }
     public int Health { get; }
     public int ManaCost { get; }
     public List<TaggedStatValue<School, IntValue>> InfluenceCost { get; }
@@ -33,6 +34,7 @@ namespace Nighthollow.Data
     public CreatureItemData(
       string name,
       CreatureTypeData baseType,
+      School school,
       int health,
       int manaCost,
       List<TaggedStatValue<School, IntValue>> influenceCost,
@@ -41,6 +43,7 @@ namespace Nighthollow.Data
     {
       Name = name;
       BaseType = baseType;
+      School = school;
       Health = health;
       ManaCost = manaCost;
       InfluenceCost = influenceCost;

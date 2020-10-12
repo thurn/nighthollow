@@ -21,11 +21,11 @@ namespace Nighthollow.Delegates.Creatures
 {
   public sealed class DefaultCreatureDelegate : CreatureDelegate
   {
-    public override void OnDeath(CreatureContext c)
+    public override void OnDeath(CreatureContext c, Results<CreatureEffect> results)
     {
       if (c.Self.Owner == PlayerName.Enemy)
       {
-        c.Results.Add(new EnemyRemovedEffect());
+        results.Add(new EnemyRemovedEffect());
       }
     }
   }
