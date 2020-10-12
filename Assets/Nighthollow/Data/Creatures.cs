@@ -33,12 +33,12 @@ namespace Nighthollow.Data
       stats.Get(Stat.ManaCost).Add(item.ManaCost);
       if (item.BaseType.IsManaCreature)
       {
-        stats.Get(Stat.IsManaCreature).AddSetTrueModifier(new StaticModifier<NoValue>());
+        stats.Get(Stat.IsManaCreature).AddSetTrueModifier(new StaticModifier());
       }
 
       foreach (var cost in item.InfluenceCost)
       {
-        stats.Get(Stat.InfluenceCost).AddAddedModifier(new StaticModifier<TaggedStatValue<School, IntValue>>(cost));
+        stats.Get(Stat.InfluenceCost).AddAddedModifier(new StaticModifier(cost));
       }
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
@@ -66,7 +66,7 @@ namespace Nighthollow.Data
       Modifiers.ApplyModifierUnchecked(
         Errors.CheckNotNull(data.Operator),
         table.UnsafeGet(Stat.GetStat(statId)),
-        value?.AsStaticModifier() ?? new StaticModifier<NoValue>());
+        value?.AsStaticModifier() ?? new StaticModifier());
     }
   }
 }

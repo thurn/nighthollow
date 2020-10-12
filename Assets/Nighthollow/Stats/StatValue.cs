@@ -21,11 +21,15 @@ namespace Nighthollow.Stats
   public interface IStatValue
   {
     IModifier AsStaticModifier();
+
+    IntValue AsIntValue();
   }
 
   public readonly struct NoValue : IStatValue
   {
-    public IModifier AsStaticModifier() => new StaticModifier<NoValue>(this);
+    public IModifier AsStaticModifier() => new StaticModifier(this);
+
+    public IntValue AsIntValue() => throw new NotImplementedException();
   }
 
   public readonly struct IntValue : IStatValue
@@ -37,7 +41,9 @@ namespace Nighthollow.Stats
       Value = value;
     }
 
-    public IModifier AsStaticModifier() => new StaticModifier<IntValue>(this);
+    public IModifier AsStaticModifier() => new StaticModifier(this);
+
+    public IntValue AsIntValue() => this;
   }
 
   public readonly struct DurationValue : IStatValue
@@ -49,7 +55,9 @@ namespace Nighthollow.Stats
       Value = new IntValue((int) Math.Round(valueSeconds * 1000.0));
     }
 
-    public IModifier AsStaticModifier() => new StaticModifier<DurationValue>(this);
+    public IModifier AsStaticModifier() => new StaticModifier(this);
+
+    public IntValue AsIntValue() => Value;
   }
 
   public readonly struct PercentageValue : IStatValue
@@ -61,7 +69,9 @@ namespace Nighthollow.Stats
       Value = new IntValue((int) Math.Round(value * 100.0));
     }
 
-    public IModifier AsStaticModifier() => new StaticModifier<PercentageValue>(this);
+    public IModifier AsStaticModifier() => new StaticModifier(this);
+
+    public IntValue AsIntValue() => Value;
   }
 
   public readonly struct IntRangeValue : IStatValue
@@ -75,7 +85,9 @@ namespace Nighthollow.Stats
       High = new IntValue(high);
     }
 
-    public IModifier AsStaticModifier() => new StaticModifier<IntRangeValue>(this);
+    public IModifier AsStaticModifier() => new StaticModifier(this);
+
+    public IntValue AsIntValue() => throw new NotImplementedException();
   }
 
   public interface ITaggedStatValue
@@ -96,7 +108,9 @@ namespace Nighthollow.Stats
       Value = value;
     }
 
-    public IModifier AsStaticModifier() => new StaticModifier<TaggedStatValue<TTag, TValue>>(this);
+    public IModifier AsStaticModifier() => new StaticModifier(this);
+
+    public IntValue AsIntValue() => throw new NotImplementedException();
 
     public Enum GetTag() => Tag;
 

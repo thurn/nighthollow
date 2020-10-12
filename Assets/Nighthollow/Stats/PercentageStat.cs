@@ -49,9 +49,9 @@ namespace Nighthollow.Stats
 
     public PercentageStat Clone() => new PercentageStat(_stat.Clone());
 
-    public void AddAddedModifier(IModifier<PercentageValue> modifier)
+    public void AddAddedModifier(IModifier modifier)
     {
-      _stat.AddAddedModifier((IModifier<IntValue>) modifier.WithValue(modifier.BaseModifier.Argument.Value));
+      _stat.AddAddedModifier(modifier.WithValue(modifier.BaseModifier.Argument.AsIntValue()));
     }
   }
 }

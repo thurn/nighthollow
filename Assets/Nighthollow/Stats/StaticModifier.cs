@@ -18,18 +18,18 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct StaticModifier<TValue> : IModifier<TValue> where TValue : IStatValue
+  public readonly struct StaticModifier : IModifier
   {
-    public readonly TValue Argument;
+    public readonly IStatValue Argument;
 
-    public StaticModifier(TValue argument)
+    public StaticModifier(IStatValue argument)
     {
       Argument = argument;
     }
 
-    public StaticModifier<TValue> BaseModifier => this;
+    public StaticModifier BaseModifier => this;
 
-    public IModifier WithValue<TNew>(TNew value) where TNew : IStatValue => value.AsStaticModifier();
+    public IModifier WithValue(IStatValue value) => value.AsStaticModifier();
 
     public IStatValue GetArgument() => Argument;
 
@@ -37,6 +37,6 @@ namespace Nighthollow.Stats
 
     public bool IsValid() => true;
 
-    public IModifier<T> Clone<T>() where T : IStatValue => Errors.CheckNotNull(this as IModifier<T>);
+    public IModifier Clone() => this;
   }
 }

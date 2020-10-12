@@ -46,7 +46,7 @@ namespace Nighthollow.Generated
     public static readonly IntStatId StartingMana = new IntStatId(24);
     public static readonly TaggedStatsId<School, IntStat> Influence = new TaggedStatsId<School, IntStat>(25);
     public static readonly IntStatId StartingHandSize = new IntStatId(26);
-    public static readonly IntStatId ManaGainPerMinute = new IntStatId(27);
+    public static readonly IntStatId ManaGain = new IntStatId(27);
     public static readonly DurationStatId CardDrawInterval = new DurationStatId(28);
     public static readonly DurationStatId InitialEnemySpawnDelay = new DurationStatId(29);
     public static readonly DurationStatId EnemySpawnDelay = new DurationStatId(30);
@@ -61,6 +61,7 @@ namespace Nighthollow.Generated
     public static readonly PercentageStatId ChainProjectileDamageMultiplier = new PercentageStatId(39);
     public static readonly DurationStatId SkillCooldownRecovery = new DurationStatId(40);
     public static readonly DurationStatId MeleeKnockbackDuration = new DurationStatId(41);
+    public static readonly DurationStatId ManaGainInterval = new DurationStatId(42);
 
     public static StatType GetType(int statId)
     {
@@ -107,6 +108,7 @@ namespace Nighthollow.Generated
         case 39: return StatType.Percentage;
         case 40: return StatType.Duration;
         case 41: return StatType.Duration;
+        case 42: return StatType.Duration;
         default: throw new ArgumentOutOfRangeException();
       }
     }
@@ -141,7 +143,7 @@ namespace Nighthollow.Generated
         case 24: return StartingMana;
         case 25: return Influence;
         case 26: return StartingHandSize;
-        case 27: return ManaGainPerMinute;
+        case 27: return ManaGain;
         case 28: return CardDrawInterval;
         case 29: return InitialEnemySpawnDelay;
         case 30: return EnemySpawnDelay;
@@ -156,6 +158,7 @@ namespace Nighthollow.Generated
         case 39: return ChainProjectileDamageMultiplier;
         case 40: return SkillCooldownRecovery;
         case 41: return MeleeKnockbackDuration;
+        case 42: return ManaGainInterval;
         default: throw new ArgumentOutOfRangeException();
       }
     }

@@ -37,8 +37,8 @@ namespace Nighthollow.Stats
   public sealed class IntStat : IStat<IntStat>
   {
     readonly int _initialValue;
-    readonly List<IModifier<IntValue>> _addedModifiers = new List<IModifier<IntValue>>();
-    readonly List<IModifier<PercentageValue>> _increaseModifiers = new List<IModifier<PercentageValue>>();
+    readonly List<IModifier> _addedModifiers = new List<IModifier>();
+    readonly List<IModifier> _increaseModifiers = new List<IModifier>();
     bool _hasDynamicModifiers;
     int _computedValue;
 
@@ -47,13 +47,13 @@ namespace Nighthollow.Stats
     }
 
     IntStat(int initialValue,
-      IEnumerable<IModifier<IntValue>> addedModifiers,
-      IEnumerable<IModifier<PercentageValue>> increaseModifiers,
+      IEnumerable<IModifier> addedModifiers,
+      IEnumerable<IModifier> increaseModifiers,
       bool hasDynamicModifiers)
     {
       _initialValue = initialValue;
-      _addedModifiers = addedModifiers.Select(m => m.Clone<IntValue>()).ToList();
-      _increaseModifiers = increaseModifiers.Select(m => m.Clone<PercentageValue>()).ToList();
+      _addedModifiers = addedModifiers.Select(m => m.Clone()).ToList();
+      _increaseModifiers = increaseModifiers.Select(m => m.Clone()).ToList();
       _hasDynamicModifiers = hasDynamicModifiers;
       Recalculate();
     }
@@ -71,16 +71,16 @@ namespace Nighthollow.Stats
       }
     }
 
-    public void Add(int value) => AddAddedModifier(new StaticModifier<IntValue>(new IntValue(value)));
+    public void Add(int value) => AddAddedModifier(new StaticModifier(new IntValue(value)));
 
-    public void AddAddedModifier(IModifier<IntValue> modifier)
+    public void AddAddedModifier(IModifier modifier)
     {
       _addedModifiers.Add(modifier);
       _hasDynamicModifiers |= modifier.IsDynamic();
       Recalculate();
     }
 
-    public void AddIncreaseModifier(IModifier<PercentageValue> modifier)
+    public void AddIncreaseModifier(IModifier modifier)
     {
       _increaseModifiers.Add(modifier);
       _hasDynamicModifiers |= modifier.IsDynamic();
@@ -96,9 +96,9 @@ namespace Nighthollow.Stats
       _addedModifiers.RemoveAll(m => !m.IsValid());
       _increaseModifiers.RemoveAll(m => !m.IsValid());
 
-      result += _addedModifiers.Sum(m => m.BaseModifier.Argument.Value);
+      result += _addedModifiers.Sum(m => m.BaseModifier.Argument.AsIntValue().Value);
 
-      var increaseBy = 10000 + _increaseModifiers.Sum(m => m.BaseModifier.Argument.Value.Value);
+      var increaseBy = 10000 + _increaseModifiers.Sum(m => ((PercentageValue) m.BaseModifier.Argument).Value.Value);
       result = Constants.FractionBasisPoints(result, increaseBy);
 
       _computedValue = result;

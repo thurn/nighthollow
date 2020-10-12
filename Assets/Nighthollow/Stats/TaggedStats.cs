@@ -39,9 +39,9 @@ namespace Nighthollow.Stats
 
   public interface ITaggedStats
   {
-    void AddAddedModifierUnchecked(IModifier modifier);
+    void AddAddedModifier(IModifier modifier);
 
-    void AddIncreaseModifierUnchecked(IModifier modifier);
+    void AddIncreaseModifier(IModifier modifier);
   }
 
   public sealed class TaggedStats<TKey, TStat> : IStat<TaggedStats<TKey, TStat>>, ITaggedStats
@@ -80,13 +80,7 @@ namespace Nighthollow.Stats
       return _stats[key];
     }
 
-    public void AddAddedModifier<TValue>(IModifier<TaggedStatValue<TKey, TValue>> modifier) where TValue : IStatValue
-    {
-      var updated = modifier.WithValue(modifier.BaseModifier.Argument.Value);
-      Modifiers.AddAddedModifierUnchecked(Get(modifier.BaseModifier.Argument.Tag), updated);
-    }
-
-    public void AddAddedModifierUnchecked(IModifier modifier)
+    public void AddAddedModifier(IModifier modifier)
     {
       var taggedValue = (ITaggedStatValue) modifier.GetArgument();
       Modifiers.AddAddedModifierUnchecked(
@@ -94,13 +88,7 @@ namespace Nighthollow.Stats
         modifier.WithValue(taggedValue.GetValue()));
     }
 
-    public void AddIncreaseModifier(IModifier<TaggedStatValue<TKey, PercentageValue>> modifier)
-    {
-      var updated = modifier.WithValue(modifier.BaseModifier.Argument.Value);
-      Modifiers.AddIncreaseModifierUnchecked(Get(modifier.BaseModifier.Argument.Tag), updated);
-    }
-
-    public void AddIncreaseModifierUnchecked(IModifier modifier)
+    public void AddIncreaseModifier(IModifier modifier)
     {
       var taggedValue = (ITaggedStatValue) modifier.GetArgument();
       Modifiers.AddIncreaseModifierUnchecked(

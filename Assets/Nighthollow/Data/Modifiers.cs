@@ -103,10 +103,10 @@ namespace Nighthollow.Data
           AddIncreaseModifierUnchecked(stat, modifier);
           break;
         case Operator.SetFalse:
-          ((BoolStat) stat).AddSetFalseModifier((IModifier<NoValue>) modifier);
+          ((BoolStat) stat).AddSetFalseModifier(modifier);
           break;
         case Operator.SetTrue:
-          ((BoolStat) stat).AddSetTrueModifier((IModifier<NoValue>) modifier);
+          ((BoolStat) stat).AddSetTrueModifier(modifier);
           break;
         case Operator.Unknown:
         default:
@@ -119,19 +119,19 @@ namespace Nighthollow.Data
       switch (stat)
       {
         case IntStat intStat:
-          intStat.AddAddedModifier((IModifier<IntValue>) modifier);
+          intStat.AddAddedModifier(modifier);
           break;
         case DurationStat durationStat:
-          durationStat.AddAddedModifier((IModifier<DurationValue>) modifier);
+          durationStat.AddAddedModifier(modifier);
           break;
         case PercentageStat percentageStat:
-          percentageStat.AddAddedModifier((IModifier<PercentageValue>) modifier);
+          percentageStat.AddAddedModifier(modifier);
           break;
         case IntRangeStat intRangeStat:
-          intRangeStat.AddAddedModifier((IModifier<IntRangeValue>) modifier);
+          intRangeStat.AddAddedModifier(modifier);
           break;
         case ITaggedStats taggedStats:
-          taggedStats.AddAddedModifierUnchecked(modifier);
+          taggedStats.AddAddedModifier(modifier);
           break;
         default:
           throw new InvalidOperationException($"Add operator is not supported for {stat}");
@@ -143,16 +143,16 @@ namespace Nighthollow.Data
       switch (stat)
       {
         case IntStat intStat:
-          intStat.AddIncreaseModifier((IModifier<PercentageValue>) modifier);
+          intStat.AddIncreaseModifier(modifier);
           break;
         case DurationStat durationStat:
-          durationStat.AddIncreaseModifier((IModifier<PercentageValue>) modifier);
+          durationStat.AddIncreaseModifier(modifier);
           break;
         case IntRangeStat intRangeStat:
-          intRangeStat.AddIncreaseModifier((IModifier<PercentageValue>) modifier);
+          intRangeStat.AddIncreaseModifier(modifier);
           break;
         case ITaggedStats taggedStats:
-          taggedStats.AddIncreaseModifierUnchecked(modifier);
+          taggedStats.AddIncreaseModifier(modifier);
           break;
         default:
           throw new InvalidOperationException($"Increase operator is not supported for {stat}");

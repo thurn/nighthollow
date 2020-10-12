@@ -93,8 +93,8 @@ namespace Nighthollow.Components
     {
       while (true)
       {
-        yield return new WaitForSeconds(1);
-        _mana += Mathf.RoundToInt(_data.GetInt(Stat.ManaGainPerMinute) / 60f);
+        yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.ManaGainInterval));
+        _mana += Mathf.RoundToInt(_data.GetInt(Stat.ManaGain));
       }
     }
 

@@ -26,9 +26,9 @@ namespace Nighthollow.Delegates.Creatures
     {
       results.Add(new ApplyModifierToOwner(
         Operator.Add,
-        Stat.ManaGainPerMinute,
-        new WhileAliveModifier<IntValue>(
-          new StaticModifier<IntValue>(new IntValue(c.Self.Data.GetInt(Stat.ManaGainPerMinute))), c.Self)));
+        Stat.ManaGain,
+        new WhileAliveModifier(
+          new StaticModifier(new IntValue(c.Self.Data.GetInt(Stat.ManaGain))), c.Self)));
     }
   }
 }

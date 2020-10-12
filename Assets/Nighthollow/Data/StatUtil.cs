@@ -27,31 +27,31 @@ namespace Nighthollow.Data
       switch (type)
       {
         case StatType.Int:
-          ((IntStat) stat).AddAddedModifier(new StaticModifier<IntValue>(new IntValue(int.Parse(value))));
+          ((IntStat) stat).AddAddedModifier(new StaticModifier(new IntValue(int.Parse(value))));
           break;
         case StatType.Bool:
           if (bool.Parse(value))
           {
-            ((BoolStat) stat).AddSetTrueModifier(new StaticModifier<NoValue>());
+            ((BoolStat) stat).AddSetTrueModifier(new StaticModifier());
           }
           else
           {
-            ((BoolStat) stat).AddSetFalseModifier(new StaticModifier<NoValue>());
+            ((BoolStat) stat).AddSetFalseModifier(new StaticModifier());
           }
 
           break;
         case StatType.Percentage:
           ((PercentageStat) stat).AddAddedModifier(
-            new StaticModifier<PercentageValue>(new PercentageValue(double.Parse(value))));
+            new StaticModifier(new PercentageValue(double.Parse(value))));
           break;
         case StatType.Duration:
           ((DurationStat) stat).AddAddedModifier(
-            new StaticModifier<DurationValue>(new DurationValue(double.Parse(value))));
+            new StaticModifier(new DurationValue(double.Parse(value))));
           break;
         case StatType.IntRange:
           var split = value.Split(',');
           ((IntRangeStat) stat).AddAddedModifier(
-            new StaticModifier<IntRangeValue>(new IntRangeValue(int.Parse(split[0]), int.Parse(split[1]))));
+            new StaticModifier(new IntRangeValue(int.Parse(split[0]), int.Parse(split[1]))));
           break;
         case StatType.SchoolInts:
         case StatType.DamageTypeInts:

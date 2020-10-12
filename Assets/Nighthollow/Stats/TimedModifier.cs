@@ -14,34 +14,33 @@
 
 #nullable enable
 
-using Nighthollow.Utils;
 using UnityEngine;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct TimedModifier<TValue> : IModifier<TValue> where TValue : IStatValue
+  public readonly struct TimedModifier : IModifier
   {
-    readonly StaticModifier<TValue> _modifier;
+    readonly StaticModifier _modifier;
     readonly float _endTimeSeconds;
 
-    public TimedModifier(StaticModifier<TValue> modifier, int durationMilliseconds)
+    public TimedModifier(StaticModifier modifier, int durationMilliseconds)
     {
       _modifier = modifier;
       _endTimeSeconds = Time.time + (durationMilliseconds / 1000f);
     }
 
-    TimedModifier(StaticModifier<TValue> modifier, float endTimeSeconds)
+    TimedModifier(StaticModifier modifier, float endTimeSeconds)
     {
       _modifier = modifier;
       _endTimeSeconds = endTimeSeconds;
     }
 
-    public StaticModifier<TValue> BaseModifier => _modifier;
+    public StaticModifier BaseModifier => _modifier;
 
-    public IModifier<T> Clone<T>() where T : IStatValue => Errors.CheckNotNull(this as IModifier<T>);
+    public IModifier Clone() => this;
 
-    public IModifier WithValue<TNew>(TNew value) where TNew : IStatValue =>
-      new TimedModifier<TNew>((StaticModifier<TNew>) _modifier.WithValue(value), _endTimeSeconds);
+    public IModifier WithValue(IStatValue value) =>
+      new TimedModifier((StaticModifier) _modifier.WithValue(value), _endTimeSeconds);
 
     public IStatValue GetArgument() => BaseModifier.GetArgument();
 

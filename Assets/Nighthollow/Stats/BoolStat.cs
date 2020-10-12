@@ -35,8 +35,8 @@ namespace Nighthollow.Stats
 
   public sealed class BoolStat : IStat<BoolStat>
   {
-    readonly List<IModifier<NoValue>> _setTrueModifiers = new List<IModifier<NoValue>>();
-    readonly List<IModifier<NoValue>> _setFalseModifiers = new List<IModifier<NoValue>>();
+    readonly List<IModifier> _setTrueModifiers = new List<IModifier>();
+    readonly List<IModifier> _setFalseModifiers = new List<IModifier>();
     bool _hasDynamicModifiers;
     bool _computedValue;
 
@@ -46,12 +46,12 @@ namespace Nighthollow.Stats
     }
 
     BoolStat(
-      IEnumerable<IModifier<NoValue>> setTrueModifiers,
-      IEnumerable<IModifier<NoValue>> setFalseModifiers,
+      IEnumerable<IModifier> setTrueModifiers,
+      IEnumerable<IModifier> setFalseModifiers,
       bool hasDynamicModifiers)
     {
-      _setTrueModifiers = setTrueModifiers.Select(m => m.Clone<NoValue>()).ToList();
-      _setFalseModifiers = setFalseModifiers.Select(m => m.Clone<NoValue>()).ToList();
+      _setTrueModifiers = setTrueModifiers.Select(m => m.Clone()).ToList();
+      _setFalseModifiers = setFalseModifiers.Select(m => m.Clone()).ToList();
       _hasDynamicModifiers = hasDynamicModifiers;
     }
 
@@ -70,14 +70,14 @@ namespace Nighthollow.Stats
       }
     }
 
-    public void AddSetTrueModifier(IModifier<NoValue> modifier)
+    public void AddSetTrueModifier(IModifier modifier)
     {
       _setTrueModifiers.Add(modifier);
       _hasDynamicModifiers |= modifier.IsDynamic();
       Recalculate();
     }
 
-    public void AddSetFalseModifier(IModifier<NoValue> modifier)
+    public void AddSetFalseModifier(IModifier modifier)
     {
       _setFalseModifiers.Add(modifier);
       _hasDynamicModifiers |= modifier.IsDynamic();

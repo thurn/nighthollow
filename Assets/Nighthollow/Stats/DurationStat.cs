@@ -43,12 +43,12 @@ namespace Nighthollow.Stats
 
     public DurationStat Clone() => new DurationStat(_stat.Clone());
 
-    public void AddAddedModifier(IModifier<DurationValue> modifier)
+    public void AddAddedModifier(IModifier modifier)
     {
-      _stat.AddAddedModifier((IModifier<IntValue>) modifier.WithValue(modifier.BaseModifier.Argument.Value));
+      _stat.AddAddedModifier(modifier.WithValue(modifier.BaseModifier.Argument.AsIntValue()));
     }
 
-    public void AddIncreaseModifier(IModifier<PercentageValue> modifier)
+    public void AddIncreaseModifier(IModifier modifier)
     {
       _stat.AddIncreaseModifier(modifier);
     }

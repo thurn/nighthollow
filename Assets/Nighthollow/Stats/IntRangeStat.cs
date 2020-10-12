@@ -49,13 +49,13 @@ namespace Nighthollow.Stats
 
     public IntRangeStat Clone() => new IntRangeStat(_low.Clone(), _high.Clone());
 
-    public void AddAddedModifier(IModifier<IntRangeValue> modifier)
+    public void AddAddedModifier(IModifier modifier)
     {
-      _low.AddAddedModifier((IModifier<IntValue>) modifier.WithValue(modifier.BaseModifier.Argument.Low));
-      _high.AddAddedModifier((IModifier<IntValue>) modifier.WithValue(modifier.BaseModifier.Argument.High));
+      _low.AddAddedModifier(modifier.WithValue(((IntRangeValue) modifier.BaseModifier.Argument).Low));
+      _high.AddAddedModifier(modifier.WithValue(((IntRangeValue) modifier.BaseModifier.Argument).High));
     }
 
-    public void AddIncreaseModifier(IModifier<PercentageValue> modifier)
+    public void AddIncreaseModifier(IModifier modifier)
     {
       _low.AddIncreaseModifier(modifier);
       _high.AddIncreaseModifier(modifier);
