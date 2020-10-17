@@ -83,7 +83,7 @@ namespace Nighthollow.Stats
     public void AddAddedModifier(IModifier modifier)
     {
       var taggedValue = (ITaggedStatValue) modifier.GetArgument();
-      Modifiers.AddAddedModifierUnchecked(
+      ModifierUtil.AddAddedModifierUnchecked(
         Get((TKey) taggedValue.GetTag()),
         modifier.WithValue(taggedValue.GetValue()));
     }
@@ -91,7 +91,7 @@ namespace Nighthollow.Stats
     public void AddIncreaseModifier(IModifier modifier)
     {
       var taggedValue = (ITaggedStatValue) modifier.GetArgument();
-      Modifiers.AddIncreaseModifierUnchecked(
+      ModifierUtil.AddIncreaseModifierUnchecked(
         Get((TKey) taggedValue.GetTag()),
         modifier.WithValue(taggedValue.GetValue()));
     }

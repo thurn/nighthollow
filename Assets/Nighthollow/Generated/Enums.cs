@@ -112,6 +112,11 @@ namespace Nighthollow.Generated
   {
     Unknown = 0,
     StartingDeck = 1,
+    TutorialDraws = 2,
+    TutorialEnemy = 3,
+    TutorialReward1 = 4,
+    TutorialReward2 = 5,
+    TutorialReward3 = 6,
   }
 
   public enum AffixPool

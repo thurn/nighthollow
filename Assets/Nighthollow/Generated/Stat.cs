@@ -48,7 +48,6 @@ namespace Nighthollow.Generated
     public static readonly IntStatId StartingHandSize = new IntStatId(26);
     public static readonly IntStatId ManaGain = new IntStatId(27);
     public static readonly DurationStatId CardDrawInterval = new DurationStatId(28);
-    public static readonly DurationStatId InitialEnemySpawnDelay = new DurationStatId(29);
     public static readonly DurationStatId EnemySpawnDelay = new DurationStatId(30);
     public static readonly IntStatId TotalEnemiesToSpawn = new IntStatId(31);
     public static readonly BoolStatId CanCrit = new BoolStatId(32);
@@ -95,7 +94,6 @@ namespace Nighthollow.Generated
         case 26: return StatType.Int;
         case 27: return StatType.Int;
         case 28: return StatType.Duration;
-        case 29: return StatType.Duration;
         case 30: return StatType.Duration;
         case 31: return StatType.Int;
         case 32: return StatType.Bool;
@@ -145,7 +143,6 @@ namespace Nighthollow.Generated
         case 26: return StartingHandSize;
         case 27: return ManaGain;
         case 28: return CardDrawInterval;
-        case 29: return InitialEnemySpawnDelay;
         case 30: return EnemySpawnDelay;
         case 31: return TotalEnemiesToSpawn;
         case 32: return CanCrit;

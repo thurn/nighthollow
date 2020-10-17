@@ -143,12 +143,13 @@ namespace Nighthollow.Services
       }
 
       var school = (School) Parse.IntRequired(row, "School");
-      var influenceCost = new List<TaggedStatValue<School, IntValue>>
+
+      var influenceCost = new List<TaggedStatValue<School, IntValue>>();
+      var cost = Parse.Int(row, "Influence Cost");
+      if (cost.HasValue && cost.Value > 0)
       {
-        new TaggedStatValue<School, IntValue>(
-          school,
-          new IntValue(Parse.IntRequired(row, "Influence Cost")))
-      };
+        influenceCost.Add(new TaggedStatValue<School, IntValue>(school, new IntValue(cost.Value)));
+      }
 
       var creatureType = GetCreatureType(Parse.IntRequired(row, "Base Creature"));
 
@@ -162,18 +163,19 @@ namespace Nighthollow.Services
           var modifier = creatureType.ImplicitAffix.ModifierRanges[i - 1];
           modifierList.Add(new Modifier(
             modifier.ModifierData,
-            Modifiers.ParseArgument(modifier.ModifierData, Parse.String(row, $"Implicit Arg {i}"))));
+            ModifierUtil.ParseArgument(modifier.ModifierData, Parse.String(row, $"Implicit Arg {i}"))));
         }
 
         affixes.Add(new AffixData(creatureType.ImplicitAffix.Id, modifierList));
       }
 
+      var cardName = Parse.String(row, "Card Name");
       var result = new CreatureItemData(
-        Parse.StringRequired(row, "Card Name"),
+        cardName ?? creatureType.Name,
         creatureType,
         school,
         Parse.IntRequired(row, "Health"),
-        Parse.IntRequired(row, "Mana Cost"),
+        Parse.Int(row, "Mana Cost") ?? 0,
         influenceCost,
         new List<SkillData>(),
         affixes);

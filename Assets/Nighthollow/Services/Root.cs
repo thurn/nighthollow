@@ -56,6 +56,9 @@ namespace Nighthollow.Services
     [SerializeField] UserDataService _userDataService;
     public UserDataService UserDataService => _userDataService;
 
+    [SerializeField] EnemyDataService _enemyDataService;
+    public EnemyDataService EnemyDataService => _enemyDataService;
+
     public static Root Instance
     {
       get
@@ -82,6 +85,7 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_damageTextService);
       Errors.CheckNotNull(_assetService);
       Errors.CheckNotNull(_gameDataService);
+      Errors.CheckNotNull(_enemyDataService);
 
       _instance = this;
     }

@@ -41,6 +41,7 @@ namespace Nighthollow.Components
       {
         Root.Instance.UserDataService.OnNewGame(Root.Instance.GameDataService);
         Root.Instance.UserDataService.StartGame();
+        Root.Instance.EnemyDataService.StartGame();
       });
     }
 

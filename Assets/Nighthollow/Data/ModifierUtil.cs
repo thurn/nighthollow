@@ -21,7 +21,7 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
-  public static class Modifiers
+  public static class ModifierUtil
   {
     public static IStatValue? ParseArgument(ModifierTypeData modifierData, string? value)
     {

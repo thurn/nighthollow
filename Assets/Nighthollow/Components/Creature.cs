@@ -175,7 +175,7 @@ namespace Nighthollow.Components
           this, new Vector2(15, 0), new Vector2(30, 1));
       }
 
-      SetState(CreatureState.Idle);
+      ToDefaultState();
 
       _selectSkill = true;
       _data.Delegate.OnActivate(this);

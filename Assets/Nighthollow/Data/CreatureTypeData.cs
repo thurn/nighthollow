@@ -31,6 +31,7 @@ namespace Nighthollow.Data
     public PlayerName Owner { get; }
     public string? ImageAddress { get; }
     public int BaseManaCost { get; }
+    public int Speed { get; }
     public AffixTypeData? ImplicitAffix { get; }
     public SkillTypeData? ImplicitSkill { get; }
     public SkillAnimationType? Skill1Type { get; }
@@ -49,7 +50,8 @@ namespace Nighthollow.Data
       HealthHigh = Parse.IntRequired(row, "Health High");
       Owner = (PlayerName) Parse.IntRequired(row, "Owner ID");
       ImageAddress = Parse.String(row, "Image Address");
-      BaseManaCost = Parse.IntRequired(row, "Base Mana Cost");
+      BaseManaCost = Parse.Int(row, "Base Mana Cost") ?? 0;
+      Speed = Parse.Int(row, "Speed") ?? 0;
 
       var affixId = Parse.Int(row, "Implicit Affix ID");
       if (affixId.HasValue)

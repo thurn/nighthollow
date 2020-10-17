@@ -31,13 +31,9 @@ namespace Nighthollow.Components
     [SerializeField] int _spawnCount;
     [SerializeField] int _deathCount;
 
-    void Awake()
+    public void OnStartGame(EnemyData data)
     {
-//      _data = _data.Clone();
-    }
-
-    public void StartSpawningEnemies()
-    {
+      _data = data.Clone();
       StartCoroutine(SpawnAsync());
     }
 
@@ -54,6 +50,7 @@ namespace Nighthollow.Components
     IEnumerator<YieldInstruction> SpawnAsync()
     {
       var spawnDelay = _data.GetDurationSeconds(Stat.EnemySpawnDelay);
+      Errors.CheckArgument(spawnDelay > 0.1f, "Spawn delay cannot be 0");
       yield return new WaitForSeconds(spawnDelay);
 
       Root.Instance.CreatureService.CreateMovingCreature(

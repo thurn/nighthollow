@@ -34,8 +34,8 @@ namespace Nighthollow.Data
 
       if (row.ContainsKey($"Low {number}") && row.ContainsKey($"High {number}"))
       {
-        Low = Modifiers.ParseArgument(ModifierData, Parse.String(row, $"Low {number}"));
-        High = Modifiers.ParseArgument(ModifierData, Parse.String(row, $"High {number}"));
+        Low = ModifierUtil.ParseArgument(ModifierData, Parse.String(row, $"Low {number}"));
+        High = ModifierUtil.ParseArgument(ModifierData, Parse.String(row, $"High {number}"));
       }
     }
   }

@@ -83,7 +83,7 @@ namespace Nighthollow.Utils
     {
       if (!expression)
       {
-        throw new InvalidOperationException(message);
+        throw new ArgumentException(message);
       }
     }
   }

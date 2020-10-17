@@ -42,10 +42,10 @@ namespace Nighthollow.Delegates.Core
       switch (self.Owner)
       {
         case PlayerName.User:
-          Modifiers.ApplyModifierUnchecked(Operator, Root.Instance.User.Data.Stats.UnsafeGet(StatId), Modifier);
+          ModifierUtil.ApplyModifierUnchecked(Operator, Root.Instance.User.Data.Stats.UnsafeGet(StatId), Modifier);
           break;
         case PlayerName.Enemy:
-          Modifiers.ApplyModifierUnchecked(Operator, Root.Instance.Enemy.Data.Stats.UnsafeGet(StatId), Modifier);
+          ModifierUtil.ApplyModifierUnchecked(Operator, Root.Instance.Enemy.Data.Stats.UnsafeGet(StatId), Modifier);
           break;
         case PlayerName.Unknown:
         default:

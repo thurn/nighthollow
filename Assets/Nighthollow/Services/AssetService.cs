@@ -62,6 +62,7 @@ namespace Nighthollow.Services
 
       foreach (var request in requests)
       {
+        Errors.CheckNotNull(request.Value.asset, $"Null asset for {request.Key}");
         _assets[request.Key] = request.Value.asset;
       }
 

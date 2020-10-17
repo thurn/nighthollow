@@ -23,7 +23,7 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
-  public static class Creatures
+  public static class CreatureUtil
   {
     public static CreatureData Build(CreatureItemData item)
     {
@@ -32,6 +32,8 @@ namespace Nighthollow.Data
 
       stats.Get(Stat.Health).Add(item.Health);
       stats.Get(Stat.ManaCost).Add(item.ManaCost);
+      stats.Get(Stat.Speed).Add(item.BaseType.Speed);
+
       if (item.BaseType.IsManaCreature)
       {
         stats.Get(Stat.IsManaCreature).AddSetTrueModifier(new StaticModifier());
@@ -64,7 +66,7 @@ namespace Nighthollow.Data
 
     static void ApplyStatModifier(StatTable table, int statId, ModifierTypeData data, IStatValue? value)
     {
-      Modifiers.ApplyModifierUnchecked(
+      ModifierUtil.ApplyModifierUnchecked(
         Errors.CheckNotNull(data.Operator),
         table.UnsafeGet(Stat.GetStat(statId)),
         value?.AsStaticModifier() ?? new StaticModifier());
