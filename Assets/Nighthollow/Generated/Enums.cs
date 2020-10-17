@@ -128,4 +128,12 @@ namespace Nighthollow.Generated
     ImplicitSkill = 3,
   }
 
+  public enum StatScope
+  {
+    Unknown = 0,
+    User = 1,
+    Enemy = 2,
+    Creatures = 3,
+  }
+
 }

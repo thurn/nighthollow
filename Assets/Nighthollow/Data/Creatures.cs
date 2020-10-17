@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 
@@ -26,7 +27,7 @@ namespace Nighthollow.Data
   {
     public static CreatureData Build(CreatureItemData item)
     {
-      var stats = new StatTable();
+      var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Creatures);
       var delegates = new List<CreatureDelegateId>();
 
       stats.Get(Stat.Health).Add(item.Health);

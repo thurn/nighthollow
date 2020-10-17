@@ -22,37 +22,21 @@ namespace Nighthollow.Data
 {
   public static class StatUtil
   {
-    public static void ParseAndAdd(IStat stat, StatType type, string value)
+    public static IStatValue ParseStat(StatType type, string value)
     {
       switch (type)
       {
         case StatType.Int:
-          ((IntStat) stat).AddAddedModifier(new StaticModifier(new IntValue(int.Parse(value))));
-          break;
+          return new IntValue(int.Parse(value));
         case StatType.Bool:
-          if (bool.Parse(value))
-          {
-            ((BoolStat) stat).AddSetTrueModifier(new StaticModifier());
-          }
-          else
-          {
-            ((BoolStat) stat).AddSetFalseModifier(new StaticModifier());
-          }
-
-          break;
+          return new BoolValue(bool.Parse(value));
         case StatType.Percentage:
-          ((PercentageStat) stat).AddAddedModifier(
-            new StaticModifier(new PercentageValue(double.Parse(value))));
-          break;
+          return new PercentageValue(double.Parse(value));
         case StatType.Duration:
-          ((DurationStat) stat).AddAddedModifier(
-            new StaticModifier(new DurationValue(double.Parse(value))));
-          break;
+          return new DurationValue(double.Parse(value));
         case StatType.IntRange:
           var split = value.Split(',');
-          ((IntRangeStat) stat).AddAddedModifier(
-            new StaticModifier(new IntRangeValue(int.Parse(split[0]), int.Parse(split[1]))));
-          break;
+          return new IntRangeValue(int.Parse(split[0]), int.Parse(split[1]));
         case StatType.SchoolInts:
         case StatType.DamageTypeInts:
         case StatType.DamageTypeIntRanges:

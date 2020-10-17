@@ -23,6 +23,8 @@ namespace Nighthollow.Stats
     IModifier AsStaticModifier();
 
     IntValue AsIntValue();
+
+    void AddTo(IStat stat);
   }
 
   public readonly struct NoValue : IStatValue
@@ -30,6 +32,8 @@ namespace Nighthollow.Stats
     public IModifier AsStaticModifier() => new StaticModifier(this);
 
     public IntValue AsIntValue() => throw new NotImplementedException();
+
+    public void AddTo(IStat stat) => throw new NotImplementedException();
   }
 
   public readonly struct IntValue : IStatValue
@@ -44,6 +48,34 @@ namespace Nighthollow.Stats
     public IModifier AsStaticModifier() => new StaticModifier(this);
 
     public IntValue AsIntValue() => this;
+
+    public void AddTo(IStat stat) => ((IntStat) stat).AddAddedModifier(AsStaticModifier());
+  }
+
+  public readonly struct BoolValue : IStatValue
+  {
+    public readonly bool Value;
+
+    public BoolValue(bool value)
+    {
+      Value = value;
+    }
+
+    public IModifier AsStaticModifier() => new StaticModifier(this);
+
+    public IntValue AsIntValue() => throw new NotImplementedException();
+
+    public void AddTo(IStat stat)
+    {
+      if (Value)
+      {
+        ((BoolStat)stat).AddSetTrueModifier(AsStaticModifier());
+      }
+      else
+      {
+        ((BoolStat)stat).AddSetFalseModifier(AsStaticModifier());
+      }
+    }
   }
 
   public readonly struct DurationValue : IStatValue
@@ -58,6 +90,8 @@ namespace Nighthollow.Stats
     public IModifier AsStaticModifier() => new StaticModifier(this);
 
     public IntValue AsIntValue() => Value;
+
+    public void AddTo(IStat stat) => ((DurationStat) stat).AddAddedModifier(AsStaticModifier());
   }
 
   public readonly struct PercentageValue : IStatValue
@@ -72,6 +106,8 @@ namespace Nighthollow.Stats
     public IModifier AsStaticModifier() => new StaticModifier(this);
 
     public IntValue AsIntValue() => Value;
+
+    public void AddTo(IStat stat) => ((PercentageStat) stat).AddAddedModifier(AsStaticModifier());
   }
 
   public readonly struct IntRangeValue : IStatValue
@@ -88,6 +124,8 @@ namespace Nighthollow.Stats
     public IModifier AsStaticModifier() => new StaticModifier(this);
 
     public IntValue AsIntValue() => throw new NotImplementedException();
+
+    public void AddTo(IStat stat) => ((IntRangeStat) stat).AddAddedModifier(AsStaticModifier());
   }
 
   public interface ITaggedStatValue
@@ -111,6 +149,8 @@ namespace Nighthollow.Stats
     public IModifier AsStaticModifier() => new StaticModifier(this);
 
     public IntValue AsIntValue() => throw new NotImplementedException();
+
+    public void AddTo(IStat stat) => throw new NotImplementedException();
 
     public Enum GetTag() => Tag;
 

@@ -32,7 +32,7 @@ namespace Nighthollow.Services
 
     public void OnNewGame(GameDataService gameDataService)
     {
-      UserStats = gameDataService.UserDefaults();
+      UserStats = gameDataService.GetDefaultStats(StatScope.User);
       _deck.Clear();
       _deck.AddRange(gameDataService.GetStaticCardList(StaticCardList.StartingDeck));;
     }
