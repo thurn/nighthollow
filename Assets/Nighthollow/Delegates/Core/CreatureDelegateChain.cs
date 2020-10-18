@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Generated;
@@ -25,6 +26,8 @@ namespace Nighthollow.Delegates.Core
   public sealed class CreatureDelegateChain
   {
     readonly List<CreatureDelegateId> _delegateIds;
+
+    IEnumerable<CreatureDelegate> Delegates() => _delegateIds.Select(CreatureDelegateMap.Get);
 
     public CreatureDelegateChain(List<CreatureDelegateId> delegateIds)
     {
@@ -38,27 +41,22 @@ namespace Nighthollow.Delegates.Core
     public void OnDeath(Creature self) =>
       Execute(self, (d, c, r) => d.OnDeath(c, r));
 
-    public SkillData? SelectSkill(Creature self)
-    {
-      foreach (var id in _delegateIds)
-      {
-        var skill = CreatureDelegateMap.Get(id).SelectSkill(self);
-        if (skill == null)
-        {
-          return skill;
-        }
-      }
+    public bool CanUseMeleeSkill(CreatureContext c) => Delegates().Any(d => d.CanUseMeleeSkill(c));
 
-      return null;
-    }
+    public bool CanUseProjectileSkill(CreatureContext c) => Delegates().Any(d => d.CanUseProjectileSkill(c));
+
+    public SkillData? SelectSkill(CreatureContext c)
+      => _delegateIds
+        .Select(id => CreatureDelegateMap.Get(id).SelectSkill(c))
+        .FirstOrDefault(skill => skill != null);
 
     public void OnKilledEnemy(Creature self, Creature enemy, int damageAmount) =>
       Execute(self, (d, c, r) => d.OnKilledEnemy(c, enemy, damageAmount, r));
 
-    void Execute(Creature self, Action<CreatureDelegate, CreatureContext, Results<CreatureEffect>> action)
+    void Execute(Creature self, Action<CreatureDelegate, CreatureContext, Results> action)
     {
       var context = new CreatureContext(self);
-      var results = new Results<CreatureEffect>();
+      var results = new Results();
 
       foreach (var id in _delegateIds)
       {
@@ -67,12 +65,7 @@ namespace Nighthollow.Delegates.Core
 
       foreach (var effect in results.Values)
       {
-        effect.Execute(self);
-      }
-
-      foreach (var effect in results.Values)
-      {
-        effect.InvokeEvent(this, self);
+        effect.Execute();
       }
     }
   }

@@ -17,6 +17,7 @@ using Nighthollow.Components;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Nighthollow.Services
@@ -33,7 +34,10 @@ namespace Nighthollow.Services
     [SerializeField] Sprite _flameSymbol;
     [SerializeField] Sprite _iceSymbol = null!;
     [SerializeField] Sprite _earthSymbol;
-    [SerializeField] Sprite _shadowSymbol = null!;
+
+    [FormerlySerializedAs("_shadowSymbol")] [SerializeField]
+    Sprite _nightSymbol = null!;
+
     [SerializeField] TimedEffect _missEffect;
     [SerializeField] TimedEffect _evadeEffect;
     [SerializeField] TimedEffect _critEffect;
@@ -83,16 +87,16 @@ namespace Nighthollow.Services
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {
-      switch (influenceType)
+      return influenceType switch
       {
-        case School.Light: return Instantiate(_lightSymbol);
-        case School.Sky: return Instantiate(_skySymbol);
-        case School.Flame: return Instantiate(_flameSymbol);
-        case School.Ice: return Instantiate(_iceSymbol);
-        case School.Earth: return Instantiate(_earthSymbol);
-        case School.Shadow: return Instantiate(_shadowSymbol);
-        default: throw Errors.UnknownEnumValue(influenceType);
-      }
+        School.Light => Instantiate(_lightSymbol),
+        School.Sky => Instantiate(_skySymbol),
+        School.Flame => Instantiate(_flameSymbol),
+        School.Ice => Instantiate(_iceSymbol),
+        School.Earth => Instantiate(_earthSymbol),
+        School.Night => Instantiate(_nightSymbol),
+        _ => throw Errors.UnknownEnumValue(influenceType),
+      };
     }
   }
 }

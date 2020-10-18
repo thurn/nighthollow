@@ -14,19 +14,56 @@
 
 #nullable enable
 
+using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
+using Nighthollow.Utils;
+using UnityEngine;
 
 namespace Nighthollow.Delegates.Creatures
 {
   public sealed class DefaultCreatureDelegate : CreatureDelegate
   {
-    public override void OnDeath(CreatureContext c, Results<CreatureEffect> results)
+    public override void OnDeath(CreatureContext c, Results results)
     {
       if (c.Self.Owner == PlayerName.Enemy)
       {
         results.Add(new EnemyRemovedEffect());
       }
     }
+
+    public override SkillData? SelectSkill(CreatureContext c)
+    {
+      var data = c.Self.Data;
+      if (data.Delegate.CanUseProjectileSkill(c))
+      {
+        var skill = data.Skills.LastOrDefault(s => s.BaseType.IsProjectile);
+        if (skill != null)
+        {
+          return skill;
+        }
+      }
+
+      if (data.Delegate.CanUseMeleeSkill(c))
+      {
+        var skill = data.Skills.LastOrDefault(s => s.BaseType.IsMelee);
+        if (skill != null)
+        {
+          return skill;
+        }
+      }
+
+      return data.Skills.LastOrDefault(s => !s.BaseType.IsProjectile && !s.BaseType.IsMelee);
+    }
+
+    public override bool CanUseMeleeSkill(CreatureContext c) =>
+      c.Self.Collider && HasOverlap(c.Self.Owner, c.Self.Collider);
+
+    public override bool CanUseProjectileSkill(CreatureContext c) =>
+      c.Self.ProjectileCollider && HasOverlap(c.Self.Owner, c.Self.ProjectileCollider.Collider);
+
+    static bool HasOverlap(PlayerName owner, Collider2D collider2D) =>
+      collider2D.IsTouchingLayers(Constants.LayerMaskForCreatures(owner.GetOpponent()));
   }
 }

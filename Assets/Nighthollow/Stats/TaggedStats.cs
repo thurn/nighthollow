@@ -23,7 +23,7 @@ using Nighthollow.Utils;
 namespace Nighthollow.Stats
 {
   public readonly struct TaggedStatsId<TKey, TStat> : IStatId<TaggedStats<TKey, TStat>>
-    where TKey : Enum where TStat : IStat<TStat>, new()
+    where TKey : Enum where TStat : IStat<TStat>, IAdditiveStat, new()
   {
     readonly int _value;
 
@@ -45,7 +45,7 @@ namespace Nighthollow.Stats
   }
 
   public sealed class TaggedStats<TKey, TStat> : IStat<TaggedStats<TKey, TStat>>, ITaggedStats
-    where TKey : Enum where TStat : IStat<TStat>, new()
+    where TKey : Enum where TStat : IStat<TStat>, IAdditiveStat, new()
   {
     readonly Dictionary<TKey, TStat> _stats;
 
@@ -66,6 +66,15 @@ namespace Nighthollow.Stats
       Errors.CheckArgument(!key.Equals(default(TKey)), $"Cannot add default value {key} as a key");
       Errors.CheckState(!_stats.ContainsKey(key), $"Key {key} already added");
       _stats[key] = value;
+    }
+
+    public void AddValue<TValue>(IStatValue list) where TValue : IStatValue
+    {
+      var input = (TaggedStatListValue<TKey, TValue, TStat>) list;
+      foreach (var pair in input.Values)
+      {
+        Get(pair.Tag).AddValue(pair.Value);
+      }
     }
 
     public TaggedStats<TKey, TStat> Clone() => new TaggedStats<TKey, TStat>(_stats);

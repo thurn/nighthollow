@@ -14,48 +14,162 @@
 
 #nullable enable
 
+using System;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Generated;
+using Nighthollow.Services;
+using Nighthollow.Stats;
+using UnityEngine;
 
 namespace Nighthollow.Delegates.Core
 {
-  public abstract class DefaultEffect : CreatureEffect
+  public sealed class EnemyRemovedEffect : Effect
   {
-    // https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
-    public abstract void Execute();
-
-    public override void Execute(Creature _)
+    public override void Execute()
     {
-      Execute();
+      Root.Instance.Enemy.OnEnemyCreatureRemoved();
     }
   }
 
-  public abstract class CreatureEffect : SkillEffect
+  public sealed class ApplyModifierToOwner : Effect
   {
-    public abstract void Execute(Creature self);
+    public Creature Self { get; }
+    public Operator Operator { get; }
+    public IStatId StatId { get; }
+    public IModifier Modifier { get; }
 
-    public virtual void InvokeEvent(CreatureDelegateChain chain, Creature self)
+    public ApplyModifierToOwner(Creature self, Operator @operator, IStatId statId, IModifier modifier)
     {
+      Self = self;
+      Operator = @operator;
+      Modifier = modifier;
+      StatId = statId;
     }
 
-    public override void Execute(Creature self, SkillData skill)
+    public override void Execute()
     {
-      Execute(self);
+      switch (Self.Owner)
+      {
+        case PlayerName.User:
+          ModifierUtil.ApplyModifierUnchecked(Operator, Root.Instance.User.Data.Stats.UnsafeGet(StatId), Modifier);
+          break;
+        case PlayerName.Enemy:
+          ModifierUtil.ApplyModifierUnchecked(Operator, Root.Instance.Enemy.Data.Stats.UnsafeGet(StatId), Modifier);
+          break;
+        case PlayerName.Unknown:
+        default:
+          throw new ArgumentOutOfRangeException();
+      }
     }
   }
 
-  public abstract class SkillEffect : TargetedSkillEffect
+  public sealed class ApplyDamageEffect : Effect
   {
-    public abstract void Execute(Creature self, SkillData skill);
+    public Creature Self { get; }
+    public Creature Target { get; }
+    public int Amount { get; }
 
-    public override void Execute(Creature self, SkillData skill, Creature target)
+    public ApplyDamageEffect(Creature self, Creature target, int amount)
     {
-      Execute(self, skill);
+      Self = self;
+      Target = target;
+      Amount = amount;
+    }
+
+    public override void Execute()
+    {
+      Target.AddDamage(Self, Amount);
     }
   }
 
-  public abstract class TargetedSkillEffect
+  public sealed class HealEffect : Effect
   {
-    public abstract void Execute(Creature self, SkillData skill, Creature target);
+    public Creature Target { get; }
+    public int Amount { get; }
+
+    public HealEffect(Creature target, int amount)
+    {
+      Target = target;
+      Amount = amount;
+    }
+
+    public override void Execute()
+    {
+      Target.Heal(Amount);
+    }
+  }
+
+  public sealed class StunEffect : Effect
+  {
+    public Creature Target { get; }
+    public float DurationSeconds { get; }
+
+    public StunEffect(Creature target, float durationSeconds)
+    {
+      Target = target;
+      DurationSeconds = durationSeconds;
+    }
+
+    public override void Execute()
+    {
+      Target.Stun(DurationSeconds);
+    }
+  }
+
+  public sealed class FireProjectileEffect : Effect
+  {
+    public SkillData SkillData { get; }
+    public Vector2 FiringPoint { get; }
+    public Vector2 FiringDirectionOffset { get; }
+
+    public FireProjectileEffect(SkillData skillData, Vector2 firingPoint, Vector2 firingDirectionOffset)
+    {
+      SkillData = skillData;
+      FiringPoint = firingPoint;
+      FiringDirectionOffset = firingDirectionOffset;
+    }
+
+    public override void Execute()
+    {
+      throw new System.NotImplementedException();
+    }
+  }
+
+  public sealed class ApplyMeleeHitEffect : Effect
+  {
+    public SkillData SkillData { get; }
+
+    public ApplyMeleeHitEffect(SkillData skillData)
+    {
+      SkillData = skillData;
+    }
+
+    public override void Execute()
+    {
+      throw new System.NotImplementedException();
+    }
+  }
+
+  public sealed class SkillEventEffect : Effect
+  {
+    public enum Event
+    {
+      Missed,
+      Crit,
+      Stun
+    }
+
+    public Event EventName { get; }
+
+    public SkillEventEffect(Event eventName)
+    {
+      EventName = eventName;
+    }
+
+    public override void Execute()
+    {
+      Debug.Log($"Text: {EventName}");
+    }
   }
 }

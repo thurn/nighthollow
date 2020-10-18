@@ -37,7 +37,8 @@ namespace Nighthollow.Data
       School school,
       IReadOnlyList<SkillData> skills,
       StatTable stats,
-      List<CreatureDelegateId> delegates) : this(name, baseType, school, skills, stats, new CreatureDelegateChain(delegates))
+      List<CreatureDelegateId> delegates) : this(name, baseType, school, skills, stats,
+      new CreatureDelegateChain(delegates))
     {
     }
 

@@ -29,8 +29,8 @@ namespace Nighthollow.Components
 
     [Header("State")]
     [SerializeField] Creature _firedBy;
-    [SerializeField] SkillData _skillData;
     [SerializeField] Collider2D _collider;
+    SkillData _skillData;
 
     public SkillData Data => _skillData;
 

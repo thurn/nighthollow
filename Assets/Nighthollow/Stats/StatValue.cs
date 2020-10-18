@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 
 #nullable enable
 
@@ -69,11 +70,11 @@ namespace Nighthollow.Stats
     {
       if (Value)
       {
-        ((BoolStat)stat).AddSetTrueModifier(AsStaticModifier());
+        ((BoolStat) stat).AddSetTrueModifier(AsStaticModifier());
       }
       else
       {
-        ((BoolStat)stat).AddSetFalseModifier(AsStaticModifier());
+        ((BoolStat) stat).AddSetFalseModifier(AsStaticModifier());
       }
     }
   }
@@ -155,5 +156,25 @@ namespace Nighthollow.Stats
     public Enum GetTag() => Tag;
 
     public IStatValue GetValue() => Value;
+  }
+
+  public readonly struct TaggedStatListValue<TTag, TValue, TStat> : IStatValue
+    where TTag : Enum where TValue : IStatValue where TStat : IStat<TStat>, IAdditiveStat, new()
+  {
+    public IReadOnlyList<TaggedStatValue<TTag, TValue>> Values { get; }
+
+    public TaggedStatListValue(IReadOnlyList<TaggedStatValue<TTag, TValue>> values)
+    {
+      Values = values;
+    }
+
+    public IModifier AsStaticModifier() => new StaticModifier(this);
+
+    public IntValue AsIntValue() => throw new NotImplementedException();
+
+    public void AddTo(IStat stat)
+    {
+      ((TaggedStats<TTag, TStat>) stat).AddAddedModifier(AsStaticModifier());
+    }
   }
 }

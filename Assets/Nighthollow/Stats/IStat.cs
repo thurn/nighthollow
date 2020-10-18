@@ -24,4 +24,9 @@ namespace Nighthollow.Stats
   {
     TSelf Clone();
   }
+
+  public interface IAdditiveStat
+  {
+    void AddValue(IStatValue value);
+  }
 }

@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System.Collections.Generic;
+using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 
@@ -22,11 +25,19 @@ namespace Nighthollow.Data
   {
     public int Id { get; }
     public string Name { get; }
+    public string? Address { get; }
+    public SkillAnimationType SkillAnimationType { get; }
+    public bool IsMelee { get; }
+    public bool IsProjectile { get; }
 
     public SkillTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
     {
       Id = Parse.IntRequired(row, "Skill ID");
       Name = Parse.StringRequired(row, "Name");
+      Address = Parse.String(row, "Address");
+      SkillAnimationType = (SkillAnimationType) Parse.IntRequired(row, "Animation");
+      IsMelee = Parse.Boolean(row, "Is Melee?");
+      IsProjectile = Parse.Boolean(row, "Is Projectile?");
     }
   }
 }

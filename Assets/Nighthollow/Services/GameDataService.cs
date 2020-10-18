@@ -144,13 +144,6 @@ namespace Nighthollow.Services
 
       var school = (School) Parse.IntRequired(row, "School");
 
-      var influenceCost = new List<TaggedStatValue<School, IntValue>>();
-      var cost = Parse.Int(row, "Influence Cost");
-      if (cost.HasValue && cost.Value > 0)
-      {
-        influenceCost.Add(new TaggedStatValue<School, IntValue>(school, new IntValue(cost.Value)));
-      }
-
       var creatureType = GetCreatureType(Parse.IntRequired(row, "Base Creature"));
 
       var affixes = new List<AffixData>();
@@ -169,14 +162,30 @@ namespace Nighthollow.Services
         affixes.Add(new AffixData(creatureType.ImplicitAffix.Id, modifierList));
       }
 
+      var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Creatures);
+      stats.Get(Stat.Health).Add(Parse.IntRequired(row, "Health"));
+      stats.Get(Stat.ManaCost).Add(Parse.Int(row, "Mana Cost") ?? 0);
+
+      var costString = Parse.String(row, "Influence Cost");
+      if (costString != null)
+      {
+        stats.Get(Stat.InfluenceCost)
+          .AddValue<IntValue>(StatUtil.ParseStat(StatType.SchoolInts, costString));
+      }
+
+      var baseDamageString = Parse.String(row, "Base Damage");
+      var baseDamage = baseDamageString == null
+        ? null
+        : (TaggedStatListValue<DamageType, IntRangeValue, IntRangeStat>?) StatUtil.ParseStat(
+          StatType.DamageTypeIntRanges, baseDamageString);
+
       var cardName = Parse.String(row, "Card Name");
       var result = new CreatureItemData(
         cardName ?? creatureType.Name,
         creatureType,
         school,
-        Parse.IntRequired(row, "Health"),
-        Parse.Int(row, "Mana Cost") ?? 0,
-        influenceCost,
+        baseDamage,
+        stats,
         new List<SkillData>(),
         affixes);
 

@@ -27,7 +27,7 @@ namespace Nighthollow.Delegates.Core
     /// <summary>
     /// Called when a skill's animation begins.
     /// </summary>
-    public virtual void OnStart(SkillContext c, Results<TargetedSkillEffect> results)
+    public virtual void OnStart(SkillContext c, Results results)
     {
     }
 
@@ -35,37 +35,78 @@ namespace Nighthollow.Delegates.Core
     /// Called when a skill's initial animation reaches its impact frame. For spells, this is the place to create and
     /// fire projectiles. For melee skills, this will be called immediately before <see cref="OnImpact"/>.
     /// </summary>
-    public virtual void OnUse(SkillContext c, Results<TargetedSkillEffect> results)
+    public virtual void OnUse(SkillContext c, Results results)
     {
     }
 
     /// <summary>
     /// Called to apply the effect of a skill, either on melee hit or on projectile impact.
     /// </summary>
-    public virtual void OnImpact(SkillContext c, Collider2D collider, Results<TargetedSkillEffect> results)
+    public virtual void OnImpact(SkillContext c,  Results results)
     {
     }
 
-    public virtual void PopulateTargets(SkillContext c, Collider2D collider, List<Creature> targets)
+    /// <summary>
+    /// Returns the collider to use for hit-testing this skill's impact. The *first* value returned will
+    /// be used, subsequent delegates will not be invoked.
+    /// </summary>
+    public virtual Collider2D? GetCollider(SkillContext c) => null;
+
+    /// <summary>
+    /// Appends new creatures to the list of targets for this skill. Normally this is invoked by the default skill
+    /// delegate's "OnImpact" implementation.
+    /// </summary>
+    public virtual void PopulateTargets(SkillContext c, List<Creature> targets)
     {
     }
 
-    public virtual void ApplyToTarget(SkillContext c, Creature target, Results<TargetedSkillEffect> results)
+    /// <summary>
+    /// Appends new effects to the list of effects to apply to the target of this skill. Normally this is invoked
+    /// by the default skill delegate's "OnImpact" implementation for each target returned from "PopulateTargets". The
+    /// default implementation implements the standard algorithm for applying the skill's BaseDamage, including
+    /// things like checking for hit, checking for critical hit, applying damage, applying life drain, and applying
+    /// stun.
+    /// </summary>
+    public virtual void ApplyToTarget(SkillContext c, Creature target, Results results)
     {
     }
 
-    public virtual bool CheckForHit(SkillContext c, Creature target) => false;
+    /// <summary>
+    /// Should return true if a hit from this creature should hit. A hit is registered if *any* delegate returns
+    /// true from this method.
+    /// </summary>
+    public virtual bool RollForHit(SkillContext c, Creature target) => false;
 
-    public virtual bool CheckForCrit(SkillContext c, Creature target) => false;
+    /// <summary>
+    /// Should return true if a hit from this creature should critically hit. A critical hit is registered if *any*
+    /// delegate returns true from this method.
+    /// </summary>
+    public virtual bool RollForCrit(SkillContext c, Creature target) => false;
 
-    public virtual int ComputeDamage(SkillContext c, Creature target,
+    /// <summary>
+    /// Adds final damage for a hit on 'target' dealing base damage 'damage'. Return values of all delegates are summed
+    /// together.
+    /// </summary>
+    public virtual int RollForDamage(SkillContext c, Creature target,
       TaggedStats<DamageType, IntRangeStat> damage) => 0;
 
-    public virtual int ComputeCritDamage(SkillContext c, Creature target,
+    /// <summary>
+    /// Adds final critical hit damage for a critical hit on 'target' dealing base damage 'damage'. Return values of all
+    /// delegates are summed together.
+    /// </summary>
+    public virtual int RollForCritDamage(SkillContext c, Creature target,
       TaggedStats<DamageType, IntRangeStat> damage) => 0;
 
+    /// <summary>
+    /// Computes life drain for a hit on 'target' dealing total damage 'damageAmount'. Return values of all delegates
+    /// are summed together.
+    /// </summary>
     public virtual int ComputeLifeDrain(SkillContext c, Creature creature, int damageAmount) => 0;
 
+    /// <summary>
+    /// Should return true if a hit from this creature should stun 'target'. A stun is invoked if *any* delegate returns
+    /// true from this method.
+    /// </summary>
     public virtual bool CheckForStun(SkillContext c, Creature target, int damageAmount) => false;
   }
 }

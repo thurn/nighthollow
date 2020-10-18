@@ -15,6 +15,7 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
@@ -25,9 +26,7 @@ namespace Nighthollow.Data
     public string Name { get; }
     public CreatureTypeData BaseType { get; }
     public School School { get; }
-    public int Health { get; }
-    public int ManaCost { get; }
-    public List<TaggedStatValue<School, IntValue>> InfluenceCost { get; }
+    public StatTable Stats { get; }
     public IReadOnlyList<SkillData> Skills { get; }
     public IReadOnlyList<AffixData> Affixes { get; }
 
@@ -35,18 +34,20 @@ namespace Nighthollow.Data
       string name,
       CreatureTypeData baseType,
       School school,
-      int health,
-      int manaCost,
-      List<TaggedStatValue<School, IntValue>> influenceCost,
+      TaggedStatListValue<DamageType, IntRangeValue, IntRangeStat>? baseDamage,
+      StatTable stats,
       IReadOnlyList<SkillData> skills,
       IReadOnlyList<AffixData> affixes)
     {
+      if (baseDamage.HasValue && baseType.SkillAnimations.Any(a => a.Type == SkillAnimationType.MeleeSkill))
+      {
+        skills = skills.Append(CreatureUtil.DefaultMeleeAttack(baseDamage.Value)).ToList();
+      }
+
       Name = name;
       BaseType = baseType;
       School = school;
-      Health = health;
-      ManaCost = manaCost;
-      InfluenceCost = influenceCost;
+      Stats = stats;
       Skills = skills;
       Affixes = affixes;
     }

@@ -24,15 +24,16 @@ namespace Nighthollow.Components
 {
   public sealed class Deck : MonoBehaviour
   {
-    [SerializeField] bool _debugOrderedDraws;
     [SerializeField] List<CreatureData> _cards;
     [SerializeField] List<int> _weights;
+    [SerializeField] bool _orderedDraws;
     int _lastDraw;
 
-    public void OnStartGame(IEnumerable<CreatureData> cards)
+    public void OnStartGame(IEnumerable<CreatureData> cards, bool orderedDraws)
     {
       _weights.Clear();
       _cards = cards.ToList();
+      _orderedDraws = orderedDraws;
 
       var manaCreatureCount = _cards.Count(c => c.GetBool(Stat.IsManaCreature));
       var manaCreatureWeight = 4000 * ((2.0 * _cards.Count - manaCreatureCount) / 3.0);
@@ -45,12 +46,12 @@ namespace Nighthollow.Components
 
     public CreatureData Draw()
     {
-      if (_debugOrderedDraws)
+      if (_orderedDraws)
       {
         return _cards[_lastDraw++ % _cards.Count].Clone();
       }
 
-      var selector = new DynamicRandomSelector<int>(-1, _cards.Count);
+      var selector = new DynamicRandomSelector<int>(seed: -1, _cards.Count);
       for (var i = 0; i < _cards.Count; ++i)
       {
         selector.Add(i, _weights[i]);

@@ -27,21 +27,14 @@ namespace Nighthollow.Data
   {
     public static CreatureData Build(CreatureItemData item)
     {
-      var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Creatures);
+      var stats = item.Stats;
       var delegates = new List<CreatureDelegateId>();
 
-      stats.Get(Stat.Health).Add(item.Health);
-      stats.Get(Stat.ManaCost).Add(item.ManaCost);
       stats.Get(Stat.Speed).Add(item.BaseType.Speed);
 
       if (item.BaseType.IsManaCreature)
       {
         stats.Get(Stat.IsManaCreature).AddSetTrueModifier(new StaticModifier());
-      }
-
-      foreach (var cost in item.InfluenceCost)
-      {
-        stats.Get(Stat.InfluenceCost).AddAddedModifier(new StaticModifier(cost));
       }
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
@@ -70,6 +63,16 @@ namespace Nighthollow.Data
         Errors.CheckNotNull(data.Operator),
         table.UnsafeGet(Stat.GetStat(statId)),
         value?.AsStaticModifier() ?? new StaticModifier());
+    }
+
+    public static SkillData DefaultMeleeAttack(TaggedStatListValue<DamageType, IntRangeValue, IntRangeStat> baseDamage)
+    {
+      var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Skill);
+      stats.Get(Stat.BaseDamage).AddValue<IntRangeValue>(baseDamage);
+      return new SkillData(
+        Root.Instance.GameDataService.GetSkillType(1),
+        stats,
+        new List<SkillDelegateId>());
     }
   }
 }

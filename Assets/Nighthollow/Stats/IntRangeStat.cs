@@ -30,7 +30,7 @@ namespace Nighthollow.Stats
     public IStat NotFoundValue() => new IntRangeStat(new IntStat(), new IntStat());
   }
 
-  public sealed class IntRangeStat : IStat<IntRangeStat>
+  public sealed class IntRangeStat : IStat<IntRangeStat>, IAdditiveStat
   {
     readonly IntStat _low;
     readonly IntStat _high;
@@ -47,6 +47,10 @@ namespace Nighthollow.Stats
       _high = high;
     }
 
+    public int LowValue => _low.Value;
+
+    public int HighValue => _high.Value;
+
     public IntRangeStat Clone() => new IntRangeStat(_low.Clone(), _high.Clone());
 
     public void AddAddedModifier(IModifier modifier)
@@ -59,6 +63,13 @@ namespace Nighthollow.Stats
     {
       _low.AddIncreaseModifier(modifier);
       _high.AddIncreaseModifier(modifier);
+    }
+
+    public void AddValue(IStatValue value)
+    {
+      var range = (IntRangeValue) value;
+      _low.Add(range.Low.Value);
+      _high.Add(range.High.Value);
     }
   }
 }

@@ -15,13 +15,13 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
-using SkillType = Nighthollow.Generated.SkillType;
 using Stat = Nighthollow.Generated.Stat;
 using DamageType = Nighthollow.Generated.DamageType;
 
@@ -29,56 +29,63 @@ namespace Nighthollow.Delegates.Skills
 {
   public sealed class DefaultSkillDelegate : SkillDelegate
   {
-    public override void OnUse(SkillContext c, Results<TargetedSkillEffect> results)
+    public override void OnUse(SkillContext c, Results results)
     {
-      if (c.Skill.SkillType == SkillType.Projectile)
+      if (c.Skill.BaseType.IsProjectile)
       {
         results.Add(new FireProjectileEffect(c.Skill, c.Self.ProjectileSource.position, Vector2.zero));
       }
     }
 
-    public override void OnImpact(SkillContext c, Collider2D collider, Results<TargetedSkillEffect> results)
+    public override void OnImpact(SkillContext c, Results results)
     {
-      var targets = new List<Creature>();
-      c.Skill.Delegate.PopulateTargets(c, targets);
+      var targets = c.Skill.Delegate.PopulateTargets(c);
       foreach (var target in targets)
       {
         c.Skill.Delegate.ApplyToTarget(c, target, results);
       }
     }
 
-    public override void PopulateTargets(SkillContext c, Collider2D collider, List<Creature> targets)
+    public override void PopulateTargets(SkillContext c, List<Creature> targets)
     {
-      var colliders = new List<Collider2D>();
-      var filter = new ContactFilter2D {layerMask = Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent())};
-      collider.OverlapCollider(filter, colliders);
-
-      foreach (var result in colliders)
+      var filter = new ContactFilter2D
       {
-        targets.Add(ComponentUtils.GetComponent<Creature>(result));
+        layerMask = Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent()),
+        useTriggers = true
+      };
+      var sourceCollider = c.Skill.Delegate.GetCollider(c);
+      if (!sourceCollider)
+      {
+        return;
       }
+
+      var colliders = new List<Collider2D>();
+      sourceCollider!.OverlapCollider(filter, colliders);
+      targets.AddRange(colliders.Select(ComponentUtils.GetComponent<Creature>));
     }
 
-    public override void ApplyToTarget(SkillContext c, Creature target, Results<TargetedSkillEffect> results)
+    public override Collider2D? GetCollider(SkillContext c) => c.Self.Collider;
+
+    public override void ApplyToTarget(SkillContext c, Creature target, Results results)
     {
-      if (!c.Skill.Delegate.CheckForHit(c, target))
+      if (!c.Skill.Delegate.RollForHit(c, target))
       {
         results.Add(new SkillEventEffect(SkillEventEffect.Event.Missed));
         return;
       }
 
       int damage;
-      if (c.Skill.Delegate.CheckForCrit(c, target))
+      if (c.Skill.Delegate.RollForCrit(c, target))
       {
         results.Add(new SkillEventEffect(SkillEventEffect.Event.Crit));
-        damage = c.Skill.Delegate.ComputeCritDamage(c, target, c.Skill.Stats.Get(Stat.BaseDamage));
+        damage = c.Skill.Delegate.RollForCritDamage(c, target, c.Skill.Stats.Get(Stat.BaseDamage));
       }
       else
       {
-        damage = c.Skill.Delegate.ComputeDamage(c, target, c.Skill.Stats.Get(Stat.BaseDamage));
+        damage = c.Skill.Delegate.RollForDamage(c, target, c.Skill.Stats.Get(Stat.BaseDamage));
       }
 
-      results.Add(new ApplyDamageEffect(target, damage));
+      results.Add(new ApplyDamageEffect(c.Self, target, damage));
 
       var lifeDrain = c.Skill.Delegate.ComputeLifeDrain(c, target, damage);
       if (lifeDrain > 0)
@@ -93,15 +100,19 @@ namespace Nighthollow.Delegates.Skills
       }
     }
 
-    public override bool CheckForHit(SkillContext c, Creature target) => false;
+    public override bool RollForHit(SkillContext c, Creature target) => true;
 
-    public override bool CheckForCrit(SkillContext c, Creature target) => false;
+    public override bool RollForCrit(SkillContext c, Creature target) => false;
 
-    public override int ComputeDamage(SkillContext c, Creature target,
-      TaggedStats<DamageType, IntRangeStat> damage) => 0;
+    public override int RollForDamage(
+      SkillContext c,
+      Creature target,
+      TaggedStats<DamageType, IntRangeStat> damage) => damage.AllEntries.Sum(e => e.Value.HighValue);
 
-    public override int ComputeCritDamage(SkillContext c, Creature target,
-      TaggedStats<DamageType, IntRangeStat> damage) => 0;
+    public override int RollForCritDamage(
+      SkillContext c,
+      Creature target,
+      TaggedStats<DamageType, IntRangeStat> damage) => damage.AllEntries.Sum(e => e.Value.HighValue);
 
     public override int ComputeLifeDrain(SkillContext c, Creature creature, int damageAmount) => 0;
 

@@ -18,12 +18,12 @@ using System.Collections.Generic;
 
 namespace Nighthollow.Delegates.Core
 {
-  public sealed class Results<T>
+  public sealed class Results
   {
-    readonly List<T> _results = new List<T>();
+    readonly List<Effect> _results = new List<Effect>();
 
-    public void Add(T result) => _results.Add(result);
+    public void Add(Effect result) => _results.Add(result);
 
-    public IEnumerable<T> Values => _results;
+    public IEnumerable<Effect> Values => _results;
   }
 }

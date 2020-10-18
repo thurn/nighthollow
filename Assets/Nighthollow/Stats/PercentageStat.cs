@@ -42,7 +42,7 @@ namespace Nighthollow.Stats
       _stat = initialValue;
     }
 
-    public float AsMultplier() => _stat.Value / BasisPoints;
+    public float AsMultiplier() => _stat.Value / BasisPoints;
 
     public int CalculateFraction(int input) =>
       Mathf.RoundToInt((input * _stat.Value) / BasisPoints);

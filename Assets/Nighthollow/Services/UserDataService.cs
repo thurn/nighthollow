@@ -34,12 +34,17 @@ namespace Nighthollow.Services
     {
       UserStats = gameDataService.GetDefaultStats(StatScope.User);
       _deck.Clear();
-      _deck.AddRange(gameDataService.GetStaticCardList(StaticCardList.StartingDeck));;
+      _deck.AddRange(gameDataService.GetStaticCardList(StaticCardList.StartingDeck));
     }
 
-    public void StartGame()
+    public void StartGame(bool isTutorial)
     {
-      Root.Instance.User.OnStartGame(new UserData(Deck.Select(CreatureUtil.Build).ToList(), UserStats.Clone()));
+      var cards = isTutorial ? Root.Instance.GameDataService.GetStaticCardList(StaticCardList.TutorialDraws) : Deck;
+      Root.Instance.User.OnStartGame(
+        new UserData(
+          cards.Select(CreatureUtil.Build).ToList(),
+          UserStats.Clone(),
+          orderedDraws: isTutorial));
     }
   }
 }

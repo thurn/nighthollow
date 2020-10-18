@@ -40,7 +40,7 @@ namespace Nighthollow.Components
       Root.Instance.GameDataService.FetchData(() =>
       {
         Root.Instance.UserDataService.OnNewGame(Root.Instance.GameDataService);
-        Root.Instance.UserDataService.StartGame();
+        Root.Instance.UserDataService.StartGame(isTutorial: true);
         Root.Instance.EnemyDataService.StartGame();
       });
     }

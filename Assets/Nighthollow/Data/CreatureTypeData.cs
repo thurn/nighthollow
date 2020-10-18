@@ -21,6 +21,18 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
+  public readonly struct CreatureSkillAnimation
+  {
+    public readonly SkillAnimationNumber Number;
+    public readonly SkillAnimationType Type;
+
+    public CreatureSkillAnimation(SkillAnimationNumber number, SkillAnimationType type)
+    {
+      Number = number;
+      Type = type;
+    }
+  }
+
   public sealed class CreatureTypeData
   {
     public int Id { get; }
@@ -34,12 +46,8 @@ namespace Nighthollow.Data
     public int Speed { get; }
     public AffixTypeData? ImplicitAffix { get; }
     public SkillTypeData? ImplicitSkill { get; }
-    public SkillAnimationType? Skill1Type { get; }
-    public SkillAnimationType? Skill2Type { get; }
-    public SkillAnimationType? Skill3Type { get; }
-    public SkillAnimationType? Skill4Type { get; }
-    public SkillAnimationType? Skill5Type { get; }
     public bool IsManaCreature { get; }
+    public List<CreatureSkillAnimation> SkillAnimations { get; }
 
     public CreatureTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
     {
@@ -65,12 +73,28 @@ namespace Nighthollow.Data
         ImplicitSkill = service.GetSkillType(skillId.Value);
       }
 
-      Skill1Type = (SkillAnimationType?) Parse.Int(row, "Skill 1");
-      Skill2Type = (SkillAnimationType?) Parse.Int(row, "Skill 2");
-      Skill3Type = (SkillAnimationType?) Parse.Int(row, "Skill 3");
-      Skill4Type = (SkillAnimationType?) Parse.Int(row, "Skill 4");
-      Skill5Type = (SkillAnimationType?) Parse.Int(row, "Skill 5");
+      var animations = new List<CreatureSkillAnimation>();
+      AddAnimation(row, "Skill 1", SkillAnimationNumber.Skill1, animations);
+      AddAnimation(row, "Skill 2", SkillAnimationNumber.Skill2, animations);
+      AddAnimation(row, "Skill 3", SkillAnimationNumber.Skill3, animations);
+      AddAnimation(row, "Skill 4", SkillAnimationNumber.Skill4, animations);
+      AddAnimation(row, "Skill 5", SkillAnimationNumber.Skill5, animations);
+      SkillAnimations = animations;
+
       IsManaCreature = Parse.Boolean(row, "Mana Creature?");
+    }
+
+    void AddAnimation(
+      IReadOnlyDictionary<string, string> row,
+      string label,
+      SkillAnimationNumber number,
+      ICollection<CreatureSkillAnimation> list)
+    {
+      var type = (SkillAnimationType?) Parse.Int(row, label);
+      if (type.HasValue)
+      {
+        list.Add(new CreatureSkillAnimation(number, type.Value));
+      }
     }
   }
 }

@@ -22,27 +22,39 @@ namespace Nighthollow.Delegates.Core
   public abstract class CreatureDelegate
   {
     /// <summary>Called when a creature is first placed.</summary>
-    public virtual void OnActivate(CreatureContext c, Results<CreatureEffect> results)
+    public virtual void OnActivate(CreatureContext c, Results results)
     {
     }
 
     /// <summary>Called when a creature dies.</summary>
-    public virtual void OnDeath(CreatureContext c, Results<CreatureEffect> results)
+    public virtual void OnDeath(CreatureContext c, Results results)
     {
     }
 
     /// <summary>
-    /// Called when a creature wants to decide which skill to use. The *first* delegate to return a non-empty
+    /// Should return true if the creature could currently use a melee skill. Result will be considered true if *any*
+    /// delegate returns true.
+    /// </summary>
+    public virtual bool CanUseMeleeSkill(CreatureContext c) => false;
+
+    /// <summary>
+    /// Should return true if the creature could currently use a projectile skill. Result will be considered true if
+    /// *any* delegate returns true.
+    /// </summary>
+    public virtual bool CanUseProjectileSkill(CreatureContext c) => false;
+
+    /// <summary>
+    /// Called when a creature wants to decide which skill to use. The *first* delegate to return a non-null
     /// value will have its value be used, other delegates in the sequence will not be invoked.
     /// </summary>
-    public virtual SkillData? SelectSkill(Creature self) => null;
+    public virtual SkillData? SelectSkill(CreatureContext c) => null;
 
     /// <summary>Called when a creature kills an enemy creature.</summary>
     public virtual void OnKilledEnemy(
       CreatureContext c,
       Creature enemy,
       int damageAmount,
-      Results<CreatureEffect> results)
+      Results results)
     {
     }
   }

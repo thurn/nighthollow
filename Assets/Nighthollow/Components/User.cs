@@ -59,7 +59,7 @@ namespace Nighthollow.Components
 
       _life = _data.GetInt(Stat.StartingLife);
       _mana = _data.GetInt(Stat.StartingMana);
-      _deck.OnStartGame(data.Deck);
+      _deck.OnStartGame(data.Deck, data.OrderedDraws);
 
       var openingHand = new List<CreatureData>();
       for (var i = 0; i < _data.GetInt(Stat.StartingHandSize); ++i)

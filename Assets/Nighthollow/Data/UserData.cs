@@ -24,15 +24,18 @@ namespace Nighthollow.Data
   {
     public IReadOnlyList<CreatureData> Deck { get; }
     public override StatTable Stats { get; }
+    public bool OrderedDraws { get; }
 
     public UserData(
       IReadOnlyList<CreatureData> deck,
-      StatTable stats)
+      StatTable stats,
+      bool orderedDraws)
     {
       Deck = deck;
       Stats = stats;
+      OrderedDraws = orderedDraws;
     }
 
-    public UserData Clone() => new UserData(Deck.Select(d => d.Clone()).ToList(), Stats.Clone());
+    public UserData Clone() => new UserData(Deck.Select(d => d.Clone()).ToList(), Stats.Clone(), OrderedDraws);
   }
 }

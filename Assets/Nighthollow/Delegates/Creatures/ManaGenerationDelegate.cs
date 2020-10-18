@@ -22,9 +22,10 @@ namespace Nighthollow.Delegates.Creatures
 {
   public sealed class ManaGenerationDelegate : CreatureDelegate
   {
-    public override void OnActivate(CreatureContext c, Results<CreatureEffect> results)
+    public override void OnActivate(CreatureContext c, Results results)
     {
       results.Add(new ApplyModifierToOwner(
+        c.Self,
         Operator.Add,
         Stat.ManaGain,
         new WhileAliveModifier(

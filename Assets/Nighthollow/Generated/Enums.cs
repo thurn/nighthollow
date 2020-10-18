@@ -30,7 +30,7 @@ namespace Nighthollow.Generated
     Flame = 3,
     Ice = 4,
     Earth = 5,
-    Shadow = 6,
+    Night = 6,
   }
 
   public enum DamageType
@@ -43,14 +43,6 @@ namespace Nighthollow.Generated
     Cold = 5,
     Physical = 6,
     Necrotic = 7,
-  }
-
-  public enum SkillType
-  {
-    Unknown = 0,
-    Untargeted = 1,
-    Melee = 2,
-    Projectile = 3,
   }
 
   public enum RankValue
@@ -131,6 +123,7 @@ namespace Nighthollow.Generated
     MeleeSkill = 1,
     CastSkill = 2,
     ImplicitSkill = 3,
+    Unused = 4,
   }
 
   public enum StatScope
@@ -139,6 +132,7 @@ namespace Nighthollow.Generated
     User = 1,
     Enemy = 2,
     Creatures = 3,
+    Skill = 4,
   }
 
 }

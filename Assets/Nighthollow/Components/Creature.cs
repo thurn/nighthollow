@@ -22,6 +22,7 @@ using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Random = UnityEngine.Random;
 
 namespace Nighthollow.Components
 {
@@ -187,13 +188,14 @@ namespace Nighthollow.Components
     {
       Errors.CheckState(CanUseSkill(), "Cannot use skill");
 
-      var skill = _data.Delegate.SelectSkill(this);
+      var skill = _data.Delegate.SelectSkill(new CreatureContext(this));
       if (skill != null)
       {
         SetState(CreatureState.UsingSkill);
         _currentSkill = skill;
 
-        switch (_currentSkill.Animation)
+        var skillAnimation = SelectAnimation(_currentSkill);
+        switch (skillAnimation)
         {
           case SkillAnimationNumber.Skill1:
             _animator.SetTrigger(Skill1);
@@ -210,8 +212,9 @@ namespace Nighthollow.Components
           case SkillAnimationNumber.Skill5:
             _animator.SetTrigger(Skill5);
             break;
+          case SkillAnimationNumber.Unknown:
           default:
-            throw Errors.UnknownEnumValue(_currentSkill.Animation);
+            throw Errors.UnknownEnumValue(skillAnimation);
         }
 
         _currentSkill.Delegate.OnStart(new SkillContext(this, _currentSkill));
@@ -220,6 +223,14 @@ namespace Nighthollow.Components
       {
         ToDefaultState();
       }
+    }
+
+    SkillAnimationNumber SelectAnimation(SkillData skill)
+    {
+      var choices = Data.BaseType.SkillAnimations.Where(a => a.Type == skill.BaseType.SkillAnimationType).ToList();
+      Errors.CheckState(choices.Count > 0,
+        $"Creature is unable to perform animation of type {skill.BaseType.SkillAnimationType}");
+      return choices[Random.Range(0, choices.Count)].Number;
     }
 
     void ToDefaultState()
@@ -272,7 +283,7 @@ namespace Nighthollow.Components
     {
       if (!IsAlive()) return;
       _currentSkill.Delegate.OnUse(new SkillContext(this, _currentSkill));
-      if (_currentSkill.SkillType == SkillType.Melee)
+      if (_currentSkill.BaseType.IsMelee)
       {
         _currentSkill.Delegate.OnImpact(new SkillContext(this, _currentSkill));
       }
@@ -339,7 +350,7 @@ namespace Nighthollow.Components
 
     public bool IsStunned() => _state == CreatureState.Stunned;
 
-    bool HasProjectileSkill() => _data.Skills.Any(s => s.SkillType == SkillType.Projectile);
+    bool HasProjectileSkill() => _data.Skills.Any(s => s.BaseType.IsProjectile);
 
     bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
 
@@ -398,7 +409,10 @@ namespace Nighthollow.Components
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
 
-      _animator.SetFloat(SkillSpeed, _data.Stats.Get(Stat.SkillSpeedMultiplier).AsMultplier());
+
+      var speedMultiplier = _data.Stats.Get(Stat.SkillSpeedMultiplier).AsMultiplier();
+      Errors.CheckState(speedMultiplier > 0.05f, "Skill speed must be > 5%");
+      _animator.SetFloat(SkillSpeed, speedMultiplier);
 
       if (_state == CreatureState.Moving)
       {

@@ -34,7 +34,7 @@ namespace Nighthollow.Stats
     public IStat NotFoundValue() => new IntStat();
   }
 
-  public sealed class IntStat : IStat<IntStat>
+  public sealed class IntStat : IStat<IntStat>, IAdditiveStat
   {
     readonly int _initialValue;
     readonly List<IModifier> _addedModifiers = new List<IModifier>();
@@ -102,6 +102,11 @@ namespace Nighthollow.Stats
       result = Constants.FractionBasisPoints(result, increaseBy);
 
       _computedValue = result;
+    }
+
+    public void AddValue(IStatValue value)
+    {
+      Add(((IntValue) value).Value);
     }
   }
 }

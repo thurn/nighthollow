@@ -14,15 +14,11 @@
 
 #nullable enable
 
-using Nighthollow.Services;
-
 namespace Nighthollow.Delegates.Core
 {
-  public sealed class EnemyRemovedEffect : DefaultEffect
+  public abstract class Effect
   {
-    public override void Execute()
-    {
-      Root.Instance.Enemy.OnEnemyCreatureRemoved();
-    }
+    // https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
+    public abstract void Execute();
   }
 }

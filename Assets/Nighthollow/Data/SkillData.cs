@@ -23,40 +23,30 @@ namespace Nighthollow.Data
 {
   public sealed class SkillData : AbstractGameEntity
   {
-    public string? Address { get; }
-    public SkillType SkillType { get; }
-    public SkillAnimationNumber Animation { get; }
+    public SkillTypeData BaseType { get; }
     public override StatTable Stats { get; }
     public SkillDelegateChain Delegate { get; }
 
     public SkillData(
-      string? address,
-      SkillType skillType,
-      SkillAnimationNumber animation,
+      SkillTypeData baseType,
       StatTable stats,
       List<SkillDelegateId> delegateIds)
     {
-      Address = address;
-      SkillType = skillType;
-      Animation = animation;
+      BaseType = baseType;
       Stats = stats;
       Delegate = new SkillDelegateChain(delegateIds);
     }
 
     SkillData(
-      string? address,
-      SkillType skillType,
-      SkillAnimationNumber animation,
+      SkillTypeData baseType,
       StatTable stats,
       SkillDelegateChain delegates)
     {
-      Address = address;
-      SkillType = skillType;
-      Animation = animation;
+      BaseType = baseType;
       Stats = stats;
       Delegate = delegates;
     }
 
-    public SkillData Clone() => new SkillData(Address, SkillType, Animation, Stats.Clone(), Delegate);
+    public SkillData Clone() => new SkillData(BaseType, Stats.Clone(), Delegate);
   }
 }
