@@ -20,6 +20,7 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
+using Nighthollow.Stats;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
@@ -132,6 +133,13 @@ namespace Nighthollow.Components
 
     public CreatureState State => _state;
 
+    public StatTable GetOwnerStats() => Owner switch
+    {
+      PlayerName.User => Root.Instance.User.Data.Stats,
+      PlayerName.Enemy => Root.Instance.Enemy.Data.Stats,
+      _ => throw Errors.UnknownEnumValue(Owner)
+    };
+
     public void EditorSetReferences(Transform projectileSource,
       Transform healthbarAnchor,
       AttachmentDisplay attachmentDisplay)
@@ -235,7 +243,7 @@ namespace Nighthollow.Components
 
     void ToDefaultState()
     {
-      SetState(_data.GetInt(Stat.Speed)> 0 ? CreatureState.Moving : CreatureState.Idle);
+      SetState(_data.GetInt(Stat.Speed) > 0 ? CreatureState.Moving : CreatureState.Idle);
     }
 
     void Kill()
@@ -361,6 +369,7 @@ namespace Nighthollow.Components
         yield return new WaitForSeconds(1);
         Heal(_data.GetInt(Stat.HealthRegenerationPerSecond));
       }
+
       // ReSharper disable once IteratorNeverReturns
     }
 

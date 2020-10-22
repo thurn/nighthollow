@@ -20,6 +20,7 @@ using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 using UnityEngine;
 
 namespace Nighthollow.Delegates.Core
@@ -72,14 +73,29 @@ namespace Nighthollow.Delegates.Core
     public bool RollForCrit(SkillContext c, Creature target)
       => Delegates().Any(d => d.RollForCrit(c, target));
 
-    public int RollForDamage(SkillContext c, Creature target, TaggedStats<DamageType, IntRangeStat> damage)
-      => Delegates().Sum(d => d.RollForDamage(c, target, damage));
+    public TaggedStatListValue<DamageType, IntValue, IntStat> RollForBaseDamage(SkillContext c, Creature target) =>
+      Errors.CheckNotNull(Delegates().Select(d => d.RollForBaseDamage(c, target)).First());
 
-    public int RollForCritDamage(SkillContext c, Creature target, TaggedStats<DamageType, IntRangeStat> damage)
-      => Delegates().Sum(d => d.RollForCritDamage(c, target, damage));
+    public TaggedStatListValue<DamageType, IntValue, IntStat> ApplyDamageReduction(
+      SkillContext c,
+      Creature target,
+      TaggedStatListValue<DamageType, IntValue, IntStat> damage) =>
+      Errors.CheckNotNull(Delegates().Select(d => d.ApplyDamageReduction(c, target, damage)).First());
 
-    public int ComputeLifeDrain(SkillContext c, Creature target, int damageAmount)
-      => Delegates().Sum(d => d.ComputeLifeDrain(c, target, damageAmount));
+    public TaggedStatListValue<DamageType, IntValue, IntStat> ApplyDamageResistance(
+      SkillContext c,
+      Creature target,
+      TaggedStatListValue<DamageType, IntValue, IntStat> damage) =>
+      Errors.CheckNotNull(Delegates().Select(d => d.ApplyDamageResistance(c, target, damage)).First());
+
+    public int ComputeFinalDamage(SkillContext c,
+      Creature target,
+      TaggedStatListValue<DamageType, IntValue, IntStat> damage,
+      bool isCriticalHit) =>
+      Errors.CheckNotNull(Delegates().Select(d => d.ComputeFinalDamage(c, target, damage, isCriticalHit)).First());
+
+    public int ComputeHealthDrain(SkillContext c, Creature target, int damageAmount)
+      => Delegates().Sum(d => d.ComputeHealthDrain(c, target, damageAmount));
 
     public bool CheckForStun(SkillContext c, Creature target, int damageAmount)
       => Delegates().Any(d => d.CheckForStun(c, target, damageAmount));

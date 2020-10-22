@@ -174,17 +174,18 @@ namespace Nighthollow.Services
       }
 
       var baseDamageString = Parse.String(row, "Base Damage");
-      var baseDamage = baseDamageString == null
-        ? null
-        : (TaggedStatListValue<DamageType, IntRangeValue, IntRangeStat>?) StatUtil.ParseStat(
-          StatType.DamageTypeIntRanges, baseDamageString);
+      if (baseDamageString != null)
+      {
+        stats.Get(Stat.BaseDamage).AddValue<IntRangeValue>(
+          (TaggedStatListValue<DamageType, IntRangeValue, IntRangeStat>?) StatUtil.ParseStat(
+            StatType.DamageTypeIntRanges, baseDamageString));
+      }
 
       var cardName = Parse.String(row, "Card Name");
       var result = new CreatureItemData(
         cardName ?? creatureType.Name,
         creatureType,
         school,
-        baseDamage,
         stats,
         new List<SkillData>(),
         affixes);

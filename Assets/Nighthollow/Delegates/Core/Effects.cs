@@ -20,7 +20,9 @@ using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Nighthollow.Delegates.Core
 {
@@ -113,6 +115,7 @@ namespace Nighthollow.Delegates.Core
 
     public override void Execute()
     {
+      Debug.Log($"Stunning {Target}");
       Target.Stun(DurationSeconds);
     }
   }
@@ -156,20 +159,66 @@ namespace Nighthollow.Delegates.Core
     public enum Event
     {
       Missed,
+      Evade,
       Crit,
       Stun
     }
 
     public Event EventName { get; }
+    public Creature Creature { get; }
 
-    public SkillEventEffect(Event eventName)
+    public SkillEventEffect(Event eventName, Creature creature)
     {
       EventName = eventName;
+      Creature = creature;
     }
 
     public override void Execute()
     {
-      Debug.Log($"Text: {EventName}");
+      switch (EventName)
+      {
+        case Event.Missed:
+         Root.Instance.Prefabs.CreateMiss(RandomEffectPoint(Creature));
+          break;
+        case Event.Evade:
+          Root.Instance.Prefabs.CreateEvade(RandomEffectPoint(Creature));
+          break;
+        case Event.Crit:
+          Root.Instance.Prefabs.CreateCrit(RandomEffectPoint(Creature));
+          break;
+        case Event.Stun:
+          Root.Instance.Prefabs.CreateStun(RandomEffectPoint(Creature));
+          break;
+        default:
+          throw Errors.UnknownEnumValue(EventName);
+      }
+    }
+
+    public static Vector3 RandomEffectPoint(Creature creature)
+    {
+      var bounds = creature.Collider.bounds;
+      return bounds.center + new Vector3(
+        (Random.value - 0.5f) * bounds.size.x,
+        (Random.value - 0.5f) * bounds.size.y,
+        0
+      );
+    }
+  }
+
+  public sealed class DamageTextEffect : Effect
+  {
+    public Creature Target { get; }
+    public int DamageAmount { get; }
+
+    public DamageTextEffect(Creature target, int damageAmount)
+    {
+      Target = target;
+      DamageAmount = damageAmount;
+    }
+
+    public override void Execute()
+    {
+      Root.Instance.DamageTextService.ShowDamageText(Target, DamageAmount);
     }
   }
 }

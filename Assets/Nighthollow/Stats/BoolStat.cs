@@ -71,11 +71,21 @@ namespace Nighthollow.Stats
       }
     }
 
+    public void SetTrue()
+    {
+      AddSetTrueModifier(new StaticModifier());
+    }
+
     public void AddSetTrueModifier(IModifier modifier)
     {
       _setTrueModifiers.Add(modifier);
       _hasDynamicModifiers |= modifier.IsDynamic();
       Recalculate();
+    }
+
+    public void SetFalse()
+    {
+      AddSetFalseModifier(new StaticModifier());
     }
 
     public void AddSetFalseModifier(IModifier modifier)

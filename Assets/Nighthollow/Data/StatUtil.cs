@@ -34,7 +34,7 @@ namespace Nighthollow.Data
         case StatType.Percentage:
           return new PercentageValue(double.Parse(value.Replace("%", "")));
         case StatType.Duration:
-          return new DurationValue(double.Parse(value));
+          return new DurationValue(double.Parse(value.Replace("s", "")));
         case StatType.IntRange:
           return AsIntRange(value);
         case StatType.DamageTypeIntRanges:

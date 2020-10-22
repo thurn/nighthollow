@@ -42,7 +42,7 @@ namespace Nighthollow.Delegates.Core
     /// <summary>
     /// Called to apply the effect of a skill, either on melee hit or on projectile impact.
     /// </summary>
-    public virtual void OnImpact(SkillContext c,  Results results)
+    public virtual void OnImpact(SkillContext c, Results results)
     {
     }
 
@@ -61,12 +61,13 @@ namespace Nighthollow.Delegates.Core
     }
 
     /// <summary>
-    /// Appends new effects to the list of effects to apply to the target of this skill. Normally this is invoked
-    /// by the default skill delegate's "OnImpact" implementation for each target returned from "PopulateTargets". The
-    /// default implementation implements the standard algorithm for applying the skill's BaseDamage, including
-    /// things like checking for hit, checking for critical hit, applying damage, applying life drain, and applying
-    /// stun.
+    /// Adds the effects for this skill as a result of a hit.
     /// </summary>
+    ///
+    /// Normally this is invoked by the default skill delegate's "OnImpact" implementation for each target returned from
+    /// "PopulateTargets" for a skill. The default implementation implements the standard algorithm for applying the
+    /// skill's BaseDamage, including things like checking for hit, checking for critical hit, applying damage,
+    /// applying health drain, and applying stun.
     public virtual void ApplyToTarget(SkillContext c, Creature target, Results results)
     {
     }
@@ -84,24 +85,45 @@ namespace Nighthollow.Delegates.Core
     public virtual bool RollForCrit(SkillContext c, Creature target) => false;
 
     /// <summary>
-    /// Adds final damage for a hit on 'target' dealing base damage 'damage'. Return values of all delegates are summed
-    /// together.
+    /// Should compute the base damage for this skill, randomly selecting from within its base damage ranges. The first
+    /// delegate to return a non-null value with be used.
     /// </summary>
-    public virtual int RollForDamage(SkillContext c, Creature target,
-      TaggedStats<DamageType, IntRangeStat> damage) => 0;
+    public virtual TaggedStatListValue<DamageType, IntValue, IntStat>? RollForBaseDamage(
+      SkillContext c, Creature target) => null;
 
     /// <summary>
-    /// Adds final critical hit damage for a critical hit on 'target' dealing base damage 'damage'. Return values of all
-    /// delegates are summed together.
+    /// Should apply damage reduction for this skill, reducing the damage value based on the target's reduction. The
+    /// first delegate to return a non-null value with be used.
     /// </summary>
-    public virtual int RollForCritDamage(SkillContext c, Creature target,
-      TaggedStats<DamageType, IntRangeStat> damage) => 0;
+    public virtual TaggedStatListValue<DamageType, IntValue, IntStat>? ApplyDamageReduction(
+      SkillContext c,
+      Creature target,
+      TaggedStatListValue<DamageType, IntValue, IntStat> damage) => null;
 
     /// <summary>
-    /// Computes life drain for a hit on 'target' dealing total damage 'damageAmount'. Return values of all delegates
+    /// Should apply damage resistance for this skill, reducing the damage value based on the target's resistance. The
+    /// first delegate to return a non-null value with be used.
+    /// </summary>
+    public virtual TaggedStatListValue<DamageType, IntValue, IntStat>? ApplyDamageResistance(
+      SkillContext c,
+      Creature target,
+      TaggedStatListValue<DamageType, IntValue, IntStat> damage) => null;
+
+    /// <summary>
+    /// Should compute the final damage value for this skill based on the value adjusted by damage resistance and
+    /// reduction. Should apply the critical hit multiplier if "isCriticalHit" is true. The first delegate to return a
+    /// non-null value with be used.
+    /// </summary>
+    public virtual int? ComputeFinalDamage(SkillContext c,
+      Creature target,
+      TaggedStatListValue<DamageType, IntValue, IntStat> damage,
+      bool isCriticalHit) => null;
+
+    /// <summary>
+    /// Computes health drain for a hit on 'target' dealing total damage 'damageAmount'. Return values of all delegates
     /// are summed together.
     /// </summary>
-    public virtual int ComputeLifeDrain(SkillContext c, Creature creature, int damageAmount) => 0;
+    public virtual int ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount) => 0;
 
     /// <summary>
     /// Should return true if a hit from this creature should stun 'target'. A stun is invoked if *any* delegate returns

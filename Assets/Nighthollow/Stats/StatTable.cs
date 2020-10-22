@@ -35,6 +35,9 @@ namespace Nighthollow.Stats
 
     public T Get<T>(IStatId<T> statId) where T : IStat => (T) UnsafeGet(statId);
 
+    public T GetWithParent<T>(IStatId<T> statId, AbstractGameEntity parent) where T : IStat =>
+      _stats.ContainsKey(statId.Value) ? Get(statId) : parent.Stats.Get(statId);
+
     public IStat UnsafeGet(IStatId statId)
     {
       if (!_stats.ContainsKey(statId.Value))

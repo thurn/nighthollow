@@ -34,14 +34,13 @@ namespace Nighthollow.Data
       string name,
       CreatureTypeData baseType,
       School school,
-      TaggedStatListValue<DamageType, IntRangeValue, IntRangeStat>? baseDamage,
       StatTable stats,
       IReadOnlyList<SkillData> skills,
       IReadOnlyList<AffixData> affixes)
     {
-      if (baseDamage.HasValue && baseType.SkillAnimations.Any(a => a.Type == SkillAnimationType.MeleeSkill))
+      if (baseType.SkillAnimations.Any(a => a.Type == SkillAnimationType.MeleeSkill))
       {
-        skills = skills.Append(CreatureUtil.DefaultMeleeAttack(baseDamage.Value)).ToList();
+        skills = skills.Append(CreatureUtil.DefaultMeleeAttack()).ToList();
       }
 
       Name = name;

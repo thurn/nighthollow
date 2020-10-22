@@ -129,10 +129,9 @@ namespace Nighthollow.Generated
   public enum StatScope
   {
     Unknown = 0,
-    User = 1,
-    Enemy = 2,
-    Creatures = 3,
-    Skill = 4,
+    Players = 1,
+    Creatures = 2,
+    Skills = 3,
   }
 
 }

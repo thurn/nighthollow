@@ -15,6 +15,7 @@
 using Nighthollow.Components;
 using Nighthollow.Utils;
 using System;
+using Nighthollow.Stats;
 using UnityEngine;
 
 namespace Nighthollow.Services

@@ -51,7 +51,6 @@ namespace Nighthollow.Components
     {
       var spawnDelay = _data.GetDurationSeconds(Stat.EnemySpawnDelay);
       Errors.CheckArgument(spawnDelay > 0.1f, "Spawn delay cannot be 0");
-      yield return new WaitForSeconds(spawnDelay);
 
       Root.Instance.CreatureService.CreateMovingCreature(
         RandomEnemy(),

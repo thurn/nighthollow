@@ -14,9 +14,7 @@
 
 #nullable enable
 
-using Nighthollow.Stats;
-
-namespace Nighthollow.Data
+namespace Nighthollow.Stats
 {
   public abstract class AbstractGameEntity
   {

@@ -65,10 +65,13 @@ namespace Nighthollow.Data
         value?.AsStaticModifier() ?? new StaticModifier());
     }
 
-    public static SkillData DefaultMeleeAttack(TaggedStatListValue<DamageType, IntRangeValue, IntRangeStat> baseDamage)
+    public static SkillData DefaultMeleeAttack()
     {
-      var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Skill);
-      stats.Get(Stat.BaseDamage).AddValue<IntRangeValue>(baseDamage);
+      var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Skills);
+      stats.Get(Stat.UsesAccuracy).SetTrue();
+      stats.Get(Stat.CanCrit).SetTrue();
+      stats.Get(Stat.CanStun).SetTrue();
+
       return new SkillData(
         Root.Instance.GameDataService.GetSkillType(1),
         stats,
