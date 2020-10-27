@@ -62,8 +62,12 @@ namespace Nighthollow.Delegates.Skills
 
       var colliders = new List<Collider2D>();
       sourceCollider!.OverlapCollider(filter, colliders);
-      targets.AddRange(colliders.Select(ComponentUtils.GetComponent<Creature>));
+      targets.AddRange(c.Skill.Delegate.SelectTargets(
+        c, colliders.Select(ComponentUtils.GetComponent<Creature>)));
     }
+
+    public override IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
+      c.Skill.BaseType.IsMelee ? hits.Take(GetStat(c, Stat.MaxMeleeAreaTargets).Value) : hits;
 
     public override Collider2D? GetCollider(SkillContext c) => c.Self.Collider;
 
@@ -154,9 +158,9 @@ namespace Nighthollow.Delegates.Skills
 
     static IntValue ApplyResistance(SkillContext c, int damageValue, float resistance) =>
       new IntValue(Mathf.RoundToInt(Math.Max(
-        // Apply maximum reduction
+        // Apply maximum resistance
         damageValue * (1f - c.Self.GetOwnerStats().Get(Stat.MaximumDamageResistance).AsMultiplier()),
-        Mathf.Clamp01(resistance / (resistance + (2.0f * damageValue))) * damageValue)));
+        Mathf.Clamp01(1f - (resistance / (resistance + (2.0f * damageValue)))) * damageValue)));
 
     public override int? ComputeFinalDamage(SkillContext c,
       Creature target,

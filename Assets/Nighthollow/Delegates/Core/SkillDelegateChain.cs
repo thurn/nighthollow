@@ -59,6 +59,9 @@ namespace Nighthollow.Delegates.Core
       return result;
     }
 
+    public IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
+      FirstNotNull(d => d.SelectTargets(c, hits));
+
     public void ApplyToTarget(SkillContext c, Creature target, Results results)
     {
       foreach (var d in Delegates())
@@ -74,25 +77,25 @@ namespace Nighthollow.Delegates.Core
       => Delegates().Any(d => d.RollForCrit(c, target));
 
     public TaggedStatListValue<DamageType, IntValue, IntStat> RollForBaseDamage(SkillContext c, Creature target) =>
-      Errors.CheckNotNull(Delegates().Select(d => d.RollForBaseDamage(c, target)).First());
+      FirstNotNull(d => d.RollForBaseDamage(c, target));
 
     public TaggedStatListValue<DamageType, IntValue, IntStat> ApplyDamageReduction(
       SkillContext c,
       Creature target,
       TaggedStatListValue<DamageType, IntValue, IntStat> damage) =>
-      Errors.CheckNotNull(Delegates().Select(d => d.ApplyDamageReduction(c, target, damage)).First());
+      FirstNotNull(d => d.ApplyDamageReduction(c, target, damage));
 
     public TaggedStatListValue<DamageType, IntValue, IntStat> ApplyDamageResistance(
       SkillContext c,
       Creature target,
       TaggedStatListValue<DamageType, IntValue, IntStat> damage) =>
-      Errors.CheckNotNull(Delegates().Select(d => d.ApplyDamageResistance(c, target, damage)).First());
+      FirstNotNull(d => d.ApplyDamageResistance(c, target, damage));
 
     public int ComputeFinalDamage(SkillContext c,
       Creature target,
       TaggedStatListValue<DamageType, IntValue, IntStat> damage,
       bool isCriticalHit) =>
-      Errors.CheckNotNull(Delegates().Select(d => d.ComputeFinalDamage(c, target, damage, isCriticalHit)).First());
+      FirstNotNull(d => d.ComputeFinalDamage(c, target, damage, isCriticalHit));
 
     public int ComputeHealthDrain(SkillContext c, Creature target, int damageAmount)
       => Delegates().Sum(d => d.ComputeHealthDrain(c, target, damageAmount));
@@ -114,5 +117,11 @@ namespace Nighthollow.Delegates.Core
         effect.Execute();
       }
     }
+
+    T FirstNotNull<T>(Func<SkillDelegate, T?> function) where T : class
+      => Errors.CheckNotNull(Delegates().Select(function).SkipWhile(a => a == null).First());
+
+    T FirstNotNull<T>(Func<SkillDelegate, T?> function) where T : struct
+      => Errors.CheckNotNull(Delegates().Select(function).SkipWhile(a => a == null).First());
   }
 }

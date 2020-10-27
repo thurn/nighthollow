@@ -48,10 +48,9 @@ namespace Nighthollow.Generated
     public static readonly DurationStatId CardDrawInterval = new DurationStatId(28);
     public static readonly DurationStatId EnemySpawnDelay = new DurationStatId(29);
     public static readonly IntStatId TotalEnemiesToSpawn = new IntStatId(30);
-    public static readonly BoolStatId MeleeAreaDamage = new BoolStatId(31);
     public static readonly BoolStatId IsManaCreature = new BoolStatId(32);
     public static readonly TaggedStatsId<DamageType, IntStat> GainedDamageOnKill = new TaggedStatsId<DamageType, IntStat>(33);
-    public static readonly IntStatId MeleeSplashMaxTargets = new IntStatId(34);
+    public static readonly IntStatId MaxMeleeAreaTargets = new IntStatId(34);
     public static readonly PercentageStatId ProjectileDamageMultiplier = new PercentageStatId(35);
     public static readonly PercentageStatId ChainProjectileDamageMultiplier = new PercentageStatId(36);
     public static readonly DurationStatId SkillCooldownRecovery = new DurationStatId(37);
@@ -98,7 +97,6 @@ namespace Nighthollow.Generated
         case 28: return StatType.Duration;
         case 29: return StatType.Duration;
         case 30: return StatType.Int;
-        case 31: return StatType.Bool;
         case 32: return StatType.Bool;
         case 33: return StatType.DamageTypeInts;
         case 34: return StatType.Int;
@@ -151,10 +149,9 @@ namespace Nighthollow.Generated
         case 28: return CardDrawInterval;
         case 29: return EnemySpawnDelay;
         case 30: return TotalEnemiesToSpawn;
-        case 31: return MeleeAreaDamage;
         case 32: return IsManaCreature;
         case 33: return GainedDamageOnKill;
-        case 34: return MeleeSplashMaxTargets;
+        case 34: return MaxMeleeAreaTargets;
         case 35: return ProjectileDamageMultiplier;
         case 36: return ChainProjectileDamageMultiplier;
         case 37: return SkillCooldownRecovery;

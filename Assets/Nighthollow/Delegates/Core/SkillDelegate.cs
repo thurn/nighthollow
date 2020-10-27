@@ -54,11 +54,19 @@ namespace Nighthollow.Delegates.Core
 
     /// <summary>
     /// Appends new creatures to the list of targets for this skill. Normally this is invoked by the default skill
-    /// delegate's "OnImpact" implementation.
+    /// delegate's "OnImpact" implementation. Default implementation uses @<see cref="GetCollider"/> to find all
+    /// creatures in the impact area and then adds targets returned by <see cref="SelectTargets"/>.
     /// </summary>
     public virtual void PopulateTargets(SkillContext c, List<Creature> targets)
     {
     }
+
+    /// <summary>
+    /// Given a list of creatures hit by a skill, returns a list of the creatures which should have the skill effect
+    /// applied by <see cref="ApplyToTarget"/>. The *first* value returned will be used, subsequent delegates will not
+    /// be invoked.
+    /// </summary>
+    public virtual IEnumerable<Creature>? SelectTargets(SkillContext c, IEnumerable<Creature> hits) => null;
 
     /// <summary>
     /// Adds the effects for this skill as a result of a hit.
