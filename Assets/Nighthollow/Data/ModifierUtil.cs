@@ -158,5 +158,18 @@ namespace Nighthollow.Data
           throw new InvalidOperationException($"Increase operator is not supported for {stat}");
       }
     }
+
+    public static void Validate(ModifierTypeData modifierData, IStatValue? value)
+    {
+      if (value != null)
+      {
+        return;
+      }
+
+      if (modifierData.Operator == Operator.Add || modifierData.Operator == Operator.Increase)
+      {
+        throw new ArgumentException($"Expected a stat value for modifier {modifierData}");
+      }
+    }
   }
 }

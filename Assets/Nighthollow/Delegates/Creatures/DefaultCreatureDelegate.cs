@@ -14,12 +14,14 @@
 
 #nullable enable
 
+using System;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Nighthollow.Delegates.Creatures
 {
@@ -38,7 +40,7 @@ namespace Nighthollow.Delegates.Creatures
       var data = c.Self.Data;
       if (data.Delegate.CanUseProjectileSkill(c))
       {
-        var skill = data.Skills.LastOrDefault(s => s.BaseType.IsProjectile);
+        var skill = SelectMatching(c, s => s.BaseType.IsProjectile);
         if (skill != null)
         {
           return skill;
@@ -47,14 +49,36 @@ namespace Nighthollow.Delegates.Creatures
 
       if (data.Delegate.CanUseMeleeSkill(c))
       {
-        var skill = data.Skills.LastOrDefault(s => s.BaseType.IsMelee);
+        var skill = SelectMatching(c, s => s.BaseType.IsMelee);
         if (skill != null)
         {
           return skill;
         }
       }
 
-      return data.Skills.LastOrDefault(s => !s.BaseType.IsProjectile && !s.BaseType.IsMelee);
+      return SelectMatching(c, s => !s.BaseType.IsProjectile && !s.BaseType.IsMelee);
+    }
+
+    static SkillData? SelectMatching(CreatureContext c, Func<SkillData, bool> predicate)
+    {
+      var available = c.Self.Data.Skills
+        .Where(predicate)
+        .Where(s => CooldownAvailable(c, s))
+        .ToList();
+      if (available.Count == 0)
+      {
+        return null;
+      }
+
+      var maxCooldown = available.Max(s => s.GetDurationSeconds(Stat.Cooldown));
+      var maximums = available.Where(s => s.GetDurationSeconds(Stat.Cooldown) >= maxCooldown).ToList();
+      return maximums.ElementAt(Random.Range(0, maximums.Count));
+    }
+
+    static bool CooldownAvailable(CreatureContext c, SkillData skill)
+    {
+      var lastUsed = c.Self.TimeLastUsedSeconds(skill.BaseType);
+      return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
     public override bool CanUseMeleeSkill(CreatureContext c) =>

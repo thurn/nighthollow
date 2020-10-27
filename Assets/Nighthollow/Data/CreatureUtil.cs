@@ -54,7 +54,41 @@ namespace Nighthollow.Data
         }
       }
 
-      return new CreatureData(item.Name, item.BaseType, item.School, item.Skills, stats, delegates);
+      var skills = item.Skills.Select(BuildSkill).ToList();
+      if (item.BaseType.SkillAnimations.Any(animation => animation.Type == SkillAnimationType.MeleeSkill))
+      {
+        skills.Add(DefaultMeleeAttack());
+      }
+
+      return new CreatureData(
+        item.Name, item.BaseType, item.School, skills, stats, delegates);
+    }
+
+    static SkillData BuildSkill(SkillItemData item)
+    {
+      var stats = item.Stats;
+      var delegates = new List<SkillDelegateId>();
+
+      foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
+      {
+
+
+        if (modifier.Data.SkillDelegateId.HasValue)
+        {
+          delegates.Add(modifier.Data.SkillDelegateId.Value);
+        }
+
+        if (modifier.Data.StatId.HasValue)
+        {
+          ApplyStatModifier(
+            stats,
+            modifier.Data.StatId.Value,
+            modifier.Data,
+            modifier.Value);
+        }
+      }
+
+      return new SkillData(item.BaseType, stats, delegates);
     }
 
     static void ApplyStatModifier(StatTable table, int statId, ModifierTypeData data, IStatValue? value)

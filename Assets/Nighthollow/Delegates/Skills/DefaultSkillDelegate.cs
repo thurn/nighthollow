@@ -32,6 +32,7 @@ namespace Nighthollow.Delegates.Skills
   {
     public override void OnUse(SkillContext c, Results results)
     {
+      c.Self.MarkSkillUsed(c.Skill.BaseType);
       if (c.Skill.BaseType.IsProjectile)
       {
         results.Add(new FireProjectileEffect(c.Skill, c.Self.ProjectileSource.position, Vector2.zero));

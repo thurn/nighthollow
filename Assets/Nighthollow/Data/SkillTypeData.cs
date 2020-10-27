@@ -29,6 +29,7 @@ namespace Nighthollow.Data
     public SkillAnimationType SkillAnimationType { get; }
     public bool IsMelee { get; }
     public bool IsProjectile { get; }
+    public AffixTypeData? ImplicitAffix { get; }
 
     public SkillTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
     {
@@ -38,6 +39,12 @@ namespace Nighthollow.Data
       SkillAnimationType = (SkillAnimationType) Parse.IntRequired(row, "Animation");
       IsMelee = Parse.Boolean(row, "Is Melee?");
       IsProjectile = Parse.Boolean(row, "Is Projectile?");
+
+      var affixId = Parse.Int(row, "Implicit Affix ID");
+      if (affixId.HasValue)
+      {
+        ImplicitAffix = service.GetAffixType(affixId.Value);
+      }
     }
   }
 }

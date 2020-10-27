@@ -115,6 +115,7 @@ namespace Nighthollow.Generated
   {
     Unknown = 0,
     CreatureImplicits = 1,
+    SkillImplicits = 2,
   }
 
   public enum SkillAnimationType

@@ -33,6 +33,7 @@ namespace Nighthollow.Services
     readonly Dictionary<int, AffixTypeData> _affixes = new Dictionary<int, AffixTypeData>();
     readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
     readonly Dictionary<int, CreatureTypeData> _creatures = new Dictionary<int, CreatureTypeData>();
+    readonly Dictionary<ModifierPath, IStatValue> _modifierValues = new Dictionary<ModifierPath, IStatValue>();
 
     readonly Dictionary<StaticCardList, List<CreatureItemData>> _staticCardLists =
       new Dictionary<StaticCardList, List<CreatureItemData>>();
@@ -70,7 +71,7 @@ namespace Nighthollow.Services
     {
       Debug.Log("Fetching Data...");
       var request = SpreadsheetHelper.SpreadsheetRequest(new List<string>
-        {"Creatures", "Skills", "Stats", "Modifiers", "Affixes", "CardLists"}
+        {"Creatures", "Skills", "Stats", "Modifiers", "Affixes", "CardLists", "CardValues"}
       );
       yield return request.SendWebRequest();
       var node = JSON.Parse(request.downloadHandler.text);
@@ -125,17 +126,23 @@ namespace Nighthollow.Services
         }
       }
 
+      foreach (var row in parsed["CardValues"])
+      {
+        ParseModifierValue(row);
+      }
+
       foreach (var row in parsed["CardLists"])
       {
-        var (list, result) = ParseStaticCard(row);
-        _staticCardLists[list].Add(result);
+        ParseStaticCard(row);
       }
+
 
       Root.Instance.AssetService.FetchAssets(this, onComplete);
     }
 
-    (StaticCardList, CreatureItemData) ParseStaticCard(IReadOnlyDictionary<string, string> row)
+    void ParseStaticCard(IReadOnlyDictionary<string, string> row)
     {
+      var cardId = Parse.IntRequired(row, "Card ID");
       var list = (StaticCardList) Parse.IntRequired(row, "Card List");
       if (!_staticCardLists.ContainsKey(list))
       {
@@ -145,22 +152,6 @@ namespace Nighthollow.Services
       var school = (School) Parse.IntRequired(row, "School");
 
       var creatureType = GetCreatureType(Parse.IntRequired(row, "Base Creature"));
-
-      var affixes = new List<AffixData>();
-      if (creatureType.ImplicitAffix != null)
-      {
-        var modifierList = new List<Modifier>();
-
-        for (var i = 1; i <= creatureType.ImplicitAffix.ModifierRanges.Count; i++)
-        {
-          var modifier = creatureType.ImplicitAffix.ModifierRanges[i - 1];
-          modifierList.Add(new Modifier(
-            modifier.ModifierData,
-            ModifierUtil.ParseArgument(modifier.ModifierData, Parse.String(row, $"Implicit Arg {i}"))));
-        }
-
-        affixes.Add(new AffixData(creatureType.ImplicitAffix.Id, modifierList));
-      }
 
       var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Creatures);
       stats.Get(Stat.Health).Add(Parse.IntRequired(row, "Health"));
@@ -187,10 +178,75 @@ namespace Nighthollow.Services
         creatureType,
         school,
         stats,
-        new List<SkillData>(),
-        affixes);
+        BuildSkills(creatureType, cardId),
+        BuildAffixes(creatureType, cardId));
 
-      return (list, result);
+      _staticCardLists[list].Add(result);
+    }
+
+    List<SkillItemData> BuildSkills(CreatureTypeData creatureType, int cardId)
+    {
+      var skills = new List<SkillItemData>();
+      var affixes = new List<AffixData>();
+      var skill = creatureType.ImplicitSkill;
+      if (skill != null)
+      {
+        var modifierList = new List<Modifier>();
+
+        if (skill.ImplicitAffix != null)
+        {
+          foreach (var range in skill.ImplicitAffix.ModifierRanges)
+          {
+            var path = new ModifierPath(cardId, skill.ImplicitAffix.Id, range.ModifierData.Id, skill.Id);
+            modifierList.Add(new Modifier(
+              range.ModifierData,
+              _modifierValues.ContainsKey(path) ? _modifierValues[path] : null));
+          }
+
+          affixes.Add(new AffixData(skill.ImplicitAffix.Id, modifierList));
+        }
+
+        skills.Add(new SkillItemData(
+          skill,
+          Root.Instance.GameDataService.GetDefaultStats(StatScope.Skills),
+          affixes));
+      }
+
+      return skills;
+    }
+
+    List<AffixData> BuildAffixes(CreatureTypeData creatureType, int cardId)
+    {
+      var affixes = new List<AffixData>();
+      if (creatureType.ImplicitAffix != null)
+      {
+        var modifierList = new List<Modifier>();
+
+        foreach (var range in creatureType.ImplicitAffix.ModifierRanges)
+        {
+          var path = new ModifierPath(cardId, creatureType.ImplicitAffix.Id, range.ModifierData.Id);
+          modifierList.Add(new Modifier(
+            range.ModifierData,
+            _modifierValues.ContainsKey(path) ? _modifierValues[path] : null));
+        }
+
+        affixes.Add(new AffixData(creatureType.ImplicitAffix.Id, modifierList));
+      }
+
+      return affixes;
+    }
+
+    void ParseModifierValue(IReadOnlyDictionary<string, string> row)
+    {
+      var modifierId = Parse.IntRequired(row, "Modifier");
+      var modifierPath = new ModifierPath(
+        Parse.IntRequired(row, "Card ID"),
+        Parse.IntRequired(row, "Affix ID"),
+        modifierId,
+        Parse.Int(row, "Skill"));
+      _modifierValues[modifierPath] = Errors.CheckNotNull(
+        ModifierUtil.ParseArgument(GetModifier(modifierId),
+          Parse.StringRequired(row, "Value")));
     }
   }
 }

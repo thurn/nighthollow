@@ -27,7 +27,7 @@ namespace Nighthollow.Data
     public CreatureTypeData BaseType { get; }
     public School School { get; }
     public StatTable Stats { get; }
-    public IReadOnlyList<SkillData> Skills { get; }
+    public IReadOnlyList<SkillItemData> Skills { get; }
     public IReadOnlyList<AffixData> Affixes { get; }
 
     public CreatureItemData(
@@ -35,14 +35,9 @@ namespace Nighthollow.Data
       CreatureTypeData baseType,
       School school,
       StatTable stats,
-      IReadOnlyList<SkillData> skills,
+      IReadOnlyList<SkillItemData> skills,
       IReadOnlyList<AffixData> affixes)
     {
-      if (baseType.SkillAnimations.Any(a => a.Type == SkillAnimationType.MeleeSkill))
-      {
-        skills = skills.Append(CreatureUtil.DefaultMeleeAttack()).ToList();
-      }
-
       Name = name;
       BaseType = baseType;
       School = school;

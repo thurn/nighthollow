@@ -13,36 +13,23 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Generated;
 using Nighthollow.Stats;
-using Nighthollow.Utils;
 
 #nullable enable
 
 namespace Nighthollow.Data
 {
-  public sealed class Modifier
+  public sealed class SkillItemData
   {
-    public ModifierTypeData Data { get; }
-    public IStatValue? Value { get; }
+    public SkillTypeData BaseType { get; }
+    public StatTable Stats { get; }
+    public IReadOnlyList<AffixData> Affixes { get; }
 
-    public Modifier(ModifierTypeData modifierData, IStatValue? value)
+    public SkillItemData(SkillTypeData baseType, StatTable stats, IReadOnlyList<AffixData> affixes)
     {
-      ModifierUtil.Validate(modifierData, value);
-      Data = modifierData;
-      Value = value;
-    }
-  }
-
-  public sealed class AffixData
-  {
-    public int AffixTypeId { get; }
-    public IReadOnlyList<Modifier> Modifiers { get; }
-
-    public AffixData(int affixTypeId, IReadOnlyList<Modifier> modifiers)
-    {
-      AffixTypeId = affixTypeId;
-      Modifiers = modifiers;
+      BaseType = baseType;
+      Stats = stats;
+      Affixes = affixes;
     }
   }
 }

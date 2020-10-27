@@ -56,8 +56,8 @@ namespace Nighthollow.Data
       Id = Parse.IntRequired(row, "Affix ID");
       MinLevel = Parse.IntRequired(row, "Min Level");
       Weight = Parse.IntRequired(row, "Weight");
-      ManaCostLow = Parse.IntRequired(row, "Mana Cost Low");
-      ManaCostHigh = Parse.IntRequired(row, "Mana Cost High");
+      ManaCostLow = Parse.Int(row, "Mana Cost Low").GetValueOrDefault();
+      ManaCostHigh = Parse.Int(row, "Mana Cost High").GetValueOrDefault();
       InfluenceType = (School?) Parse.Int(row, "Influence Type");
       AffixPool = (AffixPool) Parse.IntRequired(row, "Affix Pool");
       var modifiers = new List<ModifierRange>();

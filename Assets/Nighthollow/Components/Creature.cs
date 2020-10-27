@@ -61,6 +61,7 @@ namespace Nighthollow.Components
     [SerializeField] CustomTriggerCollider _projectileCollider;
     Coroutine _coroutine;
     [SerializeField] bool _appliedLifeLoss;
+    Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
 
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
@@ -361,6 +362,14 @@ namespace Nighthollow.Components
     bool HasProjectileSkill() => _data.Skills.Any(s => s.BaseType.IsProjectile);
 
     bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
+
+    public void MarkSkillUsed(SkillTypeData skill) => _skillLastUsedTimes[skill.Id] = Time.time;
+
+    /// <summary>
+    /// Returns the timestamp at which the provided skill was last used by this creature, or 0 if it has never been used
+    /// </summary>
+    public float? TimeLastUsedSeconds(SkillTypeData skill) =>
+      _skillLastUsedTimes.ContainsKey(skill.Id) ? (float?) _skillLastUsedTimes[skill.Id] : null;
 
     IEnumerator<YieldInstruction> RunCoroutine()
     {

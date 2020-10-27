@@ -115,7 +115,6 @@ namespace Nighthollow.Delegates.Core
 
     public override void Execute()
     {
-      Debug.Log($"Stunning {Target}");
       Target.Stun(DurationSeconds);
     }
   }

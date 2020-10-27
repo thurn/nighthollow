@@ -64,6 +64,7 @@ namespace Nighthollow.Generated
     public static readonly PercentageStatId MaximumDamageReduction = new PercentageStatId(45);
     public static readonly PercentageStatId MaximumDamageResistance = new PercentageStatId(46);
     public static readonly PercentageStatId MaximumStunChance = new PercentageStatId(47);
+    public static readonly DurationStatId Cooldown = new DurationStatId(48);
 
     public static StatType GetType(int statId)
     {
@@ -113,6 +114,7 @@ namespace Nighthollow.Generated
         case 45: return StatType.Percentage;
         case 46: return StatType.Percentage;
         case 47: return StatType.Percentage;
+        case 48: return StatType.Duration;
         default: throw new ArgumentOutOfRangeException();
       }
     }
@@ -165,6 +167,7 @@ namespace Nighthollow.Generated
         case 45: return MaximumDamageReduction;
         case 46: return MaximumDamageResistance;
         case 47: return MaximumStunChance;
+        case 48: return Cooldown;
         default: throw new ArgumentOutOfRangeException();
       }
     }

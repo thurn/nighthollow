@@ -27,6 +27,7 @@ namespace Nighthollow.Data
     public int? StatId { get; }
     public Operator? Operator { get; }
     public CreatureDelegateId? DelegateId { get; }
+    public SkillDelegateId? SkillDelegateId { get; }
     public DamageType? DamageType { get; }
     public School? School { get; }
 
@@ -37,6 +38,7 @@ namespace Nighthollow.Data
       StatId = Parse.Int(row, "Stat");
       Operator = (Operator?) Parse.Int(row, "Operator");
       DelegateId = (CreatureDelegateId?) Parse.Int(row, "Delegate");
+      SkillDelegateId = (SkillDelegateId?) Parse.Int(row, "Skill Delegate");
       DamageType = (DamageType?) Parse.Int(row, "Damage Type");
       School = (School?) Parse.Int(row, "School");
     }
@@ -57,6 +59,11 @@ namespace Nighthollow.Data
       DelegateId = delegateId;
       DamageType = damageType;
       School = school;
+    }
+
+    public override string ToString()
+    {
+      return $"[{nameof(ModifierTypeData)}] {nameof(Id)}: {Id}, {nameof(Description)}: {Description}";
     }
   }
 }
