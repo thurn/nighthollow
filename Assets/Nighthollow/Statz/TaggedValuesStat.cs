@@ -57,6 +57,21 @@ namespace Nighthollow.Statz
     }
 
     protected abstract TValue Compute(IReadOnlyList<TaggedNumericOperation<TTag, TValue>> operations);
+
+    protected override TaggedValues<TTag, TValue> ParseStatValue(string value)
+    {
+      var result = new Dictionary<TTag, TValue>();
+      foreach (var instance in value.Split(','))
+      {
+        result[ParseTag(instance.Last())] = ParseInstance(instance.Remove(instance.Length - 1));
+      }
+
+      return new TaggedValues<TTag, TValue>(result);
+    }
+
+    protected abstract TTag ParseTag(char tagCharacter);
+
+    protected abstract TValue ParseInstance(string value);
   }
 
   public abstract class TaggedIntValuesStat<TTag> : TaggedValuesStat<TTag, IntValue> where TTag : struct, Enum
@@ -68,6 +83,8 @@ namespace Nighthollow.Statz
     protected override IntValue Compute(
       IReadOnlyList<TaggedNumericOperation<TTag, IntValue>> operations) =>
       IntStat.Compute(operations, op => op);
+
+    protected override IntValue ParseInstance(string value) => new IntValue(int.Parse(value));
   }
 
   public abstract class TaggedIntRangesStat<TTag> : TaggedValuesStat<TTag, IntRangeValue> where TTag : struct, Enum
@@ -81,6 +98,8 @@ namespace Nighthollow.Statz
       new IntRangeValue(
         IntStat.Compute(operations, op => new IntValue(op.Low)).Int,
         IntStat.Compute(operations, op => new IntValue(op.High)).Int);
+
+    protected override IntRangeValue ParseInstance(string value) => IntRangeStat.ParseIntRange(value);
   }
 
   public sealed class DamageTypeIntsStat : TaggedIntValuesStat<DamageType>
@@ -88,6 +107,20 @@ namespace Nighthollow.Statz
     public DamageTypeIntsStat(int id) : base(id)
     {
     }
+
+    protected override DamageType ParseTag(char tagCharacter) => ParseDamageTypeTag(tagCharacter);
+
+    public static DamageType ParseDamageTypeTag(char tagCharacter) =>
+      tagCharacter switch
+      {
+        'R' => DamageType.Radiant,
+        'L' => DamageType.Lightning,
+        'F' => DamageType.Fire,
+        'C' => DamageType.Cold,
+        'P' => DamageType.Physical,
+        'N' => DamageType.Necrotic,
+        _ => throw new ArgumentException($"Unknown damage type identifier: {tagCharacter}")
+      };
   }
 
   public sealed class DamageTypeIntRangesStat : TaggedIntRangesStat<DamageType>
@@ -95,6 +128,8 @@ namespace Nighthollow.Statz
     public DamageTypeIntRangesStat(int id) : base(id)
     {
     }
+
+    protected override DamageType ParseTag(char tagCharacter) => DamageTypeIntsStat.ParseDamageTypeTag(tagCharacter);
   }
 
   public sealed class SchoolIntsStat : TaggedIntValuesStat<School>
@@ -102,5 +137,17 @@ namespace Nighthollow.Statz
     public SchoolIntsStat(int id) : base(id)
     {
     }
+
+    protected override School ParseTag(char tagCharacter) =>
+      tagCharacter switch
+      {
+        'L' => School.Light,
+        'S' => School.Sky,
+        'F' => School.Flame,
+        'I' => School.Ice,
+        'E' => School.Earth,
+        'N' => School.Night,
+        _ => throw new ArgumentException($"Unknown school identifier: {tagCharacter}")
+      };
   }
 }

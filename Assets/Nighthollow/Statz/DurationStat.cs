@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using UnityEngine;
 
 #nullable enable
 
@@ -42,5 +43,8 @@ namespace Nighthollow.Statz
 
     public override DurationValue ComputeValue(IReadOnlyList<NumericOperation<DurationValue>> operations) =>
       new DurationValue(IntStat.Compute(operations, duration => new IntValue(duration.AsMilliseconds())).Int);
+
+    protected override DurationValue ParseStatValue(string value) =>
+      new DurationValue(Mathf.RoundToInt(float.Parse(value.Replace("s", "")) * 1000f));
   }
 }

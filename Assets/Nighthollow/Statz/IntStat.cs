@@ -53,5 +53,7 @@ namespace Nighthollow.Statz
         10000 + operations.Select(op => op.IncreaseBy).WhereNotNull().Sum(increase => increase.AsBasisPoints());
       return new IntValue(Constants.FractionBasisPoints(result, increaseBy));
     }
+
+    protected override IntValue ParseStatValue(string value) => new IntValue(int.Parse(value));
   }
 }

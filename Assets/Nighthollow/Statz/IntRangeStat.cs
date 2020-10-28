@@ -43,5 +43,13 @@ namespace Nighthollow.Statz
       new IntRangeValue(
         IntStat.Compute(operations, range => new IntValue(range.Low)).Int,
         IntStat.Compute(operations, range => new IntValue(range.High)).Int);
+
+    protected override IntRangeValue ParseStatValue(string value) => ParseIntRange(value);
+
+    public static IntRangeValue ParseIntRange(string value)
+    {
+      var split = value.Split('-');
+      return new IntRangeValue(int.Parse(split[0]), int.Parse(split[1]));
+    }
   }
 }

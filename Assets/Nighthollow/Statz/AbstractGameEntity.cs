@@ -16,14 +16,14 @@
 
 namespace Nighthollow.Statz
 {
-  public interface IStat
+  public abstract class AbstractGameEntity
   {
-    int Id { get; }
+    public abstract StatTable Stats { get; }
 
-    IStatValue Lookup(StatTable table);
+    public int GetInt(IntStat statId) => Stats.Get(statId).Int;
 
-    void AddModifierUnchecked(StatTable table, IModifier modifier);
+    public bool GetBool(BoolStat statId) => Stats.Get(statId).Bool;
 
-    IStatValue ParseValue(string value);
+    public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
   }
 }

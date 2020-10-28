@@ -32,6 +32,10 @@ namespace Nighthollow.Statz
 
     public abstract TValue ComputeValue(IReadOnlyList<TOperation> operations);
 
+    protected abstract TValue ParseStatValue(string value);
+
+    public IStatValue ParseValue(string value) => ParseStatValue(value);
+
     public IStatValue Lookup(StatTable table) => table.Get(this);
 
     public void AddModifierUnchecked(StatTable table, IModifier modifier)

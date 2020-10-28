@@ -42,5 +42,7 @@ namespace Nighthollow.Statz
       return new BoolValue(
         operations.Count(op => op.SetBoolean) > 0 && operations.Count(op => op.SetBoolean == false) == 0);
     }
+
+    protected override BoolValue ParseStatValue(string value) => new BoolValue(bool.Parse(value));
   }
 }

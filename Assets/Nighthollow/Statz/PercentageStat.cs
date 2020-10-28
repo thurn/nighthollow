@@ -45,5 +45,8 @@ namespace Nighthollow.Statz
 
     public override PercentageValue ComputeValue(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
       new PercentageValue(IntStat.Compute(operations, duration => new IntValue(duration.AsBasisPoints())).Int);
+
+    protected override PercentageValue ParseStatValue(string value) =>
+      new PercentageValue(Mathf.RoundToInt(float.Parse(value.Replace("%", "")) * 100f));
   }
 }
