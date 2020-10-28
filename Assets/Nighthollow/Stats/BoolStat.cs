@@ -97,6 +97,8 @@ namespace Nighthollow.Stats
 
     void Recalculate()
     {
+      _setTrueModifiers.RemoveAll(m => !m.IsValid());
+      _setFalseModifiers.RemoveAll(m => !m.IsValid());
       _computedValue = _setTrueModifiers.Count > 0 && _setFalseModifiers.Count == 0;
     }
   }
