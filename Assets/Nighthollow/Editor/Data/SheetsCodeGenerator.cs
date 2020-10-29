@@ -167,55 +167,23 @@ namespace Nighthollow.Editor.Data
 
       foreach (var stat in input)
       {
-        string idType;
-        switch ((StatType) int.Parse(stat["Type"]))
+        var statType = (StatType) int.Parse(stat["Type"]) switch
         {
-          case StatType.Int:
-            idType = "IntStatId";
-            break;
-          case StatType.Percentage:
-            idType = "PercentageStatId";
-            break;
-          case StatType.Duration:
-            idType = "DurationStatId";
-            break;
-          case StatType.IntRange:
-            idType = "IntRangeStatId";
-            break;
-          case StatType.Bool:
-            idType = "BoolStatId";
-            break;
-          case StatType.SchoolInts:
-            idType = "TaggedStatsId<School, IntStat>";
-            break;
-          case StatType.DamageTypeInts:
-            idType = "TaggedStatsId<DamageType, IntStat>";
-            break;
-          case StatType.DamageTypeIntRanges:
-            idType = "TaggedStatsId<DamageType, IntRangeStat>";
-            break;
-          case StatType.Unknown:
-          default:
-            throw new ArgumentOutOfRangeException();
-        }
+          StatType.Int => "IntStat",
+          StatType.Percentage => "PercentageStat",
+          StatType.Duration => "DurationStat",
+          StatType.IntRange => "IntRangeStat",
+          StatType.Bool => "BoolStat",
+          StatType.SchoolInts => "SchoolIntsStat",
+          StatType.DamageTypeInts => "DamageTypeIntsStat",
+          StatType.DamageTypeIntRanges => "DamageTypeIntRangesStat",
+          _ => throw new ArgumentOutOfRangeException()
+        };
 
-        builder.Append($"    public static readonly {idType} {stat["Name"]} = new {idType}({stat["Stat ID"]});\n");
+        builder.Append($"    public static readonly {statType} {stat["Name"]} = new {statType}({stat["Stat ID"]});\n");
       }
 
-      builder.Append("\n    public static StatType GetType(int statId)\n");
-      builder.Append("    {\n");
-      builder.Append("      switch (statId)\n");
-      builder.Append("      {\n");
-      foreach (var stat in input)
-      {
-        var type = (StatType) int.Parse(stat["Type"]);
-        builder.Append($"        case {stat["Stat ID"]}: return StatType.{type};\n");
-      }
-      builder.Append($"        default: throw new ArgumentOutOfRangeException();\n");
-      builder.Append("      }\n");
-      builder.Append("    }\n");
-
-      builder.Append("\n    public static IStatId GetStat(int statId)\n");
+      builder.Append("\n    public static IStat GetStat(int statId)\n");
       builder.Append("    {\n");
       builder.Append("      switch (statId)\n");
       builder.Append("      {\n");

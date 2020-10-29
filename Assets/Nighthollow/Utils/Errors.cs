@@ -54,7 +54,7 @@ namespace Nighthollow.Utils
       return value;
     }
 
-    public static int CheckPositive(int value)
+    public static int CheckNonzero(int value)
     {
       if (value <= 0)
       {

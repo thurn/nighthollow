@@ -68,7 +68,7 @@ namespace Nighthollow.Delegates.Skills
     }
 
     public override IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
-      c.Skill.BaseType.IsMelee ? hits.Take(c.Skill.GetInt(Stat.MaxMeleeAreaTargets)) : hits;
+      c.Skill.BaseType.IsMelee ? hits.Take(Errors.CheckNonzero(c.Skill.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
 
     public override Collider2D? GetCollider(SkillContext c) => c.Self.Collider;
 

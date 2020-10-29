@@ -47,7 +47,7 @@ namespace Nighthollow.Components
 
     [Header("State")] [SerializeField] bool _initialized;
     CreatureData _data;
-    [SerializeField] bool _selectSkill;
+    [SerializeField] bool _useSkill;
     [SerializeField] int _damageTaken;
     [SerializeField] CreatureState _state;
     SkillData _currentSkill;
@@ -187,7 +187,7 @@ namespace Nighthollow.Components
 
       ToDefaultState();
 
-      _selectSkill = true;
+      _useSkill = true;
       _data.Delegate.OnActivate(this);
 
       _coroutine = StartCoroutine(RunCoroutine());
@@ -275,7 +275,7 @@ namespace Nighthollow.Components
       // Collision could be with a Projectile or with a TriggerCollider:
       if (CanUseSkill() && other.GetComponent<Creature>())
       {
-        _selectSkill = true;
+        _useSkill = true;
       }
     }
 
@@ -283,7 +283,7 @@ namespace Nighthollow.Components
     {
       if (CanUseSkill())
       {
-        _selectSkill = true;
+        _useSkill = true;
       }
     }
 
@@ -326,7 +326,7 @@ namespace Nighthollow.Components
       }
 
       ToDefaultState();
-      _selectSkill = true;
+      _useSkill = true;
     }
 
     public void OnDeathAnimationCompleted()
@@ -352,7 +352,7 @@ namespace Nighthollow.Components
 
       _attachmentDisplay.ClearAttachments();
       ToDefaultState();
-      _selectSkill = true;
+      _useSkill = true;
     }
 
     public bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
@@ -392,13 +392,13 @@ namespace Nighthollow.Components
 
       if (_state == CreatureState.Placing) return;
 
-      if (_selectSkill && CanUseSkill())
+      if (_useSkill && CanUseSkill())
       {
         // SelectSkill() is delayed until the next Update() call instead of being invoked
         // immediately because it gives time for the physics system to correctly update
         // collider positions after activation. This was extremely annoying to debug :)
         UseSkill();
-        _selectSkill = false;
+        _useSkill = false;
       }
 
       transform.eulerAngles = _data.BaseType.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;

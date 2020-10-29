@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Nighthollow.Stats;
+using System;
 
 // Generated Code - Do Not Modify!
 namespace Nighthollow.Generated
@@ -45,7 +45,6 @@ namespace Nighthollow.Generated
     public static readonly SchoolIntsStat Influence = new SchoolIntsStat(25);
     public static readonly IntStat StartingHandSize = new IntStat(26);
     public static readonly IntStat ManaGain = new IntStat(27);
-    public static readonly IntStat AddedManaGain = new IntStat(49);
     public static readonly DurationStat CardDrawInterval = new DurationStat(28);
     public static readonly DurationStat EnemySpawnDelay = new DurationStat(29);
     public static readonly IntStat TotalEnemiesToSpawn = new IntStat(30);
@@ -66,6 +65,7 @@ namespace Nighthollow.Generated
     public static readonly PercentageStat MaximumDamageResistance = new PercentageStat(46);
     public static readonly PercentageStat MaximumStunChance = new PercentageStat(47);
     public static readonly DurationStat Cooldown = new DurationStat(48);
+    public static readonly IntStat AddedManaGain = new IntStat(49);
 
     public static IStat GetStat(int statId)
     {
@@ -116,6 +116,7 @@ namespace Nighthollow.Generated
         case 46: return MaximumDamageResistance;
         case 47: return MaximumStunChance;
         case 48: return Cooldown;
+        case 49: return AddedManaGain;
         default: throw new ArgumentOutOfRangeException();
       }
     }
