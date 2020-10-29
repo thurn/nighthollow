@@ -68,13 +68,13 @@ namespace Nighthollow.Delegates.Skills
     }
 
     public override IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
-      c.Skill.BaseType.IsMelee ? hits.Take(GetStat(c, Stat.MaxMeleeAreaTargets).Value) : hits;
+      c.Skill.BaseType.IsMelee ? hits.Take(c.Skill.GetInt(Stat.MaxMeleeAreaTargets)) : hits;
 
     public override Collider2D? GetCollider(SkillContext c) => c.Self.Collider;
 
     public override void ApplyToTarget(SkillContext c, Creature target, Results results)
     {
-      if (GetStat(c, Stat.UsesAccuracy).Value && !c.Skill.Delegate.RollForHit(c, target))
+      if (c.Skill.GetBool(Stat.UsesAccuracy) && !c.Skill.Delegate.RollForHit(c, target))
       {
         results.Add(c.Self.Owner == PlayerName.User
           ? new SkillEventEffect(SkillEventEffect.Event.Missed, c.Self)
@@ -83,17 +83,17 @@ namespace Nighthollow.Delegates.Skills
       }
 
       var isCriticalHit = false;
-      if (GetStat(c, Stat.CanCrit).Value && c.Skill.Delegate.RollForCrit(c, target))
+      if (c.Skill.GetBool(Stat.CanCrit) && c.Skill.Delegate.RollForCrit(c, target))
       {
         results.Add(new SkillEventEffect(SkillEventEffect.Event.Crit, c.Self));
         isCriticalHit = true;
       }
 
       var damage = c.Skill.Delegate.RollForBaseDamage(c, target);
-      damage = GetStat(c, Stat.IgnoresDamageReduction).Value
+      damage = c.Skill.GetBool(Stat.IgnoresDamageReduction)
         ? damage
         : c.Skill.Delegate.ApplyDamageReduction(c, target, damage);
-      damage = GetStat(c, Stat.IgnoresDamageResistance).Value
+      damage = c.Skill.GetBool(Stat.IgnoresDamageResistance)
         ? damage
         : c.Skill.Delegate.ApplyDamageResistance(c, target, damage);
       var totalDamage = c.Skill.Delegate.ComputeFinalDamage(c, target, damage, isCriticalHit);
@@ -107,35 +107,31 @@ namespace Nighthollow.Delegates.Skills
         results.Add(new HealEffect(c.Self, healthDrain));
       }
 
-      if (GetStat(c, Stat.CanStun).Value && c.Skill.Delegate.CheckForStun(c, target, totalDamage))
+      if (c.Skill.GetBool(Stat.CanStun) && c.Skill.Delegate.CheckForStun(c, target, totalDamage))
       {
         results.Add(new StunEffect(target, c.Self.Data.GetDurationSeconds(Stat.StunDurationOnEnemies)));
         results.Add(new SkillEventEffect(SkillEventEffect.Event.Stun, target));
       }
     }
 
-    public override TaggedStatListValue<DamageType, IntValue, IntStat>? RollForBaseDamage(
+    public override TaggedValues<DamageType, IntValue>? RollForBaseDamage(
       SkillContext c, Creature target) =>
-      new TaggedStatListValue<DamageType, IntValue, IntStat>(
-        GetStat(c, Stat.BaseDamage).AllEntries
-          .Select(pair => new TaggedStatValue<DamageType, IntValue>(
-            pair.Key,
-            new IntValue(Random.Range(pair.Value.LowValue, pair.Value.HighValue))))
-          .ToList());
+      new TaggedValues<DamageType, IntValue>(
+        c.Skill.Stats.Get(Stat.BaseDamage).Values.ToDictionary(
+          k => k.Key,
+          v => new IntValue(Random.Range(v.Value.Low, v.Value.High))));
 
-    public override TaggedStatListValue<DamageType, IntValue, IntStat>? ApplyDamageReduction(
+    public override TaggedValues<DamageType, IntValue>? ApplyDamageReduction(
       SkillContext c,
       Creature target,
-      TaggedStatListValue<DamageType, IntValue, IntStat> damage) =>
-      new TaggedStatListValue<DamageType, IntValue, IntStat>(
-        damage.Values
-          .Select(pair => new TaggedStatValue<DamageType, IntValue>(
-            pair.Tag,
-            ApplyReduction(
-              c,
-              pair.Value.Value,
-              target.Data.Stats.Get(Stat.DamageReduction).Get(pair.Tag).Value)))
-          .ToList());
+      TaggedValues<DamageType, IntValue> damage) =>
+      new TaggedValues<DamageType, IntValue>(
+        damage.Values.ToDictionary(
+          k => k.Key,
+          v => ApplyReduction(
+            c,
+            v.Value.Int,
+            target.Data.Stats.Get(Stat.DamageReduction).Get(v.Key, IntValue.Zero).Int)));
 
     static IntValue ApplyReduction(SkillContext c, int damage, int reduction) =>
       new IntValue(Math.Max(
@@ -143,19 +139,17 @@ namespace Nighthollow.Delegates.Skills
         Mathf.RoundToInt(damage * (1f - c.Self.GetOwnerStats().Get(Stat.MaximumDamageReduction).AsMultiplier())),
         damage - reduction));
 
-    public override TaggedStatListValue<DamageType, IntValue, IntStat>? ApplyDamageResistance(
+    public override TaggedValues<DamageType, IntValue>? ApplyDamageResistance(
       SkillContext c,
       Creature target,
-      TaggedStatListValue<DamageType, IntValue, IntStat> damage) =>
-      new TaggedStatListValue<DamageType, IntValue, IntStat>(
-        damage.Values
-          .Select(pair => new TaggedStatValue<DamageType, IntValue>(
-            pair.Tag,
-            ApplyResistance(
-              c,
-              pair.Value.Value,
-              target.Data.Stats.Get(Stat.DamageResistance).Get(pair.Tag).Value)))
-          .ToList());
+      TaggedValues<DamageType, IntValue> damage) =>
+      new TaggedValues<DamageType, IntValue>(
+        damage.Values.ToDictionary(
+          k => k.Key,
+          v => ApplyResistance(
+            c,
+            v.Value.Int,
+            target.Data.Stats.Get(Stat.DamageResistance).Get(v.Key, IntValue.Zero).Int)));
 
     static IntValue ApplyResistance(SkillContext c, int damageValue, float resistance) =>
       new IntValue(Mathf.RoundToInt(Math.Max(
@@ -165,16 +159,16 @@ namespace Nighthollow.Delegates.Skills
 
     public override int? ComputeFinalDamage(SkillContext c,
       Creature target,
-      TaggedStatListValue<DamageType, IntValue, IntStat> damage,
+      TaggedValues<DamageType, IntValue> damage,
       bool isCriticalHit)
     {
-      var total = damage.Values.Select(v => v.Value.Value).Sum();
-      return isCriticalHit ? GetStat(c, Stat.CritMultiplier).CalculateFraction(total) : total;
+      var total = damage.Values.Values.Select(v => v.Int).Sum();
+      return isCriticalHit ? c.Skill.Stats.Get(Stat.CritMultiplier).CalculateFraction(total) : total;
     }
 
     public override bool RollForHit(SkillContext c, Creature target)
     {
-      var accuracy = GetStat(c, Stat.Accuracy).Value;
+      var accuracy = c.Skill.GetInt(Stat.Accuracy);
       var hitChance = Mathf.Clamp(
         0.1f,
         accuracy / (accuracy + Mathf.Pow((target.Data.GetInt(Stat.Evasion) / 4.0f), 0.8f)),
@@ -183,22 +177,19 @@ namespace Nighthollow.Delegates.Skills
     }
 
     public override bool RollForCrit(SkillContext c, Creature target) =>
-      Random.value <= GetStat(c, Stat.CritChance).AsMultiplier();
+      Random.value <= c.Skill.Stats.Get(Stat.CritChance).AsMultiplier();
 
     public override int ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount) =>
-      c.Skill.BaseType.IsMelee ? GetStat(c, Stat.MeleeHealthDrainPercent).CalculateFraction(damageAmount) : 0;
+      c.Skill.BaseType.IsMelee ? c.Skill.Stats.Get(Stat.MeleeHealthDrainPercent).CalculateFraction(damageAmount) : 0;
 
     public override bool CheckForStun(SkillContext c, Creature target, int damageAmount)
     {
-      var stunChance = GetStat(c, Stat.StunChance).AsMultiplier() +
-                           (damageAmount / (float) target.Data.GetInt(Stat.Health));
+      var stunChance = c.Skill.Stats.Get(Stat.StunChance).AsMultiplier() +
+                       (damageAmount / (float) target.Data.GetInt(Stat.Health));
       return Random.value <= Mathf.Clamp(
         stunChance,
         0,
         c.Self.GetOwnerStats().Get(Stat.MaximumStunChance).AsMultiplier());
     }
-
-    static T GetStat<T>(SkillContext c, IStatId<T> statId) where T : IStat =>
-      c.Skill.Stats.GetWithParent(statId, c.Self.Data);
   }
 }

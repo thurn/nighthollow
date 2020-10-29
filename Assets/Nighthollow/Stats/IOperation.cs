@@ -14,9 +14,9 @@
 
 #nullable enable
 
-namespace Nighthollow.Statz
+namespace Nighthollow.Stats
 {
-  public interface IStatValue
+  public interface IOperation
   {
 
   }

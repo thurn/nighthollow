@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Generated;
+
 #nullable enable
 
 namespace Nighthollow.Stats
 {
   public interface IStat
   {
-  }
+    int Id { get; }
 
-  public interface IStat<out TSelf> : IStat
-  {
-    TSelf Clone();
-  }
+    IStatValue Lookup(StatTable table);
 
-  public interface IAdditiveStat
-  {
-    void AddValue(IStatValue value);
+    IStatValue ParseValue(string value);
+
+    void InsertDefault(StatTable table, string value);
   }
 }

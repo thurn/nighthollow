@@ -14,17 +14,10 @@
 
 #nullable enable
 
-namespace Nighthollow.Statz
+namespace Nighthollow.Stats
 {
-  public sealed class StaticModifier<TOperation> : IModifier<TOperation> where TOperation : IOperation
+  public interface ILifetime
   {
-    public StaticModifier(TOperation operation)
-    {
-      Operation = operation;
-    }
-
-    public bool IsValid() => true;
-
-    public TOperation Operation { get; }
+    bool IsValid();
   }
 }

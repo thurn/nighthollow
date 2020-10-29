@@ -17,12 +17,13 @@
 using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
   public static class Influence
   {
-    public static bool LessThanOrEqualTo(TaggedStats<School, IntStat> a, TaggedStats<School, IntStat> b) =>
-      a.AllEntries.All(pair => pair.Value.Value <= b.Get(pair.Key).Value);
+    public static bool LessThanOrEqualTo(TaggedValues<School, IntValue> a, TaggedValues<School, IntValue> b) =>
+      a.Values.All(pair => pair.Value.Int <= b.Get(pair.Key, IntValue.Zero).Int);
   }
 }

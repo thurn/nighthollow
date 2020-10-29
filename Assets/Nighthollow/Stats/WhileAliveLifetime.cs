@@ -14,16 +14,24 @@
 
 #nullable enable
 
+using System;
+using Nighthollow.Components;
+
 namespace Nighthollow.Stats
 {
-  public interface IStatId
+  public sealed class WhileAliveLifetime : ILifetime
   {
-    int Value { get; }
+    readonly WeakReference<Creature> _scopeCreature;
 
-    IStat NotFoundValue();
-  }
+    public bool IsValid()
+    {
+      _scopeCreature.TryGetTarget(out var creature);
+      return creature && creature.IsAlive();
+    }
 
-  public interface IStatId<out T> : IStatId where T : IStat
-  {
+    public WhileAliveLifetime(Creature scopeCreature)
+    {
+      _scopeCreature = new WeakReference<Creature>(scopeCreature);
+    }
   }
 }

@@ -18,13 +18,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
+using Nighthollow.Utils;
 
-namespace Nighthollow.Statz
+namespace Nighthollow.Stats
 {
   public readonly struct TaggedValues<TTag, TValue> : IStatValue
     where TTag : struct, Enum where TValue : struct, IStatValue
   {
     public IReadOnlyDictionary<TTag, TValue> Values { get; }
+
+    public TValue Get(TTag tag, TValue notFound) => Values.GetValueOrDefault(tag, notFound);
 
     public TaggedValues(IReadOnlyDictionary<TTag, TValue> values)
     {
@@ -72,6 +75,14 @@ namespace Nighthollow.Statz
     protected abstract TTag ParseTag(char tagCharacter);
 
     protected abstract TValue ParseInstance(string value);
+
+    public override void InsertDefault(StatTable table, string value)
+    {
+      foreach (var pair in ParseStatValue(value).Values)
+      {
+        table.InsertModifier(this, TaggedNumericOperation.Add(pair.Key, pair.Value), StaticLifetime.Instance);
+      }
+    }
   }
 
   public abstract class TaggedIntValuesStat<TTag> : TaggedValuesStat<TTag, IntValue> where TTag : struct, Enum

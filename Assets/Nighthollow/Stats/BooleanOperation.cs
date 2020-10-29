@@ -16,18 +16,13 @@
 
 namespace Nighthollow.Stats
 {
-  public interface IModifier
+  public sealed class BooleanOperation : IOperation
   {
-    bool IsDynamic();
+    public bool SetBoolean { get; }
 
-    bool IsValid();
-
-    IModifier Clone();
-
-    public IModifier WithValue(IStatValue value);
-
-    public IStatValue GetArgument();
-
-    StaticModifier BaseModifier { get; }
+    public BooleanOperation(bool setBoolean)
+    {
+      SetBoolean = setBoolean;
+    }
   }
 }

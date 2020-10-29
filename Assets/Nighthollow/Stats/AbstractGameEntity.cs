@@ -20,10 +20,10 @@ namespace Nighthollow.Stats
   {
     public abstract StatTable Stats { get; }
 
-    public int GetInt(IntStatId statId) => Stats.Get(statId).Value;
+    public int GetInt(IntStat statId) => Stats.Get(statId).Int;
 
-    public bool GetBool(BoolStatId statId) => Stats.Get(statId).Value;
+    public bool GetBool(BoolStat statId) => Stats.Get(statId).Bool;
 
-    public float GetDurationSeconds(DurationStatId statId) => Stats.Get(statId).ValueSeconds;
+    public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
   }
 }

@@ -16,38 +16,44 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
   public sealed class StatTable
   {
-    readonly Dictionary<int, IStat> _stats;
+    readonly Dictionary<int, List<(IOperation, ILifetime)>> _modifiers;
 
     public StatTable()
     {
-      _stats = new Dictionary<int, IStat>();
+      _modifiers = new Dictionary<int, List<(IOperation, ILifetime)>>();
     }
 
-    public StatTable(StatTable other)
+    StatTable(Dictionary<int, List<(IOperation, ILifetime)>> modifiers)
     {
-      _stats = other._stats.ToDictionary(e => e.Key, e => e.Value);
+      _modifiers = modifiers.ToDictionary(e => e.Key, e => e.Value);
     }
 
-    public T Get<T>(IStatId<T> statId) where T : IStat => (T) UnsafeGet(statId);
-
-    public T GetWithParent<T>(IStatId<T> statId, AbstractGameEntity parent) where T : IStat =>
-      _stats.ContainsKey(statId.Value) ? Get(statId) : parent.Stats.Get(statId);
-
-    public IStat UnsafeGet(IStatId statId)
+    public TValue Get<TOperation, TValue>(AbstractStat<TOperation, TValue> stat)
+      where TOperation : IOperation where TValue : struct, IStatValue
     {
-      if (!_stats.ContainsKey(statId.Value))
+      if (_modifiers.ContainsKey(stat.Id))
       {
-        _stats[statId.Value] = statId.NotFoundValue();
+        var list = _modifiers[stat.Id];
+        list.RemoveAll(m => !m.Item2.IsValid());
+        return stat.ComputeValue(list.Cast<(TOperation, ILifetime)>().Select(m => m.Item1).ToList());
       }
 
-      return _stats[statId.Value];
+      return stat.DefaultValue();
     }
 
-    public StatTable Clone() => new StatTable(this);
+    public void InsertModifier<TOperation, TValue>(
+      AbstractStat<TOperation, TValue> stat, TOperation operation, ILifetime lifetime)
+      where TOperation : IOperation where TValue : struct, IStatValue
+    {
+      _modifiers.GetValueOrDefault(stat.Id, new List<(IOperation, ILifetime)>()).Add((operation, lifetime));
+    }
+
+    public StatTable Clone() => new StatTable(_modifiers);
   }
 }

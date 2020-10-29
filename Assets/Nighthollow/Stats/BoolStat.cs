@@ -12,94 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
-
 using System.Collections.Generic;
 using System.Linq;
 
+#nullable enable
 
 namespace Nighthollow.Stats
 {
-  public readonly struct BoolStatId : IStatId<BoolStat>
+  public readonly struct BoolValue : IStatValue
   {
-    readonly int _value;
+    public bool Bool { get; }
 
-    public BoolStatId(int value)
+    public BoolValue(bool b)
     {
-      _value = value;
+      Bool = b;
     }
-
-    public int Value => _value;
-
-    public IStat NotFoundValue() => new BoolStat();
   }
 
-  public sealed class BoolStat : IStat<BoolStat>
+  public sealed class BoolStat : AbstractStat<BooleanOperation, BoolValue>
   {
-    readonly List<IModifier> _setTrueModifiers = new List<IModifier>();
-    readonly List<IModifier> _setFalseModifiers = new List<IModifier>();
-    bool _hasDynamicModifiers;
-    bool _computedValue;
-
-    public BoolStat()
+    public BoolStat(int id) : base(id)
     {
-      _computedValue = false;
     }
 
-    BoolStat(
-      IEnumerable<IModifier> setTrueModifiers,
-      IEnumerable<IModifier> setFalseModifiers,
-      bool hasDynamicModifiers)
+    public override BoolValue DefaultValue() => new BoolValue(false);
+
+    public override BoolValue ComputeValue(IReadOnlyList<BooleanOperation> operations)
     {
-      _setTrueModifiers = setTrueModifiers.Select(m => m.Clone()).ToList();
-      _setFalseModifiers = setFalseModifiers.Select(m => m.Clone()).ToList();
-      _hasDynamicModifiers = hasDynamicModifiers;
+      return new BoolValue(
+        operations.Count(op => op.SetBoolean) > 0 && operations.Count(op => op.SetBoolean == false) == 0);
     }
 
-    public BoolStat Clone() => new BoolStat(_setTrueModifiers, _setFalseModifiers, _hasDynamicModifiers);
+    protected override BoolValue ParseStatValue(string value) => new BoolValue(bool.Parse(value));
 
-    public bool Value
-    {
-      get
-      {
-        if (_hasDynamicModifiers)
-        {
-          Recalculate();
-        }
+    public IModifier SetTrue() => StaticModifier(new BooleanOperation(true));
 
-        return _computedValue;
-      }
-    }
+    public IModifier SetFalse() => StaticModifier(new BooleanOperation(true));
 
-    public void SetTrue()
-    {
-      AddSetTrueModifier(new StaticModifier());
-    }
-
-    public void AddSetTrueModifier(IModifier modifier)
-    {
-      _setTrueModifiers.Add(modifier);
-      _hasDynamicModifiers |= modifier.IsDynamic();
-      Recalculate();
-    }
-
-    public void SetFalse()
-    {
-      AddSetFalseModifier(new StaticModifier());
-    }
-
-    public void AddSetFalseModifier(IModifier modifier)
-    {
-      _setFalseModifiers.Add(modifier);
-      _hasDynamicModifiers |= modifier.IsDynamic();
-      Recalculate();
-    }
-
-    void Recalculate()
-    {
-      _setTrueModifiers.RemoveAll(m => !m.IsValid());
-      _setFalseModifiers.RemoveAll(m => !m.IsValid());
-      _computedValue = _setTrueModifiers.Count > 0 && _setFalseModifiers.Count == 0;
-    }
+    public override void InsertDefault(StatTable table, string value) =>
+      StaticModifier(new BooleanOperation(ParseStatValue(value).Bool)).InsertInto(table);
   }
 }

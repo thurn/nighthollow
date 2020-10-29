@@ -98,9 +98,9 @@ namespace Nighthollow.Components
       _cost.text = manaCost.ToString();
 
       var addIndex = 0;
-      foreach (var pair in influenceCost.AllEntries)
+      foreach (var pair in influenceCost.Values)
       {
-        AddInfluence(pair.Key, pair.Value.Value, ref addIndex);
+        AddInfluence(pair.Key, pair.Value.Int, ref addIndex);
       }
 
       while (addIndex < _influence.Count)

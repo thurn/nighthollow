@@ -14,14 +14,23 @@
 
 #nullable enable
 
-namespace Nighthollow.Statz
+namespace Nighthollow.Stats
 {
+  public static class NumericOperation
+  {
+    public static NumericOperation<TValue> Add<TValue>(TValue value) where TValue : struct, IStatValue =>
+      new NumericOperation<TValue>(value, null);
+
+    public static NumericOperation<TValue> Increase<TValue>(PercentageValue value) where TValue : struct, IStatValue =>
+      new NumericOperation<TValue>(null, value);
+  }
+
   public class NumericOperation<TValue> : IOperation where TValue : struct, IStatValue
   {
     public TValue? AddTo { get; }
     public PercentageValue? IncreaseBy { get; }
 
-    protected NumericOperation(TValue? addTo, PercentageValue? increaseBy)
+    public NumericOperation(TValue? addTo, PercentageValue? increaseBy)
     {
       AddTo = addTo;
       IncreaseBy = increaseBy;

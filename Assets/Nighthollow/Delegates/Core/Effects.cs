@@ -37,16 +37,12 @@ namespace Nighthollow.Delegates.Core
   public sealed class ApplyModifierToOwner : Effect
   {
     public Creature Self { get; }
-    public Operator Operator { get; }
-    public IStatId StatId { get; }
     public IModifier Modifier { get; }
 
-    public ApplyModifierToOwner(Creature self, Operator @operator, IStatId statId, IModifier modifier)
+    public ApplyModifierToOwner(Creature self, IModifier modifier)
     {
       Self = self;
-      Operator = @operator;
       Modifier = modifier;
-      StatId = statId;
     }
 
     public override void Execute()
@@ -54,10 +50,10 @@ namespace Nighthollow.Delegates.Core
       switch (Self.Owner)
       {
         case PlayerName.User:
-          ModifierUtil.ApplyModifierUnchecked(Operator, Root.Instance.User.Data.Stats.UnsafeGet(StatId), Modifier);
+          Modifier.InsertInto(Root.Instance.User.Data.Stats);
           break;
         case PlayerName.Enemy:
-          ModifierUtil.ApplyModifierUnchecked(Operator, Root.Instance.Enemy.Data.Stats.UnsafeGet(StatId), Modifier);
+          Modifier.InsertInto(Root.Instance.Enemy.Data.Stats);
           break;
         case PlayerName.Unknown:
         default:
@@ -134,22 +130,7 @@ namespace Nighthollow.Delegates.Core
 
     public override void Execute()
     {
-      throw new System.NotImplementedException();
-    }
-  }
-
-  public sealed class ApplyMeleeHitEffect : Effect
-  {
-    public SkillData SkillData { get; }
-
-    public ApplyMeleeHitEffect(SkillData skillData)
-    {
-      SkillData = skillData;
-    }
-
-    public override void Execute()
-    {
-      throw new System.NotImplementedException();
+      throw new NotImplementedException();
     }
   }
 

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +23,6 @@ using Nighthollow.Stats;
 using Nighthollow.Utils;
 using SimpleJSON;
 using UnityEngine;
-
-#nullable enable
 
 namespace Nighthollow.Services
 {
@@ -98,8 +98,7 @@ namespace Nighthollow.Services
           _statDefaults[scope] = new StatTable();
         }
 
-        StatUtil.ParseStat((StatType) Parse.IntRequired(stat, "Type"), stat["Default Value"])
-          .AddTo(_statDefaults[scope].UnsafeGet(Stat.GetStat(statId)));
+        Stat.GetStat(statId).InsertDefault(_statDefaults[scope], stat["Default Value"]);
       }
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))
@@ -117,13 +116,11 @@ namespace Nighthollow.Services
         _skills[skill.Id] = skill;
       }
 
-      foreach (var row in parsed["Creatures"])
+      foreach (var creature in parsed["Creatures"]
+        .Where(row => row.ContainsKey("Prefab Address"))
+        .Select(row => new CreatureTypeData(this, row)))
       {
-        if (row.ContainsKey("Prefab Address"))
-        {
-          var creature = new CreatureTypeData(this, row);
-          _creatures[creature.Id] = creature;
-        }
+        _creatures[creature.Id] = creature;
       }
 
       foreach (var row in parsed["CardValues"])
@@ -154,22 +151,19 @@ namespace Nighthollow.Services
       var creatureType = GetCreatureType(Parse.IntRequired(row, "Base Creature"));
 
       var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Creatures);
-      stats.Get(Stat.Health).Add(Parse.IntRequired(row, "Health"));
-      stats.Get(Stat.ManaCost).Add(Parse.Int(row, "Mana Cost") ?? 0);
+      Stat.Health.Add(Parse.IntRequired(row, "Health")).InsertInto(stats);
+      Stat.ManaCost.Add(Parse.Int(row, "Mana Cost") ?? 0).InsertInto(stats);
 
       var costString = Parse.String(row, "Influence Cost");
       if (costString != null)
       {
-        stats.Get(Stat.InfluenceCost)
-          .AddValue<IntValue>(StatUtil.ParseStat(StatType.SchoolInts, costString));
+        Stat.InfluenceCost.InsertDefault(stats, costString);
       }
 
       var baseDamageString = Parse.String(row, "Base Damage");
       if (baseDamageString != null)
       {
-        stats.Get(Stat.BaseDamage).AddValue<IntRangeValue>(
-          (TaggedStatListValue<DamageType, IntRangeValue, IntRangeStat>?) StatUtil.ParseStat(
-            StatType.DamageTypeIntRanges, baseDamageString));
+        Stat.BaseDamage.InsertDefault(stats, baseDamageString);
       }
 
       var cardName = Parse.String(row, "Card Name");
@@ -191,17 +185,15 @@ namespace Nighthollow.Services
       var skill = creatureType.ImplicitSkill;
       if (skill != null)
       {
-        var modifierList = new List<Modifier>();
+        var modifierList = new List<ModifierData>();
 
         if (skill.ImplicitAffix != null)
         {
-          foreach (var range in skill.ImplicitAffix.ModifierRanges)
-          {
-            var path = new ModifierPath(cardId, skill.ImplicitAffix.Id, range.ModifierData.Id, skill.Id);
-            modifierList.Add(new Modifier(
-              range.ModifierData,
-              _modifierValues.ContainsKey(path) ? _modifierValues[path] : null));
-          }
+          modifierList.AddRange(
+            from range in skill.ImplicitAffix.ModifierRanges
+            let path = new ModifierPath(cardId, skill.ImplicitAffix.Id, range.ModifierData.Id, skill.Id)
+            select new ModifierData(
+              range.ModifierData, _modifierValues.ContainsKey(path) ? _modifierValues[path] : null));
 
           affixes.Add(new AffixData(skill.ImplicitAffix.Id, modifierList));
         }
@@ -220,17 +212,12 @@ namespace Nighthollow.Services
       var affixes = new List<AffixData>();
       if (creatureType.ImplicitAffix != null)
       {
-        var modifierList = new List<Modifier>();
+        var modifierList =
+          from range in creatureType.ImplicitAffix.ModifierRanges
+          let path = new ModifierPath(cardId, creatureType.ImplicitAffix.Id, range.ModifierData.Id)
+          select new ModifierData(range.ModifierData, _modifierValues.ContainsKey(path) ? _modifierValues[path] : null);
 
-        foreach (var range in creatureType.ImplicitAffix.ModifierRanges)
-        {
-          var path = new ModifierPath(cardId, creatureType.ImplicitAffix.Id, range.ModifierData.Id);
-          modifierList.Add(new Modifier(
-            range.ModifierData,
-            _modifierValues.ContainsKey(path) ? _modifierValues[path] : null));
-        }
-
-        affixes.Add(new AffixData(creatureType.ImplicitAffix.Id, modifierList));
+        affixes.Add(new AffixData(creatureType.ImplicitAffix.Id, modifierList.ToList()));
       }
 
       return affixes;
@@ -245,8 +232,8 @@ namespace Nighthollow.Services
         modifierId,
         Parse.Int(row, "Skill"));
       _modifierValues[modifierPath] = Errors.CheckNotNull(
-        ModifierUtil.ParseArgument(GetModifier(modifierId),
-          Parse.StringRequired(row, "Value")));
+        Stat.GetStat(Errors.CheckNotNull(GetModifier(modifierId).StatId))
+          .ParseValue(Parse.StringRequired(row, "Value")));
     }
   }
 }

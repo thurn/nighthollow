@@ -114,9 +114,9 @@ namespace Nighthollow.Components
       _manaText.text = _mana.ToString();
 
       var index = 0;
-      foreach (var pair in _data.Stats.Get(Stat.Influence).AllEntries)
+      foreach (var pair in _data.Stats.Get(Stat.Influence).Values)
       {
-        for (var i = 0; i < pair.Value.Value; ++i)
+        for (var i = 0; i < pair.Value.Int; ++i)
         {
           Image image;
           if (index < _influenceImages.Count)

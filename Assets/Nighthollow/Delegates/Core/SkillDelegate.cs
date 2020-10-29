@@ -96,26 +96,26 @@ namespace Nighthollow.Delegates.Core
     /// Should compute the base damage for this skill, randomly selecting from within its base damage ranges. The first
     /// delegate to return a non-null value with be used.
     /// </summary>
-    public virtual TaggedStatListValue<DamageType, IntValue, IntStat>? RollForBaseDamage(
+    public virtual TaggedValues<DamageType, IntValue>? RollForBaseDamage(
       SkillContext c, Creature target) => null;
 
     /// <summary>
     /// Should apply damage reduction for this skill, reducing the damage value based on the target's reduction. The
     /// first delegate to return a non-null value with be used.
     /// </summary>
-    public virtual TaggedStatListValue<DamageType, IntValue, IntStat>? ApplyDamageReduction(
+    public virtual TaggedValues<DamageType, IntValue>? ApplyDamageReduction(
       SkillContext c,
       Creature target,
-      TaggedStatListValue<DamageType, IntValue, IntStat> damage) => null;
+      TaggedValues<DamageType, IntValue> damage) => null;
 
     /// <summary>
     /// Should apply damage resistance for this skill, reducing the damage value based on the target's resistance. The
     /// first delegate to return a non-null value with be used.
     /// </summary>
-    public virtual TaggedStatListValue<DamageType, IntValue, IntStat>? ApplyDamageResistance(
+    public virtual TaggedValues<DamageType, IntValue>? ApplyDamageResistance(
       SkillContext c,
       Creature target,
-      TaggedStatListValue<DamageType, IntValue, IntStat> damage) => null;
+      TaggedValues<DamageType, IntValue> damage) => null;
 
     /// <summary>
     /// Should compute the final damage value for this skill based on the value adjusted by damage resistance and
@@ -124,7 +124,7 @@ namespace Nighthollow.Delegates.Core
     /// </summary>
     public virtual int? ComputeFinalDamage(SkillContext c,
       Creature target,
-      TaggedStatListValue<DamageType, IntValue, IntStat> damage,
+      TaggedValues<DamageType, IntValue> damage,
       bool isCriticalHit) => null;
 
     /// <summary>

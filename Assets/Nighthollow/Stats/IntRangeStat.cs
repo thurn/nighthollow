@@ -12,64 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+
 #nullable enable
 
 namespace Nighthollow.Stats
 {
-  public readonly struct IntRangeStatId : IStatId<IntRangeStat>
+  public readonly struct IntRangeValue : IStatValue
   {
-    readonly int _value;
+    public static readonly IntRangeValue Zero = new IntRangeValue(0, 0);
+    public int Low { get; }
+    public int High { get; }
 
-    public IntRangeStatId(int value)
+    public IntRangeValue(int low, int high)
     {
-      _value = value;
+      Low = low;
+      High = high;
     }
-
-    public int Value => _value;
-
-    public IStat NotFoundValue() => new IntRangeStat(new IntStat(), new IntStat());
   }
 
-  public sealed class IntRangeStat : IStat<IntRangeStat>, IAdditiveStat
+  public sealed class IntRangeStat : NumericStat<IntRangeValue>
   {
-    readonly IntStat _low;
-    readonly IntStat _high;
-
-    public IntRangeStat()
+    public IntRangeStat(int id) : base(id)
     {
-      _low = new IntStat();
-      _high = new IntStat();
     }
 
-    public IntRangeStat(IntStat low, IntStat high)
+    public override IntRangeValue DefaultValue() => IntRangeValue.Zero;
+
+    public override IntRangeValue ComputeValue(IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
+      new IntRangeValue(
+        IntStat.Compute(operations, range => new IntValue(range.Low)).Int,
+        IntStat.Compute(operations, range => new IntValue(range.High)).Int);
+
+    protected override IntRangeValue ParseStatValue(string value) => ParseIntRange(value);
+
+    public static IntRangeValue ParseIntRange(string value)
     {
-      _low = low;
-      _high = high;
-    }
-
-    public int LowValue => _low.Value;
-
-    public int HighValue => _high.Value;
-
-    public IntRangeStat Clone() => new IntRangeStat(_low.Clone(), _high.Clone());
-
-    public void AddAddedModifier(IModifier modifier)
-    {
-      _low.AddAddedModifier(modifier.WithValue(((IntRangeValue) modifier.BaseModifier.Argument).Low));
-      _high.AddAddedModifier(modifier.WithValue(((IntRangeValue) modifier.BaseModifier.Argument).High));
-    }
-
-    public void AddIncreaseModifier(IModifier modifier)
-    {
-      _low.AddIncreaseModifier(modifier);
-      _high.AddIncreaseModifier(modifier);
-    }
-
-    public void AddValue(IStatValue value)
-    {
-      var range = (IntRangeValue) value;
-      _low.Add(range.Low.Value);
-      _high.Add(range.High.Value);
+      var split = value.Split('-');
+      return new IntRangeValue(int.Parse(split[0]), int.Parse(split[1]));
     }
   }
 }

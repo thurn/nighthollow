@@ -21,12 +21,12 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
-  public sealed class Modifier
+  public sealed class ModifierData
   {
     public ModifierTypeData Data { get; }
     public IStatValue? Value { get; }
 
-    public Modifier(ModifierTypeData modifierData, IStatValue? value)
+    public ModifierData(ModifierTypeData modifierData, IStatValue? value)
     {
       ModifierUtil.Validate(modifierData, value);
       Data = modifierData;
@@ -37,9 +37,9 @@ namespace Nighthollow.Data
   public sealed class AffixData
   {
     public int AffixTypeId { get; }
-    public IReadOnlyList<Modifier> Modifiers { get; }
+    public IReadOnlyList<ModifierData> Modifiers { get; }
 
-    public AffixData(int affixTypeId, IReadOnlyList<Modifier> modifiers)
+    public AffixData(int affixTypeId, IReadOnlyList<ModifierData> modifiers)
     {
       AffixTypeId = affixTypeId;
       Modifiers = modifiers;

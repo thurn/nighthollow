@@ -12,114 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Stats;
 using System;
+using Nighthollow.Stats;
 
 // Generated Code - Do Not Modify!
 namespace Nighthollow.Generated
 {
   public static class Stat
   {
-    public static readonly IntStatId Health = new IntStatId(1);
-    public static readonly TaggedStatsId<DamageType, IntRangeStat> BaseDamage = new TaggedStatsId<DamageType, IntRangeStat>(2);
-    public static readonly IntStatId Speed = new IntStatId(3);
-    public static readonly PercentageStatId CritChance = new PercentageStatId(4);
-    public static readonly PercentageStatId CritMultiplier = new PercentageStatId(5);
-    public static readonly IntStatId Accuracy = new IntStatId(6);
-    public static readonly IntStatId Evasion = new IntStatId(7);
-    public static readonly TaggedStatsId<DamageType, IntStat> DamageResistance = new TaggedStatsId<DamageType, IntStat>(8);
-    public static readonly TaggedStatsId<DamageType, IntStat> DamageReduction = new TaggedStatsId<DamageType, IntStat>(9);
-    public static readonly PercentageStatId MeleeHealthDrainPercent = new PercentageStatId(10);
-    public static readonly IntStatId HealthGainOnMeleeHit = new IntStatId(11);
-    public static readonly PercentageStatId SkillSpeedMultiplier = new PercentageStatId(12);
-    public static readonly DurationStatId StunDurationOnEnemies = new DurationStatId(13);
-    public static readonly PercentageStatId StunChance = new PercentageStatId(15);
-    public static readonly IntStatId MeleeReflect = new IntStatId(17);
-    public static readonly IntStatId HealthRegenerationPerSecond = new IntStatId(18);
-    public static readonly IntStatId ManaCost = new IntStatId(19);
-    public static readonly TaggedStatsId<School, IntStat> InfluenceCost = new TaggedStatsId<School, IntStat>(20);
-    public static readonly IntStatId ProjectileSpeed = new IntStatId(21);
-    public static readonly IntStatId HitboxRadius = new IntStatId(22);
-    public static readonly IntStatId StartingLife = new IntStatId(23);
-    public static readonly IntStatId StartingMana = new IntStatId(24);
-    public static readonly TaggedStatsId<School, IntStat> Influence = new TaggedStatsId<School, IntStat>(25);
-    public static readonly IntStatId StartingHandSize = new IntStatId(26);
-    public static readonly IntStatId ManaGain = new IntStatId(27);
-    public static readonly DurationStatId CardDrawInterval = new DurationStatId(28);
-    public static readonly DurationStatId EnemySpawnDelay = new DurationStatId(29);
-    public static readonly IntStatId TotalEnemiesToSpawn = new IntStatId(30);
-    public static readonly BoolStatId IsManaCreature = new BoolStatId(32);
-    public static readonly TaggedStatsId<DamageType, IntStat> GainedDamageOnKill = new TaggedStatsId<DamageType, IntStat>(33);
-    public static readonly IntStatId MaxMeleeAreaTargets = new IntStatId(34);
-    public static readonly PercentageStatId ProjectileDamageMultiplier = new PercentageStatId(35);
-    public static readonly PercentageStatId ChainProjectileDamageMultiplier = new PercentageStatId(36);
-    public static readonly DurationStatId SkillCooldownRecovery = new DurationStatId(37);
-    public static readonly DurationStatId MeleeKnockbackDuration = new DurationStatId(38);
-    public static readonly DurationStatId ManaGainInterval = new DurationStatId(39);
-    public static readonly BoolStatId UsesAccuracy = new BoolStatId(40);
-    public static readonly BoolStatId CanCrit = new BoolStatId(41);
-    public static readonly BoolStatId CanStun = new BoolStatId(42);
-    public static readonly BoolStatId IgnoresDamageResistance = new BoolStatId(43);
-    public static readonly BoolStatId IgnoresDamageReduction = new BoolStatId(44);
-    public static readonly PercentageStatId MaximumDamageReduction = new PercentageStatId(45);
-    public static readonly PercentageStatId MaximumDamageResistance = new PercentageStatId(46);
-    public static readonly PercentageStatId MaximumStunChance = new PercentageStatId(47);
-    public static readonly DurationStatId Cooldown = new DurationStatId(48);
+    public static readonly IntStat Health = new IntStat(1);
+    public static readonly DamageTypeIntRangesStat BaseDamage = new DamageTypeIntRangesStat(2);
+    public static readonly IntStat Speed = new IntStat(3);
+    public static readonly PercentageStat CritChance = new PercentageStat(4);
+    public static readonly PercentageStat CritMultiplier = new PercentageStat(5);
+    public static readonly IntStat Accuracy = new IntStat(6);
+    public static readonly IntStat Evasion = new IntStat(7);
+    public static readonly DamageTypeIntsStat DamageResistance = new DamageTypeIntsStat(8);
+    public static readonly DamageTypeIntsStat DamageReduction = new DamageTypeIntsStat(9);
+    public static readonly PercentageStat MeleeHealthDrainPercent = new PercentageStat(10);
+    public static readonly IntStat HealthGainOnMeleeHit = new IntStat(11);
+    public static readonly PercentageStat SkillSpeedMultiplier = new PercentageStat(12);
+    public static readonly DurationStat StunDurationOnEnemies = new DurationStat(13);
+    public static readonly PercentageStat StunChance = new PercentageStat(15);
+    public static readonly IntStat MeleeReflect = new IntStat(17);
+    public static readonly IntStat HealthRegenerationPerSecond = new IntStat(18);
+    public static readonly IntStat ManaCost = new IntStat(19);
+    public static readonly SchoolIntsStat InfluenceCost = new SchoolIntsStat(20);
+    public static readonly IntStat ProjectileSpeed = new IntStat(21);
+    public static readonly IntStat HitboxRadius = new IntStat(22);
+    public static readonly IntStat StartingLife = new IntStat(23);
+    public static readonly IntStat StartingMana = new IntStat(24);
+    public static readonly SchoolIntsStat Influence = new SchoolIntsStat(25);
+    public static readonly IntStat StartingHandSize = new IntStat(26);
+    public static readonly IntStat ManaGain = new IntStat(27);
+    public static readonly IntStat AddedManaGain = new IntStat(49);
+    public static readonly DurationStat CardDrawInterval = new DurationStat(28);
+    public static readonly DurationStat EnemySpawnDelay = new DurationStat(29);
+    public static readonly IntStat TotalEnemiesToSpawn = new IntStat(30);
+    public static readonly BoolStat IsManaCreature = new BoolStat(32);
+    public static readonly DamageTypeIntsStat GainedDamageOnKill = new DamageTypeIntsStat(33);
+    public static readonly IntStat MaxMeleeAreaTargets = new IntStat(34);
+    public static readonly PercentageStat ProjectileDamageMultiplier = new PercentageStat(35);
+    public static readonly PercentageStat ChainProjectileDamageMultiplier = new PercentageStat(36);
+    public static readonly DurationStat SkillCooldownRecovery = new DurationStat(37);
+    public static readonly DurationStat MeleeKnockbackDuration = new DurationStat(38);
+    public static readonly DurationStat ManaGainInterval = new DurationStat(39);
+    public static readonly BoolStat UsesAccuracy = new BoolStat(40);
+    public static readonly BoolStat CanCrit = new BoolStat(41);
+    public static readonly BoolStat CanStun = new BoolStat(42);
+    public static readonly BoolStat IgnoresDamageResistance = new BoolStat(43);
+    public static readonly BoolStat IgnoresDamageReduction = new BoolStat(44);
+    public static readonly PercentageStat MaximumDamageReduction = new PercentageStat(45);
+    public static readonly PercentageStat MaximumDamageResistance = new PercentageStat(46);
+    public static readonly PercentageStat MaximumStunChance = new PercentageStat(47);
+    public static readonly DurationStat Cooldown = new DurationStat(48);
 
-    public static StatType GetType(int statId)
-    {
-      switch (statId)
-      {
-        case 1: return StatType.Int;
-        case 2: return StatType.DamageTypeIntRanges;
-        case 3: return StatType.Int;
-        case 4: return StatType.Percentage;
-        case 5: return StatType.Percentage;
-        case 6: return StatType.Int;
-        case 7: return StatType.Int;
-        case 8: return StatType.DamageTypeInts;
-        case 9: return StatType.DamageTypeInts;
-        case 10: return StatType.Percentage;
-        case 11: return StatType.Int;
-        case 12: return StatType.Percentage;
-        case 13: return StatType.Duration;
-        case 15: return StatType.Percentage;
-        case 17: return StatType.Int;
-        case 18: return StatType.Int;
-        case 19: return StatType.Int;
-        case 20: return StatType.SchoolInts;
-        case 21: return StatType.Int;
-        case 22: return StatType.Int;
-        case 23: return StatType.Int;
-        case 24: return StatType.Int;
-        case 25: return StatType.SchoolInts;
-        case 26: return StatType.Int;
-        case 27: return StatType.Int;
-        case 28: return StatType.Duration;
-        case 29: return StatType.Duration;
-        case 30: return StatType.Int;
-        case 32: return StatType.Bool;
-        case 33: return StatType.DamageTypeInts;
-        case 34: return StatType.Int;
-        case 35: return StatType.Percentage;
-        case 36: return StatType.Percentage;
-        case 37: return StatType.Duration;
-        case 38: return StatType.Duration;
-        case 39: return StatType.Duration;
-        case 40: return StatType.Bool;
-        case 41: return StatType.Bool;
-        case 42: return StatType.Bool;
-        case 43: return StatType.Bool;
-        case 44: return StatType.Bool;
-        case 45: return StatType.Percentage;
-        case 46: return StatType.Percentage;
-        case 47: return StatType.Percentage;
-        case 48: return StatType.Duration;
-        default: throw new ArgumentOutOfRangeException();
-      }
-    }
-
-    public static IStatId GetStat(int statId)
+    public static IStat GetStat(int statId)
     {
       switch (statId)
       {

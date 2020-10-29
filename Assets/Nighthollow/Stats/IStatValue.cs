@@ -14,15 +14,10 @@
 
 #nullable enable
 
-namespace Nighthollow.Statz
+namespace Nighthollow.Stats
 {
-  public sealed class BooleanOperation : IOperation
+  public interface IStatValue
   {
-    public bool SetBoolean { get; }
 
-    public BooleanOperation(bool setBoolean)
-    {
-      SetBoolean = setBoolean;
-    }
   }
 }

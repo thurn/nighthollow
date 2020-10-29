@@ -76,24 +76,24 @@ namespace Nighthollow.Delegates.Core
     public bool RollForCrit(SkillContext c, Creature target)
       => Delegates().Any(d => d.RollForCrit(c, target));
 
-    public TaggedStatListValue<DamageType, IntValue, IntStat> RollForBaseDamage(SkillContext c, Creature target) =>
+    public TaggedValues<DamageType, IntValue> RollForBaseDamage(SkillContext c, Creature target) =>
       FirstNotNull(d => d.RollForBaseDamage(c, target));
 
-    public TaggedStatListValue<DamageType, IntValue, IntStat> ApplyDamageReduction(
+    public TaggedValues<DamageType, IntValue> ApplyDamageReduction(
       SkillContext c,
       Creature target,
-      TaggedStatListValue<DamageType, IntValue, IntStat> damage) =>
+      TaggedValues<DamageType, IntValue> damage) =>
       FirstNotNull(d => d.ApplyDamageReduction(c, target, damage));
 
-    public TaggedStatListValue<DamageType, IntValue, IntStat> ApplyDamageResistance(
+    public TaggedValues<DamageType, IntValue> ApplyDamageResistance(
       SkillContext c,
       Creature target,
-      TaggedStatListValue<DamageType, IntValue, IntStat> damage) =>
+      TaggedValues<DamageType, IntValue> damage) =>
       FirstNotNull(d => d.ApplyDamageResistance(c, target, damage));
 
     public int ComputeFinalDamage(SkillContext c,
       Creature target,
-      TaggedStatListValue<DamageType, IntValue, IntStat> damage,
+      TaggedValues<DamageType, IntValue> damage,
       bool isCriticalHit) =>
       FirstNotNull(d => d.ComputeFinalDamage(c, target, damage, isCriticalHit));
 

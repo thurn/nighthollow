@@ -14,29 +14,19 @@
 
 #nullable enable
 
-using Nighthollow.Utils;
+using UnityEngine;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct StaticModifier : IModifier
+  public sealed class TimedLifetime : ILifetime
   {
-    public readonly IStatValue Argument;
+    readonly float _endTimeSeconds;
 
-    public StaticModifier(IStatValue argument)
+    public bool IsValid() => Time.time < _endTimeSeconds;
+
+    public TimedLifetime(float endTimeSeconds)
     {
-      Argument = argument;
+      _endTimeSeconds = endTimeSeconds;
     }
-
-    public StaticModifier BaseModifier => this;
-
-    public IModifier WithValue(IStatValue value) => value.AsStaticModifier();
-
-    public IStatValue GetArgument() => Argument;
-
-    public bool IsDynamic() => false;
-
-    public bool IsValid() => true;
-
-    public IModifier Clone() => this;
   }
 }

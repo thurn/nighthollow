@@ -12,45 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using UnityEngine;
+
 #nullable enable
 
 namespace Nighthollow.Stats
 {
-  public readonly struct DurationStatId : IStatId<DurationStat>
+  public readonly struct DurationValue : IStatValue
   {
-    readonly int _value;
+    readonly int _timeMilliseconds;
 
-    public DurationStatId(int value)
+    public DurationValue(int timeMilliseconds)
     {
-      _value = value;
+      _timeMilliseconds = timeMilliseconds;
     }
 
-    public int Value => _value;
+    public float AsSeconds() => _timeMilliseconds / 1000f;
 
-    public IStat NotFoundValue() => new DurationStat(new IntStat());
+    public int AsMilliseconds() => _timeMilliseconds;
   }
 
-  public sealed class DurationStat : IStat<DurationStat>
+  public sealed class DurationStat : NumericStat<DurationValue>
   {
-    readonly IntStat _stat;
-
-    public float ValueSeconds => _stat.Value / 1000f;
-
-    public DurationStat(IntStat initialValue)
+    public DurationStat(int id) : base(id)
     {
-      _stat = initialValue;
     }
 
-    public DurationStat Clone() => new DurationStat(_stat.Clone());
+    public override DurationValue DefaultValue() => new DurationValue(0);
 
-    public void AddAddedModifier(IModifier modifier)
-    {
-      _stat.AddAddedModifier(modifier.WithValue(modifier.BaseModifier.Argument.AsIntValue()));
-    }
+    public override DurationValue ComputeValue(IReadOnlyList<NumericOperation<DurationValue>> operations) =>
+      new DurationValue(IntStat.Compute(operations, duration => new IntValue(duration.AsMilliseconds())).Int);
 
-    public void AddIncreaseModifier(IModifier modifier)
-    {
-      _stat.AddIncreaseModifier(modifier);
-    }
+    protected override DurationValue ParseStatValue(string value) =>
+      new DurationValue(Mathf.RoundToInt(float.Parse(value.Replace("s", "")) * 1000f));
   }
 }

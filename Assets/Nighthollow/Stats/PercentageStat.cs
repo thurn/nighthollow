@@ -12,46 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
-
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct PercentageStatId : IStatId<PercentageStat>
-  {
-    readonly int _value;
-
-    public PercentageStatId(int value)
-    {
-      _value = value;
-    }
-
-    public int Value => _value;
-
-    public IStat NotFoundValue() => new PercentageStat(new IntStat());
-  }
-
-  public sealed class PercentageStat : IStat<PercentageStat>
+  public readonly struct PercentageValue : IStatValue
   {
     const float BasisPoints = 10_000f;
-    readonly IntStat _stat;
+    readonly int _basisPoints;
 
-    public PercentageStat(IntStat initialValue)
+    public PercentageValue(int basisPoints)
     {
-      _stat = initialValue;
+      _basisPoints = basisPoints;
     }
 
-    public float AsMultiplier() => _stat.Value / BasisPoints;
+    public int AsBasisPoints() => _basisPoints;
+
+    public float AsMultiplier() => _basisPoints / BasisPoints;
 
     public int CalculateFraction(int input) =>
-      Mathf.RoundToInt((input * _stat.Value) / BasisPoints);
+      Mathf.RoundToInt((input * _basisPoints) / BasisPoints);
+  }
 
-    public PercentageStat Clone() => new PercentageStat(_stat.Clone());
-
-    public void AddAddedModifier(IModifier modifier)
+  public sealed class PercentageStat : NumericStat<PercentageValue>
+  {
+    public PercentageStat(int id) : base(id)
     {
-      _stat.AddAddedModifier(modifier.WithValue(modifier.BaseModifier.Argument.AsIntValue()));
     }
+
+    public override PercentageValue DefaultValue() => new PercentageValue(0);
+
+    public override PercentageValue ComputeValue(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
+      new PercentageValue(IntStat.Compute(operations, duration => new IntValue(duration.AsBasisPoints())).Int);
+
+    protected override PercentageValue ParseStatValue(string value) =>
+      new PercentageValue(Mathf.RoundToInt(float.Parse(value.Replace("%", "")) * 100f));
   }
 }

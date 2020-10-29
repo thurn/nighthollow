@@ -16,7 +16,7 @@
 
 using System.Collections.Generic;
 
-namespace Nighthollow.Statz
+namespace Nighthollow.Stats
 {
   public abstract class AbstractStat<TOperation, TValue> : IStat
     where TOperation : IOperation where TValue : struct, IStatValue
@@ -34,13 +34,29 @@ namespace Nighthollow.Statz
 
     protected abstract TValue ParseStatValue(string value);
 
-    public IStatValue ParseValue(string value) => ParseStatValue(value);
+    public IModifier Modifier(TOperation operation, ILifetime lifetime) =>
+      new Modifier<TOperation, TValue>(this, operation, lifetime);
 
-    public IStatValue Lookup(StatTable table) => table.Get(this);
+    public IModifier StaticModifier(TOperation operation) =>
+      Modifier(operation, StaticLifetime.Instance);
 
-    public void AddModifierUnchecked(StatTable table, IModifier modifier)
+    public IStatValue ParseValue(string value) =>
+      ParseStatValue(value);
+
+    public abstract void InsertDefault(StatTable table, string value);
+
+    public IStatValue Lookup(StatTable table) =>
+      table.Get(this);
+  }
+
+  public abstract class NumericStat<TValue> : AbstractStat<NumericOperation<TValue>, TValue>
+    where TValue : struct, IStatValue
+  {
+    protected NumericStat(int id) : base(id)
     {
-      table.InsertModifier(this, (IModifier<TOperation>) modifier);
     }
+
+    public override void InsertDefault(StatTable table, string value) =>
+      StaticModifier(NumericOperation.Add(ParseStatValue(value))).InsertInto(table);
   }
 }

@@ -15,7 +15,6 @@
 using System;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
-using Nighthollow.Utils;
 
 #nullable enable
 
@@ -23,141 +22,8 @@ namespace Nighthollow.Data
 {
   public static class ModifierUtil
   {
-    public static IStatValue? ParseArgument(ModifierTypeData modifierData, string? value)
-    {
-      if (value == null)
-      {
-        return null;
-      }
-
-      var statId = Errors.CheckNotNull(modifierData.StatId);
-      switch (modifierData.Operator)
-      {
-        case Operator.Add:
-          switch (Stat.GetType(statId))
-          {
-            case StatType.Int:
-              return new IntValue(int.Parse(value));
-            case StatType.SchoolInts:
-              return new TaggedStatValue<School, IntValue>(
-                Errors.CheckNotNull(modifierData.School),
-                new IntValue(int.Parse(value)));
-            case StatType.DamageTypeInts:
-              return new TaggedStatValue<DamageType, IntValue>(
-                Errors.CheckNotNull(modifierData.DamageType),
-                new IntValue(int.Parse(value)));
-            case StatType.Percentage:
-              return new PercentageValue(double.Parse(value));
-            case StatType.Duration:
-              return new DurationValue(double.Parse(value));
-            case StatType.IntRange:
-              var split1 = value.Split(',');
-              return new IntRangeValue(int.Parse(split1[0]), int.Parse(split1[1]));
-            case StatType.DamageTypeIntRanges:
-              var split2 = value.Split(',');
-              return new TaggedStatValue<DamageType, IntRangeValue>(
-                Errors.CheckNotNull(modifierData.DamageType),
-                new IntRangeValue(int.Parse(split2[0]), int.Parse(split2[1])));
-            case StatType.Bool:
-              throw new InvalidOperationException("Cannot add boolean stats");
-            case StatType.Unknown:
-            default:
-              throw new ArgumentOutOfRangeException();
-          }
-        case Operator.Increase:
-          if (modifierData.DamageType.HasValue)
-          {
-            return new TaggedStatValue<DamageType, PercentageValue>(
-              modifierData.DamageType.Value,
-              new PercentageValue(double.Parse(value)));
-          }
-          else if (modifierData.School.HasValue)
-          {
-            return new TaggedStatValue<School, PercentageValue>(
-              modifierData.School.Value,
-              new PercentageValue(double.Parse(value)));
-          }
-          else
-          {
-            return new PercentageValue(double.Parse(value));
-          }
-        case Operator.SetFalse:
-        case Operator.SetTrue:
-          throw new InvalidOperationException("Boolean set operator should not have an associated value.");
-        case Operator.Unknown:
-        case null:
-        default:
-          throw new ArgumentOutOfRangeException(nameof(modifierData.Operator),
-            "Modifiers with a value must have an operator");
-      }
-    }
-
-    public static void ApplyModifierUnchecked(Operator @operator, IStat stat, IModifier modifier)
-    {
-      switch (@operator)
-      {
-        case Operator.Add:
-          AddAddedModifierUnchecked(stat, modifier);
-          break;
-        case Operator.Increase:
-          AddIncreaseModifierUnchecked(stat, modifier);
-          break;
-        case Operator.SetFalse:
-          ((BoolStat) stat).AddSetFalseModifier(modifier);
-          break;
-        case Operator.SetTrue:
-          ((BoolStat) stat).AddSetTrueModifier(modifier);
-          break;
-        case Operator.Unknown:
-        default:
-          throw new ArgumentOutOfRangeException(nameof(@operator), @operator, null);
-      }
-    }
-
-    public static void AddAddedModifierUnchecked(IStat stat, IModifier modifier)
-    {
-      switch (stat)
-      {
-        case IntStat intStat:
-          intStat.AddAddedModifier(modifier);
-          break;
-        case DurationStat durationStat:
-          durationStat.AddAddedModifier(modifier);
-          break;
-        case PercentageStat percentageStat:
-          percentageStat.AddAddedModifier(modifier);
-          break;
-        case IntRangeStat intRangeStat:
-          intRangeStat.AddAddedModifier(modifier);
-          break;
-        case ITaggedStats taggedStats:
-          taggedStats.AddAddedModifier(modifier);
-          break;
-        default:
-          throw new InvalidOperationException($"Add operator is not supported for {stat}");
-      }
-    }
-
-    public static void AddIncreaseModifierUnchecked(IStat stat, IModifier modifier)
-    {
-      switch (stat)
-      {
-        case IntStat intStat:
-          intStat.AddIncreaseModifier(modifier);
-          break;
-        case DurationStat durationStat:
-          durationStat.AddIncreaseModifier(modifier);
-          break;
-        case IntRangeStat intRangeStat:
-          intRangeStat.AddIncreaseModifier(modifier);
-          break;
-        case ITaggedStats taggedStats:
-          taggedStats.AddIncreaseModifier(modifier);
-          break;
-        default:
-          throw new InvalidOperationException($"Increase operator is not supported for {stat}");
-      }
-    }
+    public static IStatValue? ParseValue(ModifierTypeData modifierData, string? value) =>
+      modifierData.StatId.HasValue && value != null ? Stat.GetStat(modifierData.StatId.Value).ParseValue(value) : null;
 
     public static void Validate(ModifierTypeData modifierData, IStatValue? value)
     {

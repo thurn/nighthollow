@@ -14,12 +14,12 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Stats;
-using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
@@ -30,11 +30,11 @@ namespace Nighthollow.Data
       var stats = item.Stats;
       var delegates = new List<CreatureDelegateId>();
 
-      stats.Get(Stat.Speed).Add(item.BaseType.Speed);
+      Stat.Speed.Add(item.BaseType.Speed).InsertInto(stats);
 
       if (item.BaseType.IsManaCreature)
       {
-        stats.Get(Stat.IsManaCreature).AddSetTrueModifier(new StaticModifier());
+        Stat.IsManaCreature.SetTrue().InsertInto(stats);
       }
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
@@ -46,11 +46,7 @@ namespace Nighthollow.Data
 
         if (modifier.Data.StatId.HasValue)
         {
-          ApplyStatModifier(
-            stats,
-            modifier.Data.StatId.Value,
-            modifier.Data,
-            modifier.Value);
+          ApplyStatModifier(stats, modifier.Data.StatId.Value, modifier);
         }
       }
 
@@ -71,8 +67,6 @@ namespace Nighthollow.Data
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
       {
-
-
         if (modifier.Data.SkillDelegateId.HasValue)
         {
           delegates.Add(modifier.Data.SkillDelegateId.Value);
@@ -80,31 +74,26 @@ namespace Nighthollow.Data
 
         if (modifier.Data.StatId.HasValue)
         {
-          ApplyStatModifier(
-            stats,
-            modifier.Data.StatId.Value,
-            modifier.Data,
-            modifier.Value);
+          ApplyStatModifier(stats, modifier.Data.StatId.Value, modifier);
         }
       }
 
       return new SkillData(item.BaseType, stats, delegates);
     }
 
-    static void ApplyStatModifier(StatTable table, int statId, ModifierTypeData data, IStatValue? value)
+    static void ApplyStatModifier(StatTable table, int statId, ModifierData data)
     {
-      ModifierUtil.ApplyModifierUnchecked(
-        Errors.CheckNotNull(data.Operator),
-        table.UnsafeGet(Stat.GetStat(statId)),
-        value?.AsStaticModifier() ?? new StaticModifier());
+      ToModifier(statId, data).InsertInto(table);
     }
+
+    static IModifier ToModifier(int statId, ModifierData data) => throw new NotImplementedException();
 
     public static SkillData DefaultMeleeAttack()
     {
       var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Skills);
-      stats.Get(Stat.UsesAccuracy).SetTrue();
-      stats.Get(Stat.CanCrit).SetTrue();
-      stats.Get(Stat.CanStun).SetTrue();
+      Stat.UsesAccuracy.SetTrue().InsertInto(stats);
+      Stat.CanCrit.SetTrue().InsertInto(stats);
+      Stat.CanStun.SetTrue().InsertInto(stats);
 
       return new SkillData(
         Root.Instance.GameDataService.GetSkillType(1),

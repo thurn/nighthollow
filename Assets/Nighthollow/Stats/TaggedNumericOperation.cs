@@ -16,14 +16,25 @@
 
 using System;
 
-namespace Nighthollow.Statz
+namespace Nighthollow.Stats
 {
-  public class TaggedNumericOperation<TTag, TValue> : NumericOperation<TValue>
+  public static class TaggedNumericOperation
+  {
+    public static TaggedNumericOperation<TTag, TValue> Add<TTag, TValue>(TTag tag, TValue value)
+      where TTag : Enum where TValue : struct, IStatValue =>
+      new TaggedNumericOperation<TTag, TValue>(tag, value, null);
+
+    public static TaggedNumericOperation<TTag, TValue> Increase<TTag, TValue>(TTag tag, PercentageValue value)
+      where TTag : Enum where TValue : struct, IStatValue =>
+      new TaggedNumericOperation<TTag, TValue>(tag, null, value);
+  }
+
+  public sealed class TaggedNumericOperation<TTag, TValue> : NumericOperation<TValue>
     where TTag : Enum where TValue : struct, IStatValue
   {
     public TTag Tag { get; }
 
-    protected TaggedNumericOperation(TTag tag, TValue? addTo, PercentageValue? increaseBy) : base(addTo, increaseBy)
+    public TaggedNumericOperation(TTag tag, TValue? addTo, PercentageValue? increaseBy) : base(addTo, increaseBy)
     {
       Tag = tag;
     }

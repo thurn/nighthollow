@@ -14,99 +14,48 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct IntStatId : IStatId<IntStat>
+  public readonly struct IntValue : IStatValue
   {
-    readonly int _value;
+    public static readonly IntValue Zero = new IntValue(0);
+    public int Int { get; }
 
-    public IntStatId(int value)
+    public IntValue(int i)
     {
-      _value = value;
+      Int = i;
     }
-
-    public int Value => _value;
-
-    public IStat NotFoundValue() => new IntStat();
   }
 
-  public sealed class IntStat : IStat<IntStat>, IAdditiveStat
+  public sealed class IntStat : NumericStat<IntValue>
   {
-    readonly int _initialValue;
-    readonly List<IModifier> _addedModifiers = new List<IModifier>();
-    readonly List<IModifier> _increaseModifiers = new List<IModifier>();
-    bool _hasDynamicModifiers;
-    int _computedValue;
-
-    public IntStat()
+    public IntStat(int id) : base(id)
     {
     }
 
-    IntStat(int initialValue,
-      IEnumerable<IModifier> addedModifiers,
-      IEnumerable<IModifier> increaseModifiers,
-      bool hasDynamicModifiers)
+    public override IntValue DefaultValue() => IntValue.Zero;
+
+    public override IntValue ComputeValue(IReadOnlyList<NumericOperation<IntValue>> operations) =>
+      Compute(operations, op => op);
+
+    public static IntValue Compute<TValue>(
+      IReadOnlyList<NumericOperation<TValue>> operations, Func<TValue, IntValue> toInt)
+      where TValue : struct, IStatValue
     {
-      _initialValue = initialValue;
-      _addedModifiers = addedModifiers.Select(m => m.Clone()).ToList();
-      _increaseModifiers = increaseModifiers.Select(m => m.Clone()).ToList();
-      _hasDynamicModifiers = hasDynamicModifiers;
-      Recalculate();
+      var result = operations.Select(op => op.AddTo).WhereNotNull().Sum(addTo => toInt(addTo).Int);
+
+      var increaseBy =
+        10000 + operations.Select(op => op.IncreaseBy).WhereNotNull().Sum(increase => increase.AsBasisPoints());
+      return new IntValue(Constants.FractionBasisPoints(result, increaseBy));
     }
 
-    public int Value
-    {
-      get
-      {
-        if (_hasDynamicModifiers)
-        {
-          Recalculate();
-        }
+    protected override IntValue ParseStatValue(string value) => new IntValue(int.Parse(value));
 
-        return _computedValue;
-      }
-    }
-
-    public void Add(int value) => AddAddedModifier(new StaticModifier(new IntValue(value)));
-
-    public void AddAddedModifier(IModifier modifier)
-    {
-      _addedModifiers.Add(modifier);
-      _hasDynamicModifiers |= modifier.IsDynamic();
-      Recalculate();
-    }
-
-    public void AddIncreaseModifier(IModifier modifier)
-    {
-      _increaseModifiers.Add(modifier);
-      _hasDynamicModifiers |= modifier.IsDynamic();
-      Recalculate();
-    }
-
-    public IntStat Clone() => new IntStat(_initialValue, _addedModifiers, _increaseModifiers, _hasDynamicModifiers);
-
-    void Recalculate()
-    {
-      var result = _initialValue;
-
-      _addedModifiers.RemoveAll(m => !m.IsValid());
-      _increaseModifiers.RemoveAll(m => !m.IsValid());
-
-      result += _addedModifiers.Sum(m => m.BaseModifier.Argument.AsIntValue().Value);
-
-      var increaseBy = 10000 + _increaseModifiers.Sum(m => ((PercentageValue) m.BaseModifier.Argument).Value.Value);
-      result = Constants.FractionBasisPoints(result, increaseBy);
-
-      _computedValue = result;
-    }
-
-    public void AddValue(IStatValue value)
-    {
-      Add(((IntValue) value).Value);
-    }
+    public IModifier Add(int value) => StaticModifier(NumericOperation.Add(new IntValue(value)));
   }
 }

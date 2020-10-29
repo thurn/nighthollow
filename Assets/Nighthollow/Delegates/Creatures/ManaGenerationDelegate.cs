@@ -24,12 +24,11 @@ namespace Nighthollow.Delegates.Creatures
   {
     public override void OnActivate(CreatureContext c, Results results)
     {
-      results.Add(new ApplyModifierToOwner(
-        c.Self,
-        Operator.Add,
-        Stat.ManaGain,
-        new WhileAliveModifier(
-          new StaticModifier(new IntValue(c.Self.Data.GetInt(Stat.ManaGain))), c.Self)));
+      results.Add(
+        new ApplyModifierToOwner(c.Self,
+          Stat.ManaGain.Modifier(
+            NumericOperation.Add(c.Self.Data.Stats.Get(Stat.AddedManaGain)),
+            new WhileAliveLifetime(c.Self))));
     }
   }
 }

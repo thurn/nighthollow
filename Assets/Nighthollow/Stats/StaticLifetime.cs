@@ -14,22 +14,16 @@
 
 #nullable enable
 
-using UnityEngine;
-
-namespace Nighthollow.Statz
+namespace Nighthollow.Stats
 {
-  public sealed class TimedModifier<TOperation> : IModifier<TOperation> where TOperation : IOperation
+  public sealed class StaticLifetime : ILifetime
   {
-    readonly float _endTimeSeconds;
+    public static readonly StaticLifetime Instance = new StaticLifetime();
 
-    public TOperation Operation { get; }
-
-    public bool IsValid() => Time.time < _endTimeSeconds;
-
-    public TimedModifier(TOperation operation, float endTimeSeconds)
+    public StaticLifetime()
     {
-      Operation = operation;
-      _endTimeSeconds = endTimeSeconds;
     }
+
+    public bool IsValid() => true;
   }
 }
