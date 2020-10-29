@@ -15,7 +15,6 @@
 #nullable enable
 
 using System.Collections.Generic;
-using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
@@ -26,7 +25,7 @@ namespace Nighthollow.Data
     public string Name { get; }
     public CreatureTypeData BaseType { get; }
     public School School { get; }
-    public StatTable Stats { get; }
+    public StatModifierTable Stats { get; }
     public IReadOnlyList<SkillItemData> Skills { get; }
     public IReadOnlyList<AffixData> Affixes { get; }
 
@@ -34,7 +33,7 @@ namespace Nighthollow.Data
       string name,
       CreatureTypeData baseType,
       School school,
-      StatTable stats,
+      StatModifierTable stats,
       IReadOnlyList<SkillItemData> skills,
       IReadOnlyList<AffixData> affixes)
     {

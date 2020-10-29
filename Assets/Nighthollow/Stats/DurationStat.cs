@@ -39,8 +39,6 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override DurationValue DefaultValue() => new DurationValue(0);
-
     public override DurationValue ComputeValue(IReadOnlyList<NumericOperation<DurationValue>> operations) =>
       new DurationValue(IntStat.Compute(operations, duration => new IntValue(duration.AsMilliseconds())).Int);
 

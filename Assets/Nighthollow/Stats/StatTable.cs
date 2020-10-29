@@ -20,53 +20,79 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public sealed class StatTable
+  public sealed class OperationLifetime
   {
-    public sealed class OperationLifetime
-    {
-      public IOperation Operation { get; }
-      public ILifetime Lifetime { get; }
+    public IOperation Operation { get; }
+    public ILifetime Lifetime { get; }
 
-      public OperationLifetime(IOperation operation, ILifetime lifetime)
-      {
-        Operation = operation;
-        Lifetime = lifetime;
-      }
+    public OperationLifetime(IOperation operation, ILifetime lifetime)
+    {
+      Operation = operation;
+      Lifetime = lifetime;
+    }
+  }
+
+  public class StatModifierTable
+  {
+    protected readonly Dictionary<int, List<OperationLifetime>> Modifiers;
+
+    public StatModifierTable()
+    {
+      Modifiers = new Dictionary<int, List<OperationLifetime>>();
     }
 
-    readonly Dictionary<int, List<OperationLifetime>> _modifiers;
-
-    public StatTable()
+    protected StatModifierTable(Dictionary<int, List<OperationLifetime>> modifiers)
     {
-      _modifiers = new Dictionary<int, List<OperationLifetime>>();
-    }
-
-    StatTable(Dictionary<int, List<OperationLifetime>> modifiers)
-    {
-      _modifiers = modifiers.ToDictionary(e => e.Key, e => e.Value);
-    }
-
-    public TValue Get<TOperation, TValue>(AbstractStat<TOperation, TValue> stat)
-      where TOperation : IOperation where TValue : struct, IStatValue
-    {
-      if (_modifiers.ContainsKey(stat.Id))
-      {
-        var list = _modifiers[stat.Id];
-        list.RemoveAll(m => !m.Lifetime.IsValid());
-        return stat.ComputeValue(list.Select(op => (TOperation) op.Operation).ToList());
-      }
-
-      return stat.DefaultValue();
+      Modifiers = modifiers.ToDictionary(k => k.Key, v => v.Value.Select(o => o).ToList());
     }
 
     public void InsertModifier<TOperation, TValue>(
       AbstractStat<TOperation, TValue> stat, TOperation operation, ILifetime lifetime)
-      where TOperation : IOperation where TValue : struct, IStatValue
+      where TOperation : IOperation where TValue : IStatValue
     {
-      _modifiers.GetOrCreateDefault(stat.Id, new List<OperationLifetime>())
+      Modifiers.GetOrCreateDefault(stat.Id, new List<OperationLifetime>())
         .Add(new OperationLifetime(operation, lifetime));
     }
 
-    public StatTable Clone() => new StatTable(_modifiers);
+    public void Clear()
+    {
+      Modifiers.Clear();
+    }
+
+    public StatTable Clone(StatTable parent) => new StatTable(parent, Modifiers);
+  }
+
+  public sealed class StatTable : StatModifierTable
+  {
+    public static readonly StatTable Root = new StatTable(null, new Dictionary<int, List<OperationLifetime>>());
+    readonly StatTable? _parent;
+
+    public StatTable(StatTable parent)
+    {
+      _parent = parent;
+    }
+
+    public StatTable(StatTable? parent, Dictionary<int, List<OperationLifetime>> modifiers) : base(modifiers)
+    {
+      _parent = parent;
+    }
+
+    public TValue Get<TOperation, TValue>(AbstractStat<TOperation, TValue> stat)
+      where TOperation : IOperation where TValue : IStatValue =>
+      stat.ComputeValue(OperationsForStatId(stat.Id).Select(op => (TOperation) op.Operation).ToList());
+
+    IEnumerable<OperationLifetime> OperationsForStatId(int statId)
+    {
+      if (Modifiers.ContainsKey(statId))
+      {
+        var list = Modifiers[statId];
+        list.RemoveAll(m => !m.Lifetime.IsValid());
+        return _parent == null ? list : list.Concat(_parent.OperationsForStatId(statId));
+      }
+      else
+      {
+        return _parent == null ? new List<OperationLifetime>() : _parent.OperationsForStatId(statId);
+      }
+    }
   }
 }

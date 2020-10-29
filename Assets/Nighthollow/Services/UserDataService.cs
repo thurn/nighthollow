@@ -19,6 +19,7 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 using UnityEngine;
 
 namespace Nighthollow.Services
@@ -28,11 +29,12 @@ namespace Nighthollow.Services
     readonly List<CreatureItemData> _deck = new List<CreatureItemData>();
     public IReadOnlyList<CreatureItemData> Deck => _deck;
 
-    public StatTable UserStats { get; private set; } = new StatTable();
+    StatTable? _userStats;
+    public StatTable UserStats => Errors.CheckNotNull(_userStats);
 
     public void OnNewGame(GameDataService gameDataService)
     {
-      UserStats = gameDataService.GetDefaultStats(StatScope.Players);
+      _userStats = new StatTable(StatTable.Root);
       _deck.Clear();
       _deck.AddRange(gameDataService.GetStaticCardList(StaticCardList.StartingDeck));
     }
@@ -40,10 +42,11 @@ namespace Nighthollow.Services
     public void StartGame(bool isTutorial)
     {
       var cards = isTutorial ? Root.Instance.GameDataService.GetStaticCardList(StaticCardList.TutorialDraws) : Deck;
+      var stats = UserStats.Clone(StatTable.Root);
       Root.Instance.User.OnStartGame(
         new UserData(
-          cards.Select(CreatureUtil.Build).ToList(),
-          UserStats.Clone(),
+          cards.Select(c => CreatureUtil.Build(stats, c)).ToList(),
+          stats,
           orderedDraws: isTutorial));
     }
   }

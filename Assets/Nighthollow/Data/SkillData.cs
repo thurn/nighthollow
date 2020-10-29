@@ -47,6 +47,6 @@ namespace Nighthollow.Data
       Delegate = delegates;
     }
 
-    public SkillData Clone() => new SkillData(BaseType, Stats.Clone(), Delegate);
+    public SkillData Clone(StatTable parentStats) => new SkillData(BaseType, Stats.Clone(parentStats), Delegate);
   }
 }

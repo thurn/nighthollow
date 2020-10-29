@@ -94,7 +94,7 @@ namespace Nighthollow.Components
     {
       if (!_initialized && _debugMode)
       {
-        Initialize(_data.Clone());
+        Initialize(_data.Clone(Root.Instance.StatsForPlayer(Owner)));
         _creatureService.AddUserCreatureAtPosition(this,
           BoardPositions.ClosestRankForXPosition(transform.position.x),
           BoardPositions.ClosestFileForYPosition(transform.position.y));

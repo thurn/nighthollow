@@ -20,7 +20,7 @@ namespace Nighthollow.Stats
   {
     public static readonly StaticLifetime Instance = new StaticLifetime();
 
-    public StaticLifetime()
+    StaticLifetime()
     {
     }
 

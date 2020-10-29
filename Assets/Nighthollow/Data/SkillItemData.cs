@@ -22,10 +22,10 @@ namespace Nighthollow.Data
   public sealed class SkillItemData
   {
     public SkillTypeData BaseType { get; }
-    public StatTable Stats { get; }
+    public StatModifierTable Stats { get; }
     public IReadOnlyList<AffixData> Affixes { get; }
 
-    public SkillItemData(SkillTypeData baseType, StatTable stats, IReadOnlyList<AffixData> affixes)
+    public SkillItemData(SkillTypeData baseType, StatModifierTable stats, IReadOnlyList<AffixData> affixes)
     {
       BaseType = baseType;
       Stats = stats;

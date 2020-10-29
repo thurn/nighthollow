@@ -28,7 +28,6 @@ namespace Nighthollow.Services
 {
   public sealed class GameDataService : MonoBehaviour
   {
-    readonly Dictionary<StatScope, StatTable> _statDefaults = new Dictionary<StatScope, StatTable>();
     readonly Dictionary<int, ModifierTypeData> _modifiers = new Dictionary<int, ModifierTypeData>();
     readonly Dictionary<int, AffixTypeData> _affixes = new Dictionary<int, AffixTypeData>();
     readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
@@ -37,9 +36,6 @@ namespace Nighthollow.Services
 
     readonly Dictionary<StaticCardList, List<CreatureItemData>> _staticCardLists =
       new Dictionary<StaticCardList, List<CreatureItemData>>();
-
-    public StatTable GetDefaultStats(StatScope scope) =>
-      _statDefaults.ContainsKey(scope) ? _statDefaults[scope].Clone() : new StatTable();
 
     public IEnumerable<CreatureTypeData> AllCreatureTypes => _creatures.Values;
 
@@ -78,6 +74,7 @@ namespace Nighthollow.Services
       var parsed = SpreadsheetHelper.ParseResponse(node);
       Debug.Log("Got Response");
 
+      StatTable.Root.Clear();
       _modifiers.Clear();
       _affixes.Clear();
       _skills.Clear();
@@ -92,13 +89,7 @@ namespace Nighthollow.Services
         }
 
         var statId = Parse.IntRequired(stat, "Stat ID");
-        var scope = (StatScope) Parse.IntRequired(stat, "Default Scope");
-        if (!_statDefaults.ContainsKey(scope))
-        {
-          _statDefaults[scope] = new StatTable();
-        }
-
-        Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Add).InsertInto(_statDefaults[scope]);
+        Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Add).InsertInto(StatTable.Root);
       }
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))
@@ -150,7 +141,7 @@ namespace Nighthollow.Services
 
       var creatureType = GetCreatureType(Parse.IntRequired(row, "Base Creature"));
 
-      var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Creatures);
+      var stats = new StatModifierTable();
       Stat.Health.Add(Parse.IntRequired(row, "Health")).InsertInto(stats);
       Stat.ManaCost.Add(Parse.Int(row, "Mana Cost") ?? 0).InsertInto(stats);
 
@@ -199,7 +190,7 @@ namespace Nighthollow.Services
 
         skills.Add(new SkillItemData(
           skill,
-          Root.Instance.GameDataService.GetDefaultStats(StatScope.Skills),
+          new StatModifierTable(),
           affixes));
       }
 

@@ -37,8 +37,6 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override IntRangeValue DefaultValue() => IntRangeValue.Zero;
-
     public override IntRangeValue ComputeValue(IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
       Compute(operations);
 

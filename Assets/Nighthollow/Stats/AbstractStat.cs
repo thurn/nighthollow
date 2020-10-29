@@ -21,7 +21,7 @@ using Nighthollow.Generated;
 namespace Nighthollow.Stats
 {
   public abstract class AbstractStat<TOperation, TValue> : IStat
-    where TOperation : IOperation where TValue : struct, IStatValue
+    where TOperation : IOperation where TValue : IStatValue
   {
     protected AbstractStat(int id)
     {
@@ -30,8 +30,6 @@ namespace Nighthollow.Stats
 
     public int Id { get; }
 
-    public abstract TValue DefaultValue();
-
     public abstract TValue ComputeValue(IReadOnlyList<TOperation> operations);
 
     protected abstract TValue ParseStatValue(string value);
@@ -39,7 +37,7 @@ namespace Nighthollow.Stats
     public IStatModifier Modifier(TOperation operation, ILifetime lifetime) =>
       new StatModifier<TOperation, TValue>(this, operation, lifetime);
 
-    public IStatModifier StaticModifier(TOperation operation) =>
+    protected IStatModifier StaticModifier(TOperation operation) =>
       Modifier(operation, StaticLifetime.Instance);
 
     public abstract IStatModifier ParseModifier(string value, Operator op);

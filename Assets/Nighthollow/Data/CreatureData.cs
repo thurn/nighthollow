@@ -37,8 +37,8 @@ namespace Nighthollow.Data
       School school,
       IReadOnlyList<SkillData> skills,
       StatTable stats,
-      List<CreatureDelegateId> delegates) : this(name, baseType, school, skills, stats,
-      new CreatureDelegateChain(delegates))
+      List<CreatureDelegateId> delegates) : this(
+      name, baseType, school, skills, stats, new CreatureDelegateChain(delegates))
     {
     }
 
@@ -58,7 +58,11 @@ namespace Nighthollow.Data
       Delegate = delegates;
     }
 
-    public CreatureData Clone() => new CreatureData(
-      Name, BaseType, School, Skills.Select(s => s.Clone()).ToList(), Stats.Clone(), Delegate);
+    public CreatureData Clone(StatTable parentStats)
+    {
+      var statTable = Stats.Clone(parentStats);
+      return new CreatureData(
+        Name, BaseType, School, Skills.Select(s => s.Clone(statTable)).ToList(), statTable, Delegate);
+    }
   }
 }

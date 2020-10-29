@@ -15,6 +15,7 @@
 using Nighthollow.Components;
 using Nighthollow.Utils;
 using System;
+using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
 
@@ -59,6 +60,13 @@ namespace Nighthollow.Services
 
     [SerializeField] EnemyDataService _enemyDataService;
     public EnemyDataService EnemyDataService => _enemyDataService;
+
+    public StatTable StatsForPlayer(PlayerName player) => player switch
+    {
+      PlayerName.User => User.Data.Stats,
+      PlayerName.Enemy => Enemy.Data.Stats,
+      _ => throw Errors.UnknownEnumValue(player)
+    };
 
     public static Root Instance
     {

@@ -15,6 +15,7 @@
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
+using Nighthollow.Stats;
 using UnityEngine;
 
 #nullable enable
@@ -25,11 +26,12 @@ namespace Nighthollow.Services
   {
     public void StartGame()
     {
+      var stats = new StatTable(StatTable.Root);
       Root.Instance.Enemy.OnStartGame(
         new EnemyData(
           Root.Instance.GameDataService.GetStaticCardList(StaticCardList.TutorialEnemy)
-            .Select(CreatureUtil.Build).ToList(),
-          Root.Instance.GameDataService.GetDefaultStats(StatScope.Players)));
+            .Select(c => CreatureUtil.Build(stats, c)).ToList(),
+          stats));
     }
   }
 }

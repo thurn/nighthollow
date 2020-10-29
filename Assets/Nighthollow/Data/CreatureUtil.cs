@@ -18,14 +18,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Services;
+using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
   public static class CreatureUtil
   {
-    public static CreatureData Build(CreatureItemData item)
+    public static CreatureData Build(StatTable parentStats, CreatureItemData item)
     {
-      var stats = item.Stats;
+      var stats = item.Stats.Clone(parentStats);
       var delegates = new List<CreatureDelegateId>();
 
       Stat.Speed.Add(item.BaseType.Speed).InsertInto(stats);
@@ -45,19 +46,19 @@ namespace Nighthollow.Data
         modifier.StatModifier?.InsertInto(stats);
       }
 
-      var skills = item.Skills.Select(BuildSkill).ToList();
+      var skills = item.Skills.Select(s => BuildSkill(stats, s)).ToList();
       if (item.BaseType.SkillAnimations.Any(animation => animation.Type == SkillAnimationType.MeleeSkill))
       {
-        skills.Add(DefaultMeleeAttack());
+        skills.Add(DefaultMeleeAttack(stats));
       }
 
       return new CreatureData(
         item.Name, item.BaseType, item.School, skills, stats, delegates);
     }
 
-    static SkillData BuildSkill(SkillItemData item)
+    static SkillData BuildSkill(StatTable parentStats, SkillItemData item)
     {
-      var stats = item.Stats;
+      var stats = item.Stats.Clone(parentStats);
       var delegates = new List<SkillDelegateId>();
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
@@ -73,9 +74,9 @@ namespace Nighthollow.Data
       return new SkillData(item.BaseType, stats, delegates);
     }
 
-    public static SkillData DefaultMeleeAttack()
+    public static SkillData DefaultMeleeAttack(StatTable creatureStats)
     {
-      var stats = Root.Instance.GameDataService.GetDefaultStats(StatScope.Skills);
+      var stats = new StatTable(creatureStats);
       Stat.UsesAccuracy.SetTrue().InsertInto(stats);
       Stat.CanCrit.SetTrue().InsertInto(stats);
       Stat.CanStun.SetTrue().InsertInto(stats);

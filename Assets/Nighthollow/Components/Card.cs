@@ -75,7 +75,7 @@ namespace Nighthollow.Components
       {
         _cardBack.gameObject.SetActive(true);
         _cardFront.gameObject.SetActive(false);
-        Initialize(_data.Clone());
+        Initialize(_data.Clone(_user.Data.Stats));
         transform.localScale = Vector2.one * _debugCardScale;
       }
 

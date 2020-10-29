@@ -37,8 +37,6 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override BoolValue DefaultValue() => new BoolValue(false);
-
     public override BoolValue ComputeValue(IReadOnlyList<BooleanOperation> operations)
     {
       return new BoolValue(

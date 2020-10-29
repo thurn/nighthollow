@@ -36,6 +36,10 @@ namespace Nighthollow.Data
       OrderedDraws = orderedDraws;
     }
 
-    public UserData Clone() => new UserData(Deck.Select(d => d.Clone()).ToList(), Stats.Clone(), OrderedDraws);
+    public UserData Clone(StatTable parentStats)
+    {
+      var statTable = Stats.Clone(parentStats);
+      return new UserData(Deck.Select(d => d.Clone(statTable)).ToList(), statTable, OrderedDraws);
+    }
   }
 }

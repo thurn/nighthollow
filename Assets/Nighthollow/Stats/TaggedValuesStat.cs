@@ -22,7 +22,7 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct TaggedValues<TTag, TValue> : IStatValue
+  public sealed class TaggedValues<TTag, TValue> : IStatValue
     where TTag : struct, Enum where TValue : struct, IStatValue
   {
     public IReadOnlyDictionary<TTag, TValue> Values { get; }
@@ -42,9 +42,6 @@ namespace Nighthollow.Stats
     protected TaggedValuesStat(int id) : base(id)
     {
     }
-
-    public override TaggedValues<TTag, TValue> DefaultValue() =>
-      new TaggedValues<TTag, TValue>(new Dictionary<TTag, TValue>());
 
     public override TaggedValues<TTag, TValue> ComputeValue(
       IReadOnlyList<TaggedNumericOperation<TTag, TValue>> operations)

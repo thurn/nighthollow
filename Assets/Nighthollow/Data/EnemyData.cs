@@ -33,6 +33,10 @@ namespace Nighthollow.Data
       Stats = stats;
     }
 
-    public EnemyData Clone() => new EnemyData(Enemies.Select(e => e.Clone()).ToList(), Stats.Clone());
+    public EnemyData Clone(StatTable parentStats)
+    {
+      var statTable = Stats.Clone(parentStats);
+      return new EnemyData(Enemies.Select(e => e.Clone(statTable)).ToList(), statTable);
+    }
   }
 }

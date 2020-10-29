@@ -41,8 +41,6 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override PercentageValue DefaultValue() => new PercentageValue(0);
-
     public override PercentageValue ComputeValue(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
       Compute(operations);
 

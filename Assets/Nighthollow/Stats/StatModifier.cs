@@ -2,11 +2,11 @@ namespace Nighthollow.Stats
 {
   public interface IStatModifier
   {
-    void InsertInto(StatTable table);
+    void InsertInto(StatModifierTable table);
   }
 
   public sealed class StatModifier<TOperation, TValue> : IStatModifier
-    where TOperation : IOperation where TValue : struct, IStatValue
+    where TOperation : IOperation where TValue : IStatValue
   {
     public AbstractStat<TOperation, TValue> Stat { get; }
     public TOperation Operation { get; }
@@ -19,6 +19,6 @@ namespace Nighthollow.Stats
       Lifetime = lifetime;
     }
 
-    public void InsertInto(StatTable table) => table.InsertModifier(Stat, Operation, Lifetime);
+    public void InsertInto(StatModifierTable table) => table.InsertModifier(Stat, Operation, Lifetime);
   }
 }

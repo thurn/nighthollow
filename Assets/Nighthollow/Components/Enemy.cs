@@ -17,6 +17,7 @@ using DataStructures.RandomSelector;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Services;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -33,7 +34,7 @@ namespace Nighthollow.Components
 
     public void OnStartGame(EnemyData data)
     {
-      _data = data.Clone();
+      _data = data.Clone(StatTable.Root);
       StartCoroutine(SpawnAsync());
     }
 
@@ -81,7 +82,7 @@ namespace Nighthollow.Components
 
       selector.Build();
 
-      return selector.SelectRandomItem().Clone();
+      return selector.SelectRandomItem().Clone(Data.Stats);
     }
 
     FileValue RandomFile()
