@@ -42,6 +42,8 @@ namespace Nighthollow.Stats
 
     public abstract IStatModifier ParseModifier(string value, Operator op);
 
+    public abstract IStatModifier? StaticModifierForOperator(Operator op);
+
     public IStatValue Lookup(StatTable table) =>
       table.Get(this);
   }
@@ -60,5 +62,8 @@ namespace Nighthollow.Stats
         Operator.Increase => StaticModifier(NumericOperation.Increase<TValue>(PercentageStat.ParsePercentage(value))),
         _ => throw new ArgumentException($"Unsupported operator type: {op}")
       };
+
+    public override IStatModifier? StaticModifierForOperator(Operator op) => null;
+
   }
 }

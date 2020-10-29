@@ -114,14 +114,14 @@ namespace Nighthollow.Delegates.Skills
       }
     }
 
-    public override TaggedValues<DamageType, IntValue>? RollForBaseDamage(
+    public override TaggedValues<DamageType, IntValue> RollForBaseDamage(
       SkillContext c, Creature target) =>
       new TaggedValues<DamageType, IntValue>(
         c.Skill.Stats.Get(Stat.BaseDamage).Values.ToDictionary(
           k => k.Key,
           v => new IntValue(Random.Range(v.Value.Low, v.Value.High))));
 
-    public override TaggedValues<DamageType, IntValue>? ApplyDamageReduction(
+    public override TaggedValues<DamageType, IntValue> ApplyDamageReduction(
       SkillContext c,
       Creature target,
       TaggedValues<DamageType, IntValue> damage) =>
@@ -139,7 +139,7 @@ namespace Nighthollow.Delegates.Skills
         Mathf.RoundToInt(damage * (1f - c.Self.GetOwnerStats().Get(Stat.MaximumDamageReduction).AsMultiplier())),
         damage - reduction));
 
-    public override TaggedValues<DamageType, IntValue>? ApplyDamageResistance(
+    public override TaggedValues<DamageType, IntValue> ApplyDamageResistance(
       SkillContext c,
       Creature target,
       TaggedValues<DamageType, IntValue> damage) =>

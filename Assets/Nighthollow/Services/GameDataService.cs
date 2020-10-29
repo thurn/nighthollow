@@ -178,14 +178,7 @@ namespace Nighthollow.Services
       {
         if (skill.ImplicitAffix != null)
         {
-          var modifierList =
-            from range in skill.ImplicitAffix.ModifierRanges
-            let path = new ModifierPath(cardId, skill.ImplicitAffix.Id, range.ModifierData.Id, skill.Id)
-            select new ModifierData(
-              range.ModifierData.SkillDelegateId,
-              _staticModifiers.GetValueOrDefault(path, null));
-
-          affixes.Add(new AffixData(skill.ImplicitAffix.Id, modifierList.ToList()));
+          affixes.Add(BuildAffix(cardId, skill.ImplicitAffix, skill));
         }
 
         skills.Add(new SkillItemData(
@@ -202,17 +195,37 @@ namespace Nighthollow.Services
       var affixes = new List<AffixData>();
       if (creatureType.ImplicitAffix != null)
       {
-        var modifierList =
-          from range in creatureType.ImplicitAffix.ModifierRanges
-          let path = new ModifierPath(cardId, creatureType.ImplicitAffix.Id, range.ModifierData.Id)
-          select new ModifierData(
-            range.ModifierData.CreatureDelegateId,
-            _staticModifiers.GetValueOrDefault(path, null));
-
-        affixes.Add(new AffixData(creatureType.ImplicitAffix.Id, modifierList.ToList()));
+        affixes.Add(BuildAffix(cardId, creatureType.ImplicitAffix, null));
       }
 
       return affixes;
+    }
+
+    AffixData BuildAffix(int cardId, AffixTypeData affix, SkillTypeData? skill)
+    {
+      var modifiers = new List<ModifierData>();
+      foreach (var modifierRange in affix.ModifierRanges)
+      {
+        var baseType = modifierRange.BaseType;
+        var path = new ModifierPath(cardId, affix.Id, baseType.Id, skill?.Id);
+
+        IStatModifier? statModifier = null;
+        if (_staticModifiers.ContainsKey(path))
+        {
+          statModifier = _staticModifiers[path];
+        }
+        else if (baseType.StatId.HasValue && baseType.Operator.HasValue)
+        {
+          statModifier = Stat.GetStat(baseType.StatId!.Value).StaticModifierForOperator(baseType.Operator!.Value);
+        }
+
+        modifiers.Add(new ModifierData(
+          baseType.CreatureDelegateId,
+          baseType.SkillDelegateId,
+          statModifier));
+      }
+
+      return new AffixData(affix.Id, modifiers);
     }
 
     void ParseModifierValue(IReadOnlyDictionary<string, string> row)

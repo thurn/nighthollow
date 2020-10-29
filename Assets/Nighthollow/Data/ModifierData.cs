@@ -25,16 +25,10 @@ namespace Nighthollow.Data
     public SkillDelegateId? SkillDelegateId { get; }
     public IStatModifier? StatModifier { get; }
 
-    public ModifierData(CreatureDelegateId? creatureDelegateId, IStatModifier? statModifier)
+    public ModifierData(
+      CreatureDelegateId? creatureDelegateId, SkillDelegateId? skillDelegateId, IStatModifier? statModifier)
     {
       CreatureDelegateId = creatureDelegateId;
-      SkillDelegateId = null;
-      StatModifier = statModifier;
-    }
-
-    public ModifierData(SkillDelegateId? skillDelegateId, IStatModifier? statModifier)
-    {
-      CreatureDelegateId = null;
       SkillDelegateId = skillDelegateId;
       StatModifier = statModifier;
     }

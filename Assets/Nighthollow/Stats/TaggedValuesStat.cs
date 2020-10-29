@@ -93,6 +93,8 @@ namespace Nighthollow.Stats
           ParseAsPercentages(value).Values.ToDictionary(k => k.Key, v => NumericOperation.Increase<TValue>(v.Value)))),
         _ => throw new ArgumentException($"Unsupported modifier type: {op}")
       };
+
+    public override IStatModifier? StaticModifierForOperator(Operator op) => null;
   }
 
   public abstract class TaggedIntValuesStat<TTag> : TaggedValuesStat<TTag, IntValue> where TTag : struct, Enum

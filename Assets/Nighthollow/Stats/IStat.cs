@@ -23,5 +23,7 @@ namespace Nighthollow.Stats
     int Id { get; }
 
     IStatModifier ParseModifier(string value, Operator op);
+
+    IStatModifier? StaticModifierForOperator(Operator op);
   }
 }

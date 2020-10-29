@@ -127,12 +127,4 @@ namespace Nighthollow.Generated
     Unused = 4,
   }
 
-  public enum StatScope
-  {
-    Unknown = 0,
-    Players = 1,
-    Creatures = 2,
-    Skills = 3,
-  }
-
 }
