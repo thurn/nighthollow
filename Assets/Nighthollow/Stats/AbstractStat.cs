@@ -14,7 +14,9 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Generic;
+using Nighthollow.Generated;
 
 namespace Nighthollow.Stats
 {
@@ -34,16 +36,13 @@ namespace Nighthollow.Stats
 
     protected abstract TValue ParseStatValue(string value);
 
-    public IModifier Modifier(TOperation operation, ILifetime lifetime) =>
-      new Modifier<TOperation, TValue>(this, operation, lifetime);
+    public IStatModifier Modifier(TOperation operation, ILifetime lifetime) =>
+      new StatModifier<TOperation, TValue>(this, operation, lifetime);
 
-    public IModifier StaticModifier(TOperation operation) =>
+    public IStatModifier StaticModifier(TOperation operation) =>
       Modifier(operation, StaticLifetime.Instance);
 
-    public IStatValue ParseValue(string value) =>
-      ParseStatValue(value);
-
-    public abstract void InsertDefault(StatTable table, string value);
+    public abstract IStatModifier ParseModifier(string value, Operator op);
 
     public IStatValue Lookup(StatTable table) =>
       table.Get(this);
@@ -56,7 +55,12 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override void InsertDefault(StatTable table, string value) =>
-      StaticModifier(NumericOperation.Add(ParseStatValue(value))).InsertInto(table);
+    public override IStatModifier ParseModifier(string value, Operator op) =>
+      op switch
+      {
+        Operator.Add => StaticModifier(NumericOperation.Add(ParseStatValue(value))),
+        Operator.Increase => StaticModifier(NumericOperation.Increase<TValue>(PercentageStat.ParsePercentage(value))),
+        _ => throw new ArgumentException($"Unsupported operator type: {op}")
+      };
   }
 }

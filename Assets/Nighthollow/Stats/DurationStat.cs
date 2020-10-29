@@ -44,7 +44,9 @@ namespace Nighthollow.Stats
     public override DurationValue ComputeValue(IReadOnlyList<NumericOperation<DurationValue>> operations) =>
       new DurationValue(IntStat.Compute(operations, duration => new IntValue(duration.AsMilliseconds())).Int);
 
-    protected override DurationValue ParseStatValue(string value) =>
+    protected override DurationValue ParseStatValue(string value) => ParseDuration(value);
+
+    public static DurationValue ParseDuration(string value) =>
       new DurationValue(Mathf.RoundToInt(float.Parse(value.Replace("s", "")) * 1000f));
   }
 }

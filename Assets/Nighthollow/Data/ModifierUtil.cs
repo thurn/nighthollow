@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
@@ -22,20 +21,9 @@ namespace Nighthollow.Data
 {
   public static class ModifierUtil
   {
-    public static IStatValue? ParseValue(ModifierTypeData modifierData, string? value) =>
-      modifierData.StatId.HasValue && value != null ? Stat.GetStat(modifierData.StatId.Value).ParseValue(value) : null;
-
-    public static void Validate(ModifierTypeData modifierData, IStatValue? value)
-    {
-      if (value != null)
-      {
-        return;
-      }
-
-      if (modifierData.Operator == Operator.Add || modifierData.Operator == Operator.Increase)
-      {
-        throw new ArgumentException($"Expected a stat value for modifier {modifierData}");
-      }
-    }
+    public static IStatModifier? ParseModifier(ModifierTypeData modifierData, string? value) =>
+      modifierData.StatId.HasValue && modifierData.Operator.HasValue && value != null ?
+        Stat.GetStat(modifierData.StatId.Value).ParseModifier(value, modifierData.Operator.Value) :
+        null;
   }
 }

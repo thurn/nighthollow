@@ -51,15 +51,15 @@ namespace Nighthollow.Stats
     {
       var result = new Dictionary<TTag, TValue>();
 
-      foreach (var group in operations.GroupBy(op => op.Tag))
+      foreach (var group in operations.SelectMany(op => op.Operations).GroupBy(pair => pair.Key))
       {
-        result[group.Key] = Compute(group.ToList());
+        result[group.Key] = Compute(group.Select(pair => pair.Value).ToList());
       }
 
       return new TaggedValues<TTag, TValue>(result);
     }
 
-    protected abstract TValue Compute(IReadOnlyList<TaggedNumericOperation<TTag, TValue>> operations);
+    protected abstract TValue Compute(IReadOnlyList<NumericOperation<TValue>> operations);
 
     protected override TaggedValues<TTag, TValue> ParseStatValue(string value)
     {
@@ -72,17 +72,30 @@ namespace Nighthollow.Stats
       return new TaggedValues<TTag, TValue>(result);
     }
 
+    protected TaggedValues<TTag, PercentageValue> ParseAsPercentages(string value)
+    {
+      var result = new Dictionary<TTag, PercentageValue>();
+      foreach (var instance in value.Split(','))
+      {
+        result[ParseTag(instance.Last())] = PercentageStat.ParsePercentage(instance.Remove(instance.Length - 1));
+      }
+
+      return new TaggedValues<TTag, PercentageValue>(result);
+    }
+
     protected abstract TTag ParseTag(char tagCharacter);
 
     protected abstract TValue ParseInstance(string value);
 
-    public override void InsertDefault(StatTable table, string value)
-    {
-      foreach (var pair in ParseStatValue(value).Values)
+    public override IStatModifier ParseModifier(string value, Operator op) =>
+      op switch
       {
-        table.InsertModifier(this, TaggedNumericOperation.Add(pair.Key, pair.Value), StaticLifetime.Instance);
-      }
-    }
+        Operator.Add => StaticModifier(new TaggedNumericOperation<TTag, TValue>(
+          ParseStatValue(value).Values.ToDictionary(k => k.Key, v => NumericOperation.Add(v.Value)))),
+        Operator.Increase => StaticModifier(new TaggedNumericOperation<TTag, TValue>(
+          ParseAsPercentages(value).Values.ToDictionary(k => k.Key, v => NumericOperation.Increase<TValue>(v.Value)))),
+        _ => throw new ArgumentException($"Unsupported modifier type: {op}")
+      };
   }
 
   public abstract class TaggedIntValuesStat<TTag> : TaggedValuesStat<TTag, IntValue> where TTag : struct, Enum
@@ -91,11 +104,23 @@ namespace Nighthollow.Stats
     {
     }
 
-    protected override IntValue Compute(
-      IReadOnlyList<TaggedNumericOperation<TTag, IntValue>> operations) =>
+    protected override IntValue Compute(IReadOnlyList<NumericOperation<IntValue>> operations) =>
       IntStat.Compute(operations, op => op);
 
-    protected override IntValue ParseInstance(string value) => new IntValue(int.Parse(value));
+    protected override IntValue ParseInstance(string value) => IntStat.ParseInt(value);
+  }
+
+  public abstract class TaggedPercentageValuesStat<TTag> : TaggedValuesStat<TTag, PercentageValue>
+    where TTag : struct, Enum
+  {
+    protected TaggedPercentageValuesStat(int id) : base(id)
+    {
+    }
+
+    protected override PercentageValue Compute(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
+      PercentageStat.Compute(operations);
+
+    protected override PercentageValue ParseInstance(string value) => PercentageStat.ParsePercentage(value);
   }
 
   public abstract class TaggedIntRangesStat<TTag> : TaggedValuesStat<TTag, IntRangeValue> where TTag : struct, Enum
@@ -105,10 +130,7 @@ namespace Nighthollow.Stats
     }
 
     protected override IntRangeValue Compute(
-      IReadOnlyList<TaggedNumericOperation<TTag, IntRangeValue>> operations) =>
-      new IntRangeValue(
-        IntStat.Compute(operations, op => new IntValue(op.Low)).Int,
-        IntStat.Compute(operations, op => new IntValue(op.High)).Int);
+      IReadOnlyList<NumericOperation<IntRangeValue>> operations) => IntRangeStat.Compute(operations);
 
     protected override IntRangeValue ParseInstance(string value) => IntRangeStat.ParseIntRange(value);
   }

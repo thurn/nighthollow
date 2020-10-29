@@ -14,12 +14,10 @@
 
 #nullable enable
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Services;
-using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
@@ -39,15 +37,12 @@ namespace Nighthollow.Data
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
       {
-        if (modifier.Data.DelegateId.HasValue)
+        if (modifier.CreatureDelegateId.HasValue)
         {
-          delegates.Add(modifier.Data.DelegateId.Value);
+          delegates.Add(modifier.CreatureDelegateId.Value);
         }
 
-        if (modifier.Data.StatId.HasValue)
-        {
-          ApplyStatModifier(stats, modifier.Data.StatId.Value, modifier);
-        }
+        modifier.StatModifier?.InsertInto(stats);
       }
 
       var skills = item.Skills.Select(BuildSkill).ToList();
@@ -67,26 +62,16 @@ namespace Nighthollow.Data
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
       {
-        if (modifier.Data.SkillDelegateId.HasValue)
+        if (modifier.SkillDelegateId.HasValue)
         {
-          delegates.Add(modifier.Data.SkillDelegateId.Value);
+          delegates.Add(modifier.SkillDelegateId.Value);
         }
 
-        if (modifier.Data.StatId.HasValue)
-        {
-          ApplyStatModifier(stats, modifier.Data.StatId.Value, modifier);
-        }
+        modifier.StatModifier?.InsertInto(stats);
       }
 
       return new SkillData(item.BaseType, stats, delegates);
     }
-
-    static void ApplyStatModifier(StatTable table, int statId, ModifierData data)
-    {
-      ToModifier(statId, data).InsertInto(table);
-    }
-
-    static IModifier ToModifier(int statId, ModifierData data) => throw new NotImplementedException();
 
     public static SkillData DefaultMeleeAttack()
     {

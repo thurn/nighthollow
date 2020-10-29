@@ -22,10 +22,6 @@ namespace Nighthollow.Stats
   {
     int Id { get; }
 
-    IStatValue Lookup(StatTable table);
-
-    IStatValue ParseValue(string value);
-
-    void InsertDefault(StatTable table, string value);
+    IStatModifier ParseModifier(string value, Operator op);
   }
 }

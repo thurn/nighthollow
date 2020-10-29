@@ -25,7 +25,7 @@ namespace Nighthollow.Stats
       new NumericOperation<TValue>(null, value);
   }
 
-  public class NumericOperation<TValue> : IOperation where TValue : struct, IStatValue
+  public sealed class NumericOperation<TValue> : IOperation where TValue : struct, IStatValue
   {
     public TValue? AddTo { get; }
     public PercentageValue? IncreaseBy { get; }

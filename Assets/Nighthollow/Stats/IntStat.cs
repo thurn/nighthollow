@@ -54,8 +54,10 @@ namespace Nighthollow.Stats
       return new IntValue(Constants.FractionBasisPoints(result, increaseBy));
     }
 
-    protected override IntValue ParseStatValue(string value) => new IntValue(int.Parse(value));
+    protected override IntValue ParseStatValue(string value) => ParseInt(value);
 
-    public IModifier Add(int value) => StaticModifier(NumericOperation.Add(new IntValue(value)));
+    public static IntValue ParseInt(string value) => new IntValue(int.Parse(value));
+
+    public IStatModifier Add(int value) => StaticModifier(NumericOperation.Add(new IntValue(value)));
   }
 }

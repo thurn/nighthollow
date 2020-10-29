@@ -14,21 +14,29 @@
 
 #nullable enable
 
-using System.Collections.Generic;
 using Nighthollow.Generated;
-using Nighthollow.Utils;
+using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
-  public sealed class AffixData
+  public sealed class ModifierData
   {
-    public int AffixTypeId { get; }
-    public IReadOnlyList<ModifierData> Modifiers { get; }
+    public CreatureDelegateId? CreatureDelegateId { get; }
+    public SkillDelegateId? SkillDelegateId { get; }
+    public IStatModifier? StatModifier { get; }
 
-    public AffixData(int affixTypeId, IReadOnlyList<ModifierData> modifiers)
+    public ModifierData(CreatureDelegateId? creatureDelegateId, IStatModifier? statModifier)
     {
-      AffixTypeId = affixTypeId;
-      Modifiers = modifiers;
+      CreatureDelegateId = creatureDelegateId;
+      SkillDelegateId = null;
+      StatModifier = statModifier;
+    }
+
+    public ModifierData(SkillDelegateId? skillDelegateId, IStatModifier? statModifier)
+    {
+      CreatureDelegateId = null;
+      SkillDelegateId = skillDelegateId;
+      StatModifier = statModifier;
     }
   }
 }

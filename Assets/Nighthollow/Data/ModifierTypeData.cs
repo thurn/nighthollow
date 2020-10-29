@@ -26,10 +26,8 @@ namespace Nighthollow.Data
     public string Description { get; }
     public int? StatId { get; }
     public Operator? Operator { get; }
-    public CreatureDelegateId? DelegateId { get; }
+    public CreatureDelegateId? CreatureDelegateId { get; }
     public SkillDelegateId? SkillDelegateId { get; }
-    public DamageType? DamageType { get; }
-    public School? School { get; }
 
     public ModifierTypeData(IReadOnlyDictionary<string, string> row)
     {
@@ -37,28 +35,8 @@ namespace Nighthollow.Data
       Description = Parse.StringRequired(row, "Description");
       StatId = Parse.Int(row, "Stat");
       Operator = (Operator?) Parse.Int(row, "Operator");
-      DelegateId = (CreatureDelegateId?) Parse.Int(row, "Delegate");
+      CreatureDelegateId = (CreatureDelegateId?) Parse.Int(row, "Creature Delegate");
       SkillDelegateId = (SkillDelegateId?) Parse.Int(row, "Skill Delegate");
-      DamageType = (DamageType?) Parse.Int(row, "Damage Type");
-      School = (School?) Parse.Int(row, "School");
-    }
-
-    public ModifierTypeData(
-      int id,
-      string description,
-      int? statId,
-      Operator? @operator,
-      CreatureDelegateId? delegateId,
-      DamageType? damageType,
-      School? school)
-    {
-      Id = id;
-      Description = description;
-      StatId = statId;
-      Operator = @operator;
-      DelegateId = delegateId;
-      DamageType = damageType;
-      School = school;
     }
 
     public override string ToString()

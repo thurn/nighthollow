@@ -15,6 +15,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 
 namespace Nighthollow.Stats
 {
@@ -22,21 +23,27 @@ namespace Nighthollow.Stats
   {
     public static TaggedNumericOperation<TTag, TValue> Add<TTag, TValue>(TTag tag, TValue value)
       where TTag : Enum where TValue : struct, IStatValue =>
-      new TaggedNumericOperation<TTag, TValue>(tag, value, null);
+      new TaggedNumericOperation<TTag, TValue>(new Dictionary<TTag, NumericOperation<TValue>>
+      {
+        {tag, NumericOperation.Add(value)}
+      });
 
     public static TaggedNumericOperation<TTag, TValue> Increase<TTag, TValue>(TTag tag, PercentageValue value)
       where TTag : Enum where TValue : struct, IStatValue =>
-      new TaggedNumericOperation<TTag, TValue>(tag, null, value);
+      new TaggedNumericOperation<TTag, TValue>(new Dictionary<TTag, NumericOperation<TValue>>
+      {
+        {tag, NumericOperation.Increase<TValue>(value)}
+      });
   }
 
-  public sealed class TaggedNumericOperation<TTag, TValue> : NumericOperation<TValue>
+  public sealed class TaggedNumericOperation<TTag, TValue> : IOperation
     where TTag : Enum where TValue : struct, IStatValue
   {
-    public TTag Tag { get; }
+    public IReadOnlyDictionary<TTag, NumericOperation<TValue>> Operations { get; }
 
-    public TaggedNumericOperation(TTag tag, TValue? addTo, PercentageValue? increaseBy) : base(addTo, increaseBy)
+    public TaggedNumericOperation(IReadOnlyDictionary<TTag, NumericOperation<TValue>> operations)
     {
-      Tag = tag;
+      Operations = operations;
     }
   }
 }

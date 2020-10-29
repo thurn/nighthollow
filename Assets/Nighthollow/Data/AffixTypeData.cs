@@ -25,8 +25,8 @@ namespace Nighthollow.Data
   public sealed class ModifierRange
   {
     public ModifierTypeData ModifierData { get; }
-    public IStatValue? Low { get; }
-    public IStatValue? High { get; }
+    public IStatModifier? Low { get; }
+    public IStatModifier? High { get; }
 
     public ModifierRange(GameDataService service, IReadOnlyDictionary<string, string> row, int number)
     {
@@ -34,8 +34,8 @@ namespace Nighthollow.Data
 
       if (row.ContainsKey($"Low {number}") && row.ContainsKey($"High {number}"))
       {
-        Low = ModifierUtil.ParseValue(ModifierData, Parse.String(row, $"Low {number}"));
-        High = ModifierUtil.ParseValue(ModifierData, Parse.String(row, $"High {number}"));
+        Low = ModifierUtil.ParseModifier(ModifierData, Parse.String(row, $"Low {number}"));
+        High = ModifierUtil.ParseModifier(ModifierData, Parse.String(row, $"High {number}"));
       }
     }
   }

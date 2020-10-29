@@ -37,9 +37,9 @@ namespace Nighthollow.Delegates.Core
   public sealed class ApplyModifierToOwner : Effect
   {
     public Creature Self { get; }
-    public IModifier Modifier { get; }
+    public IStatModifier Modifier { get; }
 
-    public ApplyModifierToOwner(Creature self, IModifier modifier)
+    public ApplyModifierToOwner(Creature self, IStatModifier modifier)
     {
       Self = self;
       Modifier = modifier;

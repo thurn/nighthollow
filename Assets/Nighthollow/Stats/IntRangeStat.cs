@@ -40,6 +40,9 @@ namespace Nighthollow.Stats
     public override IntRangeValue DefaultValue() => IntRangeValue.Zero;
 
     public override IntRangeValue ComputeValue(IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
+      Compute(operations);
+
+    public static IntRangeValue Compute(IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
       new IntRangeValue(
         IntStat.Compute(operations, range => new IntValue(range.Low)).Int,
         IntStat.Compute(operations, range => new IntValue(range.High)).Int);

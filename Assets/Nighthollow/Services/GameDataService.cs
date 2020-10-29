@@ -33,7 +33,7 @@ namespace Nighthollow.Services
     readonly Dictionary<int, AffixTypeData> _affixes = new Dictionary<int, AffixTypeData>();
     readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
     readonly Dictionary<int, CreatureTypeData> _creatures = new Dictionary<int, CreatureTypeData>();
-    readonly Dictionary<ModifierPath, IStatValue> _modifierValues = new Dictionary<ModifierPath, IStatValue>();
+    readonly Dictionary<ModifierPath, IStatModifier> _staticModifiers = new Dictionary<ModifierPath, IStatModifier>();
 
     readonly Dictionary<StaticCardList, List<CreatureItemData>> _staticCardLists =
       new Dictionary<StaticCardList, List<CreatureItemData>>();
@@ -98,7 +98,7 @@ namespace Nighthollow.Services
           _statDefaults[scope] = new StatTable();
         }
 
-        Stat.GetStat(statId).InsertDefault(_statDefaults[scope], stat["Default Value"]);
+        Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Add).InsertInto(_statDefaults[scope]);
       }
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))
@@ -157,13 +157,13 @@ namespace Nighthollow.Services
       var costString = Parse.String(row, "Influence Cost");
       if (costString != null)
       {
-        Stat.InfluenceCost.InsertDefault(stats, costString);
+        Stat.InfluenceCost.ParseModifier(costString, Operator.Add).InsertInto(stats);
       }
 
       var baseDamageString = Parse.String(row, "Base Damage");
       if (baseDamageString != null)
       {
-        Stat.BaseDamage.InsertDefault(stats, baseDamageString);
+        Stat.BaseDamage.ParseModifier(baseDamageString, Operator.Add).InsertInto(stats);
       }
 
       var cardName = Parse.String(row, "Card Name");
@@ -185,17 +185,16 @@ namespace Nighthollow.Services
       var skill = creatureType.ImplicitSkill;
       if (skill != null)
       {
-        var modifierList = new List<ModifierData>();
-
         if (skill.ImplicitAffix != null)
         {
-          modifierList.AddRange(
+          var modifierList =
             from range in skill.ImplicitAffix.ModifierRanges
             let path = new ModifierPath(cardId, skill.ImplicitAffix.Id, range.ModifierData.Id, skill.Id)
             select new ModifierData(
-              range.ModifierData, _modifierValues.ContainsKey(path) ? _modifierValues[path] : null));
+              range.ModifierData.SkillDelegateId,
+              _staticModifiers.GetValueOrDefault(path, null));
 
-          affixes.Add(new AffixData(skill.ImplicitAffix.Id, modifierList));
+          affixes.Add(new AffixData(skill.ImplicitAffix.Id, modifierList.ToList()));
         }
 
         skills.Add(new SkillItemData(
@@ -215,7 +214,9 @@ namespace Nighthollow.Services
         var modifierList =
           from range in creatureType.ImplicitAffix.ModifierRanges
           let path = new ModifierPath(cardId, creatureType.ImplicitAffix.Id, range.ModifierData.Id)
-          select new ModifierData(range.ModifierData, _modifierValues.ContainsKey(path) ? _modifierValues[path] : null);
+          select new ModifierData(
+            range.ModifierData.CreatureDelegateId,
+            _staticModifiers.GetValueOrDefault(path, null));
 
         affixes.Add(new AffixData(creatureType.ImplicitAffix.Id, modifierList.ToList()));
       }
@@ -225,15 +226,15 @@ namespace Nighthollow.Services
 
     void ParseModifierValue(IReadOnlyDictionary<string, string> row)
     {
-      var modifierId = Parse.IntRequired(row, "Modifier");
+      var modifier = Errors.CheckNotNull(GetModifier(Parse.IntRequired(row, "Modifier")));
       var modifierPath = new ModifierPath(
         Parse.IntRequired(row, "Card ID"),
         Parse.IntRequired(row, "Affix ID"),
-        modifierId,
+        modifier.Id,
         Parse.Int(row, "Skill"));
-      _modifierValues[modifierPath] = Errors.CheckNotNull(
-        Stat.GetStat(Errors.CheckNotNull(GetModifier(modifierId).StatId))
-          .ParseValue(Parse.StringRequired(row, "Value")));
+      _staticModifiers[modifierPath] =
+        Stat.GetStat(Errors.CheckNotNull(modifier.StatId))
+          .ParseModifier(Parse.StringRequired(row, "Value"), Errors.CheckNotNull(modifier.Operator));
     }
   }
 }

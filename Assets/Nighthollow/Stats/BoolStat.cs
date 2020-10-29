@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Generated;
 
 #nullable enable
 
@@ -45,11 +47,17 @@ namespace Nighthollow.Stats
 
     protected override BoolValue ParseStatValue(string value) => new BoolValue(bool.Parse(value));
 
-    public IModifier SetTrue() => StaticModifier(new BooleanOperation(true));
+    public IStatModifier SetTrue() => StaticModifier(new BooleanOperation(true));
 
-    public IModifier SetFalse() => StaticModifier(new BooleanOperation(true));
+    public IStatModifier SetFalse() => StaticModifier(new BooleanOperation(true));
 
-    public override void InsertDefault(StatTable table, string value) =>
-      StaticModifier(new BooleanOperation(ParseStatValue(value).Bool)).InsertInto(table);
+    public override IStatModifier ParseModifier(string value, Operator op) =>
+      op switch
+      {
+        Operator.Add => StaticModifier(new BooleanOperation(ParseStatValue(value).Bool)),
+        Operator.SetFalse => StaticModifier(new BooleanOperation(false)),
+        Operator.SetTrue => StaticModifier(new BooleanOperation(true)),
+        _ => throw new ArgumentException($"Unsupported operator type: {op}")
+      };
   }
 }
