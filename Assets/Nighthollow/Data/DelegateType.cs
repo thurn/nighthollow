@@ -12,20 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Utils;
-
 #nullable enable
 
-namespace Nighthollow.Stats
+namespace Nighthollow.Data
 {
-  public abstract class AbstractGameEntity
+  public enum DelegateType
   {
-    public abstract StatTable Stats { get; }
-
-    public int GetInt(IntStat statId) => Stats.Get(statId).Int;
-
-    public bool GetBool(BoolStat statId) => Stats.Get(statId).Bool;
-
-    public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
+    Unknown = 0,
+    Creature = 1,
+    Skill = 2
   }
 }

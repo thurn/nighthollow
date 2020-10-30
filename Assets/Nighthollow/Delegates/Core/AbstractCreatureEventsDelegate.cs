@@ -34,7 +34,7 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
-    public void OnFiredProjectile(TContext c, FireProjectileEffect effect)
+    public virtual void OnFiredProjectile(TContext c, FireProjectileEffect effect)
     {
     }
   }

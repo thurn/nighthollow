@@ -20,7 +20,7 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
-  public sealed class EnemyData : AbstractGameEntity
+  public sealed class EnemyData : StatEntity
   {
     public IReadOnlyCollection<CreatureData> Enemies { get; }
     public override StatTable Stats { get; }

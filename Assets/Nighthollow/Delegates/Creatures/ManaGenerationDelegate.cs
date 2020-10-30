@@ -28,7 +28,7 @@ namespace Nighthollow.Delegates.Creatures
       c.Results.Add(
         new ApplyModifierToOwnerEffect(c.Self,
           Stat.ManaGain.Modifier(
-            NumericOperation.Add(c.Self.Data.Stats.Get(Stat.AddedManaGain)),
+            NumericOperation.Add(c.GetStat(Stat.AddedManaGain)),
             new WhileAliveLifetime(c.Self))));
     }
   }

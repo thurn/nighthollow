@@ -14,12 +14,35 @@
 
 #nullable enable
 
+using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
+using Nighthollow.Delegates.Effects;
+using Nighthollow.Generated;
+using UnityEngine;
 
 namespace Nighthollow.Delegates.Creatures
 {
   public sealed class MultipleProjectilesDelegate : AbstractCreatureDelegate
   {
+    public override void OnFiredProjectile(CreatureContext c, FireProjectileEffect effect)
+    {
+      if (effect.Identifier.DelegateType == DelegateType.Creature && effect.Identifier.Index <= c.DelegateIndex)
+      {
+        // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
+        return;
+      }
 
+      // 1 less projectile since we already fired one
+      for (var i = 1; i < c.GetInt(Stat.ProjectileCount); ++i)
+      {
+        c.Results.Add(new FireProjectileEffect(
+          c.Self,
+          effect.SkillData,
+          new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Creature),
+          c.Self.ProjectileSource.position,
+          Vector2.zero,
+          i * c.GetStat(Stat.MultipleProjectilesDelay).AsMilliseconds()));
+      }
+    }
   }
 }

@@ -16,6 +16,7 @@
 
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Core
 {
@@ -32,6 +33,8 @@ namespace Nighthollow.Delegates.Core
       Skill = skill;
       Projectile = projectile;
     }
+
+    public override StatTable Stats => Skill.Stats;
 
     public override SkillContext New() => new SkillContext(Self, Skill, Projectile);
   }

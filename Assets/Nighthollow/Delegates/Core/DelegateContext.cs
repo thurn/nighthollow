@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Stats;
+
 #nullable enable
 
 namespace Nighthollow.Delegates.Core
 {
-  public abstract class DelegateContext<TSelf> where TSelf : DelegateContext<TSelf>
+  public abstract class DelegateContext<TSelf> : StatEntity where TSelf : DelegateContext<TSelf>
   {
     public bool Implemented { get; set; }
     public int DelegateIndex { get; set; }

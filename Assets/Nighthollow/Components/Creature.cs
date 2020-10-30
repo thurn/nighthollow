@@ -20,7 +20,6 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
-using Nighthollow.Stats;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
@@ -133,13 +132,6 @@ namespace Nighthollow.Components
     public SkillData CurrentSkill => _currentSkill;
 
     public CreatureState State => _state;
-
-    public StatTable GetOwnerStats() => Owner switch
-    {
-      PlayerName.User => Root.Instance.User.Data.Stats,
-      PlayerName.Enemy => Root.Instance.Enemy.Data.Stats,
-      _ => throw Errors.UnknownEnumValue(Owner)
-    };
 
     public void EditorSetReferences(Transform projectileSource,
       Transform healthbarAnchor,

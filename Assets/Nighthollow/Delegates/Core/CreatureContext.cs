@@ -15,6 +15,7 @@
 #nullable enable
 
 using Nighthollow.Components;
+using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Core
 {
@@ -27,6 +28,8 @@ namespace Nighthollow.Delegates.Core
     {
       Self = self;
     }
+
+    public override StatTable Stats => Self.Data.Stats;
 
     public override CreatureContext New() => new CreatureContext(Self);
   }

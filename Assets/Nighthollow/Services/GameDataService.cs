@@ -89,7 +89,7 @@ namespace Nighthollow.Services
         }
 
         var statId = Parse.IntRequired(stat, "Stat ID");
-        Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Add).InsertInto(StatTable.Root);
+        Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Overwrite).InsertInto(StatTable.Root);
       }
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))

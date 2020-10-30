@@ -26,9 +26,21 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class FireProjectileEffect : Effect
   {
+    public sealed class DelegateIdentifier
+    {
+      public int Index { get; }
+      public DelegateType DelegateType { get;  }
+
+      public DelegateIdentifier(int index, DelegateType delegateType)
+      {
+        Index = index;
+        DelegateType = delegateType;
+      }
+    }
+
     public Creature FiredBy { get; }
     public SkillData SkillData { get; }
-    public int DelegateIndex { get; }
+    public DelegateIdentifier Identifier { get; }
     public Vector2 FiringPoint { get; }
     public Vector2 FiringDirectionOffset { get; }
     public int FiringDelayMs { get; }
@@ -36,14 +48,14 @@ namespace Nighthollow.Delegates.Effects
     public FireProjectileEffect(
       Creature firedBy,
       SkillData skillData,
-      int delegateIndex,
+      DelegateIdentifier delegateIdentifier,
       Vector2 firingPoint,
       Vector2 firingDirectionOffset,
       int firingDelayMs = 0)
     {
       FiredBy = firedBy;
       SkillData = skillData;
-      DelegateIndex = delegateIndex;
+      Identifier = delegateIdentifier;
       FiringPoint = firingPoint;
       FiringDirectionOffset = firingDirectionOffset;
       FiringDelayMs = firingDelayMs;

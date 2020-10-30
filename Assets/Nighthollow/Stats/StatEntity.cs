@@ -14,27 +14,20 @@
 
 #nullable enable
 
-using Nighthollow.Delegates.Core;
-using Nighthollow.Stats;
-
-namespace Nighthollow.Data
+namespace Nighthollow.Stats
 {
-  public sealed class SkillData : StatEntity
+  public abstract class StatEntity
   {
-    public SkillTypeData BaseType { get; }
-    public override StatTable Stats { get; }
-    public ISkillDelegate Delegate { get; }
+    public abstract StatTable Stats { get; }
 
-    public SkillData(
-      SkillTypeData baseType,
-      StatTable stats,
-      ISkillDelegate skillDelegate)
-    {
-      BaseType = baseType;
-      Stats = stats;
-      Delegate = skillDelegate;
-    }
+    public TValue GetStat<TOperation, TValue>(AbstractStat<TOperation, TValue> stat)
+      where TOperation : IOperation where TValue : IStatValue =>
+      Stats.Get(stat);
 
-    public SkillData Clone(StatTable parentStats) => new SkillData(BaseType, Stats.Clone(parentStats), Delegate);
+    public int GetInt(IntStat statId) => Stats.Get(statId).Int;
+
+    public bool GetBool(BoolStat statId) => Stats.Get(statId).Bool;
+
+    public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
   }
 }

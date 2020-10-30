@@ -68,6 +68,7 @@ namespace Nighthollow.Generated
     public static readonly IntStat AddedManaGain = new IntStat(49);
     public static readonly PercentageStat MeleeDamageMultiplier = new PercentageStat(50);
     public static readonly IntStat ProjectileCount = new IntStat(51);
+    public static readonly DurationStat MultipleProjectilesDelay = new DurationStat(52);
 
     public static IStat GetStat(int statId)
     {
@@ -121,6 +122,7 @@ namespace Nighthollow.Generated
         case 49: return AddedManaGain;
         case 50: return MeleeDamageMultiplier;
         case 51: return ProjectileCount;
+        case 52: return MultipleProjectilesDelay;
         default: throw new ArgumentOutOfRangeException(statId.ToString());
       }
     }

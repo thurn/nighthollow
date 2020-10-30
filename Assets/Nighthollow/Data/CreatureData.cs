@@ -22,7 +22,7 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
-  public sealed class CreatureData : AbstractGameEntity
+  public sealed class CreatureData : StatEntity
   {
     public string Name { get; }
     public CreatureTypeData BaseType { get; }
