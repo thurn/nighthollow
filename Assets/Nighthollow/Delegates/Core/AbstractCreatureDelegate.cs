@@ -14,23 +14,16 @@
 
 #nullable enable
 
-using Nighthollow.Components;
+using Nighthollow.Data;
 
-namespace Nighthollow.Delegates.Core2
+namespace Nighthollow.Delegates.Core
 {
-  public class AbstractCreatureEventsDelegate<TContext> : ICreatureEventsDelegate<TContext>
-    where TContext : DelegateContext
+  public abstract class AbstractCreatureDelegate : AbstractCreatureEventsDelegate<CreatureContext>, ICreatureDelegate
   {
-    public virtual void OnActivate(TContext c)
-    {
-    }
+    public virtual bool CanUseMeleeSkill(CreatureContext c) => c.MarkNotImplemented<bool>();
 
-    public virtual void OnDeath(TContext c)
-    {
-    }
+    public virtual bool CanUseProjectileSkill(CreatureContext c) => c.MarkNotImplemented<bool>();
 
-    public virtual void OnKilledEnemy(TContext c, Creature enemy, int damageAmount)
-    {
-    }
+    public virtual SkillData? SelectSkill(CreatureContext c) => c.MarkNotImplemented<SkillData>();
   }
 }

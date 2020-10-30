@@ -188,7 +188,7 @@ namespace Nighthollow.Components
       ToDefaultState();
 
       _useSkill = true;
-      _data.Delegate.OnActivate(this);
+      _data.Delegate.OnActivate(new CreatureContext(this));
 
       _coroutine = StartCoroutine(RunCoroutine());
     }
@@ -258,7 +258,7 @@ namespace Nighthollow.Components
       _animator.SetTrigger(Death);
       _collider.enabled = false;
 
-      Data.Delegate.OnDeath(this);
+      Data.Delegate.OnDeath(new CreatureContext(this));
 
       SetState(CreatureState.Dying);
       _creatureService.RemoveCreature(this);
@@ -305,7 +305,7 @@ namespace Nighthollow.Components
       _damageTaken = Mathf.Clamp(0, _damageTaken + damage, health);
       if (_damageTaken >= health)
       {
-        appliedBy.Data.Delegate.OnKilledEnemy(appliedBy, this, damage);
+        appliedBy.Data.Delegate.OnKilledEnemy(new CreatureContext(appliedBy), this, damage);
         Kill();
       }
     }

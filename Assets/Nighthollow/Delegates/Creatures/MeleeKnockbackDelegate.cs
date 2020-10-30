@@ -18,7 +18,7 @@ using Nighthollow.Delegates.Core;
 
 namespace Nighthollow.Delegates.Creatures
 {
-  public sealed class MeleeKnockbackDelegate : CreatureDelegate
+  public sealed class MeleeKnockbackDelegate : AbstractCreatureDelegate
   {
 
   }

@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Stats;
@@ -49,7 +50,8 @@ namespace Nighthollow.Data
       var skills = item.Skills.Select(s => BuildSkill(stats, s)).ToList();
 
       return new CreatureData(
-        item.Name, item.BaseType, item.School, skills, stats, delegates);
+        item.Name, item.BaseType, item.School, skills, stats,
+        new CreatureDelegateList(delegates.Select(CreatureDelegateMap.Get).ToList()));
     }
 
     static SkillData BuildSkill(StatTable parentStats, SkillItemData item)
@@ -87,7 +89,8 @@ namespace Nighthollow.Data
         modifier.StatModifier?.InsertInto(stats);
       }
 
-      return new SkillData(item.BaseType, stats, delegates);
+      return new SkillData(
+        item.BaseType, stats, new SkillDelegateList(delegates.Select(SkillDelegateMap.Get).ToList()));
     }
 
     public static SkillItemData DefaultMeleeAttack()

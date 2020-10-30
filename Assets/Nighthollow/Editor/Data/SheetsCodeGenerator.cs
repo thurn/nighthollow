@@ -140,8 +140,8 @@ namespace Nighthollow.Editor.Data
         builder.Append($"  public static class {pair.Key}DelegateMap\n");
         builder.Append("  {\n");
         builder.Append(
-          $"    static readonly Dictionary<{pair.Key}DelegateId, {pair.Key}Delegate> Delegates = new\n");
-        builder.Append($"        Dictionary<{pair.Key}DelegateId, {pair.Key}Delegate>\n");
+          $"    static readonly Dictionary<{pair.Key}DelegateId, I{pair.Key}Delegate> Delegates = new\n");
+        builder.Append($"        Dictionary<{pair.Key}DelegateId, I{pair.Key}Delegate>\n");
         builder.Append("    {\n");
         foreach (var (valueName, _) in pair.Value)
         {
@@ -149,7 +149,7 @@ namespace Nighthollow.Editor.Data
         }
 
         builder.Append("    };\n\n");
-        builder.Append($"    public static {pair.Key}Delegate Get({pair.Key}DelegateId id) => Delegates[id];\n");
+        builder.Append($"    public static I{pair.Key}Delegate Get({pair.Key}DelegateId id) => Delegates[id];\n");
         builder.Append("  }\n\n");
       }
 

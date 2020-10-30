@@ -35,8 +35,8 @@ namespace Nighthollow.Generated
 
   public static class CreatureDelegateMap
   {
-    static readonly Dictionary<CreatureDelegateId, CreatureDelegate> Delegates = new
-        Dictionary<CreatureDelegateId, CreatureDelegate>
+    static readonly Dictionary<CreatureDelegateId, ICreatureDelegate> Delegates = new
+        Dictionary<CreatureDelegateId, ICreatureDelegate>
     {
       {CreatureDelegateId.DefaultCreatureDelegate, new DefaultCreatureDelegate()},
       {CreatureDelegateId.MultipleProjectilesDelegate, new MultipleProjectilesDelegate()},
@@ -48,7 +48,7 @@ namespace Nighthollow.Generated
       {CreatureDelegateId.InfluenceAddedDelegate, new InfluenceAddedDelegate()},
     };
 
-    public static CreatureDelegate Get(CreatureDelegateId id) => Delegates[id];
+    public static ICreatureDelegate Get(CreatureDelegateId id) => Delegates[id];
   }
 
   public enum SkillDelegateId
@@ -59,13 +59,13 @@ namespace Nighthollow.Generated
 
   public static class SkillDelegateMap
   {
-    static readonly Dictionary<SkillDelegateId, SkillDelegate> Delegates = new
-        Dictionary<SkillDelegateId, SkillDelegate>
+    static readonly Dictionary<SkillDelegateId, ISkillDelegate> Delegates = new
+        Dictionary<SkillDelegateId, ISkillDelegate>
     {
       {SkillDelegateId.DefaultSkillDelegate, new DefaultSkillDelegate()},
     };
 
-    public static SkillDelegate Get(SkillDelegateId id) => Delegates[id];
+    public static ISkillDelegate Get(SkillDelegateId id) => Delegates[id];
   }
 
 }

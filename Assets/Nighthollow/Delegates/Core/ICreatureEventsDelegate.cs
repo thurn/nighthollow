@@ -15,17 +15,24 @@
 #nullable enable
 
 using Nighthollow.Components;
+using Nighthollow.Delegates.Effects;
 
-namespace Nighthollow.Delegates.Core2
+namespace Nighthollow.Delegates.Core
 {
-  public class CreatureContext : DelegateContext
+  public interface ICreatureEventsDelegate<in TContext> : IDelegate where TContext : DelegateContext<TContext>
   {
-    public Creature Self { get; }
-    public ICreatureDelegate Delegate => null!;
+    /// <summary>Called when a creature is first placed.</summary>
+    void OnActivate(TContext c);
 
-    public CreatureContext(Creature self)
-    {
-      Self = self;
-    }
+    /// <summary>Called when a creature dies.</summary>
+    void OnDeath(TContext c);
+
+    /// <summary>Called when a creature kills an enemy creature.</summary>
+    void OnKilledEnemy(
+      TContext c,
+      Creature enemy,
+      int damageAmount);
+
+    void OnFiredProjectile(TContext c, FireProjectileEffect effect);
   }
 }

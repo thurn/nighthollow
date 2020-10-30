@@ -16,7 +16,7 @@
 
 using Nighthollow.Data;
 
-namespace Nighthollow.Delegates.Core2
+namespace Nighthollow.Delegates.Core
 {
   public interface ICreatureDelegate : ICreatureEventsDelegate<CreatureContext>
   {

@@ -14,22 +14,10 @@
 
 #nullable enable
 
-using Nighthollow.Components;
-
-namespace Nighthollow.Delegates.Core2
+namespace Nighthollow.Delegates.Core
 {
-  public interface ICreatureEventsDelegate<in TContext> : IDelegate where TContext : DelegateContext
+  public interface IDelegate
   {
-    /// <summary>Called when a creature is first placed.</summary>
-    void OnActivate(TContext c);
 
-    /// <summary>Called when a creature dies.</summary>
-    void OnDeath(TContext c);
-
-    /// <summary>Called when a creature kills an enemy creature.</summary>
-    void OnKilledEnemy(
-      TContext c,
-      Creature enemy,
-      int damageAmount);
   }
 }

@@ -16,28 +16,33 @@
 
 using System;
 using System.Collections.Generic;
+using Nighthollow.Utils;
 
-namespace Nighthollow.Delegates.Core2
+namespace Nighthollow.Delegates.Core
 {
   public abstract class AbstractDelegateList<TContext, TDelegate>
-    where TContext : DelegateContext where TDelegate : IDelegate
+    where TContext : DelegateContext<TContext> where TDelegate : IDelegate
   {
     readonly IReadOnlyList<TDelegate> _delegates;
 
     protected AbstractDelegateList(IReadOnlyList<TDelegate> delegates)
     {
+      Errors.CheckArgument(delegates.Count > 0, "Expected > 0 delegates");
       _delegates = delegates;
     }
 
     protected TResult GetFirstImplemented<TResult>(
-      TContext context,
+      TContext delegateContext,
       Func<TDelegate, TContext, TResult> function)
     {
+      var context = delegateContext.New();
+
       for (var i = 0; i < _delegates.Count; ++i)
       {
+        context.Implemented = true;
         context.DelegateIndex = i;
         var result = function(_delegates[i], context);
-        if (!context.NotImplemented)
+        if (context.Implemented)
         {
           return result;
         }
@@ -47,10 +52,10 @@ namespace Nighthollow.Delegates.Core2
     }
 
     protected void ExecuteEvent(
-      TContext context,
+      TContext delegateContext,
       Action<TDelegate, TContext> action)
     {
-      context.Results = new Results();
+      var context = delegateContext.New();
 
       for (var i = 0; i < _delegates.Count; ++i)
       {

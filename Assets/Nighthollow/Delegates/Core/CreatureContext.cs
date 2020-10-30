@@ -18,13 +18,16 @@ using Nighthollow.Components;
 
 namespace Nighthollow.Delegates.Core
 {
-  public sealed class CreatureContext
+  public sealed class CreatureContext : DelegateContext<CreatureContext>
   {
     public Creature Self { get; }
+    public ICreatureDelegate Delegate => Self.Data.Delegate;
 
-    public CreatureContext(Creature self)
+    public CreatureContext(Creature self) : base(new Results())
     {
       Self = self;
     }
+
+    public override CreatureContext New() => new CreatureContext(Self);
   }
 }

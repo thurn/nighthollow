@@ -18,7 +18,7 @@ using Nighthollow.Delegates.Core;
 
 namespace Nighthollow.Delegates.Creatures
 {
-  public sealed class ProjectileArcDelegate : CreatureDelegate
+  public sealed class ProjectileArcDelegate : AbstractCreatureDelegate
   {
 
   }

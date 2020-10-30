@@ -20,7 +20,7 @@ using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
 
-namespace Nighthollow.Delegates.Core2
+namespace Nighthollow.Delegates.Core
 {
   public interface ISkillDelegate : ICreatureEventsDelegate<SkillContext>
   {

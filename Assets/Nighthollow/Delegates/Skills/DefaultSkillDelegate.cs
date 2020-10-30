@@ -29,96 +29,92 @@ using Random = UnityEngine.Random;
 
 namespace Nighthollow.Delegates.Skills
 {
-  public sealed class DefaultSkillDelegate : SkillDelegate
+  public sealed class DefaultSkillDelegate : AbstractSkillDelegate
   {
-    public override void OnUse(SkillContext c, Results results)
+    public override void OnUse(SkillContext c)
     {
       c.Self.MarkSkillUsed(c.Skill.BaseType);
       if (c.Skill.BaseType.IsProjectile)
       {
-        results.Add(new FireProjectileEffect(
+        c.Results.Add(new FireProjectileEffect(
           c.Self, c.Skill, c.DelegateIndex, c.Self.ProjectileSource.position, Vector2.zero));
       }
     }
 
-    public override void OnImpact(SkillContext c, Results results)
+    public override void OnImpact(SkillContext c)
     {
-      var targets = c.Skill.Delegate.PopulateTargets(c);
+      var targets = c.Delegate.PopulateTargets(c);
       foreach (var target in targets)
       {
-        c.Skill.Delegate.ApplyToTarget(c, target, results);
+        c.Delegate.OnApplyToTarget(c, target);
       }
     }
 
-    public override void PopulateTargets(SkillContext c, List<Creature> targets)
+    public override void OnApplyToTarget(SkillContext c, Creature target)
     {
-      var filter = new ContactFilter2D
+      if (c.Skill.GetBool(Stat.UsesAccuracy) && !c.Delegate.RollForHit(c, target))
       {
-        layerMask = Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent()),
-        useTriggers = true
-      };
-      var sourceCollider = c.Skill.Delegate.GetCollider(c);
-      if (!sourceCollider)
-      {
-        return;
-      }
-
-      var colliders = new List<Collider2D>();
-      sourceCollider!.OverlapCollider(filter, colliders);
-      targets.AddRange(
-        c.Skill.Delegate.SelectTargets(c, colliders
-          // Filter out trigger colliders
-          .Where(collider => collider.GetComponent<Creature>())
-          .Select(ComponentUtils.GetComponent<Creature>)));
-    }
-
-    public override IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
-      c.Skill.BaseType.IsMelee ? hits.Take(Errors.CheckNonzero(c.Skill.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
-
-    public override Collider2D? GetCollider(SkillContext c) =>
-      c.Projectile ? c.Projectile!.Collider : c.Self.Collider;
-
-    public override void ApplyToTarget(SkillContext c, Creature target, Results results)
-    {
-      if (c.Skill.GetBool(Stat.UsesAccuracy) && !c.Skill.Delegate.RollForHit(c, target))
-      {
-        results.Add(c.Self.Owner == PlayerName.User
+        c.Results.Add(c.Self.Owner == PlayerName.User
           ? new SkillEventEffect(SkillEventEffect.Event.Missed, c.Self)
           : new SkillEventEffect(SkillEventEffect.Event.Evade, target));
         return;
       }
 
       var isCriticalHit = false;
-      if (c.Skill.GetBool(Stat.CanCrit) && c.Skill.Delegate.RollForCrit(c, target))
+      if (c.Skill.GetBool(Stat.CanCrit) && c.Delegate.RollForCrit(c, target))
       {
-        results.Add(new SkillEventEffect(SkillEventEffect.Event.Crit, c.Self));
+        c.Results.Add(new SkillEventEffect(SkillEventEffect.Event.Crit, c.Self));
         isCriticalHit = true;
       }
 
-      var damage = c.Skill.Delegate.RollForBaseDamage(c, target);
+      var damage = c.Delegate.RollForBaseDamage(c, target);
       damage = c.Skill.GetBool(Stat.IgnoresDamageReduction)
         ? damage
-        : c.Skill.Delegate.ApplyDamageReduction(c, target, damage);
+        : c.Delegate.ApplyDamageReduction(c, target, damage);
       damage = c.Skill.GetBool(Stat.IgnoresDamageResistance)
         ? damage
-        : c.Skill.Delegate.ApplyDamageResistance(c, target, damage);
-      var totalDamage = c.Skill.Delegate.ComputeFinalDamage(c, target, damage, isCriticalHit);
+        : c.Delegate.ApplyDamageResistance(c, target, damage);
+      var totalDamage = c.Delegate.ComputeFinalDamage(c, target, damage, isCriticalHit);
 
-      results.Add(new ApplyDamageEffect(c.Self, target, totalDamage));
-      results.Add(new DamageTextEffect(target, totalDamage));
+      c.Results.Add(new ApplyDamageEffect(c.Self, target, totalDamage));
+      c.Results.Add(new DamageTextEffect(target, totalDamage));
 
-      var healthDrain = c.Skill.Delegate.ComputeHealthDrain(c, target, totalDamage);
+      var healthDrain = c.Delegate.ComputeHealthDrain(c, target, totalDamage);
       if (healthDrain > 0)
       {
-        results.Add(new HealEffect(c.Self, healthDrain));
+        c.Results.Add(new HealEffect(c.Self, healthDrain));
       }
 
-      if (c.Skill.GetBool(Stat.CanStun) && c.Skill.Delegate.CheckForStun(c, target, totalDamage))
+      if (c.Skill.GetBool(Stat.CanStun) && c.Delegate.RollForStun(c, target, totalDamage))
       {
-        results.Add(new StunEffect(target, c.Self.Data.GetDurationSeconds(Stat.StunDurationOnEnemies)));
-        results.Add(new SkillEventEffect(SkillEventEffect.Event.Stun, target));
+        c.Results.Add(new StunEffect(target, c.Self.Data.GetDurationSeconds(Stat.StunDurationOnEnemies)));
+        c.Results.Add(new SkillEventEffect(SkillEventEffect.Event.Stun, target));
       }
     }
+
+    public override IEnumerable<Creature> PopulateTargets(SkillContext c)
+    {
+      var filter = new ContactFilter2D
+      {
+        layerMask = Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent()),
+        useLayerMask = true,
+        useTriggers = true
+      };
+      var sourceCollider = c.Delegate.GetCollider(c);
+      var colliders = new List<Collider2D>();
+      sourceCollider.OverlapCollider(filter, colliders);
+
+      return c.Delegate.SelectTargets(c, colliders
+        // Filter out trigger colliders
+        .Where(collider => collider.GetComponent<Creature>())
+        .Select(ComponentUtils.GetComponent<Creature>));
+    }
+
+    public override IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
+      c.Skill.BaseType.IsMelee ? hits.Take(Errors.CheckNonzero(c.Skill.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
+
+    public override Collider2D GetCollider(SkillContext c) =>
+      c.Projectile ? c.Projectile!.Collider : c.Self.Collider;
 
     public override TaggedValues<DamageType, IntValue> RollForBaseDamage(
       SkillContext c, Creature target) =>
@@ -163,7 +159,7 @@ namespace Nighthollow.Delegates.Skills
         damageValue * (1f - c.Self.GetOwnerStats().Get(Stat.MaximumDamageResistance).AsMultiplier()),
         Mathf.Clamp01(1f - (resistance / (resistance + (2.0f * damageValue)))) * damageValue)));
 
-    public override int? ComputeFinalDamage(
+    public override int ComputeFinalDamage(
       SkillContext c,
       Creature target,
       TaggedValues<DamageType, IntValue> damage,

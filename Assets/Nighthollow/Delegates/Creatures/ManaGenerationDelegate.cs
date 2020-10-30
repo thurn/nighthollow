@@ -21,11 +21,11 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Creatures
 {
-  public sealed class ManaGenerationDelegate : CreatureDelegate
+  public sealed class ManaGenerationDelegate : AbstractCreatureDelegate
   {
-    public override void OnActivate(CreatureContext c, Results results)
+    public override void OnActivate(CreatureContext c)
     {
-      results.Add(
+      c.Results.Add(
         new ApplyModifierToOwnerEffect(c.Self,
           Stat.ManaGain.Modifier(
             NumericOperation.Add(c.Self.Data.Stats.Get(Stat.AddedManaGain)),

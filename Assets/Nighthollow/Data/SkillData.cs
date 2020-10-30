@@ -14,9 +14,7 @@
 
 #nullable enable
 
-using System.Collections.Generic;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Generated;
 using Nighthollow.Stats;
 
 namespace Nighthollow.Data
@@ -25,26 +23,16 @@ namespace Nighthollow.Data
   {
     public SkillTypeData BaseType { get; }
     public override StatTable Stats { get; }
-    public SkillDelegateChain Delegate { get; }
+    public ISkillDelegate Delegate { get; }
 
     public SkillData(
       SkillTypeData baseType,
       StatTable stats,
-      List<SkillDelegateId> delegateIds)
+      ISkillDelegate skillDelegate)
     {
       BaseType = baseType;
       Stats = stats;
-      Delegate = new SkillDelegateChain(delegateIds);
-    }
-
-    SkillData(
-      SkillTypeData baseType,
-      StatTable stats,
-      SkillDelegateChain delegates)
-    {
-      BaseType = baseType;
-      Stats = stats;
-      Delegate = delegates;
+      Delegate = skillDelegate;
     }
 
     public SkillData Clone(StatTable parentStats) => new SkillData(BaseType, Stats.Clone(parentStats), Delegate);

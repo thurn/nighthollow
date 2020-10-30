@@ -14,10 +14,28 @@
 
 #nullable enable
 
-namespace Nighthollow.Delegates.Core2
-{
-  public interface IDelegate
-  {
+using Nighthollow.Components;
+using Nighthollow.Delegates.Effects;
 
+namespace Nighthollow.Delegates.Core
+{
+  public class AbstractCreatureEventsDelegate<TContext> : ICreatureEventsDelegate<TContext>
+    where TContext : DelegateContext<TContext>
+  {
+    public virtual void OnActivate(TContext c)
+    {
+    }
+
+    public virtual void OnDeath(TContext c)
+    {
+    }
+
+    public virtual void OnKilledEnemy(TContext c, Creature enemy, int damageAmount)
+    {
+    }
+
+    public void OnFiredProjectile(TContext c, FireProjectileEffect effect)
+    {
+    }
   }
 }

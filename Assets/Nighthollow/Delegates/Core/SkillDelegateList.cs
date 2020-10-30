@@ -15,16 +15,20 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Components;
+using Nighthollow.Delegates.Effects;
+using Nighthollow.Delegates.Skills;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
 
-namespace Nighthollow.Delegates.Core2
+namespace Nighthollow.Delegates.Core
 {
   public sealed class SkillDelegateList : AbstractDelegateList<SkillContext, ISkillDelegate>, ISkillDelegate
   {
-    public SkillDelegateList(IReadOnlyList<ISkillDelegate> delegates) : base(delegates)
+    public SkillDelegateList(IEnumerable<ISkillDelegate> delegates) :
+      base(delegates.Append(new DefaultSkillDelegate()).ToList())
     {
     }
 
@@ -36,6 +40,9 @@ namespace Nighthollow.Delegates.Core2
 
     public void OnKilledEnemy(SkillContext context, Creature enemy, int damageAmount) =>
       ExecuteEvent(context, (d, c) => d.OnKilledEnemy(c, enemy, damageAmount));
+
+    public void OnFiredProjectile(SkillContext context, FireProjectileEffect effect) =>
+      ExecuteEvent(context, (d, c) => d.OnFiredProjectile(c, effect));
 
     public void OnStart(SkillContext context) =>
       ExecuteEvent(context, (d, c) => d.OnStart(c));

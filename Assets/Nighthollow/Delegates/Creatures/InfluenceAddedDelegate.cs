@@ -21,11 +21,11 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Creatures
 {
-  public sealed class InfluenceAddedDelegate : CreatureDelegate
+  public sealed class InfluenceAddedDelegate : AbstractCreatureDelegate
   {
-    public override void OnActivate(CreatureContext c, Results results)
+    public override void OnActivate(CreatureContext c)
     {
-      results.Add(
+      c.Results.Add(
         new ApplyModifierToOwnerEffect(c.Self,
           Stat.Influence.Modifier(
             TaggedNumericOperation.Add(c.Self.Data.School, new IntValue(1)),

@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -55,7 +56,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void RaiseEvents()
     {
-
+      FiredBy.Data.Delegate.OnFiredProjectile(new CreatureContext(FiredBy), this);
     }
 
     IEnumerator<YieldInstruction> FireAsync()

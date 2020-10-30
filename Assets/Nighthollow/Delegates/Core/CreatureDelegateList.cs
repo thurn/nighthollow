@@ -16,14 +16,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Delegates.Creatures;
+using Nighthollow.Delegates.Effects;
 
-namespace Nighthollow.Delegates.Core2
+namespace Nighthollow.Delegates.Core
 {
   public sealed class CreatureDelegateList : AbstractDelegateList<CreatureContext, ICreatureDelegate>, ICreatureDelegate
   {
-    public CreatureDelegateList(IReadOnlyList<ICreatureDelegate> delegates) : base(delegates)
+    public CreatureDelegateList(IEnumerable<ICreatureDelegate> delegates) :
+      base(delegates.Append(new DefaultCreatureDelegate()).ToList())
     {
     }
 
@@ -45,6 +49,12 @@ namespace Nighthollow.Delegates.Core2
       ExecuteForCurrentSkill(context, (d, c) => d.OnKilledEnemy(c, enemy, damageAmount));
     }
 
+    public void OnFiredProjectile(CreatureContext context, FireProjectileEffect effect)
+    {
+      ExecuteEvent(context, (d, c) => d.OnFiredProjectile(c, effect));
+      ExecuteForCurrentSkill(context, (d, c) => d.OnFiredProjectile(c, effect));
+    }
+
     public bool CanUseMeleeSkill(CreatureContext context) =>
       GetFirstImplemented(context, (d, c) => d.CanUseMeleeSkill(c));
 
@@ -56,7 +66,11 @@ namespace Nighthollow.Delegates.Core2
 
     void ExecuteForCurrentSkill(CreatureContext c, Action<ISkillDelegate, SkillContext> action)
     {
-
+      var skill = c.Self.CurrentSkill;
+      if (skill != null)
+      {
+        action(skill.Delegate, new SkillContext(c.Self, skill));
+      }
     }
   }
 }
