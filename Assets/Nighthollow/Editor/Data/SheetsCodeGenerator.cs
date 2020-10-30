@@ -191,7 +191,7 @@ namespace Nighthollow.Editor.Data
       {
         builder.Append($"        case {stat["Stat ID"]}: return {stat["Name"]};\n");
       }
-      builder.Append($"        default: throw new ArgumentOutOfRangeException();\n");
+      builder.Append($"        default: throw new ArgumentOutOfRangeException(statId.ToString());\n");
       builder.Append("      }\n");
       builder.Append("    }\n");
 

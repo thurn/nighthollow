@@ -38,18 +38,19 @@ namespace Nighthollow.Delegates.Creatures
     public override SkillData? SelectSkill(CreatureContext c)
     {
       var data = c.Self.Data;
-      if (data.Delegate.CanUseProjectileSkill(c))
+
+      if (data.Delegate.CanUseMeleeSkill(c))
       {
-        var skill = SelectMatching(c, s => s.BaseType.IsProjectile);
+        var skill = SelectMatching(c, s => s.BaseType.IsMelee);
         if (skill != null)
         {
           return skill;
         }
       }
 
-      if (data.Delegate.CanUseMeleeSkill(c))
+      if (data.Delegate.CanUseProjectileSkill(c))
       {
-        var skill = SelectMatching(c, s => s.BaseType.IsMelee);
+        var skill = SelectMatching(c, s => s.BaseType.IsProjectile);
         if (skill != null)
         {
           return skill;

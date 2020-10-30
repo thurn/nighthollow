@@ -50,7 +50,7 @@ namespace Nighthollow.Utils
     {
       Errors.CheckNotNull(component);
       var result = component.GetComponent<T>();
-      if (result == null)
+      if (!result)
       {
         throw new NullReferenceException(
           $"Expected a component of type {typeof(T).FullName} on {component.gameObject.name}");

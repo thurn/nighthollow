@@ -48,17 +48,12 @@ namespace Nighthollow.Utils
 
     public static int? Int(IReadOnlyDictionary<string, string> row, string key)
     {
-      if (row.ContainsKey(key) && int.TryParse(row[key], out var result))
-      {
-        return result;
-      }
-
-      return null;
+      return row.ContainsKey(key) ? (int?) int.Parse(row[key].Replace(",", "")) : null;
     }
 
     public static int IntRequired(IReadOnlyDictionary<string, string> row, string key)
     {
-      if (row.ContainsKey(key) && int.TryParse(row[key], out var result))
+      if (row.ContainsKey(key) && int.TryParse(row[key].Replace(",", ""), out var result))
       {
         return result;
       }

@@ -117,12 +117,15 @@ namespace Nighthollow.Delegates.Core
 
   public sealed class FireProjectileEffect : Effect
   {
+    public Creature FiredBy { get; }
     public SkillData SkillData { get; }
     public Vector2 FiringPoint { get; }
     public Vector2 FiringDirectionOffset { get; }
 
-    public FireProjectileEffect(SkillData skillData, Vector2 firingPoint, Vector2 firingDirectionOffset)
+    public FireProjectileEffect(
+      Creature firedBy, SkillData skillData, Vector2 firingPoint, Vector2 firingDirectionOffset)
     {
+      FiredBy = firedBy;
       SkillData = skillData;
       FiringPoint = firingPoint;
       FiringDirectionOffset = firingDirectionOffset;
@@ -130,7 +133,9 @@ namespace Nighthollow.Delegates.Core
 
     public override void Execute()
     {
-      throw new NotImplementedException();
+      var projectile = Root.Instance.AssetService.InstantiatePrefab<Projectile>(
+        Errors.CheckNotNull(SkillData.BaseType.Address));
+      projectile.Initialize(FiredBy, SkillData, FiringPoint, FiringDirectionOffset);
     }
   }
 

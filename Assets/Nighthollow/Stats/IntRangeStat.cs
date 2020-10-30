@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 #nullable enable
 
@@ -50,7 +52,15 @@ namespace Nighthollow.Stats
     public static IntRangeValue ParseIntRange(string value)
     {
       var split = value.Split('-');
-      return new IntRangeValue(int.Parse(split[0]), int.Parse(split[1]));
+      try
+      {
+        return new IntRangeValue(int.Parse(split[0]), int.Parse(split[1]));
+      }
+      catch (FormatException)
+      {
+        Debug.LogError($"Error parsing range: {value}");
+        throw;
+      }
     }
   }
 }

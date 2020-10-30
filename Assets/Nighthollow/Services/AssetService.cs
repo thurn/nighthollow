@@ -57,6 +57,14 @@ namespace Nighthollow.Services
         }
       }
 
+      foreach (var skill in gameDataService.AllSkillTypes)
+      {
+        if (skill.Address != null)
+        {
+          requests[skill.Address] = Resources.LoadAsync<GameObject>(skill.Address);
+        }
+      }
+
       yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
       Debug.Log("Got Asset Responses...");
 

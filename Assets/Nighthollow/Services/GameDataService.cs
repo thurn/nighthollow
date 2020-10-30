@@ -32,7 +32,7 @@ namespace Nighthollow.Services
     readonly Dictionary<int, AffixTypeData> _affixes = new Dictionary<int, AffixTypeData>();
     readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
     readonly Dictionary<int, CreatureTypeData> _creatures = new Dictionary<int, CreatureTypeData>();
-    readonly Dictionary<ModifierPath, IStatModifier> _staticModifiers = new Dictionary<ModifierPath, IStatModifier>();
+    readonly Dictionary<int, ModifierValues> _modifierValues = new Dictionary<int, ModifierValues>();
 
     readonly Dictionary<StaticCardList, List<CreatureItemData>> _staticCardLists =
       new Dictionary<StaticCardList, List<CreatureItemData>>();
@@ -116,7 +116,9 @@ namespace Nighthollow.Services
 
       foreach (var row in parsed["CardValues"])
       {
-        ParseModifierValue(row);
+        _modifierValues
+          .GetOrCreateDefault(Parse.IntRequired(row, "Card ID"), new ModifierValues())
+          .AddValue(this, row);
       }
 
       foreach (var row in parsed["CardLists"])
@@ -154,7 +156,7 @@ namespace Nighthollow.Services
       var baseDamageString = Parse.String(row, "Base Damage");
       if (baseDamageString != null)
       {
-        Stat.BaseDamage.ParseModifier(baseDamageString, Operator.Add).InsertInto(stats);
+        Stat.BaseDamage.ParseModifier(baseDamageString, Operator.Overwrite).InsertInto(stats);
       }
 
       var cardName = Parse.String(row, "Card Name");
@@ -163,82 +165,10 @@ namespace Nighthollow.Services
         creatureType,
         school,
         stats,
-        BuildSkills(creatureType, cardId),
-        BuildAffixes(creatureType, cardId));
+        _modifierValues.GetOrCreateDefault(cardId, new ModifierValues()).BuildSkills(this, creatureType),
+        _modifierValues.GetOrCreateDefault(cardId, new ModifierValues()).BuildAffixes(this, creatureType));
 
       _staticCardLists[list].Add(result);
-    }
-
-    List<SkillItemData> BuildSkills(CreatureTypeData creatureType, int cardId)
-    {
-      var skills = new List<SkillItemData>();
-      var affixes = new List<AffixData>();
-      var skill = creatureType.ImplicitSkill;
-      if (skill != null)
-      {
-        if (skill.ImplicitAffix != null)
-        {
-          affixes.Add(BuildAffix(cardId, skill.ImplicitAffix, skill));
-        }
-
-        skills.Add(new SkillItemData(
-          skill,
-          new StatModifierTable(),
-          affixes));
-      }
-
-      return skills;
-    }
-
-    List<AffixData> BuildAffixes(CreatureTypeData creatureType, int cardId)
-    {
-      var affixes = new List<AffixData>();
-      if (creatureType.ImplicitAffix != null)
-      {
-        affixes.Add(BuildAffix(cardId, creatureType.ImplicitAffix, null));
-      }
-
-      return affixes;
-    }
-
-    AffixData BuildAffix(int cardId, AffixTypeData affix, SkillTypeData? skill)
-    {
-      var modifiers = new List<ModifierData>();
-      foreach (var modifierRange in affix.ModifierRanges)
-      {
-        var baseType = modifierRange.BaseType;
-        var path = new ModifierPath(cardId, affix.Id, baseType.Id, skill?.Id);
-
-        IStatModifier? statModifier = null;
-        if (_staticModifiers.ContainsKey(path))
-        {
-          statModifier = _staticModifiers[path];
-        }
-        else if (baseType.StatId.HasValue && baseType.Operator.HasValue)
-        {
-          statModifier = Stat.GetStat(baseType.StatId!.Value).StaticModifierForOperator(baseType.Operator!.Value);
-        }
-
-        modifiers.Add(new ModifierData(
-          baseType.CreatureDelegateId,
-          baseType.SkillDelegateId,
-          statModifier));
-      }
-
-      return new AffixData(affix.Id, modifiers);
-    }
-
-    void ParseModifierValue(IReadOnlyDictionary<string, string> row)
-    {
-      var modifier = Errors.CheckNotNull(GetModifier(Parse.IntRequired(row, "Modifier")));
-      var modifierPath = new ModifierPath(
-        Parse.IntRequired(row, "Card ID"),
-        Parse.IntRequired(row, "Affix ID"),
-        modifier.Id,
-        Parse.Int(row, "Skill"));
-      _staticModifiers[modifierPath] =
-        Stat.GetStat(Errors.CheckNotNull(modifier.StatId))
-          .ParseModifier(Parse.StringRequired(row, "Value"), Errors.CheckNotNull(modifier.Operator));
     }
   }
 }

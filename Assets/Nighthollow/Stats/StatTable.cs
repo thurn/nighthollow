@@ -87,7 +87,7 @@ namespace Nighthollow.Stats
       {
         var list = Modifiers[statId];
         list.RemoveAll(m => !m.Lifetime.IsValid());
-        return _parent == null ? list : list.Concat(_parent.OperationsForStatId(statId));
+        return _parent == null ? list : _parent.OperationsForStatId(statId).Concat(list);
       }
       else
       {

@@ -19,21 +19,26 @@ namespace Nighthollow.Stats
   public static class NumericOperation
   {
     public static NumericOperation<TValue> Add<TValue>(TValue value) where TValue : struct, IStatValue =>
-      new NumericOperation<TValue>(value, null);
+      new NumericOperation<TValue>(value, null, null);
 
     public static NumericOperation<TValue> Increase<TValue>(PercentageValue value) where TValue : struct, IStatValue =>
-      new NumericOperation<TValue>(null, value);
+      new NumericOperation<TValue>(null, value, null);
+
+    public static NumericOperation<TValue> Overwrite<TValue>(TValue value) where TValue : struct, IStatValue =>
+      new NumericOperation<TValue>(null, null, value);
   }
 
   public sealed class NumericOperation<TValue> : IOperation where TValue : struct, IStatValue
   {
     public TValue? AddTo { get; }
     public PercentageValue? IncreaseBy { get; }
+    public TValue? Overwrite { get; }
 
-    public NumericOperation(TValue? addTo, PercentageValue? increaseBy)
+    public NumericOperation(TValue? addTo, PercentageValue? increaseBy, TValue? overwrite)
     {
       AddTo = addTo;
       IncreaseBy = increaseBy;
+      Overwrite = overwrite;
     }
   }
 }

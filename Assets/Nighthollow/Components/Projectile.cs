@@ -34,15 +34,17 @@ namespace Nighthollow.Components
 
     public SkillData Data => _skillData;
 
+    public Collider2D Collider => _collider;
+
     public void Initialize(
       Creature firedBy,
       SkillData skillData,
       Vector2 firingPosition,
-      Vector2? direction = null)
+      Vector2 directionOffset)
     {
       _firedBy = firedBy;
       transform.position = firingPosition;
-      transform.forward = direction ?? Constants.ForwardDirectionForPlayer(firedBy.Owner);
+      transform.forward = directionOffset + Constants.ForwardDirectionForPlayer(firedBy.Owner);
       gameObject.layer = Constants.LayerForProjectiles(firedBy.Owner);
 
       _collider = GetComponent<Collider2D>();
@@ -72,7 +74,8 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      transform.position += (_skillData.GetInt(Stat.Speed)/ 1000f) * Time.deltaTime * transform.forward;
+      transform.position += (Errors.CheckNonzero(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f)
+                            * Time.deltaTime * transform.forward;
 
       if (Mathf.Abs(transform.position.x) > 25)
       {
@@ -84,7 +87,7 @@ namespace Nighthollow.Components
     {
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;
-      _skillData.Delegate.OnImpact(new SkillContext(_firedBy, _skillData));
+      _skillData.Delegate.OnImpact(new SkillContext(_firedBy, _skillData, this));
       gameObject.SetActive(false);
     }
   }

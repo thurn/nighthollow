@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
@@ -45,7 +46,14 @@ namespace Nighthollow.Stats
       IReadOnlyList<NumericOperation<TValue>> operations, Func<TValue, IntValue> toInt)
       where TValue : struct, IStatValue
     {
-      var result = operations.Select(op => op.AddTo).WhereNotNull().Sum(addTo => toInt(addTo).Int);
+      var overwrite = operations.Select(op => op.Overwrite).WhereNotNull().ToList();
+      var result = 0;
+      if (overwrite.Count > 0)
+      {
+        result = toInt(overwrite.Last()).Int;
+      }
+
+      result += operations.Select(op => op.AddTo).WhereNotNull().Sum(addTo => toInt(addTo).Int);
 
       var increaseBy =
         10000 + operations.Select(op => op.IncreaseBy).WhereNotNull().Sum(increase => increase.AsBasisPoints());
@@ -54,8 +62,9 @@ namespace Nighthollow.Stats
 
     protected override IntValue ParseStatValue(string value) => ParseInt(value);
 
-    public static IntValue ParseInt(string value) => new IntValue(int.Parse(value));
+    public static IntValue ParseInt(string value) => new IntValue(int.Parse(value.Replace(",", "")));
 
+    [MustUseReturnValue("Return value should be used")]
     public IStatModifier Add(int value) => StaticModifier(NumericOperation.Add(new IntValue(value)));
   }
 }

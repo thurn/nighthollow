@@ -29,7 +29,7 @@ namespace Nighthollow.Data
       var stats = item.Stats.Clone(parentStats);
       var delegates = new List<CreatureDelegateId>();
 
-      Stat.Speed.Add(item.BaseType.Speed).InsertInto(stats);
+      Stat.CreatureSpeed.Add(item.BaseType.Speed).InsertInto(stats);
 
       if (item.BaseType.IsManaCreature)
       {
@@ -47,10 +47,6 @@ namespace Nighthollow.Data
       }
 
       var skills = item.Skills.Select(s => BuildSkill(stats, s)).ToList();
-      if (item.BaseType.SkillAnimations.Any(animation => animation.Type == SkillAnimationType.MeleeSkill))
-      {
-        skills.Add(DefaultMeleeAttack(stats));
-      }
 
       return new CreatureData(
         item.Name, item.BaseType, item.School, skills, stats, delegates);
@@ -59,6 +55,26 @@ namespace Nighthollow.Data
     static SkillData BuildSkill(StatTable parentStats, SkillItemData item)
     {
       var stats = item.Stats.Clone(parentStats);
+      if (item.BaseType.ProjectileSpeed.HasValue)
+      {
+        Stat.ProjectileSpeed.Add(item.BaseType.ProjectileSpeed.Value).InsertInto(stats);
+      }
+
+      if (item.BaseType.UsesAccuracy)
+      {
+        Stat.UsesAccuracy.SetTrue().InsertInto(stats);
+      }
+
+      if (item.BaseType.CanCrit)
+      {
+        Stat.CanCrit.SetTrue().InsertInto(stats);
+      }
+
+      if (item.BaseType.CanStun)
+      {
+        Stat.CanStun.SetTrue().InsertInto(stats);
+      }
+
       var delegates = new List<SkillDelegateId>();
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
@@ -74,17 +90,12 @@ namespace Nighthollow.Data
       return new SkillData(item.BaseType, stats, delegates);
     }
 
-    public static SkillData DefaultMeleeAttack(StatTable creatureStats)
+    public static SkillItemData DefaultMeleeAttack()
     {
-      var stats = new StatTable(creatureStats);
-      Stat.UsesAccuracy.SetTrue().InsertInto(stats);
-      Stat.CanCrit.SetTrue().InsertInto(stats);
-      Stat.CanStun.SetTrue().InsertInto(stats);
-
-      return new SkillData(
+      return new SkillItemData(
         Root.Instance.GameDataService.GetSkillType(1),
-        stats,
-        new List<SkillDelegateId>());
+        new StatModifierTable(),
+        new List<AffixData>());
     }
   }
 }

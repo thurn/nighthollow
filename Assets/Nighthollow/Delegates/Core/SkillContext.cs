@@ -23,11 +23,13 @@ namespace Nighthollow.Delegates.Core
   {
     public Creature Self { get; }
     public SkillData Skill { get; }
+    public Projectile? Projectile { get; }
 
-    public SkillContext(Creature self, SkillData skill)
+    public SkillContext(Creature self, SkillData skill, Projectile? projectile = null)
     {
       Self = self;
       Skill = skill;
+      Projectile = projectile;
     }
   }
 }

@@ -48,9 +48,24 @@ namespace Nighthollow.Stats
     {
       var result = new Dictionary<TTag, TValue>();
 
-      foreach (var group in operations.SelectMany(op => op.Operations).GroupBy(pair => pair.Key))
+      var overwrite = operations.Select(op => op.Overwrite).LastOrDefault(o => o != null);
+      if (overwrite != null)
       {
-        result[group.Key] = Compute(group.Select(pair => pair.Value).ToList());
+        result = overwrite.Values.ToDictionary(k => k.Key, v => v.Value);
+      }
+
+      foreach (var group in operations
+        .Where(o => o.Operations != null)
+        .SelectMany(op => op.Operations)
+        .GroupBy(pair => pair.Key))
+      {
+        var operationsForTag = group.Select(pair => pair.Value).ToList();
+        if (overwrite != null)
+        {
+          operationsForTag.Add(NumericOperation.Overwrite(overwrite.Get(group.Key, default)));
+        }
+
+        result[group.Key] = Compute(operationsForTag);
       }
 
       return new TaggedValues<TTag, TValue>(result);
@@ -63,7 +78,8 @@ namespace Nighthollow.Stats
       var result = new Dictionary<TTag, TValue>();
       foreach (var instance in value.Split(','))
       {
-        result[ParseTag(instance.Last())] = ParseInstance(instance.Remove(instance.Length - 1));
+        var tag = instance.Last();
+        result[ParseTag(tag)] = ParseInstance(instance.Replace(tag.ToString(), ""));
       }
 
       return new TaggedValues<TTag, TValue>(result);
@@ -74,7 +90,8 @@ namespace Nighthollow.Stats
       var result = new Dictionary<TTag, PercentageValue>();
       foreach (var instance in value.Split(','))
       {
-        result[ParseTag(instance.Last())] = PercentageStat.ParsePercentage(instance.Remove(instance.Length - 1));
+        var tag = instance.Last();
+        result[ParseTag(tag)] = PercentageStat.ParsePercentage(instance.Replace(tag.ToString(), ""));
       }
 
       return new TaggedValues<TTag, PercentageValue>(result);
@@ -88,8 +105,11 @@ namespace Nighthollow.Stats
       op switch
       {
         Operator.Add => StaticModifier(new TaggedNumericOperation<TTag, TValue>(
+          null,
           ParseStatValue(value).Values.ToDictionary(k => k.Key, v => NumericOperation.Add(v.Value)))),
+        Operator.Overwrite => StaticModifier(TaggedNumericOperation.Overwrite(ParseStatValue(value))),
         Operator.Increase => StaticModifier(new TaggedNumericOperation<TTag, TValue>(
+          null,
           ParseAsPercentages(value).Values.ToDictionary(k => k.Key, v => NumericOperation.Increase<TValue>(v.Value)))),
         _ => throw new ArgumentException($"Unsupported modifier type: {op}")
       };

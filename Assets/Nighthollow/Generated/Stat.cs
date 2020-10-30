@@ -22,7 +22,7 @@ namespace Nighthollow.Generated
   {
     public static readonly IntStat Health = new IntStat(1);
     public static readonly DamageTypeIntRangesStat BaseDamage = new DamageTypeIntRangesStat(2);
-    public static readonly IntStat Speed = new IntStat(3);
+    public static readonly IntStat CreatureSpeed = new IntStat(3);
     public static readonly PercentageStat CritChance = new PercentageStat(4);
     public static readonly PercentageStat CritMultiplier = new PercentageStat(5);
     public static readonly IntStat Accuracy = new IntStat(6);
@@ -33,7 +33,7 @@ namespace Nighthollow.Generated
     public static readonly IntStat HealthGainOnMeleeHit = new IntStat(11);
     public static readonly PercentageStat SkillSpeedMultiplier = new PercentageStat(12);
     public static readonly DurationStat StunDurationOnEnemies = new DurationStat(13);
-    public static readonly PercentageStat StunChance = new PercentageStat(15);
+    public static readonly PercentageStat AddedStunChance = new PercentageStat(15);
     public static readonly IntStat MeleeReflect = new IntStat(17);
     public static readonly IntStat HealthRegenerationPerSecond = new IntStat(18);
     public static readonly IntStat ManaCost = new IntStat(19);
@@ -66,6 +66,8 @@ namespace Nighthollow.Generated
     public static readonly PercentageStat MaximumStunChance = new PercentageStat(47);
     public static readonly DurationStat Cooldown = new DurationStat(48);
     public static readonly IntStat AddedManaGain = new IntStat(49);
+    public static readonly PercentageStat MeleeDamageMultiplier = new PercentageStat(50);
+    public static readonly IntStat ProjectileCount = new IntStat(51);
 
     public static IStat GetStat(int statId)
     {
@@ -73,7 +75,7 @@ namespace Nighthollow.Generated
       {
         case 1: return Health;
         case 2: return BaseDamage;
-        case 3: return Speed;
+        case 3: return CreatureSpeed;
         case 4: return CritChance;
         case 5: return CritMultiplier;
         case 6: return Accuracy;
@@ -84,7 +86,7 @@ namespace Nighthollow.Generated
         case 11: return HealthGainOnMeleeHit;
         case 12: return SkillSpeedMultiplier;
         case 13: return StunDurationOnEnemies;
-        case 15: return StunChance;
+        case 15: return AddedStunChance;
         case 17: return MeleeReflect;
         case 18: return HealthRegenerationPerSecond;
         case 19: return ManaCost;
@@ -117,7 +119,9 @@ namespace Nighthollow.Generated
         case 47: return MaximumStunChance;
         case 48: return Cooldown;
         case 49: return AddedManaGain;
-        default: throw new ArgumentOutOfRangeException();
+        case 50: return MeleeDamageMultiplier;
+        case 51: return ProjectileCount;
+        default: throw new ArgumentOutOfRangeException(statId.ToString());
       }
     }
   }

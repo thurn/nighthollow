@@ -244,7 +244,7 @@ namespace Nighthollow.Components
 
     void ToDefaultState()
     {
-      SetState(_data.GetInt(Stat.Speed) > 0 ? CreatureState.Moving : CreatureState.Idle);
+      SetState(_data.GetInt(Stat.CreatureSpeed) > 0 ? CreatureState.Moving : CreatureState.Idle);
     }
 
     void Kill()
@@ -435,7 +435,7 @@ namespace Nighthollow.Components
       if (_state == CreatureState.Moving)
       {
         _animator.SetBool(Moving, true);
-        transform.Translate(Vector3.right * (Time.deltaTime * (_data.GetInt(Stat.Speed) / 1000f)));
+        transform.Translate(Vector3.right * (Time.deltaTime * (_data.GetInt(Stat.CreatureSpeed) / 1000f)));
       }
       else
       {

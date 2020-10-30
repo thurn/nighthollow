@@ -15,6 +15,7 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
@@ -37,6 +38,11 @@ namespace Nighthollow.Data
       IReadOnlyList<SkillItemData> skills,
       IReadOnlyList<AffixData> affixes)
     {
+      if (baseType.SkillAnimations.Any(animation => animation.Type == SkillAnimationType.MeleeSkill))
+      {
+        skills = skills.Append(CreatureUtil.DefaultMeleeAttack()).ToList();
+      }
+
       Name = name;
       BaseType = baseType;
       School = school;

@@ -22,27 +22,35 @@ namespace Nighthollow.Stats
   public static class TaggedNumericOperation
   {
     public static TaggedNumericOperation<TTag, TValue> Add<TTag, TValue>(TTag tag, TValue value)
-      where TTag : Enum where TValue : struct, IStatValue =>
-      new TaggedNumericOperation<TTag, TValue>(new Dictionary<TTag, NumericOperation<TValue>>
+      where TTag : struct, Enum where TValue : struct, IStatValue =>
+      new TaggedNumericOperation<TTag, TValue>(null, new Dictionary<TTag, NumericOperation<TValue>>
       {
         {tag, NumericOperation.Add(value)}
       });
 
     public static TaggedNumericOperation<TTag, TValue> Increase<TTag, TValue>(TTag tag, PercentageValue value)
-      where TTag : Enum where TValue : struct, IStatValue =>
-      new TaggedNumericOperation<TTag, TValue>(new Dictionary<TTag, NumericOperation<TValue>>
+      where TTag : struct, Enum where TValue : struct, IStatValue =>
+      new TaggedNumericOperation<TTag, TValue>(null, new Dictionary<TTag, NumericOperation<TValue>>
       {
         {tag, NumericOperation.Increase<TValue>(value)}
       });
+
+    public static TaggedNumericOperation<TTag, TValue> Overwrite<TTag, TValue>(TaggedValues<TTag, TValue> values)
+      where TTag : struct, Enum where TValue : struct, IStatValue =>
+      new TaggedNumericOperation<TTag, TValue>(values, null);
   }
 
   public sealed class TaggedNumericOperation<TTag, TValue> : IOperation
-    where TTag : Enum where TValue : struct, IStatValue
+    where TTag : struct, Enum where TValue : struct, IStatValue
   {
-    public IReadOnlyDictionary<TTag, NumericOperation<TValue>> Operations { get; }
+    public TaggedValues<TTag, TValue>? Overwrite { get; }
+    public IReadOnlyDictionary<TTag, NumericOperation<TValue>>? Operations { get; }
 
-    public TaggedNumericOperation(IReadOnlyDictionary<TTag, NumericOperation<TValue>> operations)
+    public TaggedNumericOperation(
+      TaggedValues<TTag, TValue>? overwrite,
+      IReadOnlyDictionary<TTag, NumericOperation<TValue>>? operations)
     {
+      Overwrite = overwrite;
       Operations = operations;
     }
   }

@@ -35,7 +35,7 @@ namespace Nighthollow.Delegates.Skills
       c.Self.MarkSkillUsed(c.Skill.BaseType);
       if (c.Skill.BaseType.IsProjectile)
       {
-        results.Add(new FireProjectileEffect(c.Skill, c.Self.ProjectileSource.position, Vector2.zero));
+        results.Add(new FireProjectileEffect(c.Self, c.Skill, c.Self.ProjectileSource.position, Vector2.zero));
       }
     }
 
@@ -63,14 +63,18 @@ namespace Nighthollow.Delegates.Skills
 
       var colliders = new List<Collider2D>();
       sourceCollider!.OverlapCollider(filter, colliders);
-      targets.AddRange(c.Skill.Delegate.SelectTargets(
-        c, colliders.Select(ComponentUtils.GetComponent<Creature>)));
+      targets.AddRange(
+        c.Skill.Delegate.SelectTargets(c, colliders
+          // Filter out trigger colliders
+          .Where(collider => collider.GetComponent<Creature>())
+          .Select(ComponentUtils.GetComponent<Creature>)));
     }
 
     public override IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
       c.Skill.BaseType.IsMelee ? hits.Take(Errors.CheckNonzero(c.Skill.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
 
-    public override Collider2D? GetCollider(SkillContext c) => c.Self.Collider;
+    public override Collider2D? GetCollider(SkillContext c) =>
+      c.Projectile ? c.Projectile!.Collider : c.Self.Collider;
 
     public override void ApplyToTarget(SkillContext c, Creature target, Results results)
     {
@@ -157,13 +161,26 @@ namespace Nighthollow.Delegates.Skills
         damageValue * (1f - c.Self.GetOwnerStats().Get(Stat.MaximumDamageResistance).AsMultiplier()),
         Mathf.Clamp01(1f - (resistance / (resistance + (2.0f * damageValue)))) * damageValue)));
 
-    public override int? ComputeFinalDamage(SkillContext c,
+    public override int? ComputeFinalDamage(
+      SkillContext c,
       Creature target,
       TaggedValues<DamageType, IntValue> damage,
       bool isCriticalHit)
     {
       var total = damage.Values.Values.Select(v => v.Int).Sum();
-      return isCriticalHit ? c.Skill.Stats.Get(Stat.CritMultiplier).CalculateFraction(total) : total;
+      total = isCriticalHit ? c.Skill.Stats.Get(Stat.CritMultiplier).CalculateFraction(total) : total;
+
+      if (c.Skill.BaseType.IsMelee)
+      {
+        total = c.Skill.Stats.Get(Stat.MeleeDamageMultiplier).CalculateFraction(total);
+      }
+
+      if (c.Skill.BaseType.IsProjectile)
+      {
+        total = c.Skill.Stats.Get(Stat.ProjectileDamageMultiplier).CalculateFraction(total);
+      }
+
+      return total;
     }
 
     public override bool RollForHit(SkillContext c, Creature target)
@@ -184,7 +201,7 @@ namespace Nighthollow.Delegates.Skills
 
     public override bool CheckForStun(SkillContext c, Creature target, int damageAmount)
     {
-      var stunChance = c.Skill.Stats.Get(Stat.StunChance).AsMultiplier() +
+      var stunChance = c.Skill.Stats.Get(Stat.AddedStunChance).AsMultiplier() +
                        (damageAmount / (float) target.Data.GetInt(Stat.Health));
       return Random.value <= Mathf.Clamp(
         stunChance,
