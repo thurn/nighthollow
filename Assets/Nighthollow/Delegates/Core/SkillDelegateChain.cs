@@ -27,9 +27,22 @@ namespace Nighthollow.Delegates.Core
 {
   public sealed class SkillDelegateChain
   {
+    sealed class DelegateWithContext
+    {
+      public SkillDelegate Delegate { get; }
+      public SkillContext Context { get; }
+
+      public DelegateWithContext(SkillDelegate skillDelegate, SkillContext context, int delegateIndex)
+      {
+        Delegate = skillDelegate;
+        Context = context.WithIndex(delegateIndex);
+      }
+    }
+
     readonly List<SkillDelegateId> _delegateIds;
 
-    IEnumerable<SkillDelegate> Delegates() => _delegateIds.Select(SkillDelegateMap.Get);
+    IEnumerable<DelegateWithContext> Delegates(SkillContext c) =>
+      _delegateIds.Select(SkillDelegateMap.Get).Select((d, index) => new DelegateWithContext(d, c, index));
 
     public SkillDelegateChain(List<SkillDelegateId> delegateIds)
     {
@@ -37,91 +50,96 @@ namespace Nighthollow.Delegates.Core
       _delegateIds.Add(SkillDelegateId.DefaultSkillDelegate);
     }
 
-    public void OnStart(SkillContext c) => Execute(c, (d, r) => d.OnStart(c, r));
+    public void OnStart(SkillContext c) => Execute(c, (d, r) => d.Delegate.OnStart(d.Context, r));
 
-    public void OnUse(SkillContext c) => Execute(c, (d, r) => d.OnUse(c, r));
+    public void OnUse(SkillContext c) => Execute(c, (d, r) => d.Delegate.OnUse(d.Context, r));
 
-    public void OnImpact(SkillContext c) => Execute(c, (d, r) => d.OnImpact(c, r));
+    public void OnImpact(SkillContext c) => Execute(c, (d, r) => d.Delegate.OnImpact(d.Context, r));
 
     public Collider2D? GetCollider(SkillContext c)
-      => Delegates()
-        .Select(d => d.GetCollider(c))
+      => Delegates(c)
+        .Select(d => d.Delegate.GetCollider(d.Context))
         .FirstOrDefault(collider => (bool) collider);
 
     public IReadOnlyList<Creature> PopulateTargets(SkillContext c)
     {
       var result = new List<Creature>();
-      foreach (var d in Delegates())
+      foreach (var d in Delegates(c))
       {
-        d.PopulateTargets(c, result);
+        d.Delegate.PopulateTargets(d.Context, result);
       }
 
       return result;
     }
 
     public IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
-      FirstNotNull(d => d.SelectTargets(c, hits));
+      FirstNotNull(c, d => d.Delegate.SelectTargets(d.Context, hits));
 
     public void ApplyToTarget(SkillContext c, Creature target, Results results)
     {
-      foreach (var d in Delegates())
+      foreach (var d in Delegates(c))
       {
-        d.ApplyToTarget(c, target, results);
+        d.Delegate.ApplyToTarget(d.Context, target, results);
       }
     }
 
     public bool RollForHit(SkillContext c, Creature target)
-      => Delegates().Any(d => d.RollForHit(c, target));
+      => Delegates(c).Any(d => d.Delegate.RollForHit(d.Context, target));
 
     public bool RollForCrit(SkillContext c, Creature target)
-      => Delegates().Any(d => d.RollForCrit(c, target));
+      => Delegates(c).Any(d => d.Delegate.RollForCrit(d.Context, target));
 
     public TaggedValues<DamageType, IntValue> RollForBaseDamage(SkillContext c, Creature target) =>
-      FirstNotNull(d => d.RollForBaseDamage(c, target));
+      FirstNotNull(c, d => d.Delegate.RollForBaseDamage(d.Context, target));
 
     public TaggedValues<DamageType, IntValue> ApplyDamageReduction(
       SkillContext c,
       Creature target,
       TaggedValues<DamageType, IntValue> damage) =>
-      FirstNotNull(d => d.ApplyDamageReduction(c, target, damage));
+      FirstNotNull(c, d => d.Delegate.ApplyDamageReduction(d.Context, target, damage));
 
     public TaggedValues<DamageType, IntValue> ApplyDamageResistance(
       SkillContext c,
       Creature target,
       TaggedValues<DamageType, IntValue> damage) =>
-      FirstNotNull(d => d.ApplyDamageResistance(c, target, damage));
+      FirstNotNull(c, d => d.Delegate.ApplyDamageResistance(d.Context, target, damage));
 
     public int ComputeFinalDamage(SkillContext c,
       Creature target,
       TaggedValues<DamageType, IntValue> damage,
       bool isCriticalHit) =>
-      FirstNotNull(d => d.ComputeFinalDamage(c, target, damage, isCriticalHit));
+      FirstNotNull(c, d => d.Delegate.ComputeFinalDamage(d.Context, target, damage, isCriticalHit));
 
     public int ComputeHealthDrain(SkillContext c, Creature target, int damageAmount)
-      => Delegates().Sum(d => d.ComputeHealthDrain(c, target, damageAmount));
+      => Delegates(c).Sum(d => d.Delegate.ComputeHealthDrain(d.Context, target, damageAmount));
 
     public bool CheckForStun(SkillContext c, Creature target, int damageAmount)
-      => Delegates().Any(d => d.CheckForStun(c, target, damageAmount));
+      => Delegates(c).Any(d => d.Delegate.RollForStun(d.Context, target, damageAmount));
 
-    void Execute(SkillContext c, Action<SkillDelegate, Results> action)
+    void Execute(SkillContext c, Action<DelegateWithContext, Results> action)
     {
       var results = new Results();
 
-      foreach (var id in _delegateIds)
+      foreach (var d in Delegates(c))
       {
-        action(SkillDelegateMap.Get(id), results);
+        action(d, results);
       }
 
       foreach (var effect in results.Values)
       {
         effect.Execute();
       }
+
+      foreach (var effect in results.Values)
+      {
+        effect.RaiseEvents();
+      }
     }
 
-    T FirstNotNull<T>(Func<SkillDelegate, T?> function) where T : class
-      => Errors.CheckNotNull(Delegates().Select(function).SkipWhile(a => a == null).First());
+    T FirstNotNull<T>(SkillContext c, Func<DelegateWithContext, T?> function) where T : class
+      => Errors.CheckNotNull(Delegates(c).Select(function).SkipWhile(a => a == null).First());
 
-    T FirstNotNull<T>(Func<SkillDelegate, T?> function) where T : struct
-      => Errors.CheckNotNull(Delegates().Select(function).SkipWhile(a => a == null).First());
+    T FirstNotNull<T>(SkillContext c, Func<DelegateWithContext, T?> function) where T : struct
+      => Errors.CheckNotNull(Delegates(c).Select(function).SkipWhile(a => a == null).First());
   }
 }

@@ -41,6 +41,9 @@ namespace Nighthollow.Delegates.Core
     public void OnDeath(Creature self) =>
       Execute(self, (d, c, r) => d.OnDeath(c, r));
 
+    public void OnKilledEnemy(Creature self, Creature enemy, int damageAmount) =>
+      Execute(self, (d, c, r) => d.OnKilledEnemy(c, enemy, damageAmount, r));
+
     public bool CanUseMeleeSkill(CreatureContext c) => Delegates().Any(d => d.CanUseMeleeSkill(c));
 
     public bool CanUseProjectileSkill(CreatureContext c) => Delegates().Any(d => d.CanUseProjectileSkill(c));
@@ -49,9 +52,6 @@ namespace Nighthollow.Delegates.Core
       => _delegateIds
         .Select(id => CreatureDelegateMap.Get(id).SelectSkill(c))
         .FirstOrDefault(skill => skill != null);
-
-    public void OnKilledEnemy(Creature self, Creature enemy, int damageAmount) =>
-      Execute(self, (d, c, r) => d.OnKilledEnemy(c, enemy, damageAmount, r));
 
     void Execute(Creature self, Action<CreatureDelegate, CreatureContext, Results> action)
     {

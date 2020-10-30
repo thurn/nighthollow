@@ -14,11 +14,10 @@
 
 #nullable enable
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Core2
 {
-  public abstract class Effect
+  public interface IDelegate
   {
-    // https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
-    public abstract void Execute();
+
   }
 }

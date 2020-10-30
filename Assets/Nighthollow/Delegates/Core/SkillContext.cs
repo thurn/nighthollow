@@ -16,6 +16,7 @@
 
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Utils;
 
 namespace Nighthollow.Delegates.Core
 {
@@ -24,12 +25,17 @@ namespace Nighthollow.Delegates.Core
     public Creature Self { get; }
     public SkillData Skill { get; }
     public Projectile? Projectile { get; }
+    readonly int? _delegateIndex;
+    public int DelegateIndex => Errors.CheckNotNull(_delegateIndex);
 
-    public SkillContext(Creature self, SkillData skill, Projectile? projectile = null)
+    public SkillContext(Creature self, SkillData skill, Projectile? projectile = null, int? delegateIndex = null)
     {
       Self = self;
       Skill = skill;
       Projectile = projectile;
+      _delegateIndex = delegateIndex;
     }
+
+    public SkillContext WithIndex(int index) => new SkillContext(Self, Skill, Projectile, index);
   }
 }

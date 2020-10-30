@@ -14,17 +14,23 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Components;
+using Nighthollow.Data;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Core2
 {
-  public sealed class Results
+  public class SkillContext : DelegateContext
   {
-    readonly List<Effect> _results = new List<Effect>();
+    public Creature Self { get; }
+    public SkillData Skill { get; }
+    public Projectile? Projectile { get; }
+    public ISkillDelegate Delegate => null!;
 
-    public void Add(Effect result) => _results.Add(result);
-
-    public IEnumerable<Effect> Values => _results;
+    public SkillContext(Creature self, SkillData skill, Projectile? projectile)
+    {
+      Self = self;
+      Skill = skill;
+      Projectile = projectile;
+    }
   }
 }

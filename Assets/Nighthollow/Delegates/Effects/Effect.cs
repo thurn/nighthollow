@@ -14,17 +14,15 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
-
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Effects
 {
-  public sealed class Results
+  public abstract class Effect
   {
-    readonly List<Effect> _results = new List<Effect>();
+    // https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
+    public abstract void Execute();
 
-    public void Add(Effect result) => _results.Add(result);
-
-    public IEnumerable<Effect> Values => _results;
+    public virtual void RaiseEvents()
+    {
+    }
   }
 }

@@ -17,7 +17,7 @@
 using System;
 using System.Linq;
 using Nighthollow.Data;
-using Nighthollow.Delegates.Core;
+using Nighthollow.Delegates.Core2;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
@@ -26,21 +26,19 @@ using Random = UnityEngine.Random;
 
 namespace Nighthollow.Delegates.Creatures
 {
-  public sealed class DefaultCreatureDelegate : CreatureDelegate
+  public sealed class DefaultCreatureDelegate2 : AbstractCreatureDelegate
   {
-    public override void OnDeath(CreatureContext c, Results results)
+    public override void OnDeath(CreatureContext c)
     {
       if (c.Self.Owner == PlayerName.Enemy)
       {
-        results.Add(new EnemyRemovedEffect());
+        c.Results.Add(new EnemyRemovedEffect());
       }
     }
 
     public override SkillData? SelectSkill(CreatureContext c)
     {
-      var data = c.Self.Data;
-
-      if (data.Delegate.CanUseMeleeSkill(c))
+      if (c.Delegate.CanUseMeleeSkill(c))
       {
         var skill = SelectMatching(c, s => s.BaseType.IsMelee);
         if (skill != null)
@@ -49,7 +47,7 @@ namespace Nighthollow.Delegates.Creatures
         }
       }
 
-      if (data.Delegate.CanUseProjectileSkill(c))
+      if (c.Delegate.CanUseProjectileSkill(c))
       {
         var skill = SelectMatching(c, s => s.BaseType.IsProjectile);
         if (skill != null)

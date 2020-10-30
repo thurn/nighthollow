@@ -14,17 +14,22 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Components;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Core2
 {
-  public sealed class Results
+  public interface ICreatureEventsDelegate<in TContext> : IDelegate where TContext : DelegateContext
   {
-    readonly List<Effect> _results = new List<Effect>();
+    /// <summary>Called when a creature is first placed.</summary>
+    void OnActivate(TContext c);
 
-    public void Add(Effect result) => _results.Add(result);
+    /// <summary>Called when a creature dies.</summary>
+    void OnDeath(TContext c);
 
-    public IEnumerable<Effect> Values => _results;
+    /// <summary>Called when a creature kills an enemy creature.</summary>
+    void OnKilledEnemy(
+      TContext c,
+      Creature enemy,
+      int damageAmount);
   }
 }

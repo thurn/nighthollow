@@ -61,7 +61,7 @@ namespace Nighthollow.Components
     [SerializeField] CustomTriggerCollider _projectileCollider;
     Coroutine _coroutine;
     [SerializeField] bool _appliedLifeLoss;
-    Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
+    readonly Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
 
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");

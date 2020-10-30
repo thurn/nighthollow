@@ -14,17 +14,16 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Data;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Core2
 {
-  public sealed class Results
+  public abstract class AbstractCreatureDelegate : AbstractCreatureEventsDelegate<CreatureContext>, ICreatureDelegate
   {
-    readonly List<Effect> _results = new List<Effect>();
+    public virtual bool CanUseMeleeSkill(CreatureContext c) => c.MarkNotImplemented<bool>();
 
-    public void Add(Effect result) => _results.Add(result);
+    public virtual bool CanUseProjectileSkill(CreatureContext c) => c.MarkNotImplemented<bool>();
 
-    public IEnumerable<Effect> Values => _results;
+    public virtual SkillData? SelectSkill(CreatureContext c) => c.MarkNotImplemented<SkillData>();
   }
 }

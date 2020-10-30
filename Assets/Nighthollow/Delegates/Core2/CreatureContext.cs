@@ -14,17 +14,18 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Components;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Core2
 {
-  public sealed class Results
+  public class CreatureContext : DelegateContext
   {
-    readonly List<Effect> _results = new List<Effect>();
+    public Creature Self { get; }
+    public ICreatureDelegate Delegate => null!;
 
-    public void Add(Effect result) => _results.Add(result);
-
-    public IEnumerable<Effect> Values => _results;
+    public CreatureContext(Creature self)
+    {
+      Self = self;
+    }
   }
 }

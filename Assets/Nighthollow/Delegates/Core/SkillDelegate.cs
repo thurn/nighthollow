@@ -137,6 +137,6 @@ namespace Nighthollow.Delegates.Core
     /// Should return true if a hit from this creature should stun 'target'. A stun is invoked if *any* delegate returns
     /// true from this method.
     /// </summary>
-    public virtual bool CheckForStun(SkillContext c, Creature target, int damageAmount) => false;
+    public virtual bool RollForStun(SkillContext c, Creature target, int damageAmount) => false;
   }
 }

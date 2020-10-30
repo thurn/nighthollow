@@ -14,17 +14,18 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
-
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Core2
 {
-  public sealed class Results
+  public abstract class DelegateContext
   {
-    readonly List<Effect> _results = new List<Effect>();
+    public bool NotImplemented { get; private set; }
+    public int DelegateIndex { get; set; }
+    public Results Results { get; set; } = new Results();
 
-    public void Add(Effect result) => _results.Add(result);
-
-    public IEnumerable<Effect> Values => _results;
+    public T MarkNotImplemented<T>()
+    {
+      NotImplemented = true;
+      return default!;
+    }
   }
 }

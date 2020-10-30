@@ -14,17 +14,15 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Services;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Effects
 {
-  public sealed class Results
+  public sealed class EnemyRemovedEffect : Effect
   {
-    readonly List<Effect> _results = new List<Effect>();
-
-    public void Add(Effect result) => _results.Add(result);
-
-    public IEnumerable<Effect> Values => _results;
+    public override void Execute()
+    {
+      Root.Instance.Enemy.OnEnemyCreatureRemoved();
+    }
   }
 }

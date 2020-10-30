@@ -17,7 +17,7 @@
 using System.Collections.Generic;
 using Nighthollow.Delegates.Effects;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Core2
 {
   public sealed class Results
   {

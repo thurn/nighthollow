@@ -14,17 +14,25 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Components;
+using Nighthollow.Delegates.Core;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Effects
 {
-  public sealed class Results
+  public sealed class HealEffect : Effect
   {
-    readonly List<Effect> _results = new List<Effect>();
+    public Creature Target { get; }
+    public int Amount { get; }
 
-    public void Add(Effect result) => _results.Add(result);
+    public HealEffect(Creature target, int amount)
+    {
+      Target = target;
+      Amount = amount;
+    }
 
-    public IEnumerable<Effect> Values => _results;
+    public override void Execute()
+    {
+      Target.Heal(Amount);
+    }
   }
 }

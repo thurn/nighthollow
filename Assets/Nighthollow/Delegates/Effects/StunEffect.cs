@@ -14,17 +14,24 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Components;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Effects
 {
-  public sealed class Results
+  public sealed class StunEffect : Effect
   {
-    readonly List<Effect> _results = new List<Effect>();
+    public Creature Target { get; }
+    public float DurationSeconds { get; }
 
-    public void Add(Effect result) => _results.Add(result);
+    public StunEffect(Creature target, float durationSeconds)
+    {
+      Target = target;
+      DurationSeconds = durationSeconds;
+    }
 
-    public IEnumerable<Effect> Values => _results;
+    public override void Execute()
+    {
+      Target.Stun(DurationSeconds);
+    }
   }
 }

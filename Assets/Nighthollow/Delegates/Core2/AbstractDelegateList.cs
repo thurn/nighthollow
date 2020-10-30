@@ -1,0 +1,72 @@
+// Copyright © 2020-present Derek Thurn
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//    https://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#nullable enable
+
+using System;
+using System.Collections.Generic;
+
+namespace Nighthollow.Delegates.Core2
+{
+  public abstract class AbstractDelegateList<TContext, TDelegate>
+    where TContext : DelegateContext where TDelegate : IDelegate
+  {
+    readonly IReadOnlyList<TDelegate> _delegates;
+
+    protected AbstractDelegateList(IReadOnlyList<TDelegate> delegates)
+    {
+      _delegates = delegates;
+    }
+
+    protected TResult GetFirstImplemented<TResult>(
+      TContext context,
+      Func<TDelegate, TContext, TResult> function)
+    {
+      for (var i = 0; i < _delegates.Count; ++i)
+      {
+        context.DelegateIndex = i;
+        var result = function(_delegates[i], context);
+        if (!context.NotImplemented)
+        {
+          return result;
+        }
+      }
+
+      throw new InvalidOperationException("No implementation found for callback.");
+    }
+
+    protected void ExecuteEvent(
+      TContext context,
+      Action<TDelegate, TContext> action)
+    {
+      context.Results = new Results();
+
+      for (var i = 0; i < _delegates.Count; ++i)
+      {
+        context.DelegateIndex = i;
+        action(_delegates[i], context);
+      }
+
+      foreach (var effect in context.Results.Values)
+      {
+        effect.Execute();
+      }
+
+      foreach (var effect in context.Results.Values)
+      {
+        effect.RaiseEvents();
+      }
+    }
+  }
+}

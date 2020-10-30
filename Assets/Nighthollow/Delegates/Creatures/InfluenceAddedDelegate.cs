@@ -15,6 +15,7 @@
 #nullable enable
 
 using Nighthollow.Delegates.Core;
+using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
@@ -25,7 +26,7 @@ namespace Nighthollow.Delegates.Creatures
     public override void OnActivate(CreatureContext c, Results results)
     {
       results.Add(
-        new ApplyModifierToOwner(c.Self,
+        new ApplyModifierToOwnerEffect(c.Self,
           Stat.Influence.Modifier(
             TaggedNumericOperation.Add(c.Self.Data.School, new IntValue(1)),
             new WhileAliveLifetime(c.Self))));

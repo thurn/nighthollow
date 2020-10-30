@@ -14,17 +14,23 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Components;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Core2
 {
-  public sealed class Results
+  public class AbstractCreatureEventsDelegate<TContext> : ICreatureEventsDelegate<TContext>
+    where TContext : DelegateContext
   {
-    readonly List<Effect> _results = new List<Effect>();
+    public virtual void OnActivate(TContext c)
+    {
+    }
 
-    public void Add(Effect result) => _results.Add(result);
+    public virtual void OnDeath(TContext c)
+    {
+    }
 
-    public IEnumerable<Effect> Values => _results;
+    public virtual void OnKilledEnemy(TContext c, Creature enemy, int damageAmount)
+    {
+    }
   }
 }

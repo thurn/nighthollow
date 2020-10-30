@@ -14,17 +14,27 @@
 
 #nullable enable
 
-using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Components;
+using Nighthollow.Delegates.Core;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Effects
 {
-  public sealed class Results
+  public sealed class ApplyDamageEffect : Effect
   {
-    readonly List<Effect> _results = new List<Effect>();
+    public Creature Self { get; }
+    public Creature Target { get; }
+    public int Amount { get; }
 
-    public void Add(Effect result) => _results.Add(result);
+    public ApplyDamageEffect(Creature self, Creature target, int amount)
+    {
+      Self = self;
+      Target = target;
+      Amount = amount;
+    }
 
-    public IEnumerable<Effect> Values => _results;
+    public override void Execute()
+    {
+      Target.AddDamage(Self, Amount);
+    }
   }
 }
