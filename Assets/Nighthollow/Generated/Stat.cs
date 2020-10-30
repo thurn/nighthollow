@@ -67,8 +67,12 @@ namespace Nighthollow.Generated
     public static readonly DurationStat Cooldown = new DurationStat(48);
     public static readonly IntStat AddedManaGain = new IntStat(49);
     public static readonly PercentageStat MeleeDamageMultiplier = new PercentageStat(50);
-    public static readonly IntStat ProjectileCount = new IntStat(51);
-    public static readonly DurationStat MultipleProjectilesDelay = new DurationStat(52);
+    public static readonly IntStat ProjectileSequenceCount = new IntStat(51);
+    public static readonly DurationStat ProjectileSequenceDelay = new DurationStat(52);
+    public static readonly IntStat ProjectileArcCount = new IntStat(53);
+    public static readonly IntStat ProjectileArcRotationOffset = new IntStat(54);
+    public static readonly IntStat ProjectileAdjacentsCount = new IntStat(55);
+    public static readonly IntStat ProjectileAdjacentsOffset = new IntStat(56);
 
     public static IStat GetStat(int statId)
     {
@@ -121,8 +125,12 @@ namespace Nighthollow.Generated
         case 48: return Cooldown;
         case 49: return AddedManaGain;
         case 50: return MeleeDamageMultiplier;
-        case 51: return ProjectileCount;
-        case 52: return MultipleProjectilesDelay;
+        case 51: return ProjectileSequenceCount;
+        case 52: return ProjectileSequenceDelay;
+        case 53: return ProjectileArcCount;
+        case 54: return ProjectileArcRotationOffset;
+        case 55: return ProjectileAdjacentsCount;
+        case 56: return ProjectileAdjacentsOffset;
         default: throw new ArgumentOutOfRangeException(statId.ToString());
       }
     }

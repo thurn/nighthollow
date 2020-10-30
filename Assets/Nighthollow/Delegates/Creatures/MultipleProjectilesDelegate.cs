@@ -33,7 +33,7 @@ namespace Nighthollow.Delegates.Creatures
       }
 
       // 1 less projectile since we already fired one
-      for (var i = 1; i < c.GetInt(Stat.ProjectileCount); ++i)
+      for (var i = 1; i < c.GetInt(Stat.ProjectileSequenceCount); ++i)
       {
         c.Results.Add(new FireProjectileEffect(
           c.Self,
@@ -41,7 +41,7 @@ namespace Nighthollow.Delegates.Creatures
           new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Creature),
           c.Self.ProjectileSource.position,
           Vector2.zero,
-          i * c.GetStat(Stat.MultipleProjectilesDelay).AsMilliseconds()));
+          i * c.GetStat(Stat.ProjectileSequenceDelay).AsMilliseconds()));
       }
     }
   }
