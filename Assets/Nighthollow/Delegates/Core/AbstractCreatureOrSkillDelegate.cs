@@ -19,7 +19,7 @@ using Nighthollow.Delegates.Effects;
 
 namespace Nighthollow.Delegates.Core
 {
-  public class AbstractCreatureEventsDelegate<TContext> : ICreatureEventsDelegate<TContext>
+  public class AbstractCreatureOrSkillDelegate<TContext> : ICreatureOrSkillDelegate<TContext>
     where TContext : DelegateContext<TContext>
   {
     public virtual void OnActivate(TContext c)

@@ -23,7 +23,9 @@ namespace Nighthollow.Delegates.Core
   {
     readonly List<Effect> _results = new List<Effect>();
 
-    public void Add(Effect result) => _results.Add(result);
+    public void Add(Effect effect) => _results.Add(effect);
+
+    public void AddRange(IEnumerable<Effect> effects) => _results.AddRange(effects);
 
     public IEnumerable<Effect> Values => _results;
   }

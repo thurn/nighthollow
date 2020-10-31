@@ -18,11 +18,11 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Core
 {
-  public abstract class AbstractCreatureDelegate : AbstractCreatureEventsDelegate<CreatureContext>, ICreatureDelegate
+  public abstract class AbstractCreatureDelegate : AbstractCreatureOrSkillDelegate<CreatureContext>, ICreatureDelegate
   {
-    public virtual bool CanUseMeleeSkill(CreatureContext c) => c.MarkNotImplemented<bool>();
+    public virtual bool MeleeCouldHit(CreatureContext c) => c.MarkNotImplemented<bool>();
 
-    public virtual bool CanUseProjectileSkill(CreatureContext c) => c.MarkNotImplemented<bool>();
+    public virtual bool ProjectileCouldHit(CreatureContext c) => c.MarkNotImplemented<bool>();
 
     public virtual SkillData? SelectSkill(CreatureContext c) => c.MarkNotImplemented<SkillData>();
   }

@@ -73,5 +73,23 @@ namespace Nighthollow.Delegates.Core
         effect.RaiseEvents();
       }
     }
+
+    protected bool AnyReturnedTrue(TContext delegateContext, Func<TDelegate, TContext, bool> function)
+    {
+      var context = delegateContext.New();
+
+      for (var i = 0; i < _delegates.Count; ++i)
+      {
+        context.Implemented = true;
+        context.DelegateIndex = i;
+        var result = function(_delegates[i], context);
+        if (context.Implemented && result)
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
   }
 }

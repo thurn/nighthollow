@@ -18,17 +18,19 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Core
 {
-  public interface ICreatureDelegate : ICreatureEventsDelegate<CreatureContext>
+  public interface ICreatureDelegate : ICreatureOrSkillDelegate<CreatureContext>
   {
     /// <summary>
-    /// Should return true if the creature could currently use a melee skill.
+    /// Should check if the creature could currently hit with a melee skill. Will return true if any delegate returns
+    /// a true value.
     /// </summary>
-    bool CanUseMeleeSkill(CreatureContext c);
+    bool MeleeCouldHit(CreatureContext c);
 
     /// <summary>
-    /// Should return true if the creature could currently use a projectile skill.
+    /// Called to check if a projectile fired by this creature would currently hit a target. Will return true if
+    /// any delegate returns a true value.
     /// </summary>
-    bool CanUseProjectileSkill(CreatureContext c);
+    bool ProjectileCouldHit(CreatureContext c);
 
     /// <summary>
     /// Called when a creature wants to decide which skill to use. Should return null if there is no appropriate skill

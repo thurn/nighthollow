@@ -38,7 +38,7 @@ namespace Nighthollow.Delegates.Creatures
 
     public override SkillData? SelectSkill(CreatureContext c)
     {
-      if (c.Delegate.CanUseMeleeSkill(c))
+      if (c.Delegate.MeleeCouldHit(c))
       {
         var skill = SelectMatching(c, s => s.BaseType.IsMelee);
         if (skill != null)
@@ -47,7 +47,7 @@ namespace Nighthollow.Delegates.Creatures
         }
       }
 
-      if (c.Delegate.CanUseProjectileSkill(c))
+      if (c.Self.HasProjectileSkill() &&  c.Delegate.ProjectileCouldHit(c))
       {
         var skill = SelectMatching(c, s => s.BaseType.IsProjectile);
         if (skill != null)
@@ -81,11 +81,18 @@ namespace Nighthollow.Delegates.Creatures
       return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
-    public override bool CanUseMeleeSkill(CreatureContext c) =>
+    public override bool MeleeCouldHit(CreatureContext c) =>
       c.Self.Collider && HasOverlap(c.Self.Owner, c.Self.Collider);
 
-    public override bool CanUseProjectileSkill(CreatureContext c) =>
-      c.Self.ProjectileCollider && HasOverlap(c.Self.Owner, c.Self.ProjectileCollider.Collider);
+    public override bool ProjectileCouldHit(CreatureContext c)
+    {
+      var hit = Physics2D.Raycast(
+        origin: c.Self.ProjectileSource.position,
+        direction: Constants.ForwardDirectionForPlayer(c.Self.Owner),
+        distance: Mathf.Infinity,
+        layerMask: Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent()));
+      return hit.collider;
+    }
 
     static bool HasOverlap(PlayerName owner, Collider2D collider2D) =>
       collider2D.IsTouchingLayers(Constants.LayerMaskForCreatures(owner.GetOpponent()));

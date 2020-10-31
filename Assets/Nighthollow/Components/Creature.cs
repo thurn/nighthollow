@@ -46,7 +46,6 @@ namespace Nighthollow.Components
 
     [Header("State")] [SerializeField] bool _initialized;
     CreatureData _data;
-    [SerializeField] bool _useSkill;
     [SerializeField] int _damageTaken;
     [SerializeField] CreatureState _state;
     SkillData _currentSkill;
@@ -57,7 +56,6 @@ namespace Nighthollow.Components
     [SerializeField] StatusBarsHolder _statusBars;
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SortingGroup _sortingGroup;
-    [SerializeField] CustomTriggerCollider _projectileCollider;
     Coroutine _coroutine;
     [SerializeField] bool _appliedLifeLoss;
     readonly Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
@@ -127,8 +125,6 @@ namespace Nighthollow.Components
 
     public Collider2D Collider => _collider;
 
-    public CustomTriggerCollider ProjectileCollider => _projectileCollider;
-
     public SkillData CurrentSkill => _currentSkill;
 
     public CreatureState State => _state;
@@ -171,21 +167,15 @@ namespace Nighthollow.Components
       }
 
       _collider.enabled = true;
-      if (HasProjectileSkill())
-      {
-        _projectileCollider = CustomTriggerCollider.Add(
-          this, new Vector2(15, 0), new Vector2(30, 1));
-      }
 
       ToDefaultState();
 
-      _useSkill = true;
       _data.Delegate.OnActivate(new CreatureContext(this));
 
       _coroutine = StartCoroutine(RunCoroutine());
     }
 
-    void UseSkill()
+    void TryToUseSkill()
     {
       Errors.CheckState(CanUseSkill(), "Cannot use skill");
 
@@ -262,23 +252,6 @@ namespace Nighthollow.Components
       Destroy(_statusBars.gameObject);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-      // Collision could be with a Projectile or with a TriggerCollider:
-      if (CanUseSkill() && other.GetComponent<Creature>())
-      {
-        _useSkill = true;
-      }
-    }
-
-    public void OnCustomTriggerCollision(Creature enemy)
-    {
-      if (CanUseSkill())
-      {
-        _useSkill = true;
-      }
-    }
-
     // Called by skill animations on their 'start impact' frame
     public void AttackStart()
     {
@@ -318,7 +291,6 @@ namespace Nighthollow.Components
       }
 
       ToDefaultState();
-      _useSkill = true;
     }
 
     public void OnDeathAnimationCompleted()
@@ -344,14 +316,13 @@ namespace Nighthollow.Components
 
       _attachmentDisplay.ClearAttachments();
       ToDefaultState();
-      _useSkill = true;
     }
 
     public bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
 
     public bool IsStunned() => _state == CreatureState.Stunned;
 
-    bool HasProjectileSkill() => _data.Skills.Any(s => s.BaseType.IsProjectile);
+    public bool HasProjectileSkill() => _data.Skills.Any(s => s.BaseType.IsProjectile);
 
     bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
 
@@ -384,13 +355,11 @@ namespace Nighthollow.Components
 
       if (_state == CreatureState.Placing) return;
 
-      if (_useSkill && CanUseSkill())
+      if (CanUseSkill())
       {
-        // SelectSkill() is delayed until the next Update() call instead of being invoked
-        // immediately because it gives time for the physics system to correctly update
-        // collider positions after activation. This was extremely annoying to debug :)
-        UseSkill();
-        _useSkill = false;
+        // UseSkill() must be called from Update() in order to give time for the physics system to correctly update
+        // collider positions after activation (there is a Unity project setting which makes this automatic).
+        TryToUseSkill();
       }
 
       transform.eulerAngles = _data.BaseType.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;

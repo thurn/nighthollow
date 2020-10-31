@@ -43,5 +43,19 @@ namespace Nighthollow.Utils
 
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source) where T : struct =>
       source.Where(t => t != null).Select(t => t.GetValueOrDefault());
+
+    /// <summary>Returns the infinite sequence (1, -1, -2, -2, ....)</summary>
+    public static IEnumerable<int> AlternatingIntegers()
+    {
+      var i = 0;
+      while (true)
+      {
+        i++;
+        yield return i;
+        yield return -i;
+      }
+
+      // ReSharper disable once IteratorNeverReturns
+    }
   }
 }

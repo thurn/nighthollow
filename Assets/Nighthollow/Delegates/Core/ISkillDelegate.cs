@@ -22,7 +22,7 @@ using UnityEngine;
 
 namespace Nighthollow.Delegates.Core
 {
-  public interface ISkillDelegate : ICreatureEventsDelegate<SkillContext>
+  public interface ISkillDelegate : ICreatureOrSkillDelegate<SkillContext>
   {
     /// <summary>
     /// Called when a skill's animation begins.

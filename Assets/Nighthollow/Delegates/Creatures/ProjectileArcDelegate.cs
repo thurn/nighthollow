@@ -14,16 +14,31 @@
 
 #nullable enable
 
+using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
+using Nighthollow.Utils;
 using UnityEngine;
 
 namespace Nighthollow.Delegates.Creatures
 {
   public sealed class ProjectileArcDelegate : AbstractCreatureDelegate
   {
+    public override bool ProjectileCouldHit(CreatureContext c)
+    {
+      return CollectionUtils.AlternatingIntegers()
+        .Take(c.GetInt(Stat.ProjectileArcCount) - 1)
+        .Select(i =>
+          Physics2D.Raycast(
+            origin: c.Self.ProjectileSource.position,
+            direction: FiringDirection(c, i),
+            distance: Mathf.Infinity,
+            layerMask: Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent())))
+        .Any(hit => hit.collider);
+    }
+
     public override void OnFiredProjectile(CreatureContext c, FireProjectileEffect effect)
     {
       if (effect.Identifier.DelegateType == DelegateType.Creature && effect.Identifier.Index <= c.DelegateIndex)
@@ -32,47 +47,26 @@ namespace Nighthollow.Delegates.Creatures
         return;
       }
 
-      var toFire = c.GetInt(Stat.ProjectileArcCount) - 1;
-      var projectileCount = 0;
-      var offsetCount = 1;
+      c.Results.AddRange(
+        CollectionUtils.AlternatingIntegers()
+          .Take(c.GetInt(Stat.ProjectileArcCount) - 1)
+          .Select(i => Result(c, effect, i)));
+    }
 
-      while (true)
-      {
-        if (projectileCount == toFire)
-        {
-          break;
-        }
+    static FireProjectileEffect Result(CreatureContext c, FireProjectileEffect effect, int offsetCount)
+    {
+      return new FireProjectileEffect(
+        c.Self,
+        effect.SkillData,
+        new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Creature),
+        c.Self.ProjectileSource.position,
+        FiringDirection(c, offsetCount));
+    }
 
-        c.Results.Add(new FireProjectileEffect(
-          c.Self,
-          effect.SkillData,
-          new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Creature),
-          c.Self.ProjectileSource.position,
-          effect.FiringDirectionOffset +
-          offsetCount * new Vector2(0, c.GetInt(Stat.ProjectileArcRotationOffset) / 1000f)));
-
-        projectileCount++;
-        if (projectileCount == toFire)
-        {
-          break;
-        }
-
-        c.Results.Add(new FireProjectileEffect(
-          c.Self,
-          effect.SkillData,
-          new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Creature),
-          c.Self.ProjectileSource.position,
-          effect.FiringDirectionOffset -
-          offsetCount * new Vector2(0, c.GetInt(Stat.ProjectileArcRotationOffset) / 1000f)));
-
-        projectileCount++;
-        offsetCount++;
-      }
-
-      // 1 less projectile since we already fired one
-      for (var i = 1; i < c.GetInt(Stat.ProjectileSequenceCount); ++i)
-      {
-      }
+    static Vector2 FiringDirection(CreatureContext c, int offsetCount)
+    {
+      return Constants.ForwardDirectionForPlayer(c.Self.Owner) +
+             offsetCount * new Vector2(0, c.GetInt(Stat.ProjectileArcRotationOffset) / 1000f);
     }
   }
 }

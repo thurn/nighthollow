@@ -22,7 +22,7 @@ using UnityEngine;
 
 namespace Nighthollow.Delegates.Core
 {
-  public class AbstractSkillDelegate : AbstractCreatureEventsDelegate<SkillContext>, ISkillDelegate
+  public class AbstractSkillDelegate : AbstractCreatureOrSkillDelegate<SkillContext>, ISkillDelegate
   {
     public virtual void OnStart(SkillContext c)
     {

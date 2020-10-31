@@ -19,7 +19,7 @@ using Nighthollow.Delegates.Effects;
 
 namespace Nighthollow.Delegates.Core
 {
-  public interface ICreatureEventsDelegate<in TContext> : IDelegate where TContext : DelegateContext<TContext>
+  public interface ICreatureOrSkillDelegate<in TContext> : IDelegate where TContext : DelegateContext<TContext>
   {
     /// <summary>Called when a creature is first placed.</summary>
     void OnActivate(TContext c);
@@ -33,6 +33,7 @@ namespace Nighthollow.Delegates.Core
       Creature enemy,
       int damageAmount);
 
+    /// <summary>Called when the creature fires a projectile.</summary>
     void OnFiredProjectile(TContext c, FireProjectileEffect effect);
   }
 }

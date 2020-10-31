@@ -55,11 +55,11 @@ namespace Nighthollow.Delegates.Core
       ExecuteForCurrentSkill(context, (d, c) => d.OnFiredProjectile(c, effect));
     }
 
-    public bool CanUseMeleeSkill(CreatureContext context) =>
-      GetFirstImplemented(context, (d, c) => d.CanUseMeleeSkill(c));
+    public bool ProjectileCouldHit(CreatureContext context) =>
+      AnyReturnedTrue(context, (d, c) => d.ProjectileCouldHit(c));
 
-    public bool CanUseProjectileSkill(CreatureContext context) =>
-      GetFirstImplemented(context, (d, c) => d.CanUseProjectileSkill(c));
+    public bool MeleeCouldHit(CreatureContext context) =>
+      GetFirstImplemented(context, (d, c) => d.MeleeCouldHit(c));
 
     public SkillData? SelectSkill(CreatureContext context) =>
       GetFirstImplemented(context, (d, c) => d.SelectSkill(c));
@@ -71,6 +71,13 @@ namespace Nighthollow.Delegates.Core
       {
         action(skill.Delegate, new SkillContext(c.Self, skill));
       }
+    }
+
+    TResult RunForCurrentSkill<TResult>(
+      CreatureContext c, Func<ISkillDelegate, SkillContext, TResult> function, TResult ifNotPresent)
+    {
+      var skill = c.Self.CurrentSkill;
+      return skill == null ? ifNotPresent : function(skill.Delegate, new SkillContext(c.Self, skill));
     }
   }
 }
