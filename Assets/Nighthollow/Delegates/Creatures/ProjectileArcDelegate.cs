@@ -14,59 +14,22 @@
 
 #nullable enable
 
-using System.Linq;
-using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine;
 
 namespace Nighthollow.Delegates.Creatures
 {
-  public sealed class ProjectileArcDelegate : AbstractCreatureDelegate
+  public sealed class ProjectileArcDelegate : AbstractProjectileOffsetDelegate
   {
-    public override bool ProjectileCouldHit(CreatureContext c)
-    {
-      return CollectionUtils.AlternatingIntegers()
-        .Take(c.GetInt(Stat.ProjectileArcCount) - 1)
-        .Select(i =>
-          Physics2D.Raycast(
-            origin: c.Self.ProjectileSource.position,
-            direction: FiringDirection(c, i),
-            distance: Mathf.Infinity,
-            layerMask: Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent())))
-        .Any(hit => hit.collider);
-    }
+    protected override int GetProjectileCount(CreatureContext c) => c.GetInt(Stat.ProjectileArcCount);
 
-    public override void OnFiredProjectile(CreatureContext c, FireProjectileEffect effect)
-    {
-      if (effect.Identifier.DelegateType == DelegateType.Creature && effect.Identifier.Index <= c.DelegateIndex)
-      {
-        // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
-        return;
-      }
+    protected override Vector2 GetOrigin(CreatureContext c, int projectileNumber) =>
+      c.Self.ProjectileSource.position;
 
-      c.Results.AddRange(
-        CollectionUtils.AlternatingIntegers()
-          .Take(c.GetInt(Stat.ProjectileArcCount) - 1)
-          .Select(i => Result(c, effect, i)));
-    }
-
-    static FireProjectileEffect Result(CreatureContext c, FireProjectileEffect effect, int offsetCount)
-    {
-      return new FireProjectileEffect(
-        c.Self,
-        effect.SkillData,
-        new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Creature),
-        c.Self.ProjectileSource.position,
-        FiringDirection(c, offsetCount));
-    }
-
-    static Vector2 FiringDirection(CreatureContext c, int offsetCount)
-    {
-      return Constants.ForwardDirectionForPlayer(c.Self.Owner) +
-             offsetCount * new Vector2(0, c.GetInt(Stat.ProjectileArcRotationOffset) / 1000f);
-    }
+    protected override Vector2 GetDirection(CreatureContext c, int projectileNumber) =>
+      Constants.ForwardDirectionForPlayer(c.Self.Owner) +
+      projectileNumber * new Vector2(0, c.GetInt(Stat.ProjectileArcRotationOffset) / 1000f);
   }
 }

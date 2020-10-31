@@ -15,11 +15,21 @@
 #nullable enable
 
 using Nighthollow.Delegates.Core;
+using Nighthollow.Generated;
+using Nighthollow.Utils;
+using UnityEngine;
 
 namespace Nighthollow.Delegates.Creatures
 {
-  public sealed class AdjacentFileProjectilesDelegate : AbstractCreatureDelegate
+  public sealed class AdjacentFileProjectilesDelegate : AbstractProjectileOffsetDelegate
   {
+    protected override int GetProjectileCount(CreatureContext c) => c.GetInt(Stat.ProjectileAdjacentsCount);
 
+    protected override Vector2 GetOrigin(CreatureContext c, int projectileNumber) =>
+      (Vector2) c.Self.ProjectileSource.position +
+      projectileNumber * new Vector2(0, c.GetInt(Stat.ProjectileAdjacentsOffset) / 1000f);
+
+    protected override Vector2 GetDirection(CreatureContext c, int projectileNumber) =>
+      Constants.ForwardDirectionForPlayer(c.Self.Owner);
   }
 }
