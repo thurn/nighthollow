@@ -54,7 +54,7 @@ namespace Nighthollow.Generated
     public static readonly PercentageStat ProjectileDamageMultiplier = new PercentageStat(35);
     public static readonly PercentageStat ChainProjectileDamageMultiplier = new PercentageStat(36);
     public static readonly DurationStat SkillCooldownRecovery = new DurationStat(37);
-    public static readonly DurationStat MeleeKnockbackDuration = new DurationStat(38);
+    public static readonly DurationStat KnockbackDuration = new DurationStat(38);
     public static readonly DurationStat ManaGainInterval = new DurationStat(39);
     public static readonly BoolStat UsesAccuracy = new BoolStat(40);
     public static readonly BoolStat CanCrit = new BoolStat(41);
@@ -73,6 +73,7 @@ namespace Nighthollow.Generated
     public static readonly IntStat ProjectileArcRotationOffset = new IntStat(54);
     public static readonly IntStat ProjectileAdjacentsCount = new IntStat(55);
     public static readonly IntStat ProjectileAdjacentsOffset = new IntStat(56);
+    public static readonly PercentageStat KnockbackDistanceMultiplier = new PercentageStat(57);
 
     public static IStat GetStat(int statId)
     {
@@ -112,7 +113,7 @@ namespace Nighthollow.Generated
         case 35: return ProjectileDamageMultiplier;
         case 36: return ChainProjectileDamageMultiplier;
         case 37: return SkillCooldownRecovery;
-        case 38: return MeleeKnockbackDuration;
+        case 38: return KnockbackDuration;
         case 39: return ManaGainInterval;
         case 40: return UsesAccuracy;
         case 41: return CanCrit;
@@ -131,6 +132,7 @@ namespace Nighthollow.Generated
         case 54: return ProjectileArcRotationOffset;
         case 55: return ProjectileAdjacentsCount;
         case 56: return ProjectileAdjacentsOffset;
+        case 57: return KnockbackDistanceMultiplier;
         default: throw new ArgumentOutOfRangeException(statId.ToString());
       }
     }

@@ -45,12 +45,12 @@ namespace Nighthollow.Delegates.Skills
       }
     }
 
-    public override void OnImpact(SkillContext c)
+    public override void OnImpact(SkillContext context)
     {
-      var targets = c.Delegate.PopulateTargets(c);
+      var targets = context.Delegate.PopulateTargets(context);
       foreach (var target in targets)
       {
-        c.Delegate.OnApplyToTarget(c, target);
+        context.Results.Add(Events.Skill(context, (d, c) => d.OnApplyToTarget(c, target)));
       }
     }
 
@@ -94,6 +94,8 @@ namespace Nighthollow.Delegates.Skills
         c.Results.Add(new StunEffect(target, c.GetDurationSeconds(Stat.StunDurationOnEnemies)));
         c.Results.Add(new SkillEventEffect(SkillEventEffect.Event.Stun, target));
       }
+
+      c.Results.Add(Events.Creature(c, (d, sc) => d.OnHitTarget(sc, c.Skill, target)));
     }
 
     public override IEnumerable<Creature> PopulateTargets(SkillContext c)

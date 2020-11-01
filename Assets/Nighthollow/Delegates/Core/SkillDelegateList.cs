@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Components;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Skills;
 using Nighthollow.Generated;
@@ -43,6 +44,9 @@ namespace Nighthollow.Delegates.Core
 
     public void OnFiredProjectile(SkillContext context, FireProjectileEffect effect) =>
       ExecuteEvent(context, (d, c) => d.OnFiredProjectile(c, effect));
+
+    public void OnHitTarget(SkillContext context, SkillData skill, Creature target) =>
+      ExecuteEvent(context, (d, c) => d.OnHitTarget(c, skill, target));
 
     public void OnStart(SkillContext context) =>
       ExecuteEvent(context, (d, c) => d.OnStart(c));

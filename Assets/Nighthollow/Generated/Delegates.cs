@@ -28,9 +28,8 @@ namespace Nighthollow.Generated
     ProjectileArcDelegate = 3,
     AdjacentFileProjectilesDelegate = 4,
     ChainingProjectilesDelegate = 5,
-    MeleeKnockbackDelegate = 6,
-    ManaGenerationDelegate = 7,
-    InfluenceAddedDelegate = 8,
+    ManaGenerationDelegate = 6,
+    InfluenceAddedDelegate = 7,
   }
 
   public static class CreatureDelegateMap
@@ -43,7 +42,6 @@ namespace Nighthollow.Generated
       {CreatureDelegateId.ProjectileArcDelegate, new ProjectileArcDelegate()},
       {CreatureDelegateId.AdjacentFileProjectilesDelegate, new AdjacentFileProjectilesDelegate()},
       {CreatureDelegateId.ChainingProjectilesDelegate, new ChainingProjectilesDelegate()},
-      {CreatureDelegateId.MeleeKnockbackDelegate, new MeleeKnockbackDelegate()},
       {CreatureDelegateId.ManaGenerationDelegate, new ManaGenerationDelegate()},
       {CreatureDelegateId.InfluenceAddedDelegate, new InfluenceAddedDelegate()},
     };
@@ -55,6 +53,7 @@ namespace Nighthollow.Generated
   {
     Unknown = 0,
     DefaultSkillDelegate = 1,
+    KnockbackOnHitDelegate = 2,
   }
 
   public static class SkillDelegateMap
@@ -63,6 +62,7 @@ namespace Nighthollow.Generated
         Dictionary<SkillDelegateId, ISkillDelegate>
     {
       {SkillDelegateId.DefaultSkillDelegate, new DefaultSkillDelegate()},
+      {SkillDelegateId.KnockbackOnHitDelegate, new KnockbackOnHitDelegate()},
     };
 
     public static ISkillDelegate Get(SkillDelegateId id) => Delegates[id];

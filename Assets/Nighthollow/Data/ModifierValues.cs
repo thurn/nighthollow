@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
@@ -128,6 +129,10 @@ namespace Nighthollow.Data
       var affixes = new List<AffixData>();
       if (skill.ImplicitAffix != null)
       {
+        if (!_skillModifiers.ContainsKey(skill.Id))
+        {
+          throw new InvalidOperationException($"Expected affix values for skill ID {skill.Id}");
+        }
         affixes.Add(_skillModifiers[skill.Id].BuildAffix(skill.ImplicitAffix));
       }
 

@@ -55,6 +55,12 @@ namespace Nighthollow.Delegates.Core
       ExecuteForCurrentSkill(context, (d, c) => d.OnFiredProjectile(c, effect));
     }
 
+    public void OnHitTarget(CreatureContext context, SkillData skill, Creature target)
+    {
+      ExecuteEvent(context, (d, c) => d.OnHitTarget(c, skill, target));
+      ExecuteForCurrentSkill(context, (d, c) => d.OnHitTarget(c, skill, target));
+    }
+
     public bool ProjectileCouldHit(CreatureContext context) =>
       AnyReturnedTrue(context, (d, c) => d.ProjectileCouldHit(c));
 
@@ -71,13 +77,6 @@ namespace Nighthollow.Delegates.Core
       {
         action(skill.Delegate, new SkillContext(c.Self, skill));
       }
-    }
-
-    TResult RunForCurrentSkill<TResult>(
-      CreatureContext c, Func<ISkillDelegate, SkillContext, TResult> function, TResult ifNotPresent)
-    {
-      var skill = c.Self.CurrentSkill;
-      return skill == null ? ifNotPresent : function(skill.Delegate, new SkillContext(c.Self, skill));
     }
   }
 }

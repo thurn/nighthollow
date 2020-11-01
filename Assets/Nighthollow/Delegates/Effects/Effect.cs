@@ -24,5 +24,6 @@ namespace Nighthollow.Delegates.Effects
     public virtual void RaiseEvents()
     {
     }
+
   }
 }

@@ -14,33 +14,34 @@
 
 #nullable enable
 
+using DG.Tweening;
 using Nighthollow.Components;
 using Nighthollow.Data;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Utils;
+using UnityEngine;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Effects
 {
-  public class AbstractCreatureOrSkillDelegate<TContext> : ICreatureOrSkillDelegate<TContext>
-    where TContext : DelegateContext<TContext>
+  public sealed class KnockbackEffect : Effect
   {
-    public virtual void OnActivate(TContext c)
+    public Creature Target { get; }
+    public float Distance { get; }
+    public float DurationSeconds { get; }
+
+    public KnockbackEffect(Creature target, float distance, float durationSeconds)
     {
+      Target = target;
+      Distance = distance;
+      DurationSeconds = durationSeconds;
     }
 
-    public virtual void OnDeath(TContext c)
+    public override void Execute()
     {
-    }
-
-    public virtual void OnKilledEnemy(TContext c, Creature enemy, int damageAmount)
-    {
-    }
-
-    public virtual void OnFiredProjectile(TContext c, FireProjectileEffect effect)
-    {
-    }
-
-    public virtual void OnHitTarget(TContext c, SkillData skill, Creature target)
-    {
+      Target.transform.DOMove(
+        (Vector2) Target.transform.position +
+        (Distance *
+         Constants.ForwardDirectionForPlayer(Target.Owner.GetOpponent())),
+        DurationSeconds);
     }
   }
 }

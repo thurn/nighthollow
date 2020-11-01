@@ -14,12 +14,23 @@
 
 #nullable enable
 
+using Nighthollow.Components;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
+using Nighthollow.Delegates.Effects;
+using Nighthollow.Generated;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Skills
 {
-  public sealed class MeleeKnockbackDelegate : AbstractCreatureDelegate
+  public sealed class KnockbackOnHitDelegate : AbstractSkillDelegate
   {
-
+    public override void OnHitTarget(SkillContext c, SkillData skill, Creature target)
+    {
+      var duration = c.GetDurationSeconds(Stat.KnockbackDuration);
+      c.Results.Add(new KnockbackEffect(
+        target,
+        c.GetStat(Stat.KnockbackDistanceMultiplier).AsMultiplier() * duration,
+        duration));
+    }
   }
 }

@@ -15,6 +15,7 @@
 #nullable enable
 
 using Nighthollow.Components;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 
 namespace Nighthollow.Delegates.Core
@@ -35,5 +36,8 @@ namespace Nighthollow.Delegates.Core
 
     /// <summary>Called when the creature fires a projectile.</summary>
     void OnFiredProjectile(TContext c, FireProjectileEffect effect);
+
+    /// <summary>Called when one of the creature's skills hits a target.</summary>
+    void OnHitTarget(TContext c, SkillData skill, Creature target);
   }
 }
