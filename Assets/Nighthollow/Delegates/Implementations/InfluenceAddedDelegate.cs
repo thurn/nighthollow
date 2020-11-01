@@ -19,16 +19,16 @@ using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class ManaGenerationDelegate : AbstractCreatureDelegate
+  public sealed class InfluenceAddedDelegate : AbstractDelegate
   {
     public override void OnActivate(CreatureContext c)
     {
       c.Results.Add(
         new ApplyModifierToOwnerEffect(c.Self,
-          Stat.ManaGain.Modifier(
-            NumericOperation.Add(c.GetStat(Stat.AddedManaGain)),
+          Stat.Influence.Modifier(
+            TaggedNumericOperation.Add(c.Self.Data.School, new IntValue(1)),
             new WhileAliveLifetime(c.Self))));
     }
   }

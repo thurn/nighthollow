@@ -14,58 +14,41 @@
 
 using System.Collections.Generic;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Creatures;
-using Nighthollow.Delegates.Skills;
+using Nighthollow.Delegates.Implementations;
 
 // Generated Code - Do Not Modify!
 namespace Nighthollow.Generated
 {
-  public enum CreatureDelegateId
+  public enum DelegateId
   {
     Unknown = 0,
     DefaultCreatureDelegate = 1,
-    MultipleProjectilesDelegate = 2,
-    ProjectileArcDelegate = 3,
-    AdjacentFileProjectilesDelegate = 4,
-    ChainingProjectilesDelegate = 5,
-    ManaGenerationDelegate = 6,
-    InfluenceAddedDelegate = 7,
+    DefaultSkillDelegate = 2,
+    MultipleProjectilesDelegate = 3,
+    ProjectileArcDelegate = 4,
+    AdjacentFileProjectilesDelegate = 5,
+    ChainingProjectilesDelegate = 6,
+    ManaGenerationDelegate = 7,
+    InfluenceAddedDelegate = 8,
+    KnockbackOnHitDelegate = 9,
   }
 
-  public static class CreatureDelegateMap
+  public static class DelegateMap
   {
-    static readonly Dictionary<CreatureDelegateId, ICreatureDelegate> Delegates = new
-        Dictionary<CreatureDelegateId, ICreatureDelegate>
+    static readonly Dictionary<DelegateId, IDelegate> Delegates = new Dictionary<DelegateId, IDelegate>
     {
-      {CreatureDelegateId.DefaultCreatureDelegate, new DefaultCreatureDelegate()},
-      {CreatureDelegateId.MultipleProjectilesDelegate, new MultipleProjectilesDelegate()},
-      {CreatureDelegateId.ProjectileArcDelegate, new ProjectileArcDelegate()},
-      {CreatureDelegateId.AdjacentFileProjectilesDelegate, new AdjacentFileProjectilesDelegate()},
-      {CreatureDelegateId.ChainingProjectilesDelegate, new ChainingProjectilesDelegate()},
-      {CreatureDelegateId.ManaGenerationDelegate, new ManaGenerationDelegate()},
-      {CreatureDelegateId.InfluenceAddedDelegate, new InfluenceAddedDelegate()},
+      {DelegateId.DefaultCreatureDelegate, new DefaultCreatureDelegate()},
+      {DelegateId.DefaultSkillDelegate, new DefaultSkillDelegate()},
+      {DelegateId.MultipleProjectilesDelegate, new MultipleProjectilesDelegate()},
+      {DelegateId.ProjectileArcDelegate, new ProjectileArcDelegate()},
+      {DelegateId.AdjacentFileProjectilesDelegate, new AdjacentFileProjectilesDelegate()},
+      {DelegateId.ChainingProjectilesDelegate, new ChainingProjectilesDelegate()},
+      {DelegateId.ManaGenerationDelegate, new ManaGenerationDelegate()},
+      {DelegateId.InfluenceAddedDelegate, new InfluenceAddedDelegate()},
+      {DelegateId.KnockbackOnHitDelegate, new KnockbackOnHitDelegate()},
     };
 
-    public static ICreatureDelegate Get(CreatureDelegateId id) => Delegates[id];
-  }
-
-  public enum SkillDelegateId
-  {
-    Unknown = 0,
-    DefaultSkillDelegate = 1,
-    KnockbackOnHitDelegate = 2,
-  }
-
-  public static class SkillDelegateMap
-  {
-    static readonly Dictionary<SkillDelegateId, ISkillDelegate> Delegates = new
-        Dictionary<SkillDelegateId, ISkillDelegate>
-    {
-      {SkillDelegateId.DefaultSkillDelegate, new DefaultSkillDelegate()},
-      {SkillDelegateId.KnockbackOnHitDelegate, new KnockbackOnHitDelegate()},
-    };
-
-    public static ISkillDelegate Get(SkillDelegateId id) => Delegates[id];
+    public static IDelegate Get(DelegateId id) => Delegates[id];
   }
 
 }

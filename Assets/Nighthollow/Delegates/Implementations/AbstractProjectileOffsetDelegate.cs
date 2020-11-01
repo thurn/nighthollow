@@ -21,15 +21,15 @@ using Nighthollow.Delegates.Effects;
 using Nighthollow.Utils;
 using UnityEngine;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Implementations
 {
-  public abstract class AbstractProjectileOffsetDelegate : AbstractCreatureDelegate
+  public abstract class AbstractProjectileOffsetDelegate : AbstractDelegate
   {
-    protected abstract Vector2 GetOrigin(CreatureContext c, int projectileNumber);
+    protected abstract Vector2 GetOrigin(DelegateContext c, int projectileNumber);
 
-    protected abstract Vector2 GetDirection(CreatureContext c, int projectileNumber);
+    protected abstract Vector2 GetDirection(DelegateContext c, int projectileNumber);
 
-    protected abstract int GetProjectileCount(CreatureContext c);
+    protected abstract int GetProjectileCount(DelegateContext c);
 
     public override bool ProjectileCouldHit(CreatureContext c)
     {
@@ -44,7 +44,7 @@ namespace Nighthollow.Delegates.Creatures
         .Any(hit => hit.collider);
     }
 
-    public override void OnFiredProjectile(CreatureContext c, FireProjectileEffect effect)
+    public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
     {
       if (effect.Identifier.DelegateType == DelegateType.Creature && effect.Identifier.Index <= c.DelegateIndex)
       {
@@ -58,11 +58,11 @@ namespace Nighthollow.Delegates.Creatures
           .Select(i => Result(c, effect, i)));
     }
 
-    FireProjectileEffect Result(CreatureContext c, FireProjectileEffect effect, int offsetCount)
+    FireProjectileEffect Result(SkillContext c, FireProjectileEffect effect, int offsetCount)
     {
       return new FireProjectileEffect(
         c.Self,
-        effect.SkillData,
+        c,
         new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Creature),
         GetOrigin(c, offsetCount),
         GetDirection(c, offsetCount));

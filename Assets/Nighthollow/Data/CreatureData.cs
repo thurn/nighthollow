@@ -29,7 +29,7 @@ namespace Nighthollow.Data
     public School School { get; }
     public IReadOnlyList<SkillData> Skills { get; }
     public override StatTable Stats { get; }
-    public ICreatureDelegate Delegate { get; }
+    public DelegateList Delegate { get; }
 
     public CreatureData(
       string name,
@@ -37,7 +37,7 @@ namespace Nighthollow.Data
       School school,
       IReadOnlyList<SkillData> skills,
       StatTable stats,
-      ICreatureDelegate creatureDelegate)
+      DelegateList creatureDelegate)
     {
       Name = name;
       BaseType = baseType;

@@ -21,15 +21,13 @@ namespace Nighthollow.Data
 {
   public sealed class ModifierData
   {
-    public CreatureDelegateId? CreatureDelegateId { get; }
-    public SkillDelegateId? SkillDelegateId { get; }
+    public DelegateId? DelegateId { get; }
     public IStatModifier? StatModifier { get; }
 
     public ModifierData(
-      CreatureDelegateId? creatureDelegateId, SkillDelegateId? skillDelegateId, IStatModifier? statModifier)
+      DelegateId? delegateId, IStatModifier? statModifier)
     {
-      CreatureDelegateId = creatureDelegateId;
-      SkillDelegateId = skillDelegateId;
+      DelegateId = delegateId;
       StatModifier = statModifier;
     }
   }

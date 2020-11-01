@@ -16,51 +16,66 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Delegates.Core
 {
-  public abstract class AbstractDelegateList<TContext, TDelegate>
-    where TContext : DelegateContext<TContext> where TDelegate : IDelegate
+  public abstract class AbstractDelegateList
   {
-    readonly IReadOnlyList<TDelegate> _delegates;
+    readonly IReadOnlyList<IDelegate> _delegates;
 
-    protected AbstractDelegateList(IReadOnlyList<TDelegate> delegates)
+    protected AbstractDelegateList(IReadOnlyList<IDelegate> delegates)
     {
       Errors.CheckArgument(delegates.Count > 0, "Expected > 0 delegates");
       _delegates = delegates;
     }
 
-    protected TResult GetFirstImplemented<TResult>(
+    protected abstract AbstractDelegateList? GetChild(DelegateContext context);
+
+    IEnumerable<IDelegate> AllDelegates(DelegateContext context)
+    {
+      var child = GetChild(context);
+      return child == null ? _delegates : _delegates.Concat(child._delegates);
+    }
+
+    protected TResult GetFirstImplemented<TContext, TResult>(
       TContext delegateContext,
-      Func<TDelegate, TContext, TResult> function)
+      Func<IDelegate, TContext, TResult> function)
+      where TContext : DelegateContext, IDelegateContext<TContext>
     {
       var context = delegateContext.New();
 
-      for (var i = 0; i < _delegates.Count; ++i)
+      var i = 0;
+      foreach (var @delegate in AllDelegates(context))
       {
         context.Implemented = true;
         context.DelegateIndex = i;
-        var result = function(_delegates[i], context);
+        var result = function(@delegate, context);
         if (context.Implemented)
         {
           return result;
         }
+
+        i++;
       }
 
       throw new InvalidOperationException("No implementation found for callback.");
     }
 
-    protected void ExecuteEvent(
+    protected void ExecuteEvent<TContext>(
       TContext delegateContext,
-      Action<TDelegate, TContext> action)
+      Action<IDelegate, TContext> action)
+      where TContext : DelegateContext, IDelegateContext<TContext>
     {
       var context = delegateContext.New();
 
-      for (var i = 0; i < _delegates.Count; ++i)
+      var i = 0;
+      foreach (var @delegate in AllDelegates(context))
       {
         context.DelegateIndex = i;
-        action(_delegates[i], context);
+        action(@delegate, context);
+        i++;
       }
 
       foreach (var effect in context.Results.Values)
@@ -74,19 +89,23 @@ namespace Nighthollow.Delegates.Core
       }
     }
 
-    protected bool AnyReturnedTrue(TContext delegateContext, Func<TDelegate, TContext, bool> function)
+    protected bool AnyReturnedTrue<TContext>(TContext delegateContext, Func<IDelegate, TContext, bool> function)
+      where TContext : DelegateContext, IDelegateContext<TContext>
     {
       var context = delegateContext.New();
 
-      for (var i = 0; i < _delegates.Count; ++i)
+      var i = 0;
+      foreach (var @delegate in AllDelegates(context))
       {
         context.Implemented = true;
         context.DelegateIndex = i;
-        var result = function(_delegates[i], context);
+        var result = function(@delegate, context);
         if (context.Implemented && result)
         {
           return true;
         }
+
+        i++;
       }
 
       return false;

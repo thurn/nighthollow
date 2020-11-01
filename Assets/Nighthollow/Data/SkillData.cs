@@ -23,12 +23,12 @@ namespace Nighthollow.Data
   {
     public SkillTypeData BaseType { get; }
     public override StatTable Stats { get; }
-    public ISkillDelegate Delegate { get; }
+    public DelegateList Delegate { get; }
 
     public SkillData(
       SkillTypeData baseType,
       StatTable stats,
-      ISkillDelegate skillDelegate)
+      DelegateList skillDelegate)
     {
       BaseType = baseType;
       Stats = stats;

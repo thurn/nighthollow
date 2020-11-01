@@ -28,7 +28,7 @@ namespace Nighthollow.Data
     public static CreatureData Build(StatTable parentStats, CreatureItemData item)
     {
       var stats = item.Stats.Clone(parentStats);
-      var delegates = new List<CreatureDelegateId>();
+      var delegates = new List<DelegateId>();
 
       Stat.CreatureSpeed.Add(item.BaseType.Speed).InsertInto(stats);
 
@@ -39,9 +39,9 @@ namespace Nighthollow.Data
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
       {
-        if (modifier.CreatureDelegateId.HasValue)
+        if (modifier.DelegateId.HasValue)
         {
-          delegates.Add(modifier.CreatureDelegateId.Value);
+          delegates.Add(modifier.DelegateId.Value);
         }
 
         modifier.StatModifier?.InsertInto(stats);
@@ -51,7 +51,7 @@ namespace Nighthollow.Data
 
       return new CreatureData(
         item.Name, item.BaseType, item.School, skills, stats,
-        new CreatureDelegateList(delegates.Select(CreatureDelegateMap.Get).ToList()));
+        new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToList()));
     }
 
     static SkillData BuildSkill(StatTable parentStats, SkillItemData item)
@@ -77,20 +77,20 @@ namespace Nighthollow.Data
         Stat.CanStun.SetTrue().InsertInto(stats);
       }
 
-      var delegates = new List<SkillDelegateId>();
+      var delegates = new List<DelegateId>();
 
       foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
       {
-        if (modifier.SkillDelegateId.HasValue)
+        if (modifier.DelegateId.HasValue)
         {
-          delegates.Add(modifier.SkillDelegateId.Value);
+          delegates.Add(modifier.DelegateId.Value);
         }
 
         modifier.StatModifier?.InsertInto(stats);
       }
 
       return new SkillData(
-        item.BaseType, stats, new SkillDelegateList(delegates.Select(SkillDelegateMap.Get).ToList()));
+        item.BaseType, stats, new SkillDelegateList(delegates.Select(DelegateMap.Get).ToList()));
     }
 
     public static SkillItemData DefaultMeleeAttack()

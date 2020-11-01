@@ -103,55 +103,39 @@ namespace Nighthollow.Editor.Data
     {
       var builder = CreateHeader("\nusing System.Collections.Generic;\n" +
                                  "using Nighthollow.Delegates.Core;\n" +
-                                 "using Nighthollow.Delegates.Creatures;\n" +
-                                 "using Nighthollow.Delegates.Skills;\n");
+                                 "using Nighthollow.Delegates.Implementations;\n");
 
-      var typeRow = rows[1];
-      var typeNames = new Dictionary<int, string>();
-      var enums = new Dictionary<string, List<(string, string)>>();
+      var values = new List<(string, string)>();
 
-      for (var i = 0; i < typeRow.Count; i += 2)
-      {
-        typeNames[i] = typeRow[i + 1].Value;
-        enums[typeNames[i]] = new List<(string, string)>();
-      }
-
-      for (var i = 2; i < rows.Count; ++i)
+      for (var i = 1; i < rows.Count; ++i)
       {
         var row = rows[i];
-        for (var j = 0; j < row.Count; j += 2)
-        {
-          enums[typeNames[j]].Add((row[j].Value, row[j + 1].Value));
-        }
+        values.Add((row[0].Value, row[1].Value));
       }
 
-      foreach (var pair in enums)
+      builder.Append($"  public enum DelegateId\n");
+      builder.Append("  {\n");
+      builder.Append("    Unknown = 0,\n");
+      foreach (var (valueName, integer) in values)
       {
-        builder.Append($"  public enum {pair.Key}DelegateId\n");
-        builder.Append("  {\n");
-        builder.Append("    Unknown = 0,\n");
-        foreach (var (valueName, integer) in pair.Value)
-        {
-          builder.Append($"    {valueName} = {integer},\n");
-        }
-
-        builder.Append("  }\n\n");
-
-        builder.Append($"  public static class {pair.Key}DelegateMap\n");
-        builder.Append("  {\n");
-        builder.Append(
-          $"    static readonly Dictionary<{pair.Key}DelegateId, I{pair.Key}Delegate> Delegates = new\n");
-        builder.Append($"        Dictionary<{pair.Key}DelegateId, I{pair.Key}Delegate>\n");
-        builder.Append("    {\n");
-        foreach (var (valueName, _) in pair.Value)
-        {
-          builder.Append($"      {{{pair.Key}DelegateId.{valueName}, new {valueName}()}},\n");
-        }
-
-        builder.Append("    };\n\n");
-        builder.Append($"    public static I{pair.Key}Delegate Get({pair.Key}DelegateId id) => Delegates[id];\n");
-        builder.Append("  }\n\n");
+        builder.Append($"    {valueName} = {integer},\n");
       }
+
+      builder.Append("  }\n\n");
+
+      builder.Append($"  public static class DelegateMap\n");
+      builder.Append("  {\n");
+      builder.Append(
+        $"    static readonly Dictionary<DelegateId, IDelegate> Delegates = new Dictionary<DelegateId, IDelegate>\n");
+      builder.Append("    {\n");
+      foreach (var (valueName, _) in values)
+      {
+        builder.Append($"      {{DelegateId.{valueName}, new {valueName}()}},\n");
+      }
+
+      builder.Append("    };\n\n");
+      builder.Append($"    public static IDelegate Get(DelegateId id) => Delegates[id];\n");
+      builder.Append("  }\n\n");
 
       builder.Append("}\n");
       File.WriteAllText("Assets/Nighthollow/Generated/Delegates.cs", builder.ToString());
@@ -191,6 +175,7 @@ namespace Nighthollow.Editor.Data
       {
         builder.Append($"        case {stat["Stat ID"]}: return {stat["Name"]};\n");
       }
+
       builder.Append($"        default: throw new ArgumentOutOfRangeException(statId.ToString());\n");
       builder.Append("      }\n");
       builder.Append("    }\n");

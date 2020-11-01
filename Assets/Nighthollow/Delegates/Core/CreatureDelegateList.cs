@@ -14,69 +14,19 @@
 
 #nullable enable
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Components;
-using Nighthollow.Data;
-using Nighthollow.Delegates.Creatures;
-using Nighthollow.Delegates.Effects;
+using Nighthollow.Delegates.Implementations;
 
 namespace Nighthollow.Delegates.Core
 {
-  public sealed class CreatureDelegateList : AbstractDelegateList<CreatureContext, ICreatureDelegate>, ICreatureDelegate
+  public sealed class CreatureDelegateList : DelegateList
   {
-    public CreatureDelegateList(IEnumerable<ICreatureDelegate> delegates) :
+    public CreatureDelegateList(IEnumerable<IDelegate> delegates) :
       base(delegates.Append(new DefaultCreatureDelegate()).ToList())
     {
     }
 
-    public void OnActivate(CreatureContext context)
-    {
-      ExecuteEvent(context, (d, c) => d.OnActivate(c));
-      ExecuteForCurrentSkill(context, (d, c) => d.OnActivate(c));
-    }
-
-    public void OnDeath(CreatureContext context)
-    {
-      ExecuteEvent(context, (d, c) => d.OnDeath(c));
-      ExecuteForCurrentSkill(context, (d, c) => d.OnDeath(c));
-    }
-
-    public void OnKilledEnemy(CreatureContext context, Creature enemy, int damageAmount)
-    {
-      ExecuteEvent(context, (d, c) => d.OnKilledEnemy(c, enemy, damageAmount));
-      ExecuteForCurrentSkill(context, (d, c) => d.OnKilledEnemy(c, enemy, damageAmount));
-    }
-
-    public void OnFiredProjectile(CreatureContext context, FireProjectileEffect effect)
-    {
-      ExecuteEvent(context, (d, c) => d.OnFiredProjectile(c, effect));
-      ExecuteForCurrentSkill(context, (d, c) => d.OnFiredProjectile(c, effect));
-    }
-
-    public void OnHitTarget(CreatureContext context, SkillData skill, Creature target)
-    {
-      ExecuteEvent(context, (d, c) => d.OnHitTarget(c, skill, target));
-      ExecuteForCurrentSkill(context, (d, c) => d.OnHitTarget(c, skill, target));
-    }
-
-    public bool ProjectileCouldHit(CreatureContext context) =>
-      AnyReturnedTrue(context, (d, c) => d.ProjectileCouldHit(c));
-
-    public bool MeleeCouldHit(CreatureContext context) =>
-      GetFirstImplemented(context, (d, c) => d.MeleeCouldHit(c));
-
-    public SkillData? SelectSkill(CreatureContext context) =>
-      GetFirstImplemented(context, (d, c) => d.SelectSkill(c));
-
-    void ExecuteForCurrentSkill(CreatureContext c, Action<ISkillDelegate, SkillContext> action)
-    {
-      var skill = c.Self.CurrentSkill;
-      if (skill != null)
-      {
-        action(skill.Delegate, new SkillContext(c.Self, skill));
-      }
-    }
+    protected override AbstractDelegateList? GetChild(DelegateContext context) => context.Self.CurrentSkill?.Delegate;
   }
 }

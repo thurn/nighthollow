@@ -16,14 +16,36 @@
 
 using System.Collections.Generic;
 using Nighthollow.Components;
+using Nighthollow.Data;
+using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
 
 namespace Nighthollow.Delegates.Core
 {
-  public class AbstractSkillDelegate : AbstractCreatureOrSkillDelegate<SkillContext>, ISkillDelegate
+  public abstract class AbstractDelegate : IDelegate
   {
+    public virtual void OnActivate(CreatureContext c)
+    {
+    }
+
+    public virtual void OnDeath(CreatureContext c)
+    {
+    }
+
+    public virtual void OnKilledEnemy(CreatureContext c, Creature enemy, int damageAmount)
+    {
+    }
+
+    public virtual void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
+    {
+    }
+
+    public virtual void OnHitTarget(SkillContext c, SkillData skill, Creature target)
+    {
+    }
+
     public virtual void OnStart(SkillContext c)
     {
     }
@@ -39,6 +61,12 @@ namespace Nighthollow.Delegates.Core
     public virtual void OnApplyToTarget(SkillContext c, Creature target)
     {
     }
+
+    public virtual bool MeleeCouldHit(CreatureContext c) => c.MarkNotImplemented<bool>();
+
+    public virtual bool ProjectileCouldHit(CreatureContext c) => c.MarkNotImplemented<bool>();
+
+    public virtual SkillData SelectSkill(CreatureContext c) => c.MarkNotImplemented<SkillData>();
 
     public virtual Collider2D GetCollider(SkillContext c) =>
       c.MarkNotImplemented<Collider2D>();

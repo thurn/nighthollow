@@ -15,21 +15,21 @@
 #nullable enable
 
 using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
-using Nighthollow.Stats;
+using Nighthollow.Utils;
+using UnityEngine;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class InfluenceAddedDelegate : AbstractCreatureDelegate
+  public sealed class ProjectileArcDelegate : AbstractProjectileOffsetDelegate
   {
-    public override void OnActivate(CreatureContext c)
-    {
-      c.Results.Add(
-        new ApplyModifierToOwnerEffect(c.Self,
-          Stat.Influence.Modifier(
-            TaggedNumericOperation.Add(c.Self.Data.School, new IntValue(1)),
-            new WhileAliveLifetime(c.Self))));
-    }
+    protected override int GetProjectileCount(DelegateContext c) => c.GetInt(Stat.ProjectileArcCount);
+
+    protected override Vector2 GetOrigin(DelegateContext c, int projectileNumber) =>
+      c.Self.ProjectileSource.position;
+
+    protected override Vector2 GetDirection(DelegateContext c, int projectileNumber) =>
+      Constants.ForwardDirectionForPlayer(c.Self.Owner) +
+      projectileNumber * new Vector2(0, c.GetInt(Stat.ProjectileArcRotationOffset) / 1000f);
   }
 }

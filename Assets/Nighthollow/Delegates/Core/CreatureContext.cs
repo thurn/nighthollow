@@ -19,18 +19,14 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Core
 {
-  public sealed class CreatureContext : DelegateContext<CreatureContext>
+  public sealed class CreatureContext : DelegateContext, IDelegateContext<CreatureContext>
   {
-    public Creature Self { get; }
-    public ICreatureDelegate Delegate => Self.Data.Delegate;
-
-    public CreatureContext(Creature self) : base(new Results())
+    public CreatureContext(Creature self) : base(new Results(), self)
     {
-      Self = self;
     }
 
     public override StatTable Stats => Self.Data.Stats;
 
-    public override CreatureContext New() => new CreatureContext(Self);
+    public CreatureContext New() => new CreatureContext(Self);
   }
 }

@@ -20,22 +20,19 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Core
 {
-  public sealed class SkillContext : DelegateContext<SkillContext>
+  public sealed class SkillContext : DelegateContext, IDelegateContext<SkillContext>
   {
-    public Creature Self { get; }
     public SkillData Skill { get; }
     public Projectile? Projectile { get; }
-    public ISkillDelegate Delegate => Skill.Delegate;
 
-    public SkillContext(Creature self, SkillData skill, Projectile? projectile = null) : base(new Results())
+    public SkillContext(Creature self, SkillData skill, Projectile? projectile = null) : base(new Results(), self)
     {
-      Self = self;
       Skill = skill;
       Projectile = projectile;
     }
 
     public override StatTable Stats => Skill.Stats;
 
-    public override SkillContext New() => new SkillContext(Self, Skill, Projectile);
+    public SkillContext New() => new SkillContext(Self, Skill, Projectile);
   }
 }

@@ -27,9 +27,9 @@ using Nighthollow.Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Nighthollow.Delegates.Skills
+namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class DefaultSkillDelegate : AbstractSkillDelegate
+  public sealed class DefaultSkillDelegate : AbstractDelegate
   {
     public override void OnUse(SkillContext c)
     {
@@ -38,7 +38,7 @@ namespace Nighthollow.Delegates.Skills
       {
         c.Results.Add(new FireProjectileEffect(
           c.Self,
-          c.Skill,
+          c,
           new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Skill),
           c.Self.ProjectileSource.position,
           Vector2.zero));
@@ -50,7 +50,7 @@ namespace Nighthollow.Delegates.Skills
       var targets = context.Delegate.PopulateTargets(context);
       foreach (var target in targets)
       {
-        context.Results.Add(Events.Skill(context, (d, c) => d.OnApplyToTarget(c, target)));
+        context.Results.Add(Events.Effect(context, (d, c) => d.OnApplyToTarget(c, target)));
       }
     }
 
@@ -95,7 +95,7 @@ namespace Nighthollow.Delegates.Skills
         c.Results.Add(new SkillEventEffect(SkillEventEffect.Event.Stun, target));
       }
 
-      c.Results.Add(Events.Creature(c, (d, sc) => d.OnHitTarget(sc, c.Skill, target)));
+      c.Results.Add(Events.Effect(c, (d, dc) => d.OnHitTarget(dc, c.Skill, target)));
     }
 
     public override IEnumerable<Creature> PopulateTargets(SkillContext c)

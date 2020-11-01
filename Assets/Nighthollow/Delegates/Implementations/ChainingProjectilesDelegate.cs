@@ -16,9 +16,9 @@
 
 using Nighthollow.Delegates.Core;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class ChainingProjectilesDelegate : AbstractCreatureDelegate
+  public sealed class ChainingProjectilesDelegate : AbstractDelegate
   {
 
   }

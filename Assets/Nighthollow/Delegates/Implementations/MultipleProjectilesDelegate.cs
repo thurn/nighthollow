@@ -20,11 +20,11 @@ using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using UnityEngine;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class MultipleProjectilesDelegate : AbstractCreatureDelegate
+  public sealed class MultipleProjectilesDelegate : AbstractDelegate
   {
-    public override void OnFiredProjectile(CreatureContext c, FireProjectileEffect effect)
+    public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
     {
       if (effect.Identifier.DelegateType == DelegateType.Creature && effect.Identifier.Index <= c.DelegateIndex)
       {
@@ -37,7 +37,7 @@ namespace Nighthollow.Delegates.Creatures
       {
         c.Results.Add(new FireProjectileEffect(
           c.Self,
-          effect.SkillData,
+          c,
           new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Creature),
           c.Self.ProjectileSource.position,
           Vector2.zero,

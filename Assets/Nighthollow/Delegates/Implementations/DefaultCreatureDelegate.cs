@@ -24,9 +24,9 @@ using Nighthollow.Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Nighthollow.Delegates.Creatures
+namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class DefaultCreatureDelegate : AbstractCreatureDelegate
+  public sealed class DefaultCreatureDelegate : AbstractDelegate
   {
     public override void OnDeath(CreatureContext c)
     {

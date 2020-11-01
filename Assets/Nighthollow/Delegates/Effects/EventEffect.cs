@@ -21,27 +21,18 @@ namespace Nighthollow.Delegates.Effects
 {
   public static class Events
   {
-    public static EventEffect<ISkillDelegate, SkillContext> Skill(
-      SkillContext c, Action<ISkillDelegate, SkillContext> action) =>
-      new EventEffect<ISkillDelegate, SkillContext>(c.Delegate, c, action);
-
-    public static EventEffect<ICreatureDelegate, CreatureContext> Creature(
-      CreatureContext c, Action<ICreatureDelegate, CreatureContext> action) =>
-      new EventEffect<ICreatureDelegate, CreatureContext>(c.Delegate, c, action);
-
-    public static EventEffect<ICreatureDelegate, CreatureContext> Creature(
-      SkillContext c, Action<ICreatureDelegate, CreatureContext> action) =>
-      new EventEffect<ICreatureDelegate, CreatureContext>(c.Self.Data.Delegate, new CreatureContext(c.Self) ,action);
+    public static EventEffect<TContext> Effect<TContext>(TContext context, Action<IDelegate, TContext> action)
+      where TContext : DelegateContext, IDelegateContext<TContext> =>
+      new EventEffect<TContext>(context.Delegate, context, action);
   }
 
-  public sealed class EventEffect<TDelegate, TContext> : Effect
-    where TDelegate : IDelegate where TContext : DelegateContext<TContext>
+  public sealed class EventEffect<TContext> : Effect where TContext : DelegateContext, IDelegateContext<TContext>
   {
-    public TDelegate Delegate { get; }
+    public IDelegate Delegate { get; }
     public TContext Context { get; }
-    public Action<TDelegate, TContext> Action { get; }
+    public Action<IDelegate, TContext> Action { get; }
 
-    public EventEffect(TDelegate delegateInstance, TContext context, Action<TDelegate, TContext> action)
+    public EventEffect(IDelegate delegateInstance, TContext context, Action<IDelegate, TContext> action)
     {
       Delegate = delegateInstance;
       Context = context.New();

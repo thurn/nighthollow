@@ -12,24 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Stats;
-
 #nullable enable
+
+using Nighthollow.Components;
+using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Core
 {
-  public abstract class DelegateContext<TSelf> : StatEntity where TSelf : DelegateContext<TSelf>
+  public abstract class DelegateContext : StatEntity
   {
     public bool Implemented { get; set; }
     public int DelegateIndex { get; set; }
     public Results Results { get; }
+    public Creature Self { get; }
+    public IDelegate Delegate => Self.Data.Delegate;
 
-    protected DelegateContext(Results results)
+    protected DelegateContext(Results results, Creature self)
     {
       Results = results;
+      Self = self;
     }
-
-    public abstract TSelf New();
 
     public T MarkNotImplemented<T>()
     {

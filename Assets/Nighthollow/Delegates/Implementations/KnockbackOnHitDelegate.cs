@@ -16,31 +16,21 @@
 
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
+using Nighthollow.Generated;
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Delegates.Implementations
 {
-  public class AbstractCreatureOrSkillDelegate<TContext> : ICreatureOrSkillDelegate<TContext>
-    where TContext : DelegateContext<TContext>
+  public sealed class KnockbackOnHitDelegate : AbstractDelegate
   {
-    public virtual void OnActivate(TContext c)
+    public override void OnHitTarget(SkillContext c, SkillData skill, Creature target)
     {
-    }
-
-    public virtual void OnDeath(TContext c)
-    {
-    }
-
-    public virtual void OnKilledEnemy(TContext c, Creature enemy, int damageAmount)
-    {
-    }
-
-    public virtual void OnFiredProjectile(TContext c, FireProjectileEffect effect)
-    {
-    }
-
-    public virtual void OnHitTarget(TContext c, SkillData skill, Creature target)
-    {
+      var duration = c.GetDurationSeconds(Stat.KnockbackDuration);
+      c.Results.Add(new KnockbackEffect(
+        target,
+        c.GetStat(Stat.KnockbackDistanceMultiplier).AsMultiplier() * duration,
+        duration));
     }
   }
 }

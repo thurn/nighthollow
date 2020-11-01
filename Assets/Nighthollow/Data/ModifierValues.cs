@@ -66,8 +66,7 @@ namespace Nighthollow.Data
           }
 
           result.Add(new ModifierData(
-            baseType.CreatureDelegateId,
-            baseType.SkillDelegateId,
+            baseType.DelegateId,
             statModifier));
         }
 
