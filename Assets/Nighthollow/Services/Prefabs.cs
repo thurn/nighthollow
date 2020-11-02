@@ -24,20 +24,18 @@ namespace Nighthollow.Services
 {
   public sealed class Prefabs : MonoBehaviour
   {
+#pragma warning disable 0649
     [SerializeField] Card _cardPrefab;
     [SerializeField] StatusBarsHolder _statusBars;
     [SerializeField] SpriteRenderer _cursorPrefab;
     [SerializeField] Image _influencePrefab;
     [SerializeField] Attachment _attachmentPrefab;
     [SerializeField] Sprite _lightSymbol;
-    [SerializeField] Sprite _skySymbol = null!;
+    [SerializeField] Sprite _skySymbol;
     [SerializeField] Sprite _flameSymbol;
-    [SerializeField] Sprite _iceSymbol = null!;
+    [SerializeField] Sprite _iceSymbol;
     [SerializeField] Sprite _earthSymbol;
-
-    [FormerlySerializedAs("_shadowSymbol")] [SerializeField]
-    Sprite _nightSymbol = null!;
-
+    [SerializeField] Sprite _nightSymbol;
     [SerializeField] TimedEffect _missEffect;
     [SerializeField] TimedEffect _evadeEffect;
     [SerializeField] TimedEffect _critEffect;
@@ -47,6 +45,7 @@ namespace Nighthollow.Services
     [SerializeField] DamageText _hitBig;
     [SerializeField] Sprite _stunIcon;
     [SerializeField] Dialog _dialog;
+#pragma warning restore 0649
 
     public Card CreateCard() => ComponentUtils.Instantiate(_cardPrefab, Root.Instance.MainCanvas);
 

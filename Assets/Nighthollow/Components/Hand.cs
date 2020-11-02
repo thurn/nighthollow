@@ -23,6 +23,8 @@ namespace Nighthollow.Components
 {
   public sealed class Hand : MonoBehaviour
   {
+#pragma warning disable 0649
+
     [Header("Config")]
     [SerializeField] bool _debugMode;
     [SerializeField] Transform _deckPosition;
@@ -37,6 +39,8 @@ namespace Nighthollow.Components
     [SerializeField] Transform _controlPoint4;
     [SerializeField] List<Card> _cards;
     [SerializeField] Hand _handOverridePosition;
+
+#pragma warning restore 0649
 
     public float FinalCardScale => _finalCardScale;
 

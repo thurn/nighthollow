@@ -20,7 +20,9 @@ namespace Nighthollow.Components
 {
   public sealed class AttachmentDisplay : MonoBehaviour
   {
+#pragma warning disable 0649
     [Header("State")] [SerializeField] List<Transform> _attachments;
+#pragma warning restore 0649
 
     public void AddAttachment(Attachment attachment)
     {

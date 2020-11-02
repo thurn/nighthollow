@@ -28,7 +28,7 @@ namespace Nighthollow.Components
 {
   public sealed class User : MonoBehaviour
   {
-    [Header("Config")]
+#pragma warning disable 0649
     [SerializeField] Hand _hand;
     public Hand Hand => _hand;
 
@@ -39,13 +39,13 @@ namespace Nighthollow.Components
     [SerializeField] TextMeshProUGUI _manaText;
     [SerializeField] RectTransform _influenceRow;
 
-    [Header("State")]
     UserData _data;
     public UserData Data => _data;
 
     [SerializeField] List<Image> _influenceImages;
     [SerializeField] int _life;
     [SerializeField] int _mana;
+#pragma warning restore 0649
 
     public int Mana => _mana;
     public int Life => _life;

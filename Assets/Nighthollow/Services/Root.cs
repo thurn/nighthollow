@@ -25,6 +25,7 @@ namespace Nighthollow.Services
   {
     static Root _instance;
 
+#pragma warning disable 0649
     [SerializeField] Camera _mainCamera;
     public Camera MainCamera => _mainCamera;
 
@@ -60,6 +61,7 @@ namespace Nighthollow.Services
 
     [SerializeField] EnemyDataService _enemyDataService;
     public EnemyDataService EnemyDataService => _enemyDataService;
+#pragma warning restore 0649
 
     public StatTable StatsForPlayer(PlayerName player) => player switch
     {

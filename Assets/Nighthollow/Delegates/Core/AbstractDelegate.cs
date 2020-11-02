@@ -68,7 +68,7 @@ namespace Nighthollow.Delegates.Core
 
     public virtual bool ShouldSkipProjectileImpact(SkillContext c) => c.MarkNotImplemented<bool>();
 
-    public virtual SkillData SelectSkill(CreatureContext c) => c.MarkNotImplemented<SkillData>();
+    public virtual SkillData? SelectSkill(CreatureContext c) => c.MarkNotImplemented<SkillData>();
 
     public virtual Collider2D GetCollider(SkillContext c) =>
       c.MarkNotImplemented<Collider2D>();

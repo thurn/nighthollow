@@ -26,13 +26,13 @@ namespace Nighthollow.Services
   public sealed class DamageTextService : MonoBehaviour
   {
     [Header("Config")]
-    [SerializeField] int _alpha;
-    [SerializeField] int _mediumHitThreshold;
-    [SerializeField] int _bigHitThreshold;
+    [SerializeField] int _alpha = 0;
+    [SerializeField] int _mediumHitThreshold = 0;
+    [SerializeField] int _bigHitThreshold = 0;
 
     [Header("State")]
-    [SerializeField] int _count;
-    [SerializeField] float _averageDamage;
+    [SerializeField] int _count = 0;
+    [SerializeField] float _averageDamage = 0;
 
     public void ShowDamageText(Creature target, int amount)
     {

@@ -18,7 +18,9 @@ namespace Nighthollow.Components
 {
   public sealed class StatusBarsHolder : MonoBehaviour
   {
+#pragma warning disable 0649
     [SerializeField] StatusBar _healthBar;
     public StatusBar HealthBar => _healthBar;
+#pragma warning restore 0649
   }
 }

@@ -21,10 +21,12 @@ namespace Nighthollow.Components
 {
   public sealed class DamageText : MonoBehaviour
   {
+#pragma warning disable 0649
     [SerializeField] TextMeshProUGUI _text;
     [SerializeField] float _duration;
     [SerializeField] int _offset;
     [SerializeField] RectTransform _rectTransform;
+#pragma warning restore 0649
 
     public enum HitSize
     {

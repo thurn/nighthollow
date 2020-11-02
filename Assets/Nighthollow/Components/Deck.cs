@@ -25,10 +25,12 @@ namespace Nighthollow.Components
 {
   public sealed class Deck : MonoBehaviour
   {
+#pragma warning disable 0649
     [SerializeField] List<CreatureData> _cards;
     [SerializeField] List<int> _weights;
     [SerializeField] bool _orderedDraws;
     int _lastDraw;
+#pragma warning restore 0649
 
     public void OnStartGame(IEnumerable<CreatureData> cards, bool orderedDraws)
     {

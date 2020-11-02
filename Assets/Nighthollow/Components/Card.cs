@@ -27,8 +27,8 @@ namespace Nighthollow.Components
 {
   public sealed class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
   {
-    [Header("Config")]
-    [SerializeField] bool _debugMode;
+#pragma warning disable 0649
+    [Header("Config")] [SerializeField] bool _debugMode;
     [SerializeField] float _debugCardScale = 0.65f;
     [SerializeField] RectTransform _cardBack;
     [SerializeField] RectTransform _cardFront;
@@ -37,8 +37,7 @@ namespace Nighthollow.Components
     [SerializeField] List<Image> _influence;
     [SerializeField] Image _outline;
 
-    [Header("State")]
-    CreatureData _data;
+    [Header("State")] CreatureData _data;
     [SerializeField] User _user;
     [SerializeField] bool _canPlay;
     [SerializeField] bool _disableDragging;
@@ -48,6 +47,7 @@ namespace Nighthollow.Components
     [SerializeField] int _initialDragSiblingIndex;
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
+#pragma warning restore 0649
 
     public void Initialize(CreatureData cardData)
     {
@@ -92,7 +92,7 @@ namespace Nighthollow.Components
       var manaCost = _data.GetInt(Stat.ManaCost);
       var influenceCost = _data.Stats.Get(Stat.InfluenceCost);
       _canPlay = manaCost <= _user.Mana &&
-        Influence.LessThanOrEqualTo(influenceCost, _user.Data.Stats.Get(Stat.Influence));
+                 Influence.LessThanOrEqualTo(influenceCost, _user.Data.Stats.Get(Stat.Influence));
 
       _outline.enabled = _canPlay;
       _cost.text = manaCost.ToString();

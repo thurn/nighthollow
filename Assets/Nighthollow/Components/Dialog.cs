@@ -20,9 +20,11 @@ namespace Nighthollow.Components
 {
   public sealed class Dialog : MonoBehaviour
   {
+#pragma warning disable 0649
     [SerializeField] TextMeshProUGUI _text;
     float _oldTimeScale;
     Action _onClose;
+#pragma warning restore 0649
 
     public void Initialize(string text, Action onClose)
     {

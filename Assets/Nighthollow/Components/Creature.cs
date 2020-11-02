@@ -20,7 +20,6 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
-using Nighthollow.State;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
@@ -39,6 +38,7 @@ namespace Nighthollow.Components
 
   public sealed class Creature : MonoBehaviour
   {
+#pragma warning disable 0649
     [Header("Config")] [SerializeField] bool _debugMode;
     [SerializeField] Transform _projectileSource;
     [SerializeField] AttachmentDisplay _attachmentDisplay;
@@ -60,6 +60,7 @@ namespace Nighthollow.Components
     Coroutine _coroutine;
     [SerializeField] bool _appliedLifeLoss;
     readonly Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
+#pragma warning restore 0649
 
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");

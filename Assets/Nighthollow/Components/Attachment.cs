@@ -18,7 +18,9 @@ namespace Nighthollow.Components
 {
   public sealed class Attachment : MonoBehaviour
   {
+#pragma warning disable 0649
     [Header("Config")] [SerializeField] SpriteRenderer _spriteRenderer;
+#pragma warning restore 0649
 
     public void Initialize(Sprite sprite)
     {
