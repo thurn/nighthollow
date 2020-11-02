@@ -22,9 +22,13 @@ namespace Nighthollow.State
   public static class Key
   {
     public static readonly Key<int> TimesChained =
-      new Key<int>(1);
+      new Key<int>(1, 0);
     public static readonly Key<IReadOnlyList<Creature>> SkipProjectileImpacts =
       new Key<IReadOnlyList<Creature>>(2, new List<Creature>());
+    public static readonly Key<Creature?> LastCreatureHit =
+      new Key<Creature?>(3, null);
+    public static readonly Key<int> TimesHit =
+      new Key<int>(4, 0);
   }
 
   public sealed class Key<T>
@@ -32,7 +36,7 @@ namespace Nighthollow.State
     public int Id { get;  }
     public T DefaultValue { get; }
 
-    public Key(int id, T defaultValue = default)
+    public Key(int id, T defaultValue)
     {
       Id = id;
       DefaultValue = defaultValue;

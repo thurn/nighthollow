@@ -41,6 +41,9 @@ namespace Nighthollow.Utils
       return defaultValue;
     }
 
+    public static Dictionary<TKey, TValue> Clone<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary) =>
+      dictionary.ToDictionary(p => p.Key, p => p.Value);
+
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source) where T : struct =>
       source.Where(t => t != null).Select(t => t.GetValueOrDefault());
 

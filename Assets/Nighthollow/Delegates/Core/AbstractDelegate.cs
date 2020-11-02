@@ -42,7 +42,7 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
-    public virtual void OnHitTarget(SkillContext c, Creature target)
+    public virtual void OnHitTarget(SkillContext c, Creature target, int damage)
     {
     }
 
@@ -86,6 +86,10 @@ namespace Nighthollow.Delegates.Core
       c.MarkNotImplemented<bool>();
 
     public virtual TaggedValues<DamageType, IntValue> RollForBaseDamage(SkillContext c, Creature target) =>
+      c.MarkNotImplemented<TaggedValues<DamageType, IntValue>>();
+
+    public virtual TaggedValues<DamageType, IntValue> TransformDamage(
+      SkillContext c, Creature target, TaggedValues<DamageType, IntValue> damage) =>
       c.MarkNotImplemented<TaggedValues<DamageType, IntValue>>();
 
     public virtual TaggedValues<DamageType, IntValue> ApplyDamageReduction(

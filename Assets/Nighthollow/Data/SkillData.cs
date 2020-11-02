@@ -15,15 +15,17 @@
 #nullable enable
 
 using Nighthollow.Delegates.Core;
+using Nighthollow.State;
 using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
-  public sealed class SkillData : StatEntity
+  public sealed class SkillData : StatEntity, IHasKeyValueStore
   {
     public SkillTypeData BaseType { get; }
     public override StatTable Stats { get; }
     public DelegateList Delegate { get; }
+    public KeyValueStore Values { get; }
 
     public SkillData(
       SkillTypeData baseType,
@@ -33,6 +35,7 @@ namespace Nighthollow.Data
       BaseType = baseType;
       Stats = stats;
       Delegate = skillDelegate;
+      Values = new KeyValueStore();
     }
 
     public SkillData Clone(StatTable parentStats) => new SkillData(BaseType, Stats.Clone(parentStats), Delegate);

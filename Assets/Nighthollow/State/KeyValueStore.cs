@@ -44,6 +44,8 @@ namespace Nighthollow.State
       return this;
     }
 
+    public bool Has<T>(Key<T> key) => _values.ContainsKey(key.Id);
+
     public KeyValueStore Mutate<T>(Mutation<T> mutation)
     {
       _values[mutation.Key.Id] = mutation.Apply(Get(mutation.Key)) ??

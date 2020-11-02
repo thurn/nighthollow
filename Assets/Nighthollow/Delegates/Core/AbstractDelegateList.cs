@@ -39,7 +39,7 @@ namespace Nighthollow.Delegates.Core
       return child == null ? _delegates : _delegates.Concat(child._delegates);
     }
 
-    protected TResult GetFirstImplemented<TContext, TResult>(
+    IEnumerable<TResult> IterateDelegates<TContext, TResult>(
       TContext delegateContext,
       Func<IDelegate, TContext, TResult> function)
       where TContext : DelegateContext, IDelegateContext<TContext>
@@ -54,14 +54,22 @@ namespace Nighthollow.Delegates.Core
         var result = function(@delegate, context);
         if (context.Implemented)
         {
-          return result;
+          yield return result;
         }
 
         i++;
       }
-
-      throw new InvalidOperationException("No implementation found for callback.");
     }
+
+    protected TResult GetFirstImplemented<TContext, TResult>(
+      TContext delegateContext,
+      Func<IDelegate, TContext, TResult> function)
+      where TContext : DelegateContext, IDelegateContext<TContext> =>
+      IterateDelegates(delegateContext, function).First();
+
+    protected bool AnyReturnedTrue<TContext>(TContext delegateContext, Func<IDelegate, TContext, bool> function)
+      where TContext : DelegateContext, IDelegateContext<TContext> =>
+      IterateDelegates(delegateContext, function).Any(v => v);
 
     protected void ExecuteEvent<TContext>(
       TContext delegateContext,
@@ -89,26 +97,30 @@ namespace Nighthollow.Delegates.Core
       }
     }
 
-    protected bool AnyReturnedTrue<TContext>(TContext delegateContext, Func<IDelegate, TContext, bool> function)
+    protected TResult AggregateDelegates<TContext, TResult>(
+      TContext delegateContext,
+      TResult initialValue,
+      Func<IDelegate, TContext, TResult, TResult> function)
       where TContext : DelegateContext, IDelegateContext<TContext>
     {
       var context = delegateContext.Clone();
-
       var i = 0;
+      var value = initialValue;
+
       foreach (var @delegate in AllDelegates(context))
       {
         context.Implemented = true;
         context.DelegateIndex = i;
-        var result = function(@delegate, context);
-        if (context.Implemented && result)
+        var result = function(@delegate, context, value);
+        if (context.Implemented)
         {
-          return true;
+          value = result;
         }
 
         i++;
       }
 
-      return false;
+      return value;
     }
   }
 }

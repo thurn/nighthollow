@@ -39,7 +39,7 @@ namespace Nighthollow.Delegates.Implementations
       return false;
     }
 
-    public override void OnHitTarget(SkillContext c, Creature target)
+    public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
       Errors.CheckPositive(c.GetInt(Stat.ProjectileChainCount));
       if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) < c.GetInt(Stat.MaxProjectileTimesChained))

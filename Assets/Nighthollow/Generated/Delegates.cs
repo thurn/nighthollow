@@ -32,6 +32,7 @@ namespace Nighthollow.Generated
     InfluenceAddedDelegate = 8,
     KnockbackOnHitDelegate = 9,
     SummonMinionsDelegate = 10,
+    AddedDamageOnRepeatedHitsDelegate = 11,
   }
 
   public static class DelegateMap
@@ -48,6 +49,7 @@ namespace Nighthollow.Generated
       {DelegateId.InfluenceAddedDelegate, new InfluenceAddedDelegate()},
       {DelegateId.KnockbackOnHitDelegate, new KnockbackOnHitDelegate()},
       {DelegateId.SummonMinionsDelegate, new SummonMinionsDelegate()},
+      {DelegateId.AddedDamageOnRepeatedHitsDelegate, new AddedDamageOnRepeatedHitsDelegate()},
     };
 
     public static IDelegate Get(DelegateId id) => Delegates[id];

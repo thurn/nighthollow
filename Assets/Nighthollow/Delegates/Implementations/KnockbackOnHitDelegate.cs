@@ -23,7 +23,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class KnockbackOnHitDelegate : AbstractDelegate
   {
-    public override void OnHitTarget(SkillContext c, Creature target)
+    public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
       var duration = c.GetDurationSeconds(Stat.KnockbackDuration);
       c.Results.Add(new KnockbackEffect(

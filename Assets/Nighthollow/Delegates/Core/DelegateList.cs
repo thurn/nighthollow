@@ -42,8 +42,8 @@ namespace Nighthollow.Delegates.Core
     public void OnFiredProjectile(SkillContext context, FireProjectileEffect effect) =>
       ExecuteEvent(context, (d, c) => d.OnFiredProjectile(c, effect));
 
-    public void OnHitTarget(SkillContext context,  Creature target) =>
-      ExecuteEvent(context, (d, c) => d.OnHitTarget(c, target));
+    public void OnHitTarget(SkillContext context, Creature target, int damage) =>
+      ExecuteEvent(context, (d, c) => d.OnHitTarget(c, target, damage));
 
     public void OnStart(SkillContext context) =>
       ExecuteEvent(context, (d, c) => d.OnStart(c));
@@ -86,6 +86,10 @@ namespace Nighthollow.Delegates.Core
 
     public TaggedValues<DamageType, IntValue> RollForBaseDamage(SkillContext context, Creature target) =>
       GetFirstImplemented(context, (d, c) => d.RollForBaseDamage(c, target));
+
+    public TaggedValues<DamageType, IntValue> TransformDamage(
+      SkillContext context, Creature target, TaggedValues<DamageType, IntValue> damage) =>
+      AggregateDelegates(context, damage, (d, c, value) => d.TransformDamage(c, target, value));
 
     public TaggedValues<DamageType, IntValue> ApplyDamageReduction(
       SkillContext context, Creature target, TaggedValues<DamageType, IntValue> damage) =>

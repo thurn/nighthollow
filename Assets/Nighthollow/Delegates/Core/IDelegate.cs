@@ -43,8 +43,8 @@ namespace Nighthollow.Delegates.Core
     /// <summary>Called when the creature fires a projectile.</summary>
     void OnFiredProjectile(SkillContext c, FireProjectileEffect effect);
 
-    /// <summary>Called when one of the creature's skills hits a target.</summary>
-    void OnHitTarget(SkillContext c, Creature target);
+    /// <summary>Called after one of the creature's skills has hit a target for <paramref name="damage"/>.</summary>
+    void OnHitTarget(SkillContext c, Creature target, int damage);
 
     /// <summary>
     /// Called when a skill's animation begins.
@@ -135,7 +135,16 @@ namespace Nighthollow.Delegates.Core
     TaggedValues<DamageType, IntValue> RollForBaseDamage(SkillContext c, Creature target);
 
     /// <summary>
+    /// Given the base damage returned from <see cref="RollForBaseDamage"/>, delegates can transform the damage value
+    /// before it is passed to <see cref="ComputeFinalDamage"/>. Each delegate's implementation of this method will be
+    /// invoked in sequence with the return value of the previous delegate.
+    /// </summary>
+    TaggedValues<DamageType, IntValue> TransformDamage(
+      SkillContext c, Creature target, TaggedValues<DamageType, IntValue> damage);
+
+    /// <summary>
     /// Should apply damage reduction for this skill, reducing the damage value based on the target's reduction.
+    /// Typically called by <see cref="ComputeFinalDamage"/>.
     /// </summary>
     TaggedValues<DamageType, IntValue> ApplyDamageReduction(
       SkillContext c,
@@ -144,6 +153,7 @@ namespace Nighthollow.Delegates.Core
 
     /// <summary>
     /// Should apply damage resistance for this skill, reducing the damage value based on the target's resistance.
+    /// Typically called by <see cref="ComputeFinalDamage"/>.
     /// </summary>
     TaggedValues<DamageType, IntValue> ApplyDamageResistance(
       SkillContext c,
