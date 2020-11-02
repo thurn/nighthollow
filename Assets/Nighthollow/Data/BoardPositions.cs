@@ -14,6 +14,7 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
@@ -76,6 +77,20 @@ namespace Nighthollow.Data
 
       return closestRank;
     }
+
+    public static RankValue? Increment(this RankValue rankValue) =>
+      rankValue switch
+      {
+        RankValue.Rank1 => RankValue.Rank2,
+        RankValue.Rank2 => RankValue.Rank3,
+        RankValue.Rank3 => RankValue.Rank4,
+        RankValue.Rank4 => RankValue.Rank5,
+        RankValue.Rank5 => RankValue.Rank6,
+        RankValue.Rank6 => RankValue.Rank7,
+        RankValue.Rank7 => RankValue.Rank8,
+        RankValue.Rank8 => null,
+        _ => throw Errors.UnknownEnumValue(rankValue),
+      };
 
     public static float ToYPosition(this FileValue file)
     {

@@ -73,10 +73,10 @@ namespace Nighthollow.Delegates.Core
     public virtual Collider2D GetCollider(SkillContext c) =>
       c.MarkNotImplemented<Collider2D>();
 
-    public virtual IEnumerable<Creature> PopulateTargets(SkillContext c) =>
+    public virtual IEnumerable<Creature> FindTargets(SkillContext c) =>
       c.MarkNotImplemented<IEnumerable<Creature>>();
 
-    public virtual IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
+    public virtual IEnumerable<Creature> FilterTargets(SkillContext c, IEnumerable<Creature> hits) =>
       c.MarkNotImplemented<IEnumerable<Creature>>();
 
     public virtual bool RollForHit(SkillContext c, Creature target) =>

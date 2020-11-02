@@ -18,6 +18,6 @@ namespace Nighthollow.Delegates.Core
 {
   public interface IDelegateContext<out TSelf> where TSelf : DelegateContext
   {
-    TSelf New();
+    TSelf Clone();
   }
 }

@@ -60,7 +60,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void RaiseEvents()
     {
-      FiredBy.Data.Delegate.OnFiredProjectile(SkillContext.New(), this);
+      FiredBy.Data.Delegate.OnFiredProjectile(SkillContext.Clone(), this);
     }
 
     IEnumerator<YieldInstruction> FireAsync()

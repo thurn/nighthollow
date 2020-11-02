@@ -27,6 +27,7 @@ namespace Nighthollow.Services
   {
     readonly Dictionary<(RankValue, FileValue), Creature> _userCreatures =
       new Dictionary<(RankValue, FileValue), Creature>();
+
     readonly HashSet<Creature> _movingCreatures = new HashSet<Creature>();
 
     public Creature CreateUserCreature(CreatureData creatureData)
@@ -39,12 +40,11 @@ namespace Nighthollow.Services
     public Creature CreateMovingCreature(
       CreatureData creatureData,
       FileValue file,
-      float startingX,
-      float yOffset = 0)
+      float startingX)
     {
       var result = Root.Instance.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       result.Initialize(creatureData);
-      result.ActivateCreature(null, file, startingX, yOffset);
+      result.ActivateCreature(null, file, startingX);
       _movingCreatures.Add(result);
 
       return result;
@@ -68,6 +68,28 @@ namespace Nighthollow.Services
       }
     }
 
+    /// <summary>
+    /// Returns the first open rank position in front of this (rank, file) if one exists
+    /// </summary>
+    public RankValue? GetOpenForwardRank(RankValue rank, FileValue file)
+    {
+      while (true)
+      {
+        var result = rank.Increment();
+        if (result == null)
+        {
+          return null;
+        }
+
+        if (!_userCreatures.ContainsKey((result.Value, file)))
+        {
+          return result.Value;
+        }
+
+        rank = result.Value;
+      }
+    }
+
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
     public (RankValue, FileValue) GetClosestAvailablePosition(Vector2 position)
     {
@@ -80,8 +102,8 @@ namespace Nighthollow.Services
         foreach (var file in BoardPositions.AllFiles)
         {
           if (rank == RankValue.Unknown ||
-            file == FileValue.Unknown ||
-            _userCreatures.ContainsKey((rank, file)))
+              file == FileValue.Unknown ||
+              _userCreatures.ContainsKey((rank, file)))
           {
             continue;
           }
@@ -103,7 +125,6 @@ namespace Nighthollow.Services
       }
 
       return (closestRank.Value, closestFile.Value);
-
     }
   }
 }

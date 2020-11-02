@@ -34,7 +34,7 @@ namespace Nighthollow.Services
 
     public void OnNewGame(GameDataService gameDataService)
     {
-      _userStats = new StatTable(StatTable.Root);
+      _userStats = new StatTable(StatTable.Defaults);
       _deck.Clear();
       _deck.AddRange(gameDataService.GetStaticCardList(StaticCardList.StartingDeck));
     }
@@ -42,7 +42,7 @@ namespace Nighthollow.Services
     public void StartGame(bool isTutorial)
     {
       var cards = isTutorial ? Root.Instance.GameDataService.GetStaticCardList(StaticCardList.TutorialDraws) : Deck;
-      var stats = UserStats.Clone(StatTable.Root);
+      var stats = UserStats.Clone(StatTable.Defaults);
       Root.Instance.User.OnStartGame(
         new UserData(
           cards.Select(c => CreatureUtil.Build(stats, c)).ToList(),

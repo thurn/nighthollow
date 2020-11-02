@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
@@ -128,17 +127,38 @@ namespace Nighthollow.Data
       var affixes = new List<AffixData>();
       if (skill.ImplicitAffix != null)
       {
-        if (!_skillModifiers.ContainsKey(skill.Id))
+        if (_skillModifiers.ContainsKey(skill.Id))
         {
-          throw new InvalidOperationException($"Expected affix values for skill ID {skill.Id}");
+          affixes.Add(_skillModifiers[skill.Id].BuildAffix(skill.ImplicitAffix));
         }
-        affixes.Add(_skillModifiers[skill.Id].BuildAffix(skill.ImplicitAffix));
+        else
+        {
+          // Affix may have no required arguments
+          var result = new List<ModifierData>();
+          foreach (var modifier in skill.ImplicitAffix.ModifierRanges)
+          {
+            var baseType = modifier.BaseType;
+            IStatModifier? statModifier = null;
+            if (baseType.StatId.HasValue)
+            {
+              statModifier = Stat.GetStat(Errors.CheckNotNull(baseType.StatId))
+                .StaticModifierForOperator(Errors.CheckNotNull(baseType.Operator));
+            }
+
+            result.Add(new ModifierData(modifier.BaseType.DelegateId, statModifier));
+          }
+
+          affixes.Add(new AffixData(skill.ImplicitAffix.Id, result));
+        }
       }
 
-      affixes.AddRange(
-        _skillModifiers[skill.Id].AffixIds
-          .Where(affixId => affixId != skill.ImplicitAffix?.Id)
-          .Select(affixId => _skillModifiers[skill.Id].BuildAffix(service.GetAffixType(affixId))));
+      if (_skillModifiers.ContainsKey(skill.Id))
+      {
+        affixes.AddRange(
+          _skillModifiers[skill.Id].AffixIds
+            .Where(affixId => affixId != skill.ImplicitAffix?.Id)
+            .Select(affixId => _skillModifiers[skill.Id].BuildAffix(service.GetAffixType(affixId))));
+      }
 
       return new SkillItemData(skill, new StatModifierTable(), affixes);
     }

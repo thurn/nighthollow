@@ -27,6 +27,6 @@ namespace Nighthollow.Delegates.Core
 
     public override StatTable Stats => Self.Data.Stats;
 
-    public CreatureContext New() => new CreatureContext(Self);
+    public CreatureContext Clone() => new CreatureContext(Self);
   }
 }

@@ -74,7 +74,7 @@ namespace Nighthollow.Services
       var parsed = SpreadsheetHelper.ParseResponse(node);
       Debug.Log("Got Response");
 
-      StatTable.Root.Clear();
+      StatTable.Defaults.Clear();
       _modifiers.Clear();
       _affixes.Clear();
       _skills.Clear();
@@ -89,7 +89,7 @@ namespace Nighthollow.Services
         }
 
         var statId = Parse.IntRequired(stat, "Stat ID");
-        Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Overwrite).InsertInto(StatTable.Root);
+        Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Overwrite).InsertInto(StatTable.Defaults);
       }
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))

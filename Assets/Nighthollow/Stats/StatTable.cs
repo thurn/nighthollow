@@ -64,7 +64,7 @@ namespace Nighthollow.Stats
 
   public sealed class StatTable : StatModifierTable
   {
-    public static readonly StatTable Root = new StatTable(null, new Dictionary<int, List<OperationLifetime>>());
+    public static readonly StatTable Defaults = new StatTable(null, new Dictionary<int, List<OperationLifetime>>());
     readonly StatTable? _parent;
 
     public StatTable(StatTable parent)

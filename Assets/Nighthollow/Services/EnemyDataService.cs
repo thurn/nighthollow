@@ -26,7 +26,7 @@ namespace Nighthollow.Services
   {
     public void StartGame()
     {
-      var stats = new StatTable(StatTable.Root);
+      var stats = new StatTable(StatTable.Defaults);
       Root.Instance.Enemy.OnStartGame(
         new EnemyData(
           Root.Instance.GameDataService.GetStaticCardList(StaticCardList.TutorialEnemy)

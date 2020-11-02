@@ -76,6 +76,7 @@ namespace Nighthollow.Generated
     public static readonly PercentageStat KnockbackDistanceMultiplier = new PercentageStat(57);
     public static readonly IntStat ProjectileChainCount = new IntStat(58);
     public static readonly IntStat MaxProjectileTimesChained = new IntStat(59);
+    public static readonly BoolStat Untargeted = new BoolStat(60);
 
     public static IStat GetStat(int statId)
     {
@@ -137,6 +138,7 @@ namespace Nighthollow.Generated
         case 57: return KnockbackDistanceMultiplier;
         case 58: return ProjectileChainCount;
         case 59: return MaxProjectileTimesChained;
+        case 60: return Untargeted;
         default: throw new ArgumentOutOfRangeException(statId.ToString());
       }
     }

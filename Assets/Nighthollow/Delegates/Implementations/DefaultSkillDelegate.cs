@@ -47,7 +47,12 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnImpact(SkillContext context)
     {
-      var targets = context.Delegate.PopulateTargets(context);
+      if (context.GetBool(Stat.Untargeted))
+      {
+        return;
+      }
+
+      var targets = context.Delegate.FindTargets(context);
       foreach (var target in targets)
       {
         context.Results.Add(Events.Effect(context, (d, c) => d.OnApplyToTarget(c, target)));
@@ -98,7 +103,7 @@ namespace Nighthollow.Delegates.Implementations
       c.Results.Add(Events.Effect(c, (d, sc) => d.OnHitTarget(sc, target)));
     }
 
-    public override IEnumerable<Creature> PopulateTargets(SkillContext c)
+    public override IEnumerable<Creature> FindTargets(SkillContext c)
     {
       var filter = new ContactFilter2D
       {
@@ -110,13 +115,13 @@ namespace Nighthollow.Delegates.Implementations
       var colliders = new List<Collider2D>();
       sourceCollider.OverlapCollider(filter, colliders);
 
-      return c.Delegate.SelectTargets(c, colliders
+      return c.Delegate.FilterTargets(c, colliders
         // Filter out trigger colliders
         .Where(collider => collider.GetComponent<Creature>())
         .Select(ComponentUtils.GetComponent<Creature>));
     }
 
-    public override IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
+    public override IEnumerable<Creature> FilterTargets(SkillContext c, IEnumerable<Creature> hits) =>
       c.Skill.BaseType.IsMelee ? hits.Take(Errors.CheckPositive(c.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
 
     public override Collider2D GetCollider(SkillContext c) =>

@@ -136,8 +136,7 @@ namespace Nighthollow.Components
 
     public void ActivateCreature(RankValue? rankValue,
       FileValue fileValue,
-      float? startingX = 0f,
-      float? yOffset = 0)
+      float? startingX = 0f)
     {
       _filePosition = fileValue;
 
@@ -152,9 +151,7 @@ namespace Nighthollow.Components
       {
         transform.position = new Vector2(
           startingX.Value,
-          // We need to offset the Y position for enemy creatures because they are center-anchored:
-          // TODO handle this in a better way
-          fileValue.ToYPosition() + (yOffset ?? 0));
+          fileValue.ToYPosition());
       }
 
       _collider.enabled = true;
@@ -248,6 +245,7 @@ namespace Nighthollow.Components
     {
       if (!IsAlive()) return;
       _currentSkill.Delegate.OnUse(new SkillContext(this, _currentSkill));
+
       if (_currentSkill.BaseType.IsMelee)
       {
         _currentSkill.Delegate.OnImpact(new SkillContext(this, _currentSkill));

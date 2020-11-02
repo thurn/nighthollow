@@ -464,7 +464,6 @@ GameObject:
   - component: {fileID: 169299296}
   - component: {fileID: 169299295}
   - component: {fileID: 169299298}
-  - component: {fileID: 169299300}
   - component: {fileID: 169299301}
   - component: {fileID: 169299302}
   - component: {fileID: 169299303}
@@ -598,18 +597,6 @@ MonoBehaviour:
   _hitBig: {fileID: 6052047142294731675, guid: bf308869e57754400bb92a6d8f95dc54, type: 3}
   _stunIcon: {fileID: 21300000, guid: d09b4b4cdd159c74d809b3baec2b47a1, type: 3}
   _dialog: {fileID: 8397404786072499538, guid: ebf39abfca6dd4cef984e028f04c6a14, type: 3}
---- !u!114 &169299300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 169299293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27be1282c6b244ec9cba97e1aca24c16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &169299301
 MonoBehaviour:
   m_ObjectHideFlags: 0

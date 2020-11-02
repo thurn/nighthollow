@@ -72,11 +72,11 @@ namespace Nighthollow.Delegates.Core
     public Collider2D GetCollider(SkillContext context) =>
       GetFirstImplemented(context, (d, c) => d.GetCollider(c));
 
-    public IEnumerable<Creature> PopulateTargets(SkillContext context) =>
-      GetFirstImplemented(context, (d, c) => d.PopulateTargets(c));
+    public IEnumerable<Creature> FindTargets(SkillContext context) =>
+      GetFirstImplemented(context, (d, c) => d.FindTargets(c));
 
-    public IEnumerable<Creature> SelectTargets(SkillContext context, IEnumerable<Creature> hits) =>
-      GetFirstImplemented(context, (d, c) => d.SelectTargets(c, hits));
+    public IEnumerable<Creature> FilterTargets(SkillContext context, IEnumerable<Creature> hits) =>
+      GetFirstImplemented(context, (d, c) => d.FilterTargets(c, hits));
 
     public bool RollForHit(SkillContext context, Creature target) =>
       GetFirstImplemented(context, (d, c) => d.RollForHit(c, target));

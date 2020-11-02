@@ -35,7 +35,7 @@ namespace Nighthollow.Delegates.Effects
     public EventEffect(IDelegate delegateInstance, TContext context, Action<IDelegate, TContext> action)
     {
       Delegate = delegateInstance;
-      Context = context.New();
+      Context = context.Clone();
       Action = action;
     }
 

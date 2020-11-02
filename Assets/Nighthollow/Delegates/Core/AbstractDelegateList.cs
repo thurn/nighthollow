@@ -44,7 +44,7 @@ namespace Nighthollow.Delegates.Core
       Func<IDelegate, TContext, TResult> function)
       where TContext : DelegateContext, IDelegateContext<TContext>
     {
-      var context = delegateContext.New();
+      var context = delegateContext.Clone();
 
       var i = 0;
       foreach (var @delegate in AllDelegates(context))
@@ -68,7 +68,7 @@ namespace Nighthollow.Delegates.Core
       Action<IDelegate, TContext> action)
       where TContext : DelegateContext, IDelegateContext<TContext>
     {
-      var context = delegateContext.New();
+      var context = delegateContext.Clone();
 
       var i = 0;
       foreach (var @delegate in AllDelegates(context))
@@ -92,7 +92,7 @@ namespace Nighthollow.Delegates.Core
     protected bool AnyReturnedTrue<TContext>(TContext delegateContext, Func<IDelegate, TContext, bool> function)
       where TContext : DelegateContext, IDelegateContext<TContext>
     {
-      var context = delegateContext.New();
+      var context = delegateContext.Clone();
 
       var i = 0;
       foreach (var @delegate in AllDelegates(context))

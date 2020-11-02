@@ -110,6 +110,7 @@ namespace Nighthollow.Generated
     TutorialReward1 = 4,
     TutorialReward2 = 5,
     TutorialReward3 = 6,
+    Summons = 7,
   }
 
   public enum AffixPool

@@ -52,13 +52,14 @@ namespace Nighthollow.Delegates.Core
     void OnStart(SkillContext c);
 
     /// <summary>
-    /// Called when a skill's initial animation reaches its impact frame. For spells, this is the place to create and
-    /// fire projectiles. For melee skills, this will be called immediately before <see cref="OnImpact"/>.
+    /// Called when a skill's initial animation reaches its impact frame. The default implementation handles firing a
+    /// projectile for projectile skills. For non-projectile skills, this will be called immediately before the
+    /// <see cref="OnImpact"/> event.
     /// </summary>
     void OnUse(SkillContext c);
 
     /// <summary>
-    /// Called to apply the effect of a skill, either on melee hit or on projectile impact.
+    /// Called to apply the effect of a skill on a melee hit or projectile impact.
     /// </summary>
     void OnImpact(SkillContext c);
 
@@ -66,10 +67,10 @@ namespace Nighthollow.Delegates.Core
     /// Adds the effects for this skill as a result of a hit.
     /// </summary>
     ///
-    /// Normally this is invoked by the default skill delegate's "OnImpact" implementation for each target returned from
-    /// "PopulateTargets" for a skill. The default implementation implements the standard algorithm for applying the
-    /// skill's BaseDamage, including things like checking for hit, checking for critical hit, applying damage,
-    /// applying health drain, and applying stun.
+    /// Normally this is invoked by the default skill delegate's <see cref="OnImpact"/> implementation for each target
+    /// returned from <see cref="FindTargets"/> for a skill. The default implementation implements the standard
+    /// algorithm for applying the skill's BaseDamage, including things like checking for hit, checking for critical
+    /// hit, applying damage, applying health drain, and applying stun.
     void OnApplyToTarget(SkillContext c, Creature target);
 
     #endregion
@@ -108,15 +109,15 @@ namespace Nighthollow.Delegates.Core
     /// <summary>
     /// Returns the creatures to target for this skill. Normally this is invoked by the default skill delegate's
     /// <see cref="OnImpact"/> implementation. Default implementation uses @<see cref="GetCollider"/> to find all
-    /// creatures in the impact area and then adds targets returned by <see cref="SelectTargets"/>.
+    /// creatures in the impact area and then adds targets returned by <see cref="FilterTargets"/>.
     /// </summary>
-    IEnumerable<Creature> PopulateTargets(SkillContext c);
+    IEnumerable<Creature> FindTargets(SkillContext c);
 
     /// <summary>
     /// Given a list of creatures hit by a skill, returns a list of the creatures which should have the skill effect
     /// applied by <see cref="OnApplyToTarget"/>.
     /// </summary>
-    IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits);
+    IEnumerable<Creature> FilterTargets(SkillContext c, IEnumerable<Creature> hits);
 
     /// <summary>
     /// Should return true if a hit from this creature should hit.
@@ -151,7 +152,7 @@ namespace Nighthollow.Delegates.Core
 
     /// <summary>
     /// Should compute the final damage value for this skill based on the value adjusted by damage resistance and
-    /// reduction. Should apply the critical hit multiplier if "isCriticalHit" is true.
+    /// reduction. Should apply the critical hit multiplier if <paramref name="isCriticalHit"/> is true.
     /// </summary>
     public int ComputeFinalDamage(SkillContext c,
       Creature target,
@@ -159,12 +160,14 @@ namespace Nighthollow.Delegates.Core
       bool isCriticalHit);
 
     /// <summary>
-    /// Computes health drain for a hit on 'target' dealing total damage 'damageAmount'.
+    /// Computes health drain for a hit on <paramref name="target"/> dealing total damage
+    /// <paramref name="damageAmount"/>.
     /// </summary>
-    int ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount);
+    int ComputeHealthDrain(SkillContext c, Creature target, int damageAmount);
 
     /// <summary>
-    /// Should return true if a hit from this creature should stun 'target'.
+    /// Should return true if a hit from this creature for <paramref name="damageAmount"/> damage should stun
+    /// <paramref name="target"/>.
     /// </summary>
     bool RollForStun(SkillContext c, Creature target, int damageAmount);
 

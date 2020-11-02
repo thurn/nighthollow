@@ -34,7 +34,7 @@ namespace Nighthollow.Components
 
     public void OnStartGame(EnemyData data)
     {
-      _data = data.Clone(StatTable.Root);
+      _data = data.Clone(StatTable.Defaults);
       StartCoroutine(SpawnAsync());
     }
 
@@ -56,8 +56,7 @@ namespace Nighthollow.Components
       Root.Instance.CreatureService.CreateMovingCreature(
         RandomEnemy(),
         RandomFile(),
-        Constants.EnemyCreatureStartingX,
-        Constants.EnemyCreatureYOffset);
+        Constants.EnemyCreatureStartingX);
       _spawnCount = 1;
 
       while (_spawnCount < _data.GetInt(Stat.TotalEnemiesToSpawn))
@@ -66,8 +65,7 @@ namespace Nighthollow.Components
         Root.Instance.CreatureService.CreateMovingCreature(
           RandomEnemy(),
           RandomFile(),
-          Constants.EnemyCreatureStartingX,
-          Constants.EnemyCreatureYOffset);
+          Constants.EnemyCreatureStartingX);
         _spawnCount++;
       }
     }
