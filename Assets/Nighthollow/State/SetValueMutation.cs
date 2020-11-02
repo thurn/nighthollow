@@ -14,22 +14,19 @@
 
 #nullable enable
 
-using Nighthollow.Components;
-using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-
-namespace Nighthollow.Delegates.Implementations
+namespace Nighthollow.State
 {
-  public sealed class KnockbackOnHitDelegate : AbstractDelegate
+  public sealed class SetValueMutation<T> : Mutation<T>
   {
-    public override void OnHitTarget(SkillContext c, Creature target)
+    public T NewValue { get; }
+
+    public SetValueMutation(Key<T> key, T newValue) : base(key)
     {
-      var duration = c.GetDurationSeconds(Stat.KnockbackDuration);
-      c.Results.Add(new KnockbackEffect(
-        target,
-        c.GetStat(Stat.KnockbackDistanceMultiplier).AsMultiplier() * duration,
-        duration));
+      NewValue = newValue;
     }
+
+    public override T NotFoundValue() => NewValue;
+
+    public override T Apply(T _) => NewValue;
   }
 }

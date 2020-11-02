@@ -20,6 +20,7 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
+using Nighthollow.State;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
@@ -104,18 +105,8 @@ namespace Nighthollow.Components
 
     public RankValue? RankPosition => _rankPosition;
 
-    public FileValue FilePosition
-    {
-      get
-      {
-        if (_filePosition.HasValue)
-        {
-          return _filePosition.Value;
-        }
-
-        throw new InvalidOperationException("Creature does not have a file position");
-      }
-    }
+    public FileValue FilePosition =>
+      _filePosition ?? throw new InvalidOperationException("Creature does not have a file position");
 
     public bool IsMoving => !_rankPosition.HasValue;
 

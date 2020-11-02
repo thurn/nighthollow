@@ -57,12 +57,12 @@ namespace Nighthollow.Components
       StartCoroutine(GainMana());
       StartCoroutine(DrawCards());
 
-      _life = Errors.CheckNonzero(_data.GetInt(Stat.StartingLife));
+      _life = Errors.CheckPositive(_data.GetInt(Stat.StartingLife));
       _mana = _data.GetInt(Stat.StartingMana);
       _deck.OnStartGame(data.Deck, data.OrderedDraws);
 
       var openingHand = new List<CreatureData>();
-      for (var i = 0; i < Errors.CheckNonzero(_data.GetInt(Stat.StartingHandSize)); ++i)
+      for (var i = 0; i < Errors.CheckPositive(_data.GetInt(Stat.StartingHandSize)); ++i)
       {
         openingHand.Add(_deck.Draw());
       }

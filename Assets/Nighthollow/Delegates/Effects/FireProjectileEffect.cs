@@ -16,9 +16,9 @@
 
 using System.Collections.Generic;
 using Nighthollow.Components;
-using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Services;
+using Nighthollow.State;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -26,39 +26,31 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class FireProjectileEffect : Effect
   {
-    public sealed class DelegateIdentifier
-    {
-      public int Index { get; }
-      public DelegateType DelegateType { get;  }
-
-      public DelegateIdentifier(int index, DelegateType delegateType)
-      {
-        Index = index;
-        DelegateType = delegateType;
-      }
-    }
 
     public Creature FiredBy { get; }
     public SkillContext SkillContext { get; }
-    public DelegateIdentifier Identifier { get; }
+    public int DelegateIndex { get; }
     public Vector2 FiringPoint { get; }
     public Vector2 FiringDirectionOffset { get; }
     public int FiringDelayMs { get; }
+    public KeyValueStore? Values { get; }
 
     public FireProjectileEffect(
       Creature firedBy,
       SkillContext skillContext,
-      DelegateIdentifier delegateIdentifier,
+      int index,
       Vector2 firingPoint,
       Vector2 firingDirectionOffset,
-      int firingDelayMs = 0)
+      int firingDelayMs = 0,
+      KeyValueStore? values = null)
     {
       FiredBy = firedBy;
       SkillContext = skillContext;
-      Identifier = delegateIdentifier;
+      DelegateIndex = index;
       FiringPoint = firingPoint;
       FiringDirectionOffset = firingDirectionOffset;
       FiringDelayMs = firingDelayMs;
+      Values = values;
     }
 
     public override void Execute()
@@ -76,6 +68,7 @@ namespace Nighthollow.Delegates.Effects
       yield return new WaitForSeconds(FiringDelayMs / 1000f);
       var projectile = Root.Instance.AssetService.InstantiatePrefab<Projectile>(
         Errors.CheckNotNull(SkillContext.Skill.BaseType.Address));
+      projectile.Values.OverwriteWithValues(Values);
       projectile.Initialize(FiredBy, SkillContext.Skill, FiringPoint, FiringDirectionOffset);
     }
   }

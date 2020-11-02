@@ -46,7 +46,7 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
     {
-      if (effect.Identifier.DelegateType == DelegateType.Creature && effect.Identifier.Index <= c.DelegateIndex)
+      if (effect.DelegateIndex <= c.DelegateIndex)
       {
         // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
         return;
@@ -63,7 +63,7 @@ namespace Nighthollow.Delegates.Implementations
       return new FireProjectileEffect(
         c.Self,
         c,
-        new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Creature),
+        c.DelegateIndex,
         GetOrigin(c, offsetCount),
         GetDirection(c, offsetCount));
     }

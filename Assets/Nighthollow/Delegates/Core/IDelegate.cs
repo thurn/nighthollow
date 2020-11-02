@@ -44,7 +44,7 @@ namespace Nighthollow.Delegates.Core
     void OnFiredProjectile(SkillContext c, FireProjectileEffect effect);
 
     /// <summary>Called when one of the creature's skills hits a target.</summary>
-    void OnHitTarget(SkillContext c, SkillData skill, Creature target);
+    void OnHitTarget(SkillContext c, Creature target);
 
     /// <summary>
     /// Called when a skill's animation begins.
@@ -87,6 +87,12 @@ namespace Nighthollow.Delegates.Core
     /// any delegate returns a true value.
     /// </summary>
     bool ProjectileCouldHit(CreatureContext c);
+
+    /// <summary>
+    /// Should check if the current projectile should *not* trigger an impact in its current position. Will return
+    /// true if any delegate returns a true value.
+    /// </summary>
+    bool ShouldSkipProjectileImpact(SkillContext c);
 
     /// <summary>
     /// Called when a creature wants to decide which skill to use. Should return null if there is no appropriate skill

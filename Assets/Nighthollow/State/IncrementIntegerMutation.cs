@@ -14,12 +14,16 @@
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.State
 {
-  public enum DelegateType
+  public sealed class IncrementIntegerMutation : Mutation<int>
   {
-    Unknown = 0,
-    Creature = 1,
-    Skill = 2
+    public IncrementIntegerMutation(Key<int> key) : base(key)
+    {
+    }
+
+    public override int NotFoundValue() => 1;
+
+    public override int Apply(int currentValue) => currentValue + 1;
   }
 }

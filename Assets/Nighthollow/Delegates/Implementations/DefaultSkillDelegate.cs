@@ -39,7 +39,7 @@ namespace Nighthollow.Delegates.Implementations
         c.Results.Add(new FireProjectileEffect(
           c.Self,
           c,
-          new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Skill),
+          c.DelegateIndex,
           c.Self.ProjectileSource.position,
           Vector2.zero));
       }
@@ -95,7 +95,7 @@ namespace Nighthollow.Delegates.Implementations
         c.Results.Add(new SkillEventEffect(SkillEventEffect.Event.Stun, target));
       }
 
-      c.Results.Add(Events.Effect(c, (d, dc) => d.OnHitTarget(dc, c.Skill, target)));
+      c.Results.Add(Events.Effect(c, (d, sc) => d.OnHitTarget(sc, target)));
     }
 
     public override IEnumerable<Creature> PopulateTargets(SkillContext c)
@@ -117,7 +117,7 @@ namespace Nighthollow.Delegates.Implementations
     }
 
     public override IEnumerable<Creature> SelectTargets(SkillContext c, IEnumerable<Creature> hits) =>
-      c.Skill.BaseType.IsMelee ? hits.Take(Errors.CheckNonzero(c.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
+      c.Skill.BaseType.IsMelee ? hits.Take(Errors.CheckPositive(c.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
 
     public override Collider2D GetCollider(SkillContext c) =>
       c.Projectile ? c.Projectile!.Collider : c.Self.Collider;

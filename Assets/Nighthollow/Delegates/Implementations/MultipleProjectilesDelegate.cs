@@ -14,7 +14,6 @@
 
 #nullable enable
 
-using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
@@ -26,7 +25,7 @@ namespace Nighthollow.Delegates.Implementations
   {
     public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
     {
-      if (effect.Identifier.DelegateType == DelegateType.Creature && effect.Identifier.Index <= c.DelegateIndex)
+      if (effect.DelegateIndex <= c.DelegateIndex)
       {
         // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
         return;
@@ -38,7 +37,7 @@ namespace Nighthollow.Delegates.Implementations
         c.Results.Add(new FireProjectileEffect(
           c.Self,
           c,
-          new FireProjectileEffect.DelegateIdentifier(c.DelegateIndex, DelegateType.Creature),
+          c.DelegateIndex,
           c.Self.ProjectileSource.position,
           Vector2.zero,
           i * c.GetStat(Stat.ProjectileSequenceDelay).AsMilliseconds()));

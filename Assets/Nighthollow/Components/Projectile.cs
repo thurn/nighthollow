@@ -16,12 +16,13 @@ using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Services;
+using Nighthollow.State;
 using Nighthollow.Utils;
 using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public sealed class Projectile : MonoBehaviour
+  public sealed class Projectile : MonoBehaviour, IHasKeyValueStore
   {
     [Header("Config")]
     [SerializeField] TimedEffect _flashEffect;
@@ -31,6 +32,8 @@ namespace Nighthollow.Components
     [SerializeField] Creature _firedBy;
     [SerializeField] Collider2D _collider;
     SkillData _skillData;
+
+    public KeyValueStore Values { get; } = new KeyValueStore();
 
     public SkillData Data => _skillData;
 
@@ -74,10 +77,10 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      transform.position += (Errors.CheckNonzero(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f)
+      transform.position += (Errors.CheckPositive(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f)
                             * Time.deltaTime * transform.forward;
 
-      if (Mathf.Abs(transform.position.x) > 25)
+      if (Mathf.Abs(transform.position.x) > 25 || Mathf.Abs(transform.position.y) > 25)
       {
         gameObject.SetActive(false);
       }
@@ -85,9 +88,15 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
+      var context = new SkillContext(_firedBy, _skillData, this);
+      if (_firedBy.Data.Delegate.ShouldSkipProjectileImpact(context))
+      {
+        return;
+      }
+
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;
-      _skillData.Delegate.OnImpact(new SkillContext(_firedBy, _skillData, this));
+      _firedBy.Data.Delegate.OnImpact(context);
       gameObject.SetActive(false);
     }
   }

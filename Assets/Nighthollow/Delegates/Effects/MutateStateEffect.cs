@@ -12,24 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.State;
+
 #nullable enable
 
-using Nighthollow.Components;
-using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-
-namespace Nighthollow.Delegates.Implementations
+namespace Nighthollow.Delegates.Effects
 {
-  public sealed class KnockbackOnHitDelegate : AbstractDelegate
+  public sealed class MutateStateEffect : Effect
   {
-    public override void OnHitTarget(SkillContext c, Creature target)
+    public IHasKeyValueStore Target { get; }
+    public IMutation Mutation { get; }
+
+    public MutateStateEffect(IHasKeyValueStore target, IMutation mutation)
     {
-      var duration = c.GetDurationSeconds(Stat.KnockbackDuration);
-      c.Results.Add(new KnockbackEffect(
-        target,
-        c.GetStat(Stat.KnockbackDistanceMultiplier).AsMultiplier() * duration,
-        duration));
+      Target = target;
+      Mutation = mutation;
+    }
+
+    public override void Execute()
+    {
+      Mutation.ApplyTo(Target);
     }
   }
 }

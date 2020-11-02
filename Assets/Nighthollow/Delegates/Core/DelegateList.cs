@@ -42,8 +42,8 @@ namespace Nighthollow.Delegates.Core
     public void OnFiredProjectile(SkillContext context, FireProjectileEffect effect) =>
       ExecuteEvent(context, (d, c) => d.OnFiredProjectile(c, effect));
 
-    public void OnHitTarget(SkillContext context, SkillData skill, Creature target) =>
-      ExecuteEvent(context, (d, c) => d.OnHitTarget(c, skill, target));
+    public void OnHitTarget(SkillContext context,  Creature target) =>
+      ExecuteEvent(context, (d, c) => d.OnHitTarget(c, target));
 
     public void OnStart(SkillContext context) =>
       ExecuteEvent(context, (d, c) => d.OnStart(c));
@@ -57,11 +57,14 @@ namespace Nighthollow.Delegates.Core
     public void OnApplyToTarget(SkillContext context, Creature target) =>
       ExecuteEvent(context, (d, c) => d.OnApplyToTarget(c, target));
 
+    public bool MeleeCouldHit(CreatureContext context) =>
+      GetFirstImplemented(context, (d, c) => d.MeleeCouldHit(c));
+
     public bool ProjectileCouldHit(CreatureContext context) =>
       AnyReturnedTrue(context, (d, c) => d.ProjectileCouldHit(c));
 
-    public bool MeleeCouldHit(CreatureContext context) =>
-      GetFirstImplemented(context, (d, c) => d.MeleeCouldHit(c));
+    public bool ShouldSkipProjectileImpact(SkillContext context) =>
+      AnyReturnedTrue(context, (d, c) => d.ShouldSkipProjectileImpact(c));
 
     public SkillData? SelectSkill(CreatureContext context) =>
       GetFirstImplemented(context, (d, c) => d.SelectSkill(c));

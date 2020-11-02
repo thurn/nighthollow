@@ -42,7 +42,7 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
-    public virtual void OnHitTarget(SkillContext c, SkillData skill, Creature target)
+    public virtual void OnHitTarget(SkillContext c, Creature target)
     {
     }
 
@@ -65,6 +65,8 @@ namespace Nighthollow.Delegates.Core
     public virtual bool MeleeCouldHit(CreatureContext c) => c.MarkNotImplemented<bool>();
 
     public virtual bool ProjectileCouldHit(CreatureContext c) => c.MarkNotImplemented<bool>();
+
+    public virtual bool ShouldSkipProjectileImpact(SkillContext c) => c.MarkNotImplemented<bool>();
 
     public virtual SkillData SelectSkill(CreatureContext c) => c.MarkNotImplemented<SkillData>();
 

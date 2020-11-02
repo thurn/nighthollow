@@ -14,22 +14,10 @@
 
 #nullable enable
 
-using Nighthollow.Components;
-using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-
-namespace Nighthollow.Delegates.Implementations
+namespace Nighthollow.State
 {
-  public sealed class KnockbackOnHitDelegate : AbstractDelegate
+  public interface IHasKeyValueStore
   {
-    public override void OnHitTarget(SkillContext c, Creature target)
-    {
-      var duration = c.GetDurationSeconds(Stat.KnockbackDuration);
-      c.Results.Add(new KnockbackEffect(
-        target,
-        c.GetStat(Stat.KnockbackDistanceMultiplier).AsMultiplier() * duration,
-        duration));
-    }
+    KeyValueStore Values { get; }
   }
 }

@@ -12,24 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using Nighthollow.Components;
+
 #nullable enable
 
-using Nighthollow.Components;
-using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-
-namespace Nighthollow.Delegates.Implementations
+namespace Nighthollow.State
 {
-  public sealed class KnockbackOnHitDelegate : AbstractDelegate
+  public static class Key
   {
-    public override void OnHitTarget(SkillContext c, Creature target)
+    public static readonly Key<int> TimesChained =
+      new Key<int>(1);
+    public static readonly Key<IReadOnlyList<Creature>> SkipProjectileImpacts =
+      new Key<IReadOnlyList<Creature>>(2, new List<Creature>());
+  }
+
+  public sealed class Key<T>
+  {
+    public int Id { get;  }
+    public T DefaultValue { get; }
+
+    public Key(int id, T defaultValue = default)
     {
-      var duration = c.GetDurationSeconds(Stat.KnockbackDuration);
-      c.Results.Add(new KnockbackEffect(
-        target,
-        c.GetStat(Stat.KnockbackDistanceMultiplier).AsMultiplier() * duration,
-        duration));
+      Id = id;
+      DefaultValue = defaultValue;
     }
   }
 }
