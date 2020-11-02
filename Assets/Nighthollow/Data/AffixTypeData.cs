@@ -28,14 +28,14 @@ namespace Nighthollow.Data
     public IStatModifier? Low { get; }
     public IStatModifier? High { get; }
 
-    public ModifierRange(GameDataService service, IReadOnlyDictionary<string, string> row, int number)
+    public ModifierRange(GameDataService service, IReadOnlyDictionary<string, string> row)
     {
-      BaseType = service.GetModifier(Parse.IntRequired(row, $"Modifier {number}"));
+      BaseType = service.GetModifier(Parse.IntRequired(row, $"Modifier"));
 
-      if (row.ContainsKey($"Low {number}") && row.ContainsKey($"High {number}"))
+      if (row.ContainsKey($"Low") && row.ContainsKey($"High"))
       {
-        Low = ModifierUtil.ParseModifier(BaseType, Parse.String(row, $"Low {number}"));
-        High = ModifierUtil.ParseModifier(BaseType, Parse.String(row, $"High {number}"));
+        Low = ModifierUtil.ParseModifier(BaseType, Parse.String(row, $"Low"));
+        High = ModifierUtil.ParseModifier(BaseType, Parse.String(row, $"High"));
       }
     }
   }
@@ -51,33 +51,28 @@ namespace Nighthollow.Data
     public AffixPool AffixPool { get; }
     public IReadOnlyList<ModifierRange> ModifierRanges { get; }
 
-    public AffixTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
+    public sealed class Builder
     {
-      Id = Parse.IntRequired(row, "Affix ID");
-      MinLevel = Parse.IntRequired(row, "Min Level");
-      Weight = Parse.IntRequired(row, "Weight");
-      ManaCostLow = Parse.Int(row, "Mana Cost Low").GetValueOrDefault();
-      ManaCostHigh = Parse.Int(row, "Mana Cost High").GetValueOrDefault();
-      InfluenceType = (School?) Parse.Int(row, "Influence Type");
-      AffixPool = (AffixPool) Parse.IntRequired(row, "Affix Pool");
-      var modifiers = new List<ModifierRange>();
+      public int Id { get; set; }
+      public int MinLevel { get; set; }
+      public int Weight { get; set; }
+      public int ManaCostLow { get; set; }
+      public int ManaCostHigh { get; set; }
+      public School? InfluenceType { get; set; }
+      public AffixPool AffixPool { get; set; }
+      public List<ModifierRange> ModifierRanges { get; } = new List<ModifierRange>();
+    }
 
-      if (row.ContainsKey("Modifier 1"))
-      {
-        modifiers.Add(new ModifierRange(service, row, 1));
-      }
-
-      if (row.ContainsKey("Modifier 2"))
-      {
-        modifiers.Add(new ModifierRange(service, row, 2));
-      }
-
-      if (row.ContainsKey("Modifier 3"))
-      {
-        modifiers.Add(new ModifierRange(service, row, 3));
-      }
-
-      ModifierRanges = modifiers;
+    public AffixTypeData(Builder builder)
+    {
+      Id = builder.Id;
+      MinLevel = builder.MinLevel;
+      Weight = builder.Weight;
+      ManaCostLow = builder.ManaCostLow;
+      ManaCostHigh = builder.ManaCostHigh;
+      InfluenceType = builder.InfluenceType;
+      AffixPool = builder.AffixPool;
+      ModifierRanges = builder.ModifierRanges;
     }
   }
 }

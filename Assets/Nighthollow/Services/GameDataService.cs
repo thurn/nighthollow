@@ -97,10 +97,7 @@ namespace Nighthollow.Services
         _modifiers[modifier.Id] = modifier;
       }
 
-      foreach (var affix in parsed["Affixes"].Select(row => new AffixTypeData(this, row)))
-      {
-        _affixes[affix.Id] = affix;
-      }
+      ParseAffixes(parsed);
 
       foreach (var skill in parsed["Skills"].Select(row => new SkillTypeData(this, row)))
       {
@@ -128,6 +125,44 @@ namespace Nighthollow.Services
 
 
       Root.Instance.AssetService.FetchAssets(this, onComplete);
+    }
+
+    void ParseAffixes(IReadOnlyDictionary<string, List<Dictionary<string, string>>> parsed)
+    {
+      AffixTypeData.Builder? currentlyBuilding = null;
+      foreach (var row in parsed["Affixes"])
+      {
+        var affixId = Parse.Int(row, "Affix ID");
+        if (affixId != null)
+        {
+          if (currentlyBuilding != null)
+          {
+            _affixes[currentlyBuilding.Id] = new AffixTypeData(currentlyBuilding);
+          }
+
+          currentlyBuilding = new AffixTypeData.Builder
+          {
+            Id = affixId.Value,
+            MinLevel = Parse.Int(row, "Min Level").GetValueOrDefault(),
+            Weight = Parse.Int(row, "Weight").GetValueOrDefault(),
+            ManaCostLow = Parse.Int(row, "Mana Cost Low").GetValueOrDefault(),
+            ManaCostHigh = Parse.Int(row, "Mana Cost High").GetValueOrDefault(),
+            InfluenceType = (School?) Parse.Int(row, "Influence Type"),
+            AffixPool = (AffixPool) Parse.IntRequired(row, "Affix Pool")
+          };
+
+          currentlyBuilding.ModifierRanges.Add(new ModifierRange(this, row));
+        }
+        else
+        {
+          currentlyBuilding?.ModifierRanges.Add(new ModifierRange(this, row));
+        }
+      }
+
+      if (currentlyBuilding != null)
+      {
+        _affixes[currentlyBuilding.Id] = new AffixTypeData(currentlyBuilding);
+      }
     }
 
     void ParseStaticCard(IReadOnlyDictionary<string, string> row)
