@@ -9820,6 +9820,7 @@ MonoBehaviour:
     type: 3}
   _firedBy: {fileID: 0}
   _collider: {fileID: 0}
+  _trackCreature: {fileID: 0}
 --- !u!50 &8951039169827144431
 Rigidbody2D:
   serializedVersion: 4

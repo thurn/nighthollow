@@ -1,0 +1,19 @@
+{
+    "name": "NighthollowEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:950d1b5c6cb004414b1327ce46419292",
+        "GUID:7c5ffad23db2845fc884bce78b01051e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
