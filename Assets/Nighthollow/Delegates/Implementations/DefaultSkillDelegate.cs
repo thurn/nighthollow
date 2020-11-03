@@ -207,7 +207,8 @@ namespace Nighthollow.Delegates.Implementations
     }
 
     public override bool RollForCrit(SkillContext c, Creature target) =>
-      Random.value <= c.GetStat(Stat.CritChance).AsMultiplier();
+      Random.value <= (c.GetStat(Stat.CritChance).AsMultiplier() +
+                       target.Data.Stats.Get(Stat.ReceiveCritsChance).AsMultiplier());
 
     public override int ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount) =>
       c.Skill.BaseType.IsMelee ? c.GetStat(Stat.MeleeHealthDrainPercent).CalculateFraction(damageAmount) : 0;

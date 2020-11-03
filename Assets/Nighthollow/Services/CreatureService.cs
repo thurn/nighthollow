@@ -17,9 +17,11 @@
 using Nighthollow.Components;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Nighthollow.Services
 {
@@ -29,6 +31,8 @@ namespace Nighthollow.Services
       new Dictionary<(RankValue, FileValue), Creature>();
 
     readonly HashSet<Creature> _movingCreatures = new HashSet<Creature>();
+
+    public IEnumerable<Creature> EnemyCreatures() => _movingCreatures.Where(c => c.Owner == PlayerName.Enemy);
 
     public Creature CreateUserCreature(CreatureData creatureData)
     {

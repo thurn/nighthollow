@@ -79,6 +79,12 @@ namespace Nighthollow.Generated
     public static readonly BoolStat Untargeted = new BoolStat(60);
     public static readonly DamageTypeIntRangesStat SameTargetAddedDamage = new DamageTypeIntRangesStat(61);
     public static readonly DurationStat CurseDuration = new DurationStat(62);
+    public static readonly PercentageStat GlobalDamageMultiplier = new PercentageStat(63);
+    public static readonly PercentageStat ShockChance = new PercentageStat(64);
+    public static readonly DurationStat ShockDuration = new DurationStat(65);
+    public static readonly BoolStat IsShocked = new BoolStat(66);
+    public static readonly PercentageStat ReceiveCritsChance = new PercentageStat(67);
+    public static readonly PercentageStat ShockAddedReceiveCritsChance = new PercentageStat(68);
 
     public static IStat GetStat(int statId)
     {
@@ -143,6 +149,12 @@ namespace Nighthollow.Generated
         case 60: return Untargeted;
         case 61: return SameTargetAddedDamage;
         case 62: return CurseDuration;
+        case 63: return GlobalDamageMultiplier;
+        case 64: return ShockChance;
+        case 65: return ShockDuration;
+        case 66: return IsShocked;
+        case 67: return ReceiveCritsChance;
+        case 68: return ShockAddedReceiveCritsChance;
         default: throw new ArgumentOutOfRangeException(statId.ToString());
       }
     }

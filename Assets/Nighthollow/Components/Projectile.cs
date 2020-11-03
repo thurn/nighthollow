@@ -14,6 +14,7 @@
 
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
+using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.State;
@@ -24,13 +25,12 @@ namespace Nighthollow.Components
 {
   public sealed class Projectile : MonoBehaviour, IHasKeyValueStore
   {
-    [Header("Config")]
-    [SerializeField] TimedEffect _flashEffect;
+    [Header("Config")] [SerializeField] TimedEffect _flashEffect;
     [SerializeField] TimedEffect _hitEffect;
 
-    [Header("State")]
-    [SerializeField] Creature _firedBy;
+    [Header("State")] [SerializeField] Creature _firedBy;
     [SerializeField] Collider2D _collider;
+    [SerializeField] Creature _trackCreature;
     SkillData _skillData;
 
     public KeyValueStore Values { get; } = new KeyValueStore();
@@ -42,12 +42,22 @@ namespace Nighthollow.Components
     public void Initialize(
       Creature firedBy,
       SkillData skillData,
-      Vector2 firingPosition,
-      Vector2 directionOffset)
+      FireProjectileEffect effect)
     {
       _firedBy = firedBy;
-      transform.position = firingPosition;
-      transform.forward = directionOffset + Constants.ForwardDirectionForPlayer(firedBy.Owner);
+      transform.position = effect.FiringPoint;
+
+      if (effect.TrackCreature)
+      {
+        transform.LookAt(effect.TrackCreature!.transform.position);
+        _trackCreature = effect.TrackCreature;
+      }
+      else
+      {
+        transform.forward = effect.FiringDirectionOffset.GetValueOrDefault()
+                            + Constants.ForwardDirectionForPlayer(firedBy.Owner);
+      }
+
       gameObject.layer = Constants.LayerForProjectiles(firedBy.Owner);
 
       _collider = GetComponent<Collider2D>();
@@ -77,6 +87,10 @@ namespace Nighthollow.Components
 
     void Update()
     {
+      if (_trackCreature)
+      {
+        transform.LookAt(_trackCreature.transform.position);
+      }
       transform.position += (Errors.CheckPositive(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f)
                             * Time.deltaTime * transform.forward;
 
@@ -91,7 +105,11 @@ namespace Nighthollow.Components
       var context = new SkillContext(_firedBy, _skillData, this);
       if (_firedBy.Data.Delegate.ShouldSkipProjectileImpact(context))
       {
-        return;
+        if (!_trackCreature || _trackCreature.gameObject != other.gameObject)
+        {
+          // Tracking projectiles cannot skip their target
+          return;
+        }
       }
 
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);

@@ -34,6 +34,8 @@ namespace Nighthollow.Generated
     SummonMinionsDelegate = 10,
     AddedDamageOnRepeatedHitsDelegate = 11,
     ApplyTargetedAffixesOnHitDelegate = 12,
+    ChainToRandomTargetDelegate = 13,
+    ChanceToShockDelegate = 14,
   }
 
   public static class DelegateMap
@@ -52,6 +54,8 @@ namespace Nighthollow.Generated
       {DelegateId.SummonMinionsDelegate, new SummonMinionsDelegate()},
       {DelegateId.AddedDamageOnRepeatedHitsDelegate, new AddedDamageOnRepeatedHitsDelegate()},
       {DelegateId.ApplyTargetedAffixesOnHitDelegate, new ApplyTargetedAffixesOnHitDelegate()},
+      {DelegateId.ChainToRandomTargetDelegate, new ChainToRandomTargetDelegate()},
+      {DelegateId.ChanceToShockDelegate, new ChanceToShockDelegate()},
     };
 
     public static IDelegate Get(DelegateId id) => Delegates[id];

@@ -31,7 +31,8 @@ namespace Nighthollow.Delegates.Effects
     public SkillContext SkillContext { get; }
     public int DelegateIndex { get; }
     public Vector2 FiringPoint { get; }
-    public Vector2 FiringDirectionOffset { get; }
+    public Vector2? FiringDirectionOffset { get; }
+    public Creature? TrackCreature { get; }
     public int FiringDelayMs { get; }
     public KeyValueStore? Values { get; }
 
@@ -40,7 +41,8 @@ namespace Nighthollow.Delegates.Effects
       SkillContext skillContext,
       int index,
       Vector2 firingPoint,
-      Vector2 firingDirectionOffset,
+      Vector2? firingDirectionOffset = null,
+      Creature? trackCreature = null,
       int firingDelayMs = 0,
       KeyValueStore? values = null)
     {
@@ -49,6 +51,7 @@ namespace Nighthollow.Delegates.Effects
       DelegateIndex = index;
       FiringPoint = firingPoint;
       FiringDirectionOffset = firingDirectionOffset;
+      TrackCreature = trackCreature;
       FiringDelayMs = firingDelayMs;
       Values = values;
     }
@@ -69,7 +72,7 @@ namespace Nighthollow.Delegates.Effects
       var projectile = Root.Instance.AssetService.InstantiatePrefab<Projectile>(
         Errors.CheckNotNull(SkillContext.Skill.BaseType.Address));
       projectile.Values.OverwriteWithValues(Values);
-      projectile.Initialize(FiredBy, SkillContext.Skill, FiringPoint, FiringDirectionOffset);
+      projectile.Initialize(FiredBy, SkillContext.Skill, this);
     }
   }
 }

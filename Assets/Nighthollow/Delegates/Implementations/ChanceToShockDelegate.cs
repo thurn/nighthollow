@@ -14,34 +14,29 @@
 
 #nullable enable
 
+using Nighthollow.Components;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
+using Nighthollow.Stats;
 using UnityEngine;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class MultipleProjectilesDelegate : AbstractDelegate
+  public sealed class ChanceToShockDelegate : AbstractDelegate
   {
-    public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
+    public override void OnApplyToTarget(SkillContext c, Creature target)
     {
-      if (effect.DelegateIndex <= c.DelegateIndex)
+      if (Random.value > c.GetStat(Stat.ShockChance).AsMultiplier())
       {
-        // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
         return;
       }
 
-      // 1 less projectile since we already fired one
-      for (var i = 1; i < c.GetInt(Stat.ProjectileSequenceCount); ++i)
-      {
-        c.Results.Add(new FireProjectileEffect(
-          c.Self,
-          c,
-          c.DelegateIndex,
-          c.Self.ProjectileSource.position,
-          Vector2.zero,
-          firingDelayMs: i * c.GetStat(Stat.ProjectileSequenceDelay).AsMilliseconds()));
-      }
+      var lifetime = new TimedLifetime(c.GetDurationMilliseconds(Stat.ShockDuration));
+      target.Data.Stats.InsertModifier(Stat.IsShocked, new BooleanOperation(true), lifetime);
+      target.Data.Stats.InsertModifier(
+        Stat.ReceiveCritsChance,
+        NumericOperation.Add(c.GetStat(Stat.ShockAddedReceiveCritsChance)),
+        lifetime);
     }
   }
 }
