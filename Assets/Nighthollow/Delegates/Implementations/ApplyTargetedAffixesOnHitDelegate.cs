@@ -14,15 +14,30 @@
 
 #nullable enable
 
+using System;
 using System.Linq;
+using Nighthollow.Components;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
-namespace Nighthollow.Data
+namespace Nighthollow.Delegates.Implementations
 {
-  public static class Influence
+  public sealed class ApplyTargetedAffixesOnHitDelegate : AbstractDelegate
   {
-    public static bool LessThanOrEqualTo(TaggedValues<School, int> a, TaggedValues<School, int> b) =>
-      a.Values.All(pair => pair.Value <= b.Get(pair.Key, 0));
+    public override void OnApplyToTarget(SkillContext c, Creature target)
+    {
+      foreach (var modifier in c.Skill.TargetedAffixes.SelectMany(affix => affix.Modifiers))
+      {
+        if (modifier.DelegateId != null)
+        {
+          throw new NotSupportedException("Not yet implemented");
+        }
+
+        modifier.StatModifier?
+          .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(Stat.CurseDuration)))
+          .ApplyTo(target.Data.Stats);
+      }
+    }
   }
 }

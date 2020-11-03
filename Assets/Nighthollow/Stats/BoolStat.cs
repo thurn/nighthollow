@@ -21,29 +21,16 @@ using Nighthollow.Generated;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct BoolValue : IStatValue
-  {
-    public bool Bool { get; }
-
-    public BoolValue(bool b)
-    {
-      Bool = b;
-    }
-  }
-
-  public sealed class BoolStat : AbstractStat<BooleanOperation, BoolValue>
+  public sealed class BoolStat : AbstractStat<BooleanOperation, bool>
   {
     public BoolStat(int id) : base(id)
     {
     }
 
-    public override BoolValue ComputeValue(IReadOnlyList<BooleanOperation> operations)
-    {
-      return new BoolValue(
-        operations.Count(op => op.SetBoolean) > 0 && operations.Count(op => op.SetBoolean == false) == 0);
-    }
+    public override bool ComputeValue(IReadOnlyList<BooleanOperation> operations) =>
+      operations.Count(op => op.SetBoolean) > 0 && operations.Count(op => op.SetBoolean == false) == 0;
 
-    protected override BoolValue ParseStatValue(string value) => new BoolValue(bool.Parse(value));
+    protected override bool ParseStatValue(string value) => bool.Parse(value);
 
     public IStatModifier SetTrue() => StaticModifier(new BooleanOperation(true));
 
@@ -52,7 +39,7 @@ namespace Nighthollow.Stats
     public override IStatModifier ParseModifier(string value, Operator op) =>
       op switch
       {
-        Operator.Add => StaticModifier(new BooleanOperation(ParseStatValue(value).Bool)),
+        Operator.Add => StaticModifier(new BooleanOperation(ParseStatValue(value))),
         _ => throw new ArgumentException($"Unsupported operator type: {op}")
       };
 

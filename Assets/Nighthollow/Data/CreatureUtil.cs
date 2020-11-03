@@ -28,30 +28,22 @@ namespace Nighthollow.Data
     public static CreatureData Build(StatTable parentStats, CreatureItemData item)
     {
       var stats = item.Stats.Clone(parentStats);
-      var delegates = new List<DelegateId>();
 
-      Stat.CreatureSpeed.Add(item.BaseType.Speed).InsertInto(stats);
+      Stat.CreatureSpeed.Add(item.BaseType.Speed).ApplyTo(stats);
 
       if (item.BaseType.IsManaCreature)
       {
-        Stat.IsManaCreature.SetTrue().InsertInto(stats);
+        Stat.IsManaCreature.SetTrue().ApplyTo(stats);
       }
 
-      foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
-      {
-        if (modifier.DelegateId.HasValue)
-        {
-          delegates.Add(modifier.DelegateId.Value);
-        }
-
-        modifier.StatModifier?.InsertInto(stats);
-      }
+      var (delegates, targetedAffixes) = ProcessAffixes(item.Affixes, stats);
 
       var skills = item.Skills.Select(s => BuildSkill(stats, s)).ToList();
 
       return new CreatureData(
         item.Name, item.BaseType, item.School, skills, stats,
-        new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToList()));
+        new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToList()),
+        targetedAffixes.ToList());
     }
 
     static SkillData BuildSkill(StatTable parentStats, SkillItemData item)
@@ -59,38 +51,47 @@ namespace Nighthollow.Data
       var stats = item.Stats.Clone(parentStats);
       if (item.BaseType.ProjectileSpeed.HasValue)
       {
-        Stat.ProjectileSpeed.Add(item.BaseType.ProjectileSpeed.Value).InsertInto(stats);
+        Stat.ProjectileSpeed.Add(item.BaseType.ProjectileSpeed.Value).ApplyTo(stats);
       }
 
       if (item.BaseType.UsesAccuracy)
       {
-        Stat.UsesAccuracy.SetTrue().InsertInto(stats);
+        Stat.UsesAccuracy.SetTrue().ApplyTo(stats);
       }
 
       if (item.BaseType.CanCrit)
       {
-        Stat.CanCrit.SetTrue().InsertInto(stats);
+        Stat.CanCrit.SetTrue().ApplyTo(stats);
       }
 
       if (item.BaseType.CanStun)
       {
-        Stat.CanStun.SetTrue().InsertInto(stats);
+        Stat.CanStun.SetTrue().ApplyTo(stats);
       }
 
-      var delegates = new List<DelegateId>();
+      var (delegates, targetedAffixes) = ProcessAffixes(item.Affixes, stats);
 
-      foreach (var modifier in item.Affixes.SelectMany(affix => affix.Modifiers))
+      return new SkillData(
+        item.BaseType, stats,
+        new SkillDelegateList(delegates.Select(DelegateMap.Get).ToList()),
+        targetedAffixes.ToList());
+    }
+
+    static (IEnumerable<DelegateId>, IEnumerable<AffixData>)
+      ProcessAffixes(IReadOnlyList<AffixData> affixes, StatModifierTable stats)
+    {
+      var delegates = new List<DelegateId>();
+      foreach (var modifier in affixes.Where(affix => !affix.BaseType.IsTargeted).SelectMany(affix => affix.Modifiers))
       {
         if (modifier.DelegateId.HasValue)
         {
           delegates.Add(modifier.DelegateId.Value);
         }
 
-        modifier.StatModifier?.InsertInto(stats);
+        modifier.StatModifier?.ApplyTo(stats);
       }
 
-      return new SkillData(
-        item.BaseType, stats, new SkillDelegateList(delegates.Select(DelegateMap.Get).ToList()));
+      return (delegates, affixes.Where(affix => affix.BaseType.IsTargeted));
     }
 
     public static SkillItemData DefaultMeleeAttack()

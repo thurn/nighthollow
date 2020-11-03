@@ -39,10 +39,10 @@ namespace Nighthollow.Delegates.Effects
       switch (Self.Owner)
       {
         case PlayerName.User:
-          Modifier.InsertInto(Root.Instance.User.Data.Stats);
+          Modifier.ApplyTo(Root.Instance.User.Data.Stats);
           break;
         case PlayerName.Enemy:
-          Modifier.InsertInto(Root.Instance.Enemy.Data.Stats);
+          Modifier.ApplyTo(Root.Instance.Enemy.Data.Stats);
           break;
         case PlayerName.Unknown:
         default:

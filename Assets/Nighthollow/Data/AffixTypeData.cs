@@ -49,6 +49,7 @@ namespace Nighthollow.Data
     public int ManaCostHigh { get; }
     public School? InfluenceType { get; }
     public AffixPool AffixPool { get; }
+    public bool IsTargeted { get; }
     public IReadOnlyList<ModifierRange> ModifierRanges { get; }
 
     public sealed class Builder
@@ -60,6 +61,7 @@ namespace Nighthollow.Data
       public int ManaCostHigh { get; set; }
       public School? InfluenceType { get; set; }
       public AffixPool AffixPool { get; set; }
+      public bool IsTargeted { get; set; }
       public List<ModifierRange> ModifierRanges { get; } = new List<ModifierRange>();
     }
 
@@ -72,6 +74,7 @@ namespace Nighthollow.Data
       ManaCostHigh = builder.ManaCostHigh;
       InfluenceType = builder.InfluenceType;
       AffixPool = builder.AffixPool;
+      IsTargeted = builder.IsTargeted;
       ModifierRanges = builder.ModifierRanges;
     }
   }

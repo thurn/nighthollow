@@ -24,9 +24,9 @@ namespace Nighthollow.Stats
 
     public bool IsValid() => Time.time < _endTimeSeconds;
 
-    public TimedLifetime(float endTimeSeconds)
+    public TimedLifetime(int durationMilliseconds)
     {
-      _endTimeSeconds = endTimeSeconds;
+      _endTimeSeconds = Time.time + (durationMilliseconds / 1000f);
     }
   }
 }

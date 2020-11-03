@@ -22,12 +22,12 @@ namespace Nighthollow.Data
 {
   public sealed class AffixData
   {
-    public int AffixTypeId { get; }
+    public AffixTypeData BaseType { get; }
     public IReadOnlyList<ModifierData> Modifiers { get; }
 
-    public AffixData(int affixTypeId, IReadOnlyList<ModifierData> modifiers)
+    public AffixData(AffixTypeData baseType, IReadOnlyList<ModifierData> modifiers)
     {
-      AffixTypeId = affixTypeId;
+      BaseType = baseType;
       Modifiers = modifiers;
     }
   }

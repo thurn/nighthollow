@@ -21,12 +21,14 @@ namespace Nighthollow.Stats
     public abstract StatTable Stats { get; }
 
     public TValue GetStat<TOperation, TValue>(AbstractStat<TOperation, TValue> stat)
-      where TOperation : IOperation where TValue : IStatValue =>
+      where TOperation : IOperation =>
       Stats.Get(stat);
 
-    public int GetInt(IntStat statId) => Stats.Get(statId).Int;
+    public int GetInt(IntStat statId) => Stats.Get(statId);
 
-    public bool GetBool(BoolStat statId) => Stats.Get(statId).Bool;
+    public bool GetBool(BoolStat statId) => Stats.Get(statId);
+
+    public int GetDurationMilliseconds(DurationStat statId) => Stats.Get(statId).AsMilliseconds();
 
     public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
   }

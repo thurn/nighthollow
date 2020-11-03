@@ -80,6 +80,13 @@ namespace Nighthollow.Delegates.Implementations
       damage = c.Delegate.TransformDamage(c, target, damage);
       var totalDamage = c.Delegate.ComputeFinalDamage(c, target, damage, isCriticalHit);
 
+      c.Results.Add(Events.Effect(c, (d, sc) => d.OnHitTarget(sc, target, totalDamage)));
+
+      if (totalDamage == 0)
+      {
+        return;
+      }
+
       c.Results.Add(new ApplyDamageEffect(c.Self, target, totalDamage));
       c.Results.Add(new DamageTextEffect(target, totalDamage));
 
@@ -94,8 +101,6 @@ namespace Nighthollow.Delegates.Implementations
         c.Results.Add(new StunEffect(target, c.GetDurationSeconds(Stat.StunDurationOnEnemies)));
         c.Results.Add(new SkillEventEffect(SkillEventEffect.Event.Stun, target));
       }
-
-      c.Results.Add(Events.Effect(c, (d, sc) => d.OnHitTarget(sc, target, totalDamage)));
     }
 
     public override IEnumerable<Creature> FindTargets(SkillContext c)
@@ -122,49 +127,49 @@ namespace Nighthollow.Delegates.Implementations
     public override Collider2D GetCollider(SkillContext c) =>
       c.Projectile ? c.Projectile!.Collider : c.Self.Collider;
 
-    public override TaggedValues<DamageType, IntValue> RollForBaseDamage(SkillContext c, Creature target) =>
+    public override TaggedValues<DamageType, int> RollForBaseDamage(SkillContext c, Creature target) =>
       DamageUtil.RollForDamage(c.GetStat(Stat.BaseDamage));
 
-    public override TaggedValues<DamageType, IntValue> ApplyDamageReduction(
+    public override TaggedValues<DamageType, int> ApplyDamageReduction(
       SkillContext c,
       Creature target,
-      TaggedValues<DamageType, IntValue> damage) =>
-      new TaggedValues<DamageType, IntValue>(
+      TaggedValues<DamageType, int> damage) =>
+      new TaggedValues<DamageType, int>(
         damage.Values.ToDictionary(
           k => k.Key,
           v => ApplyReduction(
             c,
-            v.Value.Int,
-            target.Data.GetStat(Stat.DamageReduction).Get(v.Key, IntValue.Zero).Int)));
+            v.Value,
+            target.Data.GetStat(Stat.DamageReduction).Get(v.Key, 0))));
 
-    static IntValue ApplyReduction(SkillContext c, int damage, int reduction) =>
-      new IntValue(Math.Max(
+    static int ApplyReduction(SkillContext c, int damage, int reduction) =>
+      Math.Max(
         // Apply maximum reduction
         Mathf.RoundToInt(damage * (1f - c.GetStat(Stat.MaximumDamageReduction).AsMultiplier())),
-        damage - reduction));
+        damage - reduction);
 
-    public override TaggedValues<DamageType, IntValue> ApplyDamageResistance(
+    public override TaggedValues<DamageType, int> ApplyDamageResistance(
       SkillContext c,
       Creature target,
-      TaggedValues<DamageType, IntValue> damage) =>
-      new TaggedValues<DamageType, IntValue>(
+      TaggedValues<DamageType, int> damage) =>
+      new TaggedValues<DamageType, int>(
         damage.Values.ToDictionary(
           k => k.Key,
           v => ApplyResistance(
             c,
-            v.Value.Int,
-            target.Data.GetStat(Stat.DamageResistance).Get(v.Key, IntValue.Zero).Int)));
+            v.Value,
+            target.Data.GetStat(Stat.DamageResistance).Get(v.Key, 0))));
 
-    static IntValue ApplyResistance(SkillContext c, int damageValue, float resistance) =>
-      new IntValue(Mathf.RoundToInt(Math.Max(
+    static int ApplyResistance(SkillContext c, int damageValue, float resistance) =>
+      Mathf.RoundToInt(Math.Max(
         // Apply maximum resistance
         damageValue * (1f - c.GetStat(Stat.MaximumDamageResistance).AsMultiplier()),
-        Mathf.Clamp01(1f - (resistance / (resistance + (2.0f * damageValue)))) * damageValue)));
+        Mathf.Clamp01(1f - (resistance / (resistance + (2.0f * damageValue)))) * damageValue));
 
     public override int ComputeFinalDamage(
       SkillContext c,
       Creature target,
-      TaggedValues<DamageType, IntValue> damage,
+      TaggedValues<DamageType, int> damage,
       bool isCriticalHit)
     {
       damage = c.GetBool(Stat.IgnoresDamageReduction)
@@ -175,7 +180,7 @@ namespace Nighthollow.Delegates.Implementations
         ? damage
         : c.Delegate.ApplyDamageResistance(c, target, damage);
 
-      var total = damage.Values.Values.Select(v => v.Int).Sum();
+      var total = damage.Values.Values.Sum();
       total = isCriticalHit ? c.GetStat(Stat.CritMultiplier).CalculateFraction(total) : total;
 
       if (c.Skill.BaseType.IsMelee)

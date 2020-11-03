@@ -100,7 +100,7 @@ namespace Nighthollow.Components
       var addIndex = 0;
       foreach (var pair in influenceCost.Values)
       {
-        AddInfluence(pair.Key, pair.Value.Int, ref addIndex);
+        AddInfluence(pair.Key, pair.Value, ref addIndex);
       }
 
       while (addIndex < _influence.Count)

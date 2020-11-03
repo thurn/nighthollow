@@ -85,23 +85,23 @@ namespace Nighthollow.Delegates.Core
     public virtual bool RollForCrit(SkillContext c, Creature target) =>
       c.MarkNotImplemented<bool>();
 
-    public virtual TaggedValues<DamageType, IntValue> RollForBaseDamage(SkillContext c, Creature target) =>
-      c.MarkNotImplemented<TaggedValues<DamageType, IntValue>>();
+    public virtual TaggedValues<DamageType, int> RollForBaseDamage(SkillContext c, Creature target) =>
+      c.MarkNotImplemented<TaggedValues<DamageType, int>>();
 
-    public virtual TaggedValues<DamageType, IntValue> TransformDamage(
-      SkillContext c, Creature target, TaggedValues<DamageType, IntValue> damage) =>
-      c.MarkNotImplemented<TaggedValues<DamageType, IntValue>>();
+    public virtual TaggedValues<DamageType, int> TransformDamage(
+      SkillContext c, Creature target, TaggedValues<DamageType, int> damage) =>
+      c.MarkNotImplemented<TaggedValues<DamageType, int>>();
 
-    public virtual TaggedValues<DamageType, IntValue> ApplyDamageReduction(
-      SkillContext c, Creature target, TaggedValues<DamageType, IntValue> damage) =>
-      c.MarkNotImplemented<TaggedValues<DamageType, IntValue>>();
+    public virtual TaggedValues<DamageType, int> ApplyDamageReduction(
+      SkillContext c, Creature target, TaggedValues<DamageType, int> damage) =>
+      c.MarkNotImplemented<TaggedValues<DamageType, int>>();
 
-    public virtual TaggedValues<DamageType, IntValue> ApplyDamageResistance(
-      SkillContext c, Creature target, TaggedValues<DamageType, IntValue> damage) =>
-      c.MarkNotImplemented<TaggedValues<DamageType, IntValue>>();
+    public virtual TaggedValues<DamageType, int> ApplyDamageResistance(
+      SkillContext c, Creature target, TaggedValues<DamageType, int> damage) =>
+      c.MarkNotImplemented<TaggedValues<DamageType, int>>();
 
     public virtual int ComputeFinalDamage(
-      SkillContext c, Creature target, TaggedValues<DamageType, IntValue> damage, bool isCriticalHit) =>
+      SkillContext c, Creature target, TaggedValues<DamageType, int> damage, bool isCriticalHit) =>
       c.MarkNotImplemented<int>();
 
     public virtual int ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount) =>

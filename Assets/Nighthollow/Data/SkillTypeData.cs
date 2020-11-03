@@ -15,6 +15,7 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -33,7 +34,7 @@ namespace Nighthollow.Data
     public bool UsesAccuracy { get; }
     public bool CanCrit { get; }
     public bool CanStun { get; }
-    public AffixTypeData? ImplicitAffix { get; }
+    public IReadOnlyList<AffixTypeData> ImplicitAffixes { get; }
 
     public SkillTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
     {
@@ -48,11 +49,16 @@ namespace Nighthollow.Data
       CanCrit = Parse.Boolean(row, "Can Crit?");
       CanStun = Parse.Boolean(row, "Can Stun?");
 
-      var affixId = Parse.Int(row, "Implicit Affix ID");
-      if (affixId.HasValue)
+      var implicitAffixes = new List<AffixTypeData>();
+      if (row.ContainsKey("Implicit Affix IDs"))
       {
-        ImplicitAffix = service.GetAffixType(affixId.Value);
+        implicitAffixes.AddRange(
+          row["Implicit Affix IDs"]
+            .Split(',')
+            .Select(id => service.GetAffixType(int.Parse(id))));
       }
+
+      ImplicitAffixes = implicitAffixes;
     }
   }
 }

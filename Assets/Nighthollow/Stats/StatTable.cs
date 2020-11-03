@@ -20,12 +20,12 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public sealed class OperationLifetime
+  public sealed class OperationWithLifetime
   {
     public IOperation Operation { get; }
     public ILifetime Lifetime { get; }
 
-    public OperationLifetime(IOperation operation, ILifetime lifetime)
+    public OperationWithLifetime(IOperation operation, ILifetime lifetime)
     {
       Operation = operation;
       Lifetime = lifetime;
@@ -34,24 +34,23 @@ namespace Nighthollow.Stats
 
   public class StatModifierTable
   {
-    protected readonly Dictionary<int, List<OperationLifetime>> Modifiers;
+    protected readonly Dictionary<int, List<OperationWithLifetime>> Modifiers;
 
     public StatModifierTable()
     {
-      Modifiers = new Dictionary<int, List<OperationLifetime>>();
+      Modifiers = new Dictionary<int, List<OperationWithLifetime>>();
     }
 
-    protected StatModifierTable(Dictionary<int, List<OperationLifetime>> modifiers)
+    protected StatModifierTable(Dictionary<int, List<OperationWithLifetime>> modifiers)
     {
       Modifiers = modifiers.ToDictionary(k => k.Key, v => v.Value.Select(o => o).ToList());
     }
 
     public void InsertModifier<TOperation, TValue>(
-      AbstractStat<TOperation, TValue> stat, TOperation operation, ILifetime lifetime)
-      where TOperation : IOperation where TValue : IStatValue
+      AbstractStat<TOperation, TValue> stat, TOperation operation, ILifetime lifetime) where TOperation : IOperation
     {
-      Modifiers.GetOrCreateDefault(stat.Id, new List<OperationLifetime>())
-        .Add(new OperationLifetime(operation, lifetime));
+      Modifiers.GetOrCreateDefault(stat.Id, new List<OperationWithLifetime>())
+        .Add(new OperationWithLifetime(operation, lifetime));
     }
 
     public void Clear()
@@ -64,7 +63,7 @@ namespace Nighthollow.Stats
 
   public sealed class StatTable : StatModifierTable
   {
-    public static readonly StatTable Defaults = new StatTable(null, new Dictionary<int, List<OperationLifetime>>());
+    public static readonly StatTable Defaults = new StatTable(null, new Dictionary<int, List<OperationWithLifetime>>());
     readonly StatTable? _parent;
 
     public StatTable(StatTable parent)
@@ -72,16 +71,15 @@ namespace Nighthollow.Stats
       _parent = parent;
     }
 
-    public StatTable(StatTable? parent, Dictionary<int, List<OperationLifetime>> modifiers) : base(modifiers)
+    public StatTable(StatTable? parent, Dictionary<int, List<OperationWithLifetime>> modifiers) : base(modifiers)
     {
       _parent = parent;
     }
 
-    public TValue Get<TOperation, TValue>(AbstractStat<TOperation, TValue> stat)
-      where TOperation : IOperation where TValue : IStatValue =>
+    public TValue Get<TOperation, TValue>(AbstractStat<TOperation, TValue> stat) where TOperation : IOperation =>
       stat.ComputeValue(OperationsForStatId(stat.Id).Select(op => (TOperation) op.Operation).ToList());
 
-    IEnumerable<OperationLifetime> OperationsForStatId(int statId)
+    IEnumerable<OperationWithLifetime> OperationsForStatId(int statId)
     {
       if (Modifiers.ContainsKey(statId))
       {
@@ -91,7 +89,7 @@ namespace Nighthollow.Stats
       }
       else
       {
-        return _parent == null ? new List<OperationLifetime>() : _parent.OperationsForStatId(statId);
+        return _parent == null ? new List<OperationWithLifetime>() : _parent.OperationsForStatId(statId);
       }
     }
   }

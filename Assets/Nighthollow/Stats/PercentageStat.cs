@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct PercentageValue : IStatValue
+  public readonly struct PercentageValue
   {
     const float BasisPoints = 10_000f;
     readonly int _basisPoints;
@@ -45,7 +45,7 @@ namespace Nighthollow.Stats
       Compute(operations);
 
     public static PercentageValue Compute(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
-      new PercentageValue(IntStat.Compute(operations, duration => new IntValue(duration.AsBasisPoints())).Int);
+      new PercentageValue(IntStat.Compute(operations, duration => duration.AsBasisPoints()));
 
     protected override PercentageValue ParseStatValue(string value) => ParsePercentage(value);
 

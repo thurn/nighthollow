@@ -21,7 +21,7 @@ using Nighthollow.Generated;
 namespace Nighthollow.Stats
 {
   public abstract class AbstractStat<TOperation, TValue> : IStat
-    where TOperation : IOperation where TValue : IStatValue
+    where TOperation : IOperation
   {
     protected AbstractStat(int id)
     {
@@ -43,13 +43,10 @@ namespace Nighthollow.Stats
     public abstract IStatModifier ParseModifier(string value, Operator op);
 
     public abstract IStatModifier? StaticModifierForOperator(Operator op);
-
-    public IStatValue Lookup(StatTable table) =>
-      table.Get(this);
   }
 
   public abstract class NumericStat<TValue> : AbstractStat<NumericOperation<TValue>, TValue>
-    where TValue : struct, IStatValue
+    where TValue : struct
   {
     protected NumericStat(int id) : base(id)
     {

@@ -24,28 +24,28 @@ namespace Nighthollow.Data
 {
   public static class DamageUtil
   {
-    public static TaggedValues<DamageType, IntValue> RollForDamage(TaggedValues<DamageType, IntRangeValue> damage) =>
-      new TaggedValues<DamageType, IntValue>(
+    public static TaggedValues<DamageType, int> RollForDamage(TaggedValues<DamageType, IntRangeValue> damage) =>
+      new TaggedValues<DamageType, int>(
         damage.Values.ToDictionary(
           k => k.Key,
-          v => new IntValue(Random.Range(v.Value.Low, v.Value.High))));
+          v => Random.Range(v.Value.Low, v.Value.High)));
 
-    public static TaggedValues<DamageType, IntValue> Multiply(
-      int multiplier, TaggedValues<DamageType, IntValue> damage) =>
-      new TaggedValues<DamageType, IntValue>(
+    public static TaggedValues<DamageType, int> Multiply(
+      int multiplier, TaggedValues<DamageType, int> damage) =>
+      new TaggedValues<DamageType, int>(
         damage.Values.ToDictionary(
           pair => pair.Key,
-          pair => new IntValue(pair.Value.Int * multiplier)));
+          pair => pair.Value * multiplier));
 
-    public static TaggedValues<DamageType, IntValue> Add(
-      TaggedValues<DamageType, IntValue> a, TaggedValues<DamageType, IntValue> b)
+    public static TaggedValues<DamageType, int> Add(
+      TaggedValues<DamageType, int> a, TaggedValues<DamageType, int> b)
     {
       var result = a.Values.Clone();
       foreach (var pair in b.Values)
       {
         if (result.ContainsKey(pair.Key))
         {
-          result[pair.Key] = new IntValue(result[pair.Key].Int + pair.Value.Int);
+          result[pair.Key] = result[pair.Key] + pair.Value;
         }
         else
         {
@@ -53,7 +53,7 @@ namespace Nighthollow.Data
         }
       }
 
-      return new TaggedValues<DamageType, IntValue>(result);
+      return new TaggedValues<DamageType, int>(result);
     }
   }
 }

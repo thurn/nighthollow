@@ -84,23 +84,23 @@ namespace Nighthollow.Delegates.Core
     public bool RollForCrit(SkillContext context, Creature target) =>
       GetFirstImplemented(context, (d, c) => d.RollForCrit(c, target));
 
-    public TaggedValues<DamageType, IntValue> RollForBaseDamage(SkillContext context, Creature target) =>
+    public TaggedValues<DamageType, int> RollForBaseDamage(SkillContext context, Creature target) =>
       GetFirstImplemented(context, (d, c) => d.RollForBaseDamage(c, target));
 
-    public TaggedValues<DamageType, IntValue> TransformDamage(
-      SkillContext context, Creature target, TaggedValues<DamageType, IntValue> damage) =>
+    public TaggedValues<DamageType, int> TransformDamage(
+      SkillContext context, Creature target, TaggedValues<DamageType, int> damage) =>
       AggregateDelegates(context, damage, (d, c, value) => d.TransformDamage(c, target, value));
 
-    public TaggedValues<DamageType, IntValue> ApplyDamageReduction(
-      SkillContext context, Creature target, TaggedValues<DamageType, IntValue> damage) =>
+    public TaggedValues<DamageType, int> ApplyDamageReduction(
+      SkillContext context, Creature target, TaggedValues<DamageType, int> damage) =>
       GetFirstImplemented(context, (d, c) => d.ApplyDamageReduction(c, target, damage));
 
-    public TaggedValues<DamageType, IntValue> ApplyDamageResistance(
-      SkillContext context, Creature target, TaggedValues<DamageType, IntValue> damage) =>
+    public TaggedValues<DamageType, int> ApplyDamageResistance(
+      SkillContext context, Creature target, TaggedValues<DamageType, int> damage) =>
       GetFirstImplemented(context, (d, c) => d.ApplyDamageResistance(c, target, damage));
 
     public int ComputeFinalDamage(
-      SkillContext context, Creature target, TaggedValues<DamageType, IntValue> damage, bool isCriticalHit) =>
+      SkillContext context, Creature target, TaggedValues<DamageType, int> damage, bool isCriticalHit) =>
       GetFirstImplemented(context, (d, c) => d.ComputeFinalDamage(c, target, damage, isCriticalHit));
 
     public int ComputeHealthDrain(

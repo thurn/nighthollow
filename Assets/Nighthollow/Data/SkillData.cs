@@ -14,6 +14,7 @@
 
 #nullable enable
 
+using System.Collections.Generic;
 using Nighthollow.Delegates.Core;
 using Nighthollow.State;
 using Nighthollow.Stats;
@@ -25,19 +26,23 @@ namespace Nighthollow.Data
     public SkillTypeData BaseType { get; }
     public override StatTable Stats { get; }
     public DelegateList Delegate { get; }
+    public IReadOnlyList<AffixData> TargetedAffixes { get; }
     public KeyValueStore Values { get; }
 
     public SkillData(
       SkillTypeData baseType,
       StatTable stats,
-      DelegateList skillDelegate)
+      DelegateList skillDelegate,
+      IReadOnlyList<AffixData> targetedAffixes)
     {
       BaseType = baseType;
       Stats = stats;
       Delegate = skillDelegate;
+      TargetedAffixes = targetedAffixes;
       Values = new KeyValueStore();
     }
 
-    public SkillData Clone(StatTable parentStats) => new SkillData(BaseType, Stats.Clone(parentStats), Delegate);
+    public SkillData Clone(StatTable parentStats) =>
+      new SkillData(BaseType, Stats.Clone(parentStats), Delegate, TargetedAffixes);
   }
 }

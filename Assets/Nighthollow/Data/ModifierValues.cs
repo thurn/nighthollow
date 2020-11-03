@@ -46,11 +46,11 @@ namespace Nighthollow.Data
         }
       }
 
-      public AffixData BuildAffix(AffixTypeData affix)
+      public AffixData BuildAffix(AffixTypeData affixType)
       {
-        var modifierValues = _affixModifiers.GetValueOrDefault(affix.Id, new Dictionary<int, IStatModifier>());
+        var modifierValues = _affixModifiers.GetValueOrDefault(affixType.Id, new Dictionary<int, IStatModifier>());
         var result = new List<ModifierData>();
-        foreach (var modifierRange in affix.ModifierRanges)
+        foreach (var modifierRange in affixType.ModifierRanges)
         {
           var baseType = modifierRange.BaseType;
 
@@ -64,12 +64,10 @@ namespace Nighthollow.Data
             statModifier = Stat.GetStat(baseType.StatId!.Value).StaticModifierForOperator(baseType.Operator!.Value);
           }
 
-          result.Add(new ModifierData(
-            baseType.DelegateId,
-            statModifier));
+          result.Add(new ModifierData(baseType.DelegateId, statModifier));
         }
 
-        return new AffixData(affix.Id, result);
+        return new AffixData(affixType, result);
       }
     }
 
@@ -125,17 +123,17 @@ namespace Nighthollow.Data
     SkillItemData BuildSkill(GameDataService service, SkillTypeData skill)
     {
       var affixes = new List<AffixData>();
-      if (skill.ImplicitAffix != null)
+      foreach (var implicitAffix in skill.ImplicitAffixes)
       {
         if (_skillModifiers.ContainsKey(skill.Id))
         {
-          affixes.Add(_skillModifiers[skill.Id].BuildAffix(skill.ImplicitAffix));
+          affixes.Add(_skillModifiers[skill.Id].BuildAffix(implicitAffix));
         }
         else
         {
           // Affix may have no required arguments
           var result = new List<ModifierData>();
-          foreach (var modifier in skill.ImplicitAffix.ModifierRanges)
+          foreach (var modifier in implicitAffix.ModifierRanges)
           {
             var baseType = modifier.BaseType;
             IStatModifier? statModifier = null;
@@ -148,7 +146,7 @@ namespace Nighthollow.Data
             result.Add(new ModifierData(modifier.BaseType.DelegateId, statModifier));
           }
 
-          affixes.Add(new AffixData(skill.ImplicitAffix.Id, result));
+          affixes.Add(new AffixData(implicitAffix, result));
         }
       }
 
@@ -156,7 +154,7 @@ namespace Nighthollow.Data
       {
         affixes.AddRange(
           _skillModifiers[skill.Id].AffixIds
-            .Where(affixId => affixId != skill.ImplicitAffix?.Id)
+            .Where(affixId => !skill.ImplicitAffixes.Select(a => a.Id).Contains(affixId))
             .Select(affixId => _skillModifiers[skill.Id].BuildAffix(service.GetAffixType(affixId))));
       }
 

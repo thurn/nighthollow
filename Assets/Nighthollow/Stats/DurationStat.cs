@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct DurationValue : IStatValue
+  public readonly struct DurationValue
   {
     readonly int _timeMilliseconds;
 
@@ -40,7 +40,7 @@ namespace Nighthollow.Stats
     }
 
     public override DurationValue ComputeValue(IReadOnlyList<NumericOperation<DurationValue>> operations) =>
-      new DurationValue(IntStat.Compute(operations, duration => new IntValue(duration.AsMilliseconds())).Int);
+      new DurationValue(IntStat.Compute(operations, duration => duration.AsMilliseconds()));
 
     protected override DurationValue ParseStatValue(string value) => ParseDuration(value);
 

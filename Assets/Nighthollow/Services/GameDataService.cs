@@ -89,7 +89,7 @@ namespace Nighthollow.Services
         }
 
         var statId = Parse.IntRequired(stat, "Stat ID");
-        Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Overwrite).InsertInto(StatTable.Defaults);
+        Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Overwrite).ApplyTo(StatTable.Defaults);
       }
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))
@@ -148,7 +148,8 @@ namespace Nighthollow.Services
             ManaCostLow = Parse.Int(row, "Mana Cost Low").GetValueOrDefault(),
             ManaCostHigh = Parse.Int(row, "Mana Cost High").GetValueOrDefault(),
             InfluenceType = (School?) Parse.Int(row, "Influence Type"),
-            AffixPool = (AffixPool) Parse.IntRequired(row, "Affix Pool")
+            AffixPool = (AffixPool) Parse.IntRequired(row, "Affix Pool"),
+            IsTargeted = Parse.Boolean(row, "Is Targeted?")
           };
 
           currentlyBuilding.ModifierRanges.Add(new ModifierRange(this, row));
@@ -179,19 +180,19 @@ namespace Nighthollow.Services
       var creatureType = GetCreatureType(Parse.IntRequired(row, "Base Creature"));
 
       var stats = new StatModifierTable();
-      Stat.Health.Add(Parse.IntRequired(row, "Health")).InsertInto(stats);
-      Stat.ManaCost.Add(Parse.Int(row, "Mana Cost") ?? 0).InsertInto(stats);
+      Stat.Health.Add(Parse.IntRequired(row, "Health")).ApplyTo(stats);
+      Stat.ManaCost.Add(Parse.Int(row, "Mana Cost") ?? 0).ApplyTo(stats);
 
       var costString = Parse.String(row, "Influence Cost");
       if (costString != null)
       {
-        Stat.InfluenceCost.ParseModifier(costString, Operator.Add).InsertInto(stats);
+        Stat.InfluenceCost.ParseModifier(costString, Operator.Add).ApplyTo(stats);
       }
 
       var baseDamageString = Parse.String(row, "Base Damage");
       if (baseDamageString != null)
       {
-        Stat.BaseDamage.ParseModifier(baseDamageString, Operator.Overwrite).InsertInto(stats);
+        Stat.BaseDamage.ParseModifier(baseDamageString, Operator.Overwrite).ApplyTo(stats);
       }
 
       var cardName = Parse.String(row, "Card Name");

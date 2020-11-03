@@ -116,7 +116,7 @@ namespace Nighthollow.Components
       var index = 0;
       foreach (var pair in _data.Stats.Get(Stat.Influence).Values)
       {
-        for (var i = 0; i < pair.Value.Int; ++i)
+        for (var i = 0; i < pair.Value; ++i)
         {
           Image image;
           if (index < _influenceImages.Count)

@@ -40,8 +40,8 @@ namespace Nighthollow.Delegates.Implementations
       }
     }
 
-    public override TaggedValues<DamageType, IntValue> TransformDamage(
-      SkillContext c, Creature target, TaggedValues<DamageType, IntValue> damage)
+    public override TaggedValues<DamageType, int> TransformDamage(
+      SkillContext c, Creature target, TaggedValues<DamageType, int> damage)
     {
       var lastHit = c.Skill.Values.Get(Key.LastCreatureHit);
       if (lastHit && lastHit == target)

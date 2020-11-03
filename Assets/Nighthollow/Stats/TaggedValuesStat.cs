@@ -22,8 +22,8 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public sealed class TaggedValues<TTag, TValue> : IStatValue
-    where TTag : struct, Enum where TValue : struct, IStatValue
+  public sealed class TaggedValues<TTag, TValue>
+    where TTag : struct, Enum where TValue : struct
   {
     public IReadOnlyDictionary<TTag, TValue> Values { get; }
 
@@ -33,11 +33,16 @@ namespace Nighthollow.Stats
     {
       Values = values;
     }
+
+    public override string ToString()
+    {
+      return string.Join(",", Values.Select(pair => $"{pair.Key}: {pair.Value}").ToArray());
+    }
   }
 
   public abstract class TaggedValuesStat<TTag, TValue> :
     AbstractStat<TaggedNumericOperation<TTag, TValue>, TaggedValues<TTag, TValue>>
-    where TTag : struct, Enum where TValue : struct, IStatValue
+    where TTag : struct, Enum where TValue : struct
   {
     protected TaggedValuesStat(int id) : base(id)
     {
@@ -117,16 +122,16 @@ namespace Nighthollow.Stats
     public override IStatModifier? StaticModifierForOperator(Operator op) => null;
   }
 
-  public abstract class TaggedIntValuesStat<TTag> : TaggedValuesStat<TTag, IntValue> where TTag : struct, Enum
+  public abstract class TaggedIntValuesStat<TTag> : TaggedValuesStat<TTag, int> where TTag : struct, Enum
   {
     protected TaggedIntValuesStat(int id) : base(id)
     {
     }
 
-    protected override IntValue Compute(IReadOnlyList<NumericOperation<IntValue>> operations) =>
+    protected override int Compute(IReadOnlyList<NumericOperation<int>> operations) =>
       IntStat.Compute(operations, op => op);
 
-    protected override IntValue ParseInstance(string value) => IntStat.ParseInt(value);
+    protected override int ParseInstance(string value) => IntStat.ParseInt(value);
   }
 
   public abstract class TaggedPercentageValuesStat<TTag> : TaggedValuesStat<TTag, PercentageValue>

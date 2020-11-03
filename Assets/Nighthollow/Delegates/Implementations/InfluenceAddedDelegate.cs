@@ -28,7 +28,7 @@ namespace Nighthollow.Delegates.Implementations
       c.Results.Add(
         new ApplyModifierToOwnerEffect(c.Self,
           Stat.Influence.Modifier(
-            TaggedNumericOperation.Add(c.Self.Data.School, new IntValue(1)),
+            TaggedNumericOperation.Add(c.Self.Data.School, 1),
             new WhileAliveLifetime(c.Self))));
     }
   }

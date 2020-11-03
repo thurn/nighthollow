@@ -20,7 +20,7 @@ using UnityEngine;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct IntRangeValue : IStatValue
+  public readonly struct IntRangeValue
   {
     public static readonly IntRangeValue Zero = new IntRangeValue(0, 0);
     public int Low { get; }
@@ -44,8 +44,8 @@ namespace Nighthollow.Stats
 
     public static IntRangeValue Compute(IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
       new IntRangeValue(
-        IntStat.Compute(operations, range => new IntValue(range.Low)).Int,
-        IntStat.Compute(operations, range => new IntValue(range.High)).Int);
+        IntStat.Compute(operations, range => range.Low),
+        IntStat.Compute(operations, range => range.High));
 
     protected override IntRangeValue ParseStatValue(string value) => ParseIntRange(value);
 

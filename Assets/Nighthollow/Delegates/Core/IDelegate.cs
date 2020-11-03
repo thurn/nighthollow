@@ -132,33 +132,33 @@ namespace Nighthollow.Delegates.Core
     /// <summary>
     /// Should compute the base damage for this skill, randomly selecting from within its base damage ranges.
     /// </summary>
-    TaggedValues<DamageType, IntValue> RollForBaseDamage(SkillContext c, Creature target);
+    TaggedValues<DamageType, int> RollForBaseDamage(SkillContext c, Creature target);
 
     /// <summary>
     /// Given the base damage returned from <see cref="RollForBaseDamage"/>, delegates can transform the damage value
     /// before it is passed to <see cref="ComputeFinalDamage"/>. Each delegate's implementation of this method will be
     /// invoked in sequence with the return value of the previous delegate.
     /// </summary>
-    TaggedValues<DamageType, IntValue> TransformDamage(
-      SkillContext c, Creature target, TaggedValues<DamageType, IntValue> damage);
+    TaggedValues<DamageType, int> TransformDamage(
+      SkillContext c, Creature target, TaggedValues<DamageType, int> damage);
 
     /// <summary>
     /// Should apply damage reduction for this skill, reducing the damage value based on the target's reduction.
     /// Typically called by <see cref="ComputeFinalDamage"/>.
     /// </summary>
-    TaggedValues<DamageType, IntValue> ApplyDamageReduction(
+    TaggedValues<DamageType, int> ApplyDamageReduction(
       SkillContext c,
       Creature target,
-      TaggedValues<DamageType, IntValue> damage);
+      TaggedValues<DamageType, int> damage);
 
     /// <summary>
     /// Should apply damage resistance for this skill, reducing the damage value based on the target's resistance.
     /// Typically called by <see cref="ComputeFinalDamage"/>.
     /// </summary>
-    TaggedValues<DamageType, IntValue> ApplyDamageResistance(
+    TaggedValues<DamageType, int> ApplyDamageResistance(
       SkillContext c,
       Creature target,
-      TaggedValues<DamageType, IntValue> damage);
+      TaggedValues<DamageType, int> damage);
 
     /// <summary>
     /// Should compute the final damage value for this skill based on the value adjusted by damage resistance and
@@ -166,7 +166,7 @@ namespace Nighthollow.Delegates.Core
     /// </summary>
     public int ComputeFinalDamage(SkillContext c,
       Creature target,
-      TaggedValues<DamageType, IntValue> damage,
+      TaggedValues<DamageType, int> damage,
       bool isCriticalHit);
 
     /// <summary>

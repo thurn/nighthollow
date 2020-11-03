@@ -129,4 +129,11 @@ namespace Nighthollow.Generated
     Unused = 4,
   }
 
+  public enum ModifierApplicationType
+  {
+    Unknown = 0,
+    Self = 1,
+    Targeted = 2,
+  }
+
 }
