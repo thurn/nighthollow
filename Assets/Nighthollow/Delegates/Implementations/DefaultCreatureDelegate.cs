@@ -22,7 +22,6 @@ using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Nighthollow.Delegates.Implementations
 {
@@ -71,8 +70,7 @@ namespace Nighthollow.Delegates.Implementations
       }
 
       var maxCooldown = available.Max(s => s.GetDurationSeconds(Stat.Cooldown));
-      var maximums = available.Where(s => s.GetDurationSeconds(Stat.Cooldown) >= maxCooldown).ToList();
-      return maximums.ElementAt(Random.Range(0, maximums.Count));
+      return available.FirstOrDefault(s => s.GetDurationSeconds(Stat.Cooldown) >= maxCooldown);
     }
 
     static bool CooldownAvailable(CreatureContext c, SkillData skill)

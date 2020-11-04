@@ -44,6 +44,10 @@ namespace Nighthollow.Delegates.Implementations
             c.Self.ProjectileSource.position,
             Vector2.zero));
           break;
+        case SkillType.Melee when c.Skill.BaseType.Address != null:
+          c.Results.Add(
+            new PlayTimedEffectEffect(c.Skill.BaseType.Address, c.Self.Collider.bounds.center));
+          break;
         case SkillType.Area when c.Skill.BaseType.Address != null:
           c.Results.Add(
             new PlayTimedEffectEffect(c.Skill.BaseType.Address,
