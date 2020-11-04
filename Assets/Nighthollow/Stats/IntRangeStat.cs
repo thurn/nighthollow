@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using Nighthollow.Generated;
 using UnityEngine;
 
 #nullable enable
@@ -35,7 +36,7 @@ namespace Nighthollow.Stats
 
   public sealed class IntRangeStat : NumericStat<IntRangeValue>
   {
-    public IntRangeStat(int id) : base(id)
+    public IntRangeStat(StatId id) : base(id)
     {
     }
 

@@ -146,7 +146,16 @@ namespace Nighthollow.Editor.Data
       var input = SpreadsheetHelper.AsHeaderIdentifiedRows(rows);
 
       var builder = CreateHeader("\nusing Nighthollow.Stats;\nusing System;\n");
-      builder.Append("  public static class Stat\n");
+
+      builder.Append("  public enum StatId\n");
+      builder.Append("  {\n");
+      foreach (var stat in input)
+      {
+        builder.Append($"    {stat["Name"]} = {stat["Stat ID"]},\n");
+      }
+      builder.Append("  }\n");
+
+      builder.Append("\n  public static class Stat\n");
       builder.Append("  {\n");
 
       foreach (var stat in input)
@@ -164,7 +173,7 @@ namespace Nighthollow.Editor.Data
           _ => throw new ArgumentOutOfRangeException()
         };
 
-        builder.Append($"    public static readonly {statType} {stat["Name"]} = new {statType}({stat["Stat ID"]});\n");
+        builder.Append($"    public static readonly {statType} {stat["Name"]} = new {statType}(StatId.{stat["Name"]});\n");
       }
 
       builder.Append("\n    public static IStat GetStat(int statId)\n");

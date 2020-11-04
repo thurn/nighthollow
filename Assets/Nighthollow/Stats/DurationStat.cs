@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using Nighthollow.Generated;
 using UnityEngine;
 
 #nullable enable
@@ -35,7 +36,7 @@ namespace Nighthollow.Stats
 
   public sealed class DurationStat : NumericStat<DurationValue>
   {
-    public DurationStat(int id) : base(id)
+    public DurationStat(StatId id) : base(id)
     {
     }
 

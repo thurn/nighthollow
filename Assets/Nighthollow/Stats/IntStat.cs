@@ -18,13 +18,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Nighthollow.Generated;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
   public sealed class IntStat : NumericStat<int>
   {
-    public IntStat(int id) : base(id)
+    public IntStat(StatId id) : base(id)
     {
     }
 

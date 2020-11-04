@@ -44,7 +44,7 @@ namespace Nighthollow.Stats
     AbstractStat<TaggedNumericOperation<TTag, TValue>, TaggedValues<TTag, TValue>>
     where TTag : struct, Enum where TValue : struct
   {
-    protected TaggedValuesStat(int id) : base(id)
+    protected TaggedValuesStat(StatId id) : base(id)
     {
     }
 
@@ -124,7 +124,7 @@ namespace Nighthollow.Stats
 
   public abstract class TaggedIntValuesStat<TTag> : TaggedValuesStat<TTag, int> where TTag : struct, Enum
   {
-    protected TaggedIntValuesStat(int id) : base(id)
+    protected TaggedIntValuesStat(StatId id) : base(id)
     {
     }
 
@@ -137,7 +137,7 @@ namespace Nighthollow.Stats
   public abstract class TaggedPercentageValuesStat<TTag> : TaggedValuesStat<TTag, PercentageValue>
     where TTag : struct, Enum
   {
-    protected TaggedPercentageValuesStat(int id) : base(id)
+    protected TaggedPercentageValuesStat(StatId id) : base(id)
     {
     }
 
@@ -149,7 +149,7 @@ namespace Nighthollow.Stats
 
   public abstract class TaggedIntRangesStat<TTag> : TaggedValuesStat<TTag, IntRangeValue> where TTag : struct, Enum
   {
-    protected TaggedIntRangesStat(int id) : base(id)
+    protected TaggedIntRangesStat(StatId id) : base(id)
     {
     }
 
@@ -161,7 +161,7 @@ namespace Nighthollow.Stats
 
   public sealed class DamageTypeIntsStat : TaggedIntValuesStat<DamageType>
   {
-    public DamageTypeIntsStat(int id) : base(id)
+    public DamageTypeIntsStat(StatId id) : base(id)
     {
     }
 
@@ -182,7 +182,7 @@ namespace Nighthollow.Stats
 
   public sealed class DamageTypeIntRangesStat : TaggedIntRangesStat<DamageType>
   {
-    public DamageTypeIntRangesStat(int id) : base(id)
+    public DamageTypeIntRangesStat(StatId id) : base(id)
     {
     }
 
@@ -191,7 +191,7 @@ namespace Nighthollow.Stats
 
   public sealed class SchoolIntsStat : TaggedIntValuesStat<School>
   {
-    public SchoolIntsStat(int id) : base(id)
+    public SchoolIntsStat(StatId id) : base(id)
     {
     }
 

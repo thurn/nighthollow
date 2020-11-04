@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Generated;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
@@ -34,14 +35,14 @@ namespace Nighthollow.Stats
 
   public class StatModifierTable
   {
-    protected readonly Dictionary<int, List<OperationWithLifetime>> Modifiers;
+    protected readonly Dictionary<StatId, List<OperationWithLifetime>> Modifiers;
 
     public StatModifierTable()
     {
-      Modifiers = new Dictionary<int, List<OperationWithLifetime>>();
+      Modifiers = new Dictionary<StatId, List<OperationWithLifetime>>();
     }
 
-    protected StatModifierTable(Dictionary<int, List<OperationWithLifetime>> modifiers)
+    protected StatModifierTable(Dictionary<StatId, List<OperationWithLifetime>> modifiers)
     {
       Modifiers = modifiers.ToDictionary(k => k.Key, v => v.Value.Select(o => o).ToList());
     }
@@ -63,7 +64,8 @@ namespace Nighthollow.Stats
 
   public sealed class StatTable : StatModifierTable
   {
-    public static readonly StatTable Defaults = new StatTable(null, new Dictionary<int, List<OperationWithLifetime>>());
+    public static readonly StatTable Defaults =
+      new StatTable(null, new Dictionary<StatId, List<OperationWithLifetime>>());
     readonly StatTable? _parent;
 
     public StatTable(StatTable parent)
@@ -71,7 +73,7 @@ namespace Nighthollow.Stats
       _parent = parent;
     }
 
-    public StatTable(StatTable? parent, Dictionary<int, List<OperationWithLifetime>> modifiers) : base(modifiers)
+    public StatTable(StatTable? parent, Dictionary<StatId, List<OperationWithLifetime>> modifiers) : base(modifiers)
     {
       _parent = parent;
     }
@@ -79,7 +81,7 @@ namespace Nighthollow.Stats
     public TValue Get<TOperation, TValue>(AbstractStat<TOperation, TValue> stat) where TOperation : IOperation =>
       stat.ComputeValue(OperationsForStatId(stat.Id).Select(op => (TOperation) op.Operation).ToList());
 
-    IEnumerable<OperationWithLifetime> OperationsForStatId(int statId)
+    IEnumerable<OperationWithLifetime> OperationsForStatId(StatId statId)
     {
       if (Modifiers.ContainsKey(statId))
       {

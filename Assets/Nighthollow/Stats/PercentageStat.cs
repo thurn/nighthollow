@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using Nighthollow.Generated;
 using UnityEngine;
 
 namespace Nighthollow.Stats
@@ -37,7 +38,7 @@ namespace Nighthollow.Stats
 
   public sealed class PercentageStat : NumericStat<PercentageValue>
   {
-    public PercentageStat(int id) : base(id)
+    public PercentageStat(StatId id) : base(id)
     {
     }
 
