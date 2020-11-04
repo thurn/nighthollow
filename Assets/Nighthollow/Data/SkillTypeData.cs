@@ -28,8 +28,7 @@ namespace Nighthollow.Data
     public string Name { get; }
     public string? Address { get; }
     public SkillAnimationType SkillAnimationType { get; }
-    public bool IsMelee { get; }
-    public bool IsProjectile { get; }
+    public SkillType SkillType { get; }
     public int? ProjectileSpeed { get; }
     public bool UsesAccuracy { get; }
     public bool CanCrit { get; }
@@ -42,8 +41,7 @@ namespace Nighthollow.Data
       Name = Parse.StringRequired(row, "Name");
       Address = Parse.String(row, "Address");
       SkillAnimationType = (SkillAnimationType) Parse.IntRequired(row, "Animation");
-      IsMelee = Parse.Boolean(row, "Is Melee?");
-      IsProjectile = Parse.Boolean(row, "Is Projectile?");
+      SkillType = (SkillType) Parse.IntRequired(row, "Skill Type");
       ProjectileSpeed = Parse.Int(row, "Projectile Speed");
       UsesAccuracy = Parse.Boolean(row, "Uses Accuracy?");
       CanCrit = Parse.Boolean(row, "Can Crit?");

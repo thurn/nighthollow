@@ -34,14 +34,23 @@ namespace Nighthollow.Delegates.Implementations
     public override void OnUse(SkillContext c)
     {
       c.Self.MarkSkillUsed(c.Skill.BaseType);
-      if (c.Skill.BaseType.IsProjectile)
+      switch (c.Skill.BaseType.SkillType)
       {
-        c.Results.Add(new FireProjectileEffect(
-          c.Self,
-          c,
-          c.DelegateIndex,
-          c.Self.ProjectileSource.position,
-          Vector2.zero));
+        case SkillType.Projectile:
+          c.Results.Add(new FireProjectileEffect(
+            c.Self,
+            c,
+            c.DelegateIndex,
+            c.Self.ProjectileSource.position,
+            Vector2.zero));
+          break;
+        case SkillType.Area when c.Skill.BaseType.Address != null:
+          c.Results.Add(
+            new PlayTimedEffectEffect(c.Skill.BaseType.Address,
+              new Vector2(
+                c.Self.RankPosition?.ToCenterXPosition() ?? c.Self.transform.position.x,
+                c.Self.FilePosition.ToCenterYPosition())));
+          break;
       }
     }
 
@@ -122,7 +131,7 @@ namespace Nighthollow.Delegates.Implementations
     }
 
     public override IEnumerable<Creature> FilterTargets(SkillContext c, IEnumerable<Creature> hits) =>
-      c.Skill.BaseType.IsMelee ? hits.Take(Errors.CheckPositive(c.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
+      c.Skill.IsMelee() ? hits.Take(Errors.CheckPositive(c.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
 
     public override Collider2D GetCollider(SkillContext c) =>
       c.Projectile ? c.Projectile!.Collider : c.Self.Collider;
@@ -183,12 +192,12 @@ namespace Nighthollow.Delegates.Implementations
       var total = damage.Values.Values.Sum();
       total = isCriticalHit ? c.GetStat(Stat.CritMultiplier).CalculateFraction(total) : total;
 
-      if (c.Skill.BaseType.IsMelee)
+      if (c.Skill.IsMelee())
       {
         total = c.GetStat(Stat.MeleeDamageMultiplier).CalculateFraction(total);
       }
 
-      if (c.Skill.BaseType.IsProjectile)
+      if (c.Skill.IsProjectile())
       {
         total = c.GetStat(Stat.ProjectileDamageMultiplier).CalculateFraction(total);
       }
@@ -211,7 +220,7 @@ namespace Nighthollow.Delegates.Implementations
                        target.Data.Stats.Get(Stat.ReceiveCritsChance).AsMultiplier());
 
     public override int ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount) =>
-      c.Skill.BaseType.IsMelee ? c.GetStat(Stat.MeleeHealthDrainPercent).CalculateFraction(damageAmount) : 0;
+      c.Skill.IsMelee() ? c.GetStat(Stat.MeleeHealthDrainPercent).CalculateFraction(damageAmount) : 0;
 
     public override bool RollForStun(SkillContext c, Creature target, int damageAmount)
     {

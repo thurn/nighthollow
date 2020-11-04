@@ -14,6 +14,7 @@
 
 #nullable enable
 
+using Nighthollow.Utils;
 using UnityEngine;
 
 namespace Nighthollow.Stats
@@ -26,7 +27,7 @@ namespace Nighthollow.Stats
 
     public TimedLifetime(int durationMilliseconds)
     {
-      _endTimeSeconds = Time.time + (durationMilliseconds / 1000f);
+      _endTimeSeconds = Time.time + (Errors.CheckPositive(durationMilliseconds) / 1000f);
     }
   }
 }

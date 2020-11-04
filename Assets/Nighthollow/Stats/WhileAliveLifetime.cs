@@ -16,6 +16,7 @@
 
 using System;
 using Nighthollow.Components;
+using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
@@ -31,7 +32,7 @@ namespace Nighthollow.Stats
 
     public WhileAliveLifetime(Creature scopeCreature)
     {
-      _scopeCreature = new WeakReference<Creature>(scopeCreature);
+      _scopeCreature = new WeakReference<Creature>(Errors.CheckNotNull(scopeCreature));
     }
   }
 }

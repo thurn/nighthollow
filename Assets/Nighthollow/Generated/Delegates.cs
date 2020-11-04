@@ -36,6 +36,7 @@ namespace Nighthollow.Generated
     ApplyTargetedAffixesOnHitDelegate = 12,
     ChainToRandomTargetDelegate = 13,
     ChanceToShockDelegate = 14,
+    ApplyToAdjacentAlliesOnUseDelegate = 15,
   }
 
   public static class DelegateMap
@@ -56,6 +57,7 @@ namespace Nighthollow.Generated
       {DelegateId.ApplyTargetedAffixesOnHitDelegate, new ApplyTargetedAffixesOnHitDelegate()},
       {DelegateId.ChainToRandomTargetDelegate, new ChainToRandomTargetDelegate()},
       {DelegateId.ChanceToShockDelegate, new ChanceToShockDelegate()},
+      {DelegateId.ApplyToAdjacentAlliesOnUseDelegate, new ApplyToAdjacentAlliesOnUseDelegate()},
     };
 
     public static IDelegate Get(DelegateId id) => Delegates[id];

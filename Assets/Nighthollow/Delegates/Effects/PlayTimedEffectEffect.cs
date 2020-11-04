@@ -12,26 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Utils;
-
 #nullable enable
 
-namespace Nighthollow.Stats
+using Nighthollow.Components;
+using Nighthollow.Services;
+using UnityEngine;
+
+namespace Nighthollow.Delegates.Effects
 {
-  public abstract class StatEntity
+  public sealed class PlayTimedEffectEffect : Effect
   {
-    public abstract StatTable Stats { get; }
+    public string Address { get; }
+    public Vector2 Position { get; }
 
-    public TValue GetStat<TOperation, TValue>(AbstractStat<TOperation, TValue> stat)
-      where TOperation : IOperation =>
-      Stats.Get(stat);
+    public PlayTimedEffectEffect(string address, Vector2 position)
+    {
+      Address = address;
+      Position = position;
+    }
 
-    public int GetInt(IntStat statId) => Stats.Get(statId);
-
-    public bool GetBool(BoolStat statId) => Stats.Get(statId);
-
-    public int GetDurationMilliseconds(DurationStat statId) => Stats.Get(statId).AsMilliseconds();
-
-    public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
+    public override void Execute()
+    {
+      var effect = Root.Instance.AssetService.InstantiatePrefab<TimedEffect>(Address);
+      effect.transform.position = Position;
+    }
   }
 }

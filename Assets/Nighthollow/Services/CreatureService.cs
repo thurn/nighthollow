@@ -21,7 +21,6 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Nighthollow.Services
 {
@@ -93,6 +92,16 @@ namespace Nighthollow.Services
         rank = result.Value;
       }
     }
+
+    /// <summary>
+    /// Returns all User creatures in the 9 squares around the given (rank, file) position (including the creature at
+    /// that position, if any).
+    /// </summary>
+    public IEnumerable<Creature> GetAdjacentUserCreatures(RankValue inputRank, FileValue inputFile) =>
+      from rank in BoardPositions.AdjacentRanks(inputRank)
+      from file in BoardPositions.AdjacentFiles(inputFile)
+      where _userCreatures.ContainsKey((rank, file))
+      select _userCreatures[(rank, file)];
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
     public (RankValue, FileValue) GetClosestAvailablePosition(Vector2 position)

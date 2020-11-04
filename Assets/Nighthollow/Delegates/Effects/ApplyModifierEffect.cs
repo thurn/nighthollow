@@ -12,26 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Utils;
+using Nighthollow.Stats;
 
 #nullable enable
 
-namespace Nighthollow.Stats
+namespace Nighthollow.Delegates.Effects
 {
-  public abstract class StatEntity
+  public sealed class ApplyModifierEffect : Effect
   {
-    public abstract StatTable Stats { get; }
+    public StatEntity Target { get; }
+    public IStatModifier Modifier { get; }
 
-    public TValue GetStat<TOperation, TValue>(AbstractStat<TOperation, TValue> stat)
-      where TOperation : IOperation =>
-      Stats.Get(stat);
+    public ApplyModifierEffect(StatEntity target, IStatModifier modifier)
+    {
+      Target = target;
+      Modifier = modifier;
+    }
 
-    public int GetInt(IntStat statId) => Stats.Get(statId);
-
-    public bool GetBool(BoolStat statId) => Stats.Get(statId);
-
-    public int GetDurationMilliseconds(DurationStat statId) => Stats.Get(statId).AsMilliseconds();
-
-    public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
+    public override void Execute()
+    {
+      Modifier.ApplyTo(Target.Stats);
+    }
   }
 }

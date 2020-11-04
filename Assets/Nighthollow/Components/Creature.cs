@@ -247,7 +247,7 @@ namespace Nighthollow.Components
       if (!IsAlive()) return;
       _currentSkill.Delegate.OnUse(new SkillContext(this, _currentSkill));
 
-      if (_currentSkill.BaseType.IsMelee)
+      if (_currentSkill.IsMelee())
       {
         _currentSkill.Delegate.OnImpact(new SkillContext(this, _currentSkill));
       }
@@ -312,7 +312,7 @@ namespace Nighthollow.Components
 
     public bool IsStunned() => _state == CreatureState.Stunned;
 
-    public bool HasProjectileSkill() => _data.Skills.Any(s => s.BaseType.IsProjectile);
+    public bool HasProjectileSkill() => _data.Skills.Any(s => s.IsProjectile());
 
     bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
 
@@ -377,7 +377,6 @@ namespace Nighthollow.Components
 
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
-
 
       var speedMultiplier = _data.Stats.Get(Stat.SkillSpeedMultiplier).AsMultiplier();
       Errors.CheckState(speedMultiplier > 0.05f, "Skill speed must be > 5%");

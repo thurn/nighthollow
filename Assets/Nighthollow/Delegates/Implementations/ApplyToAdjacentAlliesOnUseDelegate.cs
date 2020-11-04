@@ -16,31 +16,37 @@
 
 using System;
 using System.Linq;
-using Nighthollow.Components;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
+using Nighthollow.Services;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class ApplyTargetedAffixesOnHitDelegate : AbstractDelegate
+  public sealed class ApplyToAdjacentAlliesOnUseDelegate : AbstractDelegate
   {
-    public override void OnApplyToTarget(SkillContext c, Creature target)
+    public override void OnUse(SkillContext c)
     {
-      foreach (var modifier in c.Skill.TargetedAffixes.SelectMany(affix => affix.Modifiers))
+      foreach (var creature in
+        Root.Instance.CreatureService.GetAdjacentUserCreatures(
+          Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition))
       {
-        if (modifier.DelegateId != null)
+        foreach (var modifier in c.Skill.TargetedAffixes.SelectMany(affix => affix.Modifiers))
         {
-          throw new NotSupportedException("Not yet implemented");
-        }
+          if (modifier.DelegateId != null)
+          {
+            throw new NotSupportedException("Not yet implemented");
+          }
 
-        if (modifier.StatModifier != null)
-        {
-          c.Results.Add(new ApplyModifierEffect(
-            target.Data,
-            modifier.StatModifier
-              .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(Stat.CurseDuration)))));
+          if (modifier.StatModifier != null)
+          {
+            c.Results.Add(new ApplyModifierEffect(
+              creature.Data,
+              modifier.StatModifier
+                .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(Stat.BuffDuration)))));
+          }
         }
       }
     }

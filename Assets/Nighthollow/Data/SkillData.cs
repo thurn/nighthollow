@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Delegates.Core;
+using Nighthollow.Generated;
 using Nighthollow.State;
 using Nighthollow.Stats;
 
@@ -41,6 +42,10 @@ namespace Nighthollow.Data
       TargetedAffixes = targetedAffixes;
       Values = new KeyValueStore();
     }
+
+    public bool IsMelee() => BaseType.SkillType == SkillType.Melee;
+
+    public bool IsProjectile() => BaseType.SkillType == SkillType.Projectile;
 
     public SkillData Clone(StatTable parentStats) =>
       new SkillData(BaseType, Stats.Clone(parentStats), Delegate, TargetedAffixes);

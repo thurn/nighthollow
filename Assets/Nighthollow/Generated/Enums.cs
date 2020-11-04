@@ -136,4 +136,13 @@ namespace Nighthollow.Generated
     Targeted = 2,
   }
 
+  public enum SkillType
+  {
+    Unknown = 0,
+    Custom = 1,
+    Melee = 2,
+    Projectile = 3,
+    Area = 4,
+  }
+
 }

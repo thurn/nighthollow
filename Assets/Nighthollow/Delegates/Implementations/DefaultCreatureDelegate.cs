@@ -40,23 +40,23 @@ namespace Nighthollow.Delegates.Implementations
     {
       if (c.Delegate.MeleeCouldHit(c))
       {
-        var skill = SelectMatching(c, s => s.BaseType.IsMelee);
+        var skill = SelectMatching(c, s => s.IsMelee());
         if (skill != null)
         {
           return skill;
         }
       }
 
-      if (c.Self.HasProjectileSkill() &&  c.Delegate.ProjectileCouldHit(c))
+      if (c.Self.HasProjectileSkill() && c.Delegate.ProjectileCouldHit(c))
       {
-        var skill = SelectMatching(c, s => s.BaseType.IsProjectile);
+        var skill = SelectMatching(c, s => s.IsProjectile());
         if (skill != null)
         {
           return skill;
         }
       }
 
-      return SelectMatching(c, s => !s.BaseType.IsProjectile && !s.BaseType.IsMelee);
+      return SelectMatching(c, s => !s.IsMelee() && !s.IsProjectile());
     }
 
     static SkillData? SelectMatching(CreatureContext c, Func<SkillData, bool> predicate)

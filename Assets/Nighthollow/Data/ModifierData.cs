@@ -16,6 +16,7 @@
 
 using Nighthollow.Generated;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
@@ -27,6 +28,7 @@ namespace Nighthollow.Data
     public ModifierData(
       DelegateId? delegateId, IStatModifier? statModifier)
     {
+      Errors.CheckArgument(delegateId != null || statModifier != null, "At least one value must be provided");
       DelegateId = delegateId;
       StatModifier = statModifier;
     }

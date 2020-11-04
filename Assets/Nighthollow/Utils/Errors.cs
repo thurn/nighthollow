@@ -54,6 +54,8 @@ namespace Nighthollow.Utils
       return value;
     }
 
+    public static int CheckPositive(float value) => CheckPositive((int) value);
+
     public static int CheckPositive(int value)
     {
       if (value <= 0)
