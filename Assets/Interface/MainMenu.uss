@@ -1,0 +1,75 @@
+.screen {
+    flex-grow: 1;
+    background-image: url('/Assets/ThirdParty/SuperBrutalAssets/background.jpg');
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    -unity-background-scale-mode: scale-to-fit;
+    padding-top: 52px;
+    padding-bottom: 20px;
+}
+
+.main-menu {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/mid_bar.png');
+    align-items: center;
+    justify-content: center;
+    -unity-slice-left: 500;
+    -unity-slice-right: 500;
+    -unity-slice-top: 500;
+    -unity-slice-bottom: 500;
+    width: 800px;
+    height: 800px;
+}
+
+.main-menu-text {
+    font-size: 32px;
+    color: rgb(230, 198, 172);
+    width: 600px;
+    height: 150px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    -unity-font: resource("Assets/ThirdParty/Fonts/Roboto-Regular.ttf");
+}
+
+.button {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/long_button_off.png');
+    color: rgb(230, 198, 172);
+    font-size: 52px;
+    width: 512px;
+    height: 128px;
+    margin: 16px;
+    -unity-slice-left: 20;
+    -unity-slice-right: 20;
+    -unity-slice-top: 10;
+    -unity-slice-bottom: 10;
+    border-width: 1;
+    border-color: black;
+    -unity-font: resource("Assets/ThirdParty/Fonts/Roboto-Regular.ttf");
+}
+
+.button:hover {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/long_button_on.png');
+}
+
+.button:active {
+    -unity-background-image-tint-color: rgb(200, 200, 200);
+}
+
+.menu-title {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/name_frame_mid_ready.png');
+    width: 80%;
+    height: 128px;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 10%;
+    top: -50;
+}
+
+.menu-title-text {
+    color: rgb(230, 198, 172);
+    font-size: 64px;
+    -unity-font: resource("Assets/ThirdParty/Fonts/BluuNext-Bold.otf");
+    margin-top: -10px;
+}
+
