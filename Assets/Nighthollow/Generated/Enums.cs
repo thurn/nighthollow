@@ -30,7 +30,7 @@ namespace Nighthollow.Generated
     Flame = 3,
     Ice = 4,
     Earth = 5,
-    Night = 6,
+    Shadow = 6,
   }
 
   public enum DamageType

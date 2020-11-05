@@ -17,7 +17,6 @@ using Nighthollow.Components;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Nighthollow.Services
@@ -93,7 +92,7 @@ namespace Nighthollow.Services
         School.Flame => Instantiate(_flameSymbol),
         School.Ice => Instantiate(_iceSymbol),
         School.Earth => Instantiate(_earthSymbol),
-        School.Night => Instantiate(_nightSymbol),
+        School.Shadow => Instantiate(_nightSymbol),
         _ => throw Errors.UnknownEnumValue(influenceType),
       };
     }

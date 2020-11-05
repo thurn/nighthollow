@@ -49,7 +49,7 @@ limitations under the License.
                 </ui:VisualElement>
                 <ui:VisualElement name="NightButton" class="school-selector" style="margin-right: 128px">
                     <ui:VisualElement class="school-image night"/>
-                    <ui:Label class="text" text="Night"/>
+                    <ui:Label class="text" text="Shadow"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

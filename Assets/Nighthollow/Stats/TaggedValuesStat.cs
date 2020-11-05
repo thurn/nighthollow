@@ -199,11 +199,11 @@ namespace Nighthollow.Stats
       tagCharacter switch
       {
         'L' => School.Light,
-        'S' => School.Sky,
+        'K' => School.Sky,
         'F' => School.Flame,
         'I' => School.Ice,
         'E' => School.Earth,
-        'N' => School.Night,
+        'S' => School.Shadow,
         _ => throw new ArgumentException($"Unknown school identifier: {tagCharacter}")
       };
   }

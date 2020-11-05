@@ -53,7 +53,7 @@ namespace Nighthollow.Interface
       _buttons[School.Flame] = this.Q("FlameButton");
       _buttons[School.Ice] = this.Q("IceButton");
       _buttons[School.Earth] = this.Q("EarthButton");
-      _buttons[School.Night] = this.Q("NightButton");
+      _buttons[School.Shadow] = this.Q("NightButton");
       _confirmButton = this.Q("ConfirmButton");
 
       _description.text = InitialDescription;
@@ -119,8 +119,8 @@ namespace Nighthollow.Interface
           "An Ice mage channels the fury of winter into attacking their enemies. They have the ability to freeze enemy creatures, and are known for being defensive. Their creatures often have high health, and are the hardest to destroy.",
         School.Earth =>
           "The school of Earth is all about the raw physical power of the land. They’re the best at making mana, and their creatures tend to have higher health & attack. A simple strategy, but very effective.",
-        School.Night =>
-          "Night is a subtle school, which prefers to deal damage indirectly and over time using tools like poison. They also specialize in sacrifice: they’re willing to give up their own creatures or life in order to achieve greater ends.",
+        School.Shadow =>
+          "Shadow is a subtle school, which prefers to deal damage indirectly and over time using tools like poison. They also specialize in sacrifice: they’re willing to give up their own creatures or life in order to achieve greater ends.",
         _ => throw Errors.UnknownEnumValue(school)
       };
   }
