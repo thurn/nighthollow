@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
@@ -41,6 +42,10 @@ namespace Nighthollow.Interface
       if (Application.isPlaying)
       {
         Runner.Instance.RunCoroutine(ShowDialog());
+        this.Q("ContinueButton").RegisterCallback<ClickEvent>(e =>
+        {
+          SceneManager.LoadScene("SchoolSelection");
+        });
       }
       UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
@@ -58,9 +63,14 @@ namespace Nighthollow.Interface
       FadeIn(this.Q("Dialog4"));
     }
 
-    void FadeIn(VisualElement ve)
+    public static void FadeIn(VisualElement ve, float duration = 2f)
     {
-      DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, 1f, 2f);
+      DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, 1f, duration);
+    }
+
+    public static void FadeOut(VisualElement ve, float duration = 2f)
+    {
+      DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, 0f, duration);
     }
   }
 }

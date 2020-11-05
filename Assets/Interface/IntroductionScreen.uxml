@@ -35,7 +35,7 @@ limitations under the License.
             <ui:VisualElement class="you portrait"/>
             <ui:Label class="dialog-text" text="Who dares to awaken me from my thousand-year slumber?"/>
         </ui:VisualElement>
-        <ui:Button text="Continue" name="Continue" class="button small continue-button"
+        <ui:Button text="Continue" name="ContinueButton" class="button small continue-button"
                    display-tooltip-when-elided="true"/>
     </nh:IntroductionScreen>
 </ui:UXML>

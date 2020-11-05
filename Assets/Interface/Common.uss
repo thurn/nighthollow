@@ -51,3 +51,9 @@ limitations under the License.
 .button:active {
     -unity-background-image-tint-color: rgb(200, 200, 200);
 }
+
+.text {
+    color: rgb(230, 198, 172);
+    -unity-font: resource("Assets/ThirdParty/Fonts/Roboto-Regular.ttf");
+    white-space: normal;
+}
