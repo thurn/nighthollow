@@ -16,13 +16,14 @@ limitations under the License.
 -->
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
-    <ui:VisualElement name="Screen" class="screen">
+    <ui:VisualElement name="Screen" class="screen main-menu-background">
+        <ui:Style src="Common.uss"/>
         <ui:Style src="MainMenu.uss"/>
         <nh:MainMenu>
             <ui:VisualElement name="Main" class="main-menu">
                 <ui:Label class="main-menu-text"
-                          text="Welcome to Nighthollow, a massively multiplayer tower defense game."/>
-                <ui:Button text="Play Tutorial"
+                          text="Welcome to the world of Nighthollow, a creature tower defense game of deck-building, crafting and trading."/>
+                <ui:Button text="Play"
                            name="PlayTutorial"
                            class="button"
                            display-tooltip-when-elided="true"/>

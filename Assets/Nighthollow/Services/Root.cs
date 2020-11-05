@@ -15,6 +15,8 @@
 using Nighthollow.Components;
 using Nighthollow.Utils;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright © 2020-present Derek Thurn
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
+    <nh:IntroductionScreen name="IntroductionScreen" class="screen">
+        <ui:Style src="Common.uss"/>
+        <ui:Style src="IntroductionScreen.uss"/>
+        <ui:VisualElement class="dialog-box right" name="Dialog1" style="opacity: 0;">
+            <ui:Label class="dialog-text" text="Ekis ver Morta. Eluta ver Natha."/>
+            <ui:VisualElement class="advisor portrait"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dialog-box right" name="Dialog2" style="opacity: 0;">
+            <ui:Label class="dialog-text italic" text="Ekis ver Morta! Eluta ver Natha!"/>
+            <ui:VisualElement class="advisor portrait"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dialog-box left" name="Dialog3" style="opacity: 0;">
+            <ui:VisualElement class="you portrait"/>
+            <ui:Label class="dialog-text" text="The ritual is now complete."/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dialog-box left" name="Dialog4" style="opacity: 0;">
+            <ui:VisualElement class="you portrait"/>
+            <ui:Label class="dialog-text" text="Who dares to awaken me from my thousand-year slumber?"/>
+        </ui:VisualElement>
+        <ui:Button text="Continue" name="Continue" class="button small continue-button"
+                   display-tooltip-when-elided="true"/>
+    </nh:IntroductionScreen>
+</ui:UXML>

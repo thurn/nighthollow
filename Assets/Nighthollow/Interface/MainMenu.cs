@@ -14,23 +14,20 @@
 
 #nullable enable
 
-using Nighthollow.Utils;
-using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-
-[assembly: UxmlNamespacePrefix("Nighthollow.Interface", "nh")]
 
 namespace Nighthollow.Interface
 {
-  public class MainMenu : VisualElement
+  public sealed class MainMenu : VisualElement
   {
     VisualElement? _main;
     VisualElement? _settings;
     VisualElement? _about;
     Label? _title;
 
-    public new class UxmlFactory : UxmlFactory<MainMenu, UxmlTraits>
+    public new sealed class UxmlFactory : UxmlFactory<MainMenu, UxmlTraits>
     {
     }
 
@@ -50,7 +47,7 @@ namespace Nighthollow.Interface
       _about = this.Q("About");
       _title = this.Q<Label>("MenuTitle")!;
 
-      _main.Q("PlayTutorial").RegisterCallback<ClickEvent>(e => { Debug.Log("Play Tutorial Clicked"); });
+      _main.Q("PlayTutorial").RegisterCallback<ClickEvent>(e => { SceneManager.LoadScene("Introduction"); });
       _main.Q("ShowSettings").RegisterCallback<ClickEvent>(e =>
       {
         _main.style.display = DisplayStyle.None;

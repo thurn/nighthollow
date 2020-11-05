@@ -1,0 +1,72 @@
+/*
+Copyright © 2020-present Derek Thurn
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
+
+.dialog-box {
+    width: 1000px;
+    flex-direction: row;
+    align-items: center;
+    margin: 16;
+}
+
+.dialog-box.left {
+    justify-content: flex-start;
+}
+
+.dialog-box.right {
+    justify-content: flex-end;
+}
+
+.dialog-text {
+    color: rgb(230, 198, 172);
+    font-size: 52px;
+    -unity-font: resource("Assets/ThirdParty/Fonts/Roboto-Regular.ttf");
+    white-space: normal;
+    max-width: 800px;
+    margin: 50 0;
+}
+
+.dialog-text.italic {
+    -unity-font-style: italic;
+}
+
+.dialog-text.left {
+    -unity-text-align: middle-left;
+}
+
+.dialog-text.right {
+    -unity-text-align: middle-right;
+}
+
+.portrait {
+    width: 168;
+    height: 168;
+}
+
+.portrait.advisor {
+    background-image: url('/Assets/ThirdParty/Poneti/AvatarIcons/advisor.png');
+    margin-left: 32;
+}
+
+.portrait.you {
+    background-image: url('/Assets/ThirdParty/Poneti/AvatarIcons/you.png');
+    margin-right: 32;
+}
+
+.continue-button {
+    position: absolute;
+    right: 5;
+    bottom: 10;
+}
