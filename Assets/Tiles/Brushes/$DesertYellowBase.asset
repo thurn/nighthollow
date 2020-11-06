@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26be4e82cfcd40d2850370a1296b204, type: 3}
+  m_Name: $DesertYellowBase
+  m_EditorClassIdentifier: 
+  m_Cells:
+  - m_Tile: {fileID: 0}
+    m_Matrix:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Pivot: {x: 0, y: 0, z: 0}
+  m_CanChangeZPosition: 0
+  m_FloodFillContiguousOnly: 1
+  randomTileSetSize: {x: 1, y: 1, z: 1}
+  randomTileSets:
+  - randomTiles:
+    - {fileID: 11400000, guid: 8c2c0209d261c4dd598a94a8bd9052f8, type: 2}
+  - randomTiles:
+    - {fileID: 11400000, guid: 032e86de73023442694d4616c9e5ebca, type: 2}
+  - randomTiles:
+    - {fileID: 11400000, guid: e3f0b38f631d44f09afbb6fceefb0dd8, type: 2}
+  - randomTiles:
+    - {fileID: 11400000, guid: 462e6a03b50b146729a9d6b82f96fa86, type: 2}
+  pickRandomTiles: 0
+  addToRandomTiles: 0
+  InputTiles:
+  - {fileID: 11400000, guid: 8c2c0209d261c4dd598a94a8bd9052f8, type: 2}
+  - {fileID: 11400000, guid: 032e86de73023442694d4616c9e5ebca, type: 2}
+  - {fileID: 11400000, guid: e3f0b38f631d44f09afbb6fceefb0dd8, type: 2}
+  - {fileID: 11400000, guid: 462e6a03b50b146729a9d6b82f96fa86, type: 2}
