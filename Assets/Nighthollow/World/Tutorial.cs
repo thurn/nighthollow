@@ -22,6 +22,7 @@ namespace Nighthollow.World
   {
 #pragma warning disable 0649
     [SerializeField] Dialog _dialogPrefab;
+    [SerializeField] bool _showIntroduction;
 #pragma warning restore 0649
 
     static readonly string IntroText =
@@ -29,7 +30,10 @@ namespace Nighthollow.World
 
     void Start()
     {
-      ShowDialog(IntroText);
+      if (_showIntroduction)
+      {
+        ShowDialog(IntroText);
+      }
     }
 
     void ShowDialog(string text)
