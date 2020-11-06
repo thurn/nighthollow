@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Nighthollow.Components;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
@@ -43,7 +42,6 @@ namespace Nighthollow.Services
     [SerializeField] DamageText _hitMedium;
     [SerializeField] DamageText _hitBig;
     [SerializeField] Sprite _stunIcon;
-    [SerializeField] Dialog _dialog;
 #pragma warning restore 0649
 
     public Card CreateCard() => ComponentUtils.Instantiate(_cardPrefab, Root.Instance.MainCanvas);
@@ -79,9 +77,6 @@ namespace Nighthollow.Services
       Root.Instance.ObjectPoolService.Create(_hitBig, Constants.OffScreen, Root.Instance.MainCanvas);
 
     public Sprite StunIcon() => Instantiate(_stunIcon);
-
-    public void ShowDialog(string text, Action onClose) =>
-      ComponentUtils.Instantiate(_dialog, Root.Instance.MainCanvas).Initialize(text, onClose);
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {

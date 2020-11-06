@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
@@ -101,9 +102,11 @@ namespace Nighthollow.Interface
       _confirmButton!.style.display = DisplayStyle.None;
       var dialog = this.Q("Dialog");
       dialog.style.display = DisplayStyle.Flex;
-      IntroductionScreen.FadeIn(dialog);
+      InterfaceUtils.FadeIn(dialog);
       yield return new WaitForSeconds(4f);
-      IntroductionScreen.FadeOut(dialog);
+      InterfaceUtils.FadeOut(dialog);
+      yield return new WaitForSeconds(1f);
+      SceneManager.LoadScene("World");
     }
 
     static string DescriptionForSchool(School school) =>

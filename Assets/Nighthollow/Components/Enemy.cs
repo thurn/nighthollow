@@ -20,7 +20,6 @@ using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Nighthollow.Components
 {
@@ -44,7 +43,7 @@ namespace Nighthollow.Components
       _deathCount++;
       if (_deathCount >= _data.GetInt(Stat.TotalEnemiesToSpawn))
       {
-        Root.Instance.Prefabs.ShowDialog("Victory!", () => { SceneManager.LoadScene("Main", LoadSceneMode.Single); });
+        Debug.Log("Victory!");
       }
     }
 

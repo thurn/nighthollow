@@ -21,7 +21,7 @@ using UnityEngine.Tilemaps;
 namespace Nighthollow.Editor
 {
   [CustomGridBrush(false, false, false, "Random Brush")]
-  [CreateAssetMenu(menuName = "2D/Randomizer Brush %#i")]
+  [CreateAssetMenu(menuName = "2D/Randomizer Brush")]
   public sealed class RandomizerBrush : RandomBrush
   {
     public TileBase[] InputTiles;

@@ -81,7 +81,7 @@ namespace Nighthollow.Components
       _life -= amount;
       if (_life <= 0)
       {
-        Root.Instance.Prefabs.ShowDialog("Game Over", () => { SceneManager.LoadScene("Main", LoadSceneMode.Single); });
+        Debug.Log("Game Over");
       }
       else
       {

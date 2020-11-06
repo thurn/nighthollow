@@ -54,23 +54,13 @@ namespace Nighthollow.Interface
     {
       yield return new WaitForSeconds(0.5f);
 
-      FadeIn(this.Q("Dialog1"));
+      InterfaceUtils.FadeIn(this.Q("Dialog1"));
       yield return new WaitForSeconds(3f);
-      FadeIn(this.Q("Dialog2"));
+      InterfaceUtils.FadeIn(this.Q("Dialog2"));
       yield return new WaitForSeconds(3f);
-      FadeIn(this.Q("Dialog3"));
+      InterfaceUtils.FadeIn(this.Q("Dialog3"));
       yield return new WaitForSeconds(3f);
-      FadeIn(this.Q("Dialog4"));
-    }
-
-    public static void FadeIn(VisualElement ve, float duration = 2f)
-    {
-      DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, 1f, duration);
-    }
-
-    public static void FadeOut(VisualElement ve, float duration = 2f)
-    {
-      DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, 0f, duration);
+      InterfaceUtils.FadeIn(this.Q("Dialog4"));
     }
   }
 }

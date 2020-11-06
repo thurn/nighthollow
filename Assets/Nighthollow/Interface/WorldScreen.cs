@@ -12,33 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using TMPro;
-using UnityEngine;
+#nullable enable
 
-namespace Nighthollow.Components
+using UnityEngine.UIElements;
+
+namespace Nighthollow.Interface
 {
-  public sealed class Dialog : MonoBehaviour
+  public sealed class WorldScreen : VisualElement
   {
-#pragma warning disable 0649
-    [SerializeField] TextMeshProUGUI _text;
-    float _oldTimeScale;
-    Action _onClose;
-#pragma warning restore 0649
-
-    public void Initialize(string text, Action onClose)
+    public new sealed class UxmlFactory : UxmlFactory<WorldScreen, UxmlTraits>
     {
-      _text.text = text;
-      _onClose = onClose;
-      _oldTimeScale = Time.timeScale;
-      Time.timeScale = 0f;
     }
 
-    public void OnClose()
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
     {
-      Time.timeScale = _oldTimeScale;
-      Destroy(gameObject);
-      _onClose?.Invoke();
+    }
+
+    public WorldScreen()
+    {
+      RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
+    }
+
+    void OnGeometryChange(GeometryChangedEvent evt)
+    {
+      UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
   }
 }

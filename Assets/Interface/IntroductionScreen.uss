@@ -18,7 +18,7 @@ limitations under the License.
     width: 1000px;
     flex-direction: row;
     align-items: center;
-    margin: 16;
+    margin: 16px;
 }
 
 .dialog-box.left {
@@ -35,7 +35,7 @@ limitations under the License.
     -unity-font: resource("Assets/ThirdParty/Fonts/Roboto-Regular.ttf");
     white-space: normal;
     max-width: 800px;
-    margin: 50 0;
+    margin: 50px 0;
 }
 
 .dialog-text.italic {
@@ -50,23 +50,8 @@ limitations under the License.
     -unity-text-align: middle-right;
 }
 
-.portrait {
-    width: 168;
-    height: 168;
-}
-
-.portrait.advisor {
-    background-image: url('/Assets/ThirdParty/Poneti/AvatarIcons/advisor.png');
-    margin-left: 32;
-}
-
-.portrait.you {
-    background-image: url('/Assets/ThirdParty/Poneti/AvatarIcons/you.png');
-    margin-right: 32;
-}
-
 .continue-button {
     position: absolute;
-    right: 5;
-    bottom: 10;
+    right: 5px;
+    bottom: 10px;
 }
