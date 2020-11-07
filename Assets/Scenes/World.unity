@@ -589,7 +589,7 @@ GameObject:
   - component: {fileID: 1143359795}
   - component: {fileID: 1143359796}
   m_Layer: 0
-  m_Name: WorldTilemap
+  m_Name: WorldMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39161,15 +39161,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09ee9327c6cd4b1a9f8092d1342b4001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _overlayTilemap: {fileID: 2073374813}
-  _tilemap: {fileID: 0}
-  _tilemapRenderer: {fileID: 0}
   _bottomLeftSelection: {fileID: 11400000, guid: 3915bde71dc0e42128d8b3e8f0e028c7,
     type: 2}
   _bottomRightSelection: {fileID: 11400000, guid: 3690dbd57296843bcb6025790e1db178,
     type: 2}
   _rightSelection: {fileID: 11400000, guid: 13c656795d9584940a64f1977840f5c5, type: 2}
   _leftSelection: {fileID: 11400000, guid: f4563d3b0f2d14039b09a9c273eacb6a, type: 2}
+  _overlayTilemap: {fileID: 2073374813}
 --- !u!1 &2068825404
 GameObject:
   m_ObjectHideFlags: 0
