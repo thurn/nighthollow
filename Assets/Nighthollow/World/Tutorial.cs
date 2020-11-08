@@ -12,24 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
+using System.Collections.Generic;
 using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Nighthollow.World
 {
   public sealed class Tutorial : MonoBehaviour
   {
 #pragma warning disable 0649
-    [SerializeField] Dialog _dialogPrefab;
+    [SerializeField] Dialog _dialogPrefab = null!;
     [SerializeField] bool _showIntroduction;
+    [SerializeField] WorldMap _worldMap = null!;
+    [SerializeField] Tile _fightIcon = null!;
 #pragma warning restore 0649
 
-    static readonly string IntroText =
+    static readonly Color BorderColor = new Color(0.498f, 0f, 0f);
+    static readonly Vector2Int StartingHex = new Vector2Int(-12, 7);
+    static readonly Vector2Int AttackHex = new Vector2Int(-11, 7);
+
+    const string IntroText =
       "The sleeper awakes... we have been preparing for your return for many years, my lord. We will once again bring the Eternal Night to the world of the living!";
 
     void Start()
     {
+      _worldMap.Initialize();
+
       if (_showIntroduction)
       {
         ShowDialog(IntroText);
@@ -38,7 +50,10 @@ namespace Nighthollow.World
 
     void ShowDialog(string text)
     {
-      ComponentUtils.Instantiate(_dialogPrefab).Initialize(text);
+      ComponentUtils.Instantiate(_dialogPrefab).Initialize(text, () =>
+      {
+        _worldMap.ShowIcon(AttackHex, _fightIcon);
+      });
     }
   }
 }

@@ -22,7 +22,7 @@ limitations under the License.
         <ui:VisualElement name="DialogBox" class="dialog text" style="opacity: 0;">
             <ui:VisualElement class="advisor portrait"/>
             <ui:Label name="DialogText" class="text" />
-            <ui:Button name="DialogClose" class="close-button" />
+            <ui:VisualElement name="DialogClose" class="close-button" focusable="true" />
         </ui:VisualElement>
     </nh:DialogOverlay>
 </ui:UXML>

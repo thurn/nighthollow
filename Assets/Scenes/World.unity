@@ -256,7 +256,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 178308604}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afe6c4600f907e64ca01409d01326a60, type: 3}
   m_Name: 
@@ -274,7 +274,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 178308604}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f21c074d86024caca2a0034ce4f53f73, type: 3}
   m_Name: 
@@ -298,6 +298,8 @@ MonoBehaviour:
   _dialogPrefab: {fileID: 2398821127423259907, guid: ebf39abfca6dd4cef984e028f04c6a14,
     type: 3}
   _showIntroduction: 0
+  _worldMap: {fileID: 1143359796}
+  _fightIcon: {fileID: 11400000, guid: fee0ceca865fc41bcbba700f3654ca47, type: 2}
 --- !u!1 &817099573
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 177638, guid: 0abab5bb77339e4428787a870eb31bd3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11496292, guid: 0abab5bb77339e4428787a870eb31bd3, type: 3}
       propertyPath: m_ramModuleState
@@ -39168,6 +39170,31 @@ MonoBehaviour:
   _rightSelection: {fileID: 11400000, guid: 13c656795d9584940a64f1977840f5c5, type: 2}
   _leftSelection: {fileID: 11400000, guid: f4563d3b0f2d14039b09a9c273eacb6a, type: 2}
   _overlayTilemap: {fileID: 2073374813}
+  _kingdoms:
+  - _name: Nighthollow
+    _startingLocation: {x: -12, y: 7}
+    _borderColor: {r: 0.49803922, g: 0, b: 0, a: 1}
+    _icon: {fileID: 11400000, guid: 94b6c5bab4f6d4df69d591c452215266, type: 2}
+  - _name: Ivywood
+    _startingLocation: {x: 24, y: 12}
+    _borderColor: {r: 0, g: 0.3019608, b: 0.2509804, a: 1}
+    _icon: {fileID: 11400000, guid: ad4b1b4deba234555ba7a6407a446ade, type: 2}
+  - _name: Frostford
+    _startingLocation: {x: -3, y: 19}
+    _borderColor: {r: 0.050980393, g: 0.2784314, b: 0.6313726, a: 1}
+    _icon: {fileID: 11400000, guid: fc3d25c678a0645a6b9ce42f063db148, type: 2}
+  - _name: Uldreyin
+    _startingLocation: {x: -12, y: -5}
+    _borderColor: {r: 0.2, g: 0.4117647, b: 0.11764706, a: 1}
+    _icon: {fileID: 11400000, guid: 650d8a97ff1b74ce2b51e1068278a729, type: 2}
+  - _name: Dawnhaven
+    _startingLocation: {x: 22, y: 0}
+    _borderColor: {r: 1, g: 0.43529412, b: 0, a: 1}
+    _icon: {fileID: 11400000, guid: 8634778b6278648049c82c2ee0415290, type: 2}
+  - _name: Istu
+    _startingLocation: {x: -1, y: -21}
+    _borderColor: {r: 0.2901961, g: 0.078431375, b: 0.54901963, a: 1}
+    _icon: {fileID: 11400000, guid: f9715253066634d748026d029dd85647, type: 2}
 --- !u!1 &2068825404
 GameObject:
   m_ObjectHideFlags: 0
@@ -39255,15 +39282,39 @@ Tilemap:
   m_Enabled: 1
   m_Tiles: {}
   m_AnimatedTiles: {}
-  m_TileAssetArray: []
-  m_TileSpriteArray: []
-  m_TileMatrixArray: []
-  m_TileColorArray: []
+  m_TileAssetArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  m_TileSpriteArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  m_TileMatrixArray:
+  - m_RefCount: 0
+    m_Data:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+  m_TileColorArray:
+  - m_RefCount: 0
+    m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: 0, y: 0, z: 0}
-  m_Size: {x: 0, y: 0, z: 1}
+  m_Origin: {x: -12, y: 0, z: 0}
+  m_Size: {x: 12, y: 8, z: 1}
   m_TileAnchor: {x: 0, y: -0.64, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:

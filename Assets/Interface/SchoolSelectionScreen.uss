@@ -41,7 +41,7 @@ limitations under the License.
 .school-selector .text {
     font-size: 72px;
     -unity-text-align: middle-center;
-    -unity-font: resource("Assets/ThirdParty/Fonts/BluuNext-Bold.otf");
+    -unity-font: url('/Assets/ThirdParty/Fonts/BluuNext-Bold.otf');
 }
 
 .school-selector:hover {

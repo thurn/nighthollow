@@ -23,19 +23,23 @@ namespace Nighthollow.World
 {
   public sealed class WorldMap : MonoBehaviour
   {
+#pragma warning disable 0649
     [SerializeField] Tile _bottomLeftSelection = null!;
     [SerializeField] Tile _bottomRightSelection = null!;
     [SerializeField] Tile _rightSelection = null!;
     [SerializeField] Tile _leftSelection = null!;
     [SerializeField] Tilemap _overlayTilemap = null!;
+    [SerializeField] List<KingdomData> _kingdoms = null!;
+#pragma warning restore 0649
 
     const int BottomLeftZ = 1;
     const int BottomRightZ = 2;
     const int RightZ = 3;
     const int LeftZ = 4;
+    const int IconZ = 5;
     readonly Dictionary<int, Tilemap> _children = new Dictionary<int, Tilemap>();
 
-    void Start()
+    public void Initialize()
     {
       var map = ComponentUtils.GetComponent<Tilemap>(gameObject);
 
@@ -63,14 +67,16 @@ namespace Nighthollow.World
       Destroy(GetComponent<TilemapRenderer>());
       Destroy(GetComponent<Tilemap>());
 
-      OutlineHexes(new Color(0.776f, 0.157f, 0.157f), new HashSet<Vector2Int>
+      foreach (var kingdom in _kingdoms)
       {
-        new Vector2Int(-12, 7),
-        new Vector2Int(-11, 7),
-        new Vector2Int(-10, 7),
-        new Vector2Int(-12, 6),
-        new Vector2Int(-11, 6),
-      });
+        OutlineHexes(kingdom.BorderColor, new HashSet<Vector2Int> {kingdom.StartingLocation});
+        ShowIcon(kingdom.StartingLocation, kingdom.Icon);
+      }
+    }
+
+    public void ShowIcon(Vector2Int hex, Tile tile)
+    {
+      _overlayTilemap.SetTile(new Vector3Int(hex.x, hex.y, IconZ), tile);
     }
 
     public void OutlineHexes(Color color, ISet<Vector2Int> hexes)
@@ -131,59 +137,5 @@ namespace Nighthollow.World
         _children[hex.y].SetTile(new Vector3Int(hex.x, hex.y, zPosition), tile);
       }
     }
-
-    // void Start()
-    // {
-    //   _tilemap = GetComponent<Tilemap>();
-    //   _tilemapRenderer = GetComponent<TilemapRenderer>();
-    //
-    //   var color = new Color(0.776f, 0.157f, 0.157f);
-    //   _bottomLeftSelection.color = color;
-    //   _bottomRightSelection.color = color;
-    //   _rightSelection.color = color;
-    //   _leftSelection.color = color;
-    //
-    //   if (!IsChild)
-    //   {
-    //     // Unity is supposed to be able to handle overlapping by y coordinate correctly in a single tilemap, but it's
-    //     // currently very buggy. So I just make each row in to a separate tilemap.
-    //     for (var yCoordinate = -30; yCoordinate <= 30; ++yCoordinate)
-    //     {
-    //       var childMap = ComponentUtils.GetComponent<WorldMap>(Instantiate(gameObject, transform.parent));
-    //       childMap.name = $"Row {yCoordinate}";
-    //       childMap.IsChild = true;
-    //       childMap.TilemapRenderer.sortingOrder = -yCoordinate;
-    //       childMap.Tilemap.ClearAllTiles();
-    //
-    //       for (var xCoordinate = -30; xCoordinate <= 30; ++xCoordinate)
-    //       {
-    //         childMap.Tilemap.SetTile(new Vector3Int(xCoordinate, yCoordinate, 0),
-    //           _tilemap.GetTile(new Vector3Int(xCoordinate, yCoordinate, 0)));
-    //       }
-    //
-    //       if (yCoordinate == 8)
-    //       {
-    //         childMap.Tilemap.SetTile(new Vector3Int(-12, 8, 1), Instantiate(_bottomRightSelection));
-    //         childMap.Tilemap.SetTile(new Vector3Int(-11, 8, 2), Instantiate(_bottomLeftSelection));
-    //         childMap.Tilemap.SetTile(new Vector3Int(-11, 8, 3), Instantiate(_bottomRightSelection));
-    //         childMap.Tilemap.SetTile(new Vector3Int(-10, 8, 3), Instantiate(_bottomLeftSelection));
-    //       }
-    //
-    //       if (yCoordinate == 7)
-    //       {
-    //         _overlayTilemap.SetTile(new Vector3Int(-12, 7, 2), _bottomRightSelection);
-    //         _overlayTilemap.SetTile(new Vector3Int(-12, 7, 3), _bottomLeftSelection);
-    //         _overlayTilemap.SetTile(new Vector3Int(-12, 7, 4), _leftSelection);
-    //
-    //         _overlayTilemap.SetTile(new Vector3Int(-11, 7, 2), _bottomRightSelection);
-    //         _overlayTilemap.SetTile(new Vector3Int(-11, 7, 3), _bottomLeftSelection);
-    //         _overlayTilemap.SetTile(new Vector3Int(-11, 7, 4), _rightSelection);
-    //
-    //       }
-    //     }
-    //
-    //     Destroy(gameObject);
-    //   }
-    // }
   }
 }

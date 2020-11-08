@@ -75,8 +75,11 @@ namespace Nighthollow.Interface
       var dialogBox = this.Q("DialogBox");
       InterfaceUtils.FadeIn(dialogBox, 0.3f);
       _text = (Label) this.Q("DialogText");
+      this.Q("DialogClose").RegisterCallback<MouseEnterEvent>(e => Debug.Log("Mouse Enter"));
+      this.Q("DialogText").RegisterCallback<MouseEnterEvent>(e => Debug.Log("DT Mouse Enter"));
       this.Q("DialogClose").RegisterCallback<ClickEvent>(e =>
       {
+        Debug.Log("On Close");
         InterfaceUtils.FadeOut(dialogBox, 0.3f, () =>
         {
           _parent.OnClose();
