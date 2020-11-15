@@ -256,7 +256,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 178308604}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afe6c4600f907e64ca01409d01326a60, type: 3}
   m_Name: 
@@ -274,7 +274,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 178308604}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f21c074d86024caca2a0034ce4f53f73, type: 3}
   m_Name: 
@@ -39170,6 +39170,8 @@ MonoBehaviour:
   _rightSelection: {fileID: 11400000, guid: 13c656795d9584940a64f1977840f5c5, type: 2}
   _leftSelection: {fileID: 11400000, guid: f4563d3b0f2d14039b09a9c273eacb6a, type: 2}
   _overlayTilemap: {fileID: 2073374813}
+  _mainCamera: {fileID: 817099575}
+  _grid: {fileID: 2068825406}
   _kingdoms:
   - _name: Nighthollow
     _startingLocation: {x: -12, y: 7}
@@ -39195,6 +39197,8 @@ MonoBehaviour:
     _startingLocation: {x: -1, y: -21}
     _borderColor: {r: 0.2901961, g: 0.078431375, b: 0.54901963, a: 1}
     _icon: {fileID: 11400000, guid: f9715253066634d748026d029dd85647, type: 2}
+  _selectedTileIcon: {fileID: 11400000, guid: e4a83aa02d07b461d8e795415feddc01, type: 2}
+  _document: {fileID: 178308607}
 --- !u!1 &2068825404
 GameObject:
   m_ObjectHideFlags: 0

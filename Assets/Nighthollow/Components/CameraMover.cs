@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ namespace Nighthollow.Components
   public sealed class CameraMover : MonoBehaviour
   {
 #pragma warning disable 0649
-    [SerializeField] Camera? _camera;
+    [SerializeField] Camera _camera = null!;
     [SerializeField] float _keyboardMovementSpeed;
     [SerializeField] float _scrollWheelZoomSpeed;
     [SerializeField] float _keyboardZoomSpeed;
@@ -34,6 +35,13 @@ namespace Nighthollow.Components
     [SerializeField] float _maxYZoomedOut;
     [Header("State")] [SerializeField] float _zoomDelta;
 #pragma warning restore 0649
+
+    public Camera Camera => _camera;
+
+    void Awake()
+    {
+      Errors.CheckNotNull(_camera);
+    }
 
     int ZoomDirection()
     {

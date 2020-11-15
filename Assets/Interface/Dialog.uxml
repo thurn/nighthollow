@@ -16,11 +16,11 @@ limitations under the License.
 -->
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
+    <ui:Style src="Common.uss"/>
+    <ui:Style src="Dialog.uss"/>
     <nh:DialogOverlay class="full-screen dialog-container">
-        <ui:Style src="Common.uss"/>
-        <ui:Style src="Dialog.uss"/>
         <ui:VisualElement name="DialogBox" class="dialog text" style="opacity: 0;">
-            <ui:VisualElement class="advisor portrait"/>
+            <ui:VisualElement class="ocerak portrait"/>
             <ui:Label name="DialogText" class="text" />
             <ui:VisualElement name="DialogClose" class="close-button" focusable="true" />
         </ui:VisualElement>

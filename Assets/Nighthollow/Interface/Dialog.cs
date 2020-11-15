@@ -35,7 +35,7 @@ namespace Nighthollow.Interface
     {
       yield return new WaitForSeconds(0.01f);
       var document = GetComponent<UIDocument>();
-      var overlay = (DialogOverlay) document.rootVisualElement.Children().First();
+      var overlay = (DialogOverlay) document.rootVisualElement.Q("Dialog");
       overlay.Initialize(text, this);
     }
 

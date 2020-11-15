@@ -15,21 +15,27 @@
 #nullable enable
 
 using System.Collections.Generic;
+using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 namespace Nighthollow.World
 {
   public sealed class WorldMap : MonoBehaviour
   {
 #pragma warning disable 0649
+    [SerializeField] UIDocument _document = null!;
     [SerializeField] Tile _bottomLeftSelection = null!;
     [SerializeField] Tile _bottomRightSelection = null!;
     [SerializeField] Tile _rightSelection = null!;
     [SerializeField] Tile _leftSelection = null!;
     [SerializeField] Tilemap _overlayTilemap = null!;
+    [SerializeField] Camera _mainCamera = null!;
+    [SerializeField] Grid _grid = null!;
     [SerializeField] List<KingdomData> _kingdoms = null!;
+    [SerializeField] Tile _selectedTileIcon = null!;
 #pragma warning restore 0649
 
     const int BottomLeftZ = 1;
@@ -37,11 +43,24 @@ namespace Nighthollow.World
     const int RightZ = 3;
     const int LeftZ = 4;
     const int IconZ = 5;
+
+    WorldScreen _worldScreen = null!;
     readonly Dictionary<int, Tilemap> _children = new Dictionary<int, Tilemap>();
+    TileBase _previousIconOnSelectedTile = null!;
+    Vector2Int? _currentlySelected;
+
+    void Awake()
+    {
+      Errors.CheckNotNull(_overlayTilemap);
+      Errors.CheckNotNull(_mainCamera);
+      Errors.CheckNotNull(_grid);
+    }
 
     public void Initialize()
     {
       var map = ComponentUtils.GetComponent<Tilemap>(gameObject);
+
+      _worldScreen = WorldScreen.FindInDocument(_document);
 
       // Unity is supposed to be able to handle overlapping by y coordinate correctly in a single chunked tilemap, but
       // it's currently very buggy. So I just make each row in to a separate tilemap.
@@ -74,10 +93,17 @@ namespace Nighthollow.World
       }
     }
 
-    public void ShowIcon(Vector2Int hex, Tile tile)
+    public void ShowIcon(Vector2Int hex, TileBase tile)
     {
       _overlayTilemap.SetTile(new Vector3Int(hex.x, hex.y, IconZ), tile);
     }
+
+    public void RemoveIcon(Vector2Int hex)
+    {
+      _overlayTilemap.SetTile(new Vector3Int(hex.x, hex.y, IconZ), null);
+    }
+
+    public TileBase GetIcon(Vector2Int hex) => _overlayTilemap.GetTile(new Vector3Int(hex.x, hex.y, IconZ));
 
     public void OutlineHexes(Color color, ISet<Vector2Int> hexes)
     {
@@ -135,6 +161,30 @@ namespace Nighthollow.World
       else
       {
         _children[hex.y].SetTile(new Vector3Int(hex.x, hex.y, zPosition), tile);
+      }
+    }
+
+    void Update()
+    {
+      if (Input.GetMouseButtonDown(0) && !_worldScreen.ContainsMousePosition(Input.mousePosition))
+      {
+        var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        var worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);
+        var position = _grid.WorldToCell(worldPoint);
+        var hex = new Vector2Int(position.x, position.y);
+
+        if (_currentlySelected.HasValue)
+        {
+          RemoveIcon(_currentlySelected.Value);
+          if (_previousIconOnSelectedTile)
+          {
+            ShowIcon(_currentlySelected.Value, _previousIconOnSelectedTile);
+          }
+        }
+
+        _previousIconOnSelectedTile = GetIcon(hex);
+        ShowIcon(hex, _selectedTileIcon);
+        _currentlySelected = hex;
       }
     }
   }

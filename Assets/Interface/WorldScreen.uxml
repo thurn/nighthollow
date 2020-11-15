@@ -16,10 +16,25 @@ limitations under the License.
 -->
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
-    <nh:WorldScreen class="full-screen">
-        <ui:Style src="Common.uss"/>
-        <ui:Style src="WorldScreen.uss"/>
-        <ui:VisualElement class="border-decoration-left" />
-        <ui:VisualElement class="border-decoration-right" />
+    <ui:Style src="Common.uss"/>
+    <ui:Style src="WorldScreen.uss"/>
+    <nh:WorldScreen name="WorldScreen" class="full-screen">
+        <ui:VisualElement name="CardsWindow" class="window">
+            <ui:VisualElement class="title">
+                <ui:VisualElement class="ocerak portrait small" />
+                <ui:Label text="Ocerak, Master of Cards" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="AdvisorBar" class="advisor-bar">
+            <ui:VisualElement class="border-decoration left" />
+            <ui:VisualElement class="content">
+                <ui:Button name="CardsButton" class="ocerak portrait portrait-button"/>
+                <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
+                <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
+                <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="border-decoration right" />
+        </ui:VisualElement>
     </nh:WorldScreen>
 </ui:UXML>

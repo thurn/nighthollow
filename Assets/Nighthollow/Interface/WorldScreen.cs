@@ -14,12 +14,19 @@
 
 #nullable enable
 
+using Nighthollow.Utils;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
   public sealed class WorldScreen : VisualElement
   {
+    public static WorldScreen FindInDocument(UIDocument document) =>
+      Errors.CheckNotNull((WorldScreen) document.rootVisualElement.Q("WorldScreen"));
+
+    VisualElement _advisorBar = null!;
+
     public new sealed class UxmlFactory : UxmlFactory<WorldScreen, UxmlTraits>
     {
     }
@@ -33,8 +40,12 @@ namespace Nighthollow.Interface
       RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 
+    public bool ContainsMousePosition(Vector3 mousePosition) => _advisorBar.ContainsPoint(mousePosition);
+
     void OnGeometryChange(GeometryChangedEvent evt)
     {
+      _advisorBar = this.Q("AdvisorBar");
+      _advisorBar.Q("CardsButton").RegisterCallback<ClickEvent>(e => Debug.Log("Cards Button"));
       UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
   }

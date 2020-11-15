@@ -16,16 +16,16 @@ limitations under the License.
 -->
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
+    <ui:Style src="Common.uss"/>
+    <ui:Style src="IntroductionScreen.uss"/>
     <nh:IntroductionScreen name="IntroductionScreen" class="screen">
-        <ui:Style src="Common.uss"/>
-        <ui:Style src="IntroductionScreen.uss"/>
         <ui:VisualElement class="dialog-box right" name="Dialog1" style="opacity: 0;">
             <ui:Label class="dialog-text" text="Ekis ver Morta. Eluta ver Natha."/>
-            <ui:VisualElement class="advisor portrait"/>
+            <ui:VisualElement class="ocerak portrait"/>
         </ui:VisualElement>
         <ui:VisualElement class="dialog-box right" name="Dialog2" style="opacity: 0;">
             <ui:Label class="dialog-text italic" text="Ekis ver Morta! Eluta ver Natha!"/>
-            <ui:VisualElement class="advisor portrait"/>
+            <ui:VisualElement class="ocerak portrait"/>
         </ui:VisualElement>
         <ui:VisualElement class="dialog-box left" name="Dialog3" style="opacity: 0;">
             <ui:VisualElement class="you portrait"/>
