@@ -72,8 +72,8 @@ limitations under the License.
 }
 
 .portrait.small {
-    width: 96px;
-    height: 96px;
+    width: 84px;
+    height: 84px;
 }
 
 .portrait.ocerak {
@@ -86,37 +86,133 @@ limitations under the License.
 
 .window {
     /*background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/mid_bar_frame.png');*/
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Customized/mid_bar_frame_75pct.png');
     background-color: rgb(21, 17, 17);
-    border-width: 1px;
-    border-color: gray;
+    -unity-slice-left: 128;
+    -unity-slice-right: 128;
+    -unity-slice-top: 128;
+    -unity-slice-bottom: 128;
     width: 1664px;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     flex-grow: 1;
     margin-top: 16px;
-    margin-bottom: 16px;
 }
 
-.window .title {
-    /*background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/name_frame_mid_ready.png');*/
-    background-color: rgb(21, 17, 17);
-    border-width: 1px;
-    border-color: gray;
+.window > .title {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Customized/name_frame_mid_ready_75pct.png');
+    -unity-slice-left: 512;
+    -unity-slice-right: 512;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-top: -20px;
-    padding: 8px;
+    margin-top: -24px;
+    padding: 32px 128px;
 }
 
-.window .title .portrait {
+.window > .title .portrait {
     margin-right: 16px;
 }
 
-.window .title Label {
+.window > .title Label {
     color: rgb(230, 198, 172);
     font-size: 52px;
-    padding: 16px;
     -unity-font: url('/Assets/ThirdParty/Fonts/BluuNext-Bold.otf');
+}
+
+.close {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/Mini_exit_t.png');
+    width: 64px;
+    height: 64px;
+    border-width: 0;
+}
+
+.close:hover {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/Mini_exit.png');
+}
+
+.close:active {
+    -unity-background-image-tint-color: rgb(200, 200, 200);
+}
+
+.window > .close {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+}
+
+.window > .content {
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+.window .pane {
+    flex-direction: column;
+    width: 45%;
+    margin: 0 16px 48px 16px;
+    align-items: center;
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/basic_bar.png');
+    -unity-slice-left: 32;
+    -unity-slice-right: 32;
+    -unity-slice-top: 32;
+    -unity-slice-bottom: 32;
+}
+
+.pane > .content {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pane .title {
+    color: rgb(144, 118, 89);
+    font-size: 36px;
+    white-space: normal;
+    -unity-font: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');
+    padding: 16px;
+}
+
+.pane .card {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/inventory_frame.png');
+    align-items: center;
+    justify-content: center;
+}
+
+.card Image {
+    width: 96px;
+    height: 96px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.wizard {
+    background-image: url('/Assets/ThirdParty/Pixel Cattle Games/Resources/CreatureImages/Wizard.png');
+}
+
+.ogre {
+    background-image: url('/Assets/ThirdParty/Pixel Cattle Games/Resources/CreatureImages/Ogre.png');
+}
+
+.deck .card.large {
+    width: 128px;
+    height: 128px;
+    margin: 8px 32px;
+}
+
+.collection .card {
+    width: 128px;
+    height: 128px;
+    margin: 8px;
+}
+
+.deck .card.small {
+    width: 96px;
+    height: 96px;
+    margin: 4px 8px;
+}
+
+.deck .subtitle {
+    font-size: 24px;
 }

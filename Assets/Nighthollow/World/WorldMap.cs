@@ -166,7 +166,7 @@ namespace Nighthollow.World
 
     void Update()
     {
-      if (Input.GetMouseButtonDown(0) && !_worldScreen.ContainsMousePosition(Input.mousePosition))
+      if (Input.GetMouseButtonDown(0) && !_worldScreen.ConsumesMousePosition(Input.mousePosition))
       {
         var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
         var worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);

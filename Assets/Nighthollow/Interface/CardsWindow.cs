@@ -14,21 +14,17 @@
 
 #nullable enable
 
-using Nighthollow.Utils;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class WorldScreen : VisualElement
+  public sealed class CardsWindow : VisualElement
   {
-    public static WorldScreen FindInDocument(UIDocument document) =>
-      Errors.CheckNotNull((WorldScreen) document.rootVisualElement.Q("WorldScreen"));
+    VisualElement _collection = null!;
+    VisualElement _mainDeck = null!;
+    VisualElement _manaDeck = null!;
 
-    VisualElement _advisorBar = null!;
-    VisualElement? _currentWindow;
-
-    public new sealed class UxmlFactory : UxmlFactory<WorldScreen, UxmlTraits>
+    public new sealed class UxmlFactory : UxmlFactory<CardsWindow, UxmlTraits>
     {
     }
 
@@ -36,19 +32,23 @@ namespace Nighthollow.Interface
     {
     }
 
-    public WorldScreen()
+    public CardsWindow()
     {
       RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 
-    public bool ConsumesMousePosition(Vector3 mousePosition) =>
-      _currentWindow != null || _advisorBar.ContainsPoint(mousePosition);
 
     void OnGeometryChange(GeometryChangedEvent evt)
     {
-      _advisorBar = this.Q("AdvisorBar");
-      _advisorBar.Q("CardsButton").RegisterCallback<ClickEvent>(e => Debug.Log("Cards Button"));
-      _currentWindow = this.Q("CardsWindow");
+      var self = this.Q("CardsWindow");
+      this.Q("CloseButton").RegisterCallback<ClickEvent>(e =>
+      {
+        self.style.opacity = 0;
+      });
+
+      _collection = this.Q("Collection");
+      _mainDeck = this.Q("MainDeck");
+      _manaDeck = this.Q("ManaDeck");
       UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
   }

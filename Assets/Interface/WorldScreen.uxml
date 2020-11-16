@@ -19,22 +19,77 @@ limitations under the License.
     <ui:Style src="Common.uss"/>
     <ui:Style src="WorldScreen.uss"/>
     <nh:WorldScreen name="WorldScreen" class="full-screen">
-        <ui:VisualElement name="CardsWindow" class="window">
+        <nh:CardsWindow name="CardsWindow" class="window" style="opacity: 1;">
             <ui:VisualElement class="title">
-                <ui:VisualElement class="ocerak portrait small" />
-                <ui:Label text="Ocerak, Master of Cards" />
+                <ui:VisualElement class="ocerak portrait small"/>
+                <ui:Label text="Ocerak, Master of Cards"/>
             </ui:VisualElement>
-        </ui:VisualElement>
+            <ui:Button name="CloseButton" class="close"/>
+            <ui:VisualElement class="content">
+                <ui:VisualElement class="pane collection">
+                    <ui:Label class="title" text="Collection"/>
+                    <ui:VisualElement name="Collection" class="content">
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                        <ui:VisualElement class="card"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="pane deck">
+                    <ui:Label class="title" text="Deck"/>
+                    <ui:VisualElement name="MainDeck" class="content">
+                        <ui:VisualElement class="card large">
+                            <ui:Image class="wizard"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="card large">
+                            <ui:Image class="ogre"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="card large"/>
+                        <ui:VisualElement class="card large"/>
+                        <ui:VisualElement class="card large"/>
+                        <ui:VisualElement class="card large"/>
+                        <ui:VisualElement class="card large"/>
+                        <ui:VisualElement class="card large"/>
+                        <ui:VisualElement class="card large"/>
+                    </ui:VisualElement>
+                    <ui:Label class="title subtitle" text="Mana"/>
+                    <ui:VisualElement name="ManaDeck" class="content">
+                        <ui:VisualElement class="card small"/>
+                        <ui:VisualElement class="card small"/>
+                        <ui:VisualElement class="card small"/>
+                        <ui:VisualElement class="card small"/>
+                        <ui:VisualElement class="card small"/>
+                        <ui:VisualElement class="card small"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </nh:CardsWindow>
 
         <ui:VisualElement name="AdvisorBar" class="advisor-bar">
-            <ui:VisualElement class="border-decoration left" />
+            <ui:VisualElement class="border-decoration left"/>
             <ui:VisualElement class="content">
                 <ui:Button name="CardsButton" class="ocerak portrait portrait-button"/>
                 <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
                 <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
                 <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
             </ui:VisualElement>
-            <ui:VisualElement class="border-decoration right" />
+            <ui:VisualElement class="border-decoration right"/>
         </ui:VisualElement>
     </nh:WorldScreen>
 </ui:UXML>
