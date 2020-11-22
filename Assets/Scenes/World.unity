@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 178308607}
   - component: {fileID: 178308606}
   - component: {fileID: 178308608}
+  - component: {fileID: 178308609}
   m_Layer: 0
   m_Name: Document
   m_TagString: Untagged
@@ -301,6 +302,20 @@ MonoBehaviour:
   _showIntroduction: 0
   _worldMap: {fileID: 1143359796}
   _fightIcon: {fileID: 11400000, guid: fee0ceca865fc41bcbba700f3654ca47, type: 2}
+--- !u!114 &178308609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178308604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b39bd9ec8eca48f893e1576603acd281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _document: {fileID: 178308607}
+  _dataService: {fileID: 857118944}
 --- !u!1 &817099573
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,6 +435,7 @@ GameObject:
   - component: {fileID: 857118942}
   - component: {fileID: 857118941}
   - component: {fileID: 857118943}
+  - component: {fileID: 857118944}
   m_Layer: 0
   m_Name: Data
   m_TagString: Untagged
@@ -477,6 +493,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39ad83b7ecb14f009a9ef7dde3855f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &857118944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857118939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bdc50e4fd1a4a248518d443fd752d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1081939163
@@ -39235,7 +39263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09ee9327c6cd4b1a9f8092d1342b4001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _document: {fileID: 178308607}
+  _worldScreen: {fileID: 178308609}
   _bottomLeftSelection: {fileID: 11400000, guid: 3915bde71dc0e42128d8b3e8f0e028c7,
     type: 2}
   _bottomRightSelection: {fileID: 11400000, guid: 3690dbd57296843bcb6025790e1db178,

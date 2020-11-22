@@ -180,36 +180,38 @@ limitations under the License.
     justify-content: center;
 }
 
-.card Image {
+.collection .card {
+    margin: 8px;
+}
+
+.deck .card.large {
+    margin: 8px 32px;
+}
+
+.deck .card.small {
+    margin: 4px 8px;
+}
+
+.card.large {
+    width: 128px;
+    height: 128px;
+}
+
+.card.small {
+    width: 96px;
+    height: 96px;
+}
+
+.card.large Image {
     width: 96px;
     height: 96px;
     -unity-background-scale-mode: scale-to-fit;
 }
 
-.wizard {
-    background-image: url('/Assets/ThirdParty/Pixel Cattle Games/Resources/CreatureImages/Wizard.png');
-}
-
-.ogre {
-    background-image: url('/Assets/ThirdParty/Pixel Cattle Games/Resources/CreatureImages/Ogre.png');
-}
-
-.deck .card.large {
-    width: 128px;
-    height: 128px;
-    margin: 8px 32px;
-}
-
-.collection .card {
-    width: 128px;
-    height: 128px;
-    margin: 8px;
-}
-
-.deck .card.small {
-    width: 96px;
-    height: 96px;
-    margin: 4px 8px;
+.card.small Image {
+    width: 80px;
+    height: 80px;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .deck .subtitle {

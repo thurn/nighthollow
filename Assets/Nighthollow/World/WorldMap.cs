@@ -19,14 +19,13 @@ using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 
 namespace Nighthollow.World
 {
   public sealed class WorldMap : MonoBehaviour
   {
 #pragma warning disable 0649
-    [SerializeField] UIDocument _document = null!;
+    [SerializeField] WorldScreenController _worldScreen = null!;
     [SerializeField] Tile _bottomLeftSelection = null!;
     [SerializeField] Tile _bottomRightSelection = null!;
     [SerializeField] Tile _rightSelection = null!;
@@ -44,7 +43,6 @@ namespace Nighthollow.World
     const int LeftZ = 4;
     const int IconZ = 5;
 
-    WorldScreen _worldScreen = null!;
     readonly Dictionary<int, Tilemap> _children = new Dictionary<int, Tilemap>();
     TileBase _previousIconOnSelectedTile = null!;
     Vector2Int? _currentlySelected;
@@ -59,8 +57,6 @@ namespace Nighthollow.World
     public void Initialize()
     {
       var map = ComponentUtils.GetComponent<Tilemap>(gameObject);
-
-      _worldScreen = WorldScreen.FindInDocument(_document);
 
       // Unity is supposed to be able to handle overlapping by y coordinate correctly in a single chunked tilemap, but
       // it's currently very buggy. So I just make each row in to a separate tilemap.

@@ -19,7 +19,7 @@ limitations under the License.
     <ui:Style src="Common.uss"/>
     <ui:Style src="WorldScreen.uss"/>
     <nh:WorldScreen name="WorldScreen" class="full-screen">
-        <nh:CardsWindow name="CardsWindow" class="window" style="opacity: 1;">
+        <nh:CardsWindow name="CardsWindow" class="window" style="visibility: hidden;">
             <ui:VisualElement class="title">
                 <ui:VisualElement class="ocerak portrait small"/>
                 <ui:Label text="Ocerak, Master of Cards"/>
@@ -28,55 +28,13 @@ limitations under the License.
             <ui:VisualElement class="content">
                 <ui:VisualElement class="pane collection">
                     <ui:Label class="title" text="Collection"/>
-                    <ui:VisualElement name="Collection" class="content">
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                        <ui:VisualElement class="card"/>
-                    </ui:VisualElement>
+                    <ui:VisualElement name="Collection" class="content" />
                 </ui:VisualElement>
                 <ui:VisualElement class="pane deck">
                     <ui:Label class="title" text="Deck"/>
-                    <ui:VisualElement name="MainDeck" class="content">
-                        <ui:VisualElement class="card large">
-                            <ui:Image class="wizard"/>
-                        </ui:VisualElement>
-                        <ui:VisualElement class="card large">
-                            <ui:Image class="ogre"/>
-                        </ui:VisualElement>
-                        <ui:VisualElement class="card large"/>
-                        <ui:VisualElement class="card large"/>
-                        <ui:VisualElement class="card large"/>
-                        <ui:VisualElement class="card large"/>
-                        <ui:VisualElement class="card large"/>
-                        <ui:VisualElement class="card large"/>
-                        <ui:VisualElement class="card large"/>
-                    </ui:VisualElement>
+                    <ui:VisualElement name="MainDeck" class="content" />
                     <ui:Label class="title subtitle" text="Mana"/>
-                    <ui:VisualElement name="ManaDeck" class="content">
-                        <ui:VisualElement class="card small"/>
-                        <ui:VisualElement class="card small"/>
-                        <ui:VisualElement class="card small"/>
-                        <ui:VisualElement class="card small"/>
-                        <ui:VisualElement class="card small"/>
-                        <ui:VisualElement class="card small"/>
-                    </ui:VisualElement>
+                    <ui:VisualElement name="ManaDeck" class="content" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </nh:CardsWindow>

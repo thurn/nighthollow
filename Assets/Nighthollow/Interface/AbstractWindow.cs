@@ -18,28 +18,19 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class WorldScreen : VisualElement
+  public abstract class AbstractWindow : VisualElement
   {
-    public WorldScreenController Controller { get; set; } = null!;
-
-    public new sealed class UxmlFactory : UxmlFactory<WorldScreen, UxmlTraits>
+    public void Show()
     {
+      Render();
+      style.visibility = new StyleEnum<Visibility>(Visibility.Visible);
     }
 
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    public void Hide()
     {
+      style.visibility = new StyleEnum<Visibility>(Visibility.Visible);
     }
 
-    public WorldScreen()
-    {
-      RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
-    }
-
-    void OnGeometryChange(GeometryChangedEvent evt)
-    {
-      var advisorBar = this.Q("AdvisorBar");
-      advisorBar.Q("CardsButton").RegisterCallback<ClickEvent>(e => Controller.ShowCardsWindow());
-      UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
-    }
+    protected abstract void Render();
   }
 }
