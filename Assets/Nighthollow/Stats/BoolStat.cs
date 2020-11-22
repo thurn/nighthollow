@@ -40,6 +40,9 @@ namespace Nighthollow.Stats
       op switch
       {
         Operator.Add => StaticModifier(new BooleanOperation(ParseStatValue(value))),
+        Operator.Overwrite => StaticModifier(new BooleanOperation(ParseStatValue(value))),
+        Operator.SetTrue => StaticModifier(new BooleanOperation(true)),
+        Operator.SetFalse => StaticModifier(new BooleanOperation(false)),
         _ => throw new ArgumentException($"Unsupported operator type: {op}")
       };
 

@@ -17,7 +17,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
+using Nighthollow.Services;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
+using SimpleJSON;
 
 namespace Nighthollow.Data
 {
@@ -38,11 +41,6 @@ namespace Nighthollow.Data
       IReadOnlyList<SkillItemData> skills,
       IReadOnlyList<AffixData> affixes)
     {
-      if (baseType.SkillAnimations.Any(animation => animation.Type == SkillAnimationType.MeleeSkill))
-      {
-        skills = skills.Append(CreatureUtil.DefaultMeleeAttack()).ToList();
-      }
-
       Name = name;
       BaseType = baseType;
       School = school;
@@ -50,5 +48,25 @@ namespace Nighthollow.Data
       Skills = skills;
       Affixes = affixes;
     }
+
+    public static CreatureItemData Deserialize(GameDataService gameData, JSONNode node) =>
+      new CreatureItemData(
+        node["name"].Value,
+        gameData.GetCreatureType(node["baseType"].AsInt),
+        (School) node["school"].AsInt,
+        StatModifierTable.Deserialize(node["stats"]),
+        node["skills"].FromJsonArray().Select(c => SkillItemData.Deserialize(gameData, c)).ToList(),
+        node["affixes"].FromJsonArray().Select(c => AffixData.Deserialize(gameData, c)).ToList());
+
+    public JSONNode Serialize() =>
+      new JSONObject
+      {
+        ["name"] = Name,
+        ["baseType"] = BaseType.Id,
+        ["school"] = (int) School,
+        ["stats"] = Stats.Serialize(),
+        ["skills"] = Skills.Select(s => s.Serialize()).AsJsonArray(),
+        ["affixes"] = Affixes.Select(s => s.Serialize()).AsJsonArray()
+      };
   }
 }

@@ -107,6 +107,11 @@ namespace Nighthollow.Data
     {
       var skills = new List<SkillItemData>();
 
+      if (creatureTypeData.SkillAnimations.Any(animation => animation.Type == SkillAnimationType.MeleeSkill))
+      {
+        skills = skills.Append(service.DefaultMeleeSkill()).ToList();
+      }
+
       var implicitSkill = creatureTypeData.ImplicitSkill;
       if (implicitSkill != null)
       {

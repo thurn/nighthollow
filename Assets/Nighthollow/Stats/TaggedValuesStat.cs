@@ -22,8 +22,7 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
-  public sealed class TaggedValues<TTag, TValue>
-    where TTag : struct, Enum where TValue : struct
+  public sealed class TaggedValues<TTag, TValue> where TTag : struct, Enum where TValue : struct
   {
     public IReadOnlyDictionary<TTag, TValue> Values { get; }
 
@@ -34,10 +33,7 @@ namespace Nighthollow.Stats
       Values = values;
     }
 
-    public override string ToString()
-    {
-      return string.Join(",", Values.Select(pair => $"{pair.Key}: {pair.Value}").ToArray());
-    }
+    public override string ToString() => string.Join(",", Values.Select(pair => $"{pair.Value} {pair.Key}").ToArray());
   }
 
   public abstract class TaggedValuesStat<TTag, TValue> :
@@ -59,32 +55,25 @@ namespace Nighthollow.Stats
         result = overwrite.Values.ToDictionary(k => k.Key, v => v.Value);
       }
 
-      foreach (var group in operations
-        .Where(o => o.Operations != null)
-        .SelectMany(op => op.Operations)
-        .GroupBy(pair => pair.Key))
+      foreach (var tag in AllTags())
       {
-        var operationsForTag = group.Select(pair => pair.Value).ToList();
-        if (overwrite != null)
-        {
-          operationsForTag.Add(NumericOperation.Overwrite(overwrite.Get(group.Key, default)));
-        }
-
-        result[group.Key] = Compute(operationsForTag);
+        result[tag] = ComputeTagged(operations.Select(op => op.ToNumericOperation(tag)).WhereNotNull().ToList());
       }
 
       return new TaggedValues<TTag, TValue>(result);
     }
 
-    protected abstract TValue Compute(IReadOnlyList<NumericOperation<TValue>> operations);
+    protected abstract TValue ComputeTagged(IReadOnlyList<NumericOperation<TValue>> operations);
+
+    protected abstract IEnumerable<TTag> AllTags();
 
     protected override TaggedValues<TTag, TValue> ParseStatValue(string value)
     {
       var result = new Dictionary<TTag, TValue>();
       foreach (var instance in value.Split(','))
       {
-        var tag = instance.Last();
-        result[ParseTag(tag)] = ParseInstance(instance.Replace(tag.ToString(), ""));
+        var tagged = instance.Split(' ');
+        result[ParseTag(tagged[1])] = ParseTaggedValue(tagged[0]);
       }
 
       return new TaggedValues<TTag, TValue>(result);
@@ -95,27 +84,26 @@ namespace Nighthollow.Stats
       var result = new Dictionary<TTag, PercentageValue>();
       foreach (var instance in value.Split(','))
       {
-        var tag = instance.Last();
-        result[ParseTag(tag)] = PercentageStat.ParsePercentage(instance.Replace(tag.ToString(), ""));
+        var tagged = instance.Split(' ');
+        result[ParseTag(tagged[1])] = PercentageStat.ParsePercentage(tagged[0]);
       }
 
       return new TaggedValues<TTag, PercentageValue>(result);
     }
 
-    protected abstract TTag ParseTag(char tagCharacter);
+    protected abstract TTag ParseTag(string tag);
 
-    protected abstract TValue ParseInstance(string value);
+    protected abstract TValue ParseTaggedValue(string value);
 
     public override IStatModifier ParseModifier(string value, Operator op) =>
       op switch
       {
-        Operator.Add => StaticModifier(new TaggedNumericOperation<TTag, TValue>(
-          null,
-          ParseStatValue(value).Values.ToDictionary(k => k.Key, v => NumericOperation.Add(v.Value)))),
-        Operator.Overwrite => StaticModifier(TaggedNumericOperation.Overwrite(ParseStatValue(value))),
-        Operator.Increase => StaticModifier(new TaggedNumericOperation<TTag, TValue>(
-          null,
-          ParseAsPercentages(value).Values.ToDictionary(k => k.Key, v => NumericOperation.Increase<TValue>(v.Value)))),
+        Operator.Add => StaticModifier(
+          TaggedNumericOperation.Add(ParseStatValue(value))),
+        Operator.Increase => StaticModifier(
+          TaggedNumericOperation.Increase<TTag, TValue>(ParseAsPercentages(value))),
+        Operator.Overwrite => StaticModifier(
+          TaggedNumericOperation.Overwrite(ParseStatValue(value))),
         _ => throw new ArgumentException($"Unsupported modifier type: {op}")
       };
 
@@ -128,10 +116,10 @@ namespace Nighthollow.Stats
     {
     }
 
-    protected override int Compute(IReadOnlyList<NumericOperation<int>> operations) =>
+    protected override int ComputeTagged(IReadOnlyList<NumericOperation<int>> operations) =>
       IntStat.Compute(operations, op => op);
 
-    protected override int ParseInstance(string value) => IntStat.ParseInt(value);
+    protected override int ParseTaggedValue(string value) => IntStat.ParseInt(value);
   }
 
   public abstract class TaggedPercentageValuesStat<TTag> : TaggedValuesStat<TTag, PercentageValue>
@@ -141,10 +129,10 @@ namespace Nighthollow.Stats
     {
     }
 
-    protected override PercentageValue Compute(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
+    protected override PercentageValue ComputeTagged(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
       PercentageStat.Compute(operations);
 
-    protected override PercentageValue ParseInstance(string value) => PercentageStat.ParsePercentage(value);
+    protected override PercentageValue ParseTaggedValue(string value) => PercentageStat.ParsePercentage(value);
   }
 
   public abstract class TaggedIntRangesStat<TTag> : TaggedValuesStat<TTag, IntRangeValue> where TTag : struct, Enum
@@ -153,10 +141,10 @@ namespace Nighthollow.Stats
     {
     }
 
-    protected override IntRangeValue Compute(
+    protected override IntRangeValue ComputeTagged(
       IReadOnlyList<NumericOperation<IntRangeValue>> operations) => IntRangeStat.Compute(operations);
 
-    protected override IntRangeValue ParseInstance(string value) => IntRangeStat.ParseIntRange(value);
+    protected override IntRangeValue ParseTaggedValue(string value) => IntRangeStat.ParseIntRange(value);
   }
 
   public sealed class DamageTypeIntsStat : TaggedIntValuesStat<DamageType>
@@ -165,18 +153,22 @@ namespace Nighthollow.Stats
     {
     }
 
-    protected override DamageType ParseTag(char tagCharacter) => ParseDamageTypeTag(tagCharacter);
+    protected override IEnumerable<DamageType> AllTags() =>
+      CollectionUtils.AllNonDefaultEnumValues<DamageType>(typeof(DamageType));
 
-    public static DamageType ParseDamageTypeTag(char tagCharacter) =>
-      tagCharacter switch
+    protected override DamageType ParseTag(string tag) => ParseDamageTypeTag(tag);
+
+    public static DamageType ParseDamageTypeTag(string tag) =>
+      tag switch
       {
-        'R' => DamageType.Radiant,
-        'L' => DamageType.Lightning,
-        'F' => DamageType.Fire,
-        'C' => DamageType.Cold,
-        'P' => DamageType.Physical,
-        'N' => DamageType.Necrotic,
-        _ => throw new ArgumentException($"Unknown damage type identifier: {tagCharacter}")
+        "Untyped" => DamageType.Untyped,
+        "Radiant" => DamageType.Radiant,
+        "Lightning" => DamageType.Lightning,
+        "Fire" => DamageType.Fire,
+        "Cold" => DamageType.Cold,
+        "Physical" => DamageType.Physical,
+        "Necrotic" => DamageType.Necrotic,
+        _ => throw new ArgumentException($"Unknown damage type tag: {tag}")
       };
   }
 
@@ -186,7 +178,10 @@ namespace Nighthollow.Stats
     {
     }
 
-    protected override DamageType ParseTag(char tagCharacter) => DamageTypeIntsStat.ParseDamageTypeTag(tagCharacter);
+    protected override DamageType ParseTag(string tag) => DamageTypeIntsStat.ParseDamageTypeTag(tag);
+
+    protected override IEnumerable<DamageType> AllTags() =>
+      CollectionUtils.AllNonDefaultEnumValues<DamageType>(typeof(DamageType));
   }
 
   public sealed class SchoolIntsStat : TaggedIntValuesStat<School>
@@ -195,16 +190,19 @@ namespace Nighthollow.Stats
     {
     }
 
-    protected override School ParseTag(char tagCharacter) =>
-      tagCharacter switch
+    protected override School ParseTag(string tag) =>
+      tag switch
       {
-        'L' => School.Light,
-        'K' => School.Sky,
-        'F' => School.Flame,
-        'I' => School.Ice,
-        'E' => School.Earth,
-        'S' => School.Shadow,
-        _ => throw new ArgumentException($"Unknown school identifier: {tagCharacter}")
+        "Light" => School.Light,
+        "Sky" => School.Sky,
+        "Flame" => School.Flame,
+        "Ice" => School.Ice,
+        "Earth" => School.Earth,
+        "Shadow" => School.Shadow,
+        _ => throw new ArgumentException($"Unknown school tag: {tag}")
       };
+
+    protected override IEnumerable<School> AllTags() =>
+      CollectionUtils.AllNonDefaultEnumValues<School>(typeof(School));
   }
 }

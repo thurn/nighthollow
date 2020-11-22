@@ -13,7 +13,11 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
+using Nighthollow.Services;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
+using SimpleJSON;
 
 #nullable enable
 
@@ -31,5 +35,19 @@ namespace Nighthollow.Data
       Stats = stats;
       Affixes = affixes;
     }
+
+    public static SkillItemData Deserialize(GameDataService gameData, JSONNode node) =>
+      new SkillItemData(
+        gameData.GetSkillType(node["baseType"].AsInt),
+        StatModifierTable.Deserialize(node["stats"]),
+        node["affixes"].FromJsonArray().Select(c => AffixData.Deserialize(gameData, c)).ToList());
+
+    public JSONNode Serialize() =>
+      new JSONObject
+      {
+        ["baseType"] = BaseType.Id,
+        ["stats"] = Stats.Serialize(),
+        ["affixes"] = Affixes.Select(a => a.Serialize()).AsJsonArray()
+      };
   }
 }

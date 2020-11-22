@@ -14,6 +14,7 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,6 +48,9 @@ namespace Nighthollow.Utils
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source) where T : struct =>
       source.Where(t => t != null).Select(t => t.GetValueOrDefault());
 
+    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source) where T : class =>
+      source.Where(t => t != null).Select(t => t!);
+
     /// <summary>Returns the infinite sequence (1, -1, -2, -2, ....)</summary>
     public static IEnumerable<int> AlternatingIntegers()
     {
@@ -60,5 +64,8 @@ namespace Nighthollow.Utils
 
       // ReSharper disable once IteratorNeverReturns
     }
+
+    public static IEnumerable<T> AllNonDefaultEnumValues<T>(Type type) where T : struct, Enum =>
+      Enum.GetValues(type).Cast<T>().Where(v => !v.Equals(default));
   }
 }

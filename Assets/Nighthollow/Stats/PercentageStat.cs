@@ -28,6 +28,8 @@ namespace Nighthollow.Stats
       _basisPoints = basisPoints;
     }
 
+    public override string ToString() => $"{_basisPoints / 100f}%";
+
     public int AsBasisPoints() => _basisPoints;
 
     public float AsMultiplier() => _basisPoints / BasisPoints;

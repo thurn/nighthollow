@@ -25,5 +25,7 @@ namespace Nighthollow.Stats
     }
 
     public bool IsValid() => true;
+
+    public override string ToString() => $"{nameof(StaticLifetime)}";
   }
 }

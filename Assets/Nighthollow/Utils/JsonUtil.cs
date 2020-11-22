@@ -12,26 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Generated;
-
 #nullable enable
 
-namespace Nighthollow.Stats
+using System.Collections.Generic;
+using SimpleJSON;
+
+namespace Nighthollow.Utils
 {
-  public readonly struct SerializedOperation
+  public static class JsonUtil
   {
-    public readonly string Value;
-    public readonly Operator Operator;
-
-    public SerializedOperation(string value, Operator @operator)
+    public static JSONNode AsJsonArray(this IEnumerable<JSONNode> nodes)
     {
-      Value = value;
-      Operator = @operator;
-    }
-  }
+      var result = new JSONArray();
+      foreach (var node in nodes)
+      {
+        result.Add(node);
+      }
 
-  public interface IOperation
-  {
-    SerializedOperation Serialize();
+      return result;
+    }
+
+    public static IEnumerable<JSONNode> FromJsonArray(this JSONNode node) => ((JSONArray) node).Children;
   }
 }

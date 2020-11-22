@@ -37,7 +37,6 @@ namespace Nighthollow.Interface
       RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 
-
     void OnGeometryChange(GeometryChangedEvent evt)
     {
       var self = this.Q("CardsWindow");

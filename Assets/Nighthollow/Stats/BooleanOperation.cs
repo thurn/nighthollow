@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Generated;
+
 #nullable enable
 
 namespace Nighthollow.Stats
@@ -24,5 +26,10 @@ namespace Nighthollow.Stats
     {
       SetBoolean = setBoolean;
     }
+
+    public SerializedOperation Serialize() =>
+      new SerializedOperation(SetBoolean.ToString(), SetBoolean ? Operator.SetTrue : Operator.SetFalse);
+
+    public override string ToString() => $"{nameof(SetBoolean)}: {SetBoolean}";
   }
 }

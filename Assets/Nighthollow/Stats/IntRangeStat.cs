@@ -27,6 +27,8 @@ namespace Nighthollow.Stats
     public int Low { get; }
     public int High { get; }
 
+    public override string ToString() => $"{Low}-{High}";
+
     public IntRangeValue(int low, int high)
     {
       Low = low;

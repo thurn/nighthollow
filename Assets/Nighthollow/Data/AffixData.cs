@@ -15,8 +15,10 @@
 #nullable enable
 
 using System.Collections.Generic;
-using Nighthollow.Generated;
+using System.Linq;
+using Nighthollow.Services;
 using Nighthollow.Utils;
+using SimpleJSON;
 
 namespace Nighthollow.Data
 {
@@ -30,5 +32,19 @@ namespace Nighthollow.Data
       BaseType = baseType;
       Modifiers = modifiers;
     }
+
+    public static AffixData Deserialize(GameDataService gameData, JSONNode node) =>
+      new AffixData(
+        gameData.GetAffixType(node["baseType"].AsInt),
+        node["modifiers"].FromJsonArray().Select(c => ModifierData.Deserialize(gameData, c)).ToList());
+
+    public JSONNode Serialize() =>
+      new JSONObject
+      {
+        ["baseType"] = BaseType.Id,
+        ["modifiers"] = Modifiers.Select(m => m.Serialize()).AsJsonArray()
+      };
+
+    public override string ToString() => string.Join(", ", Modifiers.Select(m => m.ToString()));
   }
 }

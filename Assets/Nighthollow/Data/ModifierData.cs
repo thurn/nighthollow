@@ -15,8 +15,10 @@
 #nullable enable
 
 using Nighthollow.Generated;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
+using SimpleJSON;
 
 namespace Nighthollow.Data
 {
@@ -32,5 +34,21 @@ namespace Nighthollow.Data
       DelegateId = delegateId;
       StatModifier = statModifier;
     }
+
+    public static ModifierData Deserialize(GameDataService gameData, JSONNode node) =>
+      new ModifierData(
+        node["delegateId"] == null ? null : (DelegateId?) node["delegateId"].AsInt,
+        node["statModifier"] == null ? null : StatModifierUtil.Deserialize(node["statModifier"]));
+
+    public JSONNode Serialize() =>
+      new JSONObject
+      {
+        ["delegateId"] = DelegateId.HasValue ? new JSONNumber((double) DelegateId.Value) : null,
+        ["statModifier"] = StatModifier?.Serialize()
+      };
+
+    public override string ToString() =>
+      $"{(DelegateId.HasValue ? DelegateId.Value.ToString() : "")} " +
+      $"{(StatModifier != null ? StatModifier.ToString() : "")}";
   }
 }

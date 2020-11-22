@@ -28,6 +28,8 @@ namespace Nighthollow.Services
 {
   public sealed class GameDataService : MonoBehaviour
   {
+    [SerializeField] AssetService _assetService = null!;
+
     readonly Dictionary<int, ModifierTypeData> _modifiers = new Dictionary<int, ModifierTypeData>();
     readonly Dictionary<int, AffixTypeData> _affixes = new Dictionary<int, AffixTypeData>();
     readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
@@ -60,6 +62,9 @@ namespace Nighthollow.Services
       return _staticCardLists[listName];
     }
 
+    public SkillItemData DefaultMeleeSkill() =>
+      new SkillItemData(GetSkillType(1), new StatModifierTable(), new List<AffixData>());
+
     static T Lookup<T>(IReadOnlyDictionary<int, T> dictionary, int id) where T : class =>
       dictionary.ContainsKey(id) ? dictionary[id] : throw new ArgumentException($"ID not found: {id}");
 
@@ -89,7 +94,8 @@ namespace Nighthollow.Services
         }
 
         var statId = Parse.IntRequired(stat, "Stat ID");
-        Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Overwrite).ApplyTo(StatTable.Defaults);
+        StatTable.Defaults.InsertModifier(
+          Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Overwrite));
       }
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))
@@ -123,8 +129,7 @@ namespace Nighthollow.Services
         ParseStaticCard(row);
       }
 
-
-      Root.Instance.AssetService.FetchAssets(this, onComplete);
+      _assetService.FetchAssets(this, onComplete);
     }
 
     void ParseAffixes(IReadOnlyDictionary<string, List<Dictionary<string, string>>> parsed)
@@ -180,19 +185,19 @@ namespace Nighthollow.Services
       var creatureType = GetCreatureType(Parse.IntRequired(row, "Base Creature"));
 
       var stats = new StatModifierTable();
-      Stat.Health.Add(Parse.IntRequired(row, "Health")).ApplyTo(stats);
-      Stat.ManaCost.Add(Parse.Int(row, "Mana Cost") ?? 0).ApplyTo(stats);
+      stats.InsertModifier(Stat.Health.Add(Parse.IntRequired(row, "Health")));
+      stats.InsertModifier(Stat.ManaCost.Add(Parse.Int(row, "Mana Cost") ?? 0));
 
       var costString = Parse.String(row, "Influence Cost");
       if (costString != null)
       {
-        Stat.InfluenceCost.ParseModifier(costString, Operator.Add).ApplyTo(stats);
+        stats.InsertModifier(Stat.InfluenceCost.ParseModifier(costString, Operator.Add));
       }
 
       var baseDamageString = Parse.String(row, "Base Damage");
       if (baseDamageString != null)
       {
-        Stat.BaseDamage.ParseModifier(baseDamageString, Operator.Overwrite).ApplyTo(stats);
+        stats.InsertModifier(Stat.BaseDamage.ParseModifier(baseDamageString, Operator.Overwrite));
       }
 
       var cardName = Parse.String(row, "Card Name");

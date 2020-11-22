@@ -14,6 +14,9 @@
 
 #nullable enable
 
+using System;
+using Nighthollow.Generated;
+
 namespace Nighthollow.Stats
 {
   public static class NumericOperation
@@ -40,5 +43,27 @@ namespace Nighthollow.Stats
       IncreaseBy = increaseBy;
       Overwrite = overwrite;
     }
+
+    public SerializedOperation Serialize()
+    {
+      if (AddTo != null)
+      {
+        return new SerializedOperation(AddTo.ToString(), Operator.Add);
+      }
+      else if (IncreaseBy != null)
+      {
+        return new SerializedOperation(IncreaseBy.ToString(), Operator.Increase);
+      }
+      else if (Overwrite != null)
+      {
+        return new SerializedOperation(Overwrite.ToString(), Operator.Overwrite);
+      }
+      else
+      {
+        throw new InvalidOperationException("Invalid NumericOperation");
+      }
+    }
+
+    public override string ToString() => $"{Serialize().Operator} {Serialize().Value}";
   }
 }

@@ -30,6 +30,8 @@ namespace Nighthollow.Stats
 
     public StatId Id { get; }
 
+    public override string ToString() => Id.ToString();
+
     public abstract TValue ComputeValue(IReadOnlyList<TOperation> operations);
 
     protected abstract TValue ParseStatValue(string value);
@@ -62,6 +64,5 @@ namespace Nighthollow.Stats
       };
 
     public override IStatModifier? StaticModifierForOperator(Operator op) => null;
-
   }
 }

@@ -18,41 +18,32 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
+using SimpleJSON;
 
 namespace Nighthollow.Stats
 {
-  public sealed class OperationWithLifetime
-  {
-    public IOperation Operation { get; }
-    public ILifetime Lifetime { get; }
-
-    public OperationWithLifetime(IOperation operation, ILifetime lifetime)
-    {
-      Operation = operation;
-      Lifetime = lifetime;
-    }
-  }
-
   public class StatModifierTable
   {
-    protected readonly Dictionary<StatId, List<OperationWithLifetime>> Modifiers;
+    protected readonly Dictionary<StatId, List<IStatModifier>> Modifiers;
 
     public StatModifierTable()
     {
-      Modifiers = new Dictionary<StatId, List<OperationWithLifetime>>();
+      Modifiers = new Dictionary<StatId, List<IStatModifier>>();
     }
 
-    protected StatModifierTable(Dictionary<StatId, List<OperationWithLifetime>> modifiers)
+    protected StatModifierTable(Dictionary<StatId, List<IStatModifier>> modifiers)
     {
       Modifiers = modifiers.ToDictionary(k => k.Key, v => v.Value.Select(o => o).ToList());
     }
 
-    public void InsertModifier<TOperation, TValue>(
-      AbstractStat<TOperation, TValue> stat, TOperation operation, ILifetime lifetime) where TOperation : IOperation
+    public void InsertModifier(IStatModifier modifier)
     {
-      Modifiers.GetOrCreateDefault(stat.Id, new List<OperationWithLifetime>())
-        .Add(new OperationWithLifetime(operation, lifetime));
+      Modifiers.GetOrCreateDefault(modifier.Stat.Id, new List<IStatModifier>()).Add(modifier);
     }
+
+    public void InsertModifier<TOperation, TValue>(
+      AbstractStat<TOperation, TValue> stat, TOperation operation, ILifetime lifetime) where TOperation : IOperation =>
+      InsertModifier(new StatModifier<TOperation, TValue>(stat, operation, lifetime));
 
     public void Clear()
     {
@@ -60,12 +51,38 @@ namespace Nighthollow.Stats
     }
 
     public StatTable Clone(StatTable parent) => new StatTable(parent, Modifiers);
+
+    public static StatModifierTable Deserialize(JSONNode node) => new StatModifierTable(DeserializeInternal(node));
+
+    protected static Dictionary<StatId, List<IStatModifier>> DeserializeInternal(JSONNode node)
+    {
+      var dictionary = new Dictionary<StatId, List<IStatModifier>>();
+      foreach (var row in node["modifiers"].AsArray.Children)
+      {
+        var statId = (StatId) row["statId"].AsInt;
+        dictionary.GetOrCreateDefault(statId, new List<IStatModifier>()).Add(StatModifierUtil.Deserialize(row));
+      }
+
+      return dictionary;
+    }
+
+    public JSONNode Serialize()
+    {
+      return new JSONObject
+      {
+        ["modifiers"] = Modifiers.SelectMany(pair => pair.Value).Select(modifier => modifier.Serialize()).AsJsonArray()
+      };
+    }
+
+    public override string ToString() =>
+      string.Join(", ", Modifiers.SelectMany(pair => pair.Value).Select(m => m.ToString()));
   }
 
   public sealed class StatTable : StatModifierTable
   {
     public static readonly StatTable Defaults =
-      new StatTable(null, new Dictionary<StatId, List<OperationWithLifetime>>());
+      new StatTable(null, new Dictionary<StatId, List<IStatModifier>>());
+
     readonly StatTable? _parent;
 
     public StatTable(StatTable parent)
@@ -73,7 +90,7 @@ namespace Nighthollow.Stats
       _parent = parent;
     }
 
-    public StatTable(StatTable? parent, Dictionary<StatId, List<OperationWithLifetime>> modifiers) : base(modifiers)
+    public StatTable(StatTable? parent, Dictionary<StatId, List<IStatModifier>> modifiers) : base(modifiers)
     {
       _parent = parent;
     }
@@ -81,7 +98,12 @@ namespace Nighthollow.Stats
     public TValue Get<TOperation, TValue>(AbstractStat<TOperation, TValue> stat) where TOperation : IOperation =>
       stat.ComputeValue(OperationsForStatId(stat.Id).Select(op => (TOperation) op.Operation).ToList());
 
-    IEnumerable<OperationWithLifetime> OperationsForStatId(StatId statId)
+    public static StatTable Deserialize(JSONNode node, StatTable parent)
+    {
+      return new StatTable(parent, DeserializeInternal(node));
+    }
+
+    IEnumerable<IStatModifier> OperationsForStatId(StatId statId)
     {
       if (Modifiers.ContainsKey(statId))
       {
@@ -91,7 +113,7 @@ namespace Nighthollow.Stats
       }
       else
       {
-        return _parent == null ? new List<OperationWithLifetime>() : _parent.OperationsForStatId(statId);
+        return _parent == null ? new List<IStatModifier>() : _parent.OperationsForStatId(statId);
       }
     }
   }

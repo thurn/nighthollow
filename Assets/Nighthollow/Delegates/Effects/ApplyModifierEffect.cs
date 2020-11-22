@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute()
     {
-      Modifier.ApplyTo(Target.Stats);
+      Target.Stats.InsertModifier(Modifier);
     }
   }
 }

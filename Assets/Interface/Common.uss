@@ -85,7 +85,6 @@ limitations under the License.
 }
 
 .window {
-    /*background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/mid_bar_frame.png');*/
     background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Customized/mid_bar_frame_75pct.png');
     background-color: rgb(21, 17, 17);
     -unity-slice-left: 128;

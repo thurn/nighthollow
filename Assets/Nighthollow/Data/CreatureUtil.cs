@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
-using Nighthollow.Services;
 using Nighthollow.Stats;
 
 namespace Nighthollow.Data
@@ -29,11 +28,11 @@ namespace Nighthollow.Data
     {
       var stats = item.Stats.Clone(parentStats);
 
-      Stat.CreatureSpeed.Add(item.BaseType.Speed).ApplyTo(stats);
+      stats.InsertModifier(Stat.CreatureSpeed.Add(item.BaseType.Speed));
 
       if (item.BaseType.IsManaCreature)
       {
-        Stat.IsManaCreature.SetTrue().ApplyTo(stats);
+        stats.InsertModifier(Stat.IsManaCreature.SetTrue());
       }
 
       var (delegates, targetedAffixes) = ProcessAffixes(item.Affixes, stats);
@@ -51,22 +50,22 @@ namespace Nighthollow.Data
       var stats = item.Stats.Clone(parentStats);
       if (item.BaseType.ProjectileSpeed.HasValue)
       {
-        Stat.ProjectileSpeed.Add(item.BaseType.ProjectileSpeed.Value).ApplyTo(stats);
+        stats.InsertModifier(Stat.ProjectileSpeed.Add(item.BaseType.ProjectileSpeed.Value));
       }
 
       if (item.BaseType.UsesAccuracy)
       {
-        Stat.UsesAccuracy.SetTrue().ApplyTo(stats);
+        stats.InsertModifier(Stat.UsesAccuracy.SetTrue());
       }
 
       if (item.BaseType.CanCrit)
       {
-        Stat.CanCrit.SetTrue().ApplyTo(stats);
+        stats.InsertModifier(Stat.CanCrit.SetTrue());
       }
 
       if (item.BaseType.CanStun)
       {
-        Stat.CanStun.SetTrue().ApplyTo(stats);
+        stats.InsertModifier(Stat.CanStun.SetTrue());
       }
 
       var (delegates, targetedAffixes) = ProcessAffixes(item.Affixes, stats);
@@ -88,18 +87,13 @@ namespace Nighthollow.Data
           delegates.Add(modifier.DelegateId.Value);
         }
 
-        modifier.StatModifier?.ApplyTo(stats);
+        if (modifier.StatModifier != null)
+        {
+          stats.InsertModifier(modifier.StatModifier);
+        }
       }
 
       return (delegates, affixes.Where(affix => affix.BaseType.IsTargeted));
-    }
-
-    public static SkillItemData DefaultMeleeAttack()
-    {
-      return new SkillItemData(
-        Root.Instance.GameDataService.GetSkillType(1),
-        new StatModifierTable(),
-        new List<AffixData>());
     }
   }
 }

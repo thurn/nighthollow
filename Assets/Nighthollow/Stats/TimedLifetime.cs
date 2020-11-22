@@ -15,6 +15,7 @@
 #nullable enable
 
 using Nighthollow.Utils;
+using SimpleJSON;
 using UnityEngine;
 
 namespace Nighthollow.Stats
@@ -29,5 +30,7 @@ namespace Nighthollow.Stats
     {
       _endTimeSeconds = Time.time + (Errors.CheckPositive(durationMilliseconds) / 1000f);
     }
+
+    public override string ToString() => $"[{nameof(TimedLifetime)}] {nameof(_endTimeSeconds)}: {_endTimeSeconds}";
   }
 }

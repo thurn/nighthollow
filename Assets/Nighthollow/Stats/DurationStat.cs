@@ -29,6 +29,8 @@ namespace Nighthollow.Stats
       _timeMilliseconds = timeMilliseconds;
     }
 
+    public override string ToString() => $"{_timeMilliseconds / 1000f}s";
+
     public float AsSeconds() => _timeMilliseconds / 1000f;
 
     public int AsMilliseconds() => _timeMilliseconds;
