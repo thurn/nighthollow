@@ -1,0 +1,87 @@
+// Copyright © 2020-present Derek Thurn
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//    https://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@use "images";
+@use "colors";
+@use "fonts";
+@use "font-sizes";
+@use "dimensions";
+@use "buttons";
+
+.window {
+  @include images.window-frame;
+  width: dimensions.$window-width;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-top: dimensions.$window-top-margin;
+
+  .window-title {
+    @include images.name-frame;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: -24px;
+    padding: 32px 128px;
+
+    .portrait {
+      margin-right: 16px;
+    }
+
+    Label {
+      font-size: font-sizes.$window-title;
+      @include fonts.headline-text;
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+  }
+
+  .body {
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+
+    .pane {
+      flex-direction: column;
+      width: 45%;
+      margin: 0 16px 48px 16px;
+      align-items: center;
+      @include images.basic-bar;
+
+      .pane-title {
+        font-size: font-sizes.$pane-title;
+        @include fonts.text;
+        padding: 16px;
+      }
+
+      .pane-subtitle {
+        @include fonts.text;
+        font-size: font-sizes.$pane-subtitle;
+        padding: 16px;
+      }
+
+      .content {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+  }
+}

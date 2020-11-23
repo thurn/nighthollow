@@ -32,6 +32,8 @@ namespace Nighthollow.Stats
     {
       Values = values;
     }
+
+    public override string ToString() => string.Join(",", Values.Select(pair => $"{pair.Value} {pair.Key}").ToArray());
   }
 
   public abstract class TaggedValuesStat<TTag, TValue> :

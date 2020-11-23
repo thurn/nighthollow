@@ -60,10 +60,10 @@ namespace Nighthollow.Services
       }
       else
       {
-        Debug.Log("Save file not found, loading new player tutorial data.");
         _deck = _gameDataService.GetStaticCardList(StaticCardList.StartingDeck).ToList();
         _collection = new List<CreatureItemData>();
         _userStats = new StatTable(StatTable.Defaults);
+        Debug.Log($"Save file not found, saving new player tutorial data to {DataPath}");
         Save();
       }
     }

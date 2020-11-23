@@ -18,29 +18,30 @@ limitations under the License.
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
     <ui:Style src="Common.uss"/>
     <ui:Style src="WorldScreen.uss"/>
+    <ui:Style src="Styles/styles.uss" />
     <nh:WorldScreen name="WorldScreen" class="full-screen">
         <nh:CardsWindow name="CardsWindow" class="window" style="visibility: hidden;">
-            <ui:VisualElement class="title">
+            <ui:VisualElement class="window-title">
                 <ui:VisualElement class="ocerak portrait small"/>
                 <ui:Label text="Ocerak, Master of Cards"/>
             </ui:VisualElement>
             <ui:Button name="CloseButton" class="close"/>
-            <ui:VisualElement class="content">
+            <ui:VisualElement class="body">
                 <ui:VisualElement class="pane collection">
-                    <ui:Label class="title" text="Collection"/>
+                    <ui:Label class="pane-title" text="Collection"/>
                     <ui:VisualElement name="Collection" class="content"/>
                 </ui:VisualElement>
                 <ui:VisualElement class="pane deck">
-                    <ui:Label class="title" text="Deck"/>
+                    <ui:Label class="pane-title" text="Deck"/>
                     <ui:VisualElement name="MainDeck" class="content"/>
-                    <ui:Label class="title subtitle" text="Mana"/>
+                    <ui:Label class="pane-subtitle" text="Mana"/>
                     <ui:VisualElement name="ManaDeck" class="content"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </nh:CardsWindow>
 
         <ui:VisualElement name="AdvisorBar" class="advisor-bar">
-            <ui:VisualElement class="border-decoration left"/>
+            <ui:VisualElement class="border-decoration left thurn"/>
             <ui:VisualElement class="content">
                 <ui:Button name="CardsButton" class="ocerak portrait portrait-button"/>
                 <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
