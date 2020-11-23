@@ -32,6 +32,8 @@ namespace Nighthollow.Stats
 
   public interface IOperation
   {
+    string Describe(string statDescription);
+
     SerializedOperation Serialize();
   }
 }

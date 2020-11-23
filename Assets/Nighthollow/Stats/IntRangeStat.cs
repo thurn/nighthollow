@@ -34,6 +34,34 @@ namespace Nighthollow.Stats
       Low = low;
       High = high;
     }
+
+    public bool Equals(IntRangeValue other)
+    {
+      return Low == other.Low && High == other.High;
+    }
+
+    public override bool Equals(object? obj)
+    {
+      return obj is IntRangeValue other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      unchecked
+      {
+        return (Low * 397) ^ High;
+      }
+    }
+
+    public static bool operator ==(IntRangeValue left, IntRangeValue right)
+    {
+      return left.Equals(right);
+    }
+
+    public static bool operator !=(IntRangeValue left, IntRangeValue right)
+    {
+      return !left.Equals(right);
+    }
   }
 
   public sealed class IntRangeStat : NumericStat<IntRangeValue>

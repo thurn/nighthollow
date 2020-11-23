@@ -44,6 +44,42 @@ namespace Nighthollow.Stats
       Overwrite = overwrite;
     }
 
+    public string Describe(string statDescription) => Describe(statDescription, null);
+
+    public string Describe(string statDescription, string? insert)
+    {
+      if (AddTo != null)
+      {
+        return ApplyDescription($"+{AddTo}", insert, statDescription);
+      }
+      else if (IncreaseBy != null)
+      {
+        return IncreaseBy.Value.IsReduction()
+          ? ApplyDescription($"{IncreaseBy} Reduced", insert, statDescription)
+          : ApplyDescription($"{IncreaseBy} Increased", insert, statDescription);
+      }
+      else if (Overwrite != null)
+      {
+        return ApplyDescription(Overwrite.ToString(), insert, statDescription);
+      }
+      else
+      {
+        throw new InvalidOperationException("Invalid NumericOperation");
+      }
+    }
+
+    string ApplyDescription(string add, string? insert, string statDescription)
+    {
+      if (insert != null)
+      {
+        add = $"{add} {insert}";
+      }
+
+      return statDescription.Contains("#")
+        ? statDescription.Replace("#", add)
+        : $"{add} {statDescription}";
+    }
+
     public SerializedOperation Serialize()
     {
       if (AddTo != null)

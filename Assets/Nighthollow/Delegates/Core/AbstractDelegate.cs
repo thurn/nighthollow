@@ -26,6 +26,8 @@ namespace Nighthollow.Delegates.Core
 {
   public abstract class AbstractDelegate : IDelegate
   {
+    public abstract string Describe(StatEntity entity);
+
     public virtual void OnActivate(CreatureContext c)
     {
     }

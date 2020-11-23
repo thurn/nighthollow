@@ -28,7 +28,7 @@ namespace Nighthollow.Interface
 
     public void Hide()
     {
-      style.visibility = new StyleEnum<Visibility>(Visibility.Visible);
+      style.visibility = new StyleEnum<Visibility>(Visibility.Hidden);
     }
 
     protected abstract void Render();

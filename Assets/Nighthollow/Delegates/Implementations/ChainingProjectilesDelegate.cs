@@ -20,6 +20,7 @@ using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.State;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -27,6 +28,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChainingProjectilesDelegate : AbstractDelegate
   {
+    public override string Describe(StatEntity entity) =>
+      $"Projectiles Chain {entity.GetInt(Stat.ProjectileChainCount)} Times on Hit";
+
     public override bool ShouldSkipProjectileImpact(SkillContext c)
     {
       if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) > 0)

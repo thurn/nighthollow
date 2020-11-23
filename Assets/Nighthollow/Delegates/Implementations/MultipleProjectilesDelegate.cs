@@ -17,12 +17,16 @@
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
+using Nighthollow.Stats;
 using UnityEngine;
 
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class MultipleProjectilesDelegate : AbstractDelegate
   {
+    public override string Describe(StatEntity entity) =>
+      $"Fires {entity.GetInt(Stat.ProjectileSequenceCount)} Projectiles in Sequence";
+
     public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
     {
       if (effect.DelegateIndex <= c.DelegateIndex)

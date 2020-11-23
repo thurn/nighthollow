@@ -16,6 +16,7 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -23,6 +24,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class AdjacentFileProjectilesDelegate : AbstractProjectileOffsetDelegate
   {
+    public override string Describe(StatEntity entity) =>
+      $"Fires {entity.GetInt(Stat.ProjectileAdjacentsCount)} Projectiles in Adjacent Files";
+
     protected override int GetProjectileCount(DelegateContext c) => c.GetInt(Stat.ProjectileAdjacentsCount);
 
     protected override Vector2 GetOrigin(DelegateContext c, int projectileNumber) =>

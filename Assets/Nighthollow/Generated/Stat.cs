@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using Nighthollow.Stats;
 using System;
 
@@ -228,6 +230,55 @@ namespace Nighthollow.Generated
         case 68: return ShockAddedReceiveCritsChance;
         case 69: return BuffDuration;
         default: throw new ArgumentOutOfRangeException(statId.ToString());
+      }
+    }
+
+    public static string? GetDescription(StatId statId)
+    {
+      switch (statId)
+      {
+        case StatId.Health: return "Health";
+        case StatId.BaseDamage: return "Damage";
+        case StatId.CreatureSpeed: return "Speed";
+        case StatId.CritChance: return "Critical Hit Chance";
+        case StatId.CritMultiplier: return "Critical Hit Multiplier";
+        case StatId.Accuracy: return "Accuracy";
+        case StatId.Evasion: return "Evasion";
+        case StatId.DamageResistance: return "Damage Resistance";
+        case StatId.DamageReduction: return "Damage Reduction";
+        case StatId.MeleeHealthDrainPercent: return "Melee Health Drain";
+        case StatId.HealthGainOnMeleeHit: return "Health Gained on Melee Hit";
+        case StatId.SkillSpeedMultiplier: return "Skill Speed Multiplier";
+        case StatId.StunDurationOnEnemies: return "Stun Duration";
+        case StatId.AddedStunChance: return "Added Stun Chance";
+        case StatId.MeleeReflect: return "Melee Damage Reflect";
+        case StatId.HealthRegenerationPerSecond: return "Health Regeneration Per Second";
+        case StatId.ManaCost: return "Mana Cost";
+        case StatId.InfluenceCost: return "Influence Cost";
+        case StatId.ProjectileSpeed: return "Projectile Speed";
+        case StatId.StartingLife: return "Starting Life";
+        case StatId.StartingMana: return "Starting Mana";
+        case StatId.Influence: return "Influence";
+        case StatId.StartingHandSize: return "Starting Hand Size";
+        case StatId.ManaGain: return "Mana Generation";
+        case StatId.CardDrawInterval: return "Card Draw Interval";
+        case StatId.MaxMeleeAreaTargets: return "Melee Attacks Hit up to # Targets";
+        case StatId.ProjectileDamageMultiplier: return "Projectile Damage";
+        case StatId.ChainProjectileDamageMultiplier: return "Chain Projectile Damage";
+        case StatId.SkillCooldownRecovery: return "Skill Cooldown Recovery";
+        case StatId.KnockbackDuration: return "Knockback Duration";
+        case StatId.ManaGainInterval: return "Mana Generation Interval";
+        case StatId.CanCrit: return "Can Critically Hit / Cannot Critically Hit";
+        case StatId.CanStun: return "Can Stun / Cannot Stun";
+        case StatId.IgnoresDamageResistance: return "Ignores Damage Resistance / Respects Damage Resistance";
+        case StatId.IgnoresDamageReduction: return "Ignores Damage Reduction / Respects Damage Reduction";
+        case StatId.MaximumDamageReduction: return "Maximum Damage Reduction";
+        case StatId.MaximumDamageResistance: return "Maximum Damage Resistance";
+        case StatId.MaximumStunChance: return "Maximum Stun Chance";
+        case StatId.Cooldown: return "Cooldown";
+        case StatId.AddedManaGain: return "Mana Generation";
+        case StatId.MeleeDamageMultiplier: return "Melee Damage";
+        default: return null;
       }
     }
   }

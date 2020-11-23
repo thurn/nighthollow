@@ -40,11 +40,13 @@ namespace Nighthollow.Editor.Data
 // distributed under the License is distributed on an ""AS IS"" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License.";
+// limitations under the License.
+
+#nullable enable";
 
     static UnityWebRequestAsyncOperation _request;
 
-    [MenuItem("Tools/Run Code Generation %#g")]
+    [MenuItem("Tools/Run Code Generation &#^g")]
     public static void RunCodeGeneration()
     {
       var request = SpreadsheetHelper.SpreadsheetRequest(new List<string> {"Enums", "Stats", "Delegates"});
@@ -184,8 +186,22 @@ namespace Nighthollow.Editor.Data
       {
         builder.Append($"        case {stat["Stat ID"]}: return {stat["Name"]};\n");
       }
-
       builder.Append($"        default: throw new ArgumentOutOfRangeException(statId.ToString());\n");
+      builder.Append("      }\n");
+      builder.Append("    }\n");
+
+      builder.Append("\n    public static string? GetDescription(StatId statId)\n");
+      builder.Append("    {\n");
+      builder.Append("      switch (statId)\n");
+      builder.Append("      {\n");
+      foreach (var stat in input)
+      {
+        if (stat.ContainsKey("Description"))
+        {
+          builder.Append($"        case StatId.{stat["Name"]}: return \"{stat["Description"]}\";\n");
+        }
+      }
+      builder.Append($"        default: return null;\n");
       builder.Append("      }\n");
       builder.Append("    }\n");
 

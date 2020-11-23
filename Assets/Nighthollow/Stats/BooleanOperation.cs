@@ -27,6 +27,12 @@ namespace Nighthollow.Stats
       SetBoolean = setBoolean;
     }
 
+    public string Describe(string statDescription)
+    {
+      var split = statDescription.Split('/');
+      return SetBoolean ? split[0] : split[1];
+    }
+
     public SerializedOperation Serialize() =>
       new SerializedOperation(SetBoolean.ToString(), SetBoolean ? Operator.SetTrue : Operator.SetFalse);
 

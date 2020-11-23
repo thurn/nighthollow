@@ -24,6 +24,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChanceToShockDelegate : AbstractDelegate
   {
+    public override string Describe(StatEntity entity) =>
+      $"{entity.GetStat(Stat.ShockChance)} Chance to Shock";
+
     public override void OnApplyToTarget(SkillContext c, Creature target)
     {
       if (Random.value > c.GetStat(Stat.ShockChance).AsMultiplier())

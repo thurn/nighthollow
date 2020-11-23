@@ -26,6 +26,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class AddedDamageOnRepeatedHitsDelegate : AbstractDelegate
   {
+    public override string Describe(StatEntity entity) =>
+      $"+{entity.GetStat(Stat.SameTargetAddedDamage)} Damage for Each Hit on the Same Target";
+
     public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
       var lastHit = c.Skill.Values.Get(Key.LastCreatureHit);

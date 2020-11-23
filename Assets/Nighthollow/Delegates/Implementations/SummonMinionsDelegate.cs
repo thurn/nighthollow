@@ -18,12 +18,15 @@ using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Services;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class SummonMinionsDelegate : AbstractDelegate
   {
+    public override string Describe(StatEntity entity) => $"Summons Minions";
+
     public override void OnUse(SkillContext c)
     {
       var rank = Root.Instance.CreatureService.GetOpenForwardRank(

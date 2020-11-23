@@ -36,6 +36,33 @@ namespace Nighthollow.Stats
 
     public int CalculateFraction(int input) =>
       Mathf.RoundToInt((input * _basisPoints) / BasisPoints);
+
+    public bool IsReduction() => _basisPoints < BasisPoints;
+
+    public bool Equals(PercentageValue other)
+    {
+      return _basisPoints == other._basisPoints;
+    }
+
+    public override bool Equals(object obj)
+    {
+      return obj is PercentageValue other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      return _basisPoints;
+    }
+
+    public static bool operator ==(PercentageValue left, PercentageValue right)
+    {
+      return left.Equals(right);
+    }
+
+    public static bool operator !=(PercentageValue left, PercentageValue right)
+    {
+      return !left.Equals(right);
+    }
   }
 
   public sealed class PercentageStat : NumericStat<PercentageValue>

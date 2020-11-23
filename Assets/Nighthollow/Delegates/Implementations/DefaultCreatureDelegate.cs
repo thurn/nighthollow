@@ -20,6 +20,7 @@ using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -27,6 +28,8 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class DefaultCreatureDelegate : AbstractDelegate
   {
+    public override string Describe(StatEntity entity) => "Default Creature Delegate";
+
     public override void OnDeath(CreatureContext c)
     {
       if (c.Self.Owner == PlayerName.Enemy)

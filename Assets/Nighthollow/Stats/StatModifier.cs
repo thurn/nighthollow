@@ -30,6 +30,8 @@ namespace Nighthollow.Stats
 
     IStatModifier WithLifetime(ILifetime lifetime);
 
+    string? Describe();
+
     JSONNode Serialize();
   }
 
@@ -64,6 +66,12 @@ namespace Nighthollow.Stats
 
     public IStatModifier WithLifetime(ILifetime lifetime) =>
       new StatModifier<TOperation, TValue>(_stat, _operation, lifetime);
+
+    public string? Describe()
+    {
+      var statDescription = Generated.Stat.GetDescription(Stat.Id);
+      return statDescription == null ? null : _operation.Describe(statDescription);
+    }
 
     public override string ToString()
     {

@@ -16,6 +16,7 @@
 
 using System;
 using DG.Tweening;
+using Nighthollow.Utils;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
@@ -41,5 +42,8 @@ namespace Nighthollow.Interface
         sequence.AppendCallback(() => onComplete());
       }
     }
+
+    public static T FindByName<T>(VisualElement parent, string name) where T : class =>
+      Errors.CheckNotNull(parent.Q(name) as T);
   }
 }

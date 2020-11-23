@@ -26,6 +26,8 @@ namespace Nighthollow.Delegates.Core
 {
   public interface IDelegate
   {
+    string Describe(StatEntity entity);
+
     #region Events
 
     /// <summary>Called when a creature is first placed.</summary>

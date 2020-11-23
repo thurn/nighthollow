@@ -50,7 +50,7 @@ namespace Nighthollow.Interface
     void OnGeometryChange(GeometryChangedEvent evt)
     {
       var self = this.Q("CardsWindow");
-      this.Q("CloseButton").RegisterCallback<ClickEvent>(e => { self.style.opacity = 0; });
+      this.Q("CloseButton").RegisterCallback<ClickEvent>(e => { Hide(); });
 
       _collection = this.Q("Collection");
       _mainDeck = this.Q("MainDeck");
@@ -107,6 +107,8 @@ namespace Nighthollow.Interface
       image.style.backgroundImage = new StyleBackground(Controller.DataService.AssetService.GetImage(
         Errors.CheckNotNull(card.BaseType.ImageAddress)));
       result.Add(image);
+      result.RegisterCallback<MouseOverEvent>(e => { Controller.ShowItemTooltip(card, result.worldBound); });
+      result.RegisterCallback<MouseOutEvent>(e => { Controller.HideTooltip(); });
       return result;
     }
   }

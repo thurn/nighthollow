@@ -26,6 +26,8 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ApplyTargetedAffixesOnHitDelegate : AbstractDelegate
   {
+    public override string Describe(StatEntity entity) => "Curses Enemies on Hit With:";
+
     public override void OnApplyToTarget(SkillContext c, Creature target)
     {
       foreach (var modifier in c.Skill.TargetedAffixes.SelectMany(affix => affix.Modifiers))

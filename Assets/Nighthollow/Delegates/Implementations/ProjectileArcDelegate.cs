@@ -16,6 +16,7 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -23,6 +24,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ProjectileArcDelegate : AbstractProjectileOffsetDelegate
   {
+    public override string Describe(StatEntity entity) =>
+      $"Fires an Arc of {entity.GetInt(Stat.ProjectileArcCount)} Projectiles";
+
     protected override int GetProjectileCount(DelegateContext c) => c.GetInt(Stat.ProjectileArcCount);
 
     protected override Vector2 GetOrigin(DelegateContext c, int projectileNumber) =>

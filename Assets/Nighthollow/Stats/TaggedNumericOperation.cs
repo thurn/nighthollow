@@ -16,6 +16,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Nighthollow.Generated;
 
 namespace Nighthollow.Stats
@@ -85,6 +87,33 @@ namespace Nighthollow.Stats
         throw new InvalidOperationException("Invalid TaggedNumericOperation");
       }
     }
+
+    public string Describe(string statDescription)
+    {
+      var result = new StringBuilder();
+      var appended = false;
+      foreach (var tag in AllTags())
+      {
+        if (appended)
+        {
+          result.Append("\n");
+        }
+
+        var operation = ToNumericOperation(tag);
+        if (operation != null)
+        {
+          result.Append(operation.Describe(statDescription, tag.ToString()));
+          appended = true;
+        }
+      }
+      return result.ToString();
+    }
+
+    IEnumerable<TTag> AllTags() => Enumerable.Empty<TTag>()
+      .Concat(AddTo?.Values.Keys ?? Enumerable.Empty<TTag>())
+      .Concat(IncreaseBy?.Values.Keys ?? Enumerable.Empty<TTag>())
+      .Concat(Overwrite?.Values.Keys ?? Enumerable.Empty<TTag>())
+      .Distinct();
 
     public SerializedOperation Serialize()
     {

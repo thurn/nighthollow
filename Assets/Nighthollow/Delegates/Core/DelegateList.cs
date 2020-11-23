@@ -30,6 +30,8 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
+    public string Describe(StatEntity entity) => "Delegate List";
+
     public void OnActivate(CreatureContext context) =>
       ExecuteEvent(context, (d, c) => d.OnActivate(c));
 

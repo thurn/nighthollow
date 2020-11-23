@@ -14,8 +14,8 @@
 
 #nullable enable
 
+using Nighthollow.Data;
 using Nighthollow.Services;
-using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,20 +31,37 @@ namespace Nighthollow.Interface
     VisualElement _advisorBar = null!;
     CardsWindow _cardsWindow = null!;
     AbstractWindow? _currentWindow;
+    ItemTooltip _itemTooltip = null!;
 
     void Start()
     {
-      _worldScreen = FindByName<WorldScreen>(_document.rootVisualElement, "WorldScreen");
+      _worldScreen = InterfaceUtils.FindByName<WorldScreen>(_document.rootVisualElement, "WorldScreen");
       _worldScreen.Controller = this;
-      _advisorBar = FindByName<VisualElement>(_worldScreen, "AdvisorBar");
-      _cardsWindow = FindByName<CardsWindow>(_worldScreen, "CardsWindow");
+      _advisorBar = InterfaceUtils.FindByName<VisualElement>(_worldScreen, "AdvisorBar");
+      _cardsWindow = InterfaceUtils.FindByName<CardsWindow>(_worldScreen, "CardsWindow");
       _cardsWindow.Controller = this;
-
-      _currentWindow = _cardsWindow;
+      _itemTooltip = InterfaceUtils.FindByName<ItemTooltip>(_worldScreen, "ItemTooltip");
+      _itemTooltip.Controller = this;
     }
 
     public bool ConsumesMousePosition(Vector3 mousePosition) =>
       _currentWindow != null || _advisorBar.ContainsPoint(mousePosition);
+
+    public void ShowItemTooltip(CreatureItemData data, Rect anchor)
+    {
+      _itemTooltip.Show(data, anchor);
+    }
+
+    public void HideTooltip()
+    {
+      _itemTooltip.Hide();
+    }
+
+    public void HideCurrentWindow()
+    {
+      _currentWindow?.Hide();
+      _currentWindow = null;
+    }
 
     public void ShowCardsWindow() => ShowWindow(_cardsWindow);
 
@@ -54,8 +71,5 @@ namespace Nighthollow.Interface
       _currentWindow = window;
       _currentWindow.Show();
     }
-
-    static T FindByName<T>(VisualElement parent, string name) where T : class =>
-      Errors.CheckNotNull(parent.Q(name) as T);
   }
 }

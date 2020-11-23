@@ -28,13 +28,13 @@ limitations under the License.
             <ui:VisualElement class="content">
                 <ui:VisualElement class="pane collection">
                     <ui:Label class="title" text="Collection"/>
-                    <ui:VisualElement name="Collection" class="content" />
+                    <ui:VisualElement name="Collection" class="content"/>
                 </ui:VisualElement>
                 <ui:VisualElement class="pane deck">
                     <ui:Label class="title" text="Deck"/>
-                    <ui:VisualElement name="MainDeck" class="content" />
+                    <ui:VisualElement name="MainDeck" class="content"/>
                     <ui:Label class="title subtitle" text="Mana"/>
-                    <ui:VisualElement name="ManaDeck" class="content" />
+                    <ui:VisualElement name="ManaDeck" class="content"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </nh:CardsWindow>
@@ -49,5 +49,10 @@ limitations under the License.
             </ui:VisualElement>
             <ui:VisualElement class="border-decoration right"/>
         </ui:VisualElement>
+
+        <nh:ItemTooltip name="ItemTooltip" class="item-tooltip" style="visibility: hidden;">
+            <ui:Label name="Title" class="title" text="Blackguard"/>
+            <ui:VisualElement name="Content" class="content" />
+        </nh:ItemTooltip>
     </nh:WorldScreen>
 </ui:UXML>

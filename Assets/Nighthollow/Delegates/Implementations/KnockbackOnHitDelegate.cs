@@ -18,11 +18,15 @@ using Nighthollow.Components;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
+using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class KnockbackOnHitDelegate : AbstractDelegate
   {
+    public override string Describe(StatEntity entity) =>
+      $"Knocks Back Targets for {entity.GetDurationSeconds(Stat.KnockbackDuration)} Seconds on Hit";
+
     public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
       var duration = c.GetDurationSeconds(Stat.KnockbackDuration);

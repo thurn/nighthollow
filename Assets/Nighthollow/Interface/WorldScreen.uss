@@ -65,3 +65,51 @@ limitations under the License.
 .portrait-button:active {
     -unity-background-image-tint-color: rgb(200, 200, 200);
 }
+
+.item-tooltip {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/basic_bar.png');
+    -unity-slice-left: 64;
+    -unity-slice-right: 64;
+    -unity-slice-top: 64;
+    -unity-slice-bottom: 64;
+    width: 512px;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+    position: absolute;
+    left: 100px;
+    top: 100px;
+}
+
+.item-tooltip .title {
+    color: white;
+    font-size: 36px;
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Customized/name_frame_mid_ready_75pct.png');
+    -unity-font: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');
+    -unity-slice-left: 256;
+    -unity-slice-right: 256;
+    -unity-text-align: middle-center;
+    margin-top: -32px;
+    padding: 16px 64px 16px 64px;
+}
+
+.item-tooltip .content {
+    margin: 4px 8px 24px 8px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.item-tooltip .divider {
+    width: 50%;
+    height: 1px;
+    background-color: rgb(144, 118, 89);
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.item-tooltip .text {
+    font-size: 28px;
+    -unity-text-align: middle-center;
+    color: rgb(144, 118, 89);
+}

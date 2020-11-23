@@ -34,6 +34,31 @@ namespace Nighthollow.Stats
     public float AsSeconds() => _timeMilliseconds / 1000f;
 
     public int AsMilliseconds() => _timeMilliseconds;
+
+    public bool Equals(DurationValue other)
+    {
+      return _timeMilliseconds == other._timeMilliseconds;
+    }
+
+    public override bool Equals(object? obj)
+    {
+      return obj is DurationValue other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      return _timeMilliseconds;
+    }
+
+    public static bool operator ==(DurationValue left, DurationValue right)
+    {
+      return left.Equals(right);
+    }
+
+    public static bool operator !=(DurationValue left, DurationValue right)
+    {
+      return !left.Equals(right);
+    }
   }
 
   public sealed class DurationStat : NumericStat<DurationValue>

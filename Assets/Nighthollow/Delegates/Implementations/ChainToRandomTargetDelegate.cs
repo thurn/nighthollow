@@ -21,12 +21,16 @@ using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.State;
+using Nighthollow.Stats;
 using UnityEngine;
 
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChainToRandomTargetDelegate : AbstractDelegate
   {
+    public override string Describe(StatEntity entity) =>
+      $"Projectiles Chain {entity.GetInt(Stat.MaxProjectileTimesChained)} Times to Random Targets";
+
     public override bool ShouldSkipProjectileImpact(SkillContext c)
     {
       if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) > 0)
