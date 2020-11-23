@@ -1,0 +1,58 @@
+// Copyright © 2020-present Derek Thurn
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//    https://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@use "images";
+@use "window";
+@use "colors";
+@use "font-sizes";
+@use "fonts";
+
+.item-tooltip {
+  @include images.basic-bar;
+  width: 512px;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
+  position: absolute;
+
+  .tooltip-title {
+    color: colors.$common-rarity;
+    font-size: font-sizes.$title;
+    @include images.name-frame(small);
+    -unity-text-align: middle-center;
+    margin-top: -32px;
+    padding: 16px 64px 16px 64px;
+  }
+
+  .tooltip-content {
+    margin: 4px 8px 24px 8px;
+    flex-direction: column;
+    align-items: center;
+
+    .text {
+      @include fonts.text;
+      font-size: font-sizes.$body1;
+      -unity-text-align: middle-center;
+    }
+
+    .divider {
+      width: 50%;
+      height: 1px;
+      background-color: colors.$primary-text;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+  }
+}

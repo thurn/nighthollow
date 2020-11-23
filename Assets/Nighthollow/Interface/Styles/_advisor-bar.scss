@@ -1,0 +1,64 @@
+// Copyright © 2020-present Derek Thurn
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//    https://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@use "images";
+@use "window";
+@use "colors";
+@use "font-sizes";
+@use "fonts";
+@use "dimensions";
+
+.advisor-bar {
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-end;
+
+  .advisor-bar-content {
+    @include images.basic-bar;
+    width: dimensions.$advisor-bar-width;
+    height: dimensions.$advisor-bar-height;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: -16px -12px;
+  }
+
+  .border-decoration {
+    width: 256px;
+    height: 256px;
+    margin-bottom: -42px;
+  }
+
+  .border-decoration.left {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Customized/decoration_right.png');
+  }
+
+  .border-decoration.right {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Customized/decoration_left.png');
+  }
+
+  Button.portrait {
+    border-width: 0;
+    margin-bottom: 8px;
+  }
+
+  Button.portrait:hover {
+    -unity-background-image-tint-color: rgb(236, 236, 236);
+  }
+
+  Button.portrait:active {
+    -unity-background-image-tint-color: rgb(200, 200, 200);
+  }
+}

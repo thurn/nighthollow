@@ -29,7 +29,7 @@
   margin-top: dimensions.$window-top-margin;
 
   .window-title {
-    @include images.name-frame;
+    @include images.name-frame(large);
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -66,14 +66,14 @@
       @include images.basic-bar;
 
       .pane-title {
-        font-size: font-sizes.$pane-title;
+        font-size: font-sizes.$title;
         @include fonts.text;
         padding: 16px;
       }
 
       .pane-subtitle {
         @include fonts.text;
-        font-size: font-sizes.$pane-subtitle;
+        font-size: font-sizes.$subtitle;
         padding: 16px;
       }
 
