@@ -16,6 +16,7 @@
 
 using System.Linq;
 using System.Text;
+using ICSharpCode.NRefactory.Ast;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
@@ -25,6 +26,70 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
+  public sealed class TooltipBuilder
+  {
+    readonly VisualElement _result;
+    StringBuilder? _currentText;
+    bool _appendDivider;
+
+    public TooltipBuilder(VisualElement result)
+    {
+      _result = result;
+    }
+
+    public void StartGroup()
+    {
+      if (_currentText != null)
+      {
+        var label = new Label {text = _currentText.ToString()};
+        label.AddToClassList("text");
+        _result.Add(label);
+      }
+
+      _currentText = null;
+    }
+
+    public void AppendDivider()
+    {
+      StartGroup();
+      _appendDivider = true;
+    }
+
+    public void AppendNullable(string? text)
+    {
+      if (text != null)
+      {
+        AppendText(text);
+      }
+    }
+
+    public void AppendText(string text)
+    {
+      if (_appendDivider)
+      {
+        var divider = new VisualElement();
+        divider.AddToClassList("divider");
+        _result.Add(divider);
+        _appendDivider = false;
+      }
+
+      if (_currentText == null)
+      {
+        _currentText = new StringBuilder(text);
+      }
+      else
+      {
+        _currentText.Append("\n").Append(text);
+      }
+    }
+
+    public VisualElement Build()
+    {
+      StartGroup();
+      return _result;
+    }
+  }
+
   public sealed class ItemTooltip : VisualElement
   {
     Label _title = null!;
@@ -84,7 +149,8 @@ namespace Nighthollow.Interface
 
       var user = Controller.DataService.UserDataService.UserStats;
       var built = CreatureUtil.Build(user, data);
-      AppendText($"Health: {built.GetInt(Stat.Health)}");
+      var builder = new TooltipBuilder(_content);
+      builder.AppendText($"Health: {built.GetInt(Stat.Health)}");
 
       var baseDamage = built.Stats.Get(Stat.BaseDamage);
       foreach (var damageType in CollectionUtils.AllNonDefaultEnumValues<DamageType>(typeof(DamageType)))
@@ -92,93 +158,68 @@ namespace Nighthollow.Interface
         var range = baseDamage.Get(damageType, IntRangeValue.Zero);
         if (range != IntRangeValue.Zero)
         {
-          AppendText($"Base Attack: {range} {damageType} Damage");
+          builder.AppendText($"Base Attack: {range} {damageType} Damage");
         }
       }
 
       if (built.GetInt(Stat.Accuracy) != user.Get(Stat.Accuracy))
       {
-        AppendText($"Accuracy: {built.GetInt(Stat.Accuracy)}");
+        builder.AppendText($"Accuracy: {built.GetInt(Stat.Accuracy)}");
       }
 
       if (built.GetInt(Stat.Evasion) != user.Get(Stat.Evasion))
       {
-        AppendText($"Evasion: {built.GetInt(Stat.Evasion)}");
+        builder.AppendText($"Evasion: {built.GetInt(Stat.Evasion)}");
       }
 
       if (built.GetStat(Stat.CritChance) != user.Get(Stat.CritChance))
       {
-        AppendText($"Critical Hit Chance: {built.GetStat(Stat.CritChance)}");
+        builder.AppendText($"Critical Hit Chance: {built.GetStat(Stat.CritChance)}");
       }
 
       if (built.GetStat(Stat.CritMultiplier) != user.Get(Stat.CritMultiplier))
       {
-        AppendText($"Critical Hit Multiplier: {built.GetStat(Stat.CritMultiplier)}");
+        builder.AppendText($"Critical Hit Multiplier: {built.GetStat(Stat.CritMultiplier)}");
       }
 
-      var implicitAffix = data.Affixes.FirstOrDefault(affix => affix.BaseType.Id == data.BaseType.ImplicitAffix?.Id);
-      if (implicitAffix != null)
+      builder.AppendDivider();
+
+      foreach (var affix in data.Affixes.Where(affix => affix.BaseType.Id == data.BaseType.ImplicitAffix?.Id))
       {
-        AppendDivider();
-        RenderAffix(built, implicitAffix);
+        RenderAffix(builder, built, affix);
       }
+
+      foreach (var skill in data.Skills.Where(skill => skill.BaseType.Id != 1))
+      {
+        builder.AppendText($"Skill: {skill.BaseType.Name}");
+      }
+
+      builder.AppendDivider();
+
+      foreach (var affix in data.Affixes.Where(affix => affix.BaseType.Id != data.BaseType.ImplicitAffix?.Id))
+      {
+        RenderAffix(builder, built, affix);
+      }
+
+      builder.Build();
     }
 
-    void RenderAffix(StatEntity built, AffixData affix)
+    void RenderAffix(TooltipBuilder builder, StatEntity built, AffixData affix)
     {
-      var text = new StringBuilder();
-      var appended = false;
+      builder.StartGroup();
 
       foreach (var modifier in affix.Modifiers)
       {
         if (modifier.DelegateId.HasValue)
         {
-          if (appended)
-          {
-            text.Append("\n");
-          }
-
-          text.Append(DelegateMap.Get(modifier.DelegateId.Value).Describe(built));
-          appended = true;
-
+          builder.AppendNullable(DelegateMap.Get(modifier.DelegateId.Value).Describe(built));
         }
 
         if (modifier.StatModifier != null)
         {
-          var description = modifier.StatModifier.Describe();
-          if (description == null)
-          {
-            continue;
-          }
-
-          if (appended)
-          {
-            text.Append("\n");
-          }
-
-          text.Append(description);
-          appended = true;
+          builder.AppendNullable(modifier.StatModifier.Describe());
         }
       }
-
-      if (appended)
-      {
-        AppendText(text.ToString());
-      }
-    }
-
-    void AppendText(string text)
-    {
-      var label = new Label {text = text};
-      label.AddToClassList("text");
-      _content.Add(label);
-    }
-
-    void AppendDivider()
-    {
-      var divider = new VisualElement();
-      divider.AddToClassList("divider");
-      _content.Add(divider);
     }
   }
 }

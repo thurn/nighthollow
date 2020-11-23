@@ -26,7 +26,7 @@ namespace Nighthollow.Delegates.Core
 {
   public interface IDelegate
   {
-    string Describe(StatEntity entity);
+    string? Describe(StatEntity entity);
 
     #region Events
 
