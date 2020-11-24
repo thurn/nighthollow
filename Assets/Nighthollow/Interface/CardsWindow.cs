@@ -107,7 +107,13 @@ namespace Nighthollow.Interface
       image.style.backgroundImage = new StyleBackground(Controller.DataService.AssetService.GetImage(
         Errors.CheckNotNull(card.BaseType.ImageAddress)));
       result.Add(image);
-      result.RegisterCallback<MouseOverEvent>(e => { Controller.ShowItemTooltip(card, result.worldBound); });
+      result.RegisterCallback<MouseOverEvent>(e =>
+      {
+        Controller.ShowTooltip(CreatureItemTooltip.Create(
+          Controller.DataService.UserDataService.UserStats,
+          card),
+          new Vector2(result.worldBound.x, result.worldBound.y));
+      });
       result.RegisterCallback<MouseOutEvent>(e => { Controller.HideTooltip(); });
       return result;
     }

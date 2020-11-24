@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Nighthollow.Utils;
 using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Components
+namespace Nighthollow.World
 {
   public sealed class CameraMover : MonoBehaviour
   {
 #pragma warning disable 0649
     [SerializeField] Camera _camera = null!;
+    [SerializeField] WorldMap _worldMap = null!;
     [SerializeField] float _keyboardMovementSpeed;
     [SerializeField] float _scrollWheelZoomSpeed;
     [SerializeField] float _keyboardZoomSpeed;
@@ -68,9 +68,14 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      transform.Translate(
-        new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0) *
-        (_keyboardMovementSpeed * Time.deltaTime), Space.Self);
+      var translation = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0) *
+                        _keyboardMovementSpeed *
+                        Time.deltaTime;
+      if (translation != Vector3.zero)
+      {
+        transform.Translate(translation, Space.Self);
+        _worldMap.ClearSelection();
+      }
 
       _zoomDelta += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * _scrollWheelZoomSpeed;
       _zoomDelta += ZoomDirection() * Time.deltaTime * _keyboardZoomSpeed;

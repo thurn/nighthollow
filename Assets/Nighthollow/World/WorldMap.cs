@@ -15,6 +15,7 @@
 #nullable enable
 
 using System.Collections.Generic;
+using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -160,6 +161,25 @@ namespace Nighthollow.World
       }
     }
 
+    public void ClearSelection()
+    {
+      ClearPreviousSelection();
+      _worldScreen.HideTooltip();
+      _currentlySelected = null;
+    }
+
+    void ClearPreviousSelection()
+    {
+      if (_currentlySelected.HasValue)
+      {
+        RemoveIcon(_currentlySelected.Value);
+        if (_previousIconOnSelectedTile)
+        {
+          ShowIcon(_currentlySelected.Value, _previousIconOnSelectedTile);
+        }
+      }
+    }
+
     void Update()
     {
       if (Input.GetMouseButtonDown(0) && !_worldScreen.ConsumesMousePosition(Input.mousePosition))
@@ -169,18 +189,19 @@ namespace Nighthollow.World
         var position = _grid.WorldToCell(worldPoint);
         var hex = new Vector2Int(position.x, position.y);
 
-        if (_currentlySelected.HasValue)
-        {
-          RemoveIcon(_currentlySelected.Value);
-          if (_previousIconOnSelectedTile)
-          {
-            ShowIcon(_currentlySelected.Value, _previousIconOnSelectedTile);
-          }
-        }
+        ClearPreviousSelection();
 
         _previousIconOnSelectedTile = GetIcon(hex);
         ShowIcon(hex, _selectedTileIcon);
         _currentlySelected = hex;
+
+        var tile = _children[hex.y].GetTile(new Vector3Int(hex.x, hex.y, 0));
+        var screenPoint = _mainCamera.WorldToScreenPoint(_grid.CellToWorld(position));
+        _worldScreen.ShowTooltip(WorldHexTooltip.Create(
+            tile.name,
+            hex == Tutorial.StartingHex ? "Kingdom of Nighthollow" : "None",
+            hex == Tutorial.TutorialAttackHex),
+          InterfaceUtils.ScreenPointToInterfacePoint(screenPoint));
       }
     }
   }

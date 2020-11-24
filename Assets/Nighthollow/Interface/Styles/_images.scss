@@ -54,3 +54,20 @@
   -unity-slice-top: 128;
   -unity-slice-bottom: 128;
 }
+
+@mixin long-button {
+  -unity-slice-left: 20;
+  -unity-slice-right: 20;
+  -unity-slice-top: 10;
+  -unity-slice-bottom: 10;
+}
+
+@mixin long-button-off {
+  @include long-button;
+  background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/long_button_off.png');
+}
+
+@mixin long-button-on {
+  @include long-button;
+  background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/long_button_on.png');
+}

@@ -51,8 +51,8 @@ limitations under the License.
         </ui:VisualElement>
 
         <nh:ItemTooltip name="ItemTooltip" class="item-tooltip" style="visibility: hidden;">
+            <ui:Button name="CloseButton" class="close small"/>
             <ui:Label name="Title" class="tooltip-title" text="Blackguard"/>
-            <ui:VisualElement name="Content" class="tooltip-content" />
         </nh:ItemTooltip>
     </nh:WorldScreen>
 </ui:UXML>

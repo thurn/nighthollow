@@ -315,6 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _document: {fileID: 178308607}
+  _worldMap: {fileID: 1143359796}
   _dataService: {fileID: 857118944}
 --- !u!1 &817099573
 GameObject:
@@ -413,6 +414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 817099575}
+  _worldMap: {fileID: 1143359796}
   _keyboardMovementSpeed: 25
   _scrollWheelZoomSpeed: -10
   _keyboardZoomSpeed: 3

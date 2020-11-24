@@ -14,8 +14,8 @@
 
 #nullable enable
 
-using Nighthollow.Data;
 using Nighthollow.Services;
+using Nighthollow.World;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,6 +24,11 @@ namespace Nighthollow.Interface
   public sealed class WorldScreenController : MonoBehaviour
   {
     [SerializeField] UIDocument _document = null!;
+    public UIDocument Document => _document;
+
+    [SerializeField] WorldMap _worldMap = null!;
+    public WorldMap WorldMap => _worldMap;
+
     [SerializeField] DataService _dataService = null!;
     public DataService DataService => _dataService;
 
@@ -45,11 +50,14 @@ namespace Nighthollow.Interface
     }
 
     public bool ConsumesMousePosition(Vector3 mousePosition) =>
-      _currentWindow != null || _advisorBar.ContainsPoint(mousePosition);
+      _currentWindow != null ||
+      InterfaceUtils.ContainsScreenPoint(_advisorBar, mousePosition) ||
+      (_itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition));
 
-    public void ShowItemTooltip(CreatureItemData data, Rect anchor)
+    public void ShowTooltip(TooltipBuilder builder, Vector2 anchor)
     {
-      _itemTooltip.Show(data, anchor);
+      _itemTooltip.Hide();
+      _itemTooltip.Show(builder, anchor);
     }
 
     public void HideTooltip()

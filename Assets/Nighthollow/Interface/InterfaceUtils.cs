@@ -17,6 +17,7 @@
 using System;
 using DG.Tweening;
 using Nighthollow.Utils;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
@@ -45,5 +46,15 @@ namespace Nighthollow.Interface
 
     public static T FindByName<T>(VisualElement parent, string name) where T : class =>
       Errors.CheckNotNull(parent.Q(name) as T);
+
+    public static bool ContainsScreenPoint(VisualElement element, Vector2 point)
+    {
+      // This is supposed to be just element.ContainsPoint(element.WorldToLocal(point)), but that doesn't work
+      return element.ContainsPoint(element.WorldToLocal(ScreenPointToInterfacePoint(point)));
+    }
+
+    public static Vector2 ScreenPointToInterfacePoint(Vector2 screenPoint) =>
+      // Not sure if there's a less hacky way to convert to GUI coordinates than Screen.height - y...
+      new Vector2(screenPoint.x, Screen.height - screenPoint.y);
   }
 }

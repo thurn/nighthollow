@@ -147,4 +147,10 @@ namespace Nighthollow.Generated
     Area = 4,
   }
 
+  public enum Rarity
+  {
+    Unknown = 0,
+    Common = 1
+  }
+
 }

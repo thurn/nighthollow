@@ -24,7 +24,6 @@
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  flex-grow: 1;
   position: absolute;
 
   .tooltip-title {
@@ -55,6 +54,10 @@
       background-color: colors.$primary-text;
       margin-top: 8px;
       margin-bottom: 8px;
+    }
+
+    .button {
+      margin: 16px 16px 0 16px;
     }
   }
 }

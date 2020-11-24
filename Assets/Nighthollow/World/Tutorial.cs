@@ -14,7 +14,6 @@
 
 #nullable enable
 
-using System.Collections.Generic;
 using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -31,9 +30,8 @@ namespace Nighthollow.World
     [SerializeField] Tile _fightIcon = null!;
 #pragma warning restore 0649
 
-    static readonly Color BorderColor = new Color(0.498f, 0f, 0f);
-    static readonly Vector2Int StartingHex = new Vector2Int(-12, 7);
-    static readonly Vector2Int AttackHex = new Vector2Int(-11, 7);
+    public static readonly Vector2Int StartingHex = new Vector2Int(-12, 7);
+    public static readonly Vector2Int TutorialAttackHex = new Vector2Int(-11, 7);
 
     const string IntroText =
       "The sleeper awakes... we have been preparing for your return for many years, my lord. We will once again bring the Eternal Night to the world of the living!";
@@ -52,7 +50,7 @@ namespace Nighthollow.World
     {
       ComponentUtils.Instantiate(_dialogPrefab).Initialize(text, () =>
       {
-        _worldMap.ShowIcon(AttackHex, _fightIcon);
+        _worldMap.ShowIcon(TutorialAttackHex, _fightIcon);
       });
     }
   }

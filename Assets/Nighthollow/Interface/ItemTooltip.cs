@@ -14,89 +14,22 @@
 
 #nullable enable
 
-using System.Linq;
-using System.Text;
-using ICSharpCode.NRefactory.Ast;
-using Nighthollow.Data;
-using Nighthollow.Generated;
-using Nighthollow.Stats;
-using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class TooltipBuilder
-  {
-    readonly VisualElement _result;
-    StringBuilder? _currentText;
-    bool _appendDivider;
-
-    public TooltipBuilder(VisualElement result)
-    {
-      _result = result;
-    }
-
-    public void StartGroup()
-    {
-      if (_currentText != null)
-      {
-        var label = new Label {text = _currentText.ToString()};
-        label.AddToClassList("text");
-        _result.Add(label);
-      }
-
-      _currentText = null;
-    }
-
-    public void AppendDivider()
-    {
-      StartGroup();
-      _appendDivider = true;
-    }
-
-    public void AppendNullable(string? text)
-    {
-      if (text != null)
-      {
-        AppendText(text);
-      }
-    }
-
-    public void AppendText(string text)
-    {
-      if (_appendDivider)
-      {
-        var divider = new VisualElement();
-        divider.AddToClassList("divider");
-        _result.Add(divider);
-        _appendDivider = false;
-      }
-
-      if (_currentText == null)
-      {
-        _currentText = new StringBuilder(text);
-      }
-      else
-      {
-        _currentText.Append("\n").Append(text);
-      }
-    }
-
-    public VisualElement Build()
-    {
-      StartGroup();
-      return _result;
-    }
-  }
-
   public sealed class ItemTooltip : VisualElement
   {
+    VisualElement _closeButton = null!;
+    bool _initialized;
     Label _title = null!;
-    VisualElement _content = null!;
-    Rect? _anchor;
+    Vector2? _anchor;
+    int _xOffset;
 
     public WorldScreenController Controller { get; set; } = null!;
+
+    public bool Visible { get; private set; }
 
     public new sealed class UxmlFactory : UxmlFactory<ItemTooltip, UxmlTraits>
     {
@@ -114,111 +47,60 @@ namespace Nighthollow.Interface
       }
     }
 
-    public void Show(CreatureItemData data, Rect anchor)
+    public void Show(TooltipBuilder builder, Vector2 anchorPoint)
     {
       style.visibility = new StyleEnum<Visibility>(Visibility.Visible);
-      style.left = new StyleLength(anchor.x - worldBound.width - 16);
-      style.top = new StyleLength(anchor.y);
-      _anchor = anchor;
+      _anchor = anchorPoint;
+      _title.text = builder.Name;
+      _xOffset = builder.XOffset;
+      Visible = true;
 
-      Render(data);
+      _closeButton.style.visibility = new StyleEnum<Visibility>(
+        builder.CloseButton ? Visibility.Visible : Visibility.Hidden);
+
+      var content = this.Q(null, "tooltip-content");
+      if (content != null)
+      {
+        Remove(content);
+      }
+
+      Add(builder.BuildContent());
+
+      SetPosition();
     }
 
     public void Hide()
     {
+      Visible = false;
       style.visibility = new StyleEnum<Visibility>(Visibility.Hidden);
+      _closeButton.style.visibility = new StyleEnum<Visibility>(Visibility.Hidden);
       _anchor = null;
     }
 
     void OnGeometryChange(GeometryChangedEvent evt)
     {
-      _title = InterfaceUtils.FindByName<Label>(this, "Title");
-      _content = InterfaceUtils.FindByName<VisualElement>(this, "Content");
+      if (!_initialized)
+      {
+        _title = InterfaceUtils.FindByName<Label>(this, "Title");
+        _closeButton = this.Q("CloseButton");
+        _closeButton.RegisterCallback<ClickEvent>(e => { Controller.WorldMap.ClearSelection(); });
+        _initialized = true;
+      }
 
+      SetPosition();
+    }
+
+    void SetPosition()
+    {
       if (_anchor != null)
       {
-        style.left = new StyleLength(_anchor.Value.x - worldBound.width - 16);
-        style.top = new StyleLength(_anchor.Value.y);
-      }
-    }
-
-    void Render(CreatureItemData data)
-    {
-      _content.Clear();
-      _title.text = data.Name;
-
-      var user = Controller.DataService.UserDataService.UserStats;
-      var built = CreatureUtil.Build(user, data);
-      var builder = new TooltipBuilder(_content);
-      builder.AppendText($"Health: {built.GetInt(Stat.Health)}");
-
-      var baseDamage = built.Stats.Get(Stat.BaseDamage);
-      foreach (var damageType in CollectionUtils.AllNonDefaultEnumValues<DamageType>(typeof(DamageType)))
-      {
-        var range = baseDamage.Get(damageType, IntRangeValue.Zero);
-        if (range != IntRangeValue.Zero)
-        {
-          builder.AppendText($"Base Attack: {range} {damageType} Damage");
-        }
-      }
-
-      if (built.GetInt(Stat.Accuracy) != user.Get(Stat.Accuracy))
-      {
-        builder.AppendText($"Accuracy: {built.GetInt(Stat.Accuracy)}");
-      }
-
-      if (built.GetInt(Stat.Evasion) != user.Get(Stat.Evasion))
-      {
-        builder.AppendText($"Evasion: {built.GetInt(Stat.Evasion)}");
-      }
-
-      if (built.GetStat(Stat.CritChance) != user.Get(Stat.CritChance))
-      {
-        builder.AppendText($"Critical Hit Chance: {built.GetStat(Stat.CritChance)}");
-      }
-
-      if (built.GetStat(Stat.CritMultiplier) != user.Get(Stat.CritMultiplier))
-      {
-        builder.AppendText($"Critical Hit Multiplier: {built.GetStat(Stat.CritMultiplier)}");
-      }
-
-      builder.AppendDivider();
-
-      foreach (var affix in data.Affixes.Where(affix => affix.BaseType.Id == data.BaseType.ImplicitAffix?.Id))
-      {
-        RenderAffix(builder, built, affix);
-      }
-
-      foreach (var skill in data.Skills.Where(skill => skill.BaseType.Id != 1))
-      {
-        builder.AppendText($"Skill: {skill.BaseType.Name}");
-      }
-
-      builder.AppendDivider();
-
-      foreach (var affix in data.Affixes.Where(affix => affix.BaseType.Id != data.BaseType.ImplicitAffix?.Id))
-      {
-        RenderAffix(builder, built, affix);
-      }
-
-      builder.Build();
-    }
-
-    void RenderAffix(TooltipBuilder builder, StatEntity built, AffixData affix)
-    {
-      builder.StartGroup();
-
-      foreach (var modifier in affix.Modifiers)
-      {
-        if (modifier.DelegateId.HasValue)
-        {
-          builder.AppendNullable(DelegateMap.Get(modifier.DelegateId.Value).Describe(built));
-        }
-
-        if (modifier.StatModifier != null)
-        {
-          builder.AppendNullable(modifier.StatModifier.Describe());
-        }
+        style.left = new StyleLength(_anchor.Value.x > Screen.width / 2f
+          ? _anchor.Value.x - worldBound.width - _xOffset
+          : _anchor.Value.x + _xOffset);
+        style.top = new StyleLength(Mathf.Clamp(
+          _anchor.Value.y - (worldBound.height / 2f),
+          32,
+          Screen.height - worldBound.height - 32));
       }
     }
   }

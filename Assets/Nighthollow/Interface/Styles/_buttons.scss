@@ -13,12 +13,56 @@
 // limitations under the License.
 
 @use "colors";
+@use "images";
+@use "fonts";
+@use "font-sizes";
+
+.button {
+  @include images.long-button-off;
+  flex-grow: 1;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 72px;
+  padding: 0 64px;
+}
+
+.button Label {
+  @include fonts.text;
+  font-size: font-sizes.$button2;
+}
+
+.button.large {
+  height: 128px;
+}
+
+.button.large Label {
+  font-size: font-sizes.$button1;
+}
+
+.button:hover {
+  @include images.long-button-on;
+}
+
+.button:active {
+  -unity-background-image-tint-color: colors.$pressed-tint;
+}
 
 .close {
   background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/Mini_exit_t.png');
   border-width: 0;
+  position: absolute;
+  top: -8px;
+  right: -8px;
   width: 64px;
   height: 64px;
+}
+
+.close.small {
+  top: -16px;
+  right: -16px;
+  width: 56px;
+  height: 56px;
 }
 
 .close:hover {
@@ -26,5 +70,5 @@
 }
 
 .close:active {
-  -unity-background-image-tint-color: rgb(200, 200, 200);
+  -unity-background-image-tint-color: colors.$pressed-tint;
 }

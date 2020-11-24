@@ -12,8 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-$transparent: rgba(0, 0, 0, 0);
-$primary-text: rgb(230, 198, 172);
-$window-background: rgb(21, 17, 17);
-$common-rarity: rgb(255, 255, 255);
-$pressed-tint: rgb(200, 200, 200);
+using System.Collections.Generic;
+
+#nullable enable
+
+namespace Nighthollow.Data
+{
+  public sealed class HexData
+  {
+    public string Name { get; }
+    public int OwnerId { get; }
+    public int Level { get; }
+    public IReadOnlyList<AffixData> Affixes { get; }
+
+    public HexData(string name, int ownerId, int level, IReadOnlyList<AffixData> affixes)
+    {
+      Name = name;
+      OwnerId = ownerId;
+      Level = level;
+      Affixes = affixes;
+    }
+  }
+}
