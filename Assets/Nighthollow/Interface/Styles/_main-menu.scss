@@ -35,7 +35,7 @@
     .main-menu-title {
       @include images.name-frame(large);
       @include fonts.headline-text;
-      font-size: font-sizes.$main-menu-title;
+      font-size: font-sizes.$main-title;
       margin-top: -48px;
       padding: 32px 64px;
       width: 90%;

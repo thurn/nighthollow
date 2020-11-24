@@ -27,6 +27,10 @@
   justify-content: center;
 }
 
+.full-screen {
+  @include full-screen;
+}
+
 @mixin center-top {
   align-items: center;
   justify-content: flex-start;

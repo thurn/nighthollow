@@ -1,0 +1,90 @@
+// Copyright © 2020-present Derek Thurn
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//    https://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@use "images";
+@use "window";
+@use "colors";
+@use "font-sizes";
+@use "fonts";
+@use "dimensions";
+
+.schools {
+  margin-top: 32px;
+
+  .school-description {
+    width: 800px;
+    height: 300px;
+    @include fonts.text;
+    font-size: font-sizes.$title;
+    -unity-text-align: middle-center;
+    margin: 32px 128px;
+    overflow: hidden;
+  }
+
+  .school-selector {
+    justify-content: center;
+    height: 220px;
+    margin-top: 16px;
+    width: 300px;
+    border-radius: 16px;
+
+    .school-text {
+      @include fonts.headline-text;
+      font-size: font-sizes.$main-title;
+      -unity-text-align: middle-center;
+    }
+
+    .school-image {
+      width: 100px;
+      height: 100px;
+      margin: 16px 100px;
+    }
+
+    .school-image.light {
+      background-image: url('/Assets/ThirdParty/Kodiak Graphics/Elemental Cards Bundle/Customized/Symbols/Light.png');
+    }
+
+    .school-image.sky {
+      background-image: url('/Assets/ThirdParty/Kodiak Graphics/Elemental Cards Bundle/Customized/Symbols/Sky.png');
+    }
+
+    .school-image.flame {
+      background-image: url('/Assets/ThirdParty/Kodiak Graphics/Elemental Cards Bundle/Customized/Symbols/Flame.png');
+    }
+
+    .school-image.ice {
+      background-image: url('/Assets/ThirdParty/Kodiak Graphics/Elemental Cards Bundle/Customized/Symbols/Ice.png');
+    }
+
+    .school-image.earth {
+      background-image: url('/Assets/ThirdParty/Kodiak Graphics/Elemental Cards Bundle/Customized/Symbols/Earth.png');
+    }
+
+    .school-image.night {
+      background-image: url('/Assets/ThirdParty/Kodiak Graphics/Elemental Cards Bundle/Customized/Symbols/Night.png');
+    }
+  }
+
+  .school-selector:hover {
+    background-color: rgb(32, 32, 32);
+  }
+
+  .school-selector.selected {
+    background-color: rgb(64, 64, 64);
+  }
+}
+
+#ConfirmButton {
+  margin-top: 32px;
+}

@@ -16,47 +16,47 @@ limitations under the License.
 -->
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
-    <ui:Style src="Common.uss"/>
-    <ui:Style src="IntroductionScreen.uss"/>
-    <ui:Style src="SchoolSelectionScreen.uss"/>
-    <nh:SchoolSelectionScreen name="SchoolSelectionScreen" class="screen">
+    <ui:Style src="Styles/styles.uss" />
+    <nh:SchoolSelectionScreen name="SchoolSelectionScreen" class="screen-background">
         <ui:VisualElement name="Schools" class="schools">
             <ui:VisualElement style="flex-direction: row; justify-content: space-between;">
                 <ui:VisualElement name="LightButton" class="school-selector" style="margin-left: 128px">
                     <ui:VisualElement class="school-image light"/>
-                    <ui:Label class="text" text="Light"/>
+                    <ui:Label class="school-text" text="Light"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="SkyButton" class="school-selector" style="margin-right: 128px">
                     <ui:VisualElement class="school-image sky"/>
-                    <ui:Label class="text" text="Sky"/>
+                    <ui:Label class="school-text" text="Sky"/>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement style="flex-direction: row; align-items: center;">
                 <ui:VisualElement name="FlameButton" class="school-selector">
                     <ui:VisualElement class="school-image flame"/>
-                    <ui:Label class="text" text="Flame"/>
+                    <ui:Label class="school-text" text="Flame"/>
                 </ui:VisualElement>
                 <ui:Label name="Description" class="text school-description"/>
                 <ui:VisualElement name="IceButton" class="school-selector">
                     <ui:VisualElement class="school-image ice"/>
-                    <ui:Label class="text" text="Ice"/>
+                    <ui:Label class="school-text" text="Ice"/>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement style="flex-direction: row; justify-content: space-between;">
                 <ui:VisualElement name="EarthButton" class="school-selector" style="margin-left: 128px">
                     <ui:VisualElement class="school-image earth"/>
-                    <ui:Label class="text" text="Earth"/>
+                    <ui:Label class="school-text" text="Earth"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="NightButton" class="school-selector" style="margin-right: 128px">
                     <ui:VisualElement class="school-image night"/>
-                    <ui:Label class="text" text="Shadow"/>
+                    <ui:Label class="school-text" text="Shadow"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Button text="Confirm" name="ConfirmButton" class="button small" style="margin-top: 32px; opacity: 0;"
-                   display-tooltip-when-elided="true"/>
-        <ui:VisualElement class="dialog-box left" name="Dialog" style="display: none; opacity: 0;">
-            <ui:VisualElement class="you portrait"/>
+        <ui:VisualElement name="ConfirmButton" class="button large" style="opacity: 0;">
+            <ui:Label text="Confirm"/>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="Dialog" class="dialog" style="display: none; opacity: 0;">
+            <ui:VisualElement class="portrait you"/>
             <ui:Label class="dialog-text" text="I shall be the doom of all life."/>
         </ui:VisualElement>
     </nh:SchoolSelectionScreen>
