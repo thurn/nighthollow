@@ -31,40 +31,40 @@ limitations under the License.
     -unity-background-scale-mode: scale-to-fit;
 }
 
-/*.button {*/
-/*    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/long_button_off.png');*/
-/*    color: rgb(230, 198, 172);*/
-/*    font-size: 52px;*/
-/*    width: 512px;*/
-/*    height: 128px;*/
-/*    -unity-slice-left: 20;*/
-/*    -unity-slice-right: 20;*/
-/*    -unity-slice-top: 10;*/
-/*    -unity-slice-bottom: 10;*/
-/*    border-width: 1px;*/
-/*    border-color: black;*/
-/*    -unity-font: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');*/
-/*}*/
+.button {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/long_button_off.png');
+    color: rgb(230, 198, 172);
+    font-size: 52px;
+    width: 512px;
+    height: 128px;
+    -unity-slice-left: 20;
+    -unity-slice-right: 20;
+    -unity-slice-top: 10;
+    -unity-slice-bottom: 10;
+    border-width: 1px;
+    border-color: black;
+    -unity-font: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');
+}
 
-/*.button.small {*/
-/*    width: 384px;*/
-/*    height: 96px;*/
-/*    font-size: 39px;*/
-/*}*/
+.button.small {
+    width: 384px;
+    height: 96px;
+    font-size: 39px;
+}
 
-/*.button:hover {*/
-/*    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/long_button_on.png');*/
-/*}*/
+.button:hover {
+    background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/long_button_on.png');
+}
 
-/*.button:active {*/
-/*    -unity-background-image-tint-color: rgb(200, 200, 200);*/
-/*}*/
+.button:active {
+    -unity-background-image-tint-color: rgb(200, 200, 200);
+}
 
-/*.text {*/
-/*    color: rgb(230, 198, 172);*/
-/*    -unity-font: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');*/
-/*    white-space: normal;*/
-/*}*/
+.text {
+    color: rgb(230, 198, 172);
+    -unity-font: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');
+    white-space: normal;
+}
 
 .portrait {
     width: 168px;

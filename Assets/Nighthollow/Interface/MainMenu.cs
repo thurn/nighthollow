@@ -14,6 +14,7 @@
 
 #nullable enable
 
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -36,7 +37,10 @@ namespace Nighthollow.Interface
 
     public MainMenu()
     {
-      RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
+      if (Application.isPlaying)
+      {
+        RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
+      }
     }
 
     void OnGeometryChange(GeometryChangedEvent evt)

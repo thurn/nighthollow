@@ -19,6 +19,20 @@
 @use "dimensions";
 @use "buttons";
 
+@mixin full-screen {
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin centered {
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
 .window {
   @include images.window-frame;
   width: dimensions.$window-width;

@@ -46,6 +46,14 @@
   -unity-slice-bottom: 128;
 }
 
+@mixin mid-bar {
+  background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/mid_bar.png');
+  -unity-slice-left: 500;
+  -unity-slice-right: 500;
+  -unity-slice-top: 500;
+  -unity-slice-bottom: 500;
+}
+
 @mixin info-window {
   background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/info_window.png');
   background-color: colors.$window-background;

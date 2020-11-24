@@ -16,45 +16,37 @@ limitations under the License.
 -->
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
-    <ui:Style src="Common.uss"/>
-    <ui:Style src="MainMenu.uss"/>
-    <ui:VisualElement name="Screen" class="screen main-menu-background">
-        <nh:MainMenu>
-            <ui:VisualElement name="Main" class="main-menu">
-                <ui:Label class="main-menu-text"
+    <ui:Style src="Styles/styles.uss"/>
+    <nh:MainMenu class="main-menu">
+        <ui:VisualElement class="main-menu-frame">
+            <ui:Label name="MenuTitle" text="Nighthollow" class="main-menu-title"/>
+            <ui:VisualElement name="Main" class="main-menu-content">
+                <ui:Label class="message"
                           text="Welcome to the world of Nighthollow, a creature tower defense game of deck-building, crafting and trading."/>
-                <ui:Button text="Play"
-                           name="PlayTutorial"
-                           class="button"
-                           display-tooltip-when-elided="true"/>
-                <ui:Button text="Settings"
-                           name="ShowSettings"
-                           class="button"
-                           display-tooltip-when-elided="true"/>
-                <ui:Button text="About"
-                           name="ShowAbout"
-                           class="button"
-                           display-tooltip-when-elided="true"/>
+                <ui:VisualElement name="PlayTutorial" class="button large">
+                    <ui:Label text="Play"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="ShowSettings" class="button large">
+                    <ui:Label text="Settings"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="ShowAbout" class="button large">
+                    <ui:Label text="About"/>
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="Settings" class="main-menu" style="display: none;">
-                <ui:Label class="main-menu-text"
+            <ui:VisualElement name="Settings" class="main-menu-content" style="display: none;">
+                <ui:Label class="message"
                           text="There aren't actually any settings yet, but not having at least three buttons in your menu just feels... wrong."/>
-                <ui:Button text="Back"
-                           name="GoBack"
-                           class="button"
-                           display-tooltip-when-elided="true"/>
+                <ui:VisualElement name="GoBack" class="button large">
+                    <ui:Label text="Back"/>
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="About" class="main-menu" style="display: none;">
-                <ui:Label class="main-menu-text"
+            <ui:VisualElement name="About" class="main-menu-content" style="display: none;">
+                <ui:Label class="message"
                           text="The source code for Nighthollow is provided under the terms of the Apache License, Version 2.0."/>
-                <ui:Button text="Back"
-                           name="GoBack"
-                           class="button"
-                           display-tooltip-when-elided="true"/>
+                <ui:VisualElement name="GoBack" class="button large">
+                    <ui:Label text="Back"/>
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement class="menu-title">
-                <ui:Label name="MenuTitle" text="Nighthollow" class="menu-title-text"/>
-            </ui:VisualElement>
-        </nh:MainMenu>
-    </ui:VisualElement>
+        </ui:VisualElement>
+    </nh:MainMenu>
 </ui:UXML>
