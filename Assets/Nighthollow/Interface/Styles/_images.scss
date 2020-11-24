@@ -13,6 +13,7 @@
 // limitations under the License.
 
 @use "colors";
+@use "dimensions";
 
 @mixin inventory-frame {
   background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/inventory_frame.png');
@@ -78,4 +79,22 @@
 @mixin long-button-on {
   @include long-button;
   background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/long_button_on.png');
+}
+
+.portrait {
+  width: dimensions.$portrait-size;
+  height: dimensions.$portrait-size;
+}
+
+.portrait.small {
+  width: dimensions.$portrait-small-size;
+  height: dimensions.$portrait-small-size;
+}
+
+.portrait.ocerak {
+  background-image: url('/Assets/ThirdParty/Poneti/AvatarIcons/advisor.png');
+}
+
+.portrait.you {
+  background-image: url('/Assets/ThirdParty/Poneti/AvatarIcons/you.png');
 }

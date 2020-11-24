@@ -27,7 +27,7 @@
 
   .main-menu-frame {
     @include images.mid-bar;
-    @include window.centered;
+    @include window.center-top;
     width: dimensions.$main-menu-width;
     height: dimensions.$main-menu-height;
     padding: 0 32px;
@@ -43,7 +43,7 @@
     }
 
     .main-menu-content {
-      @include window.centered;
+      @include window.center-top;
 
       .message {
         @include fonts.text;

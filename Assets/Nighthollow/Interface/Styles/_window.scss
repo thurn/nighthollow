@@ -27,10 +27,19 @@
   justify-content: center;
 }
 
-@mixin centered {
+@mixin center-top {
   align-items: center;
   justify-content: flex-start;
-  flex-direction: column;
+}
+
+@mixin center-middle {
+  align-items: center;
+  justify-content: center;
+}
+
+.screen-background {
+  background-color: black;
+  @include full-screen;
 }
 
 .window {

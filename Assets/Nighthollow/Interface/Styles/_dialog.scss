@@ -1,0 +1,43 @@
+// Copyright © 2020-present Derek Thurn
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//    https://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@use "images";
+@use "window";
+@use "colors";
+@use "font-sizes";
+@use "fonts";
+@use "dimensions";
+
+.dialog {
+  $vertical-padding: 16px;
+  $horizontal-padding: 32px;
+
+  @include images.basic-bar;
+  padding: $vertical-padding $horizontal-padding;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: dimensions.$dialog-width;
+
+  .dialog-text {
+    @include fonts.text;
+    font-size: font-sizes.$title;
+    -unity-text-align: middle-left;
+    width: dimensions.$dialog-width - dimensions.$portrait-size - (3 * $horizontal-padding);
+  }
+
+  .dialog-text.right {
+    -unity-text-align: middle-right;
+  }
+}
