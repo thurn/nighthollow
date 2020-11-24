@@ -14,6 +14,7 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,45 +27,64 @@ using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class UserDataService2 : MonoBehaviour
+  public sealed class UserDataService2
   {
-    [SerializeField] GameDataService _gameDataService = null!;
+    public IReadOnlyList<CreatureItemData> Deck { get; }
+    public IReadOnlyList<CreatureItemData> Collection { get; }
+    public StatTable UserStats { get; }
 
-    List<CreatureItemData> _deck = null!;
-    public IReadOnlyList<CreatureItemData> Deck => _deck;
+    TutorialState _tutorial;
 
-    List<CreatureItemData> _collection = null!;
-    public IReadOnlyList<CreatureItemData> Collection => _collection;
+    public TutorialState Tutorial
+    {
+      get => _tutorial;
+      set
+      {
+        _tutorial = value;
+        Save();
+      }
+    }
 
-    StatTable _userStats = null!;
-    public StatTable UserStats => _userStats;
+    public enum TutorialState
+    {
+      Starting,
+      InitialWorldScreen,
+      AfterFirstAttack,
+      Completed
+    }
+
+    public static void Initialize(MonoBehaviour _, GameDataService gameDataService, Action<UserDataService2> action)
+    {
+      action(new UserDataService2(gameDataService));
+    }
 
     string DataPath => Path.Combine(Application.persistentDataPath, "data.json");
 
-    void Start()
-    {
-      _gameDataService.FetchData(OnFetchCompleted);
-    }
-
-    void OnFetchCompleted()
+    UserDataService2(GameDataService gameDataService)
     {
       if (File.Exists(DataPath))
       {
         Debug.Log($"Loading saved data from {DataPath}");
         var parsed = JSON.Parse(File.ReadAllText(DataPath));
-        _deck = parsed["deck"].FromJsonArray()
-          .Select(c => CreatureItemData.Deserialize(_gameDataService, c)).ToList();
-        _collection = parsed["collection"].FromJsonArray()
-          .Select(c => CreatureItemData.Deserialize(_gameDataService, c)).ToList();
-        _userStats = StatTable.Deserialize(parsed["user"], StatTable.Defaults);
+        Deck = parsed["deck"].FromJsonArray()
+          .Select(c => CreatureItemData.Deserialize(gameDataService, c)).ToList();
+        Collection = parsed["collection"].FromJsonArray()
+          .Select(c => CreatureItemData.Deserialize(gameDataService, c)).ToList();
+        UserStats = StatTable.Deserialize(parsed["user"], StatTable.Defaults);
+        Tutorial = (TutorialState) parsed["tutorial"].AsInt;
       }
       else
       {
-        _deck = _gameDataService.GetStaticCardList(StaticCardList.StartingDeck).ToList();
-        _collection = new List<CreatureItemData>();
-        _userStats = new StatTable(StatTable.Defaults);
+        Deck = gameDataService.GetStaticCardList(StaticCardList.StartingDeck).ToList();
+        Collection = new List<CreatureItemData>();
+        UserStats = new StatTable(StatTable.Defaults);
+        Tutorial = TutorialState.Starting;
         Debug.Log($"Save file not found, saving new player tutorial data to {DataPath}");
         Save();
+
+#pragma warning disable 618
+        Application.ExternalEval("_JS_FileSystem_Sync();");
+#pragma warning restore 618
       }
     }
 
@@ -72,9 +92,10 @@ namespace Nighthollow.Services
     {
       var result = new JSONObject
       {
-        ["deck"] = _deck.Select(c => c.Serialize()).AsJsonArray(),
-        ["collection"] = _collection.Select(c => c.Serialize()).AsJsonArray(),
-        ["user"] = _userStats.Serialize()
+        ["deck"] = Deck.Select(c => c.Serialize()).AsJsonArray(),
+        ["collection"] = Collection.Select(c => c.Serialize()).AsJsonArray(),
+        ["user"] = UserStats.Serialize(),
+        ["tutorial"] = new JSONNumber((int) Tutorial)
       };
 
       File.WriteAllText(DataPath, result.ToString());

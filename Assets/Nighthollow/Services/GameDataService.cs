@@ -26,10 +26,8 @@ using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class GameDataService : MonoBehaviour
+  public sealed class GameDataService
   {
-    [SerializeField] AssetService _assetService = null!;
-
     readonly Dictionary<int, ModifierTypeData> _modifiers = new Dictionary<int, ModifierTypeData>();
     readonly Dictionary<int, AffixTypeData> _affixes = new Dictionary<int, AffixTypeData>();
     readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
@@ -43,9 +41,14 @@ namespace Nighthollow.Services
 
     public IEnumerable<SkillTypeData> AllSkillTypes => _skills.Values;
 
-    public void FetchData(Action onComplete)
+    public static void Initialize(MonoBehaviour runner, Action<GameDataService> action)
     {
-      StartCoroutine(FetchDataAsync(onComplete));
+      var service = new GameDataService();
+      runner.StartCoroutine(service.FetchDataAsync(() => action(service)));
+    }
+
+    GameDataService()
+    {
     }
 
     public ModifierTypeData GetModifier(int modifierId) => Lookup(_modifiers, modifierId);
@@ -129,7 +132,7 @@ namespace Nighthollow.Services
         ParseStaticCard(row);
       }
 
-      _assetService.FetchAssets(this, onComplete);
+      onComplete();
     }
 
     void ParseAffixes(IReadOnlyDictionary<string, List<Dictionary<string, string>>> parsed)

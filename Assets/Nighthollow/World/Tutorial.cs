@@ -15,6 +15,7 @@
 #nullable enable
 
 using Nighthollow.Interface;
+using Nighthollow.Services;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -23,7 +24,6 @@ namespace Nighthollow.World
   public sealed class Tutorial : MonoBehaviour
   {
 #pragma warning disable 0649
-    [SerializeField] bool _showIntroduction;
     [SerializeField] WorldMap _worldMap = null!;
     [SerializeField] WorldScreenController _worldScreenController = null!;
     [SerializeField] Tile _fightIcon = null!;
@@ -37,11 +37,15 @@ namespace Nighthollow.World
 
     public void Initialize()
     {
-      if (_showIntroduction)
+      Database.OnReady(data =>
       {
-        _worldScreenController.ShowDialog("ocerak", IntroText);
-        _worldMap.ShowIcon(TutorialAttackHex, _fightIcon);
-      }
+        if (data.UserData.Tutorial == UserDataService2.TutorialState.Starting)
+        {
+          _worldScreenController.ShowDialog("ocerak", IntroText);
+          _worldMap.ShowIcon(TutorialAttackHex, _fightIcon);
+          data.UserData.Tutorial = UserDataService2.TutorialState.InitialWorldScreen;
+        }
+      });
     }
   }
 }

@@ -14,7 +14,6 @@
 
 #nullable enable
 
-using Nighthollow.Services;
 using Nighthollow.World;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,9 +27,6 @@ namespace Nighthollow.Interface
 
     [SerializeField] WorldMap _worldMap = null!;
     public WorldMap WorldMap => _worldMap;
-
-    [SerializeField] DataService _dataService = null!;
-    public DataService DataService => _dataService;
 
     WorldScreen _worldScreen = null!;
     VisualElement _advisorBar = null!;

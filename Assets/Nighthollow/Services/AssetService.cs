@@ -23,13 +23,18 @@ using Object = UnityEngine.Object;
 
 namespace Nighthollow.Services
 {
-  public sealed class AssetService : MonoBehaviour
+  public sealed class AssetService
   {
     readonly Dictionary<string, Object> _assets = new Dictionary<string, Object>();
 
-    public void FetchAssets(GameDataService gameDataService, Action onComplete)
+    public static void Initialize(MonoBehaviour runner, GameDataService gameDataService, Action<AssetService> action)
     {
-      StartCoroutine(FetchAssetsAsync(gameDataService, onComplete));
+      var service = new AssetService();
+      runner.StartCoroutine(service.FetchAssetsAsync(gameDataService, () => action(service)));
+    }
+
+    AssetService()
+    {
     }
 
     public Sprite GetImage(string address)

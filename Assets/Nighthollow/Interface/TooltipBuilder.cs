@@ -14,6 +14,7 @@
 
 #nullable enable
 
+using System;
 using System.Text;
 using Nighthollow.Generated;
 using UnityEngine.UIElements;
@@ -89,11 +90,12 @@ namespace Nighthollow.Interface
       return this;
     }
 
-    public TooltipBuilder AppendButton(string text)
+    public TooltipBuilder AppendButton(string text, Action onClick)
     {
       StartGroup();
       var button = new VisualElement();
       button.AddToClassList("button");
+      button.RegisterCallback<ClickEvent>(e => onClick());
       var label = new Label {text = text};
       button.Add(label);
       _result.Add(button);

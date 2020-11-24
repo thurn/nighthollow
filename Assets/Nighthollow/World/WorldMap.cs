@@ -19,6 +19,7 @@ using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 namespace Nighthollow.World
@@ -180,6 +181,8 @@ namespace Nighthollow.World
       }
     }
 
+    public void AttackHex() => SceneManager.LoadScene("Game");
+
     void Update()
     {
       if (Input.GetMouseButtonDown(0) && !_worldScreen.ConsumesMousePosition(Input.mousePosition))
@@ -198,6 +201,7 @@ namespace Nighthollow.World
         var tile = _children[hex.y].GetTile(new Vector3Int(hex.x, hex.y, 0));
         var screenPoint = _mainCamera.WorldToScreenPoint(_grid.CellToWorld(position));
         _worldScreen.ShowTooltip(WorldHexTooltip.Create(
+            this,
             tile.name,
             hex == Tutorial.StartingHex ? "Kingdom of Nighthollow" : "None",
             hex == Tutorial.TutorialAttackHex),

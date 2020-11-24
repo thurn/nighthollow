@@ -37,12 +37,12 @@ namespace Nighthollow.Components
 
     public void StartGame()
     {
-      Root.Instance.GameDataService.FetchData(() =>
-      {
-        Root.Instance.UserDataService.OnNewGame(Root.Instance.GameDataService);
-        Root.Instance.UserDataService.StartGame(isTutorial: true);
-        Root.Instance.EnemyDataService.StartGame();
-      });
+      // Root.Instance.GameDataService.FetchData(() =>
+      // {
+      //   Root.Instance.UserDataService.OnNewGame(Root.Instance.GameDataService);
+      //   Root.Instance.UserDataService.StartGame(isTutorial: true);
+      //   Root.Instance.EnemyDataService.StartGame();
+      // });
     }
 
     public void ResetGame()

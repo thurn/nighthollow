@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -49,7 +50,6 @@ namespace Nighthollow.Interface
 
     void OnGeometryChange(GeometryChangedEvent evt)
     {
-      var self = this.Q("CardsWindow");
       this.Q("CloseButton").RegisterCallback<ClickEvent>(e => { Hide(); });
 
       _collection = this.Q("Collection");
@@ -62,15 +62,15 @@ namespace Nighthollow.Interface
     protected override void Render()
     {
       AddItems(_collection,
-        Controller.DataService.UserDataService.Collection,
+        Database.Instance.UserData.Collection,
         20,
         "large");
       AddItems(_mainDeck,
-        Controller.DataService.UserDataService.Deck.Where(i => !i.BaseType.IsManaCreature).ToList(),
+        Database.Instance.UserData.Deck.Where(i => !i.BaseType.IsManaCreature).ToList(),
         9,
         "large");
       AddItems(_manaDeck,
-        Controller.DataService.UserDataService.Deck.Where(i => i.BaseType.IsManaCreature).ToList(),
+        Database.Instance.UserData.Deck.Where(i => i.BaseType.IsManaCreature).ToList(),
         6,
         "small");
     }
@@ -104,13 +104,13 @@ namespace Nighthollow.Interface
       result.AddToClassList("card");
       result.AddToClassList(size);
       var image = new Image();
-      image.style.backgroundImage = new StyleBackground(Controller.DataService.AssetService.GetImage(
+      image.style.backgroundImage = new StyleBackground(Database.Instance.Assets.GetImage(
         Errors.CheckNotNull(card.BaseType.ImageAddress)));
       result.Add(image);
       result.RegisterCallback<MouseOverEvent>(e =>
       {
         Controller.ShowTooltip(CreatureItemTooltip.Create(
-          Controller.DataService.UserDataService.UserStats,
+            Database.Instance.UserData.UserStats,
           card),
           new Vector2(result.worldBound.x, result.worldBound.y));
       });

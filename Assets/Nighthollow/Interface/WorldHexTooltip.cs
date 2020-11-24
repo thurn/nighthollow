@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.World;
 
 #nullable enable
 
@@ -58,7 +59,7 @@ namespace Nighthollow.Interface
       ("plains", "Field"),
     };
 
-    public static TooltipBuilder Create(string hexName, string owner, bool canAttack)
+    public static TooltipBuilder Create(WorldMap worldMap, string hexName, string owner, bool canAttack)
     {
       var name = HexTypes
         .Where(pair => hexName.ToLowerInvariant().Contains(pair.Item1))
@@ -72,7 +73,7 @@ namespace Nighthollow.Interface
 
       if (canAttack)
       {
-        builder.AppendButton("Attack!");
+        builder.AppendButton("Attack!", () => worldMap.AttackHex());
       }
 
       return builder;
