@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
-    <ui:Style src="Styles/styles.uss" />
+    <ui:Style src="../Styles/styles.uss"/>
     <nh:WorldScreen name="WorldScreen" class="full-screen">
         <nh:CardsWindow name="CardsWindow" class="window" style="visibility: hidden;">
             <ui:VisualElement class="window-title">
@@ -53,5 +53,13 @@ limitations under the License.
             <ui:Button name="CloseButton" class="close small"/>
             <ui:Label name="Title" class="tooltip-title" text="Blackguard"/>
         </nh:ItemTooltip>
+
+        <ui:VisualElement class="dialog-container">
+            <nh:Dialog name="Dialog" class="dialog" style="display: none; opacity: 0;">
+                <ui:Button name="CloseButton" class="close"/>
+                <ui:VisualElement name="Portrait" class="portrait you"/>
+                <ui:Label name="Text" class="dialog-text" text="Text"/>
+            </nh:Dialog>
+        </ui:VisualElement>
     </nh:WorldScreen>
 </ui:UXML>

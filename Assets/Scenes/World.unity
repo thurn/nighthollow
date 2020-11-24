@@ -227,6 +227,7 @@ GameObject:
   - component: {fileID: 178308605}
   - component: {fileID: 178308607}
   - component: {fileID: 178308606}
+  - component: {fileID: 178308610}
   - component: {fileID: 178308608}
   - component: {fileID: 178308609}
   m_Layer: 0
@@ -297,10 +298,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b9698f1e303435696fffa90172f3476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dialogPrefab: {fileID: 2398821127423259907, guid: ebf39abfca6dd4cef984e028f04c6a14,
-    type: 3}
-  _showIntroduction: 0
+  _showIntroduction: 1
   _worldMap: {fileID: 1143359796}
+  _worldScreenController: {fileID: 178308609}
   _fightIcon: {fileID: 11400000, guid: fee0ceca865fc41bcbba700f3654ca47, type: 2}
 --- !u!114 &178308609
 MonoBehaviour:
@@ -317,6 +317,21 @@ MonoBehaviour:
   _document: {fileID: 178308607}
   _worldMap: {fileID: 1143359796}
   _dataService: {fileID: 857118944}
+--- !u!114 &178308610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178308604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c22f2376f6f4eeabce87cd0d7625b91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _worldMap: {fileID: 1143359796}
+  _worldScreenController: {fileID: 178308609}
+  _tutorial: {fileID: 178308608}
 --- !u!1 &817099573
 GameObject:
   m_ObjectHideFlags: 0

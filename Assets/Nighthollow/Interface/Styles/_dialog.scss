@@ -41,3 +41,15 @@
     -unity-text-align: middle-right;
   }
 }
+
+.dialog.no-background {
+  background-image: none;
+}
+
+.dialog-container {
+  position: absolute;
+  bottom: 32px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}

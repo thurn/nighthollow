@@ -12,46 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
+#nullable enable
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  [RequireComponent(typeof(UIDocument))]
-  public sealed class Dialog : MonoBehaviour
+  public sealed class Dialog : VisualElement
   {
-    Action _onClose;
+    VisualElement _portrait = null!;
+    Label _text = null!;
 
-    public void Initialize(string text, Action onClose = null)
-    {
-      _onClose = onClose;
-      StartCoroutine(InitializeAsync(text));
-    }
+    public bool Visible { get; private set; }
 
-    IEnumerator<YieldInstruction> InitializeAsync(string text)
-    {
-      yield return new WaitForSeconds(0.01f);
-      var document = GetComponent<UIDocument>();
-      var overlay = (DialogOverlay) document.rootVisualElement.Q("Dialog");
-      overlay.Initialize(text, this);
-    }
-
-    public void OnClose()
-    {
-      Destroy(gameObject);
-      _onClose?.Invoke();
-    }
-  }
-
-  public sealed class DialogOverlay : VisualElement
-  {
-    Label _text;
-    Dialog _parent;
-
-    public new sealed class UxmlFactory : UxmlFactory<DialogOverlay, UxmlTraits>
+    public new sealed class UxmlFactory : UxmlFactory<Dialog, UxmlTraits>
     {
     }
 
@@ -59,33 +34,33 @@ namespace Nighthollow.Interface
     {
     }
 
-    public DialogOverlay()
+    public void Show(string portraitName, string text)
     {
-      RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
-    }
+      Visible = true;
+      style.display = new StyleEnum<DisplayStyle>(DisplayStyle.Flex);
+      _portrait.ClearClassList();
+      _portrait.AddToClassList("portrait");
+      _portrait.AddToClassList(portraitName);
 
-    public void Initialize(string text, Dialog dialog)
-    {
       _text.text = text;
-      _parent = dialog;
+      InterfaceUtils.FadeIn(this, 0.3f);
     }
 
-    void OnGeometryChange(GeometryChangedEvent evt)
+    public void Hide()
     {
-      var dialogBox = this.Q("DialogBox");
-      InterfaceUtils.FadeIn(dialogBox, 0.3f);
-      _text = (Label) this.Q("DialogText");
-      this.Q("DialogClose").RegisterCallback<MouseEnterEvent>(e => Debug.Log("Mouse Enter"));
-      this.Q("DialogText").RegisterCallback<MouseEnterEvent>(e => Debug.Log("DT Mouse Enter"));
-      this.Q("DialogClose").RegisterCallback<ClickEvent>(e =>
+      InterfaceUtils.FadeOut(this, 0.3f, () =>
       {
-        Debug.Log("On Close");
-        InterfaceUtils.FadeOut(dialogBox, 0.3f, () =>
-        {
-          _parent.OnClose();
-        });
+        style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
+        Visible = false;
       });
-      UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
+    }
+
+    public void Initialize()
+    {
+      _portrait = InterfaceUtils.FindByName<VisualElement>(this, "Portrait");
+      _text = InterfaceUtils.FindByName<Label>(this, "Text");
+      var closeButton = InterfaceUtils.FindByName<Button>(this, "CloseButton");
+      closeButton.RegisterCallback<ClickEvent>(e => { Hide(); });
     }
   }
 }

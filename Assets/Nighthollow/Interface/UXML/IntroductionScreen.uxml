@@ -16,21 +16,21 @@ limitations under the License.
 -->
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
-    <ui:Style src="Styles/styles.uss" />
+    <ui:Style src="../Styles/styles.uss"/>
     <nh:IntroductionScreen name="IntroductionScreen" class="screen-background">
-        <ui:VisualElement class="dialog" name="Dialog1" style="opacity: 0;">
+        <ui:VisualElement class="dialog no-background" name="Dialog1" style="opacity: 0;">
             <ui:Label class="dialog-text right" text="Ekis ver Morta. Eluta ver Natha."/>
             <ui:VisualElement class="portrait ocerak"/>
         </ui:VisualElement>
-        <ui:VisualElement class="dialog" name="Dialog2" style="opacity: 0;">
+        <ui:VisualElement class="dialog no-background" name="Dialog2" style="opacity: 0;">
             <ui:Label class="dialog-text right italic" text="Ekis ver Morta. Eluta ver Natha."/>
             <ui:VisualElement class="portrait ocerak"/>
         </ui:VisualElement>
-        <ui:VisualElement class="dialog" name="Dialog3" style="opacity: 0;">
+        <ui:VisualElement class="dialog no-background" name="Dialog3" style="opacity: 0;">
             <ui:VisualElement class="portrait you"/>
             <ui:Label class="dialog-text" text="The ritual is now complete."/>
         </ui:VisualElement>
-        <ui:VisualElement class="dialog" name="Dialog4" style="opacity: 0;">
+        <ui:VisualElement class="dialog no-background" name="Dialog4" style="opacity: 0;">
             <ui:VisualElement class="portrait you"/>
             <ui:Label class="dialog-text" text="Who dares to awaken me from my thousand-year slumber?"/>
         </ui:VisualElement>

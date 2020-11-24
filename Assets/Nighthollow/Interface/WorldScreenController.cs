@@ -37,8 +37,9 @@ namespace Nighthollow.Interface
     CardsWindow _cardsWindow = null!;
     AbstractWindow? _currentWindow;
     ItemTooltip _itemTooltip = null!;
+    Dialog _dialog = null!;
 
-    void Start()
+    public void Initialize()
     {
       _worldScreen = InterfaceUtils.FindByName<WorldScreen>(_document.rootVisualElement, "WorldScreen");
       _worldScreen.Controller = this;
@@ -47,11 +48,14 @@ namespace Nighthollow.Interface
       _cardsWindow.Controller = this;
       _itemTooltip = InterfaceUtils.FindByName<ItemTooltip>(_worldScreen, "ItemTooltip");
       _itemTooltip.Controller = this;
+      _dialog = InterfaceUtils.FindByName<Dialog>(_worldScreen, "Dialog");
+      _dialog.Initialize();
     }
 
     public bool ConsumesMousePosition(Vector3 mousePosition) =>
       _currentWindow != null ||
       InterfaceUtils.ContainsScreenPoint(_advisorBar, mousePosition) ||
+      _dialog.Visible ||
       (_itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition));
 
     public void ShowTooltip(TooltipBuilder builder, Vector2 anchor)
@@ -65,13 +69,17 @@ namespace Nighthollow.Interface
       _itemTooltip.Hide();
     }
 
+    public void ShowDialog(string portraitName, string text) => _dialog.Show(portraitName, text);
+
+    public void HideDialog() => _dialog.Hide();
+
+    public void ShowCardsWindow() => ShowWindow(_cardsWindow);
+
     public void HideCurrentWindow()
     {
       _currentWindow?.Hide();
       _currentWindow = null;
     }
-
-    public void ShowCardsWindow() => ShowWindow(_cardsWindow);
 
     void ShowWindow(AbstractWindow window)
     {

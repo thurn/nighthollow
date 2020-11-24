@@ -15,7 +15,6 @@
 #nullable enable
 
 using Nighthollow.Interface;
-using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -24,9 +23,9 @@ namespace Nighthollow.World
   public sealed class Tutorial : MonoBehaviour
   {
 #pragma warning disable 0649
-    [SerializeField] Dialog _dialogPrefab = null!;
     [SerializeField] bool _showIntroduction;
     [SerializeField] WorldMap _worldMap = null!;
+    [SerializeField] WorldScreenController _worldScreenController = null!;
     [SerializeField] Tile _fightIcon = null!;
 #pragma warning restore 0649
 
@@ -36,22 +35,13 @@ namespace Nighthollow.World
     const string IntroText =
       "The sleeper awakes... we have been preparing for your return for many years, my lord. We will once again bring the Eternal Night to the world of the living!";
 
-    void Start()
+    public void Initialize()
     {
-      _worldMap.Initialize();
-
       if (_showIntroduction)
       {
-        ShowDialog(IntroText);
-      }
-    }
-
-    void ShowDialog(string text)
-    {
-      ComponentUtils.Instantiate(_dialogPrefab).Initialize(text, () =>
-      {
+        _worldScreenController.ShowDialog("ocerak", IntroText);
         _worldMap.ShowIcon(TutorialAttackHex, _fightIcon);
-      });
+      }
     }
   }
 }

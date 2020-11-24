@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
-    <ui:Style src="Styles/styles.uss" />
+    <ui:Style src="../Styles/styles.uss"/>
     <nh:SchoolSelectionScreen name="SchoolSelectionScreen" class="screen-background">
         <ui:VisualElement name="Schools" class="schools">
             <ui:VisualElement style="flex-direction: row; justify-content: space-between;">
@@ -55,7 +55,7 @@ limitations under the License.
             <ui:Label text="Confirm"/>
         </ui:VisualElement>
 
-        <ui:VisualElement name="Dialog" class="dialog" style="display: none; opacity: 0;">
+        <ui:VisualElement name="Dialog" class="dialog no-background" style="display: none; opacity: 0;">
             <ui:VisualElement class="portrait you"/>
             <ui:Label class="dialog-text" text="I shall be the doom of all life."/>
         </ui:VisualElement>

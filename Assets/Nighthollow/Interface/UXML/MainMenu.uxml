@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
-    <ui:Style src="Styles/styles.uss"/>
+    <ui:Style src="../Styles/styles.uss"/>
     <nh:MainMenu class="main-menu">
         <ui:VisualElement class="main-menu-frame">
             <ui:Label name="MenuTitle" text="Nighthollow" class="main-menu-title"/>

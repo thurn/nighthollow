@@ -12,12 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-$portrait-size: 168px;
-$portrait-small-size: 84px;
-$main-menu-height: 800px;
-$main-menu-width: 800px;
-$window-width: 1664px;
-$dialog-width: 1224px;
-$window-top-margin: 16px;
-$advisor-bar-height: 216px;
-$advisor-bar-width: 1024px;
+#nullable enable
+
+using Nighthollow.Interface;
+using UnityEngine;
+
+namespace Nighthollow.World
+{
+  public sealed class Initializer : MonoBehaviour
+  {
+    [SerializeField] WorldMap _worldMap = null!;
+    [SerializeField] WorldScreenController _worldScreenController = null!;
+    [SerializeField] Tutorial _tutorial = null!;
+
+    void Start()
+    {
+      _worldMap.Initialize();
+      _worldScreenController.Initialize();
+      _tutorial.Initialize();
+    }
+  }
+}
