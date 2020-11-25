@@ -60,10 +60,15 @@ namespace Nighthollow.Components
         openingHand.Add(_deck.Draw());
       }
 
-      _hand.DrawCards(openingHand, () =>
-      {
-        GameTutorial.OnDrewOpeningHand();
-      });
+      _hand.PreviewMode = true;
+      _hand.DrawCards(openingHand, OnDrewHand);
+    }
+
+    void OnDrewHand()
+    {
+      ButtonUtil.DisplayChoiceButtons(Root.Instance.ScreenController,
+        new List<ButtonUtil.Button> {new ButtonUtil.Button("Start Game!", OnStartGame, large: true)});
+      Root.Instance.HelperTextService.OnDrewOpeningHand();
     }
 
     public void OnStartGame()
@@ -72,6 +77,7 @@ namespace Nighthollow.Components
       StartCoroutine(GainMana());
       StartCoroutine(DrawCards());
 
+      _hand.PreviewMode = false;
       _life = Errors.CheckPositive(Data.GetInt(Stat.StartingLife));
       _mana = Data.GetInt(Stat.StartingMana);
     }

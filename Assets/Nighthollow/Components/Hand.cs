@@ -40,7 +40,8 @@ namespace Nighthollow.Components
     [SerializeField] Transform _controlPoint3 = null!;
     [SerializeField] Transform _controlPoint4 = null!;
     [SerializeField] List<Card> _cards = null!;
-    [SerializeField] Hand? _handOverridePosition;
+    [SerializeField] Hand _handOverridePosition = null!;
+    bool _previewMode;
 
 #pragma warning restore 0649
 
@@ -90,6 +91,7 @@ namespace Nighthollow.Components
     {
       card.transform.SetParent(transform);
       _cards.Add(card);
+      card.PreviewMode = _previewMode;
 
       if (animate)
       {
@@ -97,18 +99,17 @@ namespace Nighthollow.Components
       }
     }
 
-    public Hand? OverrideHandPosition
+    public bool PreviewMode
     {
-      private get { return _handOverridePosition; }
-
       set
       {
+        _previewMode = value;
+
         foreach (var card in _cards)
         {
-          card.DisableDragging = value;
+          card.PreviewMode = value;
         }
 
-        _handOverridePosition = value;
         AnimateCardsToPosition();
       }
     }
@@ -134,8 +135,8 @@ namespace Nighthollow.Components
         sequence.Insert(0, t.DOScale(endValue: _finalCardScale, duration: 0.3f));
         sequence.Insert(0,
           t.DOMove(
-            OverrideHandPosition
-              ? OverrideHandPosition!.CalculateBezierPosition(curvePosition)
+            _previewMode
+              ? _handOverridePosition!.CalculateBezierPosition(curvePosition)
               : CalculateBezierPosition(curvePosition), duration: 0.3f));
         sequence.Insert(0,
           t.DOLocalRotate(new Vector3(0, 0,

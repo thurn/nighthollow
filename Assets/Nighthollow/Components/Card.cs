@@ -18,6 +18,7 @@ using Nighthollow.Utils;
 using Nighthollow.Data;
 using System.Collections.Generic;
 using Nighthollow.Generated;
+using Nighthollow.Interface;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -25,7 +26,8 @@ using UnityEngine.UI;
 
 namespace Nighthollow.Components
 {
-  public sealed class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+  public sealed class Card : MonoBehaviour,
+    IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
   {
 #pragma warning disable 0649
     [Header("Config")] [SerializeField] bool _debugMode;
@@ -40,7 +42,7 @@ namespace Nighthollow.Components
     [Header("State")] CreatureData _data;
     [SerializeField] User _user;
     [SerializeField] bool _canPlay;
-    [SerializeField] bool _disableDragging;
+    [SerializeField] bool _previewMode;
     [SerializeField] bool _initialized;
     [SerializeField] bool _isDragging;
     [SerializeField] bool _overBoard;
@@ -109,9 +111,9 @@ namespace Nighthollow.Components
       }
     }
 
-    public bool DisableDragging
+    public bool PreviewMode
     {
-      set => _disableDragging = value;
+      set => _previewMode = value;
     }
 
     public void OnPlayed()
@@ -133,7 +135,7 @@ namespace Nighthollow.Components
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-      if (!_disableDragging)
+      if (!_previewMode)
       {
         _isDragging = true;
         _initialDragPosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -184,6 +186,26 @@ namespace Nighthollow.Components
         _isDragging = false;
         transform.SetSiblingIndex(_initialDragSiblingIndex);
         _user.Hand.AnimateCardsToPosition();
+      }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+      if (_previewMode)
+      {
+        var tooltip = CreatureItemTooltip.Create(Database.Instance.UserData.Stats, _data.Item);
+        tooltip.XOffset = 64;
+        Root.Instance.ScreenController.ShowTooltip(
+          tooltip,
+          InterfaceUtils.ScreenPointToInterfacePoint(transform.position));
+      }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+      if (_previewMode)
+      {
+        Root.Instance.ScreenController.HideTooltip();
       }
     }
   }

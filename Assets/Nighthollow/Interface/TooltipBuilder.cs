@@ -94,12 +94,7 @@ namespace Nighthollow.Interface
     public TooltipBuilder AppendButton(string text, Action onClick)
     {
       StartGroup();
-      var button = new VisualElement();
-      button.AddToClassList("button");
-      button.RegisterCallback<ClickEvent>(e => onClick());
-      var label = new Label {text = text};
-      button.Add(label);
-      _result.Add(button);
+      _result.Add(ButtonUtil.Create(new ButtonUtil.Button(text, onClick)));
       return this;
     }
 

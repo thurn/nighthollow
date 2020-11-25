@@ -49,6 +49,10 @@ limitations under the License.
             <ui:VisualElement class="border-decoration right"/>
         </nh:AdvisorBar>
 
+        <ui:VisualElement name="ChoiceButtons" class="choice-buttons" style="display: none;" />
+
+        <ui:VisualElement name="HelperTextContainer" />
+
         <nh:ItemTooltip name="ItemTooltip" class="item-tooltip" style="visibility: hidden;">
             <ui:Button name="CloseButton" class="close small"/>
             <ui:Label name="Title" class="tooltip-title" text="Blackguard"/>
@@ -60,12 +64,6 @@ limitations under the License.
                 <ui:VisualElement name="Portrait" class="portrait you"/>
                 <ui:Label name="Text" class="dialog-text" text="Text"/>
             </nh:Dialog>
-        </ui:VisualElement>
-
-        <ui:VisualElement class="choice-buttons" style="display: flex;">
-            <ui:VisualElement class="button large">
-                <ui:Label text="Start Game"/>
-            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

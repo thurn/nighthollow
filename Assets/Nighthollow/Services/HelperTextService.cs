@@ -12,17 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-#nullable enable
-
 namespace Nighthollow.Services
 {
-  public static class GameTutorial
+  public sealed class HelperTextService : MonoBehaviour
   {
+    bool _active;
+
     public enum ArrowDirection
     {
       Top,
@@ -31,7 +33,16 @@ namespace Nighthollow.Services
       Left
     }
 
-    public static void OnDrewOpeningHand()
+    void Update()
+    {
+      if (Input.GetMouseButtonDown(0) && _active)
+      {
+        InterfaceUtils.FindByName<VisualElement>(Root.Instance.ScreenController.Screen, "HelperTextContainer").Clear();
+        _active = false;
+      }
+    }
+
+    public void OnDrewOpeningHand()
     {
       if (Database.Instance.UserData.TutorialState == UserDataService.Tutorial.GameOne)
       {
@@ -47,7 +58,7 @@ namespace Nighthollow.Services
       }
     }
 
-    static void ShowHelperText(Vector2 interfacePosition, ArrowDirection arrowDirection, string text)
+    void ShowHelperText(Vector2 interfacePosition, ArrowDirection arrowDirection, string text)
     {
       var element = new VisualElement();
       element.AddToClassList("helper-text");
@@ -71,7 +82,10 @@ namespace Nighthollow.Services
       element.Add(label);
       InterfaceUtils.FadeIn(element, 0.3f);
 
-      Root.Instance.ScreenController.Screen.Add(element);
+      _active = true;
+      InterfaceUtils
+        .FindByName<VisualElement>(Root.Instance.ScreenController.Screen, "HelperTextContainer")
+        .Add(element);
     }
   }
 }

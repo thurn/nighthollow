@@ -31,6 +31,7 @@ namespace Nighthollow.Data
     public override StatTable Stats { get; }
     public DelegateList Delegate { get; }
     public IReadOnlyList<AffixData> TargetedAffixes { get; }
+    public CreatureItemData Item { get; }
 
     public CreatureData(
       string name,
@@ -39,7 +40,8 @@ namespace Nighthollow.Data
       IReadOnlyList<SkillData> skills,
       StatTable stats,
       DelegateList creatureDelegate,
-      IReadOnlyList<AffixData> targetedAffixes)
+      IReadOnlyList<AffixData> targetedAffixes,
+      CreatureItemData item)
     {
       Name = name;
       BaseType = baseType;
@@ -48,13 +50,21 @@ namespace Nighthollow.Data
       Stats = stats;
       Delegate = creatureDelegate;
       TargetedAffixes = targetedAffixes;
+      Item = item;
     }
 
     public CreatureData Clone(StatTable parentStats)
     {
       var statTable = Stats.Clone(parentStats);
       return new CreatureData(
-        Name, BaseType, School, Skills.Select(s => s.Clone(statTable)).ToList(), statTable, Delegate, TargetedAffixes);
+        Name,
+        BaseType,
+        School,
+        Skills.Select(s => s.Clone(statTable)).ToList(),
+        statTable,
+        Delegate,
+        TargetedAffixes,
+        Item);
     }
   }
 }

@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
+using Nighthollow.Interface;
 using Nighthollow.Stats;
 
 namespace Nighthollow.Data
@@ -40,9 +41,14 @@ namespace Nighthollow.Data
       var skills = item.Skills.Select(s => BuildSkill(stats, s)).ToList();
 
       return new CreatureData(
-        item.Name, item.BaseType, item.School, skills, stats,
+        item.Name,
+        item.BaseType,
+        item.School,
+        skills,
+        stats,
         new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToList()),
-        targetedAffixes.ToList());
+        targetedAffixes.ToList(),
+        item);
     }
 
     static SkillData BuildSkill(StatTable parentStats, SkillItemData item)

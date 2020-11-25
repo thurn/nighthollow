@@ -20,6 +20,12 @@
 $arrow-height: 20px;
 $arrow-width: 40px;
 
+#HelperTextContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .helper-text {
   position: absolute;
   align-items: center;
