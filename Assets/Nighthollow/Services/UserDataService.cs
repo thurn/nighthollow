@@ -47,11 +47,12 @@ namespace Nighthollow.Services
 
     public enum Tutorial
     {
-      Starting,
-      InitialWorldScreen,
-      GameOne,
-      AfterFirstAttack,
-      Completed
+      Unknown = 0,
+      Starting = 1,
+      InitialWorldScreen = 2,
+      GameOne = 3,
+      AfterFirstAttack = 4,
+      Completed = 5
     }
 
     public static void Initialize(MonoBehaviour _, GameDataService gameDataService, Action<UserDataService> action)

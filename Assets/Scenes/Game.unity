@@ -527,6 +527,7 @@ MonoBehaviour:
   _prefabs: {fileID: 169299299}
   _objectPoolService: {fileID: 169299296}
   _creatureService: {fileID: 169299295}
+  _screenController: {fileID: 2115052129}
   _user: {fileID: 1236180348}
   _enemy: {fileID: 1160944780}
   _damageTextService: {fileID: 169299298}

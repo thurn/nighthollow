@@ -16,6 +16,7 @@ using Nighthollow.Components;
 using Nighthollow.Utils;
 using System;
 using Nighthollow.Generated;
+using Nighthollow.Interface;
 using Nighthollow.Stats;
 using UnityEngine;
 
@@ -40,6 +41,9 @@ namespace Nighthollow.Services
 
     [SerializeField] CreatureService _creatureService;
     public CreatureService CreatureService => _creatureService;
+
+    [SerializeField] ScreenController _screenController;
+    public ScreenController ScreenController => _screenController;
 
     [SerializeField] User _user;
     public User User => _user;
@@ -82,6 +86,7 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_prefabs);
       Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_creatureService);
+      Errors.CheckNotNull(_screenController);
       Errors.CheckNotNull(_user);
       Errors.CheckNotNull(_enemy);
       Errors.CheckNotNull(_damageTextService);

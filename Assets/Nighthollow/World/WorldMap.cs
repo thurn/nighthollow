@@ -208,8 +208,8 @@ namespace Nighthollow.World
         _screen.ShowTooltip(WorldHexTooltip.Create(
             this,
             tile.name,
-            hex == Tutorial.StartingHex ? "Kingdom of Nighthollow" : "None",
-            hex == Tutorial.TutorialAttackHex),
+            hex == WorldTutorial.StartingHex ? "Kingdom of Nighthollow" : "None",
+            hex == WorldTutorial.TutorialAttackHex),
           InterfaceUtils.ScreenPointToInterfacePoint(screenPoint));
       }
     }

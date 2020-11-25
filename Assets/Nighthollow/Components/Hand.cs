@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -27,18 +29,18 @@ namespace Nighthollow.Components
 
     [Header("Config")]
     [SerializeField] bool _debugMode;
-    [SerializeField] Transform _deckPosition;
+    [SerializeField] Transform _deckPosition = null!;
     [SerializeField] float _initialCardScale;
     [SerializeField] float _finalCardScale;
     [SerializeField] int _zRotationMultiplier;
 
     [Header("State")]
-    [SerializeField] Transform _controlPoint1;
-    [SerializeField] Transform _controlPoint2;
-    [SerializeField] Transform _controlPoint3;
-    [SerializeField] Transform _controlPoint4;
-    [SerializeField] List<Card> _cards;
-    [SerializeField] Hand _handOverridePosition;
+    [SerializeField] Transform _controlPoint1 = null!;
+    [SerializeField] Transform _controlPoint2 = null!;
+    [SerializeField] Transform _controlPoint3 = null!;
+    [SerializeField] Transform _controlPoint4 = null!;
+    [SerializeField] List<Card> _cards = null!;
+    [SerializeField] Hand? _handOverridePosition;
 
 #pragma warning restore 0649
 
@@ -58,12 +60,12 @@ namespace Nighthollow.Components
       }
     }
 
-    public void DrawCards(IEnumerable<CreatureData> cards)
+    public void DrawCards(IEnumerable<CreatureData> cards, Action? onComplete = null)
     {
-      StartCoroutine(DrawsCardAsync(cards));
+      StartCoroutine(DrawsCardAsync(cards, onComplete));
     }
 
-    IEnumerator<YieldInstruction> DrawsCardAsync(IEnumerable<CreatureData> cards)
+    IEnumerator<YieldInstruction> DrawsCardAsync(IEnumerable<CreatureData> cards, Action? onComplete)
     {
       foreach (var cardData in cards)
       {
@@ -74,6 +76,8 @@ namespace Nighthollow.Components
         AddToHand(card);
         yield return new WaitForSeconds(0.2f);
       }
+
+      onComplete?.Invoke();
     }
 
     public void RemoveFromHand(Card card)
@@ -93,7 +97,7 @@ namespace Nighthollow.Components
       }
     }
 
-    public Hand OverrideHandPosition
+    public Hand? OverrideHandPosition
     {
       private get { return _handOverridePosition; }
 
@@ -119,7 +123,7 @@ namespace Nighthollow.Components
       _cards.Clear();
     }
 
-    public void AnimateCardsToPosition(Action onComplete = null)
+    public void AnimateCardsToPosition(Action? onComplete = null)
     {
       var sequence = DOTween.Sequence();
       for (var i = 0; i < _cards.Count; ++i)
@@ -131,7 +135,7 @@ namespace Nighthollow.Components
         sequence.Insert(0,
           t.DOMove(
             OverrideHandPosition
-              ? OverrideHandPosition.CalculateBezierPosition(curvePosition)
+              ? OverrideHandPosition!.CalculateBezierPosition(curvePosition)
               : CalculateBezierPosition(curvePosition), duration: 0.3f));
         sequence.Insert(0,
           t.DOLocalRotate(new Vector3(0, 0,

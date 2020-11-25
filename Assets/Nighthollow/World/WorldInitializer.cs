@@ -23,13 +23,13 @@ namespace Nighthollow.World
   {
     [SerializeField] WorldMap _worldMap = null!;
     [SerializeField] ScreenController _screenController = null!;
-    [SerializeField] Tutorial _tutorial = null!;
+    [SerializeField] WorldTutorial _worldTutorial = null!;
 
     void Start()
     {
       _worldMap.Initialize();
       _screenController.Initialize(showAdvisorBar: true);
-      _tutorial.Initialize();
+      _worldTutorial.Initialize();
     }
   }
 }

@@ -24,6 +24,9 @@ namespace Nighthollow.Interface
     [SerializeField] UIDocument _document = null!;
     public UIDocument Document => _document;
 
+    VisualElement _screen = null!;
+    public VisualElement Screen => _screen;
+
     AdvisorBar _advisorBar = null!;
     CardsWindow _cardsWindow = null!;
     AbstractWindow? _currentWindow;
@@ -32,15 +35,15 @@ namespace Nighthollow.Interface
 
     public void Initialize(bool showAdvisorBar)
     {
-      var screen = InterfaceUtils.FindByName<VisualElement>(_document.rootVisualElement, "Screen");
+      _screen = InterfaceUtils.FindByName<VisualElement>(_document.rootVisualElement, "Screen");
 
-      _advisorBar = InterfaceUtils.FindByName<AdvisorBar>(screen, "AdvisorBar");
+      _advisorBar = InterfaceUtils.FindByName<AdvisorBar>(_screen, "AdvisorBar");
       _advisorBar.Controller = this;
-      _cardsWindow = InterfaceUtils.FindByName<CardsWindow>(screen, "CardsWindow");
+      _cardsWindow = InterfaceUtils.FindByName<CardsWindow>(_screen, "CardsWindow");
       _cardsWindow.Controller = this;
-      _itemTooltip = InterfaceUtils.FindByName<ItemTooltip>(screen, "ItemTooltip");
+      _itemTooltip = InterfaceUtils.FindByName<ItemTooltip>(_screen, "ItemTooltip");
       _itemTooltip.Controller = this;
-      _dialog = InterfaceUtils.FindByName<Dialog>(screen, "Dialog");
+      _dialog = InterfaceUtils.FindByName<Dialog>(_screen, "Dialog");
       _dialog.Initialize();
 
       if (showAdvisorBar)

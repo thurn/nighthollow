@@ -62,12 +62,7 @@ limitations under the License.
             </nh:Dialog>
         </ui:VisualElement>
 
-        <ui:VisualElement name="HelperText" class="helper-text" style="display: flex">
-            <ui:Label text="This is your opening hand of creature cards to play." />
-            <ui:VisualElement class="arrow-down" />
-        </ui:VisualElement>
-
-        <ui:VisualElement name="ChoiceButtons" class="choice-buttons" style="display: flex;">
+        <ui:VisualElement class="choice-buttons" style="display: flex;">
             <ui:VisualElement class="button large">
                 <ui:Label text="Start Game"/>
             </ui:VisualElement>

@@ -17,24 +17,11 @@
 @use "font-sizes";
 @use "colors";
 
-$arrow-height: 25px;
+$arrow-height: 20px;
 $arrow-width: 40px;
-
-.arrow-down {
-  width: 0;
-  height: 0;
-  border-left-width: $arrow-height;
-  border-left-color: transparent;
-  border-right-width: $arrow-height;
-  border-right-color: transparent;
-  border-top-width: $arrow-width;
-  border-top-color: colors.$accent;
-}
 
 .helper-text {
   position: absolute;
-  top: 300px;
-  left: 250px;
   align-items: center;
   justify-content: center;
 }
@@ -46,4 +33,56 @@ $arrow-width: 40px;
   padding: 16px;
   border-radius: 16px;
   max-width: 400px;
+}
+
+.helper-text.top-arrow {
+  flex-direction: column;
+
+  .arrow {
+    width: 0;
+    height: 0;
+    border-left-width: $arrow-height;
+    border-right-width: $arrow-height;
+    border-bottom-width: $arrow-width;
+    border-bottom-color: colors.$accent;
+  }
+}
+
+.helper-text.right-arrow {
+  flex-direction: row-reverse;
+
+  .arrow {
+    width: 0;
+    height: 0;
+    border-top-width: $arrow-height;
+    border-bottom-width: $arrow-height;
+    border-left-width: $arrow-width;
+    border-left-color: colors.$accent;
+  }
+}
+
+.helper-text.bottom-arrow {
+  flex-direction: column-reverse;
+
+  .arrow {
+    width: 0;
+    height: 0;
+    border-left-width: $arrow-height;
+    border-right-width: $arrow-height;
+    border-top-width: $arrow-width;
+    border-top-color: colors.$accent;
+  }
+}
+
+.helper-text.left-arrow {
+  flex-direction: row;
+
+  .arrow {
+    width: 0;
+    height: 0;
+    border-top-width: $arrow-height;
+    border-bottom-width: $arrow-height;
+    border-right-width: $arrow-width;
+    border-right-color: colors.$accent;
+  }
 }

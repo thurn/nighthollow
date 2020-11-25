@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
+using Nighthollow.Interface;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using TMPro;
@@ -59,7 +60,10 @@ namespace Nighthollow.Components
         openingHand.Add(_deck.Draw());
       }
 
-      _hand.DrawCards(openingHand);
+      _hand.DrawCards(openingHand, () =>
+      {
+        GameTutorial.OnDrewOpeningHand();
+      });
     }
 
     public void OnStartGame()

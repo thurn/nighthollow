@@ -15,7 +15,6 @@
 #nullable enable
 
 using System;
-using System.Collections.Generic;
 using DG.Tweening;
 using Nighthollow.Utils;
 using UnityEngine;
