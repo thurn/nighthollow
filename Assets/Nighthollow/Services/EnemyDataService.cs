@@ -29,7 +29,7 @@ namespace Nighthollow.Services
       var stats = new StatTable(StatTable.Defaults);
       Root.Instance.Enemy.OnStartGame(
         new EnemyData(
-          Root.Instance.GameDataService.GetStaticCardList(StaticCardList.TutorialEnemy)
+          Database.Instance.GameData.GetStaticCardList(StaticCardList.TutorialEnemy)
             .Select(c => CreatureUtil.Build(stats, c)).ToList(),
           stats));
     }

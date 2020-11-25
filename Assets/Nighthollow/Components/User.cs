@@ -13,13 +13,13 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // ReSharper disable IteratorNeverReturns
@@ -39,35 +39,37 @@ namespace Nighthollow.Components
     [SerializeField] TextMeshProUGUI _manaText;
     [SerializeField] RectTransform _influenceRow;
 
-    UserData _data;
-    public UserData Data => _data;
-
     [SerializeField] List<Image> _influenceImages;
     [SerializeField] int _life;
     [SerializeField] int _mana;
 #pragma warning restore 0649
 
+    public UserDataService Data => Database.Instance.UserData;
     public int Mana => _mana;
     public int Life => _life;
 
-    public void OnStartGame(UserData data)
+    public void DrawOpeningHand()
     {
-      _data = data;
-      gameObject.SetActive(true);
-      StartCoroutine(GainMana());
-      StartCoroutine(DrawCards());
-
-      _life = Errors.CheckPositive(_data.GetInt(Stat.StartingLife));
-      _mana = _data.GetInt(Stat.StartingMana);
-      _deck.OnStartGame(data.Deck, data.OrderedDraws);
+      var builtDeck = Data.Deck.Select(c => CreatureUtil.Build(Data.Stats, c)).ToList();
+      _deck.OnStartGame(builtDeck, orderedDraws: Data.TutorialState != UserDataService.Tutorial.Completed);
 
       var openingHand = new List<CreatureData>();
-      for (var i = 0; i < Errors.CheckPositive(_data.GetInt(Stat.StartingHandSize)); ++i)
+      for (var i = 0; i < Errors.CheckPositive(Data.GetInt(Stat.StartingHandSize)); ++i)
       {
         openingHand.Add(_deck.Draw());
       }
 
       _hand.DrawCards(openingHand);
+    }
+
+    public void OnStartGame()
+    {
+      gameObject.SetActive(true);
+      StartCoroutine(GainMana());
+      StartCoroutine(DrawCards());
+
+      _life = Errors.CheckPositive(Data.GetInt(Stat.StartingLife));
+      _mana = Data.GetInt(Stat.StartingMana);
     }
 
     public void SpendMana(int amount)
@@ -93,8 +95,8 @@ namespace Nighthollow.Components
     {
       while (true)
       {
-        yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.ManaGainInterval));
-        _mana += Mathf.RoundToInt(_data.GetInt(Stat.ManaGain));
+        yield return new WaitForSeconds(Data.GetDurationSeconds(Stat.ManaGainInterval));
+        _mana += Mathf.RoundToInt(Data.GetInt(Stat.ManaGain));
       }
     }
 
@@ -102,8 +104,8 @@ namespace Nighthollow.Components
     {
       while (true)
       {
-        Errors.CheckArgument(_data.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
-        yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.CardDrawInterval));
+        Errors.CheckArgument(Data.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
+        yield return new WaitForSeconds(Data.GetDurationSeconds(Stat.CardDrawInterval));
         _hand.DrawCards(new List<CreatureData> {_deck.Draw()});
       }
     }
@@ -114,7 +116,7 @@ namespace Nighthollow.Components
       _manaText.text = _mana.ToString();
 
       var index = 0;
-      foreach (var pair in _data.Stats.Get(Stat.Influence).Values)
+      foreach (var pair in Data.Stats.Get(Stat.Influence).Values)
       {
         for (var i = 0; i < pair.Value; ++i)
         {

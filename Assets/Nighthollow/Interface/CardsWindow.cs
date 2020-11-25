@@ -30,7 +30,7 @@ namespace Nighthollow.Interface
     VisualElement _mainDeck = null!;
     VisualElement _manaDeck = null!;
 
-    public WorldScreenController Controller { get; set; } = null!;
+    public ScreenController Controller { get; set; } = null!;
 
     public new sealed class UxmlFactory : UxmlFactory<CardsWindow, UxmlTraits>
     {
@@ -110,7 +110,7 @@ namespace Nighthollow.Interface
       result.RegisterCallback<MouseOverEvent>(e =>
       {
         Controller.ShowTooltip(CreatureItemTooltip.Create(
-            Database.Instance.UserData.UserStats,
+            Database.Instance.UserData.Stats,
           card),
           new Vector2(result.worldBound.x, result.worldBound.y));
       });

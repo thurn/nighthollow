@@ -34,7 +34,7 @@ namespace Nighthollow.Delegates.Implementations
 
       if (rank.HasValue)
       {
-        var summons = Root.Instance.GameDataService.GetStaticCardList(StaticCardList.Summons);
+        var summons = Database.Instance.GameData.GetStaticCardList(StaticCardList.Summons);
         Errors.CheckState(summons.Count == 1, "Expected only one summon creature");
         c.Results.Add(new CreateCreatureEffect(
           summons[0],

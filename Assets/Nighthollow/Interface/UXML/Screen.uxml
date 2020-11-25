@@ -17,7 +17,7 @@ limitations under the License.
 
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
     <ui:Style src="../Styles/styles.uss"/>
-    <nh:WorldScreen name="WorldScreen" class="full-screen">
+    <ui:VisualElement name="Screen" class="full-screen">
         <nh:CardsWindow name="CardsWindow" class="window" style="visibility: hidden;">
             <ui:VisualElement class="window-title">
                 <ui:VisualElement class="ocerak portrait small"/>
@@ -38,7 +38,7 @@ limitations under the License.
             </ui:VisualElement>
         </nh:CardsWindow>
 
-        <ui:VisualElement name="AdvisorBar" class="advisor-bar">
+        <nh:AdvisorBar name="AdvisorBar" class="advisor-bar" style="display: none;">
             <ui:VisualElement class="border-decoration left thurn"/>
             <ui:VisualElement class="advisor-bar-content">
                 <ui:Button name="CardsButton" class="ocerak portrait portrait-button"/>
@@ -47,7 +47,7 @@ limitations under the License.
                 <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
             </ui:VisualElement>
             <ui:VisualElement class="border-decoration right"/>
-        </ui:VisualElement>
+        </nh:AdvisorBar>
 
         <nh:ItemTooltip name="ItemTooltip" class="item-tooltip" style="visibility: hidden;">
             <ui:Button name="CloseButton" class="close small"/>
@@ -61,5 +61,16 @@ limitations under the License.
                 <ui:Label name="Text" class="dialog-text" text="Text"/>
             </nh:Dialog>
         </ui:VisualElement>
-    </nh:WorldScreen>
+
+        <ui:VisualElement name="HelperText" class="helper-text" style="display: flex">
+            <ui:Label text="This is your opening hand of creature cards to play." />
+            <ui:VisualElement class="arrow-down" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="ChoiceButtons" class="choice-buttons" style="display: flex;">
+            <ui:VisualElement class="button large">
+                <ui:Label text="Start Game"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

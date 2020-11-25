@@ -19,16 +19,16 @@ using UnityEngine;
 
 namespace Nighthollow.World
 {
-  public sealed class Initializer : MonoBehaviour
+  public sealed class WorldInitializer : MonoBehaviour
   {
     [SerializeField] WorldMap _worldMap = null!;
-    [SerializeField] WorldScreenController _worldScreenController = null!;
+    [SerializeField] ScreenController _screenController = null!;
     [SerializeField] Tutorial _tutorial = null!;
 
     void Start()
     {
       _worldMap.Initialize();
-      _worldScreenController.Initialize();
+      _screenController.Initialize(showAdvisorBar: true);
       _tutorial.Initialize();
     }
   }

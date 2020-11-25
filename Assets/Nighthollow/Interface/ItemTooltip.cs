@@ -27,7 +27,7 @@ namespace Nighthollow.Interface
     Vector2? _anchor;
     int _xOffset;
 
-    public WorldScreenController Controller { get; set; } = null!;
+    public ScreenController Controller { get; set; } = null!;
 
     public bool Visible { get; private set; }
 
@@ -58,6 +58,12 @@ namespace Nighthollow.Interface
       _closeButton.style.visibility = new StyleEnum<Visibility>(
         builder.CloseButton ? Visibility.Visible : Visibility.Hidden);
 
+      var onClose = builder.OnClose;
+      if (onClose != null)
+      {
+        _closeButton.RegisterCallback<ClickEvent>(e => { onClose(); });
+      }
+
       var content = this.Q(null, "tooltip-content");
       if (content != null)
       {
@@ -83,7 +89,6 @@ namespace Nighthollow.Interface
       {
         _title = InterfaceUtils.FindByName<Label>(this, "Title");
         _closeButton = this.Q("CloseButton");
-        _closeButton.RegisterCallback<ClickEvent>(e => { Controller.WorldMap.ClearSelection(); });
         _initialized = true;
       }
 
@@ -94,13 +99,13 @@ namespace Nighthollow.Interface
     {
       if (_anchor != null)
       {
-        style.left = new StyleLength(_anchor.Value.x > Screen.width / 2f
+        style.left = new StyleLength(_anchor.Value.x > UnityEngine.Screen.width / 2f
           ? _anchor.Value.x - worldBound.width - _xOffset
           : _anchor.Value.x + _xOffset);
         style.top = new StyleLength(Mathf.Clamp(
           _anchor.Value.y - (worldBound.height / 2f),
           32,
-          Screen.height - worldBound.height - 32));
+          UnityEngine.Screen.height - worldBound.height - 32));
       }
     }
   }

@@ -12,16 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@forward "main-menu";
-@forward "introduction";
-@forward "school-selection";
-@forward "advisor-bar";
-@forward "cards";
-@forward "item-tooltip";
-@forward "dialog";
-@forward "choice-buttons";
-@forward "helper-text";
+@use "dimensions";
 
-Button {
-  border-width: 0;
+.choice-buttons {
+  position: absolute;
+  bottom: dimensions.$choice-buttons-bottom-offset;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }

@@ -15,8 +15,6 @@
 using Nighthollow.Components;
 using Nighthollow.Utils;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
@@ -51,15 +49,6 @@ namespace Nighthollow.Services
 
     [SerializeField] DamageTextService _damageTextService;
     public DamageTextService DamageTextService => _damageTextService;
-
-    [SerializeField] AssetService _assetService;
-    public AssetService AssetService => _assetService;
-
-    [SerializeField] GameDataService _gameDataService;
-    public GameDataService GameDataService => _gameDataService;
-
-    [SerializeField] UserDataService _userDataService;
-    public UserDataService UserDataService => _userDataService;
 
     [SerializeField] EnemyDataService _enemyDataService;
     public EnemyDataService EnemyDataService => _enemyDataService;
@@ -96,8 +85,6 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_user);
       Errors.CheckNotNull(_enemy);
       Errors.CheckNotNull(_damageTextService);
-      Errors.CheckNotNull(_assetService);
-      Errors.CheckNotNull(_gameDataService);
       Errors.CheckNotNull(_enemyDataService);
 
       _instance = this;

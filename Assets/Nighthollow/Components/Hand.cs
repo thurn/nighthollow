@@ -141,6 +141,14 @@ namespace Nighthollow.Components
       sequence.AppendCallback(() => onComplete?.Invoke());
     }
 
+    void Update()
+    {
+      if (_debugMode)
+      {
+        AnimateCardsToPosition();
+      }
+    }
+
     void OnDrawGizmosSelected()
     {
       for (var t = 0.0f; t <= 1; t += 0.05f)

@@ -12,16 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@forward "main-menu";
-@forward "introduction";
-@forward "school-selection";
-@forward "advisor-bar";
-@forward "cards";
-@forward "item-tooltip";
-@forward "dialog";
-@forward "choice-buttons";
-@forward "helper-text";
+#nullable enable
 
-Button {
-  border-width: 0;
+using Nighthollow.Interface;
+using Nighthollow.Services;
+using UnityEngine;
+
+namespace Nighthollow.Components
+{
+  public sealed class GameInitializer : MonoBehaviour
+  {
+    void Start()
+    {
+      GetComponent<ScreenController>().Initialize(showAdvisorBar: false);
+      Database.OnReady(_ =>
+      {
+        Root.Instance.User.DrawOpeningHand();
+      });
+    }
+  }
 }

@@ -66,14 +66,20 @@ namespace Nighthollow.Interface
         .Select(pair => pair.Item2)
         .FirstOrDefault();
 
-      var builder = new TooltipBuilder(name ?? hexName) {XOffset = 128, CloseButton = true};
+      var builder = new TooltipBuilder(name ?? hexName)
+      {
+        XOffset = 128,
+        CloseButton = true,
+        OnClose = worldMap.ClearSelection
+      };
+
       builder
         .AppendText($"Area Level: 1")
         .AppendText($"Owner: {owner}");
 
       if (canAttack)
       {
-        builder.AppendButton("Attack!", () => worldMap.AttackHex());
+        builder.AppendButton("Attack!", worldMap.AttackHex);
       }
 
       return builder;

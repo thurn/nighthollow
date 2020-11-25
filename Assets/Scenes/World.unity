@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 178308608}
   - component: {fileID: 178308609}
   m_Layer: 0
-  m_Name: Document
+  m_Name: Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,9 +298,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b9698f1e303435696fffa90172f3476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _showIntroduction: 1
   _worldMap: {fileID: 1143359796}
-  _worldScreenController: {fileID: 178308609}
+  _screenController: {fileID: 178308609}
   _fightIcon: {fileID: 11400000, guid: fee0ceca865fc41bcbba700f3654ca47, type: 2}
 --- !u!114 &178308609
 MonoBehaviour:
@@ -315,7 +314,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _document: {fileID: 178308607}
-  _worldMap: {fileID: 1143359796}
 --- !u!114 &178308610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _worldMap: {fileID: 1143359796}
-  _worldScreenController: {fileID: 178308609}
+  _screenController: {fileID: 178308609}
   _tutorial: {fileID: 178308608}
 --- !u!1 &817099573
 GameObject:
@@ -39195,7 +39193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09ee9327c6cd4b1a9f8092d1342b4001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _worldScreen: {fileID: 178308609}
+  _screen: {fileID: 178308609}
   _bottomLeftSelection: {fileID: 11400000, guid: 3915bde71dc0e42128d8b3e8f0e028c7,
     type: 2}
   _bottomRightSelection: {fileID: 11400000, guid: 3690dbd57296843bcb6025790e1db178,

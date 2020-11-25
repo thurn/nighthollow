@@ -33,7 +33,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute()
     {
-      var effect = Root.Instance.AssetService.InstantiatePrefab<TimedEffect>(Address);
+      var effect = Database.Instance.Assets.InstantiatePrefab<TimedEffect>(Address);
       effect.transform.position = Position;
     }
   }

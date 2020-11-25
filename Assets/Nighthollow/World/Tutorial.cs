@@ -25,7 +25,7 @@ namespace Nighthollow.World
   {
 #pragma warning disable 0649
     [SerializeField] WorldMap _worldMap = null!;
-    [SerializeField] WorldScreenController _worldScreenController = null!;
+    [SerializeField] ScreenController _screenController = null!;
     [SerializeField] Tile _fightIcon = null!;
 #pragma warning restore 0649
 
@@ -39,11 +39,11 @@ namespace Nighthollow.World
     {
       Database.OnReady(data =>
       {
-        if (data.UserData.Tutorial == UserDataService2.TutorialState.Starting)
+        if (data.UserData.TutorialState == UserDataService.Tutorial.Starting)
         {
-          _worldScreenController.ShowDialog("ocerak", IntroText);
+          _screenController.ShowDialog("ocerak", IntroText);
           _worldMap.ShowIcon(TutorialAttackHex, _fightIcon);
-          data.UserData.Tutorial = UserDataService2.TutorialState.InitialWorldScreen;
+          data.UserData.TutorialState = UserDataService.Tutorial.InitialWorldScreen;
         }
       });
     }

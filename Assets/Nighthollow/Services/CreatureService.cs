@@ -35,7 +35,7 @@ namespace Nighthollow.Services
 
     public Creature CreateUserCreature(CreatureData creatureData)
     {
-      var result = Root.Instance.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      var result = Database.Instance.Assets.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       result.Initialize(creatureData);
       return result;
     }
@@ -45,7 +45,7 @@ namespace Nighthollow.Services
       FileValue file,
       float startingX)
     {
-      var result = Root.Instance.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      var result = Database.Instance.Assets.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       result.Initialize(creatureData);
       result.ActivateCreature(null, file, startingX);
       _movingCreatures.Add(result);

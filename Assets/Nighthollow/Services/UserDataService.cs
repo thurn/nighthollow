@@ -14,40 +14,92 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
+using SimpleJSON;
 using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class UserDataService : MonoBehaviour
+  public sealed class UserDataService : StatEntity
   {
-    readonly List<CreatureItemData> _deck = new List<CreatureItemData>();
-    public IReadOnlyList<CreatureItemData> Deck => _deck;
+    public IReadOnlyList<CreatureItemData> Deck { get; }
+    public IReadOnlyList<CreatureItemData> Collection { get; }
+    public override StatTable Stats { get; }
 
-    StatTable? _userStats;
-    public StatTable UserStats => Errors.CheckNotNull(_userStats);
+    Tutorial _tutorialState;
 
-    public void OnNewGame(GameDataService gameDataService)
+    public Tutorial TutorialState
     {
-      _userStats = new StatTable(StatTable.Defaults);
-      _deck.Clear();
-      _deck.AddRange(gameDataService.GetStaticCardList(StaticCardList.StartingDeck));
+      get => _tutorialState;
+      set
+      {
+        _tutorialState = value;
+        Save();
+      }
     }
 
-    public void StartGame(bool isTutorial)
+    public enum Tutorial
     {
-      var cards = isTutorial ? Root.Instance.GameDataService.GetStaticCardList(StaticCardList.TutorialDraws) : Deck;
-      var stats = UserStats.Clone(StatTable.Defaults);
-      Root.Instance.User.OnStartGame(
-        new UserData(
-          cards.Select(c => CreatureUtil.Build(stats, c)).ToList(),
-          stats,
-          orderedDraws: isTutorial));
+      Starting,
+      InitialWorldScreen,
+      GameOne,
+      AfterFirstAttack,
+      Completed
+    }
+
+    public static void Initialize(MonoBehaviour _, GameDataService gameDataService, Action<UserDataService> action)
+    {
+      action(new UserDataService(gameDataService));
+    }
+
+    string DataPath => Path.Combine(Application.persistentDataPath, "data.json");
+
+    UserDataService(GameDataService gameDataService)
+    {
+      if (File.Exists(DataPath))
+      {
+        Debug.Log($"Loading saved data from {DataPath}");
+        var parsed = JSON.Parse(File.ReadAllText(DataPath));
+        Deck = parsed["deck"].FromJsonArray()
+          .Select(c => CreatureItemData.Deserialize(gameDataService, c)).ToList();
+        Collection = parsed["collection"].FromJsonArray()
+          .Select(c => CreatureItemData.Deserialize(gameDataService, c)).ToList();
+        Stats = StatTable.Deserialize(parsed["user"], StatTable.Defaults);
+        TutorialState = (Tutorial) parsed["tutorial"].AsInt;
+      }
+      else
+      {
+        Deck = gameDataService.GetStaticCardList(StaticCardList.StartingDeck).ToList();
+        Collection = new List<CreatureItemData>();
+        Stats = new StatTable(StatTable.Defaults);
+        TutorialState = Tutorial.Starting;
+        Debug.Log($"Save file not found, saving new player tutorial data to {DataPath}");
+        Save();
+
+#pragma warning disable 618
+        Application.ExternalEval("_JS_FileSystem_Sync();");
+#pragma warning restore 618
+      }
+    }
+
+    void Save()
+    {
+      var result = new JSONObject
+      {
+        ["deck"] = Deck.Select(c => c.Serialize()).AsJsonArray(),
+        ["collection"] = Collection.Select(c => c.Serialize()).AsJsonArray(),
+        ["user"] = Stats.Serialize(),
+        ["tutorial"] = new JSONNumber((int) TutorialState)
+      };
+
+      File.WriteAllText(DataPath, result.ToString());
     }
   }
 }

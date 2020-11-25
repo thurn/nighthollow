@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,7 +28,7 @@ namespace Nighthollow.World
   public sealed class WorldMap : MonoBehaviour
   {
 #pragma warning disable 0649
-    [SerializeField] WorldScreenController _worldScreen = null!;
+    [SerializeField] ScreenController _screen = null!;
     [SerializeField] Tile _bottomLeftSelection = null!;
     [SerializeField] Tile _bottomRightSelection = null!;
     [SerializeField] Tile _rightSelection = null!;
@@ -165,7 +166,7 @@ namespace Nighthollow.World
     public void ClearSelection()
     {
       ClearPreviousSelection();
-      _worldScreen.HideTooltip();
+      _screen.HideTooltip();
       _currentlySelected = null;
     }
 
@@ -181,11 +182,15 @@ namespace Nighthollow.World
       }
     }
 
-    public void AttackHex() => SceneManager.LoadScene("Game");
+    public void AttackHex()
+    {
+      Database.Instance.UserData.TutorialState = UserDataService.Tutorial.GameOne;
+      SceneManager.LoadScene("Game");
+    }
 
     void Update()
     {
-      if (Input.GetMouseButtonDown(0) && !_worldScreen.ConsumesMousePosition(Input.mousePosition))
+      if (Input.GetMouseButtonDown(0) && !_screen.ConsumesMousePosition(Input.mousePosition))
       {
         var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
         var worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);
@@ -200,7 +205,7 @@ namespace Nighthollow.World
 
         var tile = _children[hex.y].GetTile(new Vector3Int(hex.x, hex.y, 0));
         var screenPoint = _mainCamera.WorldToScreenPoint(_grid.CellToWorld(position));
-        _worldScreen.ShowTooltip(WorldHexTooltip.Create(
+        _screen.ShowTooltip(WorldHexTooltip.Create(
             this,
             tile.name,
             hex == Tutorial.StartingHex ? "Kingdom of Nighthollow" : "None",

@@ -27,6 +27,7 @@ namespace Nighthollow.Interface
     public Rarity Rarity { get; set; } = Rarity.Common;
     public int XOffset { get; set; } = 16;
     public bool CloseButton { get; set; }
+    public Action? OnClose { get; set; }
     readonly VisualElement _result = new VisualElement();
 
     StringBuilder? _currentText;

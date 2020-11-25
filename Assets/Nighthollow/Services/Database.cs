@@ -25,9 +25,9 @@ namespace Nighthollow.Services
   {
     public GameDataService GameData { get; }
     public AssetService Assets { get; }
-    public UserDataService2 UserData { get; }
+    public UserDataService UserData { get; }
 
-    public DataService(GameDataService gameData, AssetService assets, UserDataService2 userData)
+    public DataService(GameDataService gameData, AssetService assets, UserDataService userData)
     {
       GameData = gameData;
       Assets = assets;
@@ -70,7 +70,7 @@ namespace Nighthollow.Services
         {
           AssetService.Initialize(this, gameDataService, assetService =>
           {
-            UserDataService2.Initialize(this, gameDataService, userDataService =>
+            UserDataService.Initialize(this, gameDataService, userDataService =>
             {
               _instance = new DataService(gameDataService, assetService, userDataService);
 

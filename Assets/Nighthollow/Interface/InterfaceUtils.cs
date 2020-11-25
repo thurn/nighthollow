@@ -56,6 +56,6 @@ namespace Nighthollow.Interface
 
     public static Vector2 ScreenPointToInterfacePoint(Vector2 screenPoint) =>
       // Not sure if there's a less hacky way to convert to GUI coordinates than Screen.height - y...
-      new Vector2(screenPoint.x, Screen.height - screenPoint.y);
+      new Vector2(screenPoint.x, UnityEngine.Screen.height - screenPoint.y);
   }
 }

@@ -14,43 +14,44 @@
 
 #nullable enable
 
-using Nighthollow.World;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class WorldScreenController : MonoBehaviour
+  public sealed class ScreenController : MonoBehaviour
   {
     [SerializeField] UIDocument _document = null!;
     public UIDocument Document => _document;
 
-    [SerializeField] WorldMap _worldMap = null!;
-    public WorldMap WorldMap => _worldMap;
-
-    WorldScreen _worldScreen = null!;
-    VisualElement _advisorBar = null!;
+    AdvisorBar _advisorBar = null!;
     CardsWindow _cardsWindow = null!;
     AbstractWindow? _currentWindow;
     ItemTooltip _itemTooltip = null!;
     Dialog _dialog = null!;
 
-    public void Initialize()
+    public void Initialize(bool showAdvisorBar)
     {
-      _worldScreen = InterfaceUtils.FindByName<WorldScreen>(_document.rootVisualElement, "WorldScreen");
-      _worldScreen.Controller = this;
-      _advisorBar = InterfaceUtils.FindByName<VisualElement>(_worldScreen, "AdvisorBar");
-      _cardsWindow = InterfaceUtils.FindByName<CardsWindow>(_worldScreen, "CardsWindow");
+      var screen = InterfaceUtils.FindByName<VisualElement>(_document.rootVisualElement, "Screen");
+
+      _advisorBar = InterfaceUtils.FindByName<AdvisorBar>(screen, "AdvisorBar");
+      _advisorBar.Controller = this;
+      _cardsWindow = InterfaceUtils.FindByName<CardsWindow>(screen, "CardsWindow");
       _cardsWindow.Controller = this;
-      _itemTooltip = InterfaceUtils.FindByName<ItemTooltip>(_worldScreen, "ItemTooltip");
+      _itemTooltip = InterfaceUtils.FindByName<ItemTooltip>(screen, "ItemTooltip");
       _itemTooltip.Controller = this;
-      _dialog = InterfaceUtils.FindByName<Dialog>(_worldScreen, "Dialog");
+      _dialog = InterfaceUtils.FindByName<Dialog>(screen, "Dialog");
       _dialog.Initialize();
+
+      if (showAdvisorBar)
+      {
+        _advisorBar.Show();
+      }
     }
 
     public bool ConsumesMousePosition(Vector3 mousePosition) =>
       _currentWindow != null ||
-      InterfaceUtils.ContainsScreenPoint(_advisorBar, mousePosition) ||
+      (_advisorBar.Visible && InterfaceUtils.ContainsScreenPoint(_advisorBar, mousePosition)) ||
       _dialog.Visible ||
       (_itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition));
 
