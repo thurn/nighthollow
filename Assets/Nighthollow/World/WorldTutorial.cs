@@ -33,7 +33,7 @@ namespace Nighthollow.World
     public static readonly Vector2Int TutorialAttackHex = new Vector2Int(-11, 7);
 
     const string IntroText =
-      "The sleeper awakes... we have been preparing for your return for many years, my lord. We will once again " +
+      "The sleeper awakes! We have been preparing for your return for many years, my lord. We will once again " +
       "bring the Eternal Night to the world of the living!";
 
     public void Initialize()

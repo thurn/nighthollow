@@ -18,15 +18,14 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class AdvisorBar : HideableElement
+  public sealed class BlackoutWindow : HideableElement
   {
-    public new sealed class UxmlFactory : UxmlFactory<AdvisorBar, UxmlTraits>
+    public new sealed class UxmlFactory : UxmlFactory<BlackoutWindow, UxmlTraits>
     {
     }
 
     protected override void Initialize()
     {
-      this.Q("CardsButton").RegisterCallback<ClickEvent>(e => Controller.ShowCardsWindow());
     }
   }
 }

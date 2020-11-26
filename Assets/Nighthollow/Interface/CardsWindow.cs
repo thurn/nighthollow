@@ -50,7 +50,7 @@ namespace Nighthollow.Interface
 
     void OnGeometryChange(GeometryChangedEvent evt)
     {
-      this.Q("CloseButton").RegisterCallback<ClickEvent>(e => { Hide(); });
+      this.Q("CloseButton").RegisterCallback<ClickEvent>(e => { Controller.HideCurrentWindow(); });
 
       _collection = this.Q("Collection");
       _mainDeck = this.Q("MainDeck");

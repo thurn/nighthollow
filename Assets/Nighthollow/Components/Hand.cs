@@ -39,6 +39,7 @@ namespace Nighthollow.Components
     [SerializeField] Transform _controlPoint4 = null!;
     [SerializeField] List<Card> _cards = null!;
     [SerializeField] Hand _handOverridePosition = null!;
+    bool _shouldOverrideHandPosition;
     bool _previewMode;
 
 #pragma warning restore 0649
@@ -97,7 +98,13 @@ namespace Nighthollow.Components
       }
     }
 
-    public void SetPreviewMode(bool value, Action? onComplete = null)
+    public void OverrideHandPosition(bool value, Action? onComplete = null)
+    {
+      _shouldOverrideHandPosition = value;
+      AnimateCardsToPosition(onComplete);
+    }
+
+    public void SetCardsToPreviewMode(bool value)
     {
       _previewMode = value;
 
@@ -105,8 +112,6 @@ namespace Nighthollow.Components
       {
         card.PreviewMode = value;
       }
-
-      AnimateCardsToPosition(onComplete);
     }
 
     public void DestroyAllCards()
@@ -130,7 +135,7 @@ namespace Nighthollow.Components
         sequence.Insert(0, t.DOScale(endValue: _finalCardScale, duration: 0.3f));
         sequence.Insert(0,
           t.DOMove(
-            _previewMode
+            _shouldOverrideHandPosition
               ? _handOverridePosition!.CalculateBezierPosition(curvePosition)
               : CalculateBezierPosition(curvePosition), duration: 0.3f));
         sequence.Insert(0,

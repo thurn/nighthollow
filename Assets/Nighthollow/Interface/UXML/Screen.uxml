@@ -18,6 +18,34 @@ limitations under the License.
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
     <ui:Style src="../Styles/styles.uss"/>
     <ui:VisualElement name="Screen" class="full-screen">
+        <nh:AdvisorBar name="AdvisorBar" class="advisor-bar" style="display: none;">
+            <ui:VisualElement class="border-decoration left thurn"/>
+            <ui:VisualElement class="advisor-bar-content">
+                <ui:Button name="CardsButton" class="ocerak portrait portrait-button"/>
+                <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
+                <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
+                <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="border-decoration right"/>
+        </nh:AdvisorBar>
+
+        <nh:UserStatus name="UserStatus" class="user-status-container" style="display: none;">
+            <ui:VisualElement class="user-status">
+                <ui:VisualElement class="status-item">
+                    <ui:VisualElement name="ManaImage"/>
+                    <ui:Label name="ManaText" text="999"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="status-item">
+                    <ui:VisualElement name="LifeImage"/>
+                    <ui:Label name="LifeText" text="99"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="InfluenceContainer">
+            </ui:VisualElement>
+        </nh:UserStatus>
+
+        <nh:BlackoutWindow name="BlackoutWindow" class="screen-background" style="display: none;"/>
+
         <nh:CardsWindow name="CardsWindow" class="window" style="visibility: hidden;">
             <ui:VisualElement class="window-title">
                 <ui:VisualElement class="ocerak portrait small"/>
@@ -38,35 +66,9 @@ limitations under the License.
             </ui:VisualElement>
         </nh:CardsWindow>
 
-        <nh:AdvisorBar name="AdvisorBar" class="advisor-bar" style="display: none;">
-            <ui:VisualElement class="border-decoration left thurn"/>
-            <ui:VisualElement class="advisor-bar-content">
-                <ui:Button name="CardsButton" class="ocerak portrait portrait-button"/>
-                <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
-                <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
-                <ui:Button class="ocerak portrait portrait-button" style="opacity: 0;"/>
-            </ui:VisualElement>
-            <ui:VisualElement class="border-decoration right"/>
-        </nh:AdvisorBar>
+        <ui:VisualElement name="ChoiceButtons" class="choice-buttons" style="display: none;"/>
 
-        <nh:UserStatus name="UserStatus" class="user-status-container" style="display: none;">
-            <ui:VisualElement class="user-status">
-                <ui:VisualElement class="status-item">
-                    <ui:VisualElement name="ManaImage" />
-                    <ui:Label name="ManaText" text="999" />
-                </ui:VisualElement>
-                <ui:VisualElement class="status-item">
-                    <ui:VisualElement name="LifeImage" />
-                    <ui:Label name="LifeText" text="99" />
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:VisualElement name="InfluenceContainer">
-            </ui:VisualElement>
-        </nh:UserStatus>
-
-        <ui:VisualElement name="ChoiceButtons" class="choice-buttons" style="display: none;" />
-
-        <ui:VisualElement name="HelperTextContainer" />
+        <ui:VisualElement name="HelperTextContainer"/>
 
         <nh:ItemTooltip name="ItemTooltip" class="item-tooltip" style="visibility: hidden;">
             <ui:Button name="CloseButton" class="close small"/>

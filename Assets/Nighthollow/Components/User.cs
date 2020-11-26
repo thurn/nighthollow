@@ -65,16 +65,18 @@ namespace Nighthollow.Components
         openingHand.Add(_deck.Draw());
       }
 
-      _hand.SetPreviewMode(true);
+      _hand.OverrideHandPosition(true);
       _hand.DrawCards(openingHand, OnDrewHand);
     }
 
     void OnDrewHand()
     {
+      _hand.SetCardsToPreviewMode(true);
       ButtonUtil.DisplayChoiceButtons(Root.Instance.ScreenController,
         new List<ButtonUtil.Button> {new ButtonUtil.Button("Start Game!", () =>
         {
-          _hand.SetPreviewMode(false, OnStartGame);
+          _hand.SetCardsToPreviewMode(false);
+          _hand.OverrideHandPosition(false, OnStartGame);
         }, large: true)});
       Root.Instance.HelperTextService.OnDrewOpeningHand();
     }

@@ -184,6 +184,18 @@ namespace Nighthollow.World
 
     public void AttackHex()
     {
+      StartCoroutine(LoadGame());
+    }
+
+    IEnumerator<YieldInstruction> LoadGame()
+    {
+      _screen.HideTooltip();
+      _screen.Show(ScreenController.BlackoutWindow);
+      _screen.ShowDialog("you", "Surrender to the night!", hideCloseButton: true);
+      yield return new WaitForSeconds(3.5f);
+      _screen.HideDialog();
+      yield return new WaitForSeconds(0.5f);
+
       Database.Instance.UserData.TutorialState = UserDataService.Tutorial.GameOne;
       SceneManager.LoadScene("Game");
     }

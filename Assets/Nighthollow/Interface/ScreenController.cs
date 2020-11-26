@@ -52,11 +52,13 @@ namespace Nighthollow.Interface
 
     public static ElementKey<AdvisorBar> AdvisorBar = new ElementKey<AdvisorBar>("AdvisorBar");
     public static ElementKey<UserStatus> UserStatus = new ElementKey<UserStatus>("UserStatus");
+    public static ElementKey<BlackoutWindow> BlackoutWindow = new ElementKey<BlackoutWindow>("BlackoutWindow");
 
     readonly List<IElementKey> _keys = new List<IElementKey>
     {
       AdvisorBar,
-      UserStatus
+      UserStatus,
+      BlackoutWindow
     };
 
     readonly Dictionary<string, HideableElement> _elements = new Dictionary<string, HideableElement>();
@@ -90,29 +92,23 @@ namespace Nighthollow.Interface
       }
     }
 
-    public T Get<T>(ElementKey<T> key) where T : HideableElement
+    public T Get<T>(ElementKey<T> key) where T : HideableElement => (T) GetElement(key);
+
+    public HideableElement GetElement(IElementKey key)
     {
       Errors.CheckState(_elements.ContainsKey(key.Name), $"Element not found: {key.Name}");
-      return (T) _elements[key.Name];
+      return _elements[key.Name];
     }
 
-    public void Show(IElementKey key)
-    {
-      Errors.CheckState(_elements.ContainsKey(key.Name), $"Element not found: {key.Name}");
-      _elements[key.Name].Show();
-    }
+    public void Show(IElementKey key) => GetElement(key).Show();
 
-    public void Hide(IElementKey key)
-    {
-      Errors.CheckState(_elements.ContainsKey(key.Name), $"Element not found: {key.Name}");
-      _elements[key.Name].Hide();
-    }
+    public void Hide(IElementKey key) => GetElement(key).Hide();
 
     public bool ConsumesMousePosition(Vector3 mousePosition)
     {
       return _currentWindow != null ||
              _elements.Values
-               .Any(element => element.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition)) ||
+               .Any(element => element.Visible && InterfaceUtils.ContainsScreenPoint(element, mousePosition)) ||
              _dialog.Visible ||
              (_itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition));
     }
@@ -128,7 +124,8 @@ namespace Nighthollow.Interface
       _itemTooltip.Hide();
     }
 
-    public void ShowDialog(string portraitName, string text) => _dialog.Show(portraitName, text);
+    public void ShowDialog(string portraitName, string text, bool hideCloseButton = false) =>
+      _dialog.Show(portraitName, text, hideCloseButton);
 
     public void HideDialog() => _dialog.Hide();
 

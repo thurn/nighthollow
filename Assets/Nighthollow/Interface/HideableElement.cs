@@ -15,30 +15,28 @@
 #nullable enable
 
 using Nighthollow.Utils;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public abstract class HideableElement : VisualElement
+  public abstract class HideableElement<TShowArgument> : VisualElement
   {
     public ScreenController Controller { get; set; } = null!;
     public bool Visible { get; protected set; }
+    bool _initialized;
 
     public new sealed class UxmlTraits : VisualElement.UxmlTraits
     {
     }
 
-    protected HideableElement()
+    public void Show(TShowArgument argument, bool animate = false)
     {
-      if (Application.isPlaying)
+      if (!_initialized)
       {
-        RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
+        Initialize();
+        _initialized = true;
       }
-    }
 
-    public void Show(bool animate = false)
-    {
       Visible = true;
       style.display = new StyleEnum<DisplayStyle>(DisplayStyle.Flex);
 
@@ -47,6 +45,8 @@ namespace Nighthollow.Interface
         style.opacity = new StyleFloat(0f);
         InterfaceUtils.FadeIn(this, 0.3f);
       }
+
+      OnShow(argument);
     }
 
     public void Hide(bool animate = false)
@@ -61,16 +61,31 @@ namespace Nighthollow.Interface
       }
     }
 
-    protected abstract void OnRegister();
+    protected abstract void Initialize();
+
+    protected abstract void OnShow(TShowArgument argument);
 
     protected VisualElement FindElement(string elementName) => Find<VisualElement>(elementName);
 
     protected T Find<T>(string elementName) where T : class => Errors.CheckNotNull(this.Q(elementName) as T);
+  }
 
-    void OnGeometryChange(GeometryChangedEvent evt)
+  public readonly struct NoArguments
+  {
+  }
+
+  public abstract class HideableElement : HideableElement<NoArguments>
+  {
+    public void Show(bool animate = false)
     {
-      OnRegister();
-      UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
+      Show(new NoArguments(), animate);
     }
+
+    protected sealed override void OnShow(NoArguments argument)
+    {
+      OnShow();
+    }
+
+    protected virtual void OnShow() {}
   }
 }

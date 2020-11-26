@@ -45,8 +45,8 @@ limitations under the License.
                     <ui:VisualElement class="school-image earth"/>
                     <ui:Label class="school-text" text="Earth"/>
                 </ui:VisualElement>
-                <ui:VisualElement name="NightButton" class="school-selector" style="margin-right: 128px">
-                    <ui:VisualElement class="school-image night"/>
+                <ui:VisualElement name="ShadowButton" class="school-selector" style="margin-right: 128px">
+                    <ui:VisualElement class="school-image shadow"/>
                     <ui:Label class="school-text" text="Shadow"/>
                 </ui:VisualElement>
             </ui:VisualElement>

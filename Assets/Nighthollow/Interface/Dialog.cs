@@ -20,6 +20,7 @@ namespace Nighthollow.Interface
 {
   public sealed class Dialog : VisualElement
   {
+    Button _closeButton = null!;
     VisualElement _portrait = null!;
     Label _text = null!;
 
@@ -33,7 +34,7 @@ namespace Nighthollow.Interface
     {
     }
 
-    public void Show(string portraitName, string text)
+    public void Show(string portraitName, string text, bool hideCloseButton = false)
     {
       Visible = true;
       style.display = new StyleEnum<DisplayStyle>(DisplayStyle.Flex);
@@ -43,6 +44,7 @@ namespace Nighthollow.Interface
 
       _text.text = text;
       InterfaceUtils.FadeIn(this, 0.3f);
+      _closeButton.style.display = new StyleEnum<DisplayStyle>(hideCloseButton ? DisplayStyle.None : DisplayStyle.Flex);
     }
 
     public void Hide()
@@ -58,8 +60,8 @@ namespace Nighthollow.Interface
     {
       _portrait = InterfaceUtils.FindByName<VisualElement>(this, "Portrait");
       _text = InterfaceUtils.FindByName<Label>(this, "Text");
-      var closeButton = InterfaceUtils.FindByName<Button>(this, "CloseButton");
-      closeButton.RegisterCallback<ClickEvent>(e => { Hide(); });
+      _closeButton = InterfaceUtils.FindByName<Button>(this, "CloseButton");
+      _closeButton.RegisterCallback<ClickEvent>(e => { Hide(); });
     }
   }
 }

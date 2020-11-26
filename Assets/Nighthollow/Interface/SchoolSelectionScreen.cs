@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Generated;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -54,7 +55,7 @@ namespace Nighthollow.Interface
       _buttons[School.Flame] = this.Q("FlameButton");
       _buttons[School.Ice] = this.Q("IceButton");
       _buttons[School.Earth] = this.Q("EarthButton");
-      _buttons[School.Shadow] = this.Q("NightButton");
+      _buttons[School.Shadow] = this.Q("ShadowButton");
       _confirmButton = this.Q("ConfirmButton");
 
       _description.text = InitialDescription;
@@ -90,6 +91,7 @@ namespace Nighthollow.Interface
 
       _confirmButton.RegisterCallback<ClickEvent>(e =>
       {
+        Database.Instance.UserData.TutorialState = UserDataService.Tutorial.Starting;
         Runner.Instance.StartCoroutine(ShowDialog());
       });
 

@@ -31,6 +31,13 @@ namespace Nighthollow.Interface
     {
     }
 
+    protected override void Initialize()
+    {
+      _manaText = Find<Label>("ManaText");
+      _lifeText = Find<Label>("LifeText");
+      _influenceContainer = FindElement("InfluenceContainer");
+    }
+
     public int Mana
     {
       set => _manaText.text = value.ToString();
@@ -67,13 +74,6 @@ namespace Nighthollow.Interface
           }
         }
       }
-    }
-
-    protected override void OnRegister()
-    {
-      _manaText = Find<Label>("ManaText");
-      _lifeText = Find<Label>("LifeText");
-      _influenceContainer = FindElement("InfluenceContainer");
     }
   }
 }
