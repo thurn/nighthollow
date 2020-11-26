@@ -328,7 +328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _worldMap: {fileID: 1143359796}
   _screenController: {fileID: 178308609}
-  _tutorial: {fileID: 178308608}
+  _worldTutorial: {fileID: 178308608}
 --- !u!1 &817099573
 GameObject:
   m_ObjectHideFlags: 0

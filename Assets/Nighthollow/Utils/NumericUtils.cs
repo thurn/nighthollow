@@ -14,19 +14,12 @@
 
 #nullable enable
 
-using UnityEngine.UIElements;
+using System;
 
-namespace Nighthollow.Interface
+namespace Nighthollow.Utils
 {
-  public sealed class AdvisorBar : HideableElement
+  public class NumericUtils
   {
-    public new sealed class UxmlFactory : UxmlFactory<AdvisorBar, UxmlTraits>
-    {
-    }
-
-    protected override void OnRegister()
-    {
-      this.Q("CardsButton").RegisterCallback<ClickEvent>(e => Controller.ShowCardsWindow());
-    }
+    public static int Clamp(int value, int low, int high) => Math.Max(low, Math.Min(value, high));
   }
 }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
@@ -19,9 +21,7 @@ using Nighthollow.Generated;
 using Nighthollow.Interface;
 using Nighthollow.Services;
 using Nighthollow.Utils;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 // ReSharper disable IteratorNeverReturns
 
@@ -29,25 +29,30 @@ namespace Nighthollow.Components
 {
   public sealed class User : MonoBehaviour
   {
-#pragma warning disable 0649
-    [SerializeField] Hand _hand;
+    [SerializeField] Hand _hand = null!;
     public Hand Hand => _hand;
 
-    [SerializeField] Deck _deck;
+    [SerializeField] Deck _deck = null!;
     public Deck Deck => _deck;
 
-    [SerializeField] TextMeshProUGUI _lifeText;
-    [SerializeField] TextMeshProUGUI _manaText;
-    [SerializeField] RectTransform _influenceRow;
-
-    [SerializeField] List<Image> _influenceImages;
     [SerializeField] int _life;
+    public int Life
+    {
+      get => _life;
+      private set => _life = NumericUtils.Clamp(value, 0, 99);
+    }
+
     [SerializeField] int _mana;
-#pragma warning restore 0649
+
+    public int Mana
+    {
+      get => _mana;
+      private set => _mana = NumericUtils.Clamp(value, 0, 999);
+    }
+
+    UserStatus? _statusDisplay;
 
     public UserDataService Data => Database.Instance.UserData;
-    public int Mana => _mana;
-    public int Life => _life;
 
     public void DrawOpeningHand()
     {
@@ -60,38 +65,44 @@ namespace Nighthollow.Components
         openingHand.Add(_deck.Draw());
       }
 
-      _hand.PreviewMode = true;
+      _hand.SetPreviewMode(true);
       _hand.DrawCards(openingHand, OnDrewHand);
     }
 
     void OnDrewHand()
     {
       ButtonUtil.DisplayChoiceButtons(Root.Instance.ScreenController,
-        new List<ButtonUtil.Button> {new ButtonUtil.Button("Start Game!", OnStartGame, large: true)});
+        new List<ButtonUtil.Button> {new ButtonUtil.Button("Start Game!", () =>
+        {
+          _hand.SetPreviewMode(false, OnStartGame);
+        }, large: true)});
       Root.Instance.HelperTextService.OnDrewOpeningHand();
     }
 
     public void OnStartGame()
     {
       gameObject.SetActive(true);
+      Root.Instance.HelperTextService.OnGameStarted();
       StartCoroutine(GainMana());
       StartCoroutine(DrawCards());
 
-      _hand.PreviewMode = false;
-      _life = Errors.CheckPositive(Data.GetInt(Stat.StartingLife));
-      _mana = Data.GetInt(Stat.StartingMana);
+      _statusDisplay = Root.Instance.ScreenController.Get(ScreenController.UserStatus);
+      _statusDisplay.Show(animate: true);
+
+      Life = Errors.CheckPositive(Data.GetInt(Stat.StartingLife));
+      Mana = Data.GetInt(Stat.StartingMana);
     }
 
     public void SpendMana(int amount)
     {
-      _mana -= amount;
+      Mana -= amount;
     }
 
     public void LoseLife(int amount)
     {
       Errors.CheckArgument(amount >= 0, "Cannot lose a negative amount of life");
-      _life -= amount;
-      if (_life <= 0)
+      Life -= amount;
+      if (Life == 0)
       {
         Debug.Log("Game Over");
       }
@@ -106,7 +117,7 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(Data.GetDurationSeconds(Stat.ManaGainInterval));
-        _mana += Mathf.RoundToInt(Data.GetInt(Stat.ManaGain));
+        Mana += Data.GetInt(Stat.ManaGain);
       }
     }
 
@@ -122,37 +133,11 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      _lifeText.text = _life.ToString();
-      _manaText.text = _mana.ToString();
-
-      var index = 0;
-      foreach (var pair in Data.Stats.Get(Stat.Influence).Values)
+      if (_statusDisplay != null)
       {
-        for (var i = 0; i < pair.Value; ++i)
-        {
-          Image image;
-          if (index < _influenceImages.Count)
-          {
-            image = _influenceImages[index];
-          }
-          else
-          {
-            image = Root.Instance.Prefabs.CreateInfluence();
-            _influenceImages.Add(image);
-          }
-
-          image.gameObject.SetActive(true);
-          image.sprite = Root.Instance.Prefabs.SpriteForInfluenceType(pair.Key);
-          image.transform.SetParent(_influenceRow);
-          image.transform.localScale = Vector3.one;
-          image.transform.localPosition = new Vector3(i * 100, 0, 0);
-          index++;
-        }
-      }
-
-      while (index < _influenceImages.Count)
-      {
-        _influenceImages[index++].gameObject.SetActive(false);
+        _statusDisplay.Life = Life;
+        _statusDisplay.Mana = Mana;
+        _statusDisplay.Influence = Data.Stats.Get(Stat.Influence).Values;
       }
     }
   }

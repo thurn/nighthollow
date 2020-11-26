@@ -49,6 +49,21 @@ limitations under the License.
             <ui:VisualElement class="border-decoration right"/>
         </nh:AdvisorBar>
 
+        <nh:UserStatus name="UserStatus" class="user-status-container" style="display: none;">
+            <ui:VisualElement class="user-status">
+                <ui:VisualElement class="status-item">
+                    <ui:VisualElement name="ManaImage" />
+                    <ui:Label name="ManaText" text="999" />
+                </ui:VisualElement>
+                <ui:VisualElement class="status-item">
+                    <ui:VisualElement name="LifeImage" />
+                    <ui:Label name="LifeText" text="99" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="InfluenceContainer">
+            </ui:VisualElement>
+        </nh:UserStatus>
+
         <ui:VisualElement name="ChoiceButtons" class="choice-buttons" style="display: none;" />
 
         <ui:VisualElement name="HelperTextContainer" />

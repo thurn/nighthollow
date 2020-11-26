@@ -27,15 +27,13 @@ namespace Nighthollow.Components
   {
 #pragma warning disable 0649
 
-    [Header("Config")]
-    [SerializeField] bool _debugMode;
+    [Header("Config")] [SerializeField] bool _debugMode;
     [SerializeField] Transform _deckPosition = null!;
     [SerializeField] float _initialCardScale;
     [SerializeField] float _finalCardScale;
     [SerializeField] int _zRotationMultiplier;
 
-    [Header("State")]
-    [SerializeField] Transform _controlPoint1 = null!;
+    [Header("State")] [SerializeField] Transform _controlPoint1 = null!;
     [SerializeField] Transform _controlPoint2 = null!;
     [SerializeField] Transform _controlPoint3 = null!;
     [SerializeField] Transform _controlPoint4 = null!;
@@ -99,19 +97,16 @@ namespace Nighthollow.Components
       }
     }
 
-    public bool PreviewMode
+    public void SetPreviewMode(bool value, Action? onComplete = null)
     {
-      set
+      _previewMode = value;
+
+      foreach (var card in _cards)
       {
-        _previewMode = value;
-
-        foreach (var card in _cards)
-        {
-          card.PreviewMode = value;
-        }
-
-        AnimateCardsToPosition();
+        card.PreviewMode = value;
       }
+
+      AnimateCardsToPosition(onComplete);
     }
 
     public void DestroyAllCards()

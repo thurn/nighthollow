@@ -23,6 +23,10 @@ namespace Nighthollow.Services
 {
   public sealed class HelperTextService : MonoBehaviour
   {
+    [SerializeField] bool _toggleDebugMode;
+    [SerializeField] string _debugText = null!;
+    [SerializeField] Vector2 _debugPosition;
+    [SerializeField] ArrowDirection _debugArrowDirection;
     bool _active;
 
     public enum ArrowDirection
@@ -40,6 +44,13 @@ namespace Nighthollow.Services
         InterfaceUtils.FindByName<VisualElement>(Root.Instance.ScreenController.Screen, "HelperTextContainer").Clear();
         _active = false;
       }
+
+      if (_toggleDebugMode)
+      {
+        InterfaceUtils.FindByName<VisualElement>(Root.Instance.ScreenController.Screen, "HelperTextContainer").Clear();
+        ShowHelperText(_debugPosition, _debugArrowDirection, _debugText);
+        _toggleDebugMode = false;
+      }
     }
 
     public void OnDrewOpeningHand()
@@ -55,6 +66,22 @@ namespace Nighthollow.Services
           new Vector2(1400, 400),
           ArrowDirection.Left,
           "To play a card, you must pay its Mana cost and have the required amount of Influence.");
+      }
+    }
+
+    public void OnGameStarted()
+    {
+      if (Database.Instance.UserData.TutorialState == UserDataService.Tutorial.GameOne)
+      {
+        ShowHelperText(
+          new Vector2(5, 175),
+          ArrowDirection.Top,
+          "Your current Mana, Life, and Influence are shown here.");
+
+        ShowHelperText(
+          new Vector2(940, 710),
+          ArrowDirection.Bottom,
+          "You can play an Adept to add Influence and increase your Mana generation");
       }
     }
 

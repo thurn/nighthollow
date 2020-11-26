@@ -14,20 +14,53 @@
 
 #nullable enable
 
+using System.Collections.Generic;
+using System.Linq;
+using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
+  public interface IElementKey
+  {
+    public string Name { get; }
+
+    HideableElement FindByNameIn(VisualElement element);
+  }
+
+  public readonly struct ElementKey<T> : IElementKey where T : HideableElement
+  {
+    public string Name { get; }
+
+    public ElementKey(string name)
+    {
+      Name = name;
+    }
+
+    public HideableElement FindByNameIn(VisualElement element) => InterfaceUtils.FindByName<T>(element, Name);
+  }
+
   public sealed class ScreenController : MonoBehaviour
   {
     [SerializeField] UIDocument _document = null!;
+
     public UIDocument Document => _document;
 
     VisualElement _screen = null!;
     public VisualElement Screen => _screen;
 
-    AdvisorBar _advisorBar = null!;
+    public static ElementKey<AdvisorBar> AdvisorBar = new ElementKey<AdvisorBar>("AdvisorBar");
+    public static ElementKey<UserStatus> UserStatus = new ElementKey<UserStatus>("UserStatus");
+
+    readonly List<IElementKey> _keys = new List<IElementKey>
+    {
+      AdvisorBar,
+      UserStatus
+    };
+
+    readonly Dictionary<string, HideableElement> _elements = new Dictionary<string, HideableElement>();
+
     CardsWindow _cardsWindow = null!;
     AbstractWindow? _currentWindow;
     ItemTooltip _itemTooltip = null!;
@@ -37,8 +70,13 @@ namespace Nighthollow.Interface
     {
       _screen = InterfaceUtils.FindByName<VisualElement>(_document.rootVisualElement, "Screen");
 
-      _advisorBar = InterfaceUtils.FindByName<AdvisorBar>(_screen, "AdvisorBar");
-      _advisorBar.Controller = this;
+      foreach (var key in _keys)
+      {
+        var element = key.FindByNameIn(_screen);
+        element.Controller = this;
+        _elements[key.Name] = element;
+      }
+
       _cardsWindow = InterfaceUtils.FindByName<CardsWindow>(_screen, "CardsWindow");
       _cardsWindow.Controller = this;
       _itemTooltip = InterfaceUtils.FindByName<ItemTooltip>(_screen, "ItemTooltip");
@@ -48,15 +86,36 @@ namespace Nighthollow.Interface
 
       if (showAdvisorBar)
       {
-        _advisorBar.Show();
+        Show(AdvisorBar);
       }
     }
 
-    public bool ConsumesMousePosition(Vector3 mousePosition) =>
-      _currentWindow != null ||
-      (_advisorBar.Visible && InterfaceUtils.ContainsScreenPoint(_advisorBar, mousePosition)) ||
-      _dialog.Visible ||
-      (_itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition));
+    public T Get<T>(ElementKey<T> key) where T : HideableElement
+    {
+      Errors.CheckState(_elements.ContainsKey(key.Name), $"Element not found: {key.Name}");
+      return (T) _elements[key.Name];
+    }
+
+    public void Show(IElementKey key)
+    {
+      Errors.CheckState(_elements.ContainsKey(key.Name), $"Element not found: {key.Name}");
+      _elements[key.Name].Show();
+    }
+
+    public void Hide(IElementKey key)
+    {
+      Errors.CheckState(_elements.ContainsKey(key.Name), $"Element not found: {key.Name}");
+      _elements[key.Name].Hide();
+    }
+
+    public bool ConsumesMousePosition(Vector3 mousePosition)
+    {
+      return _currentWindow != null ||
+             _elements.Values
+               .Any(element => element.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition)) ||
+             _dialog.Visible ||
+             (_itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition));
+    }
 
     public void ShowTooltip(TooltipBuilder builder, Vector2 anchor)
     {

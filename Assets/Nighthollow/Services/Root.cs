@@ -83,7 +83,6 @@ namespace Nighthollow.Services
 
     void OnEnable()
     {
-      DontDestroyOnLoad(this);
       Errors.CheckNotNull(_mainCamera);
       Errors.CheckNotNull(_mainCanvas);
       Errors.CheckNotNull(_prefabs);
