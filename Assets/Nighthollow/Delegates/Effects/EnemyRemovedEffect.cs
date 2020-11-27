@@ -22,7 +22,7 @@ namespace Nighthollow.Delegates.Effects
   {
     public override void Execute()
     {
-      Root.Instance.Enemy.OnEnemyCreatureRemoved();
+      Root.Instance.Enemy.OnEnemyCreatureKilled();
     }
   }
 }

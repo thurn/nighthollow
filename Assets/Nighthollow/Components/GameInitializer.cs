@@ -25,9 +25,9 @@ namespace Nighthollow.Components
     void Start()
     {
       GetComponent<ScreenController>().Initialize(showAdvisorBar: false);
-      Database.OnReady(_ =>
+      Database.OnReady(data =>
       {
-        Root.Instance.User.DrawOpeningHand();
+        Root.Instance.User.DrawOpeningHand(data);
       });
     }
   }

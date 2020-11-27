@@ -54,9 +54,6 @@ namespace Nighthollow.Services
     [SerializeField] DamageTextService _damageTextService;
     public DamageTextService DamageTextService => _damageTextService;
 
-    [SerializeField] EnemyDataService _enemyDataService;
-    public EnemyDataService EnemyDataService => _enemyDataService;
-
     [SerializeField] HelperTextService _helperTextService;
     public HelperTextService HelperTextService => _helperTextService;
 #pragma warning restore 0649
@@ -64,7 +61,7 @@ namespace Nighthollow.Services
     public StatTable StatsForPlayer(PlayerName player) => player switch
     {
       PlayerName.User => User.Data.Stats,
-      PlayerName.Enemy => Enemy.Data.Stats,
+      PlayerName.Enemy => Enemy.Stats,
       _ => throw Errors.UnknownEnumValue(player)
     };
 
@@ -92,7 +89,6 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_user);
       Errors.CheckNotNull(_enemy);
       Errors.CheckNotNull(_damageTextService);
-      Errors.CheckNotNull(_enemyDataService);
       Errors.CheckNotNull(_helperTextService);
 
       _instance = this;

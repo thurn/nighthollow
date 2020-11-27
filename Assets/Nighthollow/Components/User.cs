@@ -44,6 +44,9 @@ namespace Nighthollow.Components
 
     [SerializeField] int _mana;
 
+    UserDataService _data = null!;
+    public UserDataService Data => _data;
+
     public int Mana
     {
       get => _mana;
@@ -52,15 +55,14 @@ namespace Nighthollow.Components
 
     UserStatus? _statusDisplay;
 
-    public UserDataService Data => Database.Instance.UserData;
-
-    public void DrawOpeningHand()
+    public void DrawOpeningHand(DataService data)
     {
-      var builtDeck = Data.Deck.Select(c => CreatureUtil.Build(Data.Stats, c)).ToList();
-      _deck.OnStartGame(builtDeck, orderedDraws: Data.TutorialState != UserDataService.Tutorial.Completed);
+      _data = data.UserData;
+      var builtDeck = _data.Deck.Select(c => CreatureUtil.Build(_data.Stats, c)).ToList();
+      _deck.OnStartGame(builtDeck, orderedDraws: _data.TutorialState != UserDataService.Tutorial.Completed);
 
       var openingHand = new List<CreatureData>();
-      for (var i = 0; i < Errors.CheckPositive(Data.GetInt(Stat.StartingHandSize)); ++i)
+      for (var i = 0; i < Errors.CheckPositive(data.UserData.GetInt(Stat.StartingHandSize)); ++i)
       {
         openingHand.Add(_deck.Draw());
       }
@@ -72,7 +74,7 @@ namespace Nighthollow.Components
     void OnDrewHand()
     {
       _hand.SetCardsToPreviewMode(true);
-      ButtonUtil.DisplayChoiceButtons(Root.Instance.ScreenController,
+      ButtonUtil.DisplayMainButtons(Root.Instance.ScreenController,
         new List<ButtonUtil.Button> {new ButtonUtil.Button("Start Game!", () =>
         {
           _hand.SetCardsToPreviewMode(false);
@@ -84,6 +86,7 @@ namespace Nighthollow.Components
     public void OnStartGame()
     {
       gameObject.SetActive(true);
+      Root.Instance.Enemy.OnGameStarted();
       Root.Instance.HelperTextService.OnGameStarted();
       StartCoroutine(GainMana());
       StartCoroutine(DrawCards());
@@ -91,8 +94,8 @@ namespace Nighthollow.Components
       _statusDisplay = Root.Instance.ScreenController.Get(ScreenController.UserStatus);
       _statusDisplay.Show(animate: true);
 
-      Life = Errors.CheckPositive(Data.GetInt(Stat.StartingLife));
-      Mana = Data.GetInt(Stat.StartingMana);
+      Life = Errors.CheckPositive(_data.GetInt(Stat.StartingLife));
+      Mana = _data.GetInt(Stat.StartingMana);
     }
 
     public void SpendMana(int amount)
@@ -108,18 +111,14 @@ namespace Nighthollow.Components
       {
         Debug.Log("Game Over");
       }
-      else
-      {
-        Root.Instance.Enemy.OnEnemyCreatureRemoved();
-      }
     }
 
     IEnumerator<YieldInstruction> GainMana()
     {
       while (true)
       {
-        yield return new WaitForSeconds(Data.GetDurationSeconds(Stat.ManaGainInterval));
-        Mana += Data.GetInt(Stat.ManaGain);
+        yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.ManaGainInterval));
+        Mana += _data.GetInt(Stat.ManaGain);
       }
     }
 
@@ -127,8 +126,8 @@ namespace Nighthollow.Components
     {
       while (true)
       {
-        Errors.CheckArgument(Data.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
-        yield return new WaitForSeconds(Data.GetDurationSeconds(Stat.CardDrawInterval));
+        Errors.CheckArgument(_data.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
+        yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.CardDrawInterval));
         _hand.DrawCards(new List<CreatureData> {_deck.Draw()});
       }
     }
@@ -139,7 +138,7 @@ namespace Nighthollow.Components
       {
         _statusDisplay.Life = Life;
         _statusDisplay.Mana = Mana;
-        _statusDisplay.Influence = Data.Stats.Get(Stat.Influence).Values;
+        _statusDisplay.Influence = _data.Stats.Get(Stat.Influence).Values;
       }
     }
   }

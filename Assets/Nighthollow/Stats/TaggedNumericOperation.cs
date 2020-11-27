@@ -54,6 +54,7 @@ namespace Nighthollow.Stats
   public sealed class TaggedNumericOperation<TTag, TValue> : IOperation
     where TTag : struct, Enum where TValue : struct
   {
+    public ISet<TTag> Tags { get; }
     public TaggedValues<TTag, TValue>? AddTo { get; }
     public TaggedValues<TTag, PercentageValue>? IncreaseBy { get; }
     public TaggedValues<TTag, TValue>? Overwrite { get; }
@@ -66,6 +67,13 @@ namespace Nighthollow.Stats
       AddTo = addTo;
       IncreaseBy = increaseBy;
       Overwrite = overwrite;
+      var tags = new HashSet<TTag>();
+
+      tags.UnionWith(addTo?.Values.Keys ?? Enumerable.Empty<TTag>());
+      tags.UnionWith(increaseBy?.Values.Keys ?? Enumerable.Empty<TTag>());
+      tags.UnionWith(overwrite?.Values.Keys ?? Enumerable.Empty<TTag>());
+
+      Tags = tags;
     }
 
     public NumericOperation<TValue>? ToNumericOperation(TTag tag)
@@ -92,7 +100,7 @@ namespace Nighthollow.Stats
     {
       var result = new StringBuilder();
       var appended = false;
-      foreach (var tag in AllTags())
+      foreach (var tag in Tags)
       {
         if (appended)
         {
@@ -108,12 +116,6 @@ namespace Nighthollow.Stats
       }
       return result.ToString();
     }
-
-    IEnumerable<TTag> AllTags() => Enumerable.Empty<TTag>()
-      .Concat(AddTo?.Values.Keys ?? Enumerable.Empty<TTag>())
-      .Concat(IncreaseBy?.Values.Keys ?? Enumerable.Empty<TTag>())
-      .Concat(Overwrite?.Values.Keys ?? Enumerable.Empty<TTag>())
-      .Distinct();
 
     public SerializedOperation Serialize()
     {

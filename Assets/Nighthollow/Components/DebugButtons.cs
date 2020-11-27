@@ -37,8 +37,7 @@ namespace Nighthollow.Components
 
     public void StartGame()
     {
-      Root.Instance.User.OnStartGame();
-      Root.Instance.EnemyDataService.StartGame();
+      Debug.Log("Start Game");
     }
 
     public void ResetGame()

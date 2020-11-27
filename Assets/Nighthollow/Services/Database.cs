@@ -16,7 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Nighthollow.Utils;
+using SimpleJSON;
 using UnityEngine;
 
 namespace Nighthollow.Services
@@ -26,17 +28,26 @@ namespace Nighthollow.Services
     public GameDataService GameData { get; }
     public AssetService Assets { get; }
     public UserDataService UserData { get; }
+    public GameConfig CurrentGameConfig { get; }
 
-    public DataService(GameDataService gameData, AssetService assets, UserDataService userData)
+    public DataService(
+      GameDataService gameData,
+      AssetService assets,
+      UserDataService userData,
+      GameConfig currentGameConfig)
     {
       GameData = gameData;
       Assets = assets;
       UserData = userData;
+      CurrentGameConfig = currentGameConfig;
     }
   }
 
   public sealed class Database : MonoBehaviour
   {
+    const string UserDataKey = "userData";
+    const string CurrentGameConfigKey = "currentGameConfig";
+
     static DataService? _instance;
     static readonly List<Action<DataService>> ReadyList = new List<Action<DataService>>();
 
@@ -70,9 +81,25 @@ namespace Nighthollow.Services
         {
           AssetService.Initialize(this, gameDataService, assetService =>
           {
-            UserDataService.Initialize(this, gameDataService, userDataService =>
+            LoadDatabase(json =>
             {
-              _instance = new DataService(gameDataService, assetService, userDataService);
+              if (json == null)
+              {
+                _instance = new DataService(
+                  gameDataService,
+                  assetService,
+                  new UserDataService(this, gameDataService),
+                  new GameConfig(gameDataService));
+                Save();
+              }
+              else
+              {
+                _instance = new DataService(
+                  gameDataService,
+                  assetService,
+                  new UserDataService(this, gameDataService, json[UserDataKey]),
+                  new GameConfig(gameDataService, json[CurrentGameConfigKey]));
+              }
 
               foreach (var onReady in ReadyList)
               {
@@ -84,6 +111,34 @@ namespace Nighthollow.Services
           });
         });
       }
+    }
+
+    string DataPath => Path.Combine(Application.persistentDataPath, "data.json");
+
+    void LoadDatabase(Action<JSONNode?> onComplete)
+    {
+      onComplete(File.Exists(DataPath) ? JSON.Parse(File.ReadAllText(DataPath)) : null);
+    }
+
+    public void Save()
+    {
+      Debug.Log($"Saving to {DataPath}");
+      if (_instance == null)
+      {
+        throw new InvalidOperationException("Attempted to save database before initialization.");
+      }
+
+      var result = new JSONObject
+      {
+        [UserDataKey] = _instance.UserData.Serialize(),
+        [CurrentGameConfigKey] = _instance.CurrentGameConfig.Serialize()
+      };
+
+      File.WriteAllText(DataPath, result.ToString());
+
+#pragma warning disable 618
+      Application.ExternalEval("_JS_FileSystem_Sync();");
+#pragma warning restore 618
     }
   }
 }

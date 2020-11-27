@@ -54,7 +54,7 @@ namespace Nighthollow.Interface
       return result;
     }
 
-    public static void DisplayChoiceButtons(ScreenController controller, IEnumerable<Button> buttons)
+    public static void DisplayMainButtons(ScreenController controller, IEnumerable<Button> buttons)
     {
       var parent = controller.Screen.Q("ChoiceButtons");
       parent.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.Flex);

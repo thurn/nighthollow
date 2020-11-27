@@ -55,7 +55,7 @@ namespace Nighthollow.Stats
         result = overwrite.Values.ToDictionary(k => k.Key, v => v.Value);
       }
 
-      foreach (var tag in AllTags())
+      foreach (var tag in AllTags().Where(tag => operations.Any(o => o.Tags.Contains(tag))))
       {
         result[tag] = ComputeTagged(operations.Select(op => op.ToNumericOperation(tag)).WhereNotNull().ToList());
       }

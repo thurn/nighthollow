@@ -150,7 +150,7 @@ namespace Nighthollow.Generated
   public enum Rarity
   {
     Unknown = 0,
-    Common = 1
+    Common = 1,
   }
 
 }

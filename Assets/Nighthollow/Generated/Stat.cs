@@ -49,7 +49,7 @@ namespace Nighthollow.Generated
     ManaGain = 27,
     CardDrawInterval = 28,
     EnemySpawnDelay = 29,
-    TotalEnemiesToSpawn = 30,
+    KillsRequiredForVictory = 30,
     IsManaCreature = 32,
     GainedDamageOnKill = 33,
     MaxMeleeAreaTargets = 34,
@@ -119,7 +119,7 @@ namespace Nighthollow.Generated
     public static readonly IntStat ManaGain = new IntStat(StatId.ManaGain);
     public static readonly DurationStat CardDrawInterval = new DurationStat(StatId.CardDrawInterval);
     public static readonly DurationStat EnemySpawnDelay = new DurationStat(StatId.EnemySpawnDelay);
-    public static readonly IntStat TotalEnemiesToSpawn = new IntStat(StatId.TotalEnemiesToSpawn);
+    public static readonly IntStat KillsRequiredForVictory = new IntStat(StatId.KillsRequiredForVictory);
     public static readonly BoolStat IsManaCreature = new BoolStat(StatId.IsManaCreature);
     public static readonly DamageTypeIntsStat GainedDamageOnKill = new DamageTypeIntsStat(StatId.GainedDamageOnKill);
     public static readonly IntStat MaxMeleeAreaTargets = new IntStat(StatId.MaxMeleeAreaTargets);
@@ -190,7 +190,7 @@ namespace Nighthollow.Generated
         case 27: return ManaGain;
         case 28: return CardDrawInterval;
         case 29: return EnemySpawnDelay;
-        case 30: return TotalEnemiesToSpawn;
+        case 30: return KillsRequiredForVictory;
         case 32: return IsManaCreature;
         case 33: return GainedDamageOnKill;
         case 34: return MaxMeleeAreaTargets;

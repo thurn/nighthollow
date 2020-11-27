@@ -14,21 +14,19 @@
 
 #nullable enable
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using SimpleJSON;
-using UnityEngine;
 
 namespace Nighthollow.Services
 {
   public sealed class UserDataService : StatEntity
   {
+    readonly Database _database;
     public IReadOnlyList<CreatureItemData> Deck { get; }
     public IReadOnlyList<CreatureItemData> Collection { get; }
     public override StatTable Stats { get; }
@@ -41,7 +39,7 @@ namespace Nighthollow.Services
       set
       {
         _tutorialState = value;
-        Save();
+        _database.Save();
       }
     }
 
@@ -55,52 +53,34 @@ namespace Nighthollow.Services
       Completed = 5
     }
 
-    public static void Initialize(MonoBehaviour _, GameDataService gameDataService, Action<UserDataService> action)
+    public UserDataService(Database database, GameDataService gameDataService, JSONNode? json = null)
     {
-      action(new UserDataService(gameDataService));
-    }
-
-    string DataPath => Path.Combine(Application.persistentDataPath, "data.json");
-
-    UserDataService(GameDataService gameDataService)
-    {
-      if (File.Exists(DataPath))
-      {
-        Debug.Log($"Loading saved data from {DataPath}");
-        var parsed = JSON.Parse(File.ReadAllText(DataPath));
-        Deck = parsed["deck"].FromJsonArray()
-          .Select(c => CreatureItemData.Deserialize(gameDataService, c)).ToList();
-        Collection = parsed["collection"].FromJsonArray()
-          .Select(c => CreatureItemData.Deserialize(gameDataService, c)).ToList();
-        Stats = StatTable.Deserialize(parsed["user"], StatTable.Defaults);
-        TutorialState = (Tutorial) parsed["tutorial"].AsInt;
-      }
-      else
+      _database = database;
+      if (json == null)
       {
         Deck = gameDataService.GetStaticCardList(StaticCardList.StartingDeck).ToList();
         Collection = new List<CreatureItemData>();
         Stats = new StatTable(StatTable.Defaults);
-        TutorialState = Tutorial.Starting;
-        Debug.Log($"Save file not found, saving new player tutorial data to {DataPath}");
-        Save();
-
-#pragma warning disable 618
-        Application.ExternalEval("_JS_FileSystem_Sync();");
-#pragma warning restore 618
+        _tutorialState = Tutorial.Starting;
+      }
+      else
+      {
+        Deck = json["deck"].FromJsonArray()
+          .Select(c => CreatureItemData.Deserialize(gameDataService, c)).ToList();
+        Collection = json["collection"].FromJsonArray()
+          .Select(c => CreatureItemData.Deserialize(gameDataService, c)).ToList();
+        Stats = StatTable.Deserialize(json["user"], StatTable.Defaults);
+        _tutorialState = (Tutorial) json["tutorial"].AsInt;
       }
     }
 
-    void Save()
-    {
-      var result = new JSONObject
+    public JSONNode Serialize() =>
+      new JSONObject
       {
         ["deck"] = Deck.Select(c => c.Serialize()).AsJsonArray(),
         ["collection"] = Collection.Select(c => c.Serialize()).AsJsonArray(),
         ["user"] = Stats.Serialize(),
         ["tutorial"] = new JSONNumber((int) TutorialState)
       };
-
-      File.WriteAllText(DataPath, result.ToString());
-    }
   }
 }

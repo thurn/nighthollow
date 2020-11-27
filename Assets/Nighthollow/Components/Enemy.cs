@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using DataStructures.RandomSelector;
 using Nighthollow.Data;
 using Nighthollow.Generated;
@@ -25,23 +26,27 @@ namespace Nighthollow.Components
 {
   public sealed class Enemy : MonoBehaviour
   {
-    EnemyData _data;
-    public EnemyData Data => _data;
+    StatTable _stats = null!;
+    public StatTable Stats => _stats;
 
-    [SerializeField] int _spawnCount;
+    List<CreatureData> _enemies = null!;
+
     [SerializeField] int _deathCount;
 
-    public void OnStartGame(EnemyData data)
+    public void OnGameStarted()
     {
-      _data = data.Clone(StatTable.Defaults);
+      var config = Database.Instance.CurrentGameConfig;
+      _stats = config.EnemyStats;
+      _enemies = config.Enemies.Select(c => CreatureUtil.Build(_stats, c)).ToList();
+
       StartCoroutine(SpawnAsync());
     }
 
-    /// <summary>Called when an enemy is killed or reaches the victory line.</summary>
-    public void OnEnemyCreatureRemoved()
+    /// <summary>Called when an enemy is killed (not despawned).</summary>
+    public void OnEnemyCreatureKilled()
     {
       _deathCount++;
-      if (_deathCount >= _data.GetInt(Stat.TotalEnemiesToSpawn))
+      if (_deathCount >= _stats.Get(Stat.KillsRequiredForVictory))
       {
         Debug.Log("Victory!");
       }
@@ -49,37 +54,30 @@ namespace Nighthollow.Components
 
     IEnumerator<YieldInstruction> SpawnAsync()
     {
-      var spawnDelay = _data.GetDurationSeconds(Stat.EnemySpawnDelay);
+      var spawnDelay = _stats.Get(Stat.EnemySpawnDelay).AsSeconds();
       Errors.CheckArgument(spawnDelay > 0.1f, "Spawn delay cannot be 0");
 
-      Root.Instance.CreatureService.CreateMovingCreature(
-        RandomEnemy(),
-        RandomFile(),
-        Constants.EnemyCreatureStartingX);
-      _spawnCount = 1;
-
-      while (_spawnCount < _data.GetInt(Stat.TotalEnemiesToSpawn))
+      while (true)
       {
         yield return new WaitForSeconds(spawnDelay);
         Root.Instance.CreatureService.CreateMovingCreature(
           RandomEnemy(),
           RandomFile(),
           Constants.EnemyCreatureStartingX);
-        _spawnCount++;
       }
     }
 
     CreatureData RandomEnemy()
     {
       var selector = new DynamicRandomSelector<CreatureData>();
-      foreach (var enemy in _data.Enemies)
+      foreach (var enemy in _enemies)
       {
         selector.Add(enemy, 1.0f);
       }
 
       selector.Build();
 
-      return selector.SelectRandomItem().Clone(Data.Stats);
+      return selector.SelectRandomItem().Clone(_stats);
     }
 
     FileValue RandomFile()

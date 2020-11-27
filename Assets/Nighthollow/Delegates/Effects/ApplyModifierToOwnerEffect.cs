@@ -42,7 +42,7 @@ namespace Nighthollow.Delegates.Effects
           Root.Instance.User.Data.Stats.InsertModifier(Modifier);
           break;
         case PlayerName.Enemy:
-          Root.Instance.Enemy.Data.Stats.InsertModifier(Modifier);
+          Root.Instance.Enemy.Stats.InsertModifier(Modifier);
           break;
         case PlayerName.Unknown:
         default:
