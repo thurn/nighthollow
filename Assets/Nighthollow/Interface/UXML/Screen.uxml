@@ -66,6 +66,10 @@ limitations under the License.
             </ui:VisualElement>
         </nh:CardsWindow>
 
+        <nh:GameOverMessage name="GameOverMessage" class="game-over-message" style="display: none">
+            <ui:Label name="GameOverText" text="Victory!" />
+        </nh:GameOverMessage>
+
         <ui:VisualElement name="ChoiceButtons" class="choice-buttons" style="display: none;"/>
 
         <ui:VisualElement name="HelperTextContainer"/>

@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class UserStatus : HideableElement
+  public sealed class UserStatus : DefaultHideableElement
   {
     Label _manaText = null!;
     Label _lifeText = null!;

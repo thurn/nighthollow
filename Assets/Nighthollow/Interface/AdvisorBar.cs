@@ -18,7 +18,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class AdvisorBar : HideableElement
+  public sealed class AdvisorBar : DefaultHideableElement
   {
     public new sealed class UxmlFactory : UxmlFactory<AdvisorBar, UxmlTraits>
     {

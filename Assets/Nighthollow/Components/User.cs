@@ -109,7 +109,8 @@ namespace Nighthollow.Components
       Life -= amount;
       if (Life == 0)
       {
-        Debug.Log("Game Over");
+        Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
+          .Show(new GameOverMessage.Args("Game Over", "World"));
       }
     }
 

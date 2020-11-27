@@ -15,7 +15,6 @@
 #nullable enable
 
 using System.Collections.Generic;
-using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -190,7 +189,7 @@ namespace Nighthollow.World
     IEnumerator<YieldInstruction> LoadGame()
     {
       _screen.HideTooltip();
-      _screen.Show(ScreenController.BlackoutWindow);
+      _screen.Get(ScreenController.BlackoutWindow).Show(1.0f);
       _screen.ShowDialog("you", "Surrender to the night!", hideCloseButton: true);
       yield return new WaitForSeconds(3.5f);
       _screen.HideDialog();

@@ -19,10 +19,15 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public abstract class HideableElement<TShowArgument> : VisualElement
+  public abstract class HideableElement : VisualElement
   {
     public ScreenController Controller { get; set; } = null!;
     public bool Visible { get; protected set; }
+  }
+
+  public abstract class HideableElement<TShowArgument> : HideableElement
+  {
+
     bool _initialized;
 
     public new sealed class UxmlTraits : VisualElement.UxmlTraits
@@ -74,7 +79,7 @@ namespace Nighthollow.Interface
   {
   }
 
-  public abstract class HideableElement : HideableElement<NoArguments>
+  public abstract class DefaultHideableElement : HideableElement<NoArguments>
   {
     public void Show(bool animate = false)
     {

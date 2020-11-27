@@ -17,10 +17,12 @@ using System.Linq;
 using DataStructures.RandomSelector;
 using Nighthollow.Data;
 using Nighthollow.Generated;
+using Nighthollow.Interface;
 using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Nighthollow.Components
 {
@@ -48,7 +50,8 @@ namespace Nighthollow.Components
       _deathCount++;
       if (_deathCount >= _stats.Get(Stat.KillsRequiredForVictory))
       {
-        Debug.Log("Victory!");
+        Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
+          .Show(new GameOverMessage.Args("Victory!", "World"));
       }
     }
 
@@ -65,6 +68,8 @@ namespace Nighthollow.Components
           RandomFile(),
           Constants.EnemyCreatureStartingX);
       }
+
+      // ReSharper disable once IteratorNeverReturns
     }
 
     CreatureData RandomEnemy()

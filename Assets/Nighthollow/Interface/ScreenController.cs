@@ -53,12 +53,14 @@ namespace Nighthollow.Interface
     public static ElementKey<AdvisorBar> AdvisorBar = new ElementKey<AdvisorBar>("AdvisorBar");
     public static ElementKey<UserStatus> UserStatus = new ElementKey<UserStatus>("UserStatus");
     public static ElementKey<BlackoutWindow> BlackoutWindow = new ElementKey<BlackoutWindow>("BlackoutWindow");
+    public static ElementKey<GameOverMessage> GameOverMessage = new ElementKey<GameOverMessage>("GameOverMessage");
 
     readonly List<IElementKey> _keys = new List<IElementKey>
     {
       AdvisorBar,
       UserStatus,
-      BlackoutWindow
+      BlackoutWindow,
+      GameOverMessage
     };
 
     readonly Dictionary<string, HideableElement> _elements = new Dictionary<string, HideableElement>();
@@ -88,21 +90,17 @@ namespace Nighthollow.Interface
 
       if (showAdvisorBar)
       {
-        Show(AdvisorBar);
+        Get(AdvisorBar).Show();
       }
     }
 
     public T Get<T>(ElementKey<T> key) where T : HideableElement => (T) GetElement(key);
 
-    public HideableElement GetElement(IElementKey key)
+    HideableElement GetElement(IElementKey key)
     {
       Errors.CheckState(_elements.ContainsKey(key.Name), $"Element not found: {key.Name}");
       return _elements[key.Name];
     }
-
-    public void Show(IElementKey key) => GetElement(key).Show();
-
-    public void Hide(IElementKey key) => GetElement(key).Hide();
 
     public bool ConsumesMousePosition(Vector3 mousePosition)
     {
