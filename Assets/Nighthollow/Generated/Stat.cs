@@ -42,14 +42,14 @@ namespace Nighthollow.Generated
     InfluenceCost = 20,
     ProjectileSpeed = 21,
     HitboxRadius = 22,
-    StartingLife = 23,
     StartingMana = 24,
     Influence = 25,
     StartingHandSize = 26,
     ManaGain = 27,
     CardDrawInterval = 28,
     EnemySpawnDelay = 29,
-    KillsRequiredForVictory = 30,
+    InitialEnemySpawnDelay = 30,
+    EnemiesToSpawn = 31,
     IsManaCreature = 32,
     GainedDamageOnKill = 33,
     MaxMeleeAreaTargets = 34,
@@ -112,14 +112,14 @@ namespace Nighthollow.Generated
     public static readonly SchoolIntsStat InfluenceCost = new SchoolIntsStat(StatId.InfluenceCost);
     public static readonly IntStat ProjectileSpeed = new IntStat(StatId.ProjectileSpeed);
     public static readonly IntStat HitboxRadius = new IntStat(StatId.HitboxRadius);
-    public static readonly IntStat StartingLife = new IntStat(StatId.StartingLife);
     public static readonly IntStat StartingMana = new IntStat(StatId.StartingMana);
     public static readonly SchoolIntsStat Influence = new SchoolIntsStat(StatId.Influence);
     public static readonly IntStat StartingHandSize = new IntStat(StatId.StartingHandSize);
     public static readonly IntStat ManaGain = new IntStat(StatId.ManaGain);
     public static readonly DurationStat CardDrawInterval = new DurationStat(StatId.CardDrawInterval);
     public static readonly DurationStat EnemySpawnDelay = new DurationStat(StatId.EnemySpawnDelay);
-    public static readonly IntStat KillsRequiredForVictory = new IntStat(StatId.KillsRequiredForVictory);
+    public static readonly DurationStat InitialEnemySpawnDelay = new DurationStat(StatId.InitialEnemySpawnDelay);
+    public static readonly IntStat EnemiesToSpawn = new IntStat(StatId.EnemiesToSpawn);
     public static readonly BoolStat IsManaCreature = new BoolStat(StatId.IsManaCreature);
     public static readonly DamageTypeIntsStat GainedDamageOnKill = new DamageTypeIntsStat(StatId.GainedDamageOnKill);
     public static readonly IntStat MaxMeleeAreaTargets = new IntStat(StatId.MaxMeleeAreaTargets);
@@ -183,14 +183,14 @@ namespace Nighthollow.Generated
         case 20: return InfluenceCost;
         case 21: return ProjectileSpeed;
         case 22: return HitboxRadius;
-        case 23: return StartingLife;
         case 24: return StartingMana;
         case 25: return Influence;
         case 26: return StartingHandSize;
         case 27: return ManaGain;
         case 28: return CardDrawInterval;
         case 29: return EnemySpawnDelay;
-        case 30: return KillsRequiredForVictory;
+        case 30: return InitialEnemySpawnDelay;
+        case 31: return EnemiesToSpawn;
         case 32: return IsManaCreature;
         case 33: return GainedDamageOnKill;
         case 34: return MaxMeleeAreaTargets;
@@ -256,7 +256,6 @@ namespace Nighthollow.Generated
         case StatId.ManaCost: return "Mana Cost";
         case StatId.InfluenceCost: return "Influence Cost";
         case StatId.ProjectileSpeed: return "Projectile Speed";
-        case StatId.StartingLife: return "Starting Life";
         case StatId.StartingMana: return "Starting Mana";
         case StatId.Influence: return "Influence";
         case StatId.StartingHandSize: return "Starting Hand Size";

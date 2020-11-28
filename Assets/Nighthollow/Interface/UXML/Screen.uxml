@@ -35,10 +35,6 @@ limitations under the License.
                     <ui:VisualElement name="ManaImage"/>
                     <ui:Label name="ManaText" text="999"/>
                 </ui:VisualElement>
-                <ui:VisualElement class="status-item">
-                    <ui:VisualElement name="LifeImage"/>
-                    <ui:Label name="LifeText" text="99"/>
-                </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="InfluenceContainer">
             </ui:VisualElement>

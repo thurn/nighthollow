@@ -58,7 +58,6 @@ namespace Nighthollow.Components
     [SerializeField] CreatureService _creatureService;
     [SerializeField] SortingGroup _sortingGroup;
     Coroutine _coroutine;
-    [SerializeField] bool _appliedLifeLoss;
     readonly Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
 #pragma warning restore 0649
 
@@ -160,6 +159,7 @@ namespace Nighthollow.Components
       ToDefaultState();
 
       _data.Delegate.OnActivate(new CreatureContext(this));
+      Root.Instance.HelperTextService.OnCreaturePlayed();
 
       _coroutine = StartCoroutine(RunCoroutine());
     }
@@ -360,11 +360,9 @@ namespace Nighthollow.Components
         DestroyCreature();
       }
       else if (Owner == PlayerName.Enemy &&
-               !_appliedLifeLoss &&
-               transform.position.x < Constants.EnemyCreatureRemoveLifeX)
+               transform.position.x < Constants.EnemyCreatureEndzoneX)
       {
-        Root.Instance.User.LoseLife(1);
-        _appliedLifeLoss = true;
+        Root.Instance.Enemy.OnEnemyCreatureAtEndzone(this);
       }
 
       var health = _data.GetInt(Stat.Health);

@@ -24,7 +24,6 @@ namespace Nighthollow.Interface
   public sealed class UserStatus : DefaultHideableElement
   {
     Label _manaText = null!;
-    Label _lifeText = null!;
     VisualElement _influenceContainer = null!;
 
     public new sealed class UxmlFactory : UxmlFactory<UserStatus, UxmlTraits>
@@ -34,18 +33,12 @@ namespace Nighthollow.Interface
     protected override void Initialize()
     {
       _manaText = Find<Label>("ManaText");
-      _lifeText = Find<Label>("LifeText");
       _influenceContainer = FindElement("InfluenceContainer");
     }
 
     public int Mana
     {
       set => _manaText.text = value.ToString();
-    }
-
-    public int Life
-    {
-      set => _lifeText.text = value.ToString();
     }
 
     public IReadOnlyDictionary<School, int> Influence

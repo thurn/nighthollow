@@ -14,6 +14,7 @@
 
 #nullable enable
 
+using System.Collections.Generic;
 using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -27,6 +28,7 @@ namespace Nighthollow.Services
     [SerializeField] string _debugText = null!;
     [SerializeField] Vector2 _debugPosition;
     [SerializeField] ArrowDirection _debugArrowDirection;
+    HashSet<int> _shown = new HashSet<int>();
     bool _active;
 
     public enum ArrowDirection
@@ -35,6 +37,22 @@ namespace Nighthollow.Services
       Right,
       Bottom,
       Left
+    }
+
+    readonly struct HelperText
+    {
+      public int Id { get; }
+      public Vector2 Position { get; }
+      public ArrowDirection ArrowDirection { get; }
+      public string Text { get; }
+
+      public HelperText(int id, Vector2 position, ArrowDirection arrowDirection, string text)
+      {
+        Id = id;
+        Position = position;
+        ArrowDirection = arrowDirection;
+        Text = text;
+      }
     }
 
     void Update()
@@ -47,8 +65,9 @@ namespace Nighthollow.Services
 
       if (_toggleDebugMode)
       {
+        _shown.Remove(0);
         InterfaceUtils.FindByName<VisualElement>(Root.Instance.ScreenController.Screen, "HelperTextContainer").Clear();
-        ShowHelperText(_debugPosition, _debugArrowDirection, _debugText);
+        ShowHelperText(new HelperText(0, _debugPosition, _debugArrowDirection, _debugText));
         _toggleDebugMode = false;
       }
     }
@@ -58,14 +77,16 @@ namespace Nighthollow.Services
       if (Database.Instance.UserData.TutorialState == UserDataService.Tutorial.GameOne)
       {
         ShowHelperText(
-          new Vector2(250, 300),
-          ArrowDirection.Bottom,
-          "This is your opening hand of creature cards to play.");
+          new HelperText(1,
+            new Vector2(250, 300),
+            ArrowDirection.Bottom,
+            "This is your opening hand of creature cards to play"));
 
         ShowHelperText(
-          new Vector2(1400, 400),
-          ArrowDirection.Left,
-          "To play a card, you must pay its Mana cost and have the required amount of Influence.");
+          new HelperText(2,
+            new Vector2(1400, 400),
+            ArrowDirection.Left,
+            "To play a card, you must pay its Mana cost and have the required amount of Influence"));
       }
     }
 
@@ -74,38 +95,55 @@ namespace Nighthollow.Services
       if (Database.Instance.UserData.TutorialState == UserDataService.Tutorial.GameOne)
       {
         ShowHelperText(
-          new Vector2(5, 175),
-          ArrowDirection.Top,
-          "Your current Mana, Life, and Influence are shown here.");
+          new HelperText(3,
+            new Vector2(160, 50),
+            ArrowDirection.Left,
+            "Your current Mana and Influence are shown here"));
 
         ShowHelperText(
-          new Vector2(940, 710),
-          ArrowDirection.Bottom,
-          "You can play an Adept to add Influence and increase your Mana generation");
+          new HelperText(4,
+            new Vector2(940, 710),
+            ArrowDirection.Bottom,
+            "You can play an Adept to add Influence and increase your Mana generation"));
       }
     }
 
-    void ShowHelperText(Vector2 interfacePosition, ArrowDirection arrowDirection, string text)
+    public void OnCreaturePlayed()
     {
+      ShowHelperText(
+        new HelperText(5,
+          new Vector2(100, 450),
+          ArrowDirection.Left,
+          "To win the game, make sure no enemies get past your defenses to here"));
+    }
+
+    void ShowHelperText(HelperText helperText)
+    {
+      if (_shown.Contains(helperText.Id))
+      {
+        return;
+      }
+
+      _shown.Add(helperText.Id);
       var element = new VisualElement();
       element.AddToClassList("helper-text");
-      element.AddToClassList(arrowDirection switch
+      element.AddToClassList(helperText.ArrowDirection switch
       {
         ArrowDirection.Top => "top-arrow",
         ArrowDirection.Right => "right-arrow",
         ArrowDirection.Bottom => "bottom-arrow",
         ArrowDirection.Left => "left-arrow",
-        _ => throw Errors.UnknownEnumValue(arrowDirection)
+        _ => throw Errors.UnknownEnumValue(helperText.ArrowDirection)
       });
-      element.style.left = new StyleLength(interfacePosition.x);
-      element.style.top = new StyleLength(interfacePosition.y);
+      element.style.left = new StyleLength(helperText.Position.x);
+      element.style.top = new StyleLength(helperText.Position.y);
       element.style.opacity = new StyleFloat(0f);
 
       var arrow = new VisualElement();
       arrow.AddToClassList("arrow");
       element.Add(arrow);
 
-      var label = new Label {text = text};
+      var label = new Label {text = helperText.Text};
       element.Add(label);
       InterfaceUtils.FadeIn(element, 0.3f);
 

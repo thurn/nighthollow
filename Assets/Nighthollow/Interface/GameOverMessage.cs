@@ -15,7 +15,7 @@
 #nullable enable
 
 using System.Collections.Generic;
-using UnityEngine;
+using Nighthollow.Services;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -48,14 +48,13 @@ namespace Nighthollow.Interface
 
     protected override void OnShow(Args args)
     {
-      Controller.Get(ScreenController.BlackoutWindow).Show(0.5f);
+      Root.Instance.User.OnGameOver();
       _text.text = args.Text;
       ButtonUtil.DisplayMainButtons(Controller,
         new List<ButtonUtil.Button> {new ButtonUtil.Button("Continue", () =>
         {
           SceneManager.LoadScene(args.LoadScene);
         }, large: true)});
-      Time.timeScale = 0f;
     }
   }
 }

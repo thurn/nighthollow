@@ -35,17 +35,12 @@ namespace Nighthollow.Components
     [SerializeField] Deck _deck = null!;
     public Deck Deck => _deck;
 
-    [SerializeField] int _life;
-    public int Life
-    {
-      get => _life;
-      private set => _life = NumericUtils.Clamp(value, 0, 99);
-    }
-
     [SerializeField] int _mana;
 
     UserDataService _data = null!;
     public UserDataService Data => _data;
+
+    public bool GameOver { get; private set; }
 
     public int Mana
     {
@@ -94,7 +89,6 @@ namespace Nighthollow.Components
       _statusDisplay = Root.Instance.ScreenController.Get(ScreenController.UserStatus);
       _statusDisplay.Show(animate: true);
 
-      Life = Errors.CheckPositive(_data.GetInt(Stat.StartingLife));
       Mana = _data.GetInt(Stat.StartingMana);
     }
 
@@ -103,20 +97,14 @@ namespace Nighthollow.Components
       Mana -= amount;
     }
 
-    public void LoseLife(int amount)
+    public void OnGameOver()
     {
-      Errors.CheckArgument(amount >= 0, "Cannot lose a negative amount of life");
-      Life -= amount;
-      if (Life == 0)
-      {
-        Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
-          .Show(new GameOverMessage.Args("Game Over", "World"));
-      }
+      GameOver = true;
     }
 
     IEnumerator<YieldInstruction> GainMana()
     {
-      while (true)
+      while (!GameOver)
       {
         yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.ManaGainInterval));
         Mana += _data.GetInt(Stat.ManaGain);
@@ -125,7 +113,7 @@ namespace Nighthollow.Components
 
     IEnumerator<YieldInstruction> DrawCards()
     {
-      while (true)
+      while (!GameOver)
       {
         Errors.CheckArgument(_data.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
         yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.CardDrawInterval));
@@ -137,7 +125,6 @@ namespace Nighthollow.Components
     {
       if (_statusDisplay != null)
       {
-        _statusDisplay.Life = Life;
         _statusDisplay.Mana = Mana;
         _statusDisplay.Influence = _data.Stats.Get(Stat.Influence).Values;
       }

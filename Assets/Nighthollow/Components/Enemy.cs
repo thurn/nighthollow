@@ -22,7 +22,6 @@ using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Nighthollow.Components
 {
@@ -33,6 +32,7 @@ namespace Nighthollow.Components
 
     List<CreatureData> _enemies = null!;
 
+    [SerializeField] int _spawnCount;
     [SerializeField] int _deathCount;
 
     public void OnGameStarted()
@@ -48,25 +48,33 @@ namespace Nighthollow.Components
     public void OnEnemyCreatureKilled()
     {
       _deathCount++;
-      if (_deathCount >= _stats.Get(Stat.KillsRequiredForVictory))
+      if (_deathCount >= _stats.Get(Stat.EnemiesToSpawn))
       {
         Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
-          .Show(new GameOverMessage.Args("Victory!", "World"));
+          .Show(new GameOverMessage.Args("Victory!", "World"), animate: true);
       }
+    }
+
+    public void OnEnemyCreatureAtEndzone(Creature creature)
+    {
+      Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
+        .Show(new GameOverMessage.Args("Game Over", "World"));
+      Root.Instance.ScreenController.Get(ScreenController.BlackoutWindow).Show(0.5f);
+      Time.timeScale = 0f;
     }
 
     IEnumerator<YieldInstruction> SpawnAsync()
     {
-      var spawnDelay = _stats.Get(Stat.EnemySpawnDelay).AsSeconds();
-      Errors.CheckArgument(spawnDelay > 0.1f, "Spawn delay cannot be 0");
+      yield return new WaitForSeconds(_stats.Get(Stat.InitialEnemySpawnDelay).AsSeconds());
 
-      while (true)
+      while (_spawnCount < _stats.Get(Stat.EnemiesToSpawn))
       {
-        yield return new WaitForSeconds(spawnDelay);
+        _spawnCount++;
         Root.Instance.CreatureService.CreateMovingCreature(
           RandomEnemy(),
           RandomFile(),
           Constants.EnemyCreatureStartingX);
+        yield return new WaitForSeconds(_stats.Get(Stat.EnemySpawnDelay).AsSeconds());
       }
 
       // ReSharper disable once IteratorNeverReturns
