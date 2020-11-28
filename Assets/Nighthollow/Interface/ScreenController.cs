@@ -50,6 +50,7 @@ namespace Nighthollow.Interface
     VisualElement _screen = null!;
     public VisualElement Screen => _screen;
 
+    public static ElementKey<HideableVisualElement> Background = new ElementKey<HideableVisualElement>("Background");
     public static ElementKey<AdvisorBar> AdvisorBar = new ElementKey<AdvisorBar>("AdvisorBar");
     public static ElementKey<UserStatus> UserStatus = new ElementKey<UserStatus>("UserStatus");
     public static ElementKey<BlackoutWindow> BlackoutWindow = new ElementKey<BlackoutWindow>("BlackoutWindow");
@@ -57,6 +58,7 @@ namespace Nighthollow.Interface
 
     readonly List<IElementKey> _keys = new List<IElementKey>
     {
+      Background,
       AdvisorBar,
       UserStatus,
       BlackoutWindow,
@@ -95,6 +97,8 @@ namespace Nighthollow.Interface
     }
 
     public T Get<T>(ElementKey<T> key) where T : HideableElement => (T) GetElement(key);
+
+    public void Show<T>(ElementKey<T> key) where T : DefaultHideableElement => Get(key).Show();
 
     HideableElement GetElement(IElementKey key)
     {

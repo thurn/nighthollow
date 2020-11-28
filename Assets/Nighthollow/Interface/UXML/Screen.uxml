@@ -18,6 +18,8 @@ limitations under the License.
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
     <ui:Style src="../Styles/styles.uss"/>
     <ui:VisualElement name="Screen" class="full-screen">
+        <ui:VisualElement name="Background" class="screen-background" style="display: none" />
+
         <nh:AdvisorBar name="AdvisorBar" class="advisor-bar" style="display: none;">
             <ui:VisualElement class="border-decoration left thurn"/>
             <ui:VisualElement class="advisor-bar-content">

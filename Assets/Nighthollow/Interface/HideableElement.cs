@@ -93,4 +93,11 @@ namespace Nighthollow.Interface
 
     protected virtual void OnShow() {}
   }
+
+  public sealed class HideableVisualElement : DefaultHideableElement
+  {
+    protected override void Initialize()
+    {
+    }
+  }
 }
