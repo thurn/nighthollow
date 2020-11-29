@@ -17,6 +17,8 @@ using System.Linq;
 using SimpleJSON;
 using UnityEngine.Networking;
 
+#nullable enable
+
 namespace Nighthollow.Data
 {
   public static class SpreadsheetHelper
@@ -36,20 +38,18 @@ namespace Nighthollow.Data
       var result = new Dictionary<string, List<Dictionary<string, string>>>();
 
       foreach (var range in response["valueRanges"].Children)
-      {
         result[range["range"].Value.Split('!').First()] = AsHeaderIdentifiedRows(range["values"]);
-      }
 
       return result;
     }
 
     /// <summary>
-    /// Converts a sheets JSON response into a list of dictionaries where each item is a row and the keys are provided
-    /// by the first row of the response.
+    ///   Converts a sheets JSON response into a list of dictionaries where each item is a row and the keys are provided
+    ///   by the first row of the response.
     /// </summary>
     public static List<Dictionary<string, string>> AsHeaderIdentifiedRows(JSONNode rows)
     {
-      var firstRow = rows[0];
+      var firstRow = rows[aIndex: 0];
       var columnNames = new Dictionary<int, string>();
       for (var i = 0; i < firstRow.Count; ++i)
       {
@@ -72,15 +72,9 @@ namespace Nighthollow.Data
         var dictionary = new Dictionary<string, string>();
         for (var j = 0; j < row.Count; ++j)
         {
-          if (!columnNames.ContainsKey(j))
-          {
-            continue;
-          }
+          if (!columnNames.ContainsKey(j)) continue;
 
-          if (!string.IsNullOrWhiteSpace(row[j].Value))
-          {
-            dictionary[columnNames[j]] = row[j].Value;
-          }
+          if (!string.IsNullOrWhiteSpace(row[j].Value)) dictionary[columnNames[j]] = row[j].Value;
         }
 
         result.Add(dictionary);

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Generated;
 using Nighthollow.Services;
@@ -20,13 +19,12 @@ using Nighthollow.Stats;
 using Nighthollow.Utils;
 using SimpleJSON;
 
+#nullable enable
+
 namespace Nighthollow.Data
 {
   public sealed class ModifierData
   {
-    public DelegateId? DelegateId { get; }
-    public IStatModifier? StatModifier { get; }
-
     public ModifierData(
       DelegateId? delegateId, IStatModifier? statModifier)
     {
@@ -35,20 +33,29 @@ namespace Nighthollow.Data
       StatModifier = statModifier;
     }
 
-    public static ModifierData Deserialize(GameDataService gameData, JSONNode node) =>
-      new ModifierData(
+    public DelegateId? DelegateId { get; }
+    public IStatModifier? StatModifier { get; }
+
+    public static ModifierData Deserialize(GameDataService gameData, JSONNode node)
+    {
+      return new ModifierData(
         node["delegateId"] == null ? null : (DelegateId?) node["delegateId"].AsInt,
         node["statModifier"] == null ? null : StatModifierUtil.Deserialize(node["statModifier"]));
+    }
 
-    public JSONNode Serialize() =>
-      new JSONObject
+    public JSONNode Serialize()
+    {
+      return new JSONObject
       {
         ["delegateId"] = DelegateId.HasValue ? new JSONNumber((double) DelegateId.Value) : null,
         ["statModifier"] = StatModifier?.Serialize()
       };
+    }
 
-    public override string ToString() =>
-      $"{(DelegateId.HasValue ? DelegateId.Value.ToString() : "")} " +
-      $"{(StatModifier != null ? StatModifier.ToString() : "")}";
+    public override string ToString()
+    {
+      return $"{(DelegateId.HasValue ? DelegateId.Value.ToString() : "")} " +
+             $"{(StatModifier != null ? StatModifier.ToString() : "")}";
+    }
   }
 }

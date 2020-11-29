@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using DG.Tweening;
 using Nighthollow.Components;
@@ -20,14 +19,12 @@ using Nighthollow.Data;
 using Nighthollow.Utils;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Effects
 {
   public sealed class KnockbackEffect : Effect
   {
-    public Creature Target { get; }
-    public float Distance { get; }
-    public float DurationSeconds { get; }
-
     public KnockbackEffect(Creature target, float distance, float durationSeconds)
     {
       Target = target;
@@ -35,12 +32,16 @@ namespace Nighthollow.Delegates.Effects
       DurationSeconds = durationSeconds;
     }
 
+    public Creature Target { get; }
+    public float Distance { get; }
+    public float DurationSeconds { get; }
+
     public override void Execute()
     {
       Target.transform.DOMove(
         (Vector2) Target.transform.position +
-        (Distance *
-         Constants.ForwardDirectionForPlayer(Target.Owner.GetOpponent())),
+        Distance *
+        Constants.ForwardDirectionForPlayer(Target.Owner.GetOpponent()),
         DurationSeconds);
     }
   }

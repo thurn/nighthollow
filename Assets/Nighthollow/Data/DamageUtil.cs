@@ -24,34 +24,32 @@ namespace Nighthollow.Data
 {
   public static class DamageUtil
   {
-    public static TaggedValues<DamageType, int> RollForDamage(TaggedValues<DamageType, IntRangeValue> damage) =>
-      new TaggedValues<DamageType, int>(
+    public static TaggedValues<DamageType, int> RollForDamage(TaggedValues<DamageType, IntRangeValue> damage)
+    {
+      return new TaggedValues<DamageType, int>(
         damage.Values.ToDictionary(
           k => k.Key,
           v => Random.Range(v.Value.Low, v.Value.High)));
+    }
 
     public static TaggedValues<DamageType, int> Multiply(
-      int multiplier, TaggedValues<DamageType, int> damage) =>
-      new TaggedValues<DamageType, int>(
+      int multiplier, TaggedValues<DamageType, int> damage)
+    {
+      return new TaggedValues<DamageType, int>(
         damage.Values.ToDictionary(
           pair => pair.Key,
           pair => pair.Value * multiplier));
+    }
 
     public static TaggedValues<DamageType, int> Add(
       TaggedValues<DamageType, int> a, TaggedValues<DamageType, int> b)
     {
       var result = a.Values.Clone();
       foreach (var pair in b.Values)
-      {
         if (result.ContainsKey(pair.Key))
-        {
           result[pair.Key] = result[pair.Key] + pair.Value;
-        }
         else
-        {
           result[pair.Key] = pair.Value;
-        }
-      }
 
       return new TaggedValues<DamageType, int>(result);
     }

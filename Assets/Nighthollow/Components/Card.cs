@@ -12,35 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using DG.Tweening;
-using Nighthollow.Services;
-using Nighthollow.Utils;
-using Nighthollow.Data;
 using System.Collections.Generic;
+using DG.Tweening;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Interface;
+using Nighthollow.Services;
+using Nighthollow.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+#nullable enable
 
 namespace Nighthollow.Components
 {
   public sealed class Card : MonoBehaviour,
     IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
   {
-#pragma warning disable 0649
     [Header("Config")] [SerializeField] bool _debugMode;
     [SerializeField] float _debugCardScale = 0.65f;
-    [SerializeField] RectTransform _cardBack;
-    [SerializeField] RectTransform _cardFront;
-    [SerializeField] Image _cardImage;
-    [SerializeField] TextMeshProUGUI _cost;
-    [SerializeField] List<Image> _influence;
-    [SerializeField] Image _outline;
-
-    [Header("State")] CreatureData _data;
-    [SerializeField] User _user;
+    [SerializeField] RectTransform _cardBack = null!;
+    [SerializeField] RectTransform _cardFront = null!;
+    [SerializeField] Image _cardImage = null!;
+    [SerializeField] TextMeshProUGUI _cost = null!;
+    [SerializeField] List<Image> _influence = null!;
+    [SerializeField] Image _outline = null!;
+    [SerializeField] User _user = null!;
     [SerializeField] bool _canPlay;
     [SerializeField] bool _previewMode;
     [SerializeField] bool _initialized;
@@ -49,34 +48,20 @@ namespace Nighthollow.Components
     [SerializeField] int _initialDragSiblingIndex;
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
-#pragma warning restore 0649
 
-    public void Initialize(CreatureData cardData)
+    [Header("State")] CreatureData _data = null!;
+
+    public bool PreviewMode
     {
-      _cardFront.gameObject.SetActive(false);
-      _cardBack.gameObject.SetActive(true);
-      _user = Root.Instance.User;
-      _data = cardData;
-
-      DOTween.Sequence()
-        .Insert(0, _cardBack.transform.DOLocalRotate(new Vector3(0, 90, 0), 0.2f))
-        .InsertCallback(0.2f, () =>
-        {
-          _cardFront.gameObject.SetActive(true);
-          _cardFront.transform.localRotation = Quaternion.Euler(0, 90, 0);
-          _cardBack.gameObject.SetActive(false);
-        })
-        .Insert(0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, 0.3f));
-
-      _initialized = true;
+      set => _previewMode = value;
     }
 
     void Start()
     {
       if (!_initialized && _debugMode)
       {
-        _cardBack.gameObject.SetActive(true);
-        _cardFront.gameObject.SetActive(false);
+        _cardBack.gameObject.SetActive(value: true);
+        _cardFront.gameObject.SetActive(value: false);
         Initialize(_data.Clone(_user.Data.Stats));
         transform.localScale = Vector2.one * _debugCardScale;
       }
@@ -100,37 +85,9 @@ namespace Nighthollow.Components
       _cost.text = manaCost.ToString();
 
       var addIndex = 0;
-      foreach (var pair in influenceCost.Values)
-      {
-        AddInfluence(pair.Key, pair.Value, ref addIndex);
-      }
+      foreach (var pair in influenceCost.Values) AddInfluence(pair.Key, pair.Value, ref addIndex);
 
-      while (addIndex < _influence.Count)
-      {
-        _influence[addIndex++].enabled = false;
-      }
-    }
-
-    public bool PreviewMode
-    {
-      set => _previewMode = value;
-    }
-
-    public void OnPlayed()
-    {
-      _user.Hand.RemoveFromHand(this);
-      _user.SpendMana(_data.GetInt(Stat.ManaCost));
-      Destroy(gameObject);
-    }
-
-    void AddInfluence(School school, int influence, ref int addIndex)
-    {
-      for (var i = 0; i < influence; ++i)
-      {
-        _influence[addIndex].enabled = true;
-        _influence[addIndex].sprite = Root.Instance.Prefabs.SpriteForInfluenceType(school);
-        addIndex++;
-      }
+      while (addIndex < _influence.Count) _influence[addIndex++].enabled = false;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -157,7 +114,7 @@ namespace Nighthollow.Components
         {
           if (!_overBoard)
           {
-            gameObject.SetActive(false);
+            gameObject.SetActive(value: false);
             var creature = Root.Instance.CreatureService.CreateUserCreature(_data);
             creature.gameObject.AddComponent<CreaturePositionSelector>().Initialize(creature, this);
             _overBoard = true;
@@ -168,7 +125,7 @@ namespace Nighthollow.Components
           var distanceDragged = Vector2.Distance(mousePosition, _initialDragPosition);
 
           var t = Mathf.Clamp01(distanceDragged / 5);
-          var scale = Mathf.Lerp(_user.Hand.FinalCardScale, 1.2f, t);
+          var scale = Mathf.Lerp(_user.Hand.FinalCardScale, b: 1.2f, t);
           transform.localScale = scale * Vector3.one;
 
           var rotation = Quaternion.Slerp(_initialDragRotation, Quaternion.identity, t);
@@ -203,9 +160,43 @@ namespace Nighthollow.Components
 
     public void OnPointerExit(PointerEventData eventData)
     {
-      if (_previewMode)
+      if (_previewMode) Root.Instance.ScreenController.HideTooltip();
+    }
+
+    public void Initialize(CreatureData cardData)
+    {
+      _cardFront.gameObject.SetActive(value: false);
+      _cardBack.gameObject.SetActive(value: true);
+      _user = Root.Instance.User;
+      _data = cardData;
+
+      DOTween.Sequence()
+        .Insert(atPosition: 0, _cardBack.transform.DOLocalRotate(new Vector3(x: 0, y: 90, z: 0), duration: 0.2f))
+        .InsertCallback(atPosition: 0.2f, () =>
+        {
+          _cardFront.gameObject.SetActive(value: true);
+          _cardFront.transform.localRotation = Quaternion.Euler(x: 0, y: 90, z: 0);
+          _cardBack.gameObject.SetActive(value: false);
+        })
+        .Insert(atPosition: 0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, duration: 0.3f));
+
+      _initialized = true;
+    }
+
+    public void OnPlayed()
+    {
+      _user.Hand.RemoveFromHand(this);
+      _user.SpendMana(_data.GetInt(Stat.ManaCost));
+      Destroy(gameObject);
+    }
+
+    void AddInfluence(School school, int influence, ref int addIndex)
+    {
+      for (var i = 0; i < influence; ++i)
       {
-        Root.Instance.ScreenController.HideTooltip();
+        _influence[addIndex].enabled = true;
+        _influence[addIndex].sprite = Root.Instance.Prefabs.SpriteForInfluenceType(school);
+        addIndex++;
       }
     }
   }

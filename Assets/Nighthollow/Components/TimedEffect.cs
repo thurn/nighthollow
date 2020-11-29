@@ -15,12 +15,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Components
 {
   public sealed class TimedEffect : MonoBehaviour
   {
-    [Header("Config")]
-    [SerializeField] float _duration;
+    [Header("Config")] [SerializeField] float _duration;
 
     void OnEnable()
     {
@@ -38,24 +39,17 @@ namespace Nighthollow.Components
       }
 
       foreach (var audioSource in GetComponentsInChildren<AudioSource>())
-      {
         if (audioSource.clip != null)
-        {
           _duration = Mathf.Max(_duration, audioSource.clip.length);
-        }
-      }
 
-      foreach (var ps in GetComponentsInChildren<ParticleSystem>())
-      {
-        ps.GetComponent<Renderer>().sortingOrder = 500;
-      }
+      foreach (var ps in GetComponentsInChildren<ParticleSystem>()) ps.GetComponent<Renderer>().sortingOrder = 500;
     }
 
     IEnumerator<YieldInstruction> DisableAsync(float duration)
     {
       // Add a little extra time for safety :)
       yield return new WaitForSeconds(duration + 0.5f);
-      gameObject.SetActive(false);
+      gameObject.SetActive(value: false);
     }
   }
 }

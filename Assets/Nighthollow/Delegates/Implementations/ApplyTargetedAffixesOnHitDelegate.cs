@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Linq;
@@ -22,28 +21,28 @@ using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ApplyTargetedAffixesOnHitDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) => "Curses Enemies on Hit With:";
+    public override string Describe(StatEntity entity)
+    {
+      return "Curses Enemies on Hit With:";
+    }
 
     public override void OnApplyToTarget(SkillContext c, Creature target)
     {
       foreach (var modifier in c.Skill.TargetedAffixes.SelectMany(affix => affix.Modifiers))
       {
-        if (modifier.DelegateId != null)
-        {
-          throw new NotSupportedException("Not yet implemented");
-        }
+        if (modifier.DelegateId != null) throw new NotSupportedException("Not yet implemented");
 
         if (modifier.StatModifier != null)
-        {
           c.Results.Add(new ApplyModifierEffect(
             target.Data,
             modifier.StatModifier
               .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(Stat.CurseDuration)))));
-        }
       }
     }
   }

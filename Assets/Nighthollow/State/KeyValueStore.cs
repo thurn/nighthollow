@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+#nullable enable
 
 namespace Nighthollow.State
 {
@@ -44,7 +45,10 @@ namespace Nighthollow.State
       return this;
     }
 
-    public bool Has<T>(Key<T> key) => _values.ContainsKey(key.Id);
+    public bool Has<T>(Key<T> key)
+    {
+      return _values.ContainsKey(key.Id);
+    }
 
     public KeyValueStore Mutate<T>(Mutation<T> mutation)
     {
@@ -53,21 +57,26 @@ namespace Nighthollow.State
       return this;
     }
 
-    public KeyValueStore Increment(Key<int> key) => Set(key, Get(key) + 1);
+    public KeyValueStore Increment(Key<int> key)
+    {
+      return Set(key, Get(key) + 1);
+    }
 
-    public KeyValueStore Append<T>(Key<IReadOnlyList<T>> key, T value) => Set(key, Get(key).Append(value).ToList());
+    public KeyValueStore Append<T>(Key<IReadOnlyList<T>> key, T value)
+    {
+      return Set(key, Get(key).Append(value).ToList());
+    }
 
-    public KeyValueStore Copy() => new KeyValueStore(_values.ToDictionary(pair => pair.Key, pair => pair.Value));
+    public KeyValueStore Copy()
+    {
+      return new KeyValueStore(_values.ToDictionary(pair => pair.Key, pair => pair.Value));
+    }
 
     public void OverwriteWithValues(KeyValueStore? other)
     {
       if (other != null)
-      {
         foreach (var pair in other._values)
-        {
           _values[pair.Key] = pair.Value;
-        }
-      }
     }
   }
 }

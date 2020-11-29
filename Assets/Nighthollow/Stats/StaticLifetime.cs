@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #nullable enable
 
 namespace Nighthollow.Stats
@@ -24,8 +25,14 @@ namespace Nighthollow.Stats
     {
     }
 
-    public bool IsValid() => true;
+    public bool IsValid()
+    {
+      return true;
+    }
 
-    public override string ToString() => $"{nameof(StaticLifetime)}";
+    public override string ToString()
+    {
+      return $"{nameof(StaticLifetime)}";
+    }
   }
 }

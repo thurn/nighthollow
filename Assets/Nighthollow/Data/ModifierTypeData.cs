@@ -12,22 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 
+#nullable enable
+
 namespace Nighthollow.Data
 {
   public sealed class ModifierTypeData
   {
-    public int Id { get; }
-    public string Description { get; }
-    public int? StatId { get; }
-    public Operator? Operator { get; }
-    public DelegateId? DelegateId { get; }
-
     public ModifierTypeData(IReadOnlyDictionary<string, string> row)
     {
       Id = Parse.IntRequired(row, "Modifier ID");
@@ -36,6 +31,12 @@ namespace Nighthollow.Data
       Operator = (Operator?) Parse.Int(row, "Operator");
       DelegateId = (DelegateId?) Parse.Int(row, "Delegate");
     }
+
+    public int Id { get; }
+    public string Description { get; }
+    public int? StatId { get; }
+    public Operator? Operator { get; }
+    public DelegateId? DelegateId { get; }
 
     public override string ToString()
     {

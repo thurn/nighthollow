@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Delegates.Effects;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Core
 {
@@ -23,10 +24,16 @@ namespace Nighthollow.Delegates.Core
   {
     readonly List<Effect> _results = new List<Effect>();
 
-    public void Add(Effect effect) => _results.Add(effect);
-
-    public void AddRange(IEnumerable<Effect> effects) => _results.AddRange(effects);
-
     public IEnumerable<Effect> Values => _results;
+
+    public void Add(Effect effect)
+    {
+      _results.Add(effect);
+    }
+
+    public void AddRange(IEnumerable<Effect> effects)
+    {
+      _results.AddRange(effects);
+    }
   }
 }

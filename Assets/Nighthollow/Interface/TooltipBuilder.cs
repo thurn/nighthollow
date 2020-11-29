@@ -12,26 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Text;
 using Nighthollow.Generated;
 using UnityEngine.UIElements;
 
+#nullable enable
+
 namespace Nighthollow.Interface
 {
   public sealed class TooltipBuilder
   {
-    public string Name { get; }
-    public Rarity Rarity { get; set; } = Rarity.Common;
-    public int XOffset { get; set; } = 16;
-    public bool CloseButton { get; set; }
-    public Action? OnClose { get; set; }
     readonly VisualElement _result = new VisualElement();
+    bool _appendDivider;
 
     StringBuilder? _currentText;
-    bool _appendDivider;
 
     public TooltipBuilder(string name)
     {
@@ -39,6 +35,12 @@ namespace Nighthollow.Interface
 
       _result.AddToClassList("tooltip-content");
     }
+
+    public string Name { get; }
+    public Rarity Rarity { get; set; } = Rarity.Common;
+    public int XOffset { get; set; } = 16;
+    public bool CloseButton { get; set; }
+    public Action? OnClose { get; set; }
 
     public TooltipBuilder StartGroup()
     {
@@ -62,10 +64,7 @@ namespace Nighthollow.Interface
 
     public TooltipBuilder AppendNullable(string? text)
     {
-      if (text != null)
-      {
-        AppendText(text);
-      }
+      if (text != null) AppendText(text);
       return this;
     }
 
@@ -80,13 +79,9 @@ namespace Nighthollow.Interface
       }
 
       if (_currentText == null)
-      {
         _currentText = new StringBuilder(text);
-      }
       else
-      {
         _currentText.Append("\n").Append(text);
-      }
 
       return this;
     }

@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Components;
 using Nighthollow.Stats;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Core
 {
@@ -27,6 +28,9 @@ namespace Nighthollow.Delegates.Core
 
     public override StatTable Stats => Self.Data.Stats;
 
-    public CreatureContext Clone() => new CreatureContext(Self);
+    public CreatureContext Clone()
+    {
+      return new CreatureContext(Self);
+    }
   }
 }

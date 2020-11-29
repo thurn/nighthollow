@@ -15,24 +15,29 @@
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using Random = UnityEngine.Random;
+
+#nullable enable
 
 namespace Nighthollow.Components
 {
   public sealed class DamageText : MonoBehaviour
   {
-#pragma warning disable 0649
-    [SerializeField] TextMeshProUGUI _text;
-    [SerializeField] float _duration;
-    [SerializeField] int _offset;
-    [SerializeField] RectTransform _rectTransform;
-#pragma warning restore 0649
-
     public enum HitSize
     {
       Small,
       Medium,
       Big
+    }
+
+    [SerializeField] TextMeshProUGUI _text = null!;
+    [SerializeField] float _duration;
+    [SerializeField] int _offset;
+    [SerializeField] RectTransform _rectTransform = null!;
+
+    void OnValidate()
+    {
+      _text = GetComponent<TextMeshProUGUI>();
+      _rectTransform = GetComponent<RectTransform>();
     }
 
     public void Initialize(string text, Vector3 position)
@@ -44,15 +49,9 @@ namespace Nighthollow.Components
       var offset = new Vector3(Random.Range(-_offset, _offset), Random.Range(-_offset, _offset));
       DOTween
         .Sequence()
-        .Insert(0f, transform.DOMove(transform.position + offset, _duration))
-        .Insert(0f, _text.DOFade(0f, _duration).SetEase(Ease.InQuad))
-        .AppendCallback(() => gameObject.SetActive(false));
-    }
-
-    void OnValidate()
-    {
-      _text = GetComponent<TextMeshProUGUI>();
-      _rectTransform = GetComponent<RectTransform>();
+        .Insert(atPosition: 0f, transform.DOMove(transform.position + offset, _duration))
+        .Insert(atPosition: 0f, _text.DOFade(endValue: 0f, _duration).SetEase(Ease.InQuad))
+        .AppendCallback(() => gameObject.SetActive(value: false));
     }
   }
 }

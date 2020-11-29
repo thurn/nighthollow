@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
@@ -20,24 +19,25 @@ using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class MultipleProjectilesDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) =>
-      $"Fires {entity.GetInt(Stat.ProjectileSequenceCount)} Projectiles in Sequence";
+    public override string Describe(StatEntity entity)
+    {
+      return $"Fires {entity.GetInt(Stat.ProjectileSequenceCount)} Projectiles in Sequence";
+    }
 
     public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
     {
       if (effect.DelegateIndex <= c.DelegateIndex)
-      {
         // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
         return;
-      }
 
       // 1 less projectile since we already fired one
       for (var i = 1; i < c.GetInt(Stat.ProjectileSequenceCount); ++i)
-      {
         c.Results.Add(new FireProjectileEffect(
           c.Self,
           c,
@@ -45,7 +45,6 @@ namespace Nighthollow.Delegates.Implementations
           c.Self.ProjectileSource.position,
           Vector2.zero,
           firingDelayMs: i * c.GetStat(Stat.ProjectileSequenceDelay).AsMilliseconds()));
-      }
     }
   }
 }

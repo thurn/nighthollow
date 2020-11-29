@@ -29,11 +29,20 @@ namespace Nighthollow.Stats
       _timeMilliseconds = timeMilliseconds;
     }
 
-    public override string ToString() => $"{_timeMilliseconds / 1000f}s";
+    public override string ToString()
+    {
+      return $"{_timeMilliseconds / 1000f}s";
+    }
 
-    public float AsSeconds() => _timeMilliseconds / 1000f;
+    public float AsSeconds()
+    {
+      return _timeMilliseconds / 1000f;
+    }
 
-    public int AsMilliseconds() => _timeMilliseconds;
+    public int AsMilliseconds()
+    {
+      return _timeMilliseconds;
+    }
 
     public bool Equals(DurationValue other)
     {
@@ -67,12 +76,19 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override DurationValue ComputeValue(IReadOnlyList<NumericOperation<DurationValue>> operations) =>
-      new DurationValue(IntStat.Compute(operations, duration => duration.AsMilliseconds()));
+    public override DurationValue ComputeValue(IReadOnlyList<NumericOperation<DurationValue>> operations)
+    {
+      return new DurationValue(IntStat.Compute(operations, duration => duration.AsMilliseconds()));
+    }
 
-    protected override DurationValue ParseStatValue(string value) => ParseDuration(value);
+    protected override DurationValue ParseStatValue(string value)
+    {
+      return ParseDuration(value);
+    }
 
-    public static DurationValue ParseDuration(string value) =>
-      new DurationValue(Mathf.RoundToInt(float.Parse(value.Replace("s", "")) * 1000f));
+    public static DurationValue ParseDuration(string value)
+    {
+      return new DurationValue(Mathf.RoundToInt(float.Parse(value.Replace("s", "")) * 1000f));
+    }
   }
 }

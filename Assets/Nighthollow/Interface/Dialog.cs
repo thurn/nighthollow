@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using UnityEngine.UIElements;
+
+#nullable enable
 
 namespace Nighthollow.Interface
 {
@@ -26,14 +27,6 @@ namespace Nighthollow.Interface
 
     public bool Visible { get; private set; }
 
-    public new sealed class UxmlFactory : UxmlFactory<Dialog, UxmlTraits>
-    {
-    }
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
-    }
-
     public void Show(string portraitName, string text, bool hideCloseButton = false)
     {
       Visible = true;
@@ -43,13 +36,13 @@ namespace Nighthollow.Interface
       _portrait.AddToClassList(portraitName);
 
       _text.text = text;
-      InterfaceUtils.FadeIn(this, 0.3f);
+      InterfaceUtils.FadeIn(this, duration: 0.3f);
       _closeButton.style.display = new StyleEnum<DisplayStyle>(hideCloseButton ? DisplayStyle.None : DisplayStyle.Flex);
     }
 
     public void Hide()
     {
-      InterfaceUtils.FadeOut(this, 0.3f, () =>
+      InterfaceUtils.FadeOut(this, duration: 0.3f, () =>
       {
         style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
         Visible = false;
@@ -62,6 +55,14 @@ namespace Nighthollow.Interface
       _text = InterfaceUtils.FindByName<Label>(this, "Text");
       _closeButton = InterfaceUtils.FindByName<Button>(this, "CloseButton");
       _closeButton.RegisterCallback<ClickEvent>(e => { Hide(); });
+    }
+
+    public new sealed class UxmlFactory : UxmlFactory<Dialog, UxmlTraits>
+    {
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
     }
   }
 }

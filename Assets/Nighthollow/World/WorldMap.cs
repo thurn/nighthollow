@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Interface;
@@ -22,23 +21,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
+#nullable enable
+
 namespace Nighthollow.World
 {
   public sealed class WorldMap : MonoBehaviour
   {
-#pragma warning disable 0649
-    [SerializeField] ScreenController _screen = null!;
-    [SerializeField] Tile _bottomLeftSelection = null!;
-    [SerializeField] Tile _bottomRightSelection = null!;
-    [SerializeField] Tile _rightSelection = null!;
-    [SerializeField] Tile _leftSelection = null!;
-    [SerializeField] Tilemap _overlayTilemap = null!;
-    [SerializeField] Camera _mainCamera = null!;
-    [SerializeField] Grid _grid = null!;
-    [SerializeField] List<KingdomData> _kingdoms = null!;
-    [SerializeField] Tile _selectedTileIcon = null!;
-#pragma warning restore 0649
-
     const int BottomLeftZ = 1;
     const int BottomRightZ = 2;
     const int RightZ = 3;
@@ -46,14 +34,40 @@ namespace Nighthollow.World
     const int IconZ = 5;
 
     readonly Dictionary<int, Tilemap> _children = new Dictionary<int, Tilemap>();
-    TileBase _previousIconOnSelectedTile = null!;
     Vector2Int? _currentlySelected;
+    TileBase _previousIconOnSelectedTile = null!;
 
     void Awake()
     {
       Errors.CheckNotNull(_overlayTilemap);
       Errors.CheckNotNull(_mainCamera);
       Errors.CheckNotNull(_grid);
+    }
+
+    void Update()
+    {
+      if (Input.GetMouseButtonDown(button: 0) && !_screen.ConsumesMousePosition(Input.mousePosition))
+      {
+        var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        var worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);
+        var position = _grid.WorldToCell(worldPoint);
+        var hex = new Vector2Int(position.x, position.y);
+
+        ClearPreviousSelection();
+
+        _previousIconOnSelectedTile = GetIcon(hex);
+        ShowIcon(hex, _selectedTileIcon);
+        _currentlySelected = hex;
+
+        var tile = _children[hex.y].GetTile(new Vector3Int(hex.x, hex.y, z: 0));
+        var screenPoint = _mainCamera.WorldToScreenPoint(_grid.CellToWorld(position));
+        _screen.ShowTooltip(WorldHexTooltip.Create(
+            this,
+            tile.name,
+            hex == WorldTutorial.StartingHex ? "Kingdom of Nighthollow" : "None",
+            hex == WorldTutorial.TutorialAttackHex),
+          InterfaceUtils.ScreenPointToInterfacePoint(screenPoint));
+      }
     }
 
     public void Initialize()
@@ -72,10 +86,8 @@ namespace Nighthollow.World
         ComponentUtils.GetComponent<TilemapRenderer>(childMap).sortingOrder = -yCoordinate;
 
         for (var xCoordinate = -30; xCoordinate <= 30; ++xCoordinate)
-        {
-          tilemap.SetTile(new Vector3Int(xCoordinate, yCoordinate, 0),
-            map.GetTile(new Vector3Int(xCoordinate, yCoordinate, 0)));
-        }
+          tilemap.SetTile(new Vector3Int(xCoordinate, yCoordinate, z: 0),
+            map.GetTile(new Vector3Int(xCoordinate, yCoordinate, z: 0)));
 
         _children[yCoordinate] = tilemap;
       }
@@ -98,10 +110,13 @@ namespace Nighthollow.World
 
     public void RemoveIcon(Vector2Int hex)
     {
-      _overlayTilemap.SetTile(new Vector3Int(hex.x, hex.y, IconZ), null);
+      _overlayTilemap.SetTile(new Vector3Int(hex.x, hex.y, IconZ), tile: null);
     }
 
-    public TileBase GetIcon(Vector2Int hex) => _overlayTilemap.GetTile(new Vector3Int(hex.x, hex.y, IconZ));
+    public TileBase GetIcon(Vector2Int hex)
+    {
+      return _overlayTilemap.GetTile(new Vector3Int(hex.x, hex.y, IconZ));
+    }
 
     public void OutlineHexes(Color color, ISet<Vector2Int> hexes)
     {
@@ -117,49 +132,31 @@ namespace Nighthollow.World
       foreach (var hex in hexes)
       {
         var upLeft = HexUtils.GetInDirection(hex, HexUtils.Direction.UpLeft);
-        if (!hexes.Contains(upLeft))
-        {
-          ApplySelection(upLeft, bottomRightSelection, BottomRightZ, toOverlay: false);
-        }
+        if (!hexes.Contains(upLeft)) ApplySelection(upLeft, bottomRightSelection, BottomRightZ, toOverlay: false);
 
         var upRight = HexUtils.GetInDirection(hex, HexUtils.Direction.UpRight);
-        if (!hexes.Contains(upRight))
-        {
-          ApplySelection(upRight, bottomLeftSelection, BottomLeftZ, toOverlay: false);
-        }
+        if (!hexes.Contains(upRight)) ApplySelection(upRight, bottomLeftSelection, BottomLeftZ, toOverlay: false);
 
         if (!hexes.Contains(HexUtils.GetInDirection(hex, HexUtils.Direction.Left)))
-        {
           ApplySelection(hex, leftSelection, LeftZ, toOverlay: true);
-        }
 
         if (!hexes.Contains(HexUtils.GetInDirection(hex, HexUtils.Direction.Right)))
-        {
           ApplySelection(hex, rightSelection, RightZ, toOverlay: true);
-        }
 
         if (!hexes.Contains(HexUtils.GetInDirection(hex, HexUtils.Direction.DownLeft)))
-        {
           ApplySelection(hex, bottomLeftSelection, BottomLeftZ, toOverlay: true);
-        }
 
         if (!hexes.Contains(HexUtils.GetInDirection(hex, HexUtils.Direction.DownRight)))
-        {
           ApplySelection(hex, bottomRightSelection, BottomRightZ, toOverlay: true);
-        }
       }
     }
 
     void ApplySelection(Vector2Int hex, Tile tile, int zPosition, bool toOverlay)
     {
       if (toOverlay)
-      {
         _overlayTilemap.SetTile(new Vector3Int(hex.x, hex.y, zPosition), tile);
-      }
       else
-      {
         _children[hex.y].SetTile(new Vector3Int(hex.x, hex.y, zPosition), tile);
-      }
     }
 
     public void ClearSelection()
@@ -174,10 +171,7 @@ namespace Nighthollow.World
       if (_currentlySelected.HasValue)
       {
         RemoveIcon(_currentlySelected.Value);
-        if (_previousIconOnSelectedTile)
-        {
-          ShowIcon(_currentlySelected.Value, _previousIconOnSelectedTile);
-        }
+        if (_previousIconOnSelectedTile) ShowIcon(_currentlySelected.Value, _previousIconOnSelectedTile);
       }
     }
 
@@ -189,40 +183,26 @@ namespace Nighthollow.World
     IEnumerator<YieldInstruction> LoadGame()
     {
       _screen.HideTooltip();
-      _screen.Get(ScreenController.BlackoutWindow).Show(1.0f);
+      _screen.Get(ScreenController.BlackoutWindow).Show(argument: 1.0f);
       _screen.ShowDialog("you", "Surrender to the night!", hideCloseButton: true);
-      yield return new WaitForSeconds(3.5f);
+      yield return new WaitForSeconds(seconds: 3.5f);
       _screen.HideDialog();
-      yield return new WaitForSeconds(0.5f);
+      yield return new WaitForSeconds(seconds: 0.5f);
 
       Database.Instance.UserData.TutorialState = UserDataService.Tutorial.GameOne;
       SceneManager.LoadScene("Game");
     }
-
-    void Update()
-    {
-      if (Input.GetMouseButtonDown(0) && !_screen.ConsumesMousePosition(Input.mousePosition))
-      {
-        var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-        var worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);
-        var position = _grid.WorldToCell(worldPoint);
-        var hex = new Vector2Int(position.x, position.y);
-
-        ClearPreviousSelection();
-
-        _previousIconOnSelectedTile = GetIcon(hex);
-        ShowIcon(hex, _selectedTileIcon);
-        _currentlySelected = hex;
-
-        var tile = _children[hex.y].GetTile(new Vector3Int(hex.x, hex.y, 0));
-        var screenPoint = _mainCamera.WorldToScreenPoint(_grid.CellToWorld(position));
-        _screen.ShowTooltip(WorldHexTooltip.Create(
-            this,
-            tile.name,
-            hex == WorldTutorial.StartingHex ? "Kingdom of Nighthollow" : "None",
-            hex == WorldTutorial.TutorialAttackHex),
-          InterfaceUtils.ScreenPointToInterfacePoint(screenPoint));
-      }
-    }
+#pragma warning disable 0649
+    [SerializeField] ScreenController _screen = null!;
+    [SerializeField] Tile _bottomLeftSelection = null!;
+    [SerializeField] Tile _bottomRightSelection = null!;
+    [SerializeField] Tile _rightSelection = null!;
+    [SerializeField] Tile _leftSelection = null!;
+    [SerializeField] Tilemap _overlayTilemap = null!;
+    [SerializeField] Camera _mainCamera = null!;
+    [SerializeField] Grid _grid = null!;
+    [SerializeField] List<KingdomData> _kingdoms = null!;
+    [SerializeField] Tile _selectedTileIcon = null!;
+#pragma warning restore 0649
   }
 }

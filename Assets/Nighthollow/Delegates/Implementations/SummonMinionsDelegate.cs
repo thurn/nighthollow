@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
@@ -21,11 +20,16 @@ using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class SummonMinionsDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) => $"Summons Minions";
+    public override string Describe(StatEntity entity)
+    {
+      return $"Summons Minions";
+    }
 
     public override void OnUse(SkillContext c)
     {
@@ -37,7 +41,7 @@ namespace Nighthollow.Delegates.Implementations
         var summons = Database.Instance.GameData.GetStaticCardList(StaticCardList.Summons);
         Errors.CheckState(summons.Count == 1, "Expected only one summon creature");
         c.Results.Add(new CreateCreatureEffect(
-          summons[0],
+          summons[index: 0],
           rank.Value,
           c.Self.FilePosition,
           isMoving: true));

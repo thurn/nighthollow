@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+#nullable enable
 
 namespace Nighthollow.Interface
 {
@@ -38,23 +39,22 @@ namespace Nighthollow.Interface
       Name = name;
     }
 
-    public HideableElement FindByNameIn(VisualElement element) => InterfaceUtils.FindByName<T>(element, Name);
+    public HideableElement FindByNameIn(VisualElement element)
+    {
+      return InterfaceUtils.FindByName<T>(element, Name);
+    }
   }
 
   public sealed class ScreenController : MonoBehaviour
   {
-    [SerializeField] UIDocument _document = null!;
-
-    public UIDocument Document => _document;
-
-    VisualElement _screen = null!;
-    public VisualElement Screen => _screen;
-
     public static ElementKey<HideableVisualElement> Background = new ElementKey<HideableVisualElement>("Background");
     public static ElementKey<AdvisorBar> AdvisorBar = new ElementKey<AdvisorBar>("AdvisorBar");
     public static ElementKey<UserStatus> UserStatus = new ElementKey<UserStatus>("UserStatus");
     public static ElementKey<BlackoutWindow> BlackoutWindow = new ElementKey<BlackoutWindow>("BlackoutWindow");
     public static ElementKey<GameOverMessage> GameOverMessage = new ElementKey<GameOverMessage>("GameOverMessage");
+    [SerializeField] UIDocument _document = null!;
+
+    readonly Dictionary<string, HideableElement> _elements = new Dictionary<string, HideableElement>();
 
     readonly List<IElementKey> _keys = new List<IElementKey>
     {
@@ -65,12 +65,15 @@ namespace Nighthollow.Interface
       GameOverMessage
     };
 
-    readonly Dictionary<string, HideableElement> _elements = new Dictionary<string, HideableElement>();
-
     CardsWindow _cardsWindow = null!;
     AbstractWindow? _currentWindow;
-    ItemTooltip _itemTooltip = null!;
     Dialog _dialog = null!;
+    ItemTooltip _itemTooltip = null!;
+
+    VisualElement _screen = null!;
+
+    public UIDocument Document => _document;
+    public VisualElement Screen => _screen;
 
     public void Initialize(bool showAdvisorBar)
     {
@@ -90,15 +93,18 @@ namespace Nighthollow.Interface
       _dialog = InterfaceUtils.FindByName<Dialog>(_screen, "Dialog");
       _dialog.Initialize();
 
-      if (showAdvisorBar)
-      {
-        Get(AdvisorBar).Show();
-      }
+      if (showAdvisorBar) Get(AdvisorBar).Show();
     }
 
-    public T Get<T>(ElementKey<T> key) where T : HideableElement => (T) GetElement(key);
+    public T Get<T>(ElementKey<T> key) where T : HideableElement
+    {
+      return (T) GetElement(key);
+    }
 
-    public void Show<T>(ElementKey<T> key) where T : DefaultHideableElement => Get(key).Show();
+    public void Show<T>(ElementKey<T> key) where T : DefaultHideableElement
+    {
+      Get(key).Show();
+    }
 
     HideableElement GetElement(IElementKey key)
     {
@@ -112,7 +118,7 @@ namespace Nighthollow.Interface
              _elements.Values
                .Any(element => element.Visible && InterfaceUtils.ContainsScreenPoint(element, mousePosition)) ||
              _dialog.Visible ||
-             (_itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition));
+             _itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition);
     }
 
     public void ShowTooltip(TooltipBuilder builder, Vector2 anchor)
@@ -126,12 +132,20 @@ namespace Nighthollow.Interface
       _itemTooltip.Hide();
     }
 
-    public void ShowDialog(string portraitName, string text, bool hideCloseButton = false) =>
+    public void ShowDialog(string portraitName, string text, bool hideCloseButton = false)
+    {
       _dialog.Show(portraitName, text, hideCloseButton);
+    }
 
-    public void HideDialog() => _dialog.Hide();
+    public void HideDialog()
+    {
+      _dialog.Hide();
+    }
 
-    public void ShowCardsWindow() => ShowWindow(_cardsWindow);
+    public void ShowCardsWindow()
+    {
+      ShowWindow(_cardsWindow);
+    }
 
     public void HideCurrentWindow()
     {

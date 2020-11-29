@@ -12,17 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
-using Nighthollow.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
+using Nighthollow.Services;
+using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
+
+#nullable enable
 
 namespace Nighthollow.Components
 {
@@ -38,29 +40,6 @@ namespace Nighthollow.Components
 
   public sealed class Creature : MonoBehaviour
   {
-#pragma warning disable 0649
-    [Header("Config")] [SerializeField] bool _debugMode;
-    [SerializeField] Transform _projectileSource;
-    [SerializeField] AttachmentDisplay _attachmentDisplay;
-    [SerializeField] Transform _healthbarAnchor;
-    [SerializeField] float _animationSpeedMultiplier;
-
-    [Header("State")] [SerializeField] bool _initialized;
-    CreatureData _data;
-    [SerializeField] int _damageTaken;
-    [SerializeField] CreatureState _state;
-    SkillData _currentSkill;
-    [SerializeField] RankValue? _rankPosition;
-    [SerializeField] FileValue? _filePosition;
-    [SerializeField] Animator _animator;
-    [SerializeField] Collider2D _collider;
-    [SerializeField] StatusBarsHolder _statusBars;
-    [SerializeField] CreatureService _creatureService;
-    [SerializeField] SortingGroup _sortingGroup;
-    Coroutine _coroutine;
-    readonly Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
-#pragma warning restore 0649
-
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
     static readonly int Skill3 = Animator.StringToHash("Skill3");
@@ -70,34 +49,26 @@ namespace Nighthollow.Components
     static readonly int Moving = Animator.StringToHash("Moving");
     static readonly int Hit = Animator.StringToHash("Hit");
     static readonly int SkillSpeed = Animator.StringToHash("SkillSpeedMultiplier");
+    [Header("Config")] [SerializeField] bool _debugMode;
+    [SerializeField] Transform _projectileSource = null!;
+    [SerializeField] AttachmentDisplay _attachmentDisplay = null!;
+    [SerializeField] Transform _healthbarAnchor = null!;
+    [SerializeField] float _animationSpeedMultiplier;
 
-    public void Initialize(CreatureData creatureData)
-    {
-      _creatureService = Root.Instance.CreatureService;
-      SetState(CreatureState.Placing);
-      _animator = GetComponent<Animator>();
-      _collider = GetComponent<Collider2D>();
-      _collider.enabled = false;
-      _sortingGroup = GetComponent<SortingGroup>();
-      _statusBars = Root.Instance.Prefabs.CreateStatusBars();
-      _statusBars.HealthBar.gameObject.SetActive(false);
-      gameObject.layer = Constants.LayerForCreatures(creatureData.BaseType.Owner);
-      _animator.speed = _animationSpeedMultiplier;
-
-      _data = creatureData;
-      _initialized = true;
-    }
-
-    void Start()
-    {
-      if (!_initialized && _debugMode)
-      {
-        Initialize(_data.Clone(Root.Instance.StatsForPlayer(Owner)));
-        _creatureService.AddUserCreatureAtPosition(this,
-          BoardPositions.ClosestRankForXPosition(transform.position.x),
-          BoardPositions.ClosestFileForYPosition(transform.position.y));
-      }
-    }
+    [Header("State")] [SerializeField] bool _initialized;
+    [SerializeField] int _damageTaken;
+    [SerializeField] CreatureState _state;
+    [SerializeField] RankValue? _rankPosition;
+    [SerializeField] FileValue? _filePosition;
+    [SerializeField] Animator _animator = null!;
+    [SerializeField] Collider2D _collider = null!;
+    [SerializeField] StatusBarsHolder _statusBars = null!;
+    [SerializeField] CreatureService _creatureService = null!;
+    [SerializeField] SortingGroup _sortingGroup = null!;
+    readonly Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
+    Coroutine _coroutine = null!;
+    SkillData _currentSkill = null!;
+    CreatureData _data = null!;
 
     public CreatureData Data => _data;
 
@@ -120,6 +91,86 @@ namespace Nighthollow.Components
 
     public CreatureState State => _state;
 
+    public bool AnimationPaused
+    {
+      set => _animator.speed = value ? 0 : 1;
+    }
+
+    void Start()
+    {
+      if (!_initialized && _debugMode)
+      {
+        Initialize(_data.Clone(Root.Instance.StatsForPlayer(Owner)));
+        _creatureService.AddUserCreatureAtPosition(this,
+          BoardPositions.ClosestRankForXPosition(transform.position.x),
+          BoardPositions.ClosestFileForYPosition(transform.position.y));
+      }
+    }
+
+    void Update()
+    {
+      if (_state == CreatureState.Dying) return;
+
+      // Ensure lower Y creatures are always rendered on top of higher Y creatures
+      _sortingGroup.sortingOrder =
+        100 - Mathf.RoundToInt(transform.position.y * 10) - Mathf.RoundToInt(transform.position.x);
+
+      if (_state == CreatureState.Placing) return;
+
+      if (CanUseSkill())
+        // UseSkill() must be called from Update() in order to give time for the physics system to correctly update
+        // collider positions after activation (there is a Unity project setting which makes this automatic).
+        TryToUseSkill();
+
+      transform.eulerAngles = _data.BaseType.Owner == PlayerName.Enemy ? new Vector3(x: 0, y: 180, z: 0) : Vector3.zero;
+
+      if (transform.position.x > Constants.CreatureDespawnRightX ||
+          transform.position.x < Constants.CreatureDespawnLeftX)
+        DestroyCreature();
+      else if (Owner == PlayerName.Enemy &&
+               transform.position.x < Constants.EnemyCreatureEndzoneX)
+        Root.Instance.Enemy.OnEnemyCreatureAtEndzone(this);
+
+      var health = _data.GetInt(Stat.Health);
+      if (health > 0) _statusBars.HealthBar.Value = (health - _damageTaken) / (float) health;
+
+      _statusBars.HealthBar.gameObject.SetActive(_damageTaken > 0);
+
+      var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
+      _statusBars.transform.position = pos;
+
+      var speedMultiplier = _data.Stats.Get(Stat.SkillSpeedMultiplier).AsMultiplier();
+      Errors.CheckState(speedMultiplier > 0.05f, "Skill speed must be > 5%");
+      _animator.SetFloat(SkillSpeed, speedMultiplier);
+
+      if (_state == CreatureState.Moving)
+      {
+        _animator.SetBool(Moving, value: true);
+        transform.Translate(Vector3.right * (Time.deltaTime * (_data.GetInt(Stat.CreatureSpeed) / 1000f)));
+      }
+      else
+      {
+        _animator.SetBool(Moving, value: false);
+      }
+    }
+
+    public void Initialize(CreatureData creatureData)
+    {
+      _creatureService = Root.Instance.CreatureService;
+      SetState(CreatureState.Placing);
+      _animator = GetComponent<Animator>();
+      _collider = GetComponent<Collider2D>();
+      _collider.enabled = false;
+      _sortingGroup = GetComponent<SortingGroup>();
+      _statusBars = Root.Instance.Prefabs.CreateStatusBars();
+      _statusBars.HealthBar.gameObject.SetActive(value: false);
+      gameObject.layer = Constants.LayerForCreatures(creatureData.BaseType.Owner);
+      _animator.speed = _animationSpeedMultiplier;
+
+      _data = creatureData;
+      _initialized = true;
+    }
+
     public void EditorSetReferences(Transform projectileSource,
       Transform healthbarAnchor,
       AttachmentDisplay attachmentDisplay)
@@ -127,11 +178,6 @@ namespace Nighthollow.Components
       _projectileSource = projectileSource;
       _healthbarAnchor = healthbarAnchor;
       _attachmentDisplay = attachmentDisplay;
-    }
-
-    public bool AnimationPaused
-    {
-      set => _animator.speed = value ? 0 : 1;
     }
 
     public void ActivateCreature(RankValue? rankValue,
@@ -210,7 +256,7 @@ namespace Nighthollow.Components
       var choices = Data.BaseType.SkillAnimations.Where(a => a.Type == skill.BaseType.SkillAnimationType).ToList();
       Errors.CheckState(choices.Count > 0,
         $"Creature is unable to perform animation of type {skill.BaseType.SkillAnimationType}");
-      return choices[Random.Range(0, choices.Count)].Number;
+      return choices[Random.Range(minInclusive: 0, choices.Count)].Number;
     }
 
     void ToDefaultState()
@@ -220,12 +266,9 @@ namespace Nighthollow.Components
 
     void Kill()
     {
-      if (_coroutine != null)
-      {
-        StopCoroutine(_coroutine);
-      }
+      if (_coroutine != null) StopCoroutine(_coroutine);
 
-      _statusBars.HealthBar.gameObject.SetActive(false);
+      _statusBars.HealthBar.gameObject.SetActive(value: false);
       _animator.SetTrigger(Death);
       _collider.enabled = false;
 
@@ -247,17 +290,14 @@ namespace Nighthollow.Components
       if (!IsAlive()) return;
       _currentSkill.Delegate.OnUse(new SkillContext(this, _currentSkill));
 
-      if (_currentSkill.IsMelee())
-      {
-        _currentSkill.Delegate.OnImpact(new SkillContext(this, _currentSkill));
-      }
+      if (_currentSkill.IsMelee()) _currentSkill.Delegate.OnImpact(new SkillContext(this, _currentSkill));
     }
 
     public void AddDamage(Creature appliedBy, int damage)
     {
       Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
       var health = _data.GetInt(Stat.Health);
-      _damageTaken = Mathf.Clamp(0, _damageTaken + damage, health);
+      _damageTaken = Mathf.Clamp(value: 0, _damageTaken + damage, health);
       if (_damageTaken >= health)
       {
         appliedBy.Data.Delegate.OnKilledEnemy(new CreatureContext(appliedBy), this, damage);
@@ -269,16 +309,14 @@ namespace Nighthollow.Components
     {
       Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
       var health = _data.GetInt(Stat.Health);
-      _damageTaken = Mathf.Clamp(0, _damageTaken - healing, health);
+      _damageTaken = Mathf.Clamp(value: 0, _damageTaken - healing, health);
     }
 
     public void OnActionAnimationCompleted()
     {
       if (!IsAlive() || IsStunned())
-      {
         // Ignore exit states from skills that ended early due to stun
         return;
-      }
 
       ToDefaultState();
     }
@@ -308,87 +346,48 @@ namespace Nighthollow.Components
       ToDefaultState();
     }
 
-    public bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
+    public bool IsAlive()
+    {
+      return _state != CreatureState.Placing && _state != CreatureState.Dying;
+    }
 
-    public bool IsStunned() => _state == CreatureState.Stunned;
+    public bool IsStunned()
+    {
+      return _state == CreatureState.Stunned;
+    }
 
-    public bool HasProjectileSkill() => _data.Skills.Any(s => s.IsProjectile());
+    public bool HasProjectileSkill()
+    {
+      return _data.Skills.Any(s => s.IsProjectile());
+    }
 
-    bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
+    bool CanUseSkill()
+    {
+      return _state == CreatureState.Idle || _state == CreatureState.Moving;
+    }
 
-    public void MarkSkillUsed(SkillTypeData skill) => _skillLastUsedTimes[skill.Id] = Time.time;
+    public void MarkSkillUsed(SkillTypeData skill)
+    {
+      _skillLastUsedTimes[skill.Id] = Time.time;
+    }
 
     /// <summary>
-    /// Returns the timestamp at which the provided skill was last used by this creature, or 0 if it has never been used
+    ///   Returns the timestamp at which the provided skill was last used by this creature, or 0 if it has never been used
     /// </summary>
-    public float? TimeLastUsedSeconds(SkillTypeData skill) =>
-      _skillLastUsedTimes.ContainsKey(skill.Id) ? (float?) _skillLastUsedTimes[skill.Id] : null;
+    public float? TimeLastUsedSeconds(SkillTypeData skill)
+    {
+      return _skillLastUsedTimes.ContainsKey(skill.Id) ? (float?) _skillLastUsedTimes[skill.Id] : null;
+    }
 
     IEnumerator<YieldInstruction> RunCoroutine()
     {
       while (true)
       {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(seconds: 1);
         Heal(_data.GetInt(Stat.HealthRegenerationPerSecond));
       }
 
       // ReSharper disable once IteratorNeverReturns
-    }
-
-    void Update()
-    {
-      if (_state == CreatureState.Dying) return;
-
-      // Ensure lower Y creatures are always rendered on top of higher Y creatures
-      _sortingGroup.sortingOrder =
-        100 - Mathf.RoundToInt(transform.position.y * 10) - Mathf.RoundToInt(transform.position.x);
-
-      if (_state == CreatureState.Placing) return;
-
-      if (CanUseSkill())
-      {
-        // UseSkill() must be called from Update() in order to give time for the physics system to correctly update
-        // collider positions after activation (there is a Unity project setting which makes this automatic).
-        TryToUseSkill();
-      }
-
-      transform.eulerAngles = _data.BaseType.Owner == PlayerName.Enemy ? new Vector3(0, 180, 0) : Vector3.zero;
-
-      if (transform.position.x > Constants.CreatureDespawnRightX ||
-          transform.position.x < Constants.CreatureDespawnLeftX)
-      {
-        DestroyCreature();
-      }
-      else if (Owner == PlayerName.Enemy &&
-               transform.position.x < Constants.EnemyCreatureEndzoneX)
-      {
-        Root.Instance.Enemy.OnEnemyCreatureAtEndzone(this);
-      }
-
-      var health = _data.GetInt(Stat.Health);
-      if (health > 0)
-      {
-        _statusBars.HealthBar.Value = (health - _damageTaken) / (float) health;
-      }
-
-      _statusBars.HealthBar.gameObject.SetActive(_damageTaken > 0);
-
-      var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
-      _statusBars.transform.position = pos;
-
-      var speedMultiplier = _data.Stats.Get(Stat.SkillSpeedMultiplier).AsMultiplier();
-      Errors.CheckState(speedMultiplier > 0.05f, "Skill speed must be > 5%");
-      _animator.SetFloat(SkillSpeed, speedMultiplier);
-
-      if (_state == CreatureState.Moving)
-      {
-        _animator.SetBool(Moving, true);
-        transform.Translate(Vector3.right * (Time.deltaTime * (_data.GetInt(Stat.CreatureSpeed) / 1000f)));
-      }
-      else
-      {
-        _animator.SetBool(Moving, false);
-      }
     }
 
     void SetState(CreatureState newState)

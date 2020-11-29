@@ -21,9 +21,11 @@ namespace Nighthollow.Data
 {
   public static class ModifierUtil
   {
-    public static IStatModifier? ParseModifier(ModifierTypeData modifierData, string? value) =>
-      modifierData.StatId.HasValue && modifierData.Operator.HasValue && value != null ?
-        Stat.GetStat(modifierData.StatId.Value).ParseModifier(value, modifierData.Operator.Value) :
-        null;
+    public static IStatModifier? ParseModifier(ModifierTypeData modifierData, string? value)
+    {
+      return modifierData.StatId.HasValue && modifierData.Operator.HasValue && value != null
+        ? Stat.GetStat(modifierData.StatId.Value).ParseModifier(value, modifierData.Operator.Value)
+        : null;
+    }
   }
 }

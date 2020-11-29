@@ -18,65 +18,97 @@ using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable enable
+
 namespace Nighthollow.Services
 {
   public sealed class Prefabs : MonoBehaviour
   {
-#pragma warning disable 0649
-    [SerializeField] Card _cardPrefab;
-    [SerializeField] StatusBarsHolder _statusBars;
-    [SerializeField] SpriteRenderer _cursorPrefab;
-    [SerializeField] Image _influencePrefab;
-    [SerializeField] Attachment _attachmentPrefab;
-    [SerializeField] Sprite _lightSymbol;
-    [SerializeField] Sprite _skySymbol;
-    [SerializeField] Sprite _flameSymbol;
-    [SerializeField] Sprite _iceSymbol;
-    [SerializeField] Sprite _earthSymbol;
-    [SerializeField] Sprite _nightSymbol;
-    [SerializeField] TimedEffect _missEffect;
-    [SerializeField] TimedEffect _evadeEffect;
-    [SerializeField] TimedEffect _critEffect;
-    [SerializeField] TimedEffect _stunEffect;
-    [SerializeField] DamageText _hitSmall;
-    [SerializeField] DamageText _hitMedium;
-    [SerializeField] DamageText _hitBig;
-    [SerializeField] Sprite _stunIcon;
-#pragma warning restore 0649
+    [SerializeField] Card _cardPrefab = null!;
+    [SerializeField] StatusBarsHolder _statusBars = null!;
+    [SerializeField] SpriteRenderer _cursorPrefab = null!;
+    [SerializeField] Image _influencePrefab = null!;
+    [SerializeField] Attachment _attachmentPrefab = null!;
+    [SerializeField] Sprite _lightSymbol = null!;
+    [SerializeField] Sprite _skySymbol = null!;
+    [SerializeField] Sprite _flameSymbol = null!;
+    [SerializeField] Sprite _iceSymbol = null!;
+    [SerializeField] Sprite _earthSymbol = null!;
+    [SerializeField] Sprite _nightSymbol = null!;
+    [SerializeField] TimedEffect _missEffect = null!;
+    [SerializeField] TimedEffect _evadeEffect = null!;
+    [SerializeField] TimedEffect _critEffect = null!;
+    [SerializeField] TimedEffect _stunEffect = null!;
+    [SerializeField] DamageText _hitSmall = null!;
+    [SerializeField] DamageText _hitMedium = null!;
+    [SerializeField] DamageText _hitBig = null!;
+    [SerializeField] Sprite _stunIcon = null!;
 
-    public Card CreateCard() => ComponentUtils.Instantiate(_cardPrefab, Root.Instance.MainCanvas);
+    public Card CreateCard()
+    {
+      return ComponentUtils.Instantiate(_cardPrefab, Root.Instance.MainCanvas);
+    }
 
-    public StatusBarsHolder CreateStatusBars() => ComponentUtils.Instantiate(_statusBars,
-      Root.Instance.MainCanvas);
+    public StatusBarsHolder CreateStatusBars()
+    {
+      return ComponentUtils.Instantiate(_statusBars,
+        Root.Instance.MainCanvas);
+    }
 
-    public SpriteRenderer CreateCursor() => ComponentUtils.Instantiate(_cursorPrefab);
+    public SpriteRenderer CreateCursor()
+    {
+      return ComponentUtils.Instantiate(_cursorPrefab);
+    }
 
-    public Image CreateInfluence() => ComponentUtils.Instantiate(_influencePrefab);
+    public Image CreateInfluence()
+    {
+      return ComponentUtils.Instantiate(_influencePrefab);
+    }
 
-    public Attachment CreateAttachment() => ComponentUtils.Instantiate(_attachmentPrefab);
+    public Attachment CreateAttachment()
+    {
+      return ComponentUtils.Instantiate(_attachmentPrefab);
+    }
 
-    public GameObject CreateMiss(Vector3 position) =>
-      Root.Instance.ObjectPoolService.Create(_missEffect.gameObject, position);
+    public GameObject CreateMiss(Vector3 position)
+    {
+      return Root.Instance.ObjectPoolService.Create(_missEffect.gameObject, position);
+    }
 
-    public GameObject CreateEvade(Vector3 position) =>
-      Root.Instance.ObjectPoolService.Create(_evadeEffect.gameObject, position);
+    public GameObject CreateEvade(Vector3 position)
+    {
+      return Root.Instance.ObjectPoolService.Create(_evadeEffect.gameObject, position);
+    }
 
-    public GameObject CreateCrit(Vector3 position) =>
-      Root.Instance.ObjectPoolService.Create(_critEffect.gameObject, position);
+    public GameObject CreateCrit(Vector3 position)
+    {
+      return Root.Instance.ObjectPoolService.Create(_critEffect.gameObject, position);
+    }
 
-    public GameObject CreateStun(Vector3 position) =>
-      Root.Instance.ObjectPoolService.Create(_stunEffect.gameObject, position);
+    public GameObject CreateStun(Vector3 position)
+    {
+      return Root.Instance.ObjectPoolService.Create(_stunEffect.gameObject, position);
+    }
 
-    public DamageText CreateHitSmall() =>
-      Root.Instance.ObjectPoolService.Create(_hitSmall, Constants.OffScreen, Root.Instance.MainCanvas);
+    public DamageText CreateHitSmall()
+    {
+      return Root.Instance.ObjectPoolService.Create(_hitSmall, Constants.OffScreen, Root.Instance.MainCanvas);
+    }
 
-    public DamageText CreateHitMedium() =>
-      Root.Instance.ObjectPoolService.Create(_hitMedium, Constants.OffScreen, Root.Instance.MainCanvas);
+    public DamageText CreateHitMedium()
+    {
+      return Root.Instance.ObjectPoolService.Create(_hitMedium, Constants.OffScreen, Root.Instance.MainCanvas);
+    }
 
-    public DamageText CreateHitBig() =>
-      Root.Instance.ObjectPoolService.Create(_hitBig, Constants.OffScreen, Root.Instance.MainCanvas);
+    public DamageText CreateHitBig()
+    {
+      return Root.Instance.ObjectPoolService.Create(_hitBig, Constants.OffScreen, Root.Instance.MainCanvas);
+    }
 
-    public Sprite StunIcon() => Instantiate(_stunIcon);
+    public Sprite StunIcon()
+    {
+      return Instantiate(_stunIcon);
+    }
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {
@@ -88,7 +120,7 @@ namespace Nighthollow.Services
         School.Ice => Instantiate(_iceSymbol),
         School.Earth => Instantiate(_earthSymbol),
         School.Shadow => Instantiate(_nightSymbol),
-        _ => throw Errors.UnknownEnumValue(influenceType),
+        _ => throw Errors.UnknownEnumValue(influenceType)
       };
     }
   }

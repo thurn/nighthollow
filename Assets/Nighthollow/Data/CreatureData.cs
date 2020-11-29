@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
@@ -20,19 +19,12 @@ using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
+#nullable enable
+
 namespace Nighthollow.Data
 {
   public sealed class CreatureData : StatEntity
   {
-    public string Name { get; }
-    public CreatureTypeData BaseType { get; }
-    public School School { get; }
-    public IReadOnlyList<SkillData> Skills { get; }
-    public override StatTable Stats { get; }
-    public DelegateList Delegate { get; }
-    public IReadOnlyList<AffixData> TargetedAffixes { get; }
-    public CreatureItemData Item { get; }
-
     public CreatureData(
       string name,
       CreatureTypeData baseType,
@@ -52,6 +44,15 @@ namespace Nighthollow.Data
       TargetedAffixes = targetedAffixes;
       Item = item;
     }
+
+    public string Name { get; }
+    public CreatureTypeData BaseType { get; }
+    public School School { get; }
+    public IReadOnlyList<SkillData> Skills { get; }
+    public override StatTable Stats { get; }
+    public DelegateList Delegate { get; }
+    public IReadOnlyList<AffixData> TargetedAffixes { get; }
+    public CreatureItemData Item { get; }
 
     public CreatureData Clone(StatTable parentStats)
     {

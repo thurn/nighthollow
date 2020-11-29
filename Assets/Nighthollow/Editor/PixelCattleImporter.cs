@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.IO;
 using System.Linq;
 using Nighthollow.Components;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.Rendering;
-using Object = UnityEngine.Object;
+
+#nullable enable
 
 namespace Nighthollow.Editor
 {
   public sealed class PixelCattleImporter
   {
     const string PixelCattleDirectory = "Assets/ThirdParty/Pixel Cattle Games";
-    string _creatureName;
-    string _internalCreatureName;
+    string _creatureName = null!;
+    string _internalCreatureName = null!;
 
     [MenuItem("Tools/Import/Pixel Cattle Creature %#p")]
     public static void Import()
@@ -89,7 +89,7 @@ namespace Nighthollow.Editor
       healthbarPosition.transform.SetParent(prefab.transform);
       healthbarPosition.transform.localPosition = new Vector2(50, 200);
 
-      AttachmentDisplay attachmentDisplay = null;
+      AttachmentDisplay? attachmentDisplay = null;
       foreach (var t in prefab.GetComponentsInChildren<Transform>())
       {
         if (t.gameObject.name.Contains("buttock") && t.childCount == 0)
@@ -103,13 +103,15 @@ namespace Nighthollow.Editor
         }
       }
 
-      if (!attachmentDisplay)
+      var creature = prefab.AddComponent<Creature>();
+      if (attachmentDisplay)
+      {
+        creature.EditorSetReferences(projectileSource.transform, healthbarPosition.transform, attachmentDisplay!);
+      }
+      else
       {
         Debug.LogError("Buttock not found!");
       }
-
-      var creature = prefab.AddComponent<Creature>();
-      creature.EditorSetReferences(projectileSource.transform, healthbarPosition.transform, attachmentDisplay);
 
       var sortingGroup = prefab.AddComponent<SortingGroup>();
       sortingGroup.sortingOrder = 100;

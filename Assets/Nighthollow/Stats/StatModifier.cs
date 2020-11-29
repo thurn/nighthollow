@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using SimpleJSON;
+
+#nullable enable
 
 namespace Nighthollow.Stats
 {
@@ -47,9 +48,9 @@ namespace Nighthollow.Stats
 
   public sealed class StatModifier<TOperation, TValue> : IStatModifier where TOperation : IOperation
   {
-    readonly AbstractStat<TOperation, TValue> _stat;
-    readonly TOperation _operation;
     readonly ILifetime _lifetime;
+    readonly TOperation _operation;
+    readonly AbstractStat<TOperation, TValue> _stat;
 
     public StatModifier(AbstractStat<TOperation, TValue> stat, TOperation operation, ILifetime lifetime)
     {
@@ -64,18 +65,15 @@ namespace Nighthollow.Stats
 
     public ILifetime Lifetime => _lifetime;
 
-    public IStatModifier WithLifetime(ILifetime lifetime) =>
-      new StatModifier<TOperation, TValue>(_stat, _operation, lifetime);
+    public IStatModifier WithLifetime(ILifetime lifetime)
+    {
+      return new StatModifier<TOperation, TValue>(_stat, _operation, lifetime);
+    }
 
     public string? Describe()
     {
       var statDescription = Generated.Stat.GetDescription(Stat.Id);
       return statDescription == null ? null : _operation.Describe(statDescription);
-    }
-
-    public override string ToString()
-    {
-      return $"{Stat}: {Operation}";
     }
 
     public JSONNode Serialize()
@@ -87,6 +85,11 @@ namespace Nighthollow.Stats
         ["value"] = serialized.Value,
         ["operator"] = (int) serialized.Operator
       };
+    }
+
+    public override string ToString()
+    {
+      return $"{Stat}: {Operation}";
     }
   }
 }

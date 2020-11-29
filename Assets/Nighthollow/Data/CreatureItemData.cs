@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
@@ -22,17 +21,12 @@ using Nighthollow.Stats;
 using Nighthollow.Utils;
 using SimpleJSON;
 
+#nullable enable
+
 namespace Nighthollow.Data
 {
   public sealed class CreatureItemData
   {
-    public string Name { get; }
-    public CreatureTypeData BaseType { get; }
-    public School School { get; }
-    public StatModifierTable Stats { get; }
-    public IReadOnlyList<SkillItemData> Skills { get; }
-    public IReadOnlyList<AffixData> Affixes { get; }
-
     public CreatureItemData(
       string name,
       CreatureTypeData baseType,
@@ -49,17 +43,27 @@ namespace Nighthollow.Data
       Affixes = affixes;
     }
 
-    public static CreatureItemData Deserialize(GameDataService gameData, JSONNode node) =>
-      new CreatureItemData(
+    public string Name { get; }
+    public CreatureTypeData BaseType { get; }
+    public School School { get; }
+    public StatModifierTable Stats { get; }
+    public IReadOnlyList<SkillItemData> Skills { get; }
+    public IReadOnlyList<AffixData> Affixes { get; }
+
+    public static CreatureItemData Deserialize(GameDataService gameData, JSONNode node)
+    {
+      return new CreatureItemData(
         node["name"].Value,
         gameData.GetCreatureType(node["baseType"].AsInt),
         (School) node["school"].AsInt,
         StatModifierTable.Deserialize(node["stats"]),
         node["skills"].FromJsonArray().Select(c => SkillItemData.Deserialize(gameData, c)).ToList(),
         node["affixes"].FromJsonArray().Select(c => AffixData.Deserialize(gameData, c)).ToList());
+    }
 
-    public JSONNode Serialize() =>
-      new JSONObject
+    public JSONNode Serialize()
+    {
+      return new JSONObject
       {
         ["name"] = Name,
         ["baseType"] = BaseType.Id,
@@ -68,5 +72,6 @@ namespace Nighthollow.Data
         ["skills"] = Skills.Select(s => s.Serialize()).AsJsonArray(),
         ["affixes"] = Affixes.Select(s => s.Serialize()).AsJsonArray()
       };
+    }
   }
 }

@@ -27,6 +27,9 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
-    protected override AbstractDelegateList? GetChild(DelegateContext context) => null;
+    protected override AbstractDelegateList? GetChild(DelegateContext context)
+    {
+      return null;
+    }
   }
 }

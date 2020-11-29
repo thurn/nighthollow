@@ -23,11 +23,14 @@ namespace Nighthollow.Stats
 {
   public readonly struct IntRangeValue
   {
-    public static readonly IntRangeValue Zero = new IntRangeValue(0, 0);
+    public static readonly IntRangeValue Zero = new IntRangeValue(low: 0, high: 0);
     public int Low { get; }
     public int High { get; }
 
-    public override string ToString() => $"{Low}-{High}";
+    public override string ToString()
+    {
+      return $"{Low}-{High}";
+    }
 
     public IntRangeValue(int low, int high)
     {
@@ -70,15 +73,22 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override IntRangeValue ComputeValue(IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
-      Compute(operations);
+    public override IntRangeValue ComputeValue(IReadOnlyList<NumericOperation<IntRangeValue>> operations)
+    {
+      return Compute(operations);
+    }
 
-    public static IntRangeValue Compute(IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
-      new IntRangeValue(
+    public static IntRangeValue Compute(IReadOnlyList<NumericOperation<IntRangeValue>> operations)
+    {
+      return new IntRangeValue(
         IntStat.Compute(operations, range => range.Low),
         IntStat.Compute(operations, range => range.High));
+    }
 
-    protected override IntRangeValue ParseStatValue(string value) => ParseIntRange(value);
+    protected override IntRangeValue ParseStatValue(string value)
+    {
+      return ParseIntRange(value);
+    }
 
     public static IntRangeValue ParseIntRange(string value)
     {

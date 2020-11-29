@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+#nullable enable
 
 namespace Nighthollow.Utils
 {
@@ -25,31 +25,36 @@ namespace Nighthollow.Utils
     public static TValue GetValueOrDefault<TKey, TValue>(
       this IReadOnlyDictionary<TKey, TValue> dictionary,
       TKey key,
-      TValue defaultValue) =>
-      dictionary.TryGetValue(key, out var value) ? value : defaultValue;
+      TValue defaultValue)
+    {
+      return dictionary.TryGetValue(key, out var value) ? value : defaultValue;
+    }
 
     public static TValue GetOrCreateDefault<TKey, TValue>(
       this IDictionary<TKey, TValue> dictionary,
       TKey key,
       TValue defaultValue)
     {
-      if (dictionary.TryGetValue(key, out var value))
-      {
-        return value;
-      }
+      if (dictionary.TryGetValue(key, out var value)) return value;
 
       dictionary[key] = defaultValue;
       return defaultValue;
     }
 
-    public static Dictionary<TKey, TValue> Clone<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary) =>
-      dictionary.ToDictionary(p => p.Key, p => p.Value);
+    public static Dictionary<TKey, TValue> Clone<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary)
+    {
+      return dictionary.ToDictionary(p => p.Key, p => p.Value);
+    }
 
-    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source) where T : struct =>
-      source.Where(t => t != null).Select(t => t.GetValueOrDefault());
+    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source) where T : struct
+    {
+      return source.Where(t => t != null).Select(t => t.GetValueOrDefault());
+    }
 
-    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source) where T : class =>
-      source.Where(t => t != null).Select(t => t!);
+    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source) where T : class
+    {
+      return source.Where(t => t != null).Select(t => t!);
+    }
 
     /// <summary>Returns the infinite sequence (1, -1, -2, -2, ....)</summary>
     public static IEnumerable<int> AlternatingIntegers()
@@ -65,7 +70,9 @@ namespace Nighthollow.Utils
       // ReSharper disable once IteratorNeverReturns
     }
 
-    public static IEnumerable<T> AllNonDefaultEnumValues<T>(Type type) where T : struct, Enum =>
-      Enum.GetValues(type).Cast<T>().Where(v => !v.Equals(default));
+    public static IEnumerable<T> AllNonDefaultEnumValues<T>(Type type) where T : struct, Enum
+    {
+      return Enum.GetValues(type).Cast<T>().Where(v => !v.Equals(obj: default));
+    }
   }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -21,12 +20,12 @@ using Nighthollow.Data;
 using Nighthollow.Services;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Components
 {
   public sealed class Hand : MonoBehaviour
   {
-#pragma warning disable 0649
-
     [Header("Config")] [SerializeField] bool _debugMode;
     [SerializeField] Transform _deckPosition = null!;
     [SerializeField] float _initialCardScale;
@@ -39,10 +38,8 @@ namespace Nighthollow.Components
     [SerializeField] Transform _controlPoint4 = null!;
     [SerializeField] List<Card> _cards = null!;
     [SerializeField] Hand _handOverridePosition = null!;
-    bool _shouldOverrideHandPosition;
     bool _previewMode;
-
-#pragma warning restore 0649
+    bool _shouldOverrideHandPosition;
 
     public float FinalCardScale => _finalCardScale;
 
@@ -51,107 +48,15 @@ namespace Nighthollow.Components
       if (_debugMode)
       {
         var children = GetComponentsInChildren<Card>();
-        foreach (var child in children)
-        {
-          _cards.Add(child);
-        }
+        foreach (var child in children) _cards.Add(child);
 
         AnimateCardsToPosition();
       }
-    }
-
-    public void DrawCards(IEnumerable<CreatureData> cards, Action? onComplete = null)
-    {
-      StartCoroutine(DrawsCardAsync(cards, onComplete));
-    }
-
-    IEnumerator<YieldInstruction> DrawsCardAsync(IEnumerable<CreatureData> cards, Action? onComplete)
-    {
-      foreach (var cardData in cards)
-      {
-        var card = Root.Instance.Prefabs.CreateCard();
-        card.Initialize(cardData);
-        card.transform.position = _deckPosition.position;
-        card.transform.localScale = Vector2.one * _initialCardScale;
-        AddToHand(card);
-        yield return new WaitForSeconds(0.2f);
-      }
-
-      onComplete?.Invoke();
-    }
-
-    public void RemoveFromHand(Card card)
-    {
-      _cards.Remove(card);
-      AnimateCardsToPosition();
-    }
-
-    public void AddToHand(Card card, bool animate = true)
-    {
-      card.transform.SetParent(transform);
-      _cards.Add(card);
-      card.PreviewMode = _previewMode;
-
-      if (animate)
-      {
-        AnimateCardsToPosition();
-      }
-    }
-
-    public void OverrideHandPosition(bool value, Action? onComplete = null)
-    {
-      _shouldOverrideHandPosition = value;
-      AnimateCardsToPosition(onComplete);
-    }
-
-    public void SetCardsToPreviewMode(bool value)
-    {
-      _previewMode = value;
-
-      foreach (var card in _cards)
-      {
-        card.PreviewMode = value;
-      }
-    }
-
-    public void DestroyAllCards()
-    {
-      foreach (var card in _cards)
-      {
-        Destroy(card.gameObject);
-      }
-
-      _cards.Clear();
-    }
-
-    public void AnimateCardsToPosition(Action? onComplete = null)
-    {
-      var sequence = DOTween.Sequence();
-      for (var i = 0; i < _cards.Count; ++i)
-      {
-        var curvePosition = CalculateCurvePosition(i);
-        var t = _cards[i].transform;
-        t.SetSiblingIndex(i);
-        sequence.Insert(0, t.DOScale(endValue: _finalCardScale, duration: 0.3f));
-        sequence.Insert(0,
-          t.DOMove(
-            _shouldOverrideHandPosition
-              ? _handOverridePosition!.CalculateBezierPosition(curvePosition)
-              : CalculateBezierPosition(curvePosition), duration: 0.3f));
-        sequence.Insert(0,
-          t.DOLocalRotate(new Vector3(0, 0,
-            _zRotationMultiplier * CalculateZRotation(curvePosition)), duration: 0.3f));
-      }
-
-      sequence.AppendCallback(() => onComplete?.Invoke());
     }
 
     void Update()
     {
-      if (_debugMode)
-      {
-        AnimateCardsToPosition();
-      }
+      if (_debugMode) AnimateCardsToPosition();
     }
 
     void OnDrawGizmosSelected()
@@ -169,12 +74,86 @@ namespace Nighthollow.Components
       Gizmos.DrawSphere(_controlPoint4.position, radius: 10);
     }
 
+    public void DrawCards(IEnumerable<CreatureData> cards, Action? onComplete = null)
+    {
+      StartCoroutine(DrawsCardAsync(cards, onComplete));
+    }
+
+    IEnumerator<YieldInstruction> DrawsCardAsync(IEnumerable<CreatureData> cards, Action? onComplete)
+    {
+      foreach (var cardData in cards)
+      {
+        var card = Root.Instance.Prefabs.CreateCard();
+        card.Initialize(cardData);
+        card.transform.position = _deckPosition.position;
+        card.transform.localScale = Vector2.one * _initialCardScale;
+        AddToHand(card);
+        yield return new WaitForSeconds(seconds: 0.2f);
+      }
+
+      onComplete?.Invoke();
+    }
+
+    public void RemoveFromHand(Card card)
+    {
+      _cards.Remove(card);
+      AnimateCardsToPosition();
+    }
+
+    public void AddToHand(Card card, bool animate = true)
+    {
+      card.transform.SetParent(transform);
+      _cards.Add(card);
+      card.PreviewMode = _previewMode;
+
+      if (animate) AnimateCardsToPosition();
+    }
+
+    public void OverrideHandPosition(bool value, Action? onComplete = null)
+    {
+      _shouldOverrideHandPosition = value;
+      AnimateCardsToPosition(onComplete);
+    }
+
+    public void SetCardsToPreviewMode(bool value)
+    {
+      _previewMode = value;
+
+      foreach (var card in _cards) card.PreviewMode = value;
+    }
+
+    public void DestroyAllCards()
+    {
+      foreach (var card in _cards) Destroy(card.gameObject);
+
+      _cards.Clear();
+    }
+
+    public void AnimateCardsToPosition(Action? onComplete = null)
+    {
+      var sequence = DOTween.Sequence();
+      for (var i = 0; i < _cards.Count; ++i)
+      {
+        var curvePosition = CalculateCurvePosition(i);
+        var t = _cards[i].transform;
+        t.SetSiblingIndex(i);
+        sequence.Insert(atPosition: 0, t.DOScale(_finalCardScale, duration: 0.3f));
+        sequence.Insert(atPosition: 0,
+          t.DOMove(
+            _shouldOverrideHandPosition
+              ? _handOverridePosition!.CalculateBezierPosition(curvePosition)
+              : CalculateBezierPosition(curvePosition), duration: 0.3f));
+        sequence.Insert(atPosition: 0,
+          t.DOLocalRotate(new Vector3(x: 0, y: 0,
+            _zRotationMultiplier * CalculateZRotation(curvePosition)), duration: 0.3f));
+      }
+
+      sequence.AppendCallback(() => onComplete?.Invoke());
+    }
+
     float CalculateCurvePosition(int cardIndex)
     {
-      if (cardIndex < 0 || cardIndex >= _cards.Count)
-      {
-        throw new ArgumentException("Index out of bounds");
-      }
+      if (cardIndex < 0 || cardIndex >= _cards.Count) throw new ArgumentException("Index out of bounds");
 
       switch (_cards.Count)
       {
@@ -197,11 +176,16 @@ namespace Nighthollow.Components
 
     // Given a start,end range on the 0,1 line, returns the position within that range where card 'index' of of
     // 'count' total cards should be positioned
-    float PositionWithinRange(float start, float end, int index, int count) =>
-      start + (index * ((end - start) / (count - 1.0f)));
+    float PositionWithinRange(float start, float end, int index, int count)
+    {
+      return start + index * ((end - start) / (count - 1.0f));
+    }
 
     // Card rotation ranges from 5 to -5
-    float CalculateZRotation(float t) => (-10.0f * t) + 5.0f;
+    float CalculateZRotation(float t)
+    {
+      return -10.0f * t + 5.0f;
+    }
 
     Vector3 CalculateBezierPosition(float t)
     {

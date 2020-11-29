@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.Components
 {
@@ -39,7 +40,7 @@ namespace Nighthollow.Components
     IEnumerator<YieldInstruction> Play()
     {
       _animator.SetTrigger(OpenTrigger);
-      yield return new WaitForSeconds(0.2f);
+      yield return new WaitForSeconds(seconds: 0.2f);
       var effect = Instantiate(_onOpenEffect.gameObject);
       effect.transform.position = transform.position;
     }

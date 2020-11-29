@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -27,11 +26,16 @@ using Nighthollow.Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class DefaultSkillDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) => "Default Skill Delegate";
+    public override string Describe(StatEntity entity)
+    {
+      return "Default Skill Delegate";
+    }
 
     public override void OnUse(SkillContext c)
     {
@@ -62,16 +66,11 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnImpact(SkillContext context)
     {
-      if (context.GetBool(Stat.Untargeted))
-      {
-        return;
-      }
+      if (context.GetBool(Stat.Untargeted)) return;
 
       var targets = context.Delegate.FindTargets(context);
       foreach (var target in targets)
-      {
         context.Results.Add(Events.Effect(context, (d, c) => d.OnApplyToTarget(c, target)));
-      }
     }
 
     public override void OnApplyToTarget(SkillContext c, Creature target)
@@ -97,19 +96,13 @@ namespace Nighthollow.Delegates.Implementations
 
       c.Results.Add(Events.Effect(c, (d, sc) => d.OnHitTarget(sc, target, totalDamage)));
 
-      if (totalDamage == 0)
-      {
-        return;
-      }
+      if (totalDamage == 0) return;
 
       c.Results.Add(new ApplyDamageEffect(c.Self, target, totalDamage));
       c.Results.Add(new DamageTextEffect(target, totalDamage));
 
       var healthDrain = c.Delegate.ComputeHealthDrain(c, target, totalDamage);
-      if (healthDrain > 0)
-      {
-        c.Results.Add(new HealEffect(c.Self, healthDrain));
-      }
+      if (healthDrain > 0) c.Results.Add(new HealEffect(c.Self, healthDrain));
 
       if (c.GetBool(Stat.CanStun) && c.Delegate.RollForStun(c, target, totalDamage))
       {
@@ -136,50 +129,64 @@ namespace Nighthollow.Delegates.Implementations
         .Select(ComponentUtils.GetComponent<Creature>));
     }
 
-    public override IEnumerable<Creature> FilterTargets(SkillContext c, IEnumerable<Creature> hits) =>
-      c.Skill.IsMelee() ? hits.Take(Errors.CheckPositive(c.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
+    public override IEnumerable<Creature> FilterTargets(SkillContext c, IEnumerable<Creature> hits)
+    {
+      return c.Skill.IsMelee() ? hits.Take(Errors.CheckPositive(c.GetInt(Stat.MaxMeleeAreaTargets))) : hits;
+    }
 
-    public override Collider2D GetCollider(SkillContext c) =>
-      c.Projectile ? c.Projectile!.Collider : c.Self.Collider;
+    public override Collider2D GetCollider(SkillContext c)
+    {
+      return c.Projectile ? c.Projectile!.Collider : c.Self.Collider;
+    }
 
-    public override TaggedValues<DamageType, int> RollForBaseDamage(SkillContext c, Creature target) =>
-      DamageUtil.RollForDamage(c.GetStat(Stat.BaseDamage));
+    public override TaggedValues<DamageType, int> RollForBaseDamage(SkillContext c, Creature target)
+    {
+      return DamageUtil.RollForDamage(c.GetStat(Stat.BaseDamage));
+    }
 
     public override TaggedValues<DamageType, int> ApplyDamageReduction(
       SkillContext c,
       Creature target,
-      TaggedValues<DamageType, int> damage) =>
-      new TaggedValues<DamageType, int>(
+      TaggedValues<DamageType, int> damage)
+    {
+      return new TaggedValues<DamageType, int>(
         damage.Values.ToDictionary(
           k => k.Key,
           v => ApplyReduction(
             c,
             v.Value,
-            target.Data.GetStat(Stat.DamageReduction).Get(v.Key, 0))));
+            target.Data.GetStat(Stat.DamageReduction).Get(v.Key, notFound: 0))));
+    }
 
-    static int ApplyReduction(SkillContext c, int damage, int reduction) =>
-      Math.Max(
+    static int ApplyReduction(SkillContext c, int damage, int reduction)
+    {
+      return Math.Max(
         // Apply maximum reduction
         Mathf.RoundToInt(damage * (1f - c.GetStat(Stat.MaximumDamageReduction).AsMultiplier())),
         damage - reduction);
+    }
 
     public override TaggedValues<DamageType, int> ApplyDamageResistance(
       SkillContext c,
       Creature target,
-      TaggedValues<DamageType, int> damage) =>
-      new TaggedValues<DamageType, int>(
+      TaggedValues<DamageType, int> damage)
+    {
+      return new TaggedValues<DamageType, int>(
         damage.Values.ToDictionary(
           k => k.Key,
           v => ApplyResistance(
             c,
             v.Value,
-            target.Data.GetStat(Stat.DamageResistance).Get(v.Key, 0))));
+            target.Data.GetStat(Stat.DamageResistance).Get(v.Key, notFound: 0))));
+    }
 
-    static int ApplyResistance(SkillContext c, int damageValue, float resistance) =>
-      Mathf.RoundToInt(Math.Max(
+    static int ApplyResistance(SkillContext c, int damageValue, float resistance)
+    {
+      return Mathf.RoundToInt(Math.Max(
         // Apply maximum resistance
         damageValue * (1f - c.GetStat(Stat.MaximumDamageResistance).AsMultiplier()),
-        Mathf.Clamp01(1f - (resistance / (resistance + (2.0f * damageValue)))) * damageValue));
+        Mathf.Clamp01(1f - resistance / (resistance + 2.0f * damageValue)) * damageValue));
+    }
 
     public override int ComputeFinalDamage(
       SkillContext c,
@@ -198,15 +205,9 @@ namespace Nighthollow.Delegates.Implementations
       var total = damage.Values.Values.Sum();
       total = isCriticalHit ? c.GetStat(Stat.CritMultiplier).CalculateFraction(total) : total;
 
-      if (c.Skill.IsMelee())
-      {
-        total = c.GetStat(Stat.MeleeDamageMultiplier).CalculateFraction(total);
-      }
+      if (c.Skill.IsMelee()) total = c.GetStat(Stat.MeleeDamageMultiplier).CalculateFraction(total);
 
-      if (c.Skill.IsProjectile())
-      {
-        total = c.GetStat(Stat.ProjectileDamageMultiplier).CalculateFraction(total);
-      }
+      if (c.Skill.IsProjectile()) total = c.GetStat(Stat.ProjectileDamageMultiplier).CalculateFraction(total);
 
       return total;
     }
@@ -215,26 +216,30 @@ namespace Nighthollow.Delegates.Implementations
     {
       var accuracy = c.GetInt(Stat.Accuracy);
       var hitChance = Mathf.Clamp(
-        0.1f,
-        accuracy / (accuracy + Mathf.Pow((target.Data.GetInt(Stat.Evasion) / 4.0f), 0.8f)),
-        0.95f);
+        value: 0.1f,
+        accuracy / (accuracy + Mathf.Pow(target.Data.GetInt(Stat.Evasion) / 4.0f, p: 0.8f)),
+        max: 0.95f);
       return Random.value <= hitChance;
     }
 
-    public override bool RollForCrit(SkillContext c, Creature target) =>
-      Random.value <= (c.GetStat(Stat.CritChance).AsMultiplier() +
-                       target.Data.Stats.Get(Stat.ReceiveCritsChance).AsMultiplier());
+    public override bool RollForCrit(SkillContext c, Creature target)
+    {
+      return Random.value <= c.GetStat(Stat.CritChance).AsMultiplier() +
+        target.Data.Stats.Get(Stat.ReceiveCritsChance).AsMultiplier();
+    }
 
-    public override int ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount) =>
-      c.Skill.IsMelee() ? c.GetStat(Stat.MeleeHealthDrainPercent).CalculateFraction(damageAmount) : 0;
+    public override int ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount)
+    {
+      return c.Skill.IsMelee() ? c.GetStat(Stat.MeleeHealthDrainPercent).CalculateFraction(damageAmount) : 0;
+    }
 
     public override bool RollForStun(SkillContext c, Creature target, int damageAmount)
     {
       var stunChance = c.GetStat(Stat.AddedStunChance).AsMultiplier() +
-                       (damageAmount / (float) target.Data.GetInt(Stat.Health));
+                       damageAmount / (float) target.Data.GetInt(Stat.Health);
       return Random.value <= Mathf.Clamp(
         stunChance,
-        0,
+        min: 0,
         c.GetStat(Stat.MaximumStunChance).AsMultiplier());
     }
   }

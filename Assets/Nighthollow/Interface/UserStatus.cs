@@ -12,29 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine.UIElements;
 
+#nullable enable
+
 namespace Nighthollow.Interface
 {
   public sealed class UserStatus : DefaultHideableElement
   {
-    Label _manaText = null!;
     VisualElement _influenceContainer = null!;
-
-    public new sealed class UxmlFactory : UxmlFactory<UserStatus, UxmlTraits>
-    {
-    }
-
-    protected override void Initialize()
-    {
-      _manaText = Find<Label>("ManaText");
-      _influenceContainer = FindElement("InfluenceContainer");
-    }
+    Label _manaText = null!;
 
     public int Mana
     {
@@ -67,6 +58,16 @@ namespace Nighthollow.Interface
           }
         }
       }
+    }
+
+    protected override void Initialize()
+    {
+      _manaText = Find<Label>("ManaText");
+      _influenceContainer = FindElement("InfluenceContainer");
+    }
+
+    public new sealed class UxmlFactory : UxmlFactory<UserStatus, UxmlTraits>
+    {
     }
   }
 }

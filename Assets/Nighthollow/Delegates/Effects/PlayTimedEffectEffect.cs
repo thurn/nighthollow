@@ -12,24 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Components;
 using Nighthollow.Services;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Effects
 {
   public sealed class PlayTimedEffectEffect : Effect
   {
-    public string Address { get; }
-    public Vector2 Position { get; }
-
     public PlayTimedEffectEffect(string address, Vector2 position)
     {
       Address = address;
       Position = position;
     }
+
+    public string Address { get; }
+    public Vector2 Position { get; }
 
     public override void Execute()
     {

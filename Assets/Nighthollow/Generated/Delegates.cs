@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Implementations;
 
 // Generated Code - Do Not Modify!
+#nullable enable
+
 namespace Nighthollow.Generated
 {
   public enum DelegateId
@@ -38,7 +39,7 @@ namespace Nighthollow.Generated
     ApplyTargetedAffixesOnHitDelegate = 12,
     ChainToRandomTargetDelegate = 13,
     ChanceToShockDelegate = 14,
-    ApplyToAdjacentAlliesOnUseDelegate = 15,
+    ApplyToAdjacentAlliesOnUseDelegate = 15
   }
 
   public static class DelegateMap
@@ -59,10 +60,12 @@ namespace Nighthollow.Generated
       {DelegateId.ApplyTargetedAffixesOnHitDelegate, new ApplyTargetedAffixesOnHitDelegate()},
       {DelegateId.ChainToRandomTargetDelegate, new ChainToRandomTargetDelegate()},
       {DelegateId.ChanceToShockDelegate, new ChanceToShockDelegate()},
-      {DelegateId.ApplyToAdjacentAlliesOnUseDelegate, new ApplyToAdjacentAlliesOnUseDelegate()},
+      {DelegateId.ApplyToAdjacentAlliesOnUseDelegate, new ApplyToAdjacentAlliesOnUseDelegate()}
     };
 
-    public static IDelegate Get(DelegateId id) => Delegates[id];
+    public static IDelegate Get(DelegateId id)
+    {
+      return Delegates[id];
+    }
   }
-
 }

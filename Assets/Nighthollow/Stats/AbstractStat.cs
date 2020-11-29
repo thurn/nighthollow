@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Collections.Generic;
 using Nighthollow.Generated;
+
+#nullable enable
 
 namespace Nighthollow.Stats
 {
@@ -30,21 +31,28 @@ namespace Nighthollow.Stats
 
     public StatId Id { get; }
 
-    public override string ToString() => Id.ToString();
+    public abstract IStatModifier ParseModifier(string value, Operator op);
+
+    public abstract IStatModifier? StaticModifierForOperator(Operator op);
+
+    public override string ToString()
+    {
+      return Id.ToString();
+    }
 
     public abstract TValue ComputeValue(IReadOnlyList<TOperation> operations);
 
     protected abstract TValue ParseStatValue(string value);
 
-    public IStatModifier Modifier(TOperation operation, ILifetime lifetime) =>
-      new StatModifier<TOperation, TValue>(this, operation, lifetime);
+    public IStatModifier Modifier(TOperation operation, ILifetime lifetime)
+    {
+      return new StatModifier<TOperation, TValue>(this, operation, lifetime);
+    }
 
-    protected IStatModifier StaticModifier(TOperation operation) =>
-      Modifier(operation, StaticLifetime.Instance);
-
-    public abstract IStatModifier ParseModifier(string value, Operator op);
-
-    public abstract IStatModifier? StaticModifierForOperator(Operator op);
+    protected IStatModifier StaticModifier(TOperation operation)
+    {
+      return Modifier(operation, StaticLifetime.Instance);
+    }
   }
 
   public abstract class NumericStat<TValue> : AbstractStat<NumericOperation<TValue>, TValue>
@@ -54,15 +62,20 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override IStatModifier ParseModifier(string value, Operator op) =>
-      op switch
+    public override IStatModifier ParseModifier(string value, Operator op)
+    {
+      return op switch
       {
         Operator.Add => StaticModifier(NumericOperation.Add(ParseStatValue(value))),
         Operator.Overwrite => StaticModifier(NumericOperation.Overwrite(ParseStatValue(value))),
         Operator.Increase => StaticModifier(NumericOperation.Increase<TValue>(PercentageStat.ParsePercentage(value))),
         _ => throw new ArgumentException($"Unsupported operator type: {op}")
       };
+    }
 
-    public override IStatModifier? StaticModifierForOperator(Operator op) => null;
+    public override IStatModifier? StaticModifierForOperator(Operator op)
+    {
+      return null;
+    }
   }
 }

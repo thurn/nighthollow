@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
-using Nighthollow.Interface;
 using Nighthollow.Stats;
+
+#nullable enable
 
 namespace Nighthollow.Data
 {
@@ -31,10 +31,7 @@ namespace Nighthollow.Data
 
       stats.InsertModifier(Stat.CreatureSpeed.Add(item.BaseType.Speed));
 
-      if (item.BaseType.IsManaCreature)
-      {
-        stats.InsertModifier(Stat.IsManaCreature.SetTrue());
-      }
+      if (item.BaseType.IsManaCreature) stats.InsertModifier(Stat.IsManaCreature.SetTrue());
 
       var (delegates, targetedAffixes) = ProcessAffixes(item.Affixes, stats);
 
@@ -55,24 +52,13 @@ namespace Nighthollow.Data
     {
       var stats = item.Stats.Clone(parentStats);
       if (item.BaseType.ProjectileSpeed.HasValue)
-      {
         stats.InsertModifier(Stat.ProjectileSpeed.Add(item.BaseType.ProjectileSpeed.Value));
-      }
 
-      if (item.BaseType.UsesAccuracy)
-      {
-        stats.InsertModifier(Stat.UsesAccuracy.SetTrue());
-      }
+      if (item.BaseType.UsesAccuracy) stats.InsertModifier(Stat.UsesAccuracy.SetTrue());
 
-      if (item.BaseType.CanCrit)
-      {
-        stats.InsertModifier(Stat.CanCrit.SetTrue());
-      }
+      if (item.BaseType.CanCrit) stats.InsertModifier(Stat.CanCrit.SetTrue());
 
-      if (item.BaseType.CanStun)
-      {
-        stats.InsertModifier(Stat.CanStun.SetTrue());
-      }
+      if (item.BaseType.CanStun) stats.InsertModifier(Stat.CanStun.SetTrue());
 
       var (delegates, targetedAffixes) = ProcessAffixes(item.Affixes, stats);
 
@@ -88,15 +74,9 @@ namespace Nighthollow.Data
       var delegates = new List<DelegateId>();
       foreach (var modifier in affixes.Where(affix => !affix.BaseType.IsTargeted).SelectMany(affix => affix.Modifiers))
       {
-        if (modifier.DelegateId.HasValue)
-        {
-          delegates.Add(modifier.DelegateId.Value);
-        }
+        if (modifier.DelegateId.HasValue) delegates.Add(modifier.DelegateId.Value);
 
-        if (modifier.StatModifier != null)
-        {
-          stats.InsertModifier(modifier.StatModifier);
-        }
+        if (modifier.StatModifier != null) stats.InsertModifier(modifier.StatModifier);
       }
 
       return (delegates, affixes.Where(affix => affix.BaseType.IsTargeted));

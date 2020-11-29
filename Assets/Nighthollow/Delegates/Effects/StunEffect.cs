@@ -12,22 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Components;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Effects
 {
   public sealed class StunEffect : Effect
   {
-    public Creature Target { get; }
-    public float DurationSeconds { get; }
-
     public StunEffect(Creature target, float durationSeconds)
     {
       Target = target;
       DurationSeconds = durationSeconds;
     }
+
+    public Creature Target { get; }
+    public float DurationSeconds { get; }
 
     public override void Execute()
     {

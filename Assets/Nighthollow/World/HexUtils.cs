@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Utils;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.World
 {
@@ -37,31 +38,27 @@ namespace Nighthollow.World
       // See: https://www.redblobgames.com/grids/hexagons/#coordinates
 
       if (hex.y % 2 == 0)
-      {
         return hex + direction switch
         {
-          Direction.Right => new Vector2Int(1, 0),
-          Direction.UpRight => new Vector2Int(0, 1),
-          Direction.UpLeft => new Vector2Int(-1, 1),
-          Direction.Left => new Vector2Int(-1, 0),
-          Direction.DownLeft => new Vector2Int(-1, -1),
-          Direction.DownRight => new Vector2Int(0, -1),
+          Direction.Right => new Vector2Int(x: 1, y: 0),
+          Direction.UpRight => new Vector2Int(x: 0, y: 1),
+          Direction.UpLeft => new Vector2Int(x: -1, y: 1),
+          Direction.Left => new Vector2Int(x: -1, y: 0),
+          Direction.DownLeft => new Vector2Int(x: -1, y: -1),
+          Direction.DownRight => new Vector2Int(x: 0, y: -1),
           _ => throw Errors.UnknownEnumValue(direction)
         };
-      }
       else
-      {
         return hex + direction switch
         {
-          Direction.Right => new Vector2Int(1, 0),
-          Direction.UpRight => new Vector2Int(1, 1),
-          Direction.UpLeft => new Vector2Int(0, 1),
-          Direction.Left => new Vector2Int(-1, 0),
-          Direction.DownLeft => new Vector2Int(0, -1),
-          Direction.DownRight => new Vector2Int(1, -1),
+          Direction.Right => new Vector2Int(x: 1, y: 0),
+          Direction.UpRight => new Vector2Int(x: 1, y: 1),
+          Direction.UpLeft => new Vector2Int(x: 0, y: 1),
+          Direction.Left => new Vector2Int(x: -1, y: 0),
+          Direction.DownLeft => new Vector2Int(x: 0, y: -1),
+          Direction.DownRight => new Vector2Int(x: 1, y: -1),
           _ => throw Errors.UnknownEnumValue(direction)
         };
-      }
     }
   }
 }

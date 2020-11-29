@@ -15,6 +15,8 @@
 using Nighthollow.Utils;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Components
 {
   public sealed class OnDeathStateExit : StateMachineBehaviour

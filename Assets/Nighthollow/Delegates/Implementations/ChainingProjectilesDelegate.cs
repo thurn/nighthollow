@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Linq;
 using Nighthollow.Components;
@@ -24,21 +23,23 @@ using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChainingProjectilesDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) =>
-      $"Projectiles Chain {entity.GetInt(Stat.ProjectileChainCount)} Times on Hit";
+    public override string Describe(StatEntity entity)
+    {
+      return $"Projectiles Chain {entity.GetInt(Stat.ProjectileChainCount)} Times on Hit";
+    }
 
     public override bool ShouldSkipProjectileImpact(SkillContext c)
     {
       if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) > 0)
-      {
         // We skip impact for the projectile for creatures which have already been hit by a chaining projectile
         return !c.Delegate.FindTargets(c)
           .Except(c.Projectile.Values.Get(Key.SkipProjectileImpacts)).Any();
-      }
 
       return false;
     }
@@ -54,7 +55,7 @@ namespace Nighthollow.Delegates.Implementations
         for (var i = 0; i < chainCount; ++i)
         {
           var direction = Quaternion.AngleAxis(
-            Mathf.Lerp(0f, 360f, (i + add) / (chainCount + add)),
+            Mathf.Lerp(a: 0f, b: 360f, (i + add) / (chainCount + add)),
             Vector3.forward) * c.Projectile.transform.forward;
           c.Results.Add(new FireProjectileEffect(
             c.Self,

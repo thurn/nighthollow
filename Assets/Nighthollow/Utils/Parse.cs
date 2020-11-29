@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Collections.Generic;
+
+#nullable enable
 
 namespace Nighthollow.Utils
 {
@@ -23,10 +24,7 @@ namespace Nighthollow.Utils
   {
     public static bool Boolean(IReadOnlyDictionary<string, string> row, string key)
     {
-      if (row.ContainsKey(key) && bool.TryParse(row[key], out var result))
-      {
-        return result;
-      }
+      if (row.ContainsKey(key) && bool.TryParse(row[key], out var result)) return result;
 
       return false;
     }
@@ -38,10 +36,7 @@ namespace Nighthollow.Utils
 
     public static string StringRequired(IReadOnlyDictionary<string, string> row, string key)
     {
-      if (!row.ContainsKey(key))
-      {
-        throw new InvalidOperationException($"Key '{key}' not found in {row}");
-      }
+      if (!row.ContainsKey(key)) throw new InvalidOperationException($"Key '{key}' not found in {row}");
 
       return row[key];
     }
@@ -53,10 +48,7 @@ namespace Nighthollow.Utils
 
     public static int IntRequired(IReadOnlyDictionary<string, string> row, string key)
     {
-      if (row.ContainsKey(key) && int.TryParse(row[key].Replace(",", ""), out var result))
-      {
-        return result;
-      }
+      if (row.ContainsKey(key) && int.TryParse(row[key].Replace(",", ""), out var result)) return result;
 
       throw new InvalidOperationException($"Unable to parse integer for key '{key}' in {row}");
     }

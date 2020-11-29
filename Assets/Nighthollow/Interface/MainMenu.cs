@@ -12,35 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
+#nullable enable
+
 namespace Nighthollow.Interface
 {
   public sealed class MainMenu : VisualElement
   {
+    VisualElement? _about;
     VisualElement? _main;
     VisualElement? _settings;
-    VisualElement? _about;
     Label? _title;
-
-    public new sealed class UxmlFactory : UxmlFactory<MainMenu, UxmlTraits>
-    {
-    }
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
-    }
 
     public MainMenu()
     {
-      if (Application.isPlaying)
-      {
-        RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
-      }
+      if (Application.isPlaying) RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 
     void OnGeometryChange(GeometryChangedEvent evt)
@@ -76,6 +66,14 @@ namespace Nighthollow.Interface
         _title.text = "Nighthollow";
       });
       UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
+    }
+
+    public new sealed class UxmlFactory : UxmlFactory<MainMenu, UxmlTraits>
+    {
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
     }
   }
 }

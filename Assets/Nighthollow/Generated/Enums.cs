@@ -12,16 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 // Generated Code - Do Not Modify!
+
+#nullable enable
+
 namespace Nighthollow.Generated
 {
   public enum PlayerName
   {
     Unknown = 0,
     User = 1,
-    Enemy = 2,
+    Enemy = 2
   }
 
   public enum School
@@ -32,7 +34,7 @@ namespace Nighthollow.Generated
     Flame = 3,
     Ice = 4,
     Earth = 5,
-    Shadow = 6,
+    Shadow = 6
   }
 
   public enum DamageType
@@ -44,7 +46,7 @@ namespace Nighthollow.Generated
     Fire = 4,
     Cold = 5,
     Physical = 6,
-    Necrotic = 7,
+    Necrotic = 7
   }
 
   public enum RankValue
@@ -57,7 +59,7 @@ namespace Nighthollow.Generated
     Rank5 = 5,
     Rank6 = 6,
     Rank7 = 7,
-    Rank8 = 8,
+    Rank8 = 8
   }
 
   public enum FileValue
@@ -67,7 +69,7 @@ namespace Nighthollow.Generated
     File2 = 2,
     File3 = 3,
     File4 = 4,
-    File5 = 5,
+    File5 = 5
   }
 
   public enum StatType
@@ -80,7 +82,7 @@ namespace Nighthollow.Generated
     Percentage = 5,
     Duration = 6,
     IntRange = 7,
-    DamageTypeIntRanges = 8,
+    DamageTypeIntRanges = 8
   }
 
   public enum SkillAnimationNumber
@@ -90,7 +92,7 @@ namespace Nighthollow.Generated
     Skill2 = 2,
     Skill3 = 3,
     Skill4 = 4,
-    Skill5 = 5,
+    Skill5 = 5
   }
 
   public enum Operator
@@ -100,7 +102,7 @@ namespace Nighthollow.Generated
     Increase = 2,
     SetFalse = 3,
     SetTrue = 4,
-    Overwrite = 5,
+    Overwrite = 5
   }
 
   public enum StaticCardList
@@ -112,14 +114,14 @@ namespace Nighthollow.Generated
     TutorialReward1 = 4,
     TutorialReward2 = 5,
     TutorialReward3 = 6,
-    Summons = 7,
+    Summons = 7
   }
 
   public enum AffixPool
   {
     Unknown = 0,
     CreatureImplicits = 1,
-    SkillImplicits = 2,
+    SkillImplicits = 2
   }
 
   public enum SkillAnimationType
@@ -128,14 +130,14 @@ namespace Nighthollow.Generated
     MeleeSkill = 1,
     CastSkill = 2,
     ImplicitSkill = 3,
-    Unused = 4,
+    Unused = 4
   }
 
   public enum ModifierApplicationType
   {
     Unknown = 0,
     Self = 1,
-    Targeted = 2,
+    Targeted = 2
   }
 
   public enum SkillType
@@ -144,13 +146,12 @@ namespace Nighthollow.Generated
     Custom = 1,
     Melee = 2,
     Projectile = 3,
-    Area = 4,
+    Area = 4
   }
 
   public enum Rarity
   {
     Unknown = 0,
-    Common = 1,
+    Common = 1
   }
-
 }

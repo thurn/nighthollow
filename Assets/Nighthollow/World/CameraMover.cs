@@ -21,21 +21,6 @@ namespace Nighthollow.World
 {
   public sealed class CameraMover : MonoBehaviour
   {
-#pragma warning disable 0649
-    [SerializeField] Camera _camera = null!;
-    [SerializeField] WorldMap _worldMap = null!;
-    [SerializeField] float _keyboardMovementSpeed;
-    [SerializeField] float _scrollWheelZoomSpeed;
-    [SerializeField] float _keyboardZoomSpeed;
-    [SerializeField] float _minimumCameraSize;
-    [SerializeField] float _maximumCameraSize;
-    [SerializeField] float _maxXZoomedIn;
-    [SerializeField] float _maxXZoomedOut;
-    [SerializeField] float _maxYZoomedIn;
-    [SerializeField] float _maxYZoomedOut;
-    [Header("State")] [SerializeField] float _zoomDelta;
-#pragma warning restore 0649
-
     public Camera Camera => _camera;
 
     void Awake()
@@ -43,32 +28,9 @@ namespace Nighthollow.World
       Errors.CheckNotNull(_camera);
     }
 
-    int ZoomDirection()
-    {
-      var zoomIn = Input.GetKey(KeyCode.Z);
-      var zoomOut = Input.GetKey(KeyCode.X);
-
-      if (zoomIn && zoomOut)
-      {
-        return 0;
-      }
-      else if (!zoomIn && zoomOut)
-      {
-        return 1;
-      }
-      else if (zoomIn && !zoomOut)
-      {
-        return -1;
-      }
-      else
-      {
-        return 0;
-      }
-    }
-
     void Update()
     {
-      var translation = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0) *
+      var translation = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), z: 0) *
                         _keyboardMovementSpeed *
                         Time.deltaTime;
       if (translation != Vector3.zero)
@@ -89,5 +51,34 @@ namespace Nighthollow.World
         Mathf.Clamp(transform.position.y, -maxY, maxY),
         transform.position.z);
     }
+
+    int ZoomDirection()
+    {
+      var zoomIn = Input.GetKey(KeyCode.Z);
+      var zoomOut = Input.GetKey(KeyCode.X);
+
+      if (zoomIn && zoomOut)
+        return 0;
+      else if (!zoomIn && zoomOut)
+        return 1;
+      else if (zoomIn && !zoomOut)
+        return -1;
+      else
+        return 0;
+    }
+#pragma warning disable 0649
+    [SerializeField] Camera _camera = null!;
+    [SerializeField] WorldMap _worldMap = null!;
+    [SerializeField] float _keyboardMovementSpeed;
+    [SerializeField] float _scrollWheelZoomSpeed;
+    [SerializeField] float _keyboardZoomSpeed;
+    [SerializeField] float _minimumCameraSize;
+    [SerializeField] float _maximumCameraSize;
+    [SerializeField] float _maxXZoomedIn;
+    [SerializeField] float _maxXZoomedOut;
+    [SerializeField] float _maxYZoomedIn;
+    [SerializeField] float _maxYZoomedOut;
+    [Header("State")] [SerializeField] float _zoomDelta;
+#pragma warning restore 0649
   }
 }

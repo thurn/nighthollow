@@ -21,23 +21,61 @@ using Nighthollow.State;
 using Nighthollow.Utils;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Components
 {
   public sealed class Projectile : MonoBehaviour, IHasKeyValueStore
   {
-    [Header("Config")] [SerializeField] TimedEffect _flashEffect;
-    [SerializeField] TimedEffect _hitEffect;
+    [Header("Config")] [SerializeField] TimedEffect _flashEffect = null!;
+    [SerializeField] TimedEffect _hitEffect = null!;
 
-    [Header("State")] [SerializeField] Creature _firedBy;
-    [SerializeField] Collider2D _collider;
-    [SerializeField] Creature _trackCreature;
-    SkillData _skillData;
-
-    public KeyValueStore Values { get; } = new KeyValueStore();
+    [Header("State")] [SerializeField] Creature _firedBy = null!;
+    [SerializeField] Collider2D _collider = null!;
+    [SerializeField] Creature _trackCreature = null!;
+    SkillData _skillData = null!;
 
     public SkillData Data => _skillData;
 
     public Collider2D Collider => _collider;
+
+    void Update()
+    {
+      if (_trackCreature) transform.LookAt(_trackCreature.transform.position);
+      transform.position += Errors.CheckPositive(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f
+                            * Time.deltaTime * transform.forward;
+
+      if (Mathf.Abs(transform.position.x) > 25 || Mathf.Abs(transform.position.y) > 25)
+        gameObject.SetActive(value: false);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+      var context = new SkillContext(_firedBy, _skillData, this);
+      if (_firedBy.Data.Delegate.ShouldSkipProjectileImpact(context))
+        if (!_trackCreature || _trackCreature.gameObject != other.gameObject)
+          // Tracking projectiles cannot skip their target
+          return;
+
+      var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
+      hit.transform.forward = -transform.forward;
+      _firedBy.Data.Delegate.OnImpact(context);
+      gameObject.SetActive(value: false);
+    }
+
+    void OnValidate()
+    {
+      foreach (var ps in GetComponentsInChildren<ParticleSystem>())
+      {
+        // We give projectiles a lifetime of 3 seconds, which is approximately enough
+        // time to get across the screen at a speed of 10,000.
+        var main = ps.main;
+        main.startLifetime = 3.0f;
+        ps.GetComponent<Renderer>().sortingOrder = 500;
+      }
+    }
+
+    public KeyValueStore Values { get; } = new KeyValueStore();
 
     public void Initialize(
       Creature firedBy,
@@ -67,55 +105,10 @@ namespace Nighthollow.Components
       _skillData = skillData;
     }
 
-    void OnValidate()
-    {
-      foreach (var ps in GetComponentsInChildren<ParticleSystem>())
-      {
-        // We give projectiles a lifetime of 3 seconds, which is approximately enough
-        // time to get across the screen at a speed of 10,000.
-        var main = ps.main;
-        main.startLifetime = 3.0f;
-        ps.GetComponent<Renderer>().sortingOrder = 500;
-      }
-    }
-
     public void SetReferences(TimedEffect flashEffect, TimedEffect hitEffect)
     {
       _flashEffect = flashEffect;
       _hitEffect = hitEffect;
-    }
-
-    void Update()
-    {
-      if (_trackCreature)
-      {
-        transform.LookAt(_trackCreature.transform.position);
-      }
-      transform.position += (Errors.CheckPositive(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f)
-                            * Time.deltaTime * transform.forward;
-
-      if (Mathf.Abs(transform.position.x) > 25 || Mathf.Abs(transform.position.y) > 25)
-      {
-        gameObject.SetActive(false);
-      }
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-      var context = new SkillContext(_firedBy, _skillData, this);
-      if (_firedBy.Data.Delegate.ShouldSkipProjectileImpact(context))
-      {
-        if (!_trackCreature || _trackCreature.gameObject != other.gameObject)
-        {
-          // Tracking projectiles cannot skip their target
-          return;
-        }
-      }
-
-      var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
-      hit.transform.forward = -transform.forward;
-      _firedBy.Data.Delegate.OnImpact(context);
-      gameObject.SetActive(false);
     }
   }
 }

@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Delegates.Implementations;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Core
 {
@@ -27,6 +28,9 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
-    protected override AbstractDelegateList? GetChild(DelegateContext context) => context.Self.CurrentSkill?.Delegate;
+    protected override AbstractDelegateList? GetChild(DelegateContext context)
+    {
+      return context.Self.CurrentSkill?.Delegate;
+    }
   }
 }

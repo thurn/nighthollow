@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using Nighthollow.Generated;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Stats
 {
   public readonly struct PercentageValue
@@ -28,16 +30,30 @@ namespace Nighthollow.Stats
       _basisPoints = basisPoints;
     }
 
-    public override string ToString() => $"{_basisPoints / 100f}%";
+    public override string ToString()
+    {
+      return $"{_basisPoints / 100f}%";
+    }
 
-    public int AsBasisPoints() => _basisPoints;
+    public int AsBasisPoints()
+    {
+      return _basisPoints;
+    }
 
-    public float AsMultiplier() => _basisPoints / BasisPoints;
+    public float AsMultiplier()
+    {
+      return _basisPoints / BasisPoints;
+    }
 
-    public int CalculateFraction(int input) =>
-      Mathf.RoundToInt((input * _basisPoints) / BasisPoints);
+    public int CalculateFraction(int input)
+    {
+      return Mathf.RoundToInt(input * _basisPoints / BasisPoints);
+    }
 
-    public bool IsReduction() => _basisPoints < BasisPoints;
+    public bool IsReduction()
+    {
+      return _basisPoints < BasisPoints;
+    }
 
     public bool Equals(PercentageValue other)
     {
@@ -71,15 +87,24 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override PercentageValue ComputeValue(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
-      Compute(operations);
+    public override PercentageValue ComputeValue(IReadOnlyList<NumericOperation<PercentageValue>> operations)
+    {
+      return Compute(operations);
+    }
 
-    public static PercentageValue Compute(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
-      new PercentageValue(IntStat.Compute(operations, duration => duration.AsBasisPoints()));
+    public static PercentageValue Compute(IReadOnlyList<NumericOperation<PercentageValue>> operations)
+    {
+      return new PercentageValue(IntStat.Compute(operations, duration => duration.AsBasisPoints()));
+    }
 
-    protected override PercentageValue ParseStatValue(string value) => ParsePercentage(value);
+    protected override PercentageValue ParseStatValue(string value)
+    {
+      return ParsePercentage(value);
+    }
 
-    public static PercentageValue ParsePercentage(string value) =>
-      new PercentageValue(Mathf.RoundToInt(float.Parse(value.Replace("%", "")) * 100f));
+    public static PercentageValue ParsePercentage(string value)
+    {
+      return new PercentageValue(Mathf.RoundToInt(float.Parse(value.Replace("%", "")) * 100f));
+    }
   }
 }

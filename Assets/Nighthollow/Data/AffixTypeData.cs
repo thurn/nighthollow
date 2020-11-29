@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Generated;
@@ -20,14 +19,12 @@ using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 
+#nullable enable
+
 namespace Nighthollow.Data
 {
   public sealed class ModifierRange
   {
-    public ModifierTypeData BaseType { get; }
-    public IStatModifier? Low { get; }
-    public IStatModifier? High { get; }
-
     public ModifierRange(GameDataService service, IReadOnlyDictionary<string, string> row)
     {
       BaseType = service.GetModifier(Parse.IntRequired(row, $"Modifier"));
@@ -38,10 +35,27 @@ namespace Nighthollow.Data
         High = ModifierUtil.ParseModifier(BaseType, Parse.String(row, $"High"));
       }
     }
+
+    public ModifierTypeData BaseType { get; }
+    public IStatModifier? Low { get; }
+    public IStatModifier? High { get; }
   }
 
   public sealed class AffixTypeData
   {
+    public AffixTypeData(Builder builder)
+    {
+      Id = builder.Id;
+      MinLevel = builder.MinLevel;
+      Weight = builder.Weight;
+      ManaCostLow = builder.ManaCostLow;
+      ManaCostHigh = builder.ManaCostHigh;
+      InfluenceType = builder.InfluenceType;
+      AffixPool = builder.AffixPool;
+      IsTargeted = builder.IsTargeted;
+      ModifierRanges = builder.ModifierRanges;
+    }
+
     public int Id { get; }
     public int MinLevel { get; }
     public int Weight { get; }
@@ -63,19 +77,6 @@ namespace Nighthollow.Data
       public AffixPool AffixPool { get; set; }
       public bool IsTargeted { get; set; }
       public List<ModifierRange> ModifierRanges { get; } = new List<ModifierRange>();
-    }
-
-    public AffixTypeData(Builder builder)
-    {
-      Id = builder.Id;
-      MinLevel = builder.MinLevel;
-      Weight = builder.Weight;
-      ManaCostLow = builder.ManaCostLow;
-      ManaCostHigh = builder.ManaCostHigh;
-      InfluenceType = builder.InfluenceType;
-      AffixPool = builder.AffixPool;
-      IsTargeted = builder.IsTargeted;
-      ModifierRanges = builder.ModifierRanges;
     }
   }
 }

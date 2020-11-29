@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
-using Nighthollow.Stats;
 using System;
+using Nighthollow.Stats;
 
 // Generated Code - Do Not Modify!
+#nullable enable
+
 namespace Nighthollow.Generated
 {
   public enum StatId
@@ -87,7 +88,7 @@ namespace Nighthollow.Generated
     IsShocked = 66,
     ReceiveCritsChance = 67,
     ShockAddedReceiveCritsChance = 68,
-    BuffDuration = 69,
+    BuffDuration = 69
   }
 
   public static class Stat
@@ -123,8 +124,13 @@ namespace Nighthollow.Generated
     public static readonly BoolStat IsManaCreature = new BoolStat(StatId.IsManaCreature);
     public static readonly DamageTypeIntsStat GainedDamageOnKill = new DamageTypeIntsStat(StatId.GainedDamageOnKill);
     public static readonly IntStat MaxMeleeAreaTargets = new IntStat(StatId.MaxMeleeAreaTargets);
-    public static readonly PercentageStat ProjectileDamageMultiplier = new PercentageStat(StatId.ProjectileDamageMultiplier);
-    public static readonly PercentageStat ChainProjectileDamageMultiplier = new PercentageStat(StatId.ChainProjectileDamageMultiplier);
+
+    public static readonly PercentageStat ProjectileDamageMultiplier =
+      new PercentageStat(StatId.ProjectileDamageMultiplier);
+
+    public static readonly PercentageStat ChainProjectileDamageMultiplier =
+      new PercentageStat(StatId.ChainProjectileDamageMultiplier);
+
     public static readonly DurationStat SkillCooldownRecovery = new DurationStat(StatId.SkillCooldownRecovery);
     public static readonly DurationStat KnockbackDuration = new DurationStat(StatId.KnockbackDuration);
     public static readonly DurationStat ManaGainInterval = new DurationStat(StatId.ManaGainInterval);
@@ -145,18 +151,27 @@ namespace Nighthollow.Generated
     public static readonly IntStat ProjectileArcRotationOffset = new IntStat(StatId.ProjectileArcRotationOffset);
     public static readonly IntStat ProjectileAdjacentsCount = new IntStat(StatId.ProjectileAdjacentsCount);
     public static readonly IntStat ProjectileAdjacentsOffset = new IntStat(StatId.ProjectileAdjacentsOffset);
-    public static readonly PercentageStat KnockbackDistanceMultiplier = new PercentageStat(StatId.KnockbackDistanceMultiplier);
+
+    public static readonly PercentageStat KnockbackDistanceMultiplier =
+      new PercentageStat(StatId.KnockbackDistanceMultiplier);
+
     public static readonly IntStat ProjectileChainCount = new IntStat(StatId.ProjectileChainCount);
     public static readonly IntStat MaxProjectileTimesChained = new IntStat(StatId.MaxProjectileTimesChained);
     public static readonly BoolStat Untargeted = new BoolStat(StatId.Untargeted);
-    public static readonly DamageTypeIntRangesStat SameTargetAddedDamage = new DamageTypeIntRangesStat(StatId.SameTargetAddedDamage);
+
+    public static readonly DamageTypeIntRangesStat SameTargetAddedDamage =
+      new DamageTypeIntRangesStat(StatId.SameTargetAddedDamage);
+
     public static readonly DurationStat CurseDuration = new DurationStat(StatId.CurseDuration);
     public static readonly PercentageStat GlobalDamageMultiplier = new PercentageStat(StatId.GlobalDamageMultiplier);
     public static readonly PercentageStat ShockChance = new PercentageStat(StatId.ShockChance);
     public static readonly DurationStat ShockDuration = new DurationStat(StatId.ShockDuration);
     public static readonly BoolStat IsShocked = new BoolStat(StatId.IsShocked);
     public static readonly PercentageStat ReceiveCritsChance = new PercentageStat(StatId.ReceiveCritsChance);
-    public static readonly PercentageStat ShockAddedReceiveCritsChance = new PercentageStat(StatId.ShockAddedReceiveCritsChance);
+
+    public static readonly PercentageStat ShockAddedReceiveCritsChance =
+      new PercentageStat(StatId.ShockAddedReceiveCritsChance);
+
     public static readonly DurationStat BuffDuration = new DurationStat(StatId.BuffDuration);
 
     public static IStat GetStat(int statId)

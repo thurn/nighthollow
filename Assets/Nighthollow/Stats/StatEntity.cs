@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #nullable enable
 
 namespace Nighthollow.Stats
@@ -21,15 +22,29 @@ namespace Nighthollow.Stats
     public abstract StatTable Stats { get; }
 
     public TValue GetStat<TOperation, TValue>(AbstractStat<TOperation, TValue> stat)
-      where TOperation : IOperation =>
-      Stats.Get(stat);
+      where TOperation : IOperation
+    {
+      return Stats.Get(stat);
+    }
 
-    public int GetInt(IntStat statId) => Stats.Get(statId);
+    public int GetInt(IntStat statId)
+    {
+      return Stats.Get(statId);
+    }
 
-    public bool GetBool(BoolStat statId) => Stats.Get(statId);
+    public bool GetBool(BoolStat statId)
+    {
+      return Stats.Get(statId);
+    }
 
-    public int GetDurationMilliseconds(DurationStat statId) => Stats.Get(statId).AsMilliseconds();
+    public int GetDurationMilliseconds(DurationStat statId)
+    {
+      return Stats.Get(statId).AsMilliseconds();
+    }
 
-    public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
+    public float GetDurationSeconds(DurationStat statId)
+    {
+      return Stats.Get(statId).AsSeconds();
+    }
   }
 }

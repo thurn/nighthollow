@@ -25,10 +25,6 @@ namespace Nighthollow.Data
 {
   public sealed class SkillItemData
   {
-    public SkillTypeData BaseType { get; }
-    public StatModifierTable Stats { get; }
-    public IReadOnlyList<AffixData> Affixes { get; }
-
     public SkillItemData(SkillTypeData baseType, StatModifierTable stats, IReadOnlyList<AffixData> affixes)
     {
       BaseType = baseType;
@@ -36,18 +32,26 @@ namespace Nighthollow.Data
       Affixes = affixes;
     }
 
-    public static SkillItemData Deserialize(GameDataService gameData, JSONNode node) =>
-      new SkillItemData(
+    public SkillTypeData BaseType { get; }
+    public StatModifierTable Stats { get; }
+    public IReadOnlyList<AffixData> Affixes { get; }
+
+    public static SkillItemData Deserialize(GameDataService gameData, JSONNode node)
+    {
+      return new SkillItemData(
         gameData.GetSkillType(node["baseType"].AsInt),
         StatModifierTable.Deserialize(node["stats"]),
         node["affixes"].FromJsonArray().Select(c => AffixData.Deserialize(gameData, c)).ToList());
+    }
 
-    public JSONNode Serialize() =>
-      new JSONObject
+    public JSONNode Serialize()
+    {
+      return new JSONObject
       {
         ["baseType"] = BaseType.Id,
         ["stats"] = Stats.Serialize(),
         ["affixes"] = Affixes.Select(a => a.Serialize()).AsJsonArray()
       };
+    }
   }
 }

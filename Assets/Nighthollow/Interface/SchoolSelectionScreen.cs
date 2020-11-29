@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Generated;
@@ -22,25 +21,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
+#nullable enable
+
 namespace Nighthollow.Interface
 {
   public sealed class SchoolSelectionScreen : VisualElement
   {
-    Label? _description;
-    readonly Dictionary<School, VisualElement> _buttons = new Dictionary<School, VisualElement>();
-    KeyValuePair<School, VisualElement>? _selected;
-    VisualElement? _confirmButton;
-
     static readonly string InitialDescription =
       "Magic courses through the world of Nighthollow, granting great power to those who wield it. To begin your journey, you must select one of the six Schools of magic to focus on. Later on you'll be able to pick secondary Schools to supplement your arsenal.";
 
-    public new sealed class UxmlFactory : UxmlFactory<SchoolSelectionScreen, UxmlTraits>
-    {
-    }
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
-    }
+    readonly Dictionary<School, VisualElement> _buttons = new Dictionary<School, VisualElement>();
+    VisualElement? _confirmButton;
+    Label? _description;
+    KeyValuePair<School, VisualElement>? _selected;
 
     public SchoolSelectionScreen()
     {
@@ -105,14 +98,15 @@ namespace Nighthollow.Interface
       var dialog = this.Q("Dialog");
       dialog.style.display = DisplayStyle.Flex;
       InterfaceUtils.FadeIn(dialog);
-      yield return new WaitForSeconds(4f);
+      yield return new WaitForSeconds(seconds: 4f);
       InterfaceUtils.FadeOut(dialog);
-      yield return new WaitForSeconds(1f);
+      yield return new WaitForSeconds(seconds: 1f);
       SceneManager.LoadScene("World");
     }
 
-    static string DescriptionForSchool(School school) =>
-      school switch
+    static string DescriptionForSchool(School school)
+    {
+      return school switch
       {
         School.Light =>
           "A mage specializing in the school of Light is a user of healing magic. They are able to heal damage or even resurrect creatures which have fallen in battle. They are also great believers in teamwork, focusing on lots of small creatures working together.",
@@ -128,5 +122,14 @@ namespace Nighthollow.Interface
           "Shadow is a subtle school, which prefers to deal damage indirectly and over time using tools like poison. They also specialize in sacrifice: they’re willing to give up their own creatures or life in order to achieve greater ends.",
         _ => throw Errors.UnknownEnumValue(school)
       };
+    }
+
+    public new sealed class UxmlFactory : UxmlFactory<SchoolSelectionScreen, UxmlTraits>
+    {
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
+    }
   }
 }

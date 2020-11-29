@@ -12,17 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Services;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
+#nullable enable
+
 namespace Nighthollow.Interface
 {
   public sealed class GameOverMessage : HideableElement<GameOverMessage.Args>
   {
+    Label _text = null!;
+
+    protected override void Initialize()
+    {
+      _text = Find<Label>("GameOverText");
+    }
+
+    protected override void OnShow(Args args)
+    {
+      Root.Instance.User.OnGameOver();
+      _text.text = args.Text;
+      ButtonUtil.DisplayMainButtons(Controller,
+        new List<ButtonUtil.Button>
+          {new ButtonUtil.Button("Continue", () => { SceneManager.LoadScene(args.LoadScene); }, large: true)});
+    }
+
     public readonly struct Args
     {
       public readonly string Text;
@@ -35,26 +52,8 @@ namespace Nighthollow.Interface
       }
     }
 
-    Label _text = null!;
-
     public new sealed class UxmlFactory : UxmlFactory<GameOverMessage, UxmlTraits>
     {
-    }
-
-    protected override void Initialize()
-    {
-      _text = Find<Label>("GameOverText");
-    }
-
-    protected override void OnShow(Args args)
-    {
-      Root.Instance.User.OnGameOver();
-      _text.text = args.Text;
-      ButtonUtil.DisplayMainButtons(Controller,
-        new List<ButtonUtil.Button> {new ButtonUtil.Button("Continue", () =>
-        {
-          SceneManager.LoadScene(args.LoadScene);
-        }, large: true)});
     }
   }
 }

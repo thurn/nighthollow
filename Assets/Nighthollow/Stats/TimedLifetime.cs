@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Utils;
-using SimpleJSON;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.Stats
 {
@@ -24,13 +24,19 @@ namespace Nighthollow.Stats
   {
     readonly float _endTimeSeconds;
 
-    public bool IsValid() => Time.time < _endTimeSeconds;
-
     public TimedLifetime(int durationMilliseconds)
     {
-      _endTimeSeconds = Time.time + (Errors.CheckPositive(durationMilliseconds) / 1000f);
+      _endTimeSeconds = Time.time + Errors.CheckPositive(durationMilliseconds) / 1000f;
     }
 
-    public override string ToString() => $"[{nameof(TimedLifetime)}] {nameof(_endTimeSeconds)}: {_endTimeSeconds}";
+    public bool IsValid()
+    {
+      return Time.time < _endTimeSeconds;
+    }
+
+    public override string ToString()
+    {
+      return $"[{nameof(TimedLifetime)}] {nameof(_endTimeSeconds)}: {_endTimeSeconds}";
+    }
   }
 }

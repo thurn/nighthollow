@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Components;
@@ -22,20 +21,12 @@ using Nighthollow.State;
 using Nighthollow.Utils;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Effects
 {
   public sealed class FireProjectileEffect : Effect
   {
-
-    public Creature FiredBy { get; }
-    public SkillContext SkillContext { get; }
-    public int DelegateIndex { get; }
-    public Vector2 FiringPoint { get; }
-    public Vector2? FiringDirectionOffset { get; }
-    public Creature? TrackCreature { get; }
-    public int FiringDelayMs { get; }
-    public KeyValueStore? Values { get; }
-
     public FireProjectileEffect(
       Creature firedBy,
       SkillContext skillContext,
@@ -55,6 +46,15 @@ namespace Nighthollow.Delegates.Effects
       FiringDelayMs = firingDelayMs;
       Values = values;
     }
+
+    public Creature FiredBy { get; }
+    public SkillContext SkillContext { get; }
+    public int DelegateIndex { get; }
+    public Vector2 FiringPoint { get; }
+    public Vector2? FiringDirectionOffset { get; }
+    public Creature? TrackCreature { get; }
+    public int FiringDelayMs { get; }
+    public KeyValueStore? Values { get; }
 
     public override void Execute()
     {

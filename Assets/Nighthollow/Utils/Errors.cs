@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
+using Object = UnityEngine.Object;
+
+#nullable enable
 
 namespace Nighthollow.Utils
 {
@@ -25,7 +27,7 @@ namespace Nighthollow.Utils
       switch (value)
       {
         case null:
-        case UnityEngine.Object c when !c:
+        case Object c when !c:
           // UnityEngine.Object has weird null behavior
           throw new NullReferenceException($"Expected a non-null object of type {typeof(T).FullName}. {message}");
         default:
@@ -35,10 +37,7 @@ namespace Nighthollow.Utils
 
     public static T CheckNotNull<T>(T? value) where T : struct
     {
-      if (!value.HasValue)
-      {
-        throw new ArgumentException($"Expected a non-null value of type {typeof(T).FullName}");
-      }
+      if (!value.HasValue) throw new ArgumentException($"Expected a non-null value of type {typeof(T).FullName}");
 
       return value.Value;
     }
@@ -46,47 +45,42 @@ namespace Nighthollow.Utils
     public static T CheckEnum<T>(T value) where T : Enum
     {
       if (Equals(value, default(T)))
-      {
         throw new ArgumentException($"Expected enum value of type {typeof(T).FullName} to have a non-default value.");
-
-      }
 
       return value;
     }
 
-    public static int CheckPositive(float value) => CheckPositive((int) value);
+    public static int CheckPositive(float value)
+    {
+      return CheckPositive((int) value);
+    }
 
     public static int CheckPositive(int value)
     {
-      if (value <= 0)
-      {
-        throw new ArgumentException($"Expected value {value} to be > 0.");
-      }
+      if (value <= 0) throw new ArgumentException($"Expected value {value} to be > 0.");
 
       return value;
     }
 
     public static Exception UnknownEnumValue<T>(T value) where T : Enum
-      => new ArgumentException($"Unknown '{typeof(T).Name}' value: '{value}'");
+    {
+      return new ArgumentException($"Unknown '{typeof(T).Name}' value: '{value}'");
+    }
 
 
     public static Exception UnknownIntEnumValue(int value, int minimum, int maximum)
-      => new ArgumentException($"Int value '{value}' must be between '{minimum}' and '{maximum}' (inclusive)");
+    {
+      return new ArgumentException($"Int value '{value}' must be between '{minimum}' and '{maximum}' (inclusive)");
+    }
 
     public static void CheckArgument(bool expression, string message)
     {
-      if (!expression)
-      {
-        throw new ArgumentException(message);
-      }
+      if (!expression) throw new ArgumentException(message);
     }
 
     public static void CheckState(bool expression, string message)
     {
-      if (!expression)
-      {
-        throw new ArgumentException(message);
-      }
+      if (!expression) throw new ArgumentException(message);
     }
   }
 }

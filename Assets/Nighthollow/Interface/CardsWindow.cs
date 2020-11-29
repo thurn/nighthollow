@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +21,8 @@ using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+#nullable enable
+
 namespace Nighthollow.Interface
 {
   public sealed class CardsWindow : AbstractWindow
@@ -30,23 +31,12 @@ namespace Nighthollow.Interface
     VisualElement _mainDeck = null!;
     VisualElement _manaDeck = null!;
 
-    public ScreenController Controller { get; set; } = null!;
-
-    public new sealed class UxmlFactory : UxmlFactory<CardsWindow, UxmlTraits>
-    {
-    }
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
-    }
-
     public CardsWindow()
     {
-      if (Application.isPlaying)
-      {
-        RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
-      }
+      if (Application.isPlaying) RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
+
+    public ScreenController Controller { get; set; } = null!;
 
     void OnGeometryChange(GeometryChangedEvent evt)
     {
@@ -63,15 +53,15 @@ namespace Nighthollow.Interface
     {
       AddItems(_collection,
         Database.Instance.UserData.Collection,
-        20,
+        count: 20,
         "large");
       AddItems(_mainDeck,
         Database.Instance.UserData.Deck.Where(i => !i.BaseType.IsManaCreature).ToList(),
-        9,
+        count: 9,
         "large");
       AddItems(_manaDeck,
         Database.Instance.UserData.Deck.Where(i => i.BaseType.IsManaCreature).ToList(),
-        6,
+        count: 6,
         "small");
     }
 
@@ -79,15 +69,9 @@ namespace Nighthollow.Interface
     {
       parentElement.Clear();
       var index = 0;
-      for (; index < items.Count; ++index)
-      {
-        parentElement.Add(RenderItem(items[index], size));
-      }
+      for (; index < items.Count; ++index) parentElement.Add(RenderItem(items[index], size));
 
-      for (; index < count; ++index)
-      {
-        parentElement.Add(EmptyItem(size));
-      }
+      for (; index < count; ++index) parentElement.Add(EmptyItem(size));
     }
 
     VisualElement EmptyItem(string size)
@@ -111,11 +95,19 @@ namespace Nighthollow.Interface
       {
         Controller.ShowTooltip(CreatureItemTooltip.Create(
             Database.Instance.UserData.Stats,
-          card),
+            card),
           new Vector2(result.worldBound.x, result.worldBound.y));
       });
       result.RegisterCallback<MouseOutEvent>(e => { Controller.HideTooltip(); });
       return result;
+    }
+
+    public new sealed class UxmlFactory : UxmlFactory<CardsWindow, UxmlTraits>
+    {
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
     }
   }
 }

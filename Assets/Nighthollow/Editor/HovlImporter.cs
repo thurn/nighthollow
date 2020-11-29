@@ -21,6 +21,8 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+#nullable enable
+
 namespace Nighthollow.Editor
 {
   public sealed class HovlImporter

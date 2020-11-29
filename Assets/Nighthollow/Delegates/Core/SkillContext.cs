@@ -12,27 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Stats;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Core
 {
   public sealed class SkillContext : DelegateContext, IDelegateContext<SkillContext>
   {
-    public SkillData Skill { get; }
-    public Projectile? Projectile { get; }
-
     public SkillContext(Creature self, SkillData skill, Projectile? projectile = null) : base(new Results(), self)
     {
       Skill = skill;
       Projectile = projectile;
     }
 
+    public SkillData Skill { get; }
+    public Projectile? Projectile { get; }
+
     public override StatTable Stats => Skill.Stats;
 
-    public SkillContext Clone() => new SkillContext(Self, Skill, Projectile);
+    public SkillContext Clone()
+    {
+      return new SkillContext(Self, Skill, Projectile);
+    }
   }
 }

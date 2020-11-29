@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #nullable enable
 
 namespace Nighthollow.State
@@ -22,8 +23,14 @@ namespace Nighthollow.State
     {
     }
 
-    public override int NotFoundValue() => 1;
+    public override int NotFoundValue()
+    {
+      return 1;
+    }
 
-    public override int Apply(int currentValue) => currentValue + 1;
+    public override int Apply(int currentValue)
+    {
+      return currentValue + 1;
+    }
   }
 }

@@ -12,25 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
 using System.Collections.Generic;
+using Nighthollow.Services;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.Components
 {
   public sealed class AttachmentDisplay : MonoBehaviour
   {
-#pragma warning disable 0649
-    [Header("State")] [SerializeField] List<Transform> _attachments;
-#pragma warning restore 0649
+    [Header("State")] [SerializeField] List<Transform> _attachments = null!;
 
     public void AddAttachment(Attachment attachment)
     {
       attachment.transform.SetParent(transform);
-      foreach (var child in attachment.GetComponentsInChildren<SpriteRenderer>())
-      {
-        child.sortingOrder = 0;
-      }
+      foreach (var child in attachment.GetComponentsInChildren<SpriteRenderer>()) child.sortingOrder = 0;
 
       _attachments.Add(attachment.transform);
       UpdatePositions();
@@ -50,10 +47,7 @@ namespace Nighthollow.Components
 
     public void ClearAttachments()
     {
-      foreach (var attachment in _attachments)
-      {
-        Destroy(attachment.gameObject);
-      }
+      foreach (var attachment in _attachments) Destroy(attachment.gameObject);
 
       _attachments.Clear();
     }
@@ -90,33 +84,33 @@ namespace Nighthollow.Components
           switch (index)
           {
             case 1:
-              return new Vector2(-0.25f, 0f);
+              return new Vector2(x: -0.25f, y: 0f);
             default:
-              return new Vector2(0.25f, 0f);
+              return new Vector2(x: 0.25f, y: 0f);
           }
 
         case 3:
           switch (index)
           {
             case 1:
-              return new Vector2(-0.2f, -0.2f);
+              return new Vector2(x: -0.2f, y: -0.2f);
             case 2:
-              return new Vector2(0.2f, -0.2f);
+              return new Vector2(x: 0.2f, y: -0.2f);
             default:
-              return new Vector2(-0.2f, 0.2f);
+              return new Vector2(x: -0.2f, y: 0.2f);
           }
 
         default:
           switch (index)
           {
             case 1:
-              return new Vector2(-0.2f, -0.2f);
+              return new Vector2(x: -0.2f, y: -0.2f);
             case 2:
-              return new Vector2(0.2f, -0.2f);
+              return new Vector2(x: 0.2f, y: -0.2f);
             case 3:
-              return new Vector2(-0.2f, 0.2f);
+              return new Vector2(x: -0.2f, y: 0.2f);
             default:
-              return new Vector2(0.2f, 0.2f);
+              return new Vector2(x: 0.2f, y: 0.2f);
           }
       }
     }

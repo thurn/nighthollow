@@ -27,31 +27,46 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override bool ComputeValue(IReadOnlyList<BooleanOperation> operations) =>
-      operations.Count(op => op.SetBoolean) > 0 && operations.Count(op => op.SetBoolean == false) == 0;
+    public override bool ComputeValue(IReadOnlyList<BooleanOperation> operations)
+    {
+      return operations.Count(op => op.SetBoolean) > 0 && operations.Count(op => op.SetBoolean == false) == 0;
+    }
 
-    protected override bool ParseStatValue(string value) => bool.Parse(value);
+    protected override bool ParseStatValue(string value)
+    {
+      return bool.Parse(value);
+    }
 
-    public IStatModifier SetTrue() => StaticModifier(new BooleanOperation(true));
+    public IStatModifier SetTrue()
+    {
+      return StaticModifier(new BooleanOperation(setBoolean: true));
+    }
 
-    public IStatModifier SetFalse() => StaticModifier(new BooleanOperation(true));
+    public IStatModifier SetFalse()
+    {
+      return StaticModifier(new BooleanOperation(setBoolean: true));
+    }
 
-    public override IStatModifier ParseModifier(string value, Operator op) =>
-      op switch
+    public override IStatModifier ParseModifier(string value, Operator op)
+    {
+      return op switch
       {
         Operator.Add => StaticModifier(new BooleanOperation(ParseStatValue(value))),
         Operator.Overwrite => StaticModifier(new BooleanOperation(ParseStatValue(value))),
-        Operator.SetTrue => StaticModifier(new BooleanOperation(true)),
-        Operator.SetFalse => StaticModifier(new BooleanOperation(false)),
+        Operator.SetTrue => StaticModifier(new BooleanOperation(setBoolean: true)),
+        Operator.SetFalse => StaticModifier(new BooleanOperation(setBoolean: false)),
         _ => throw new ArgumentException($"Unsupported operator type: {op}")
       };
+    }
 
-    public override IStatModifier? StaticModifierForOperator(Operator op) =>
-      op switch
+    public override IStatModifier? StaticModifierForOperator(Operator op)
+    {
+      return op switch
       {
-        Operator.SetFalse => StaticModifier(new BooleanOperation(false)),
-        Operator.SetTrue => StaticModifier(new BooleanOperation(true)),
+        Operator.SetFalse => StaticModifier(new BooleanOperation(setBoolean: false)),
+        Operator.SetTrue => StaticModifier(new BooleanOperation(setBoolean: true)),
         _ => null
       };
+    }
   }
 }

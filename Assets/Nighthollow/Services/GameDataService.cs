@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -24,18 +23,24 @@ using Nighthollow.Utils;
 using SimpleJSON;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Services
 {
   public sealed class GameDataService
   {
-    readonly Dictionary<int, ModifierTypeData> _modifiers = new Dictionary<int, ModifierTypeData>();
     readonly Dictionary<int, AffixTypeData> _affixes = new Dictionary<int, AffixTypeData>();
-    readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
     readonly Dictionary<int, CreatureTypeData> _creatures = new Dictionary<int, CreatureTypeData>();
+    readonly Dictionary<int, ModifierTypeData> _modifiers = new Dictionary<int, ModifierTypeData>();
     readonly Dictionary<int, ModifierValues> _modifierValues = new Dictionary<int, ModifierValues>();
+    readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
 
     readonly Dictionary<StaticCardList, List<CreatureItemData>> _staticCardLists =
       new Dictionary<StaticCardList, List<CreatureItemData>>();
+
+    GameDataService()
+    {
+    }
 
     public IEnumerable<CreatureTypeData> AllCreatureTypes => _creatures.Values;
 
@@ -47,17 +52,25 @@ namespace Nighthollow.Services
       runner.StartCoroutine(service.FetchDataAsync(() => action(service)));
     }
 
-    GameDataService()
+    public ModifierTypeData GetModifier(int modifierId)
     {
+      return Lookup(_modifiers, modifierId);
     }
 
-    public ModifierTypeData GetModifier(int modifierId) => Lookup(_modifiers, modifierId);
+    public AffixTypeData GetAffixType(int affixId)
+    {
+      return Lookup(_affixes, affixId);
+    }
 
-    public AffixTypeData GetAffixType(int affixId) => Lookup(_affixes, affixId);
+    public SkillTypeData GetSkillType(int skillId)
+    {
+      return Lookup(_skills, skillId);
+    }
 
-    public SkillTypeData GetSkillType(int skillId) => Lookup(_skills, skillId);
-
-    public CreatureTypeData GetCreatureType(int creatureId) => Lookup(_creatures, creatureId);
+    public CreatureTypeData GetCreatureType(int creatureId)
+    {
+      return Lookup(_creatures, creatureId);
+    }
 
     public IReadOnlyList<CreatureItemData> GetStaticCardList(StaticCardList listName)
     {
@@ -65,11 +78,15 @@ namespace Nighthollow.Services
       return _staticCardLists[listName];
     }
 
-    public SkillItemData DefaultMeleeSkill() =>
-      new SkillItemData(GetSkillType(1), new StatModifierTable(), new List<AffixData>());
+    public SkillItemData DefaultMeleeSkill()
+    {
+      return new SkillItemData(GetSkillType(skillId: 1), new StatModifierTable(), new List<AffixData>());
+    }
 
-    static T Lookup<T>(IReadOnlyDictionary<int, T> dictionary, int id) where T : class =>
-      dictionary.ContainsKey(id) ? dictionary[id] : throw new ArgumentException($"ID not found: {id}");
+    static T Lookup<T>(IReadOnlyDictionary<int, T> dictionary, int id) where T : class
+    {
+      return dictionary.ContainsKey(id) ? dictionary[id] : throw new ArgumentException($"ID not found: {id}");
+    }
 
     IEnumerator<YieldInstruction> FetchDataAsync(Action onComplete)
     {
@@ -91,10 +108,7 @@ namespace Nighthollow.Services
 
       foreach (var stat in parsed["Stats"])
       {
-        if (!stat.ContainsKey("Default Value"))
-        {
-          continue;
-        }
+        if (!stat.ContainsKey("Default Value")) continue;
 
         var statId = Parse.IntRequired(stat, "Stat ID");
         StatTable.Defaults.InsertModifier(
@@ -102,35 +116,23 @@ namespace Nighthollow.Services
       }
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))
-      {
         _modifiers[modifier.Id] = modifier;
-      }
 
       ParseAffixes(parsed);
 
-      foreach (var skill in parsed["Skills"].Select(row => new SkillTypeData(this, row)))
-      {
-        _skills[skill.Id] = skill;
-      }
+      foreach (var skill in parsed["Skills"].Select(row => new SkillTypeData(this, row))) _skills[skill.Id] = skill;
 
       foreach (var creature in parsed["Creatures"]
         .Where(row => row.ContainsKey("Prefab Address"))
         .Select(row => new CreatureTypeData(this, row)))
-      {
         _creatures[creature.Id] = creature;
-      }
 
       foreach (var row in parsed["CardValues"])
-      {
         _modifierValues
           .GetOrCreateDefault(Parse.IntRequired(row, "Card ID"), new ModifierValues())
           .AddValue(this, row);
-      }
 
-      foreach (var row in parsed["CardLists"])
-      {
-        ParseStaticCard(row);
-      }
+      foreach (var row in parsed["CardLists"]) ParseStaticCard(row);
 
       onComplete();
     }
@@ -143,10 +145,7 @@ namespace Nighthollow.Services
         var affixId = Parse.Int(row, "Affix ID");
         if (affixId != null)
         {
-          if (currentlyBuilding != null)
-          {
-            _affixes[currentlyBuilding.Id] = new AffixTypeData(currentlyBuilding);
-          }
+          if (currentlyBuilding != null) _affixes[currentlyBuilding.Id] = new AffixTypeData(currentlyBuilding);
 
           currentlyBuilding = new AffixTypeData.Builder
           {
@@ -168,20 +167,14 @@ namespace Nighthollow.Services
         }
       }
 
-      if (currentlyBuilding != null)
-      {
-        _affixes[currentlyBuilding.Id] = new AffixTypeData(currentlyBuilding);
-      }
+      if (currentlyBuilding != null) _affixes[currentlyBuilding.Id] = new AffixTypeData(currentlyBuilding);
     }
 
     void ParseStaticCard(IReadOnlyDictionary<string, string> row)
     {
       var cardId = Parse.IntRequired(row, "Card ID");
       var list = (StaticCardList) Parse.IntRequired(row, "Card List");
-      if (!_staticCardLists.ContainsKey(list))
-      {
-        _staticCardLists[list] = new List<CreatureItemData>();
-      }
+      if (!_staticCardLists.ContainsKey(list)) _staticCardLists[list] = new List<CreatureItemData>();
 
       var school = (School) Parse.IntRequired(row, "School");
 
@@ -192,16 +185,11 @@ namespace Nighthollow.Services
       stats.InsertModifier(Stat.ManaCost.Add(Parse.Int(row, "Mana Cost") ?? 0));
 
       var costString = Parse.String(row, "Influence Cost");
-      if (costString != null)
-      {
-        stats.InsertModifier(Stat.InfluenceCost.ParseModifier(costString, Operator.Add));
-      }
+      if (costString != null) stats.InsertModifier(Stat.InfluenceCost.ParseModifier(costString, Operator.Add));
 
       var baseDamageString = Parse.String(row, "Base Damage");
       if (baseDamageString != null)
-      {
         stats.InsertModifier(Stat.BaseDamage.ParseModifier(baseDamageString, Operator.Overwrite));
-      }
 
       var cardName = Parse.String(row, "Card Name");
       var result = new CreatureItemData(

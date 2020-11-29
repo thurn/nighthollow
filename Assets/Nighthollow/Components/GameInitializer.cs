@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Interface;
 using Nighthollow.Services;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.Components
 {
@@ -25,10 +26,7 @@ namespace Nighthollow.Components
     void Start()
     {
       GetComponent<ScreenController>().Initialize(showAdvisorBar: false);
-      Database.OnReady(data =>
-      {
-        Root.Instance.User.DrawOpeningHand(data);
-      });
+      Database.OnReady(data => { Root.Instance.User.DrawOpeningHand(data); });
     }
   }
 }

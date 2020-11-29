@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using SimpleJSON;
+
+#nullable enable
 
 namespace Nighthollow.Stats
 {
@@ -42,17 +43,25 @@ namespace Nighthollow.Stats
     }
 
     public void InsertModifier<TOperation, TValue>(
-      AbstractStat<TOperation, TValue> stat, TOperation operation, ILifetime lifetime) where TOperation : IOperation =>
+      AbstractStat<TOperation, TValue> stat, TOperation operation, ILifetime lifetime) where TOperation : IOperation
+    {
       InsertModifier(new StatModifier<TOperation, TValue>(stat, operation, lifetime));
+    }
 
     public void Clear()
     {
       Modifiers.Clear();
     }
 
-    public StatTable Clone(StatTable parent) => new StatTable(parent, Modifiers);
+    public StatTable Clone(StatTable parent)
+    {
+      return new StatTable(parent, Modifiers);
+    }
 
-    public static StatModifierTable Deserialize(JSONNode node) => new StatModifierTable(DeserializeInternal(node));
+    public static StatModifierTable Deserialize(JSONNode node)
+    {
+      return new StatModifierTable(DeserializeInternal(node));
+    }
 
     protected static Dictionary<StatId, List<IStatModifier>> DeserializeInternal(JSONNode node)
     {
@@ -74,14 +83,16 @@ namespace Nighthollow.Stats
       };
     }
 
-    public override string ToString() =>
-      string.Join(", ", Modifiers.SelectMany(pair => pair.Value).Select(m => m.ToString()));
+    public override string ToString()
+    {
+      return string.Join(", ", Modifiers.SelectMany(pair => pair.Value).Select(m => m.ToString()));
+    }
   }
 
   public sealed class StatTable : StatModifierTable
   {
     public static readonly StatTable Defaults =
-      new StatTable(null, new Dictionary<StatId, List<IStatModifier>>());
+      new StatTable(parent: null, new Dictionary<StatId, List<IStatModifier>>());
 
     readonly StatTable? _parent;
 
@@ -95,8 +106,10 @@ namespace Nighthollow.Stats
       _parent = parent;
     }
 
-    public TValue Get<TOperation, TValue>(AbstractStat<TOperation, TValue> stat) where TOperation : IOperation =>
-      stat.ComputeValue(OperationsForStatId(stat.Id).Select(op => (TOperation) op.Operation).ToList());
+    public TValue Get<TOperation, TValue>(AbstractStat<TOperation, TValue> stat) where TOperation : IOperation
+    {
+      return stat.ComputeValue(OperationsForStatId(stat.Id).Select(op => (TOperation) op.Operation).ToList());
+    }
 
     public static StatTable Deserialize(JSONNode node, StatTable parent)
     {

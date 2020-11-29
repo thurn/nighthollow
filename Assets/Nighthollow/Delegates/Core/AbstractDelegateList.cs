@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Utils;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Core
 {
@@ -52,10 +53,7 @@ namespace Nighthollow.Delegates.Core
         context.Implemented = true;
         context.DelegateIndex = i;
         var result = function(@delegate, context);
-        if (context.Implemented)
-        {
-          yield return result;
-        }
+        if (context.Implemented) yield return result;
 
         i++;
       }
@@ -64,12 +62,16 @@ namespace Nighthollow.Delegates.Core
     protected TResult GetFirstImplemented<TContext, TResult>(
       TContext delegateContext,
       Func<IDelegate, TContext, TResult> function)
-      where TContext : DelegateContext, IDelegateContext<TContext> =>
-      IterateDelegates(delegateContext, function).First();
+      where TContext : DelegateContext, IDelegateContext<TContext>
+    {
+      return IterateDelegates(delegateContext, function).First();
+    }
 
     protected bool AnyReturnedTrue<TContext>(TContext delegateContext, Func<IDelegate, TContext, bool> function)
-      where TContext : DelegateContext, IDelegateContext<TContext> =>
-      IterateDelegates(delegateContext, function).Any(v => v);
+      where TContext : DelegateContext, IDelegateContext<TContext>
+    {
+      return IterateDelegates(delegateContext, function).Any(v => v);
+    }
 
     protected void ExecuteEvent<TContext>(
       TContext delegateContext,
@@ -86,15 +88,9 @@ namespace Nighthollow.Delegates.Core
         i++;
       }
 
-      foreach (var effect in context.Results.Values)
-      {
-        effect.Execute();
-      }
+      foreach (var effect in context.Results.Values) effect.Execute();
 
-      foreach (var effect in context.Results.Values)
-      {
-        effect.RaiseEvents();
-      }
+      foreach (var effect in context.Results.Values) effect.RaiseEvents();
     }
 
     protected TResult AggregateDelegates<TContext, TResult>(
@@ -112,10 +108,7 @@ namespace Nighthollow.Delegates.Core
         context.Implemented = true;
         context.DelegateIndex = i;
         var result = function(@delegate, context, value);
-        if (context.Implemented)
-        {
-          value = result;
-        }
+        if (context.Implemented) value = result;
 
         i++;
       }

@@ -20,11 +20,6 @@ namespace Nighthollow.Data
 {
   public sealed class HexData
   {
-    public string Name { get; }
-    public int OwnerId { get; }
-    public int Level { get; }
-    public IReadOnlyList<AffixData> Affixes { get; }
-
     public HexData(string name, int ownerId, int level, IReadOnlyList<AffixData> affixes)
     {
       Name = name;
@@ -32,5 +27,10 @@ namespace Nighthollow.Data
       Level = level;
       Affixes = affixes;
     }
+
+    public string Name { get; }
+    public int OwnerId { get; }
+    public int Level { get; }
+    public IReadOnlyList<AffixData> Affixes { get; }
   }
 }

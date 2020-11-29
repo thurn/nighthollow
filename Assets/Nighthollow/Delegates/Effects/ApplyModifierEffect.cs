@@ -20,14 +20,14 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class ApplyModifierEffect : Effect
   {
-    public StatEntity Target { get; }
-    public IStatModifier Modifier { get; }
-
     public ApplyModifierEffect(StatEntity target, IStatModifier modifier)
     {
       Target = target;
       Modifier = modifier;
     }
+
+    public StatEntity Target { get; }
+    public IStatModifier Modifier { get; }
 
     public override void Execute()
     {

@@ -12,14 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
+
+#nullable enable
 
 namespace Nighthollow.Utils
 {
   public class NumericUtils
   {
-    public static int Clamp(int value, int low, int high) => Math.Max(low, Math.Min(value, high));
+    public static int Clamp(int value, int low, int high)
+    {
+      return Math.Max(low, Math.Min(value, high));
+    }
   }
 }

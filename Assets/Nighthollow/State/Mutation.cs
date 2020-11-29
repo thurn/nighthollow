@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #nullable enable
 
 namespace Nighthollow.State
@@ -23,17 +24,20 @@ namespace Nighthollow.State
 
   public abstract class Mutation<T> : IMutation
   {
-    public Key<T> Key { get; }
-
     protected Mutation(Key<T> key)
     {
       Key = key;
     }
 
+    public Key<T> Key { get; }
+
+    public void ApplyTo(IHasKeyValueStore store)
+    {
+      store.Values.Mutate(this);
+    }
+
     public abstract T NotFoundValue();
 
     public abstract T Apply(T currentValue);
-
-    public void ApplyTo(IHasKeyValueStore store) => store.Values.Mutate(this);
   }
 }

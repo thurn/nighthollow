@@ -25,52 +25,6 @@ namespace Nighthollow.Data
 {
   public sealed class ModifierValues
   {
-    sealed class AffixModifierValues
-    {
-      // Affix ID -> Modifier ID -> Modifier Value
-      readonly Dictionary<int, Dictionary<int, IStatModifier>> _affixModifiers =
-        new Dictionary<int, Dictionary<int, IStatModifier>>();
-
-      public IEnumerable<int> AffixIds => _affixModifiers.Keys;
-
-      public void AddValueForAffix(GameDataService service, int affixId, IReadOnlyDictionary<string, string> row)
-      {
-        var modifierId = Parse.IntRequired(row, "Modifier");
-        var modifier = service.GetModifier(modifierId);
-        var value = Parse.String(row, "Value");
-        if (value != null)
-        {
-          _affixModifiers.GetOrCreateDefault(affixId, new Dictionary<int, IStatModifier>())[modifierId] =
-            Stat.GetStat(Errors.CheckNotNull(modifier.StatId))
-              .ParseModifier(Parse.StringRequired(row, "Value"), Errors.CheckNotNull(modifier.Operator));
-        }
-      }
-
-      public AffixData BuildAffix(AffixTypeData affixType)
-      {
-        var modifierValues = _affixModifiers.GetValueOrDefault(affixType.Id, new Dictionary<int, IStatModifier>());
-        var result = new List<ModifierData>();
-        foreach (var modifierRange in affixType.ModifierRanges)
-        {
-          var baseType = modifierRange.BaseType;
-
-          IStatModifier? statModifier = null;
-          if (modifierValues.ContainsKey(baseType.Id))
-          {
-            statModifier = modifierValues[baseType.Id];
-          }
-          else if (baseType.StatId.HasValue && baseType.Operator.HasValue)
-          {
-            statModifier = Stat.GetStat(baseType.StatId!.Value).StaticModifierForOperator(baseType.Operator!.Value);
-          }
-
-          result.Add(new ModifierData(baseType.DelegateId, statModifier));
-        }
-
-        return new AffixData(affixType, result);
-      }
-    }
-
     readonly AffixModifierValues _creatureModifiers =
       new AffixModifierValues();
 
@@ -92,9 +46,7 @@ namespace Nighthollow.Data
     {
       var affixes = new List<AffixData>();
       if (creatureTypeData.ImplicitAffix != null)
-      {
         affixes.Add(_creatureModifiers.BuildAffix(creatureTypeData.ImplicitAffix));
-      }
 
       affixes.AddRange(_creatureModifiers.AffixIds
         .Where(affixId => affixId != creatureTypeData.ImplicitAffix?.Id)
@@ -108,15 +60,10 @@ namespace Nighthollow.Data
       var skills = new List<SkillItemData>();
 
       if (creatureTypeData.SkillAnimations.Any(animation => animation.Type == SkillAnimationType.MeleeSkill))
-      {
         skills = skills.Append(service.DefaultMeleeSkill()).ToList();
-      }
 
       var implicitSkill = creatureTypeData.ImplicitSkill;
-      if (implicitSkill != null)
-      {
-        skills.Add(BuildSkill(service, implicitSkill));
-      }
+      if (implicitSkill != null) skills.Add(BuildSkill(service, implicitSkill));
 
       skills.AddRange(_skillModifiers.Keys
         .Where(skillId => skillId != implicitSkill?.Id)
@@ -129,7 +76,6 @@ namespace Nighthollow.Data
     {
       var affixes = new List<AffixData>();
       foreach (var implicitAffix in skill.ImplicitAffixes)
-      {
         if (_skillModifiers.ContainsKey(skill.Id))
         {
           affixes.Add(_skillModifiers[skill.Id].BuildAffix(implicitAffix));
@@ -143,27 +89,62 @@ namespace Nighthollow.Data
             var baseType = modifier.BaseType;
             IStatModifier? statModifier = null;
             if (baseType.StatId.HasValue)
-            {
               statModifier = Stat.GetStat(Errors.CheckNotNull(baseType.StatId))
                 .StaticModifierForOperator(Errors.CheckNotNull(baseType.Operator));
-            }
 
             result.Add(new ModifierData(modifier.BaseType.DelegateId, statModifier));
           }
 
           affixes.Add(new AffixData(implicitAffix, result));
         }
-      }
 
       if (_skillModifiers.ContainsKey(skill.Id))
-      {
         affixes.AddRange(
           _skillModifiers[skill.Id].AffixIds
             .Where(affixId => !skill.ImplicitAffixes.Select(a => a.Id).Contains(affixId))
             .Select(affixId => _skillModifiers[skill.Id].BuildAffix(service.GetAffixType(affixId))));
-      }
 
       return new SkillItemData(skill, new StatModifierTable(), affixes);
+    }
+
+    sealed class AffixModifierValues
+    {
+      // Affix ID -> Modifier ID -> Modifier Value
+      readonly Dictionary<int, Dictionary<int, IStatModifier>> _affixModifiers =
+        new Dictionary<int, Dictionary<int, IStatModifier>>();
+
+      public IEnumerable<int> AffixIds => _affixModifiers.Keys;
+
+      public void AddValueForAffix(GameDataService service, int affixId, IReadOnlyDictionary<string, string> row)
+      {
+        var modifierId = Parse.IntRequired(row, "Modifier");
+        var modifier = service.GetModifier(modifierId);
+        var value = Parse.String(row, "Value");
+        if (value != null)
+          _affixModifiers.GetOrCreateDefault(affixId, new Dictionary<int, IStatModifier>())[modifierId] =
+            Stat.GetStat(Errors.CheckNotNull(modifier.StatId))
+              .ParseModifier(Parse.StringRequired(row, "Value"), Errors.CheckNotNull(modifier.Operator));
+      }
+
+      public AffixData BuildAffix(AffixTypeData affixType)
+      {
+        var modifierValues = _affixModifiers.GetValueOrDefault(affixType.Id, new Dictionary<int, IStatModifier>());
+        var result = new List<ModifierData>();
+        foreach (var modifierRange in affixType.ModifierRanges)
+        {
+          var baseType = modifierRange.BaseType;
+
+          IStatModifier? statModifier = null;
+          if (modifierValues.ContainsKey(baseType.Id))
+            statModifier = modifierValues[baseType.Id];
+          else if (baseType.StatId.HasValue && baseType.Operator.HasValue)
+            statModifier = Stat.GetStat(baseType.StatId!.Value).StaticModifierForOperator(baseType.Operator!.Value);
+
+          result.Add(new ModifierData(baseType.DelegateId, statModifier));
+        }
+
+        return new AffixData(affixType, result);
+      }
     }
   }
 }

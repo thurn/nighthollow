@@ -24,6 +24,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
+#nullable enable
+
 namespace Nighthollow.Editor.Data
 {
   public static class SheetsCodeGenerator
@@ -42,9 +44,9 @@ namespace Nighthollow.Editor.Data
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable";
+";
 
-    static UnityWebRequestAsyncOperation _request;
+    static UnityWebRequestAsyncOperation _request = null!;
 
     [MenuItem("Tools/Run Code Generation &#^g")]
     public static void RunCodeGeneration()
@@ -260,7 +262,7 @@ namespace Nighthollow.Editor.Data
       builder.Append(LicenseHeader);
       builder.Append($"\n{usingDirective}");
       builder.Append("\n// Generated Code - Do Not Modify!");
-      builder.Append("\nnamespace Nighthollow.Generated\n");
+      builder.Append("\n#namespace Nighthollow.Generated\n");
       builder.Append("{\n");
       return builder;
     }

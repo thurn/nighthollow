@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using Nighthollow.Components;
 using Nighthollow.Utils;
-using SimpleJSON;
+
+#nullable enable
 
 namespace Nighthollow.Stats
 {
@@ -25,15 +25,15 @@ namespace Nighthollow.Stats
   {
     readonly WeakReference<Creature> _scopeCreature;
 
+    public WhileAliveLifetime(Creature scopeCreature)
+    {
+      _scopeCreature = new WeakReference<Creature>(Errors.CheckNotNull(scopeCreature));
+    }
+
     public bool IsValid()
     {
       _scopeCreature.TryGetTarget(out var creature);
       return creature && creature.IsAlive();
-    }
-
-    public WhileAliveLifetime(Creature scopeCreature)
-    {
-      _scopeCreature = new WeakReference<Creature>(Errors.CheckNotNull(scopeCreature));
     }
 
     public override string ToString()

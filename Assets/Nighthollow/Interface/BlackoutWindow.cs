@@ -12,18 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using UnityEngine.UIElements;
+
+#nullable enable
 
 namespace Nighthollow.Interface
 {
   public sealed class BlackoutWindow : HideableElement<float>
   {
-    public new sealed class UxmlFactory : UxmlFactory<BlackoutWindow, UxmlTraits>
-    {
-    }
-
     protected override void Initialize()
     {
     }
@@ -31,6 +28,10 @@ namespace Nighthollow.Interface
     protected override void OnShow(float argument)
     {
       style.opacity = new StyleFloat(argument);
+    }
+
+    public new sealed class UxmlFactory : UxmlFactory<BlackoutWindow, UxmlTraits>
+    {
     }
   }
 }

@@ -12,32 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using Nighthollow.Delegates.Core;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Effects
 {
   public static class Events
   {
     public static EventEffect<TContext> Effect<TContext>(TContext context, Action<IDelegate, TContext> action)
-      where TContext : DelegateContext, IDelegateContext<TContext> =>
-      new EventEffect<TContext>(context.Delegate, context, action);
+      where TContext : DelegateContext, IDelegateContext<TContext>
+    {
+      return new EventEffect<TContext>(context.Delegate, context, action);
+    }
   }
 
   public sealed class EventEffect<TContext> : Effect where TContext : DelegateContext, IDelegateContext<TContext>
   {
-    public IDelegate Delegate { get; }
-    public TContext Context { get; }
-    public Action<IDelegate, TContext> Action { get; }
-
     public EventEffect(IDelegate delegateInstance, TContext context, Action<IDelegate, TContext> action)
     {
       Delegate = delegateInstance;
       Context = context.Clone();
       Action = action;
     }
+
+    public IDelegate Delegate { get; }
+    public TContext Context { get; }
+    public Action<IDelegate, TContext> Action { get; }
 
     public override void Execute()
     {

@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Utils;
+
+#nullable enable
 
 namespace Nighthollow.Data
 {
@@ -35,6 +36,35 @@ namespace Nighthollow.Data
 
   public sealed class CreatureTypeData
   {
+    public CreatureTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
+    {
+      Id = Parse.IntRequired(row, "Creature ID");
+      Name = Parse.StringRequired(row, "Name");
+      PrefabAddress = Parse.StringRequired(row, "Prefab Address");
+      HealthLow = Parse.IntRequired(row, "Health Low");
+      HealthHigh = Parse.IntRequired(row, "Health High");
+      Owner = (PlayerName) Parse.IntRequired(row, "Owner ID");
+      ImageAddress = Parse.String(row, "Image Address");
+      BaseManaCost = Parse.Int(row, "Base Mana Cost") ?? 0;
+      Speed = Parse.Int(row, "Speed") ?? 0;
+
+      var affixId = Parse.Int(row, "Implicit Affix ID");
+      if (affixId.HasValue) ImplicitAffix = service.GetAffixType(affixId.Value);
+
+      var skillId = Parse.Int(row, "Implicit Skill");
+      if (skillId.HasValue) ImplicitSkill = service.GetSkillType(skillId.Value);
+
+      var animations = new List<CreatureSkillAnimation>();
+      AddAnimation(row, "Skill 1", SkillAnimationNumber.Skill1, animations);
+      AddAnimation(row, "Skill 2", SkillAnimationNumber.Skill2, animations);
+      AddAnimation(row, "Skill 3", SkillAnimationNumber.Skill3, animations);
+      AddAnimation(row, "Skill 4", SkillAnimationNumber.Skill4, animations);
+      AddAnimation(row, "Skill 5", SkillAnimationNumber.Skill5, animations);
+      SkillAnimations = animations;
+
+      IsManaCreature = Parse.Boolean(row, "Mana Creature?");
+    }
+
     public int Id { get; }
     public string Name { get; }
     public string PrefabAddress { get; }
@@ -49,41 +79,6 @@ namespace Nighthollow.Data
     public bool IsManaCreature { get; }
     public List<CreatureSkillAnimation> SkillAnimations { get; }
 
-    public CreatureTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
-    {
-      Id = Parse.IntRequired(row, "Creature ID");
-      Name = Parse.StringRequired(row, "Name");
-      PrefabAddress = Parse.StringRequired(row, "Prefab Address");
-      HealthLow = Parse.IntRequired(row, "Health Low");
-      HealthHigh = Parse.IntRequired(row, "Health High");
-      Owner = (PlayerName) Parse.IntRequired(row, "Owner ID");
-      ImageAddress = Parse.String(row, "Image Address");
-      BaseManaCost = Parse.Int(row, "Base Mana Cost") ?? 0;
-      Speed = Parse.Int(row, "Speed") ?? 0;
-
-      var affixId = Parse.Int(row, "Implicit Affix ID");
-      if (affixId.HasValue)
-      {
-        ImplicitAffix = service.GetAffixType(affixId.Value);
-      }
-
-      var skillId = Parse.Int(row, "Implicit Skill");
-      if (skillId.HasValue)
-      {
-        ImplicitSkill = service.GetSkillType(skillId.Value);
-      }
-
-      var animations = new List<CreatureSkillAnimation>();
-      AddAnimation(row, "Skill 1", SkillAnimationNumber.Skill1, animations);
-      AddAnimation(row, "Skill 2", SkillAnimationNumber.Skill2, animations);
-      AddAnimation(row, "Skill 3", SkillAnimationNumber.Skill3, animations);
-      AddAnimation(row, "Skill 4", SkillAnimationNumber.Skill4, animations);
-      AddAnimation(row, "Skill 5", SkillAnimationNumber.Skill5, animations);
-      SkillAnimations = animations;
-
-      IsManaCreature = Parse.Boolean(row, "Mana Creature?");
-    }
-
     void AddAnimation(
       IReadOnlyDictionary<string, string> row,
       string label,
@@ -91,10 +86,7 @@ namespace Nighthollow.Data
       ICollection<CreatureSkillAnimation> list)
     {
       var type = (SkillAnimationType?) Parse.Int(row, label);
-      if (type.HasValue)
-      {
-        list.Add(new CreatureSkillAnimation(number, type.Value));
-      }
+      if (type.HasValue) list.Add(new CreatureSkillAnimation(number, type.Value));
     }
   }
 }

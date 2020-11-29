@@ -12,21 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Effects
 {
   public sealed class CreateCreatureEffect : Effect
   {
-    public CreatureItemData Data { get; }
-    public RankValue RankPosition { get; }
-    public FileValue FilePosition { get; }
-    public bool IsMoving { get; }
-
     public CreateCreatureEffect(CreatureItemData data, RankValue rankPosition, FileValue filePosition, bool isMoving)
     {
       Data = data;
@@ -35,20 +31,21 @@ namespace Nighthollow.Delegates.Effects
       IsMoving = isMoving;
     }
 
+    public CreatureItemData Data { get; }
+    public RankValue RankPosition { get; }
+    public FileValue FilePosition { get; }
+    public bool IsMoving { get; }
+
     public override void Execute()
     {
       var data = CreatureUtil.Build(Root.Instance.StatsForPlayer(Data.BaseType.Owner), Data);
       if (IsMoving)
-      {
         Root.Instance.CreatureService.CreateMovingCreature(data, FilePosition, RankPosition.ToXPosition());
-      }
       else
-      {
         Root.Instance.CreatureService.AddUserCreatureAtPosition(
           Root.Instance.CreatureService.CreateUserCreature(data),
           RankPosition,
           FilePosition);
-      }
     }
   }
 }

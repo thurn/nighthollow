@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
@@ -22,27 +21,12 @@ using Nighthollow.Stats;
 using Nighthollow.Utils;
 using SimpleJSON;
 
+#nullable enable
+
 namespace Nighthollow.Services
 {
   public sealed class UserDataService : StatEntity
   {
-    readonly Database _database;
-    public IReadOnlyList<CreatureItemData> Deck { get; }
-    public IReadOnlyList<CreatureItemData> Collection { get; }
-    public override StatTable Stats { get; }
-
-    Tutorial _tutorialState;
-
-    public Tutorial TutorialState
-    {
-      get => _tutorialState;
-      set
-      {
-        _tutorialState = value;
-        _database.Save();
-      }
-    }
-
     public enum Tutorial
     {
       Unknown = 0,
@@ -52,6 +36,10 @@ namespace Nighthollow.Services
       AfterFirstAttack = 4,
       Completed = 5
     }
+
+    readonly Database _database;
+
+    Tutorial _tutorialState;
 
     public UserDataService(Database database, GameDataService gameDataService, JSONNode? json = null)
     {
@@ -74,13 +62,29 @@ namespace Nighthollow.Services
       }
     }
 
-    public JSONNode Serialize() =>
-      new JSONObject
+    public IReadOnlyList<CreatureItemData> Deck { get; }
+    public IReadOnlyList<CreatureItemData> Collection { get; }
+    public override StatTable Stats { get; }
+
+    public Tutorial TutorialState
+    {
+      get => _tutorialState;
+      set
+      {
+        _tutorialState = value;
+        _database.Save();
+      }
+    }
+
+    public JSONNode Serialize()
+    {
+      return new JSONObject
       {
         ["deck"] = Deck.Select(c => c.Serialize()).AsJsonArray(),
         ["collection"] = Collection.Select(c => c.Serialize()).AsJsonArray(),
         ["user"] = Stats.Serialize(),
         ["tutorial"] = new JSONNumber((int) TutorialState)
       };
+    }
   }
 }

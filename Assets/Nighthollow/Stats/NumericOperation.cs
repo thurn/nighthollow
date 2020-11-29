@@ -12,31 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using Nighthollow.Generated;
+
+#nullable enable
 
 namespace Nighthollow.Stats
 {
   public static class NumericOperation
   {
-    public static NumericOperation<TValue> Add<TValue>(TValue value) where TValue : struct =>
-      new NumericOperation<TValue>(value, null, null);
+    public static NumericOperation<TValue> Add<TValue>(TValue value) where TValue : struct
+    {
+      return new NumericOperation<TValue>(value, increaseBy: null, overwrite: null);
+    }
 
-    public static NumericOperation<TValue> Increase<TValue>(PercentageValue value) where TValue : struct =>
-      new NumericOperation<TValue>(null, value, null);
+    public static NumericOperation<TValue> Increase<TValue>(PercentageValue value) where TValue : struct
+    {
+      return new NumericOperation<TValue>(addTo: null, value, overwrite: null);
+    }
 
-    public static NumericOperation<TValue> Overwrite<TValue>(TValue value) where TValue : struct =>
-      new NumericOperation<TValue>(null, null, value);
+    public static NumericOperation<TValue> Overwrite<TValue>(TValue value) where TValue : struct
+    {
+      return new NumericOperation<TValue>(addTo: null, increaseBy: null, value);
+    }
   }
 
   public sealed class NumericOperation<TValue> : IOperation where TValue : struct
   {
-    public TValue? AddTo { get; }
-    public PercentageValue? IncreaseBy { get; }
-    public TValue? Overwrite { get; }
-
     public NumericOperation(TValue? addTo, PercentageValue? increaseBy, TValue? overwrite)
     {
       AddTo = addTo;
@@ -44,62 +47,53 @@ namespace Nighthollow.Stats
       Overwrite = overwrite;
     }
 
-    public string Describe(string statDescription) => Describe(statDescription, null);
+    public TValue? AddTo { get; }
+    public PercentageValue? IncreaseBy { get; }
+    public TValue? Overwrite { get; }
+
+    public string Describe(string statDescription)
+    {
+      return Describe(statDescription, insert: null);
+    }
+
+    public SerializedOperation Serialize()
+    {
+      if (AddTo != null)
+        return new SerializedOperation(AddTo.ToString(), Operator.Add);
+      else if (IncreaseBy != null)
+        return new SerializedOperation(IncreaseBy.ToString(), Operator.Increase);
+      else if (Overwrite != null)
+        return new SerializedOperation(Overwrite.ToString(), Operator.Overwrite);
+      else
+        throw new InvalidOperationException("Invalid NumericOperation");
+    }
 
     public string Describe(string statDescription, string? insert)
     {
       if (AddTo != null)
-      {
         return ApplyDescription($"+{AddTo}", insert, statDescription);
-      }
       else if (IncreaseBy != null)
-      {
         return IncreaseBy.Value.IsReduction()
           ? ApplyDescription($"{IncreaseBy} Reduced", insert, statDescription)
           : ApplyDescription($"{IncreaseBy} Increased", insert, statDescription);
-      }
       else if (Overwrite != null)
-      {
         return ApplyDescription(Overwrite.ToString(), insert, statDescription);
-      }
       else
-      {
         throw new InvalidOperationException("Invalid NumericOperation");
-      }
     }
 
     string ApplyDescription(string add, string? insert, string statDescription)
     {
-      if (insert != null)
-      {
-        add = $"{add} {insert}";
-      }
+      if (insert != null) add = $"{add} {insert}";
 
       return statDescription.Contains("#")
         ? statDescription.Replace("#", add)
         : $"{add} {statDescription}";
     }
 
-    public SerializedOperation Serialize()
+    public override string ToString()
     {
-      if (AddTo != null)
-      {
-        return new SerializedOperation(AddTo.ToString(), Operator.Add);
-      }
-      else if (IncreaseBy != null)
-      {
-        return new SerializedOperation(IncreaseBy.ToString(), Operator.Increase);
-      }
-      else if (Overwrite != null)
-      {
-        return new SerializedOperation(Overwrite.ToString(), Operator.Overwrite);
-      }
-      else
-      {
-        throw new InvalidOperationException("Invalid NumericOperation");
-      }
+      return $"{Serialize().Operator} {Serialize().Value}";
     }
-
-    public override string ToString() => $"{Serialize().Operator} {Serialize().Value}";
   }
 }

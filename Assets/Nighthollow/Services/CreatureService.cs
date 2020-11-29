@@ -12,26 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
-using Nighthollow.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.Services
 {
   public sealed class CreatureService : MonoBehaviour
   {
+    readonly HashSet<Creature> _movingCreatures = new HashSet<Creature>();
+
     readonly Dictionary<(RankValue, FileValue), Creature> _userCreatures =
       new Dictionary<(RankValue, FileValue), Creature>();
 
-    readonly HashSet<Creature> _movingCreatures = new HashSet<Creature>();
-
-    public IEnumerable<Creature> EnemyCreatures() => _movingCreatures.Where(c => c.Owner == PlayerName.Enemy);
+    public IEnumerable<Creature> EnemyCreatures()
+    {
+      return _movingCreatures.Where(c => c.Owner == PlayerName.Enemy);
+    }
 
     public Creature CreateUserCreature(CreatureData creatureData)
     {
@@ -47,7 +51,7 @@ namespace Nighthollow.Services
     {
       var result = Database.Instance.Assets.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       result.Initialize(creatureData);
-      result.ActivateCreature(null, file, startingX);
+      result.ActivateCreature(rankValue: null, file, startingX);
       _movingCreatures.Add(result);
 
       return result;
@@ -62,46 +66,38 @@ namespace Nighthollow.Services
     public void RemoveCreature(Creature creature)
     {
       if (creature.IsMoving)
-      {
         _movingCreatures.Remove(creature);
-      }
       else if (creature.RankPosition.HasValue)
-      {
         _userCreatures.Remove((creature.RankPosition.Value, creature.FilePosition));
-      }
     }
 
     /// <summary>
-    /// Returns the first open rank position in front of this (rank, file) if one exists
+    ///   Returns the first open rank position in front of this (rank, file) if one exists
     /// </summary>
     public RankValue? GetOpenForwardRank(RankValue rank, FileValue file)
     {
       while (true)
       {
         var result = rank.Increment();
-        if (result == null)
-        {
-          return null;
-        }
+        if (result == null) return null;
 
-        if (!_userCreatures.ContainsKey((result.Value, file)))
-        {
-          return result.Value;
-        }
+        if (!_userCreatures.ContainsKey((result.Value, file))) return result.Value;
 
         rank = result.Value;
       }
     }
 
     /// <summary>
-    /// Returns all User creatures in the 9 squares around the given (rank, file) position (including the creature at
-    /// that position, if any).
+    ///   Returns all User creatures in the 9 squares around the given (rank, file) position (including the creature at
+    ///   that position, if any).
     /// </summary>
-    public IEnumerable<Creature> GetAdjacentUserCreatures(RankValue inputRank, FileValue inputFile) =>
-      from rank in BoardPositions.AdjacentRanks(inputRank)
-      from file in BoardPositions.AdjacentFiles(inputFile)
-      where _userCreatures.ContainsKey((rank, file))
-      select _userCreatures[(rank, file)];
+    public IEnumerable<Creature> GetAdjacentUserCreatures(RankValue inputRank, FileValue inputFile)
+    {
+      return from rank in BoardPositions.AdjacentRanks(inputRank)
+        from file in BoardPositions.AdjacentFiles(inputFile)
+        where _userCreatures.ContainsKey((rank, file))
+        select _userCreatures[(rank, file)];
+    }
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
     public (RankValue, FileValue) GetClosestAvailablePosition(Vector2 position)
@@ -111,31 +107,24 @@ namespace Nighthollow.Services
       var closestDistance = float.MaxValue;
 
       foreach (var rank in BoardPositions.AllRanks)
+      foreach (var file in BoardPositions.AllFiles)
       {
-        foreach (var file in BoardPositions.AllFiles)
-        {
-          if (rank == RankValue.Unknown ||
-              file == FileValue.Unknown ||
-              _userCreatures.ContainsKey((rank, file)))
-          {
-            continue;
-          }
+        if (rank == RankValue.Unknown ||
+            file == FileValue.Unknown ||
+            _userCreatures.ContainsKey((rank, file)))
+          continue;
 
-          var distance = Vector2.Distance(position,
-            new Vector2(rank.ToXPosition(), file.ToYPosition()));
-          if (distance < closestDistance)
-          {
-            closestDistance = distance;
-            closestRank = rank;
-            closestFile = file;
-          }
+        var distance = Vector2.Distance(position,
+          new Vector2(rank.ToXPosition(), file.ToYPosition()));
+        if (distance < closestDistance)
+        {
+          closestDistance = distance;
+          closestRank = rank;
+          closestFile = file;
         }
       }
 
-      if (closestRank == null || closestFile == null)
-      {
-        throw new InvalidOperationException("Board is full!");
-      }
+      if (closestRank == null || closestFile == null) throw new InvalidOperationException("Board is full!");
 
       return (closestRank.Value, closestFile.Value);
     }

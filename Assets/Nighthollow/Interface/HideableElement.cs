@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Utils;
 using UnityEngine.UIElements;
+
+#nullable enable
 
 namespace Nighthollow.Interface
 {
@@ -27,12 +28,7 @@ namespace Nighthollow.Interface
 
   public abstract class HideableElement<TShowArgument> : HideableElement
   {
-
     bool _initialized;
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
-    }
 
     public void Show(TShowArgument argument, bool animate = false)
     {
@@ -47,8 +43,8 @@ namespace Nighthollow.Interface
 
       if (animate)
       {
-        style.opacity = new StyleFloat(0f);
-        InterfaceUtils.FadeIn(this, 0.3f);
+        style.opacity = new StyleFloat(v: 0f);
+        InterfaceUtils.FadeIn(this, duration: 0.3f);
       }
 
       OnShow(argument);
@@ -61,8 +57,8 @@ namespace Nighthollow.Interface
 
       if (animate)
       {
-        style.opacity = new StyleFloat(1f);
-        InterfaceUtils.FadeOut(this, 0.3f);
+        style.opacity = new StyleFloat(v: 1f);
+        InterfaceUtils.FadeOut(this, duration: 0.3f);
       }
     }
 
@@ -70,9 +66,19 @@ namespace Nighthollow.Interface
 
     protected abstract void OnShow(TShowArgument argument);
 
-    protected VisualElement FindElement(string elementName) => Find<VisualElement>(elementName);
+    protected VisualElement FindElement(string elementName)
+    {
+      return Find<VisualElement>(elementName);
+    }
 
-    protected T Find<T>(string elementName) where T : class => Errors.CheckNotNull(this.Q(elementName) as T);
+    protected T Find<T>(string elementName) where T : class
+    {
+      return Errors.CheckNotNull(this.Q(elementName) as T);
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
+    }
   }
 
   public readonly struct NoArguments
@@ -91,7 +97,9 @@ namespace Nighthollow.Interface
       OnShow();
     }
 
-    protected virtual void OnShow() {}
+    protected virtual void OnShow()
+    {
+    }
   }
 
   public sealed class HideableVisualElement : DefaultHideableElement

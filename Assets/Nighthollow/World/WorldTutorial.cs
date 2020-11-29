@@ -12,29 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Interface;
 using Nighthollow.Services;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+#nullable enable
+
 namespace Nighthollow.World
 {
   public sealed class WorldTutorial : MonoBehaviour
   {
-#pragma warning disable 0649
-    [SerializeField] WorldMap _worldMap = null!;
-    [SerializeField] ScreenController _screenController = null!;
-    [SerializeField] Tile _fightIcon = null!;
-#pragma warning restore 0649
-
-    public static readonly Vector2Int StartingHex = new Vector2Int(-12, 7);
-    public static readonly Vector2Int TutorialAttackHex = new Vector2Int(-11, 7);
-
     const string IntroText =
       "The sleeper awakes! We have been preparing for your return for many years, my lord. We will once again " +
       "bring the Eternal Night to the world of the living!";
+
+    public static readonly Vector2Int StartingHex = new Vector2Int(x: -12, y: 7);
+    public static readonly Vector2Int TutorialAttackHex = new Vector2Int(x: -11, y: 7);
 
     public void Initialize()
     {
@@ -48,5 +43,10 @@ namespace Nighthollow.World
         }
       });
     }
+#pragma warning disable 0649
+    [SerializeField] WorldMap _worldMap = null!;
+    [SerializeField] ScreenController _screenController = null!;
+    [SerializeField] Tile _fightIcon = null!;
+#pragma warning restore 0649
   }
 }

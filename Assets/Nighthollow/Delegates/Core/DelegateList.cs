@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Components;
@@ -21,6 +20,8 @@ using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Core
 {

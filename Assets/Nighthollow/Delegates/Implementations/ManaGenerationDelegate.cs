@@ -12,18 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ManaGenerationDelegate : AbstractDelegate
   {
-    public override string? Describe(StatEntity entity) => null;
+    public override string? Describe(StatEntity entity)
+    {
+      return null;
+    }
 
     public override void OnActivate(CreatureContext c)
     {

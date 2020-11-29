@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Components;
 using Nighthollow.Data;
@@ -22,12 +21,16 @@ using Nighthollow.Generated;
 using Nighthollow.State;
 using Nighthollow.Stats;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class AddedDamageOnRepeatedHitsDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) =>
-      $"+{entity.GetStat(Stat.SameTargetAddedDamage)} Damage for Each Hit on the Same Target";
+    public override string Describe(StatEntity entity)
+    {
+      return $"+{entity.GetStat(Stat.SameTargetAddedDamage)} Damage for Each Hit on the Same Target";
+    }
 
     public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
@@ -39,7 +42,7 @@ namespace Nighthollow.Delegates.Implementations
       else
       {
         c.Results.Add(new MutateStateEffect(c.Skill, SetValueMutation.New(Key.LastCreatureHit, target)));
-        c.Results.Add(new MutateStateEffect(c.Skill, SetValueMutation.New(Key.TimesHit, 1)));
+        c.Results.Add(new MutateStateEffect(c.Skill, SetValueMutation.New(Key.TimesHit, newValue: 1)));
       }
     }
 
@@ -48,15 +51,11 @@ namespace Nighthollow.Delegates.Implementations
     {
       var lastHit = c.Skill.Values.Get(Key.LastCreatureHit);
       if (lastHit && lastHit == target)
-      {
         return DamageUtil.Add(damage, DamageUtil.Multiply(
           c.Skill.Values.Get(Key.TimesHit),
           DamageUtil.RollForDamage(c.Skill.Stats.Get(Stat.SameTargetAddedDamage))));
-      }
       else
-      {
         return damage;
-      }
     }
   }
 }

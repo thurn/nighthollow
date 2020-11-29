@@ -56,7 +56,7 @@ namespace Nighthollow.Interface
       ("woodland", "Forest"),
       ("mountain", "Mountain"),
       ("volcano", "Volcano"),
-      ("plains", "Field"),
+      ("plains", "Field")
     };
 
     public static TooltipBuilder Create(WorldMap worldMap, string hexName, string owner, bool canAttack)
@@ -77,10 +77,7 @@ namespace Nighthollow.Interface
         .AppendText($"Area Level: 1")
         .AppendText($"Owner: {owner}");
 
-      if (canAttack)
-      {
-        builder.AppendButton("Attack!", worldMap.AttackHex);
-      }
+      if (canAttack) builder.AppendButton("Attack!", worldMap.AttackHex);
 
       return builder;
     }

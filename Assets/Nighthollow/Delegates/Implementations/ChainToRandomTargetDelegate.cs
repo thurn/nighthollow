@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Linq;
 using Nighthollow.Components;
@@ -24,21 +23,23 @@ using Nighthollow.State;
 using Nighthollow.Stats;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChainToRandomTargetDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) =>
-      $"Projectiles Chain {entity.GetInt(Stat.MaxProjectileTimesChained)} Times to Random Targets";
+    public override string Describe(StatEntity entity)
+    {
+      return $"Projectiles Chain {entity.GetInt(Stat.MaxProjectileTimesChained)} Times to Random Targets";
+    }
 
     public override bool ShouldSkipProjectileImpact(SkillContext c)
     {
       if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) > 0)
-      {
         // We skip impact for the projectile for creatures which have already been hit by a chaining projectile
         return !c.Delegate.FindTargets(c)
           .Except(c.Projectile.Values.Get(Key.SkipProjectileImpacts)).Any();
-      }
 
       return false;
     }
@@ -52,12 +53,12 @@ namespace Nighthollow.Delegates.Implementations
           .ToList();
         if (enemies.Count > 0)
         {
-          var enemy = enemies[Random.Range(0, enemies.Count)];
+          var enemy = enemies[Random.Range(minInclusive: 0, enemies.Count)];
           c.Results.Add(new FireProjectileEffect(
-            firedBy: c.Self,
-            skillContext: c,
-            index: c.DelegateIndex,
-            firingPoint: c.Projectile.transform.position,
+            c.Self,
+            c,
+            c.DelegateIndex,
+            c.Projectile.transform.position,
             trackCreature: enemy,
             values: c.Projectile.Values.Copy()
               .Increment(Key.TimesChained)

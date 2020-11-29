@@ -12,67 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Components;
-using Nighthollow.Utils;
 using System;
+using Nighthollow.Components;
 using Nighthollow.Generated;
 using Nighthollow.Interface;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.Services
 {
   public sealed class Root : MonoBehaviour
   {
-    static Root _instance;
+    static Root _instance = null!;
 
-#pragma warning disable 0649
-    [SerializeField] Camera _mainCamera;
+    [SerializeField] Camera _mainCamera = null!;
+
+    [SerializeField] RectTransform _mainCanvas = null!;
+
+    [SerializeField] Prefabs _prefabs = null!;
+
+    [SerializeField] ObjectPoolService _objectPoolService = null!;
+
+    [SerializeField] CreatureService _creatureService = null!;
+
+    [SerializeField] ScreenController _screenController = null!;
+
+    [SerializeField] User _user = null!;
+
+    [SerializeField] Enemy _enemy = null!;
+
+    [SerializeField] DamageTextService _damageTextService = null!;
+
+    [SerializeField] HelperTextService _helperTextService = null!;
     public Camera MainCamera => _mainCamera;
-
-    [SerializeField] RectTransform _mainCanvas;
     public RectTransform MainCanvas => _mainCanvas;
-
-    [SerializeField] Prefabs _prefabs;
     public Prefabs Prefabs => _prefabs;
-
-    [SerializeField] ObjectPoolService _objectPoolService;
     public ObjectPoolService ObjectPoolService => _objectPoolService;
-
-    [SerializeField] CreatureService _creatureService;
     public CreatureService CreatureService => _creatureService;
-
-    [SerializeField] ScreenController _screenController;
     public ScreenController ScreenController => _screenController;
-
-    [SerializeField] User _user;
     public User User => _user;
-
-    [SerializeField] Enemy _enemy;
     public Enemy Enemy => _enemy;
-
-    [SerializeField] DamageTextService _damageTextService;
     public DamageTextService DamageTextService => _damageTextService;
-
-    [SerializeField] HelperTextService _helperTextService;
     public HelperTextService HelperTextService => _helperTextService;
-#pragma warning restore 0649
-
-    public StatTable StatsForPlayer(PlayerName player) => player switch
-    {
-      PlayerName.User => User.Data.Stats,
-      PlayerName.Enemy => Enemy.Stats,
-      _ => throw Errors.UnknownEnumValue(player)
-    };
 
     public static Root Instance
     {
       get
       {
-        if (!_instance)
-        {
-          throw new NullReferenceException("Attempted to access Root before OnEnable!");
-        }
+        if (!_instance) throw new NullReferenceException("Attempted to access Root before OnEnable!");
 
         return _instance;
       }
@@ -92,6 +82,16 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_helperTextService);
 
       _instance = this;
+    }
+
+    public StatTable StatsForPlayer(PlayerName player)
+    {
+      return player switch
+      {
+        PlayerName.User => User.Data.Stats,
+        PlayerName.Enemy => Enemy.Stats,
+        _ => throw Errors.UnknownEnumValue(player)
+      };
     }
   }
 }

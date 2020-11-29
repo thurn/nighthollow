@@ -31,6 +31,9 @@ namespace Nighthollow.Interface
       _instance = this;
     }
 
-    public Coroutine RunCoroutine(IEnumerator<YieldInstruction> routine) => StartCoroutine(routine);
+    public Coroutine RunCoroutine(IEnumerator<YieldInstruction> routine)
+    {
+      return StartCoroutine(routine);
+    }
   }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
@@ -20,21 +19,12 @@ using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 
+#nullable enable
+
 namespace Nighthollow.Data
 {
   public sealed class SkillTypeData
   {
-    public int Id { get; }
-    public string Name { get; }
-    public string? Address { get; }
-    public SkillAnimationType SkillAnimationType { get; }
-    public SkillType SkillType { get; }
-    public int? ProjectileSpeed { get; }
-    public bool UsesAccuracy { get; }
-    public bool CanCrit { get; }
-    public bool CanStun { get; }
-    public IReadOnlyList<AffixTypeData> ImplicitAffixes { get; }
-
     public SkillTypeData(GameDataService service, IReadOnlyDictionary<string, string> row)
     {
       Id = Parse.IntRequired(row, "Skill ID");
@@ -49,14 +39,23 @@ namespace Nighthollow.Data
 
       var implicitAffixes = new List<AffixTypeData>();
       if (row.ContainsKey("Implicit Affix IDs"))
-      {
         implicitAffixes.AddRange(
           row["Implicit Affix IDs"]
             .Split(',')
             .Select(id => service.GetAffixType(int.Parse(id))));
-      }
 
       ImplicitAffixes = implicitAffixes;
     }
+
+    public int Id { get; }
+    public string Name { get; }
+    public string? Address { get; }
+    public SkillAnimationType SkillAnimationType { get; }
+    public SkillType SkillType { get; }
+    public int? ProjectileSpeed { get; }
+    public bool UsesAccuracy { get; }
+    public bool CanCrit { get; }
+    public bool CanStun { get; }
+    public IReadOnlyList<AffixTypeData> ImplicitAffixes { get; }
   }
 }

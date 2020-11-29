@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Components;
-using Nighthollow.Delegates.Core;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Effects
 {
   public sealed class HealEffect : Effect
   {
-    public Creature Target { get; }
-    public int Amount { get; }
-
     public HealEffect(Creature target, int amount)
     {
       Target = target;
       Amount = amount;
     }
+
+    public Creature Target { get; }
+    public int Amount { get; }
 
     public override void Execute()
     {

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -21,20 +20,22 @@ using Nighthollow.Utils;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+#nullable enable
+
 namespace Nighthollow.Services
 {
   public sealed class AssetService
   {
     readonly Dictionary<string, Object> _assets = new Dictionary<string, Object>();
 
+    AssetService()
+    {
+    }
+
     public static void Initialize(MonoBehaviour runner, GameDataService gameDataService, Action<AssetService> action)
     {
       var service = new AssetService();
       runner.StartCoroutine(service.FetchAssetsAsync(gameDataService, () => action(service)));
-    }
-
-    AssetService()
-    {
     }
 
     public Sprite GetImage(string address)
@@ -57,18 +58,12 @@ namespace Nighthollow.Services
       {
         requests[creature.PrefabAddress] = Resources.LoadAsync<GameObject>(creature.PrefabAddress);
         if (creature.ImageAddress != null)
-        {
           requests[creature.ImageAddress] = Resources.LoadAsync<Sprite>(creature.ImageAddress);
-        }
       }
 
       foreach (var skill in gameDataService.AllSkillTypes)
-      {
         if (skill.Address != null)
-        {
           requests[skill.Address] = Resources.LoadAsync<GameObject>(skill.Address);
-        }
-      }
 
       yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
       Debug.Log("Got Asset Responses...");

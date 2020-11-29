@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Linq;
@@ -24,18 +23,20 @@ using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class DefaultCreatureDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) => "Default Creature Delegate";
+    public override string Describe(StatEntity entity)
+    {
+      return "Default Creature Delegate";
+    }
 
     public override void OnDeath(CreatureContext c)
     {
-      if (c.Self.Owner == PlayerName.Enemy)
-      {
-        c.Results.Add(new EnemyRemovedEffect());
-      }
+      if (c.Self.Owner == PlayerName.Enemy) c.Results.Add(new EnemyRemovedEffect());
     }
 
     public override SkillData? SelectSkill(CreatureContext c)
@@ -43,19 +44,13 @@ namespace Nighthollow.Delegates.Implementations
       if (c.Delegate.MeleeCouldHit(c))
       {
         var skill = SelectMatching(c, s => s.IsMelee());
-        if (skill != null)
-        {
-          return skill;
-        }
+        if (skill != null) return skill;
       }
 
       if (c.Self.HasProjectileSkill() && c.Delegate.ProjectileCouldHit(c))
       {
         var skill = SelectMatching(c, s => s.IsProjectile());
-        if (skill != null)
-        {
-          return skill;
-        }
+        if (skill != null) return skill;
       }
 
       return SelectMatching(c, s => !s.IsMelee() && !s.IsProjectile());
@@ -67,10 +62,7 @@ namespace Nighthollow.Delegates.Implementations
         .Where(predicate)
         .Where(s => CooldownAvailable(c, s))
         .ToList();
-      if (available.Count == 0)
-      {
-        return null;
-      }
+      if (available.Count == 0) return null;
 
       var maxCooldown = available.Max(s => s.GetDurationSeconds(Stat.Cooldown));
       return available.FirstOrDefault(s => s.GetDurationSeconds(Stat.Cooldown) >= maxCooldown);
@@ -82,20 +74,24 @@ namespace Nighthollow.Delegates.Implementations
       return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
-    public override bool MeleeCouldHit(CreatureContext c) =>
-      c.Self.Collider && HasOverlap(c.Self.Owner, c.Self.Collider);
+    public override bool MeleeCouldHit(CreatureContext c)
+    {
+      return c.Self.Collider && HasOverlap(c.Self.Owner, c.Self.Collider);
+    }
 
     public override bool ProjectileCouldHit(CreatureContext c)
     {
       var hit = Physics2D.Raycast(
-        origin: c.Self.ProjectileSource.position,
-        direction: Constants.ForwardDirectionForPlayer(c.Self.Owner),
-        distance: Mathf.Infinity,
-        layerMask: Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent()));
+        c.Self.ProjectileSource.position,
+        Constants.ForwardDirectionForPlayer(c.Self.Owner),
+        Mathf.Infinity,
+        Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent()));
       return hit.collider;
     }
 
-    static bool HasOverlap(PlayerName owner, Collider2D collider2D) =>
-      collider2D.IsTouchingLayers(Constants.LayerMaskForCreatures(owner.GetOpponent()));
+    static bool HasOverlap(PlayerName owner, Collider2D collider2D)
+    {
+      return collider2D.IsTouchingLayers(Constants.LayerMaskForCreatures(owner.GetOpponent()));
+    }
   }
 }

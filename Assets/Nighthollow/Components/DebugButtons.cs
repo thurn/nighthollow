@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+#nullable enable
 
 namespace Nighthollow.Components
 {
@@ -22,7 +23,7 @@ namespace Nighthollow.Components
   {
     public void HideButtons()
     {
-      gameObject.SetActive(false);
+      gameObject.SetActive(value: false);
     }
 
     public void Slow()
@@ -47,12 +48,10 @@ namespace Nighthollow.Components
 
     public void Draft()
     {
-
     }
 
     public void DeckBuilder()
     {
-
     }
   }
 }

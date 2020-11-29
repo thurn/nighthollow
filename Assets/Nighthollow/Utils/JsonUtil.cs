@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using SimpleJSON;
+
+#nullable enable
 
 namespace Nighthollow.Utils
 {
@@ -24,14 +25,14 @@ namespace Nighthollow.Utils
     public static JSONNode AsJsonArray(this IEnumerable<JSONNode> nodes)
     {
       var result = new JSONArray();
-      foreach (var node in nodes)
-      {
-        result.Add(node);
-      }
+      foreach (var node in nodes) result.Add(node);
 
       return result;
     }
 
-    public static IEnumerable<JSONNode> FromJsonArray(this JSONNode node) => ((JSONArray) node).Children;
+    public static IEnumerable<JSONNode> FromJsonArray(this JSONNode node)
+    {
+      return ((JSONArray) node).Children;
+    }
   }
 }

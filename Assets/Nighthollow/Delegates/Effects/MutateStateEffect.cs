@@ -20,14 +20,14 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class MutateStateEffect : Effect
   {
-    public IHasKeyValueStore Target { get; }
-    public IMutation Mutation { get; }
-
     public MutateStateEffect(IHasKeyValueStore target, IMutation mutation)
     {
       Target = target;
       Mutation = mutation;
     }
+
+    public IHasKeyValueStore Target { get; }
+    public IMutation Mutation { get; }
 
     public override void Execute()
     {

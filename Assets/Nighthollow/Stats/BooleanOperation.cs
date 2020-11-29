@@ -20,12 +20,12 @@ namespace Nighthollow.Stats
 {
   public sealed class BooleanOperation : IOperation
   {
-    public bool SetBoolean { get; }
-
     public BooleanOperation(bool setBoolean)
     {
       SetBoolean = setBoolean;
     }
+
+    public bool SetBoolean { get; }
 
     public string Describe(string statDescription)
     {
@@ -33,9 +33,14 @@ namespace Nighthollow.Stats
       return SetBoolean ? split[0] : split[1];
     }
 
-    public SerializedOperation Serialize() =>
-      new SerializedOperation(SetBoolean.ToString(), SetBoolean ? Operator.SetTrue : Operator.SetFalse);
+    public SerializedOperation Serialize()
+    {
+      return new SerializedOperation(SetBoolean.ToString(), SetBoolean ? Operator.SetTrue : Operator.SetFalse);
+    }
 
-    public override string ToString() => $"{nameof(SetBoolean)}: {SetBoolean}";
+    public override string ToString()
+    {
+      return $"{nameof(SetBoolean)}: {SetBoolean}";
+    }
   }
 }

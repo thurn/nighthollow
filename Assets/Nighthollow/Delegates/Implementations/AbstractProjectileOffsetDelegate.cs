@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Linq;
 using Nighthollow.Data;
@@ -20,6 +19,8 @@ using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Utils;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Implementations
 {
@@ -37,20 +38,18 @@ namespace Nighthollow.Delegates.Implementations
         .Take(GetProjectileCount(c) - 1)
         .Select(i =>
           Physics2D.Raycast(
-            origin: GetOrigin(c, i),
-            direction: GetDirection(c, i),
-            distance: Mathf.Infinity,
-            layerMask: Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent())))
+            GetOrigin(c, i),
+            GetDirection(c, i),
+            Mathf.Infinity,
+            Constants.LayerMaskForCreatures(c.Self.Owner.GetOpponent())))
         .Any(hit => hit.collider);
     }
 
     public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
     {
       if (effect.DelegateIndex <= c.DelegateIndex)
-      {
         // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
         return;
-      }
 
       c.Results.AddRange(
         CollectionUtils.AlternatingIntegers()

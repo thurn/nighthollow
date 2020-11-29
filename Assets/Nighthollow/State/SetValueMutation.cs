@@ -12,26 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #nullable enable
 
 namespace Nighthollow.State
 {
   public static class SetValueMutation
   {
-    public static SetValueMutation<T> New<T>(Key<T> key, T newValue) => new SetValueMutation<T>(key, newValue);
+    public static SetValueMutation<T> New<T>(Key<T> key, T newValue)
+    {
+      return new SetValueMutation<T>(key, newValue);
+    }
   }
 
   public sealed class SetValueMutation<T> : Mutation<T>
   {
-    public T NewValue { get; }
-
     public SetValueMutation(Key<T> key, T newValue) : base(key)
     {
       NewValue = newValue;
     }
 
-    public override T NotFoundValue() => NewValue;
+    public T NewValue { get; }
 
-    public override T Apply(T _) => NewValue;
+    public override T NotFoundValue()
+    {
+      return NewValue;
+    }
+
+    public override T Apply(T _)
+    {
+      return NewValue;
+    }
   }
 }

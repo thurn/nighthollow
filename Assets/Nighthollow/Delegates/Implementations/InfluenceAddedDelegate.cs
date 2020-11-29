@@ -12,25 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class InfluenceAddedDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) => $"+1 Influence";
+    public override string Describe(StatEntity entity)
+    {
+      return $"+1 Influence";
+    }
 
     public override void OnActivate(CreatureContext c)
     {
       c.Results.Add(
         new ApplyModifierToOwnerEffect(c.Self,
           Stat.Influence.Modifier(
-            TaggedNumericOperation.Add(c.Self.Data.School, 1),
+            TaggedNumericOperation.Add(c.Self.Data.School, value: 1),
             new WhileAliveLifetime(c.Self))));
     }
   }

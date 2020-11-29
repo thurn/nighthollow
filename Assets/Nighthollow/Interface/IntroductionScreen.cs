@@ -12,26 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+
+#nullable enable
 
 namespace Nighthollow.Interface
 {
   public sealed class IntroductionScreen : VisualElement
   {
-    public new sealed class UxmlFactory : UxmlFactory<IntroductionScreen, UxmlTraits>
-    {
-    }
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
-    }
-
     public IntroductionScreen()
     {
       RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
@@ -42,25 +34,31 @@ namespace Nighthollow.Interface
       if (Application.isPlaying)
       {
         Runner.Instance.RunCoroutine(ShowDialog());
-        this.Q("ContinueButton").RegisterCallback<ClickEvent>(e =>
-        {
-          SceneManager.LoadScene("SchoolSelection");
-        });
+        this.Q("ContinueButton").RegisterCallback<ClickEvent>(e => { SceneManager.LoadScene("SchoolSelection"); });
       }
+
       UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 
     IEnumerator<YieldInstruction> ShowDialog()
     {
-      yield return new WaitForSeconds(0.5f);
+      yield return new WaitForSeconds(seconds: 0.5f);
 
       InterfaceUtils.FadeIn(this.Q("Dialog1"));
-      yield return new WaitForSeconds(3f);
+      yield return new WaitForSeconds(seconds: 3f);
       InterfaceUtils.FadeIn(this.Q("Dialog2"));
-      yield return new WaitForSeconds(3f);
+      yield return new WaitForSeconds(seconds: 3f);
       InterfaceUtils.FadeIn(this.Q("Dialog3"));
-      yield return new WaitForSeconds(3f);
+      yield return new WaitForSeconds(seconds: 3f);
       InterfaceUtils.FadeIn(this.Q("Dialog4"));
+    }
+
+    public new sealed class UxmlFactory : UxmlFactory<IntroductionScreen, UxmlTraits>
+    {
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
     }
   }
 }

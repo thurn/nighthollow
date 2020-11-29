@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Delegates.Core;
@@ -20,16 +19,12 @@ using Nighthollow.Generated;
 using Nighthollow.State;
 using Nighthollow.Stats;
 
+#nullable enable
+
 namespace Nighthollow.Data
 {
   public sealed class SkillData : StatEntity, IHasKeyValueStore
   {
-    public SkillTypeData BaseType { get; }
-    public override StatTable Stats { get; }
-    public DelegateList Delegate { get; }
-    public IReadOnlyList<AffixData> TargetedAffixes { get; }
-    public KeyValueStore Values { get; }
-
     public SkillData(
       SkillTypeData baseType,
       StatTable stats,
@@ -43,11 +38,25 @@ namespace Nighthollow.Data
       Values = new KeyValueStore();
     }
 
-    public bool IsMelee() => BaseType.SkillType == SkillType.Melee;
+    public SkillTypeData BaseType { get; }
+    public override StatTable Stats { get; }
+    public DelegateList Delegate { get; }
+    public IReadOnlyList<AffixData> TargetedAffixes { get; }
+    public KeyValueStore Values { get; }
 
-    public bool IsProjectile() => BaseType.SkillType == SkillType.Projectile;
+    public bool IsMelee()
+    {
+      return BaseType.SkillType == SkillType.Melee;
+    }
 
-    public SkillData Clone(StatTable parentStats) =>
-      new SkillData(BaseType, Stats.Clone(parentStats), Delegate, TargetedAffixes);
+    public bool IsProjectile()
+    {
+      return BaseType.SkillType == SkillType.Projectile;
+    }
+
+    public SkillData Clone(StatTable parentStats)
+    {
+      return new SkillData(BaseType, Stats.Clone(parentStats), Delegate, TargetedAffixes);
+    }
   }
 }

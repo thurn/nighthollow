@@ -12,17 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
+#nullable enable
+
 namespace Nighthollow.Data
 {
   public static class Influence
   {
-    public static bool LessThanOrEqualTo(TaggedValues<School, int> a, TaggedValues<School, int> b) =>
-      a.Values.All(pair => pair.Value <= b.Get(pair.Key, 0));
+    public static bool LessThanOrEqualTo(TaggedValues<School, int> a, TaggedValues<School, int> b)
+    {
+      return a.Values.All(pair => pair.Value <= b.Get(pair.Key, notFound: 0));
+    }
   }
 }

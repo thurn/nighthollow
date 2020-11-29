@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Components;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Effects
 {
@@ -31,14 +32,14 @@ namespace Nighthollow.Delegates.Effects
       Stun
     }
 
-    public Event EventName { get; }
-    public Creature Creature { get; }
-
     public SkillEventEffect(Event eventName, Creature creature)
     {
       EventName = eventName;
       Creature = creature;
     }
+
+    public Event EventName { get; }
+    public Creature Creature { get; }
 
     public override void Execute()
     {
@@ -67,7 +68,7 @@ namespace Nighthollow.Delegates.Effects
       return bounds.center + new Vector3(
         (Random.value - 0.5f) * bounds.size.x,
         (Random.value - 0.5f) * bounds.size.y,
-        0
+        z: 0
       );
     }
   }

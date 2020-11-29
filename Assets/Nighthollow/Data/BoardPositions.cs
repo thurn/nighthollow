@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine;
+
+#nullable enable
 
 namespace Nighthollow.Data
 {
@@ -60,7 +61,10 @@ namespace Nighthollow.Data
       }
     }
 
-    public static float ToCenterXPosition(this RankValue rank) => ToXPosition(rank);
+    public static float ToCenterXPosition(this RankValue rank)
+    {
+      return ToXPosition(rank);
+    }
 
     public static RankValue ClosestRankForXPosition(float xPosition)
     {
@@ -79,8 +83,9 @@ namespace Nighthollow.Data
       return closestRank;
     }
 
-    public static RankValue? Increment(this RankValue rankValue) =>
-      rankValue switch
+    public static RankValue? Increment(this RankValue rankValue)
+    {
+      return rankValue switch
       {
         RankValue.Rank1 => RankValue.Rank2,
         RankValue.Rank2 => RankValue.Rank3,
@@ -90,22 +95,17 @@ namespace Nighthollow.Data
         RankValue.Rank6 => RankValue.Rank7,
         RankValue.Rank7 => RankValue.Rank8,
         RankValue.Rank8 => null,
-        _ => throw Errors.UnknownEnumValue(rankValue),
+        _ => throw Errors.UnknownEnumValue(rankValue)
       };
+    }
 
     public static IEnumerable<RankValue> AdjacentRanks(RankValue rankValue)
     {
-      if ((int) rankValue > 1)
-      {
-        yield return rankValue - 1;
-      }
+      if ((int) rankValue > 1) yield return rankValue - 1;
 
       yield return rankValue;
 
-      if ((int) rankValue < 8)
-      {
-        yield return rankValue + 1;
-      }
+      if ((int) rankValue < 8) yield return rankValue + 1;
     }
 
     public static float ToYPosition(this FileValue file)
@@ -121,7 +121,10 @@ namespace Nighthollow.Data
       }
     }
 
-    public static float ToCenterYPosition(this FileValue file) => ToYPosition(file) + 1.25f;
+    public static float ToCenterYPosition(this FileValue file)
+    {
+      return ToYPosition(file) + 1.25f;
+    }
 
     public static FileValue ClosestFileForYPosition(float yPosition)
     {
@@ -142,17 +145,11 @@ namespace Nighthollow.Data
 
     public static IEnumerable<FileValue> AdjacentFiles(FileValue fileValue)
     {
-      if ((int) fileValue > 1)
-      {
-        yield return fileValue - 1;
-      }
+      if ((int) fileValue > 1) yield return fileValue - 1;
 
       yield return fileValue;
 
-      if ((int) fileValue < 5)
-      {
-        yield return fileValue + 1;
-      }
+      if ((int) fileValue < 5) yield return fileValue + 1;
     }
   }
 }

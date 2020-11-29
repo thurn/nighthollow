@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +21,12 @@ using Nighthollow.Stats;
 using Nighthollow.Utils;
 using SimpleJSON;
 
+#nullable enable
+
 namespace Nighthollow.Services
 {
   public sealed class GameConfig
   {
-    public IReadOnlyList<CreatureItemData> Enemies { get; }
-    public StatTable EnemyStats { get; }
-
     public GameConfig(GameDataService gameDataService, JSONNode? json = null)
     {
       if (json == null)
@@ -44,11 +42,16 @@ namespace Nighthollow.Services
       }
     }
 
-    public JSONNode Serialize() =>
-      new JSONObject
+    public IReadOnlyList<CreatureItemData> Enemies { get; }
+    public StatTable EnemyStats { get; }
+
+    public JSONNode Serialize()
+    {
+      return new JSONObject
       {
         ["enemies"] = Enemies.Select(c => c.Serialize()).AsJsonArray(),
-        ["enemyStats"] = EnemyStats.Serialize(),
+        ["enemyStats"] = EnemyStats.Serialize()
       };
+    }
   }
 }

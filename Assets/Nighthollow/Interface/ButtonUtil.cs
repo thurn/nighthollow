@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -23,30 +22,11 @@ namespace Nighthollow.Interface
 {
   public static class ButtonUtil
   {
-    public readonly struct Button
-    {
-      public readonly string Text;
-      public readonly Action OnClick;
-      public readonly bool Large;
-
-      public Button(string text, Action onClick, bool large = false)
-      {
-        Text = text;
-        OnClick = onClick;
-        Large = large;
-      }
-
-      public Button WithAction(Action action) => new Button(Text, action, Large);
-    }
-
     public static VisualElement Create(Button button)
     {
       var result = new VisualElement();
       result.AddToClassList("button");
-      if (button.Large)
-      {
-        result.AddToClassList("large");
-      }
+      if (button.Large) result.AddToClassList("large");
 
       result.RegisterCallback<ClickEvent>(e => button.OnClick());
       var label = new Label {text = button.Text};
@@ -61,12 +41,29 @@ namespace Nighthollow.Interface
       parent.Clear();
 
       foreach (var button in buttons)
-      {
         parent.Add(Create(button.WithAction(() =>
         {
           button.OnClick();
           parent.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
         })));
+    }
+
+    public readonly struct Button
+    {
+      public readonly string Text;
+      public readonly Action OnClick;
+      public readonly bool Large;
+
+      public Button(string text, Action onClick, bool large = false)
+      {
+        Text = text;
+        OnClick = onClick;
+        Large = large;
+      }
+
+      public Button WithAction(Action action)
+      {
+        return new Button(Text, action, Large);
       }
     }
   }

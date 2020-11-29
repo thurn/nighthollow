@@ -15,14 +15,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable enable
+
 namespace Nighthollow.Components
 {
   public sealed class StatusBar : MonoBehaviour
   {
-#pragma warning disable 0649
-    [Header("Config")]
-    [SerializeField] Slider _slider;
-#pragma warning restore 0649
+    [Header("Config")] [SerializeField] Slider _slider = null!;
 
     public float Value
     {

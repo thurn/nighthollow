@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Components;
 using Nighthollow.Delegates.Core;
@@ -20,22 +19,23 @@ using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChanceToShockDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) =>
-      $"{entity.GetStat(Stat.ShockChance)} Chance to Shock";
+    public override string Describe(StatEntity entity)
+    {
+      return $"{entity.GetStat(Stat.ShockChance)} Chance to Shock";
+    }
 
     public override void OnApplyToTarget(SkillContext c, Creature target)
     {
-      if (Random.value > c.GetStat(Stat.ShockChance).AsMultiplier())
-      {
-        return;
-      }
+      if (Random.value > c.GetStat(Stat.ShockChance).AsMultiplier()) return;
 
       var lifetime = new TimedLifetime(c.GetDurationMilliseconds(Stat.ShockDuration));
-      target.Data.Stats.InsertModifier(Stat.IsShocked, new BooleanOperation(true), lifetime);
+      target.Data.Stats.InsertModifier(Stat.IsShocked, new BooleanOperation(setBoolean: true), lifetime);
       target.Data.Stats.InsertModifier(
         Stat.ReceiveCritsChance,
         NumericOperation.Add(c.GetStat(Stat.ShockAddedReceiveCritsChance)),

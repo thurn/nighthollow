@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using Nighthollow.Components;
-using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Stats;
+
+#nullable enable
 
 namespace Nighthollow.Delegates.Effects
 {
   public sealed class ApplyModifierToOwnerEffect : Effect
   {
-    public Creature Self { get; }
-    public IStatModifier Modifier { get; }
-
     public ApplyModifierToOwnerEffect(Creature self, IStatModifier modifier)
     {
       Self = self;
       Modifier = modifier;
     }
+
+    public Creature Self { get; }
+    public IStatModifier Modifier { get; }
 
     public override void Execute()
     {

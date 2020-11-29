@@ -15,6 +15,8 @@
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 
+#nullable enable
+
 namespace Nighthollow.Data
 {
   public static class PlayerNames

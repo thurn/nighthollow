@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -21,15 +20,12 @@ using Nighthollow.Utils;
 using SimpleJSON;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Services
 {
   public sealed class DataService
   {
-    public GameDataService GameData { get; }
-    public AssetService Assets { get; }
-    public UserDataService UserData { get; }
-    public GameConfig CurrentGameConfig { get; }
-
     public DataService(
       GameDataService gameData,
       AssetService assets,
@@ -41,6 +37,11 @@ namespace Nighthollow.Services
       UserData = userData;
       CurrentGameConfig = currentGameConfig;
     }
+
+    public GameDataService GameData { get; }
+    public AssetService Assets { get; }
+    public UserDataService UserData { get; }
+    public GameConfig CurrentGameConfig { get; }
   }
 
   public sealed class Database : MonoBehaviour
@@ -55,28 +56,11 @@ namespace Nighthollow.Services
 
     public static DataService Instance => Errors.CheckNotNull(_instance);
 
-    public static void OnReady(Action<DataService> action)
-    {
-      if (_instance == null)
-      {
-        ReadyList.Add(action);
-      }
-      else
-      {
-        action(_instance);
-      }
-    }
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void Init()
-    {
-      _instance = null;
-    }
+    string DataPath => Path.Combine(Application.persistentDataPath, "data.json");
 
     void Start()
     {
       if (_instance == null)
-      {
         GameDataService.Initialize(this, gameDataService =>
         {
           AssetService.Initialize(this, gameDataService, assetService =>
@@ -101,19 +85,27 @@ namespace Nighthollow.Services
                   new GameConfig(gameDataService, json[CurrentGameConfigKey]));
               }
 
-              foreach (var onReady in ReadyList)
-              {
-                onReady(_instance);
-              }
+              foreach (var onReady in ReadyList) onReady(_instance);
 
               ReadyList.Clear();
             });
           });
         });
-      }
     }
 
-    string DataPath => Path.Combine(Application.persistentDataPath, "data.json");
+    public static void OnReady(Action<DataService> action)
+    {
+      if (_instance == null)
+        ReadyList.Add(action);
+      else
+        action(_instance);
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void Init()
+    {
+      _instance = null;
+    }
 
     void LoadDatabase(Action<JSONNode?> onComplete)
     {
@@ -123,10 +115,7 @@ namespace Nighthollow.Services
     public void Save()
     {
       Debug.Log($"Saving to {DataPath}");
-      if (_instance == null)
-      {
-        throw new InvalidOperationException("Attempted to save database before initialization.");
-      }
+      if (_instance == null) throw new InvalidOperationException("Attempted to save database before initialization.");
 
       var result = new JSONObject
       {

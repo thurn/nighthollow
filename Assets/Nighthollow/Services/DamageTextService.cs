@@ -12,34 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#nullable enable
 
 using Nighthollow.Components;
-using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine;
 
+#nullable enable
+
 namespace Nighthollow.Services
 {
   public sealed class DamageTextService : MonoBehaviour
   {
-    [Header("Config")]
-    [SerializeField] int _alpha = 0;
-    [SerializeField] int _mediumHitThreshold = 0;
-    [SerializeField] int _bigHitThreshold = 0;
+    [Header("Config")] [SerializeField] int _alpha;
 
-    [Header("State")]
-    [SerializeField] int _count = 0;
-    [SerializeField] float _averageDamage = 0;
+    [SerializeField] int _mediumHitThreshold;
+    [SerializeField] int _bigHitThreshold;
+
+    [Header("State")] [SerializeField] int _count;
+
+    [SerializeField] float _averageDamage;
 
     public void ShowDamageText(Creature target, int amount)
     {
-      if (target.Owner != PlayerName.Enemy)
-      {
-        return;
-      }
+      if (target.Owner != PlayerName.Enemy) return;
 
       // Exponential moving average
       var alpha = Constants.MultiplierBasisPoints(_alpha);
@@ -49,17 +46,11 @@ namespace Nighthollow.Services
 
       DamageText result;
       if (_count < 4 || amount < _averageDamage * Constants.MultiplierBasisPoints(_mediumHitThreshold))
-      {
         result = Root.Instance.Prefabs.CreateHitSmall();
-      }
       else if (amount < _averageDamage * Constants.MultiplierBasisPoints(_bigHitThreshold))
-      {
         result = Root.Instance.Prefabs.CreateHitMedium();
-      }
       else
-      {
         result = Root.Instance.Prefabs.CreateHitBig();
-      }
 
       result.Initialize(amount.ToString(), point);
     }
