@@ -36,9 +36,6 @@ namespace Nighthollow.Stats
       return creature && creature.IsAlive();
     }
 
-    public override string ToString()
-    {
-      return $"[{nameof(WhileAliveLifetime)}] {nameof(_scopeCreature)}: {_scopeCreature}";
-    }
+    public override string ToString() => $"[{nameof(WhileAliveLifetime)}] {nameof(_scopeCreature)}: {_scopeCreature}";
   }
 }

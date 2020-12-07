@@ -40,25 +40,14 @@ namespace Nighthollow.Utils
 
     public static readonly Vector2 OffScreen = new Vector2(x: -9999, y: -9999);
 
-    public static float MultiplierBasisPoints(int basisPoints)
-    {
-      return basisPoints / 10_000.0f;
-    }
+    public static float MultiplierBasisPoints(int basisPoints) => basisPoints / 10_000.0f;
 
-    public static int FractionBasisPoints(int input, int basisPoints)
-    {
-      return Mathf.RoundToInt(input * basisPoints / 10_000.0f);
-    }
+    public static int FractionBasisPoints(int input, int basisPoints) =>
+      Mathf.RoundToInt(input * basisPoints / 10_000.0f);
 
-    public static string PercentageStringBasisPoints(int basisPoints)
-    {
-      return $"{Mathf.RoundToInt(basisPoints / 100.0f)}%";
-    }
+    public static string PercentageStringBasisPoints(int basisPoints) => $"{Mathf.RoundToInt(basisPoints / 100.0f)}%";
 
-    public static string MultiplierStringBasisPoints(int basisPoints)
-    {
-      return $"{MultiplierBasisPoints(basisPoints):0.##}x";
-    }
+    public static string MultiplierStringBasisPoints(int basisPoints) => $"{MultiplierBasisPoints(basisPoints):0.##}x";
 
     public static int LayerForCreatures(PlayerName playerName)
     {

@@ -48,7 +48,10 @@ namespace Nighthollow.Components
       if (_debugMode)
       {
         var children = GetComponentsInChildren<Card>();
-        foreach (var child in children) _cards.Add(child);
+        foreach (var child in children)
+        {
+          _cards.Add(child);
+        }
 
         AnimateCardsToPosition();
       }
@@ -56,7 +59,10 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      if (_debugMode) AnimateCardsToPosition();
+      if (_debugMode)
+      {
+        AnimateCardsToPosition();
+      }
     }
 
     void OnDrawGizmosSelected()
@@ -106,7 +112,10 @@ namespace Nighthollow.Components
       _cards.Add(card);
       card.PreviewMode = _previewMode;
 
-      if (animate) AnimateCardsToPosition();
+      if (animate)
+      {
+        AnimateCardsToPosition();
+      }
     }
 
     public void OverrideHandPosition(bool value, Action? onComplete = null)
@@ -119,12 +128,18 @@ namespace Nighthollow.Components
     {
       _previewMode = value;
 
-      foreach (var card in _cards) card.PreviewMode = value;
+      foreach (var card in _cards)
+      {
+        card.PreviewMode = value;
+      }
     }
 
     public void DestroyAllCards()
     {
-      foreach (var card in _cards) Destroy(card.gameObject);
+      foreach (var card in _cards)
+      {
+        Destroy(card.gameObject);
+      }
 
       _cards.Clear();
     }
@@ -153,7 +168,10 @@ namespace Nighthollow.Components
 
     float CalculateCurvePosition(int cardIndex)
     {
-      if (cardIndex < 0 || cardIndex >= _cards.Count) throw new ArgumentException("Index out of bounds");
+      if (cardIndex < 0 || cardIndex >= _cards.Count)
+      {
+        throw new ArgumentException("Index out of bounds");
+      }
 
       switch (_cards.Count)
       {
@@ -176,23 +194,16 @@ namespace Nighthollow.Components
 
     // Given a start,end range on the 0,1 line, returns the position within that range where card 'index' of of
     // 'count' total cards should be positioned
-    float PositionWithinRange(float start, float end, int index, int count)
-    {
-      return start + index * ((end - start) / (count - 1.0f));
-    }
+    float PositionWithinRange(float start, float end, int index, int count) =>
+      start + index * ((end - start) / (count - 1.0f));
 
     // Card rotation ranges from 5 to -5
-    float CalculateZRotation(float t)
-    {
-      return -10.0f * t + 5.0f;
-    }
+    float CalculateZRotation(float t) => -10.0f * t + 5.0f;
 
-    Vector3 CalculateBezierPosition(float t)
-    {
-      return Mathf.Pow(1 - t, p: 3) * _controlPoint1.position +
-             3 * Mathf.Pow(1 - t, p: 2) * t * _controlPoint2.position +
-             3 * (1 - t) * Mathf.Pow(t, p: 2) * _controlPoint3.position +
-             Mathf.Pow(t, p: 3) * _controlPoint4.position;
-    }
+    Vector3 CalculateBezierPosition(float t) =>
+      Mathf.Pow(1 - t, p: 3) * _controlPoint1.position +
+      3 * Mathf.Pow(1 - t, p: 2) * t * _controlPoint2.position +
+      3 * (1 - t) * Mathf.Pow(t, p: 2) * _controlPoint3.position +
+      Mathf.Pow(t, p: 3) * _controlPoint4.position;
   }
 }

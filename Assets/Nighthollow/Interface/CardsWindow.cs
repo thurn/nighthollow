@@ -12,12 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Data;
 using Nighthollow.Services;
-using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,9 +27,20 @@ namespace Nighthollow.Interface
     VisualElement _mainDeck = null!;
     VisualElement _manaDeck = null!;
 
+    public new sealed class UxmlFactory : UxmlFactory<CardsWindow, UxmlTraits>
+    {
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
+    }
+
     public CardsWindow()
     {
-      if (Application.isPlaying) RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
+      if (Application.isPlaying)
+      {
+        RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
+      }
     }
 
     public ScreenController Controller { get; set; } = null!;
@@ -51,63 +58,21 @@ namespace Nighthollow.Interface
 
     protected override void Render()
     {
-      AddItems(_collection,
+      ItemRenderer.AddItems(
+        Controller,
+        _collection,
         Database.Instance.UserData.Collection,
-        count: 20,
-        "large");
-      AddItems(_mainDeck,
+        new ItemRenderer.Config(count: 20));
+      ItemRenderer.AddItems(
+        Controller,
+        _mainDeck,
         Database.Instance.UserData.Deck.Where(i => !i.BaseType.IsManaCreature).ToList(),
-        count: 9,
-        "large");
-      AddItems(_manaDeck,
+        new ItemRenderer.Config(count: 9));
+      ItemRenderer.AddItems(
+        Controller,
+        _manaDeck,
         Database.Instance.UserData.Deck.Where(i => i.BaseType.IsManaCreature).ToList(),
-        count: 6,
-        "small");
-    }
-
-    void AddItems(VisualElement parentElement, IReadOnlyList<CreatureItemData> items, int count, string size)
-    {
-      parentElement.Clear();
-      var index = 0;
-      for (; index < items.Count; ++index) parentElement.Add(RenderItem(items[index], size));
-
-      for (; index < count; ++index) parentElement.Add(EmptyItem(size));
-    }
-
-    VisualElement EmptyItem(string size)
-    {
-      var result = new VisualElement();
-      result.AddToClassList("card");
-      result.AddToClassList(size);
-      return result;
-    }
-
-    VisualElement RenderItem(CreatureItemData card, string size)
-    {
-      var result = new VisualElement();
-      result.AddToClassList("card");
-      result.AddToClassList(size);
-      var image = new Image();
-      image.style.backgroundImage = new StyleBackground(Database.Instance.Assets.GetImage(
-        Errors.CheckNotNull(card.BaseType.ImageAddress)));
-      result.Add(image);
-      result.RegisterCallback<MouseOverEvent>(e =>
-      {
-        Controller.ShowTooltip(CreatureItemTooltip.Create(
-            Database.Instance.UserData.Stats,
-            card),
-          new Vector2(result.worldBound.x, result.worldBound.y));
-      });
-      result.RegisterCallback<MouseOutEvent>(e => { Controller.HideTooltip(); });
-      return result;
-    }
-
-    public new sealed class UxmlFactory : UxmlFactory<CardsWindow, UxmlTraits>
-    {
-    }
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
+        new ItemRenderer.Config(count: 6, ItemRenderer.Size.Small));
     }
   }
 }

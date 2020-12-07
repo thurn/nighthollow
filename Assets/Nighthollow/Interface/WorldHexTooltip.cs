@@ -77,7 +77,10 @@ namespace Nighthollow.Interface
         .AppendText($"Area Level: 1")
         .AppendText($"Owner: {owner}");
 
-      if (canAttack) builder.AppendButton("Attack!", worldMap.AttackHex);
+      if (canAttack)
+      {
+        builder.AppendButton("Attack!", worldMap.AttackHex);
+      }
 
       return builder;
     }

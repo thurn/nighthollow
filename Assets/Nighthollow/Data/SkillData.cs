@@ -44,19 +44,11 @@ namespace Nighthollow.Data
     public IReadOnlyList<AffixData> TargetedAffixes { get; }
     public KeyValueStore Values { get; }
 
-    public bool IsMelee()
-    {
-      return BaseType.SkillType == SkillType.Melee;
-    }
+    public bool IsMelee() => BaseType.SkillType == SkillType.Melee;
 
-    public bool IsProjectile()
-    {
-      return BaseType.SkillType == SkillType.Projectile;
-    }
+    public bool IsProjectile() => BaseType.SkillType == SkillType.Projectile;
 
-    public SkillData Clone(StatTable parentStats)
-    {
-      return new SkillData(BaseType, Stats.Clone(parentStats), Delegate, TargetedAffixes);
-    }
+    public SkillData Clone(StatTable parentStats) =>
+      new SkillData(BaseType, Stats.Clone(parentStats), Delegate, TargetedAffixes);
   }
 }

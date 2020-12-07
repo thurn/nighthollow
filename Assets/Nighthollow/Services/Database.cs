@@ -61,6 +61,7 @@ namespace Nighthollow.Services
     void Start()
     {
       if (_instance == null)
+      {
         GameDataService.Initialize(this, gameDataService =>
         {
           AssetService.Initialize(this, gameDataService, assetService =>
@@ -85,20 +86,28 @@ namespace Nighthollow.Services
                   new GameConfig(gameDataService, json[CurrentGameConfigKey]));
               }
 
-              foreach (var onReady in ReadyList) onReady(_instance);
+              foreach (var onReady in ReadyList)
+              {
+                onReady(_instance);
+              }
 
               ReadyList.Clear();
             });
           });
         });
+      }
     }
 
     public static void OnReady(Action<DataService> action)
     {
       if (_instance == null)
+      {
         ReadyList.Add(action);
+      }
       else
+      {
         action(_instance);
+      }
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -115,7 +124,10 @@ namespace Nighthollow.Services
     public void Save()
     {
       Debug.Log($"Saving to {DataPath}");
-      if (_instance == null) throw new InvalidOperationException("Attempted to save database before initialization.");
+      if (_instance == null)
+      {
+        throw new InvalidOperationException("Attempted to save database before initialization.");
+      }
 
       var result = new JSONObject
       {

@@ -37,7 +37,10 @@ namespace Nighthollow.Utils
 
     public static T CheckNotNull<T>(T? value) where T : struct
     {
-      if (!value.HasValue) throw new ArgumentException($"Expected a non-null value of type {typeof(T).FullName}");
+      if (!value.HasValue)
+      {
+        throw new ArgumentException($"Expected a non-null value of type {typeof(T).FullName}");
+      }
 
       return value.Value;
     }
@@ -45,42 +48,46 @@ namespace Nighthollow.Utils
     public static T CheckEnum<T>(T value) where T : Enum
     {
       if (Equals(value, default(T)))
+      {
         throw new ArgumentException($"Expected enum value of type {typeof(T).FullName} to have a non-default value.");
+      }
 
       return value;
     }
 
-    public static int CheckPositive(float value)
-    {
-      return CheckPositive((int) value);
-    }
+    public static int CheckPositive(float value) => CheckPositive((int) value);
 
     public static int CheckPositive(int value)
     {
-      if (value <= 0) throw new ArgumentException($"Expected value {value} to be > 0.");
+      if (value <= 0)
+      {
+        throw new ArgumentException($"Expected value {value} to be > 0.");
+      }
 
       return value;
     }
 
-    public static Exception UnknownEnumValue<T>(T value) where T : Enum
-    {
-      return new ArgumentException($"Unknown '{typeof(T).Name}' value: '{value}'");
-    }
+    public static Exception UnknownEnumValue<T>(T value) where T : Enum =>
+      new ArgumentException($"Unknown '{typeof(T).Name}' value: '{value}'");
 
 
-    public static Exception UnknownIntEnumValue(int value, int minimum, int maximum)
-    {
-      return new ArgumentException($"Int value '{value}' must be between '{minimum}' and '{maximum}' (inclusive)");
-    }
+    public static Exception UnknownIntEnumValue(int value, int minimum, int maximum) =>
+      new ArgumentException($"Int value '{value}' must be between '{minimum}' and '{maximum}' (inclusive)");
 
     public static void CheckArgument(bool expression, string message)
     {
-      if (!expression) throw new ArgumentException(message);
+      if (!expression)
+      {
+        throw new ArgumentException(message);
+      }
     }
 
     public static void CheckState(bool expression, string message)
     {
-      if (!expression) throw new ArgumentException(message);
+      if (!expression)
+      {
+        throw new ArgumentException(message);
+      }
     }
   }
 }

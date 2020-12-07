@@ -86,8 +86,10 @@ namespace Nighthollow.World
         ComponentUtils.GetComponent<TilemapRenderer>(childMap).sortingOrder = -yCoordinate;
 
         for (var xCoordinate = -30; xCoordinate <= 30; ++xCoordinate)
+        {
           tilemap.SetTile(new Vector3Int(xCoordinate, yCoordinate, z: 0),
             map.GetTile(new Vector3Int(xCoordinate, yCoordinate, z: 0)));
+        }
 
         _children[yCoordinate] = tilemap;
       }
@@ -113,10 +115,7 @@ namespace Nighthollow.World
       _overlayTilemap.SetTile(new Vector3Int(hex.x, hex.y, IconZ), tile: null);
     }
 
-    public TileBase GetIcon(Vector2Int hex)
-    {
-      return _overlayTilemap.GetTile(new Vector3Int(hex.x, hex.y, IconZ));
-    }
+    public TileBase GetIcon(Vector2Int hex) => _overlayTilemap.GetTile(new Vector3Int(hex.x, hex.y, IconZ));
 
     public void OutlineHexes(Color color, ISet<Vector2Int> hexes)
     {
@@ -132,31 +131,49 @@ namespace Nighthollow.World
       foreach (var hex in hexes)
       {
         var upLeft = HexUtils.GetInDirection(hex, HexUtils.Direction.UpLeft);
-        if (!hexes.Contains(upLeft)) ApplySelection(upLeft, bottomRightSelection, BottomRightZ, toOverlay: false);
+        if (!hexes.Contains(upLeft))
+        {
+          ApplySelection(upLeft, bottomRightSelection, BottomRightZ, toOverlay: false);
+        }
 
         var upRight = HexUtils.GetInDirection(hex, HexUtils.Direction.UpRight);
-        if (!hexes.Contains(upRight)) ApplySelection(upRight, bottomLeftSelection, BottomLeftZ, toOverlay: false);
+        if (!hexes.Contains(upRight))
+        {
+          ApplySelection(upRight, bottomLeftSelection, BottomLeftZ, toOverlay: false);
+        }
 
         if (!hexes.Contains(HexUtils.GetInDirection(hex, HexUtils.Direction.Left)))
+        {
           ApplySelection(hex, leftSelection, LeftZ, toOverlay: true);
+        }
 
         if (!hexes.Contains(HexUtils.GetInDirection(hex, HexUtils.Direction.Right)))
+        {
           ApplySelection(hex, rightSelection, RightZ, toOverlay: true);
+        }
 
         if (!hexes.Contains(HexUtils.GetInDirection(hex, HexUtils.Direction.DownLeft)))
+        {
           ApplySelection(hex, bottomLeftSelection, BottomLeftZ, toOverlay: true);
+        }
 
         if (!hexes.Contains(HexUtils.GetInDirection(hex, HexUtils.Direction.DownRight)))
+        {
           ApplySelection(hex, bottomRightSelection, BottomRightZ, toOverlay: true);
+        }
       }
     }
 
     void ApplySelection(Vector2Int hex, Tile tile, int zPosition, bool toOverlay)
     {
       if (toOverlay)
+      {
         _overlayTilemap.SetTile(new Vector3Int(hex.x, hex.y, zPosition), tile);
+      }
       else
+      {
         _children[hex.y].SetTile(new Vector3Int(hex.x, hex.y, zPosition), tile);
+      }
     }
 
     public void ClearSelection()
@@ -171,7 +188,10 @@ namespace Nighthollow.World
       if (_currentlySelected.HasValue)
       {
         RemoveIcon(_currentlySelected.Value);
-        if (_previousIconOnSelectedTile) ShowIcon(_currentlySelected.Value, _previousIconOnSelectedTile);
+        if (_previousIconOnSelectedTile)
+        {
+          ShowIcon(_currentlySelected.Value, _previousIconOnSelectedTile);
+        }
       }
     }
 

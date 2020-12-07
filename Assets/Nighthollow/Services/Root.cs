@@ -62,7 +62,10 @@ namespace Nighthollow.Services
     {
       get
       {
-        if (!_instance) throw new NullReferenceException("Attempted to access Root before OnEnable!");
+        if (!_instance)
+        {
+          throw new NullReferenceException("Attempted to access Root before OnEnable!");
+        }
 
         return _instance;
       }

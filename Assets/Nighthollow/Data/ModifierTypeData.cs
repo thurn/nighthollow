@@ -38,9 +38,7 @@ namespace Nighthollow.Data
     public Operator? Operator { get; }
     public DelegateId? DelegateId { get; }
 
-    public override string ToString()
-    {
-      return $"[{nameof(ModifierTypeData)}] {nameof(Id)}: {Id}, {nameof(Description)}: {Description}";
-    }
+    public override string ToString() =>
+      $"[{nameof(ModifierTypeData)}] {nameof(Id)}: {Id}, {nameof(Description)}: {Description}";
   }
 }

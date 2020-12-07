@@ -50,8 +50,10 @@ namespace Nighthollow.Components
     {
       _deathCount++;
       if (_deathCount >= _stats.Get(Stat.EnemiesToSpawn))
+      {
         Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
           .Show(new GameOverMessage.Args("Victory!", "World"), animate: true);
+      }
     }
 
     public void OnEnemyCreatureAtEndzone(Creature creature)
@@ -82,7 +84,10 @@ namespace Nighthollow.Components
     CreatureData RandomEnemy()
     {
       var selector = new DynamicRandomSelector<CreatureData>();
-      foreach (var enemy in _enemies) selector.Add(enemy, weight: 1.0f);
+      foreach (var enemy in _enemies)
+      {
+        selector.Add(enemy, weight: 1.0f);
+      }
 
       selector.Build();
 
@@ -92,7 +97,10 @@ namespace Nighthollow.Components
     FileValue RandomFile()
     {
       var selector = new DynamicRandomSelector<FileValue>();
-      foreach (var file in BoardPositions.AllFiles) selector.Add(file, weight: 1.0f);
+      foreach (var file in BoardPositions.AllFiles)
+      {
+        selector.Add(file, weight: 1.0f);
+      }
 
       selector.Build();
 

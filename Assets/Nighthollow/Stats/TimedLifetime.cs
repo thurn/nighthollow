@@ -29,14 +29,8 @@ namespace Nighthollow.Stats
       _endTimeSeconds = Time.time + Errors.CheckPositive(durationMilliseconds) / 1000f;
     }
 
-    public bool IsValid()
-    {
-      return Time.time < _endTimeSeconds;
-    }
+    public bool IsValid() => Time.time < _endTimeSeconds;
 
-    public override string ToString()
-    {
-      return $"[{nameof(TimedLifetime)}] {nameof(_endTimeSeconds)}: {_endTimeSeconds}";
-    }
+    public override string ToString() => $"[{nameof(TimedLifetime)}] {nameof(_endTimeSeconds)}: {_endTimeSeconds}";
   }
 }

@@ -24,10 +24,7 @@ namespace Nighthollow.Utils
   {
     const int ReferencePixelsPerUnit = 100;
 
-    public static Vector2 WorldToCanvasPosition(Vector2 worldPosition)
-    {
-      return ReferencePixelsPerUnit * worldPosition;
-    }
+    public static Vector2 WorldToCanvasPosition(Vector2 worldPosition) => ReferencePixelsPerUnit * worldPosition;
 
     public static Vector2 WorldToCanvasAnchorPosition(Vector2 worldPosition)
     {

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using System.Collections.Generic;
+using Nighthollow.Interface;
 using UnityEngine;
 
 #nullable enable
@@ -25,6 +25,7 @@ namespace Nighthollow.Components
     static readonly int OpenTrigger = Animator.StringToHash("Open");
 
     [SerializeField] TimedEffect _onOpenEffect = null!;
+    [SerializeField] ScreenController _screenController = null!;
     Animator _animator = null!;
 
     void Start()
@@ -40,9 +41,10 @@ namespace Nighthollow.Components
     IEnumerator<YieldInstruction> Play()
     {
       _animator.SetTrigger(OpenTrigger);
-      yield return new WaitForSeconds(seconds: 0.2f);
+      yield return new WaitForSeconds(seconds: 0.1f);
       var effect = Instantiate(_onOpenEffect.gameObject);
       effect.transform.position = transform.position;
+      _screenController.Get(ScreenController.RewardsWindow).AnimateOpening();
     }
   }
 }

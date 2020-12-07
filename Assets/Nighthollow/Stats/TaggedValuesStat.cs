@@ -32,10 +32,7 @@ namespace Nighthollow.Stats
 
     public IReadOnlyDictionary<TTag, TValue> Values { get; }
 
-    public TValue Get(TTag tag, TValue notFound)
-    {
-      return Values.GetValueOrDefault(tag, notFound);
-    }
+    public TValue Get(TTag tag, TValue notFound) => Values.GetValueOrDefault(tag, notFound);
 
     public override string ToString()
     {
@@ -57,10 +54,15 @@ namespace Nighthollow.Stats
       var result = new Dictionary<TTag, TValue>();
 
       var overwrite = operations.Select(op => op.Overwrite).LastOrDefault(o => o != null);
-      if (overwrite != null) result = overwrite.Values.ToDictionary(k => k.Key, v => v.Value);
+      if (overwrite != null)
+      {
+        result = overwrite.Values.ToDictionary(k => k.Key, v => v.Value);
+      }
 
       foreach (var tag in AllTags().Where(tag => operations.Any(o => o.Tags.Contains(tag))))
+      {
         result[tag] = ComputeTagged(operations.Select(op => op.ToNumericOperation(tag)).WhereNotNull().ToList());
+      }
 
       return new TaggedValues<TTag, TValue>(result);
     }
@@ -111,10 +113,7 @@ namespace Nighthollow.Stats
       };
     }
 
-    public override IStatModifier? StaticModifierForOperator(Operator op)
-    {
-      return null;
-    }
+    public override IStatModifier? StaticModifierForOperator(Operator op) => null;
   }
 
   public abstract class TaggedIntValuesStat<TTag> : TaggedValuesStat<TTag, int> where TTag : struct, Enum
@@ -128,10 +127,7 @@ namespace Nighthollow.Stats
       return IntStat.Compute(operations, op => op);
     }
 
-    protected override int ParseTaggedValue(string value)
-    {
-      return IntStat.ParseInt(value);
-    }
+    protected override int ParseTaggedValue(string value) => IntStat.ParseInt(value);
   }
 
   public abstract class TaggedPercentageValuesStat<TTag> : TaggedValuesStat<TTag, PercentageValue>
@@ -141,15 +137,10 @@ namespace Nighthollow.Stats
     {
     }
 
-    protected override PercentageValue ComputeTagged(IReadOnlyList<NumericOperation<PercentageValue>> operations)
-    {
-      return PercentageStat.Compute(operations);
-    }
+    protected override PercentageValue ComputeTagged(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
+      PercentageStat.Compute(operations);
 
-    protected override PercentageValue ParseTaggedValue(string value)
-    {
-      return PercentageStat.ParsePercentage(value);
-    }
+    protected override PercentageValue ParseTaggedValue(string value) => PercentageStat.ParsePercentage(value);
   }
 
   public abstract class TaggedIntRangesStat<TTag> : TaggedValuesStat<TTag, IntRangeValue> where TTag : struct, Enum
@@ -159,15 +150,10 @@ namespace Nighthollow.Stats
     }
 
     protected override IntRangeValue ComputeTagged(
-      IReadOnlyList<NumericOperation<IntRangeValue>> operations)
-    {
-      return IntRangeStat.Compute(operations);
-    }
+      IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
+      IntRangeStat.Compute(operations);
 
-    protected override IntRangeValue ParseTaggedValue(string value)
-    {
-      return IntRangeStat.ParseIntRange(value);
-    }
+    protected override IntRangeValue ParseTaggedValue(string value) => IntRangeStat.ParseIntRange(value);
   }
 
   public sealed class DamageTypeIntsStat : TaggedIntValuesStat<DamageType>
@@ -176,15 +162,10 @@ namespace Nighthollow.Stats
     {
     }
 
-    protected override IEnumerable<DamageType> AllTags()
-    {
-      return CollectionUtils.AllNonDefaultEnumValues<DamageType>(typeof(DamageType));
-    }
+    protected override IEnumerable<DamageType> AllTags() =>
+      CollectionUtils.AllNonDefaultEnumValues<DamageType>(typeof(DamageType));
 
-    protected override DamageType ParseTag(string tag)
-    {
-      return ParseDamageTypeTag(tag);
-    }
+    protected override DamageType ParseTag(string tag) => ParseDamageTypeTag(tag);
 
     public static DamageType ParseDamageTypeTag(string tag)
     {
@@ -208,15 +189,10 @@ namespace Nighthollow.Stats
     {
     }
 
-    protected override DamageType ParseTag(string tag)
-    {
-      return DamageTypeIntsStat.ParseDamageTypeTag(tag);
-    }
+    protected override DamageType ParseTag(string tag) => DamageTypeIntsStat.ParseDamageTypeTag(tag);
 
-    protected override IEnumerable<DamageType> AllTags()
-    {
-      return CollectionUtils.AllNonDefaultEnumValues<DamageType>(typeof(DamageType));
-    }
+    protected override IEnumerable<DamageType> AllTags() =>
+      CollectionUtils.AllNonDefaultEnumValues<DamageType>(typeof(DamageType));
   }
 
   public sealed class SchoolIntsStat : TaggedIntValuesStat<School>
@@ -239,9 +215,6 @@ namespace Nighthollow.Stats
       };
     }
 
-    protected override IEnumerable<School> AllTags()
-    {
-      return CollectionUtils.AllNonDefaultEnumValues<School>(typeof(School));
-    }
+    protected override IEnumerable<School> AllTags() => CollectionUtils.AllNonDefaultEnumValues<School>(typeof(School));
   }
 }

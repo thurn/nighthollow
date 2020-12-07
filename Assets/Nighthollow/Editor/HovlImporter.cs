@@ -46,7 +46,7 @@ namespace Nighthollow.Editor
         Object.Instantiate(
           AssetDatabase.LoadAssetAtPath<GameObject>(projectilePath));
 
-      var projectileNumber = int.Parse(match.Groups[1].ToString());
+      var projectileNumber = int.Parse(match.Groups[groupnum: 1].ToString());
       var flashPrefab =
         Object.Instantiate(
           AssetDatabase.LoadAssetAtPath<GameObject>(

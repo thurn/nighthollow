@@ -58,12 +58,18 @@ namespace Nighthollow.Services
       {
         requests[creature.PrefabAddress] = Resources.LoadAsync<GameObject>(creature.PrefabAddress);
         if (creature.ImageAddress != null)
+        {
           requests[creature.ImageAddress] = Resources.LoadAsync<Sprite>(creature.ImageAddress);
+        }
       }
 
       foreach (var skill in gameDataService.AllSkillTypes)
+      {
         if (skill.Address != null)
+        {
           requests[skill.Address] = Resources.LoadAsync<GameObject>(skill.Address);
+        }
+      }
 
       yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
       Debug.Log("Got Asset Responses...");

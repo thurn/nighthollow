@@ -41,21 +41,31 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      if (_trackCreature) transform.LookAt(_trackCreature.transform.position);
+      if (_trackCreature)
+      {
+        transform.LookAt(_trackCreature.transform.position);
+      }
+
       transform.position += Errors.CheckPositive(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f
                             * Time.deltaTime * transform.forward;
 
       if (Mathf.Abs(transform.position.x) > 25 || Mathf.Abs(transform.position.y) > 25)
+      {
         gameObject.SetActive(value: false);
+      }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
       var context = new SkillContext(_firedBy, _skillData, this);
       if (_firedBy.Data.Delegate.ShouldSkipProjectileImpact(context))
+      {
         if (!_trackCreature || _trackCreature.gameObject != other.gameObject)
           // Tracking projectiles cannot skip their target
+        {
           return;
+        }
+      }
 
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;

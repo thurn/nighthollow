@@ -68,7 +68,9 @@ namespace Nighthollow.Components
 
       var openingHand = new List<CreatureData>();
       for (var i = 0; i < Errors.CheckPositive(data.UserData.GetInt(Stat.StartingHandSize)); ++i)
+      {
         openingHand.Add(_deck.Draw());
+      }
 
       _hand.OverrideHandPosition(value: true);
       _hand.DrawCards(openingHand, OnDrewHand);

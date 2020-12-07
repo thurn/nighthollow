@@ -22,7 +22,7 @@ using UnityEngine.Tilemaps;
 
 namespace Nighthollow.Editor
 {
-  [CustomGridBrush(false, false, false, "Random Brush")]
+  [CustomGridBrush(hideAssetInstances: false, hideDefaultInstance: false, defaultBrush: false, "Random Brush")]
   [CreateAssetMenu(menuName = "2D/Randomizer Brush")]
   public sealed class RandomizerBrush : RandomBrush
   {
@@ -35,7 +35,7 @@ namespace Nighthollow.Editor
     public override void OnInspectorGUI()
     {
       base.OnInspectorGUI();
-      GUILayout.Space(24f);
+      GUILayout.Space(pixels: 24f);
       if (GUILayout.Button("Import"))
       {
         var targetBrush = (RandomizerBrush) target;

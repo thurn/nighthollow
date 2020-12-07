@@ -29,7 +29,8 @@ namespace Nighthollow.World
     void Start()
     {
       _worldMap.Initialize();
-      _screenController.Initialize(showAdvisorBar: true);
+      _screenController.Initialize();
+      _screenController.Show(ScreenController.AdvisorBar);
       _worldTutorial.Initialize();
     }
   }

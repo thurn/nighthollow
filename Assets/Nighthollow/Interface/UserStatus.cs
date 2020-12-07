@@ -27,6 +27,10 @@ namespace Nighthollow.Interface
     VisualElement _influenceContainer = null!;
     Label _manaText = null!;
 
+    public new sealed class UxmlFactory : UxmlFactory<UserStatus, UxmlTraits>
+    {
+    }
+
     public int Mana
     {
       set => _manaText.text = value.ToString();
@@ -64,10 +68,6 @@ namespace Nighthollow.Interface
     {
       _manaText = Find<Label>("ManaText");
       _influenceContainer = FindElement("InfluenceContainer");
-    }
-
-    public new sealed class UxmlFactory : UxmlFactory<UserStatus, UxmlTraits>
-    {
     }
   }
 }

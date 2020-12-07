@@ -43,6 +43,19 @@ namespace Nighthollow.Data
 
   public sealed class AffixTypeData
   {
+    public sealed class Builder
+    {
+      public int Id { get; set; }
+      public int MinLevel { get; set; }
+      public int Weight { get; set; }
+      public int ManaCostLow { get; set; }
+      public int ManaCostHigh { get; set; }
+      public School? InfluenceType { get; set; }
+      public AffixPool AffixPool { get; set; }
+      public bool IsTargeted { get; set; }
+      public List<ModifierRange> ModifierRanges { get; } = new List<ModifierRange>();
+    }
+
     public AffixTypeData(Builder builder)
     {
       Id = builder.Id;
@@ -65,18 +78,5 @@ namespace Nighthollow.Data
     public AffixPool AffixPool { get; }
     public bool IsTargeted { get; }
     public IReadOnlyList<ModifierRange> ModifierRanges { get; }
-
-    public sealed class Builder
-    {
-      public int Id { get; set; }
-      public int MinLevel { get; set; }
-      public int Weight { get; set; }
-      public int ManaCostLow { get; set; }
-      public int ManaCostHigh { get; set; }
-      public School? InfluenceType { get; set; }
-      public AffixPool AffixPool { get; set; }
-      public bool IsTargeted { get; set; }
-      public List<ModifierRange> ModifierRanges { get; } = new List<ModifierRange>();
-    }
   }
 }

@@ -44,71 +44,40 @@ namespace Nighthollow.Services
     [SerializeField] DamageText _hitBig = null!;
     [SerializeField] Sprite _stunIcon = null!;
 
-    public Card CreateCard()
-    {
-      return ComponentUtils.Instantiate(_cardPrefab, Root.Instance.MainCanvas);
-    }
+    public Card CreateCard() => ComponentUtils.Instantiate(_cardPrefab, Root.Instance.MainCanvas);
 
-    public StatusBarsHolder CreateStatusBars()
-    {
-      return ComponentUtils.Instantiate(_statusBars,
+    public StatusBarsHolder CreateStatusBars() =>
+      ComponentUtils.Instantiate(_statusBars,
         Root.Instance.MainCanvas);
-    }
 
-    public SpriteRenderer CreateCursor()
-    {
-      return ComponentUtils.Instantiate(_cursorPrefab);
-    }
+    public SpriteRenderer CreateCursor() => ComponentUtils.Instantiate(_cursorPrefab);
 
-    public Image CreateInfluence()
-    {
-      return ComponentUtils.Instantiate(_influencePrefab);
-    }
+    public Image CreateInfluence() => ComponentUtils.Instantiate(_influencePrefab);
 
-    public Attachment CreateAttachment()
-    {
-      return ComponentUtils.Instantiate(_attachmentPrefab);
-    }
+    public Attachment CreateAttachment() => ComponentUtils.Instantiate(_attachmentPrefab);
 
-    public GameObject CreateMiss(Vector3 position)
-    {
-      return Root.Instance.ObjectPoolService.Create(_missEffect.gameObject, position);
-    }
+    public GameObject CreateMiss(Vector3 position) =>
+      Root.Instance.ObjectPoolService.Create(_missEffect.gameObject, position);
 
-    public GameObject CreateEvade(Vector3 position)
-    {
-      return Root.Instance.ObjectPoolService.Create(_evadeEffect.gameObject, position);
-    }
+    public GameObject CreateEvade(Vector3 position) =>
+      Root.Instance.ObjectPoolService.Create(_evadeEffect.gameObject, position);
 
-    public GameObject CreateCrit(Vector3 position)
-    {
-      return Root.Instance.ObjectPoolService.Create(_critEffect.gameObject, position);
-    }
+    public GameObject CreateCrit(Vector3 position) =>
+      Root.Instance.ObjectPoolService.Create(_critEffect.gameObject, position);
 
-    public GameObject CreateStun(Vector3 position)
-    {
-      return Root.Instance.ObjectPoolService.Create(_stunEffect.gameObject, position);
-    }
+    public GameObject CreateStun(Vector3 position) =>
+      Root.Instance.ObjectPoolService.Create(_stunEffect.gameObject, position);
 
-    public DamageText CreateHitSmall()
-    {
-      return Root.Instance.ObjectPoolService.Create(_hitSmall, Constants.OffScreen, Root.Instance.MainCanvas);
-    }
+    public DamageText CreateHitSmall() =>
+      Root.Instance.ObjectPoolService.Create(_hitSmall, Constants.OffScreen, Root.Instance.MainCanvas);
 
-    public DamageText CreateHitMedium()
-    {
-      return Root.Instance.ObjectPoolService.Create(_hitMedium, Constants.OffScreen, Root.Instance.MainCanvas);
-    }
+    public DamageText CreateHitMedium() =>
+      Root.Instance.ObjectPoolService.Create(_hitMedium, Constants.OffScreen, Root.Instance.MainCanvas);
 
-    public DamageText CreateHitBig()
-    {
-      return Root.Instance.ObjectPoolService.Create(_hitBig, Constants.OffScreen, Root.Instance.MainCanvas);
-    }
+    public DamageText CreateHitBig() =>
+      Root.Instance.ObjectPoolService.Create(_hitBig, Constants.OffScreen, Root.Instance.MainCanvas);
 
-    public Sprite StunIcon()
-    {
-      return Instantiate(_stunIcon);
-    }
+    public Sprite StunIcon() => Instantiate(_stunIcon);
 
     public Sprite SpriteForInfluenceType(School influenceType)
     {

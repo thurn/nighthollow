@@ -25,6 +25,14 @@ namespace Nighthollow.Interface
     VisualElement _portrait = null!;
     Label _text = null!;
 
+    public new sealed class UxmlFactory : UxmlFactory<Dialog, UxmlTraits>
+    {
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
+    }
+
     public bool Visible { get; private set; }
 
     public void Show(string portraitName, string text, bool hideCloseButton = false)
@@ -55,14 +63,6 @@ namespace Nighthollow.Interface
       _text = InterfaceUtils.FindByName<Label>(this, "Text");
       _closeButton = InterfaceUtils.FindByName<Button>(this, "CloseButton");
       _closeButton.RegisterCallback<ClickEvent>(e => { Hide(); });
-    }
-
-    public new sealed class UxmlFactory : UxmlFactory<Dialog, UxmlTraits>
-    {
-    }
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
     }
   }
 }

@@ -85,9 +85,15 @@ namespace Nighthollow.Components
       _cost.text = manaCost.ToString();
 
       var addIndex = 0;
-      foreach (var pair in influenceCost.Values) AddInfluence(pair.Key, pair.Value, ref addIndex);
+      foreach (var pair in influenceCost.Values)
+      {
+        AddInfluence(pair.Key, pair.Value, ref addIndex);
+      }
 
-      while (addIndex < _influence.Count) _influence[addIndex++].enabled = false;
+      while (addIndex < _influence.Count)
+      {
+        _influence[addIndex++].enabled = false;
+      }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -160,7 +166,10 @@ namespace Nighthollow.Components
 
     public void OnPointerExit(PointerEventData eventData)
     {
-      if (_previewMode) Root.Instance.ScreenController.HideTooltip();
+      if (_previewMode)
+      {
+        Root.Instance.ScreenController.HideTooltip();
+      }
     }
 
     public void Initialize(CreatureData cardData)

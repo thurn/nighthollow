@@ -32,20 +32,11 @@ namespace Nighthollow.Stats
       return operations.Count(op => op.SetBoolean) > 0 && operations.Count(op => op.SetBoolean == false) == 0;
     }
 
-    protected override bool ParseStatValue(string value)
-    {
-      return bool.Parse(value);
-    }
+    protected override bool ParseStatValue(string value) => bool.Parse(value);
 
-    public IStatModifier SetTrue()
-    {
-      return StaticModifier(new BooleanOperation(setBoolean: true));
-    }
+    public IStatModifier SetTrue() => StaticModifier(new BooleanOperation(setBoolean: true));
 
-    public IStatModifier SetFalse()
-    {
-      return StaticModifier(new BooleanOperation(setBoolean: true));
-    }
+    public IStatModifier SetFalse() => StaticModifier(new BooleanOperation(setBoolean: true));
 
     public override IStatModifier ParseModifier(string value, Operator op)
     {

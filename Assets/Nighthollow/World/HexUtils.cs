@@ -38,6 +38,7 @@ namespace Nighthollow.World
       // See: https://www.redblobgames.com/grids/hexagons/#coordinates
 
       if (hex.y % 2 == 0)
+      {
         return hex + direction switch
         {
           Direction.Right => new Vector2Int(x: 1, y: 0),
@@ -48,7 +49,9 @@ namespace Nighthollow.World
           Direction.DownRight => new Vector2Int(x: 0, y: -1),
           _ => throw Errors.UnknownEnumValue(direction)
         };
+      }
       else
+      {
         return hex + direction switch
         {
           Direction.Right => new Vector2Int(x: 1, y: 0),
@@ -59,6 +62,7 @@ namespace Nighthollow.World
           Direction.DownRight => new Vector2Int(x: 1, y: -1),
           _ => throw Errors.UnknownEnumValue(direction)
         };
+      }
     }
   }
 }

@@ -49,7 +49,9 @@ namespace Nighthollow.Delegates.Implementations
     {
       if (effect.DelegateIndex <= c.DelegateIndex)
         // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
+      {
         return;
+      }
 
       c.Results.AddRange(
         CollectionUtils.AlternatingIntegers()
@@ -57,14 +59,12 @@ namespace Nighthollow.Delegates.Implementations
           .Select(i => Result(c, effect, i)));
     }
 
-    FireProjectileEffect Result(SkillContext c, FireProjectileEffect effect, int offsetCount)
-    {
-      return new FireProjectileEffect(
+    FireProjectileEffect Result(SkillContext c, FireProjectileEffect effect, int offsetCount) =>
+      new FireProjectileEffect(
         c.Self,
         c,
         c.DelegateIndex,
         GetOrigin(c, offsetCount),
         GetDirection(c, offsetCount));
-    }
   }
 }

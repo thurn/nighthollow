@@ -24,31 +24,36 @@ namespace Nighthollow.Utils
   {
     public static bool Boolean(IReadOnlyDictionary<string, string> row, string key)
     {
-      if (row.ContainsKey(key) && bool.TryParse(row[key], out var result)) return result;
+      if (row.ContainsKey(key) && bool.TryParse(row[key], out var result))
+      {
+        return result;
+      }
 
       return false;
     }
 
-    public static string? String(IReadOnlyDictionary<string, string> row, string key)
-    {
-      return row.ContainsKey(key) ? row[key] : null;
-    }
+    public static string? String(IReadOnlyDictionary<string, string> row, string key) =>
+      row.ContainsKey(key) ? row[key] : null;
 
     public static string StringRequired(IReadOnlyDictionary<string, string> row, string key)
     {
-      if (!row.ContainsKey(key)) throw new InvalidOperationException($"Key '{key}' not found in {row}");
+      if (!row.ContainsKey(key))
+      {
+        throw new InvalidOperationException($"Key '{key}' not found in {row}");
+      }
 
       return row[key];
     }
 
-    public static int? Int(IReadOnlyDictionary<string, string> row, string key)
-    {
-      return row.ContainsKey(key) ? (int?) int.Parse(row[key].Replace(",", "")) : null;
-    }
+    public static int? Int(IReadOnlyDictionary<string, string> row, string key) =>
+      row.ContainsKey(key) ? (int?) int.Parse(row[key].Replace(",", "")) : null;
 
     public static int IntRequired(IReadOnlyDictionary<string, string> row, string key)
     {
-      if (row.ContainsKey(key) && int.TryParse(row[key].Replace(",", ""), out var result)) return result;
+      if (row.ContainsKey(key) && int.TryParse(row[key].Replace(",", ""), out var result))
+      {
+        return result;
+      }
 
       throw new InvalidOperationException($"Unable to parse integer for key '{key}' in {row}");
     }

@@ -63,9 +63,6 @@ namespace Nighthollow.Generated
       {DelegateId.ApplyToAdjacentAlliesOnUseDelegate, new ApplyToAdjacentAlliesOnUseDelegate()}
     };
 
-    public static IDelegate Get(DelegateId id)
-    {
-      return Delegates[id];
-    }
+    public static IDelegate Get(DelegateId id) => Delegates[id];
   }
 }

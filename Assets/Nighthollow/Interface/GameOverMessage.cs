@@ -26,20 +26,6 @@ namespace Nighthollow.Interface
   {
     Label _text = null!;
 
-    protected override void Initialize()
-    {
-      _text = Find<Label>("GameOverText");
-    }
-
-    protected override void OnShow(Args args)
-    {
-      Root.Instance.User.OnGameOver();
-      _text.text = args.Text;
-      ButtonUtil.DisplayMainButtons(Controller,
-        new List<ButtonUtil.Button>
-          {new ButtonUtil.Button("Continue", () => { SceneManager.LoadScene(args.LoadScene); }, large: true)});
-    }
-
     public readonly struct Args
     {
       public readonly string Text;
@@ -54,6 +40,20 @@ namespace Nighthollow.Interface
 
     public new sealed class UxmlFactory : UxmlFactory<GameOverMessage, UxmlTraits>
     {
+    }
+
+    protected override void Initialize()
+    {
+      _text = Find<Label>("GameOverText");
+    }
+
+    protected override void OnShow(Args args)
+    {
+      Root.Instance.User.OnGameOver();
+      _text.text = args.Text;
+      ButtonUtil.DisplayMainButtons(Controller,
+        new List<ButtonUtil.Button>
+          {new ButtonUtil.Button("Continue", () => { SceneManager.LoadScene(args.LoadScene); }, large: true)});
     }
   }
 }

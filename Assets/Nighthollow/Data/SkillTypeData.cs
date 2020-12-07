@@ -39,10 +39,12 @@ namespace Nighthollow.Data
 
       var implicitAffixes = new List<AffixTypeData>();
       if (row.ContainsKey("Implicit Affix IDs"))
+      {
         implicitAffixes.AddRange(
           row["Implicit Affix IDs"]
             .Split(',')
             .Select(id => service.GetAffixType(int.Parse(id))));
+      }
 
       ImplicitAffixes = implicitAffixes;
     }

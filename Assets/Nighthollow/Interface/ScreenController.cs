@@ -27,10 +27,10 @@ namespace Nighthollow.Interface
   {
     public string Name { get; }
 
-    HideableElement FindByNameIn(VisualElement element);
+    AbstractHideableElement FindByNameIn(VisualElement element);
   }
 
-  public readonly struct ElementKey<T> : IElementKey where T : HideableElement
+  public readonly struct ElementKey<T> : IElementKey where T : AbstractHideableElement
   {
     public string Name { get; }
 
@@ -39,10 +39,7 @@ namespace Nighthollow.Interface
       Name = name;
     }
 
-    public HideableElement FindByNameIn(VisualElement element)
-    {
-      return InterfaceUtils.FindByName<T>(element, Name);
-    }
+    public AbstractHideableElement FindByNameIn(VisualElement element) => InterfaceUtils.FindByName<T>(element, Name);
   }
 
   public sealed class ScreenController : MonoBehaviour
@@ -52,9 +49,10 @@ namespace Nighthollow.Interface
     public static ElementKey<UserStatus> UserStatus = new ElementKey<UserStatus>("UserStatus");
     public static ElementKey<BlackoutWindow> BlackoutWindow = new ElementKey<BlackoutWindow>("BlackoutWindow");
     public static ElementKey<GameOverMessage> GameOverMessage = new ElementKey<GameOverMessage>("GameOverMessage");
+    public static ElementKey<RewardsWindow> RewardsWindow = new ElementKey<RewardsWindow>("RewardsWindow");
     [SerializeField] UIDocument _document = null!;
 
-    readonly Dictionary<string, HideableElement> _elements = new Dictionary<string, HideableElement>();
+    readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
     readonly List<IElementKey> _keys = new List<IElementKey>
     {
@@ -62,7 +60,8 @@ namespace Nighthollow.Interface
       AdvisorBar,
       UserStatus,
       BlackoutWindow,
-      GameOverMessage
+      GameOverMessage,
+      RewardsWindow
     };
 
     CardsWindow _cardsWindow = null!;
@@ -75,7 +74,7 @@ namespace Nighthollow.Interface
     public UIDocument Document => _document;
     public VisualElement Screen => _screen;
 
-    public void Initialize(bool showAdvisorBar)
+    public void Initialize()
     {
       _screen = InterfaceUtils.FindByName<VisualElement>(_document.rootVisualElement, "Screen");
 
@@ -92,21 +91,16 @@ namespace Nighthollow.Interface
       _itemTooltip.Controller = this;
       _dialog = InterfaceUtils.FindByName<Dialog>(_screen, "Dialog");
       _dialog.Initialize();
-
-      if (showAdvisorBar) Get(AdvisorBar).Show();
     }
 
-    public T Get<T>(ElementKey<T> key) where T : HideableElement
-    {
-      return (T) GetElement(key);
-    }
+    public T Get<T>(ElementKey<T> key) where T : AbstractHideableElement => (T) GetElement(key);
 
     public void Show<T>(ElementKey<T> key) where T : DefaultHideableElement
     {
       Get(key).Show();
     }
 
-    HideableElement GetElement(IElementKey key)
+    AbstractHideableElement GetElement(IElementKey key)
     {
       Errors.CheckState(_elements.ContainsKey(key.Name), $"Element not found: {key.Name}");
       return _elements[key.Name];

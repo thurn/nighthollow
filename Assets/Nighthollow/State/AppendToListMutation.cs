@@ -29,14 +29,8 @@ namespace Nighthollow.State
 
     T Value { get; }
 
-    public override IReadOnlyList<T> NotFoundValue()
-    {
-      return new List<T> {Value};
-    }
+    public override IReadOnlyList<T> NotFoundValue() => new List<T> {Value};
 
-    public override IReadOnlyList<T> Apply(IReadOnlyList<T> currentValue)
-    {
-      return currentValue.Append(Value).ToList();
-    }
+    public override IReadOnlyList<T> Apply(IReadOnlyList<T> currentValue) => currentValue.Append(Value).ToList();
   }
 }

@@ -30,55 +30,25 @@ namespace Nighthollow.Stats
       _basisPoints = basisPoints;
     }
 
-    public override string ToString()
-    {
-      return $"{_basisPoints / 100f}%";
-    }
+    public override string ToString() => $"{_basisPoints / 100f}%";
 
-    public int AsBasisPoints()
-    {
-      return _basisPoints;
-    }
+    public int AsBasisPoints() => _basisPoints;
 
-    public float AsMultiplier()
-    {
-      return _basisPoints / BasisPoints;
-    }
+    public float AsMultiplier() => _basisPoints / BasisPoints;
 
-    public int CalculateFraction(int input)
-    {
-      return Mathf.RoundToInt(input * _basisPoints / BasisPoints);
-    }
+    public int CalculateFraction(int input) => Mathf.RoundToInt(input * _basisPoints / BasisPoints);
 
-    public bool IsReduction()
-    {
-      return _basisPoints < BasisPoints;
-    }
+    public bool IsReduction() => _basisPoints < BasisPoints;
 
-    public bool Equals(PercentageValue other)
-    {
-      return _basisPoints == other._basisPoints;
-    }
+    public bool Equals(PercentageValue other) => _basisPoints == other._basisPoints;
 
-    public override bool Equals(object obj)
-    {
-      return obj is PercentageValue other && Equals(other);
-    }
+    public override bool Equals(object obj) => obj is PercentageValue other && Equals(other);
 
-    public override int GetHashCode()
-    {
-      return _basisPoints;
-    }
+    public override int GetHashCode() => _basisPoints;
 
-    public static bool operator ==(PercentageValue left, PercentageValue right)
-    {
-      return left.Equals(right);
-    }
+    public static bool operator ==(PercentageValue left, PercentageValue right) => left.Equals(right);
 
-    public static bool operator !=(PercentageValue left, PercentageValue right)
-    {
-      return !left.Equals(right);
-    }
+    public static bool operator !=(PercentageValue left, PercentageValue right) => !left.Equals(right);
   }
 
   public sealed class PercentageStat : NumericStat<PercentageValue>
@@ -87,24 +57,17 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override PercentageValue ComputeValue(IReadOnlyList<NumericOperation<PercentageValue>> operations)
-    {
-      return Compute(operations);
-    }
+    public override PercentageValue ComputeValue(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
+      Compute(operations);
 
     public static PercentageValue Compute(IReadOnlyList<NumericOperation<PercentageValue>> operations)
     {
       return new PercentageValue(IntStat.Compute(operations, duration => duration.AsBasisPoints()));
     }
 
-    protected override PercentageValue ParseStatValue(string value)
-    {
-      return ParsePercentage(value);
-    }
+    protected override PercentageValue ParseStatValue(string value) => ParsePercentage(value);
 
-    public static PercentageValue ParsePercentage(string value)
-    {
-      return new PercentageValue(Mathf.RoundToInt(float.Parse(value.Replace("%", "")) * 100f));
-    }
+    public static PercentageValue ParsePercentage(string value) =>
+      new PercentageValue(Mathf.RoundToInt(float.Parse(value.Replace("%", "")) * 100f));
   }
 }

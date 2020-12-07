@@ -38,7 +38,9 @@ namespace Nighthollow.Data
       var result = new Dictionary<string, List<Dictionary<string, string>>>();
 
       foreach (var range in response["valueRanges"].Children)
+      {
         result[range["range"].Value.Split('!').First()] = AsHeaderIdentifiedRows(range["values"]);
+      }
 
       return result;
     }
@@ -72,9 +74,15 @@ namespace Nighthollow.Data
         var dictionary = new Dictionary<string, string>();
         for (var j = 0; j < row.Count; ++j)
         {
-          if (!columnNames.ContainsKey(j)) continue;
+          if (!columnNames.ContainsKey(j))
+          {
+            continue;
+          }
 
-          if (!string.IsNullOrWhiteSpace(row[j].Value)) dictionary[columnNames[j]] = row[j].Value;
+          if (!string.IsNullOrWhiteSpace(row[j].Value))
+          {
+            dictionary[columnNames[j]] = row[j].Value;
+          }
         }
 
         result.Add(dictionary);

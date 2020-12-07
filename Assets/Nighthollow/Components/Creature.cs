@@ -49,6 +49,7 @@ namespace Nighthollow.Components
     static readonly int Moving = Animator.StringToHash("Moving");
     static readonly int Hit = Animator.StringToHash("Hit");
     static readonly int SkillSpeed = Animator.StringToHash("SkillSpeedMultiplier");
+
     [Header("Config")] [SerializeField] bool _debugMode;
     [SerializeField] Transform _projectileSource = null!;
     [SerializeField] AttachmentDisplay _attachmentDisplay = null!;
@@ -65,6 +66,7 @@ namespace Nighthollow.Components
     [SerializeField] StatusBarsHolder _statusBars = null!;
     [SerializeField] CreatureService _creatureService = null!;
     [SerializeField] SortingGroup _sortingGroup = null!;
+
     readonly Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
     Coroutine _coroutine = null!;
     SkillData _currentSkill = null!;
@@ -109,30 +111,45 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      if (_state == CreatureState.Dying) return;
+      if (_state == CreatureState.Dying)
+      {
+        return;
+      }
 
       // Ensure lower Y creatures are always rendered on top of higher Y creatures
       _sortingGroup.sortingOrder =
         100 - Mathf.RoundToInt(transform.position.y * 10) - Mathf.RoundToInt(transform.position.x);
 
-      if (_state == CreatureState.Placing) return;
+      if (_state == CreatureState.Placing)
+      {
+        return;
+      }
 
       if (CanUseSkill())
         // UseSkill() must be called from Update() in order to give time for the physics system to correctly update
         // collider positions after activation (there is a Unity project setting which makes this automatic).
+      {
         TryToUseSkill();
+      }
 
       transform.eulerAngles = _data.BaseType.Owner == PlayerName.Enemy ? new Vector3(x: 0, y: 180, z: 0) : Vector3.zero;
 
       if (transform.position.x > Constants.CreatureDespawnRightX ||
           transform.position.x < Constants.CreatureDespawnLeftX)
+      {
         DestroyCreature();
+      }
       else if (Owner == PlayerName.Enemy &&
                transform.position.x < Constants.EnemyCreatureEndzoneX)
+      {
         Root.Instance.Enemy.OnEnemyCreatureAtEndzone(this);
+      }
 
       var health = _data.GetInt(Stat.Health);
-      if (health > 0) _statusBars.HealthBar.Value = (health - _damageTaken) / (float) health;
+      if (health > 0)
+      {
+        _statusBars.HealthBar.Value = (health - _damageTaken) / (float) health;
+      }
 
       _statusBars.HealthBar.gameObject.SetActive(_damageTaken > 0);
 
@@ -266,7 +283,10 @@ namespace Nighthollow.Components
 
     void Kill()
     {
-      if (_coroutine != null) StopCoroutine(_coroutine);
+      if (_coroutine != null)
+      {
+        StopCoroutine(_coroutine);
+      }
 
       _statusBars.HealthBar.gameObject.SetActive(value: false);
       _animator.SetTrigger(Death);
@@ -287,10 +307,17 @@ namespace Nighthollow.Components
     // Called by skill animations on their 'start impact' frame
     public void AttackStart()
     {
-      if (!IsAlive()) return;
+      if (!IsAlive())
+      {
+        return;
+      }
+
       _currentSkill.Delegate.OnUse(new SkillContext(this, _currentSkill));
 
-      if (_currentSkill.IsMelee()) _currentSkill.Delegate.OnImpact(new SkillContext(this, _currentSkill));
+      if (_currentSkill.IsMelee())
+      {
+        _currentSkill.Delegate.OnImpact(new SkillContext(this, _currentSkill));
+      }
     }
 
     public void AddDamage(Creature appliedBy, int damage)
@@ -316,7 +343,9 @@ namespace Nighthollow.Components
     {
       if (!IsAlive() || IsStunned())
         // Ignore exit states from skills that ended early due to stun
+      {
         return;
+      }
 
       ToDefaultState();
     }
@@ -328,7 +357,11 @@ namespace Nighthollow.Components
 
     public void Stun(float durationSeconds)
     {
-      if (!IsAlive() || IsStunned()) return;
+      if (!IsAlive() || IsStunned())
+      {
+        return;
+      }
+
       StartCoroutine(StunAsync(durationSeconds));
     }
 
@@ -346,25 +379,16 @@ namespace Nighthollow.Components
       ToDefaultState();
     }
 
-    public bool IsAlive()
-    {
-      return _state != CreatureState.Placing && _state != CreatureState.Dying;
-    }
+    public bool IsAlive() => _state != CreatureState.Placing && _state != CreatureState.Dying;
 
-    public bool IsStunned()
-    {
-      return _state == CreatureState.Stunned;
-    }
+    public bool IsStunned() => _state == CreatureState.Stunned;
 
     public bool HasProjectileSkill()
     {
       return _data.Skills.Any(s => s.IsProjectile());
     }
 
-    bool CanUseSkill()
-    {
-      return _state == CreatureState.Idle || _state == CreatureState.Moving;
-    }
+    bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
 
     public void MarkSkillUsed(SkillTypeData skill)
     {
@@ -374,10 +398,8 @@ namespace Nighthollow.Components
     /// <summary>
     ///   Returns the timestamp at which the provided skill was last used by this creature, or 0 if it has never been used
     /// </summary>
-    public float? TimeLastUsedSeconds(SkillTypeData skill)
-    {
-      return _skillLastUsedTimes.ContainsKey(skill.Id) ? (float?) _skillLastUsedTimes[skill.Id] : null;
-    }
+    public float? TimeLastUsedSeconds(SkillTypeData skill) =>
+      _skillLastUsedTimes.ContainsKey(skill.Id) ? (float?) _skillLastUsedTimes[skill.Id] : null;
 
     IEnumerator<YieldInstruction> RunCoroutine()
     {

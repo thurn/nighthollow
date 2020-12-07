@@ -35,6 +35,14 @@ namespace Nighthollow.Interface
     Label? _description;
     KeyValuePair<School, VisualElement>? _selected;
 
+    public new sealed class UxmlFactory : UxmlFactory<SchoolSelectionScreen, UxmlTraits>
+    {
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
+    }
+
     public SchoolSelectionScreen()
     {
       RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
@@ -122,14 +130,6 @@ namespace Nighthollow.Interface
           "Shadow is a subtle school, which prefers to deal damage indirectly and over time using tools like poison. They also specialize in sacrifice: they’re willing to give up their own creatures or life in order to achieve greater ends.",
         _ => throw Errors.UnknownEnumValue(school)
       };
-    }
-
-    public new sealed class UxmlFactory : UxmlFactory<SchoolSelectionScreen, UxmlTraits>
-    {
-    }
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
     }
   }
 }

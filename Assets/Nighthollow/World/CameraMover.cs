@@ -58,13 +58,21 @@ namespace Nighthollow.World
       var zoomOut = Input.GetKey(KeyCode.X);
 
       if (zoomIn && zoomOut)
+      {
         return 0;
+      }
       else if (!zoomIn && zoomOut)
+      {
         return 1;
+      }
       else if (zoomIn && !zoomOut)
+      {
         return -1;
+      }
       else
+      {
         return 0;
+      }
     }
 #pragma warning disable 0649
     [SerializeField] Camera _camera = null!;

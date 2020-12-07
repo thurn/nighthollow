@@ -29,17 +29,17 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChainingProjectilesDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity)
-    {
-      return $"Projectiles Chain {entity.GetInt(Stat.ProjectileChainCount)} Times on Hit";
-    }
+    public override string Describe(StatEntity entity) =>
+      $"Projectiles Chain {entity.GetInt(Stat.ProjectileChainCount)} Times on Hit";
 
     public override bool ShouldSkipProjectileImpact(SkillContext c)
     {
       if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) > 0)
         // We skip impact for the projectile for creatures which have already been hit by a chaining projectile
+      {
         return !c.Delegate.FindTargets(c)
           .Except(c.Projectile.Values.Get(Key.SkipProjectileImpacts)).Any();
+      }
 
       return false;
     }

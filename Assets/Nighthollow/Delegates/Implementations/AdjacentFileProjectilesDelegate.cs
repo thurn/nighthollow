@@ -25,25 +25,16 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class AdjacentFileProjectilesDelegate : AbstractProjectileOffsetDelegate
   {
-    public override string Describe(StatEntity entity)
-    {
-      return $"Fires {entity.GetInt(Stat.ProjectileAdjacentsCount)} Projectiles in Adjacent Files";
-    }
+    public override string Describe(StatEntity entity) =>
+      $"Fires {entity.GetInt(Stat.ProjectileAdjacentsCount)} Projectiles in Adjacent Files";
 
-    protected override int GetProjectileCount(DelegateContext c)
-    {
-      return c.GetInt(Stat.ProjectileAdjacentsCount);
-    }
+    protected override int GetProjectileCount(DelegateContext c) => c.GetInt(Stat.ProjectileAdjacentsCount);
 
-    protected override Vector2 GetOrigin(DelegateContext c, int projectileNumber)
-    {
-      return (Vector2) c.Self.ProjectileSource.position +
-             projectileNumber * new Vector2(x: 0, c.GetInt(Stat.ProjectileAdjacentsOffset) / 1000f);
-    }
+    protected override Vector2 GetOrigin(DelegateContext c, int projectileNumber) =>
+      (Vector2) c.Self.ProjectileSource.position +
+      projectileNumber * new Vector2(x: 0, c.GetInt(Stat.ProjectileAdjacentsOffset) / 1000f);
 
-    protected override Vector2 GetDirection(DelegateContext c, int projectileNumber)
-    {
-      return Constants.ForwardDirectionForPlayer(c.Self.Owner);
-    }
+    protected override Vector2 GetDirection(DelegateContext c, int projectileNumber) =>
+      Constants.ForwardDirectionForPlayer(c.Self.Owner);
   }
 }

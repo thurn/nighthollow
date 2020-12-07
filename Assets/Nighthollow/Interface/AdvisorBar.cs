@@ -21,13 +21,13 @@ namespace Nighthollow.Interface
 {
   public sealed class AdvisorBar : DefaultHideableElement
   {
+    public new sealed class UxmlFactory : UxmlFactory<AdvisorBar, UxmlTraits>
+    {
+    }
+
     protected override void Initialize()
     {
       this.Q("CardsButton").RegisterCallback<ClickEvent>(e => Controller.ShowCardsWindow());
-    }
-
-    public new sealed class UxmlFactory : UxmlFactory<AdvisorBar, UxmlTraits>
-    {
     }
   }
 }

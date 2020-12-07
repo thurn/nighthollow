@@ -65,10 +65,8 @@ namespace Nighthollow.Stats
 
     public ILifetime Lifetime => _lifetime;
 
-    public IStatModifier WithLifetime(ILifetime lifetime)
-    {
-      return new StatModifier<TOperation, TValue>(_stat, _operation, lifetime);
-    }
+    public IStatModifier WithLifetime(ILifetime lifetime) =>
+      new StatModifier<TOperation, TValue>(_stat, _operation, lifetime);
 
     public string? Describe()
     {
@@ -87,9 +85,6 @@ namespace Nighthollow.Stats
       };
     }
 
-    public override string ToString()
-    {
-      return $"{Stat}: {Operation}";
-    }
+    public override string ToString() => $"{Stat}: {Operation}";
   }
 }

@@ -25,17 +25,18 @@ namespace Nighthollow.Utils
     public static TValue GetValueOrDefault<TKey, TValue>(
       this IReadOnlyDictionary<TKey, TValue> dictionary,
       TKey key,
-      TValue defaultValue)
-    {
-      return dictionary.TryGetValue(key, out var value) ? value : defaultValue;
-    }
+      TValue defaultValue) =>
+      dictionary.TryGetValue(key, out var value) ? value : defaultValue;
 
     public static TValue GetOrCreateDefault<TKey, TValue>(
       this IDictionary<TKey, TValue> dictionary,
       TKey key,
       TValue defaultValue)
     {
-      if (dictionary.TryGetValue(key, out var value)) return value;
+      if (dictionary.TryGetValue(key, out var value))
+      {
+        return value;
+      }
 
       dictionary[key] = defaultValue;
       return defaultValue;

@@ -44,12 +44,18 @@ namespace Nighthollow.Components
 
         if (Input.GetMouseButtonUp(button: 0))
         {
-          if (_card) _card!.OnPlayed();
+          if (_card)
+          {
+            _card!.OnPlayed();
+          }
 
           Destroy(_cursor);
           Destroy(this);
 
-          foreach (var spriteRenderer in _spriteRenderers) spriteRenderer.color = Color.white;
+          foreach (var spriteRenderer in _spriteRenderers)
+          {
+            spriteRenderer.color = Color.white;
+          }
 
           DOTween.Sequence()
             .Append(transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), z: 0), duration: 0.3f))

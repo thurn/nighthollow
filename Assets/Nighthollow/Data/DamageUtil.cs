@@ -46,10 +46,16 @@ namespace Nighthollow.Data
     {
       var result = a.Values.Clone();
       foreach (var pair in b.Values)
+      {
         if (result.ContainsKey(pair.Key))
+        {
           result[pair.Key] = result[pair.Key] + pair.Value;
+        }
         else
+        {
           result[pair.Key] = pair.Value;
+        }
+      }
 
       return new TaggedValues<DamageType, int>(result);
     }

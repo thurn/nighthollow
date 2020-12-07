@@ -29,45 +29,21 @@ namespace Nighthollow.Stats
       _timeMilliseconds = timeMilliseconds;
     }
 
-    public override string ToString()
-    {
-      return $"{_timeMilliseconds / 1000f}s";
-    }
+    public override string ToString() => $"{_timeMilliseconds / 1000f}s";
 
-    public float AsSeconds()
-    {
-      return _timeMilliseconds / 1000f;
-    }
+    public float AsSeconds() => _timeMilliseconds / 1000f;
 
-    public int AsMilliseconds()
-    {
-      return _timeMilliseconds;
-    }
+    public int AsMilliseconds() => _timeMilliseconds;
 
-    public bool Equals(DurationValue other)
-    {
-      return _timeMilliseconds == other._timeMilliseconds;
-    }
+    public bool Equals(DurationValue other) => _timeMilliseconds == other._timeMilliseconds;
 
-    public override bool Equals(object? obj)
-    {
-      return obj is DurationValue other && Equals(other);
-    }
+    public override bool Equals(object? obj) => obj is DurationValue other && Equals(other);
 
-    public override int GetHashCode()
-    {
-      return _timeMilliseconds;
-    }
+    public override int GetHashCode() => _timeMilliseconds;
 
-    public static bool operator ==(DurationValue left, DurationValue right)
-    {
-      return left.Equals(right);
-    }
+    public static bool operator ==(DurationValue left, DurationValue right) => left.Equals(right);
 
-    public static bool operator !=(DurationValue left, DurationValue right)
-    {
-      return !left.Equals(right);
-    }
+    public static bool operator !=(DurationValue left, DurationValue right) => !left.Equals(right);
   }
 
   public sealed class DurationStat : NumericStat<DurationValue>
@@ -81,14 +57,9 @@ namespace Nighthollow.Stats
       return new DurationValue(IntStat.Compute(operations, duration => duration.AsMilliseconds()));
     }
 
-    protected override DurationValue ParseStatValue(string value)
-    {
-      return ParseDuration(value);
-    }
+    protected override DurationValue ParseStatValue(string value) => ParseDuration(value);
 
-    public static DurationValue ParseDuration(string value)
-    {
-      return new DurationValue(Mathf.RoundToInt(float.Parse(value.Replace("s", "")) * 1000f));
-    }
+    public static DurationValue ParseDuration(string value) =>
+      new DurationValue(Mathf.RoundToInt(float.Parse(value.Replace("s", "")) * 1000f));
   }
 }

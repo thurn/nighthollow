@@ -114,7 +114,7 @@ namespace Nighthollow.Editor.Data
       for (var i = 1; i < rows.Count; ++i)
       {
         var row = rows[i];
-        values.Add((row[0].Value, row[1].Value));
+        values.Add((row[aIndex: 0].Value, row[aIndex: 1].Value));
       }
 
       builder.Append($"  public enum DelegateId\n");
@@ -157,6 +157,7 @@ namespace Nighthollow.Editor.Data
       {
         builder.Append($"    {stat["Name"]} = {stat["Stat ID"]},\n");
       }
+
       builder.Append("  }\n");
 
       builder.Append("\n  public static class Stat\n");
@@ -177,7 +178,8 @@ namespace Nighthollow.Editor.Data
           _ => throw new ArgumentOutOfRangeException()
         };
 
-        builder.Append($"    public static readonly {statType} {stat["Name"]} = new {statType}(StatId.{stat["Name"]});\n");
+        builder.Append(
+          $"    public static readonly {statType} {stat["Name"]} = new {statType}(StatId.{stat["Name"]});\n");
       }
 
       builder.Append("\n    public static IStat GetStat(int statId)\n");
@@ -188,6 +190,7 @@ namespace Nighthollow.Editor.Data
       {
         builder.Append($"        case {stat["Stat ID"]}: return {stat["Name"]};\n");
       }
+
       builder.Append($"        default: throw new ArgumentOutOfRangeException(statId.ToString());\n");
       builder.Append("      }\n");
       builder.Append("    }\n");
@@ -203,6 +206,7 @@ namespace Nighthollow.Editor.Data
           builder.Append($"        case StatId.{stat["Name"]}: return \"{stat["Description"]}\";\n");
         }
       }
+
       builder.Append($"        default: return null;\n");
       builder.Append("      }\n");
       builder.Append("    }\n");
@@ -215,7 +219,7 @@ namespace Nighthollow.Editor.Data
 
     static void GenerateEnums(JSONNode rows)
     {
-      var firstRow = rows[0];
+      var firstRow = rows[aIndex: 0];
       var enumNames = new Dictionary<int, string>();
       var enums = new Dictionary<int, List<(string, string)>>();
 

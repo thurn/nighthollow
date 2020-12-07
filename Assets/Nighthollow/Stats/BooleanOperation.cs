@@ -33,14 +33,9 @@ namespace Nighthollow.Stats
       return SetBoolean ? split[0] : split[1];
     }
 
-    public SerializedOperation Serialize()
-    {
-      return new SerializedOperation(SetBoolean.ToString(), SetBoolean ? Operator.SetTrue : Operator.SetFalse);
-    }
+    public SerializedOperation Serialize() =>
+      new SerializedOperation(SetBoolean.ToString(), SetBoolean ? Operator.SetTrue : Operator.SetFalse);
 
-    public override string ToString()
-    {
-      return $"{nameof(SetBoolean)}: {SetBoolean}";
-    }
+    public override string ToString() => $"{nameof(SetBoolean)}: {SetBoolean}";
   }
 }

@@ -12,22 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using Nighthollow.Components;
-using Nighthollow.Stats;
+using Nighthollow.Generated;
+using Nighthollow.Interface;
+using Nighthollow.Services;
+using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Delegates.Core
+namespace Nighthollow.Components
 {
-  public sealed class CreatureContext : DelegateContext, IDelegateContext<CreatureContext>
+  public sealed class RewardsScreenInitializer : MonoBehaviour
   {
-    public CreatureContext(Creature self) : base(new Results(), self)
+    [SerializeField] ScreenController _screenController = null!;
+
+    void Start()
     {
+      Database.OnReady(data =>
+      {
+        _screenController.Initialize();
+        _screenController.Get(ScreenController.RewardsWindow)
+          .Show(new RewardsWindow.Args(data.GameData.GetStaticCardList(StaticCardList.StartingDeck)));
+      });
     }
-
-    public override StatTable Stats => Self.Data.Stats;
-
-    public CreatureContext Clone() => new CreatureContext(Self);
   }
 }

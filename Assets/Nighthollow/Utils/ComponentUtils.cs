@@ -23,21 +23,24 @@ namespace Nighthollow.Utils
 {
   public static class ComponentUtils
   {
-    public static T Instantiate<T>(T prefabComponent, Transform? parent = null) where T : Component
-    {
-      return InstantiateGameObject<T>(Errors.CheckNotNull(prefabComponent).gameObject, parent);
-    }
+    public static T Instantiate<T>(T prefabComponent, Transform? parent = null) where T : Component =>
+      InstantiateGameObject<T>(Errors.CheckNotNull(prefabComponent).gameObject, parent);
 
     public static T InstantiateGameObject<T>(GameObject prefab, Transform? parent = null) where T : Component
     {
       Errors.CheckNotNull(prefab);
       var prefabObject = Object.Instantiate(prefab, parent);
       var result = prefabObject.GetComponent<T>();
-      if (!result) throw new NullReferenceException($"Expected a component of type {typeof(T).FullName}");
+      if (!result)
+      {
+        throw new NullReferenceException($"Expected a component of type {typeof(T).FullName}");
+      }
 
       if (!parent)
         // Instantiate things safely out of view if there's no parent specified :)
+      {
         prefabObject.transform.position = 1000f * Vector3.one;
+      }
 
       return result;
     }
@@ -47,8 +50,10 @@ namespace Nighthollow.Utils
       Errors.CheckNotNull(component);
       var result = component.GetComponent<T>();
       if (!result)
+      {
         throw new NullReferenceException(
           $"Expected a component of type {typeof(T).FullName} on {component.gameObject.name}");
+      }
 
       return result;
     }
@@ -58,7 +63,9 @@ namespace Nighthollow.Utils
       Errors.CheckNotNull(gameObject);
       var result = gameObject.GetComponent<T>();
       if (!result)
+      {
         throw new NullReferenceException($"Expected a component of type {typeof(T).FullName} on {gameObject.name}");
+      }
 
       return result;
     }

@@ -24,6 +24,14 @@ namespace Nighthollow.Interface
 {
   public sealed class IntroductionScreen : VisualElement
   {
+    public new sealed class UxmlFactory : UxmlFactory<IntroductionScreen, UxmlTraits>
+    {
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
+    }
+
     public IntroductionScreen()
     {
       RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
@@ -51,14 +59,6 @@ namespace Nighthollow.Interface
       InterfaceUtils.FadeIn(this.Q("Dialog3"));
       yield return new WaitForSeconds(seconds: 3f);
       InterfaceUtils.FadeIn(this.Q("Dialog4"));
-    }
-
-    public new sealed class UxmlFactory : UxmlFactory<IntroductionScreen, UxmlTraits>
-    {
-    }
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
     }
   }
 }

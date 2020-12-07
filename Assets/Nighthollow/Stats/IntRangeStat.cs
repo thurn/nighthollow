@@ -27,10 +27,7 @@ namespace Nighthollow.Stats
     public int Low { get; }
     public int High { get; }
 
-    public override string ToString()
-    {
-      return $"{Low}-{High}";
-    }
+    public override string ToString() => $"{Low}-{High}";
 
     public IntRangeValue(int low, int high)
     {
@@ -38,15 +35,9 @@ namespace Nighthollow.Stats
       High = high;
     }
 
-    public bool Equals(IntRangeValue other)
-    {
-      return Low == other.Low && High == other.High;
-    }
+    public bool Equals(IntRangeValue other) => Low == other.Low && High == other.High;
 
-    public override bool Equals(object? obj)
-    {
-      return obj is IntRangeValue other && Equals(other);
-    }
+    public override bool Equals(object? obj) => obj is IntRangeValue other && Equals(other);
 
     public override int GetHashCode()
     {
@@ -56,15 +47,9 @@ namespace Nighthollow.Stats
       }
     }
 
-    public static bool operator ==(IntRangeValue left, IntRangeValue right)
-    {
-      return left.Equals(right);
-    }
+    public static bool operator ==(IntRangeValue left, IntRangeValue right) => left.Equals(right);
 
-    public static bool operator !=(IntRangeValue left, IntRangeValue right)
-    {
-      return !left.Equals(right);
-    }
+    public static bool operator !=(IntRangeValue left, IntRangeValue right) => !left.Equals(right);
   }
 
   public sealed class IntRangeStat : NumericStat<IntRangeValue>
@@ -73,10 +58,8 @@ namespace Nighthollow.Stats
     {
     }
 
-    public override IntRangeValue ComputeValue(IReadOnlyList<NumericOperation<IntRangeValue>> operations)
-    {
-      return Compute(operations);
-    }
+    public override IntRangeValue ComputeValue(IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
+      Compute(operations);
 
     public static IntRangeValue Compute(IReadOnlyList<NumericOperation<IntRangeValue>> operations)
     {
@@ -85,10 +68,7 @@ namespace Nighthollow.Stats
         IntStat.Compute(operations, range => range.High));
     }
 
-    protected override IntRangeValue ParseStatValue(string value)
-    {
-      return ParseIntRange(value);
-    }
+    protected override IntRangeValue ParseStatValue(string value) => ParseIntRange(value);
 
     public static IntRangeValue ParseIntRange(string value)
     {

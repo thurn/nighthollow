@@ -53,15 +53,9 @@ namespace Nighthollow.Stats
       Modifiers.Clear();
     }
 
-    public StatTable Clone(StatTable parent)
-    {
-      return new StatTable(parent, Modifiers);
-    }
+    public StatTable Clone(StatTable parent) => new StatTable(parent, Modifiers);
 
-    public static StatModifierTable Deserialize(JSONNode node)
-    {
-      return new StatModifierTable(DeserializeInternal(node));
-    }
+    public static StatModifierTable Deserialize(JSONNode node) => new StatModifierTable(DeserializeInternal(node));
 
     protected static Dictionary<StatId, List<IStatModifier>> DeserializeInternal(JSONNode node)
     {
@@ -111,10 +105,8 @@ namespace Nighthollow.Stats
       return stat.ComputeValue(OperationsForStatId(stat.Id).Select(op => (TOperation) op.Operation).ToList());
     }
 
-    public static StatTable Deserialize(JSONNode node, StatTable parent)
-    {
-      return new StatTable(parent, DeserializeInternal(node));
-    }
+    public static StatTable Deserialize(JSONNode node, StatTable parent) =>
+      new StatTable(parent, DeserializeInternal(node));
 
     IEnumerable<IStatModifier> OperationsForStatId(StatId statId)
     {

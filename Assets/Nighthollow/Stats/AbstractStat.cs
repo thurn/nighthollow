@@ -35,24 +35,16 @@ namespace Nighthollow.Stats
 
     public abstract IStatModifier? StaticModifierForOperator(Operator op);
 
-    public override string ToString()
-    {
-      return Id.ToString();
-    }
+    public override string ToString() => Id.ToString();
 
     public abstract TValue ComputeValue(IReadOnlyList<TOperation> operations);
 
     protected abstract TValue ParseStatValue(string value);
 
-    public IStatModifier Modifier(TOperation operation, ILifetime lifetime)
-    {
-      return new StatModifier<TOperation, TValue>(this, operation, lifetime);
-    }
+    public IStatModifier Modifier(TOperation operation, ILifetime lifetime) =>
+      new StatModifier<TOperation, TValue>(this, operation, lifetime);
 
-    protected IStatModifier StaticModifier(TOperation operation)
-    {
-      return Modifier(operation, StaticLifetime.Instance);
-    }
+    protected IStatModifier StaticModifier(TOperation operation) => Modifier(operation, StaticLifetime.Instance);
   }
 
   public abstract class NumericStat<TValue> : AbstractStat<NumericOperation<TValue>, TValue>
@@ -73,9 +65,6 @@ namespace Nighthollow.Stats
       };
     }
 
-    public override IStatModifier? StaticModifierForOperator(Operator op)
-    {
-      return null;
-    }
+    public override IStatModifier? StaticModifierForOperator(Operator op) => null;
   }
 }

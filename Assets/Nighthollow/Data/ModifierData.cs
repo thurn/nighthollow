@@ -36,26 +36,20 @@ namespace Nighthollow.Data
     public DelegateId? DelegateId { get; }
     public IStatModifier? StatModifier { get; }
 
-    public static ModifierData Deserialize(GameDataService gameData, JSONNode node)
-    {
-      return new ModifierData(
+    public static ModifierData Deserialize(GameDataService gameData, JSONNode node) =>
+      new ModifierData(
         node["delegateId"] == null ? null : (DelegateId?) node["delegateId"].AsInt,
         node["statModifier"] == null ? null : StatModifierUtil.Deserialize(node["statModifier"]));
-    }
 
-    public JSONNode Serialize()
-    {
-      return new JSONObject
+    public JSONNode Serialize() =>
+      new JSONObject
       {
         ["delegateId"] = DelegateId.HasValue ? new JSONNumber((double) DelegateId.Value) : null,
         ["statModifier"] = StatModifier?.Serialize()
       };
-    }
 
-    public override string ToString()
-    {
-      return $"{(DelegateId.HasValue ? DelegateId.Value.ToString() : "")} " +
-             $"{(StatModifier != null ? StatModifier.ToString() : "")}";
-    }
+    public override string ToString() =>
+      $"{(DelegateId.HasValue ? DelegateId.Value.ToString() : "")} " +
+      $"{(StatModifier != null ? StatModifier.ToString() : "")}";
   }
 }

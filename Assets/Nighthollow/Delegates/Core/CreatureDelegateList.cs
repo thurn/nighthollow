@@ -28,9 +28,6 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
-    protected override AbstractDelegateList? GetChild(DelegateContext context)
-    {
-      return context.Self.CurrentSkill?.Delegate;
-    }
+    protected override AbstractDelegateList? GetChild(DelegateContext context) => context.Self.CurrentSkill?.Delegate;
   }
 }

@@ -19,10 +19,7 @@ namespace Nighthollow.State
 {
   public static class SetValueMutation
   {
-    public static SetValueMutation<T> New<T>(Key<T> key, T newValue)
-    {
-      return new SetValueMutation<T>(key, newValue);
-    }
+    public static SetValueMutation<T> New<T>(Key<T> key, T newValue) => new SetValueMutation<T>(key, newValue);
   }
 
   public sealed class SetValueMutation<T> : Mutation<T>
@@ -34,14 +31,8 @@ namespace Nighthollow.State
 
     public T NewValue { get; }
 
-    public override T NotFoundValue()
-    {
-      return NewValue;
-    }
+    public override T NotFoundValue() => NewValue;
 
-    public override T Apply(T _)
-    {
-      return NewValue;
-    }
+    public override T Apply(T _) => NewValue;
   }
 }

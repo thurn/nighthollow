@@ -26,10 +26,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class SummonMinionsDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity)
-    {
-      return $"Summons Minions";
-    }
+    public override string Describe(StatEntity entity) => $"Summons Minions";
 
     public override void OnUse(SkillContext c)
     {

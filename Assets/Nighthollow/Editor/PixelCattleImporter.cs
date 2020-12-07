@@ -83,11 +83,11 @@ namespace Nighthollow.Editor
 
       var projectileSource = new GameObject("ProjectileSource");
       projectileSource.transform.SetParent(prefab.transform);
-      projectileSource.transform.localPosition = new Vector2(100, 75);
+      projectileSource.transform.localPosition = new Vector2(x: 100, y: 75);
 
       var healthbarPosition = new GameObject("HealthbarPosition");
       healthbarPosition.transform.SetParent(prefab.transform);
-      healthbarPosition.transform.localPosition = new Vector2(50, 200);
+      healthbarPosition.transform.localPosition = new Vector2(x: 50, y: 200);
 
       AttachmentDisplay? attachmentDisplay = null;
       foreach (var t in prefab.GetComponentsInChildren<Transform>())
@@ -121,8 +121,8 @@ namespace Nighthollow.Editor
 
       var collider = prefab.AddComponent<BoxCollider2D>();
       collider.isTrigger = true;
-      collider.size = new Vector2(100, 200);
-      collider.offset = new Vector2(50, 100);
+      collider.size = new Vector2(x: 100, y: 200);
+      collider.offset = new Vector2(x: 50, y: 100);
 
       var rigidbody = prefab.AddComponent<Rigidbody2D>();
       rigidbody.gravityScale = 0.0f;

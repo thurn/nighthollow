@@ -37,8 +37,24 @@ namespace Nighthollow.Services
     [SerializeField] string _debugText = null!;
     [SerializeField] Vector2 _debugPosition;
     [SerializeField] ArrowDirection _debugArrowDirection;
-    bool _active;
     readonly HashSet<int> _shown = new HashSet<int>();
+    bool _active;
+
+    readonly struct HelperText
+    {
+      public int Id { get; }
+      public Vector2 Position { get; }
+      public ArrowDirection ArrowDirection { get; }
+      public string Text { get; }
+
+      public HelperText(int id, Vector2 position, ArrowDirection arrowDirection, string text)
+      {
+        Id = id;
+        Position = position;
+        ArrowDirection = arrowDirection;
+        Text = text;
+      }
+    }
 
     void Update()
     {
@@ -104,7 +120,10 @@ namespace Nighthollow.Services
 
     void ShowHelperText(HelperText helperText)
     {
-      if (_shown.Contains(helperText.Id)) return;
+      if (_shown.Contains(helperText.Id))
+      {
+        return;
+      }
 
       _shown.Add(helperText.Id);
       var element = new VisualElement();
@@ -133,22 +152,6 @@ namespace Nighthollow.Services
       InterfaceUtils
         .FindByName<VisualElement>(Root.Instance.ScreenController.Screen, "HelperTextContainer")
         .Add(element);
-    }
-
-    readonly struct HelperText
-    {
-      public int Id { get; }
-      public Vector2 Position { get; }
-      public ArrowDirection ArrowDirection { get; }
-      public string Text { get; }
-
-      public HelperText(int id, Vector2 position, ArrowDirection arrowDirection, string text)
-      {
-        Id = id;
-        Position = position;
-        ArrowDirection = arrowDirection;
-        Text = text;
-      }
     }
   }
 }

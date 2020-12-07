@@ -28,9 +28,20 @@ namespace Nighthollow.Interface
     Label _title = null!;
     int _xOffset;
 
+    public new sealed class UxmlFactory : UxmlFactory<ItemTooltip, UxmlTraits>
+    {
+    }
+
+    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    {
+    }
+
     public ItemTooltip()
     {
-      if (Application.isPlaying) RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
+      if (Application.isPlaying)
+      {
+        RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
+      }
     }
 
     public ScreenController Controller { get; set; } = null!;
@@ -49,10 +60,16 @@ namespace Nighthollow.Interface
         builder.CloseButton ? Visibility.Visible : Visibility.Hidden);
 
       var onClose = builder.OnClose;
-      if (onClose != null) _closeButton.RegisterCallback<ClickEvent>(e => { onClose(); });
+      if (onClose != null)
+      {
+        _closeButton.RegisterCallback<ClickEvent>(e => { onClose(); });
+      }
 
       var content = this.Q(name: null, "tooltip-content");
-      if (content != null) Remove(content);
+      if (content != null)
+      {
+        Remove(content);
+      }
 
       Add(builder.BuildContent());
 
@@ -91,14 +108,6 @@ namespace Nighthollow.Interface
           min: 32,
           Screen.height - worldBound.height - 32));
       }
-    }
-
-    public new sealed class UxmlFactory : UxmlFactory<ItemTooltip, UxmlTraits>
-    {
-    }
-
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
-    {
     }
   }
 }

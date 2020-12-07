@@ -61,10 +61,7 @@ namespace Nighthollow.Data
       }
     }
 
-    public static float ToCenterXPosition(this RankValue rank)
-    {
-      return ToXPosition(rank);
-    }
+    public static float ToCenterXPosition(this RankValue rank) => ToXPosition(rank);
 
     public static RankValue ClosestRankForXPosition(float xPosition)
     {
@@ -101,11 +98,17 @@ namespace Nighthollow.Data
 
     public static IEnumerable<RankValue> AdjacentRanks(RankValue rankValue)
     {
-      if ((int) rankValue > 1) yield return rankValue - 1;
+      if ((int) rankValue > 1)
+      {
+        yield return rankValue - 1;
+      }
 
       yield return rankValue;
 
-      if ((int) rankValue < 8) yield return rankValue + 1;
+      if ((int) rankValue < 8)
+      {
+        yield return rankValue + 1;
+      }
     }
 
     public static float ToYPosition(this FileValue file)
@@ -121,10 +124,7 @@ namespace Nighthollow.Data
       }
     }
 
-    public static float ToCenterYPosition(this FileValue file)
-    {
-      return ToYPosition(file) + 1.25f;
-    }
+    public static float ToCenterYPosition(this FileValue file) => ToYPosition(file) + 1.25f;
 
     public static FileValue ClosestFileForYPosition(float yPosition)
     {
@@ -145,11 +145,17 @@ namespace Nighthollow.Data
 
     public static IEnumerable<FileValue> AdjacentFiles(FileValue fileValue)
     {
-      if ((int) fileValue > 1) yield return fileValue - 1;
+      if ((int) fileValue > 1)
+      {
+        yield return fileValue - 1;
+      }
 
       yield return fileValue;
 
-      if ((int) fileValue < 5) yield return fileValue + 1;
+      if ((int) fileValue < 5)
+      {
+        yield return fileValue + 1;
+      }
     }
   }
 }

@@ -24,10 +24,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class InfluenceAddedDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity)
-    {
-      return $"+1 Influence";
-    }
+    public override string Describe(StatEntity entity) => $"+1 Influence";
 
     public override void OnActivate(CreatureContext c)
     {

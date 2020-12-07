@@ -28,10 +28,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ApplyToAdjacentAlliesOnUseDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity)
-    {
-      return "Buffs Adjacent Allies With:";
-    }
+    public override string Describe(StatEntity entity) => "Buffs Adjacent Allies With:";
 
     public override void OnUse(SkillContext c)
     {
@@ -40,13 +37,18 @@ namespace Nighthollow.Delegates.Implementations
           Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition))
       foreach (var modifier in c.Skill.TargetedAffixes.SelectMany(affix => affix.Modifiers))
       {
-        if (modifier.DelegateId != null) throw new NotSupportedException("Not yet implemented");
+        if (modifier.DelegateId != null)
+        {
+          throw new NotSupportedException("Not yet implemented");
+        }
 
         if (modifier.StatModifier != null)
+        {
           c.Results.Add(new ApplyModifierEffect(
             creature.Data,
             modifier.StatModifier
               .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(Stat.BuffDuration)))));
+        }
       }
     }
   }

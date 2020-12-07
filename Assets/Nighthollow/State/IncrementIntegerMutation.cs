@@ -23,14 +23,8 @@ namespace Nighthollow.State
     {
     }
 
-    public override int NotFoundValue()
-    {
-      return 1;
-    }
+    public override int NotFoundValue() => 1;
 
-    public override int Apply(int currentValue)
-    {
-      return currentValue + 1;
-    }
+    public override int Apply(int currentValue) => currentValue + 1;
   }
 }

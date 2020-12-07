@@ -42,15 +42,23 @@ namespace Nighthollow.Components
       var manaCreatureWeight = 4000 * ((2.0 * _cards.Count - manaCreatureCount) / 3.0);
 
       foreach (var card in _cards)
+      {
         _weights.Add(card.GetBool(Stat.IsManaCreature) ? (int) Math.Round(manaCreatureWeight) : 4000);
+      }
     }
 
     public CreatureData Draw()
     {
-      if (_orderedDraws) return _cards[_lastDraw++ % _cards.Count].Clone(Root.Instance.User.Data.Stats);
+      if (_orderedDraws)
+      {
+        return _cards[_lastDraw++ % _cards.Count].Clone(Root.Instance.User.Data.Stats);
+      }
 
       var selector = new DynamicRandomSelector<int>(seed: -1, _cards.Count);
-      for (var i = 0; i < _cards.Count; ++i) selector.Add(i, _weights[i]);
+      for (var i = 0; i < _cards.Count; ++i)
+      {
+        selector.Add(i, _weights[i]);
+      }
 
       selector.Build();
 

@@ -34,9 +34,6 @@ namespace Nighthollow.Delegates.Core
 
     public override StatTable Stats => Skill.Stats;
 
-    public SkillContext Clone()
-    {
-      return new SkillContext(Self, Skill, Projectile);
-    }
+    public SkillContext Clone() => new SkillContext(Self, Skill, Projectile);
   }
 }

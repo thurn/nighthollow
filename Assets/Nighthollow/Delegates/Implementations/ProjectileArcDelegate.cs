@@ -25,25 +25,15 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ProjectileArcDelegate : AbstractProjectileOffsetDelegate
   {
-    public override string Describe(StatEntity entity)
-    {
-      return $"Fires an Arc of {entity.GetInt(Stat.ProjectileArcCount)} Projectiles";
-    }
+    public override string Describe(StatEntity entity) =>
+      $"Fires an Arc of {entity.GetInt(Stat.ProjectileArcCount)} Projectiles";
 
-    protected override int GetProjectileCount(DelegateContext c)
-    {
-      return c.GetInt(Stat.ProjectileArcCount);
-    }
+    protected override int GetProjectileCount(DelegateContext c) => c.GetInt(Stat.ProjectileArcCount);
 
-    protected override Vector2 GetOrigin(DelegateContext c, int projectileNumber)
-    {
-      return c.Self.ProjectileSource.position;
-    }
+    protected override Vector2 GetOrigin(DelegateContext c, int projectileNumber) => c.Self.ProjectileSource.position;
 
-    protected override Vector2 GetDirection(DelegateContext c, int projectileNumber)
-    {
-      return Constants.ForwardDirectionForPlayer(c.Self.Owner) +
-             projectileNumber * new Vector2(x: 0, c.GetInt(Stat.ProjectileArcRotationOffset) / 1000f);
-    }
+    protected override Vector2 GetDirection(DelegateContext c, int projectileNumber) =>
+      Constants.ForwardDirectionForPlayer(c.Self.Owner) +
+      projectileNumber * new Vector2(x: 0, c.GetInt(Stat.ProjectileArcRotationOffset) / 1000f);
   }
 }

@@ -49,10 +49,16 @@ namespace Nighthollow.Data
       Speed = Parse.Int(row, "Speed") ?? 0;
 
       var affixId = Parse.Int(row, "Implicit Affix ID");
-      if (affixId.HasValue) ImplicitAffix = service.GetAffixType(affixId.Value);
+      if (affixId.HasValue)
+      {
+        ImplicitAffix = service.GetAffixType(affixId.Value);
+      }
 
       var skillId = Parse.Int(row, "Implicit Skill");
-      if (skillId.HasValue) ImplicitSkill = service.GetSkillType(skillId.Value);
+      if (skillId.HasValue)
+      {
+        ImplicitSkill = service.GetSkillType(skillId.Value);
+      }
 
       var animations = new List<CreatureSkillAnimation>();
       AddAnimation(row, "Skill 1", SkillAnimationNumber.Skill1, animations);
@@ -86,7 +92,10 @@ namespace Nighthollow.Data
       ICollection<CreatureSkillAnimation> list)
     {
       var type = (SkillAnimationType?) Parse.Int(row, label);
-      if (type.HasValue) list.Add(new CreatureSkillAnimation(number, type.Value));
+      if (type.HasValue)
+      {
+        list.Add(new CreatureSkillAnimation(number, type.Value));
+      }
     }
   }
 }

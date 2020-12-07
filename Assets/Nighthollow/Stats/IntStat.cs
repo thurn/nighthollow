@@ -41,7 +41,10 @@ namespace Nighthollow.Stats
     {
       var overwrite = operations.Select(op => op.Overwrite).WhereNotNull().ToList();
       var result = 0;
-      if (overwrite.Count > 0) result = toInt(overwrite.Last());
+      if (overwrite.Count > 0)
+      {
+        result = toInt(overwrite.Last());
+      }
 
       result += operations.Select(op => op.AddTo).WhereNotNull().Sum(toInt);
 
@@ -50,20 +53,11 @@ namespace Nighthollow.Stats
       return Constants.FractionBasisPoints(result, increaseBy);
     }
 
-    protected override int ParseStatValue(string value)
-    {
-      return ParseInt(value);
-    }
+    protected override int ParseStatValue(string value) => ParseInt(value);
 
-    public static int ParseInt(string value)
-    {
-      return int.Parse(value.Replace(",", ""));
-    }
+    public static int ParseInt(string value) => int.Parse(value.Replace(",", ""));
 
     [MustUseReturnValue("Return value should be used")]
-    public IStatModifier Add(int value)
-    {
-      return StaticModifier(NumericOperation.Add(value));
-    }
+    public IStatModifier Add(int value) => StaticModifier(NumericOperation.Add(value));
   }
 }

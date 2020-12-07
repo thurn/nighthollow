@@ -36,7 +36,10 @@ namespace Nighthollow.Services
 
     public void ShowDamageText(Creature target, int amount)
     {
-      if (target.Owner != PlayerName.Enemy) return;
+      if (target.Owner != PlayerName.Enemy)
+      {
+        return;
+      }
 
       // Exponential moving average
       var alpha = Constants.MultiplierBasisPoints(_alpha);
@@ -46,11 +49,17 @@ namespace Nighthollow.Services
 
       DamageText result;
       if (_count < 4 || amount < _averageDamage * Constants.MultiplierBasisPoints(_mediumHitThreshold))
+      {
         result = Root.Instance.Prefabs.CreateHitSmall();
+      }
       else if (amount < _averageDamage * Constants.MultiplierBasisPoints(_bigHitThreshold))
+      {
         result = Root.Instance.Prefabs.CreateHitMedium();
+      }
       else
+      {
         result = Root.Instance.Prefabs.CreateHitBig();
+      }
 
       result.Initialize(amount.ToString(), point);
     }

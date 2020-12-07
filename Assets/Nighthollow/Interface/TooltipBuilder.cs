@@ -64,7 +64,11 @@ namespace Nighthollow.Interface
 
     public TooltipBuilder AppendNullable(string? text)
     {
-      if (text != null) AppendText(text);
+      if (text != null)
+      {
+        AppendText(text);
+      }
+
       return this;
     }
 
@@ -79,9 +83,13 @@ namespace Nighthollow.Interface
       }
 
       if (_currentText == null)
+      {
         _currentText = new StringBuilder(text);
+      }
       else
+      {
         _currentText.Append("\n").Append(text);
+      }
 
       return this;
     }

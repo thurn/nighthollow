@@ -18,7 +18,7 @@ limitations under the License.
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
     <ui:Style src="../Styles/styles.uss"/>
     <ui:VisualElement name="Screen" class="full-screen">
-        <ui:VisualElement name="Background" class="screen-background" style="display: none" />
+        <nh:HideableVisualElement name="Background" class="screen-background" style="display: none"/>
 
         <nh:AdvisorBar name="AdvisorBar" class="advisor-bar" style="display: none;">
             <ui:VisualElement class="border-decoration left thurn"/>
@@ -41,6 +41,11 @@ limitations under the License.
             <ui:VisualElement name="InfluenceContainer">
             </ui:VisualElement>
         </nh:UserStatus>
+
+        <nh:RewardsWindow name="RewardsWindow" class="window left-window" style="display: none">
+            <ui:Label class="pane-title rewards-title" text="Reward Selection"/>
+            <ui:VisualElement name="Content" class="card-grid"/>
+        </nh:RewardsWindow>
 
         <nh:BlackoutWindow name="BlackoutWindow" class="screen-background" style="display: none;"/>
 
@@ -65,7 +70,7 @@ limitations under the License.
         </nh:CardsWindow>
 
         <nh:GameOverMessage name="GameOverMessage" class="game-over-message" style="display: none">
-            <ui:Label name="GameOverText" text="Victory!" />
+            <ui:Label name="GameOverText" text="Victory!"/>
         </nh:GameOverMessage>
 
         <ui:VisualElement name="ChoiceButtons" class="choice-buttons" style="display: none;"/>

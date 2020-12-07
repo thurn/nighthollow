@@ -27,7 +27,10 @@ namespace Nighthollow.Components
     public void AddAttachment(Attachment attachment)
     {
       attachment.transform.SetParent(transform);
-      foreach (var child in attachment.GetComponentsInChildren<SpriteRenderer>()) child.sortingOrder = 0;
+      foreach (var child in attachment.GetComponentsInChildren<SpriteRenderer>())
+      {
+        child.sortingOrder = 0;
+      }
 
       _attachments.Add(attachment.transform);
       UpdatePositions();
@@ -47,7 +50,10 @@ namespace Nighthollow.Components
 
     public void ClearAttachments()
     {
-      foreach (var attachment in _attachments) Destroy(attachment.gameObject);
+      foreach (var attachment in _attachments)
+      {
+        Destroy(attachment.gameObject);
+      }
 
       _attachments.Clear();
     }

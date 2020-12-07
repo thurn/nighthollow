@@ -15,7 +15,6 @@
 
 using System;
 using DG.Tweening;
-using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,31 +28,44 @@ namespace Nighthollow.Interface
     {
       var sequence = DOTween.Sequence()
         .Append(DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, endValue: 1f, duration));
-      if (onComplete != null) sequence.AppendCallback(() => onComplete());
+      if (onComplete != null)
+      {
+        sequence.AppendCallback(() => onComplete());
+      }
     }
 
     public static void FadeOut(VisualElement ve, float duration = 2f, Action? onComplete = null)
     {
       var sequence = DOTween.Sequence()
         .Append(DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, endValue: 0f, duration));
-      if (onComplete != null) sequence.AppendCallback(() => onComplete());
+      if (onComplete != null)
+      {
+        sequence.AppendCallback(() => onComplete());
+      }
     }
 
     public static T FindByName<T>(VisualElement parent, string name) where T : class
     {
-      return Errors.CheckNotNull(parent.Q(name) as T);
+      var element = parent.Q(name);
+      if (element == null)
+      {
+        throw new NullReferenceException($"Expected to find an element named {name}");
+      }
+
+      if (!(element is T result))
+      {
+        throw new ArgumentException($"Expected element {name} to be of type {typeof(T)}");
+      }
+
+      return result;
     }
 
-    public static bool ContainsScreenPoint(VisualElement element, Vector2 point)
-    {
+    public static bool ContainsScreenPoint(VisualElement element, Vector2 point) =>
       // This is supposed to be just element.ContainsPoint(element.WorldToLocal(point)), but that doesn't work
-      return element.ContainsPoint(element.WorldToLocal(ScreenPointToInterfacePoint(point)));
-    }
+      element.ContainsPoint(element.WorldToLocal(ScreenPointToInterfacePoint(point)));
 
-    public static Vector2 ScreenPointToInterfacePoint(Vector2 screenPoint)
-    {
+    public static Vector2 ScreenPointToInterfacePoint(Vector2 screenPoint) =>
       // Not sure if there's a less hacky way to convert to GUI coordinates than Screen.height - y...
-      return new Vector2(screenPoint.x, Screen.height - screenPoint.y);
-    }
+      new Vector2(screenPoint.x, Screen.height - screenPoint.y);
   }
 }

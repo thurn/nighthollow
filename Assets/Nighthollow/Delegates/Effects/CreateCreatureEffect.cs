@@ -40,12 +40,16 @@ namespace Nighthollow.Delegates.Effects
     {
       var data = CreatureUtil.Build(Root.Instance.StatsForPlayer(Data.BaseType.Owner), Data);
       if (IsMoving)
+      {
         Root.Instance.CreatureService.CreateMovingCreature(data, FilePosition, RankPosition.ToXPosition());
+      }
       else
+      {
         Root.Instance.CreatureService.AddUserCreatureAtPosition(
           Root.Instance.CreatureService.CreateUserCreature(data),
           RankPosition,
           FilePosition);
+      }
     }
   }
 }
