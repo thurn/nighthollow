@@ -19,6 +19,7 @@
 
 .button {
   @include images.long-button-off;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   height: 72px;
@@ -46,6 +47,14 @@
   -unity-background-image-tint-color: colors.$pressed-tint;
 }
 
+.button.disabled {
+  -unity-background-image-tint-color: colors.$disabled-tint;
+
+  Label {
+    color: colors.$disabled-text;
+  }
+}
+
 .close {
   background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/Mini_exit_t.png');
   border-width: 0;
@@ -69,4 +78,33 @@
 
 .close:active {
   -unity-background-image-tint-color: colors.$pressed-tint;
+}
+
+.icon-button {
+  background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/mini_button.png');
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  Label {
+    @include fonts.text;
+    font-size: font-sizes.$button2;
+  }
+}
+
+.icon-button.large {
+  width: 128px;
+  height: 128px;
+}
+
+.icon-button:active {
+  -unity-background-image-tint-color: colors.$pressed-tint;
+}
+
+.icon-button.add-button {
+  background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/Mini_add_t.png');
+}
+
+.icon-button.add-button:hover {
+  background-image: url('/Assets/ThirdParty/Poneti/Classic_RPG_GUI/Parts/Mini_add.png');
 }

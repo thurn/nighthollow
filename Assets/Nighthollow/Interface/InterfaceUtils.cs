@@ -26,6 +26,7 @@ namespace Nighthollow.Interface
   {
     public static void FadeIn(VisualElement ve, float duration = 2f, Action? onComplete = null)
     {
+      ve.style.opacity = 0f;
       var sequence = DOTween.Sequence()
         .Append(DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, endValue: 1f, duration));
       if (onComplete != null)
@@ -36,6 +37,7 @@ namespace Nighthollow.Interface
 
     public static void FadeOut(VisualElement ve, float duration = 2f, Action? onComplete = null)
     {
+      ve.style.opacity = 1f;
       var sequence = DOTween.Sequence()
         .Append(DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, endValue: 0f, duration));
       if (onComplete != null)

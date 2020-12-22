@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Interface;
 using Nighthollow.Services;
@@ -30,8 +32,10 @@ namespace Nighthollow.Components
       Database.OnReady(data =>
       {
         _screenController.Initialize();
-        _screenController.Get(ScreenController.RewardsWindow)
-          .Show(new RewardsWindow.Args(data.GameData.GetStaticCardList(StaticCardList.StartingDeck)));
+        // _screenController.Get(ScreenController.RewardsWindow)
+        //   .Show(new RewardsWindow.Args(new List<CreatureItemData>()));
+        _screenController.Get(ScreenController.RewardChoiceWindow)
+          .Show(new RewardChoiceWindow.Args(data.GameData.GetStaticCardList(StaticCardList.StartingDeck)));
       });
     }
   }

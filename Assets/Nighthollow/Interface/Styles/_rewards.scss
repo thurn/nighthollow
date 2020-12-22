@@ -1,0 +1,62 @@
+// Copyright © 2020-present Derek Thurn
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//    https://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@use "images";
+@use "dimensions";
+@use "font-sizes";
+@use "fonts";
+@use "colors";
+
+.reward-choice {
+  @include images.basic-bar;
+  position: absolute;
+  bottom: 300px;
+  padding: 32px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+
+  .choice-label {
+    font-size: font-sizes.$title;
+    @include fonts.text;
+    margin-bottom: 16px;
+  }
+
+  .cost-text {
+    font-size: font-sizes.$subtitle;
+    @include fonts.text;
+  }
+
+  .choice-display {
+    flex-direction: row;
+    align-items: center;
+
+    .choice-options {
+      width: 300px;
+    }
+
+    .choice-divider {
+      height: 256px;
+      width: 1px;
+      background-color: colors.$primary-text;
+      margin-left: 32px;
+      margin-right: 32px;
+    }
+
+    .choice-target {
+      width: 300px;
+    }
+  }
+}

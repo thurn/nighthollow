@@ -44,7 +44,7 @@ namespace Nighthollow.Components
       yield return new WaitForSeconds(seconds: 0.1f);
       var effect = Instantiate(_onOpenEffect.gameObject);
       effect.transform.position = transform.position;
-      _screenController.Get(ScreenController.RewardsWindow).AnimateOpening();
+      _screenController.Get(ScreenController.RewardChoiceWindow).AnimateOpening();
     }
   }
 }

@@ -44,12 +44,27 @@ namespace Nighthollow.Interface
 
   public sealed class ScreenController : MonoBehaviour
   {
-    public static ElementKey<HideableVisualElement> Background = new ElementKey<HideableVisualElement>("Background");
-    public static ElementKey<AdvisorBar> AdvisorBar = new ElementKey<AdvisorBar>("AdvisorBar");
-    public static ElementKey<UserStatus> UserStatus = new ElementKey<UserStatus>("UserStatus");
-    public static ElementKey<BlackoutWindow> BlackoutWindow = new ElementKey<BlackoutWindow>("BlackoutWindow");
-    public static ElementKey<GameOverMessage> GameOverMessage = new ElementKey<GameOverMessage>("GameOverMessage");
-    public static ElementKey<RewardsWindow> RewardsWindow = new ElementKey<RewardsWindow>("RewardsWindow");
+    public static ElementKey<HideableVisualElement> Background =
+      new ElementKey<HideableVisualElement>("Background");
+
+    public static ElementKey<AdvisorBar> AdvisorBar =
+      new ElementKey<AdvisorBar>("AdvisorBar");
+
+    public static ElementKey<UserStatus> UserStatus =
+      new ElementKey<UserStatus>("UserStatus");
+
+    public static ElementKey<BlackoutWindow> BlackoutWindow =
+      new ElementKey<BlackoutWindow>("BlackoutWindow");
+
+    public static ElementKey<GameOverMessage> GameOverMessage =
+      new ElementKey<GameOverMessage>("GameOverMessage");
+
+    public static ElementKey<RewardsWindow> RewardsWindow =
+      new ElementKey<RewardsWindow>("RewardsWindow");
+
+    public static ElementKey<RewardChoiceWindow> RewardChoiceWindow =
+      new ElementKey<RewardChoiceWindow>("RewardChoiceWindow");
+
     [SerializeField] UIDocument _document = null!;
 
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
@@ -61,7 +76,8 @@ namespace Nighthollow.Interface
       UserStatus,
       BlackoutWindow,
       GameOverMessage,
-      RewardsWindow
+      RewardsWindow,
+      RewardChoiceWindow
     };
 
     CardsWindow _cardsWindow = null!;

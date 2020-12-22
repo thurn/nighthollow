@@ -42,10 +42,23 @@ limitations under the License.
             </ui:VisualElement>
         </nh:UserStatus>
 
-        <nh:RewardsWindow name="RewardsWindow" class="window left-window" style="display: none">
-            <ui:Label class="pane-title rewards-title" text="Reward Selection"/>
+        <nh:RewardsWindow name="RewardsWindow" class="window left-window" style="display: none;">
+            <ui:Label class="pane-title rewards-title" text="Rewards"/>
             <ui:VisualElement name="Content" class="card-grid"/>
         </nh:RewardsWindow>
+
+        <nh:RewardChoiceWindow name="RewardChoiceWindow" class="reward-choice" style="display: none;">
+            <ui:Label class="choice-label" text="Pick Rewards"/>
+            <ui:VisualElement class="choice-display">
+                <ui:VisualElement name="Content" class="choice-options card-grid"/>
+                <ui:VisualElement class="choice-divider" />
+                <ui:VisualElement name="Selections" class="choice-target card-grid" />
+            </ui:VisualElement>
+            <ui:Label class="cost-text" text="Cost: 0" style="visibility: hidden;"/>
+            <ui:VisualElement name="ConfirmButton" class="button disabled">
+                <ui:Label text="Confirm"/>
+            </ui:VisualElement>
+        </nh:RewardChoiceWindow>
 
         <nh:BlackoutWindow name="BlackoutWindow" class="screen-background" style="display: none;"/>
 

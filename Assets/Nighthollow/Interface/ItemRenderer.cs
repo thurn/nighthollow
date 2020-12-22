@@ -31,11 +31,11 @@ namespace Nighthollow.Interface
 
     public readonly struct Config
     {
-      public readonly int Count;
+      public readonly int? Count;
       public readonly Size Size;
       public readonly bool ShouldAddTooltip;
 
-      public Config(int count, Size size = Size.Large, bool shouldAddTooltip = true)
+      public Config(int? count = null, Size size = Size.Large, bool shouldAddTooltip = true)
       {
         Count = count;
         Size = size;
@@ -56,7 +56,7 @@ namespace Nighthollow.Interface
         parentElement.Add(RenderItem(controller, items[index], config));
       }
 
-      for (; index < config.Count; ++index)
+      for (; index < (config.Count ?? 0); ++index)
       {
         parentElement.Add(EmptyItem(config));
       }
