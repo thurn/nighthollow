@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
+using Nighthollow.Items;
 using UnityEngine.UIElements;
 
 #nullable enable

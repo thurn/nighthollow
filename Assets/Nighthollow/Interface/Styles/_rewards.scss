@@ -49,10 +49,20 @@
 
     .choice-divider {
       height: 256px;
-      width: 1px;
+      width: 2px;
       background-color: colors.$primary-text;
       margin-left: 32px;
       margin-right: 32px;
+    }
+
+    .choice-arrow {
+      width: 0;
+      height: 0;
+      border-top-width: 15px;
+      border-bottom-width: 15px;
+      border-left-width: 30px;
+      border-left-color: colors.$primary-text;
+      margin-left: -32px;
     }
 
     .choice-target {

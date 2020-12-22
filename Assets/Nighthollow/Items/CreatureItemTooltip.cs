@@ -16,12 +16,13 @@
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Generated;
+using Nighthollow.Interface;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 
 #nullable enable
 
-namespace Nighthollow.Interface
+namespace Nighthollow.Items
 {
   public static class CreatureItemTooltip
   {

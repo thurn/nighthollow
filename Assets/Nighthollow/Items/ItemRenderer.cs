@@ -14,12 +14,13 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
+using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.Interface
+namespace Nighthollow.Items
 {
   public static class ItemRenderer
   {
@@ -46,7 +47,7 @@ namespace Nighthollow.Interface
     public static void AddItems(
       ScreenController controller,
       VisualElement parentElement,
-      IReadOnlyList<CreatureItemData> items,
+      IReadOnlyList<IItemData> items,
       Config config)
     {
       parentElement.Clear();
@@ -70,7 +71,7 @@ namespace Nighthollow.Interface
       return result;
     }
 
-    public static VisualElement RenderItem(ScreenController controller, CreatureItemData card, Config config)
+    public static VisualElement RenderItem(ScreenController controller, IItemData card, Config config)
     {
       var result = new VisualElement();
       result.AddToClassList("card");

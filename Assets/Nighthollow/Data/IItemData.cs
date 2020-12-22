@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using UnityEngine.UIElements;
+using System;
 
 #nullable enable
 
-namespace Nighthollow.Interface
+namespace Nighthollow.Data
 {
-  public sealed class AdvisorBar : DefaultHideableElement
+  public interface IItemData
   {
-    public new sealed class UxmlFactory : UxmlFactory<AdvisorBar, UxmlTraits>
-    {
-    }
+    string Name { get; }
 
-    protected override void Initialize()
-    {
-      this.Q("CardsButton").RegisterCallback<ClickEvent>(e => Controller.ShowCardsWindow());
-    }
+    string ImageAddress { get; }
+
+    T Switch<T>(
+      Func<CreatureItemData, T> onCreature,
+      Func<ResourceItemData, T> onResource);
   }
 }

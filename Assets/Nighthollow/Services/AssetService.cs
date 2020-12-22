@@ -71,6 +71,11 @@ namespace Nighthollow.Services
         }
       }
 
+      foreach (var resource in gameDataService.AllResources)
+      {
+        requests[resource.ImageAddress] = Resources.LoadAsync<Sprite>(resource.ImageAddress);
+      }
+
       yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
       Debug.Log("Got Asset Responses...");
 

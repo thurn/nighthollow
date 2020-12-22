@@ -16,11 +16,12 @@
 using System;
 using System.Text;
 using Nighthollow.Generated;
+using Nighthollow.Interface;
 using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.Interface
+namespace Nighthollow.Items
 {
   public sealed class TooltipBuilder
   {

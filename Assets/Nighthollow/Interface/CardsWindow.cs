@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Linq;
+using Nighthollow.Items;
 using Nighthollow.Services;
 using UnityEngine;
 using UnityEngine.UIElements;

@@ -13,26 +13,26 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Interface;
 using Nighthollow.Services;
-using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.Interface
+namespace Nighthollow.Items
 {
   public sealed class ItemImage : VisualElement
   {
     readonly bool _addTooltip;
-    readonly CreatureItemData _item;
+    readonly IItemData _item;
     readonly ScreenController _screenController;
 
     public new sealed class UxmlFactory : UxmlFactory<HideableVisualElement, UxmlTraits>
     {
     }
 
-    public ItemImage(ScreenController screenController, CreatureItemData item, bool addTooltip = true)
+    public ItemImage(ScreenController screenController, IItemData item, bool addTooltip = true)
     {
       _screenController = screenController;
       _item = item;
@@ -43,23 +43,27 @@ namespace Nighthollow.Interface
 
     public void AddTooltip()
     {
-      RegisterCallback<MouseOverEvent>(e =>
-      {
-        var tooltipBuilder = CreatureItemTooltip.Create(
-          Database.Instance.UserData.Stats,
-          _item);
-        tooltipBuilder.XOffset = 128;
-
-        _screenController.ShowTooltip(tooltipBuilder, new Vector2(worldBound.x, worldBound.y));
-      });
+      RegisterCallback<MouseOverEvent>(OnHover);
       RegisterCallback<MouseOutEvent>(e => { _screenController.HideTooltip(); });
+    }
+
+    void OnHover(MouseOverEvent e)
+    {
+      var tooltipBuilder =
+        _item.Switch(creature =>
+            CreatureItemTooltip.Create(
+              Database.Instance.UserData.Stats,
+              creature),
+          resource => new TooltipBuilder(resource.Name));
+      tooltipBuilder.XOffset = 128;
+
+      _screenController.ShowTooltip(tooltipBuilder, new Vector2(worldBound.x, worldBound.y));
     }
 
     void OnGeometryChange(GeometryChangedEvent evt)
     {
       var image = new Image();
-      image.style.backgroundImage = new StyleBackground(Database.Instance.Assets.GetImage(
-        Errors.CheckNotNull(_item.BaseType.ImageAddress)));
+      image.style.backgroundImage = new StyleBackground(Database.Instance.Assets.GetImage(_item.ImageAddress));
       Add(image);
 
       if (_addTooltip)

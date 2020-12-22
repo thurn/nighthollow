@@ -15,7 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nh="Nighthollow.Interface" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:nh="Nighthollow.Interface"
+         editor-extension-mode="False">
     <ui:Style src="../Styles/styles.uss"/>
     <ui:VisualElement name="Screen" class="full-screen">
         <nh:HideableVisualElement name="Background" class="screen-background" style="display: none"/>
@@ -51,8 +53,20 @@ limitations under the License.
             <ui:Label class="choice-label" text="Pick Rewards"/>
             <ui:VisualElement class="choice-display">
                 <ui:VisualElement name="Content" class="choice-options card-grid"/>
-                <ui:VisualElement class="choice-divider" />
-                <ui:VisualElement name="Selections" class="choice-target card-grid" />
+                <ui:VisualElement class="choice-divider"/>
+                <ui:VisualElement class="choice-arrow"/>
+                <ui:VisualElement name="Selections" class="choice-target card-grid">
+                    <ui:VisualElement class="card large"/>
+                    <ui:VisualElement class="card large">
+                        <ui:Image class="item essence-item disabled"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="card large">
+                        <ui:Image class="item essence-item disabled"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="card large">
+                        <ui:Image class="item essence-item disabled"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
             </ui:VisualElement>
             <ui:Label class="cost-text" text="Cost: 0" style="visibility: hidden;"/>
             <ui:VisualElement name="ConfirmButton" class="button disabled">

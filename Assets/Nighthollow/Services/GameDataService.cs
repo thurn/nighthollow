@@ -34,6 +34,7 @@ namespace Nighthollow.Services
     readonly Dictionary<int, ModifierTypeData> _modifiers = new Dictionary<int, ModifierTypeData>();
     readonly Dictionary<int, ModifierValues> _modifierValues = new Dictionary<int, ModifierValues>();
     readonly Dictionary<int, SkillTypeData> _skills = new Dictionary<int, SkillTypeData>();
+    readonly Dictionary<int, ResourceItemData> _resources = new Dictionary<int, ResourceItemData>();
 
     readonly Dictionary<StaticCardList, List<CreatureItemData>> _staticCardLists =
       new Dictionary<StaticCardList, List<CreatureItemData>>();
@@ -45,6 +46,8 @@ namespace Nighthollow.Services
     public IEnumerable<CreatureTypeData> AllCreatureTypes => _creatures.Values;
 
     public IEnumerable<SkillTypeData> AllSkillTypes => _skills.Values;
+
+    public IEnumerable<ResourceItemData> AllResources => _resources.Values;
 
     public static void Initialize(MonoBehaviour runner, Action<GameDataService> action)
     {
@@ -59,6 +62,8 @@ namespace Nighthollow.Services
     public SkillTypeData GetSkillType(int skillId) => Lookup(_skills, skillId);
 
     public CreatureTypeData GetCreatureType(int creatureId) => Lookup(_creatures, creatureId);
+
+    public ResourceItemData GetResource(int resourceId) => Lookup(_resources, resourceId);
 
     public IReadOnlyList<CreatureItemData> GetStaticCardList(StaticCardList listName)
     {
@@ -128,6 +133,11 @@ namespace Nighthollow.Services
           .GetOrCreateDefault(Parse.IntRequired(row, "Card ID"), new ModifierValues())
           .AddValue(this, row);
       }
+
+      _resources[1] = new ResourceItemData(
+        "Essence",
+        "Icons/Essence",
+        "Grants the ability to pick multiple rewards in the future");
 
       foreach (var row in parsed["CardLists"])
       {

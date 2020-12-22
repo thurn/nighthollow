@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using Nighthollow.Data;
+using Nighthollow.Items;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,7 +26,7 @@ namespace Nighthollow.Interface
   public sealed class RewardChoiceWindow : HideableElement<RewardChoiceWindow.Args>
   {
     const float AnimationOneDuration = 1f;
-    const float AnimationOnePause = 1.5f;
+    const float AnimationOnePause = 1f;
     const float AnimationTwoDuration = 1f;
     const Ease AnimationOneEase = Ease.OutBounce;
     const Ease AnimationTwoEase = Ease.OutCirc;
@@ -36,9 +37,9 @@ namespace Nighthollow.Interface
 
     public readonly struct Args
     {
-      public readonly IReadOnlyList<CreatureItemData> Items;
+      public readonly IReadOnlyList<IItemData> Items;
 
-      public Args(IReadOnlyList<CreatureItemData> items)
+      public Args(IReadOnlyList<IItemData> items)
       {
         Items = items;
       }
@@ -60,11 +61,6 @@ namespace Nighthollow.Interface
         _content,
         argument.Items,
         new ItemRenderer.Config(shouldAddTooltip: false));
-
-      ItemRenderer.AddItems(Controller,
-        _selections,
-        new List<CreatureItemData>(),
-        new ItemRenderer.Config(count: 4));
       RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 

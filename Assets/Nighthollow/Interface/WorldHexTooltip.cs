@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Items;
 using Nighthollow.World;
 
 #nullable enable

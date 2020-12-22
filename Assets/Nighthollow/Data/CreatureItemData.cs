@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Generated;
@@ -25,7 +25,7 @@ using SimpleJSON;
 
 namespace Nighthollow.Data
 {
-  public sealed class CreatureItemData
+  public sealed class CreatureItemData : IItemData
   {
     public CreatureItemData(
       string name,
@@ -49,6 +49,10 @@ namespace Nighthollow.Data
     public StatModifierTable Stats { get; }
     public IReadOnlyList<SkillItemData> Skills { get; }
     public IReadOnlyList<AffixData> Affixes { get; }
+
+    public string ImageAddress => Errors.CheckNotNull(BaseType.ImageAddress);
+
+    public T Switch<T>(Func<CreatureItemData, T> onCreature, Func<ResourceItemData, T> onResource) => onCreature(this);
 
     public static CreatureItemData Deserialize(GameDataService gameData, JSONNode node)
     {

@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Items;
 using Nighthollow.Utils;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
 
+[assembly: UxmlNamespacePrefix("Nighthollow.Interface", "nh")]
 namespace Nighthollow.Interface
 {
   public interface IElementKey
