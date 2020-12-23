@@ -137,7 +137,7 @@ namespace Nighthollow.Services
       _resources[1] = new ResourceItemData(
         "Essence",
         "Icons/Essence",
-        "Grants the ability to pick multiple rewards in the future");
+        "Spent to pick multiple rewards in the future");
 
       foreach (var row in parsed["CardLists"])
       {

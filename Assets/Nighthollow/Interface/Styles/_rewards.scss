@@ -18,6 +18,10 @@
 @use "fonts";
 @use "colors";
 
+.rewards-title {
+  margin-top: 64px;
+}
+
 .reward-choice {
   @include images.basic-bar;
   position: absolute;
@@ -68,5 +72,10 @@
     .choice-target {
       width: 300px;
     }
+  }
+
+  .drag-highlight {
+    background-color: colors.$window-background-highlight;
+    border-radius: 8px;
   }
 }

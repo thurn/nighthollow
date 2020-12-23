@@ -23,17 +23,20 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class RewardChoiceWindow : HideableElement<RewardChoiceWindow.Args>
+  public sealed class RewardChoiceWindow : HideableElement<RewardChoiceWindow.Args>, IDragManager<ItemImage>
   {
-    const float AnimationOneDuration = 1f;
-    const float AnimationOnePause = 1f;
-    const float AnimationTwoDuration = 1f;
+    const float AnimationOneDuration = 0.1f;
+    const float AnimationOnePause = 0.1f;
+    const float AnimationTwoDuration = 0.1f;
     const Ease AnimationOneEase = Ease.OutBounce;
     const Ease AnimationTwoEase = Ease.OutCirc;
     const float SequenceDelaySeconds = 0.1f;
 
-    VisualElement _content = null!;
+    VisualElement _choices = null!;
     VisualElement _selections = null!;
+    VisualElement _confirmButton = null!;
+    readonly ISet<IItemData> _choiceSet = new HashSet<IItemData>();
+    readonly ISet<IItemData> _selectionSet = new HashSet<IItemData>();
 
     public readonly struct Args
     {
@@ -51,14 +54,19 @@ namespace Nighthollow.Interface
 
     protected override void Initialize()
     {
-      _content = FindElement("Content");
+      _choices = FindElement("Content");
       _selections = FindElement("Selections");
+      _confirmButton = FindElement("ConfirmButton");
     }
 
     protected override void OnShow(Args argument)
     {
+      _choiceSet.Clear();
+      _selectionSet.Clear();
+      _choiceSet.UnionWith(argument.Items);
+
       ItemRenderer.AddItems(Controller,
-        _content,
+        _choices,
         argument.Items,
         new ItemRenderer.Config(shouldAddTooltip: false));
       RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
@@ -153,7 +161,8 @@ namespace Nighthollow.Interface
           {
             foreach (var image in RewardImages())
             {
-              image.AddTooltip();
+              image.HasTooltip = true;
+              image.MakeDraggable(this);
             }
           });
       }
@@ -183,6 +192,39 @@ namespace Nighthollow.Interface
       element.style.left = new StyleLength(converted.x);
       element.style.top = new StyleLength(converted.y);
       element.style.visibility = new StyleEnum<Visibility>(Visibility.Hidden);
+    }
+
+    public VisualElement GetDragTarget(ItemImage element) => _choiceSet.Contains(element.Item) ? _selections : _choices;
+
+    public void OnDragEnter(ItemImage element)
+    {
+      GetDragTarget(element).AddToClassList("drag-highlight");
+    }
+
+    public void OnDragExit(ItemImage element)
+    {
+      GetDragTarget(element).RemoveFromClassList("drag-highlight");
+    }
+
+    public VisualElement OnDraggableReleased(ItemImage element)
+    {
+      var target = GetDragTarget(element);
+      target.RemoveFromClassList("drag-highlight");
+      return target.Query().Class("card").First();
+    }
+
+    public void OnDragReceived(ItemImage element)
+    {
+      if (_choiceSet.Contains(element.Item))
+      {
+        _choiceSet.Remove(element.Item);
+        _selectionSet.Add(element.Item);
+      }
+      else
+      {
+        _selectionSet.Remove(element.Item);
+        _choiceSet.Add(element.Item);
+      }
     }
   }
 }

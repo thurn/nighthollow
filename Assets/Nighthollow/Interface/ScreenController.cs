@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Nighthollow.Items;
 using Nighthollow.Utils;
 using UnityEditor.UIElements;
@@ -23,6 +24,7 @@ using UnityEngine.UIElements;
 #nullable enable
 
 [assembly: UxmlNamespacePrefix("Nighthollow.Interface", "nh")]
+
 namespace Nighthollow.Interface
 {
   public interface IElementKey
@@ -68,7 +70,6 @@ namespace Nighthollow.Interface
       new ElementKey<RewardChoiceWindow>("RewardChoiceWindow");
 
     [SerializeField] UIDocument _document = null!;
-
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
     readonly List<IElementKey> _keys = new List<IElementKey>
@@ -82,15 +83,18 @@ namespace Nighthollow.Interface
       RewardChoiceWindow
     };
 
+    DragInfo? _currentlyDragging;
     CardsWindow _cardsWindow = null!;
     AbstractWindow? _currentWindow;
     Dialog _dialog = null!;
     ItemTooltip _itemTooltip = null!;
 
     VisualElement _screen = null!;
+    bool _currentlyWithinDragTarget;
 
     public UIDocument Document => _document;
     public VisualElement Screen => _screen;
+    public bool IsCurrentlyDragging => _currentlyDragging != null;
 
     public void Initialize()
     {
@@ -109,6 +113,9 @@ namespace Nighthollow.Interface
       _itemTooltip.Controller = this;
       _dialog = InterfaceUtils.FindByName<Dialog>(_screen, "Dialog");
       _dialog.Initialize();
+
+      _screen.RegisterCallback<MouseMoveEvent>(MouseMove);
+      _screen.RegisterCallback<MouseUpEvent>(MouseUp);
     }
 
     public T Get<T>(ElementKey<T> key) where T : AbstractHideableElement => (T) GetElement(key);
@@ -135,8 +142,11 @@ namespace Nighthollow.Interface
 
     public void ShowTooltip(TooltipBuilder builder, Vector2 anchor)
     {
-      _itemTooltip.Hide();
-      _itemTooltip.Show(builder, anchor);
+      if (!IsCurrentlyDragging)
+      {
+        _itemTooltip.Hide();
+        _itemTooltip.Show(builder, anchor);
+      }
     }
 
     public void HideTooltip()
@@ -170,6 +180,97 @@ namespace Nighthollow.Interface
       _currentWindow?.Hide();
       _currentWindow = window;
       _currentWindow.Show();
+    }
+
+    public void StartDrag(DragInfo dragInfo)
+    {
+      _currentlyDragging = dragInfo;
+      var element = dragInfo.Element;
+      HideTooltip();
+      element.RemoveFromHierarchy();
+
+      element.style.position = new StyleEnum<Position>(Position.Absolute);
+      _screen.Add(element);
+      element.style.left = new StyleLength(_currentlyDragging.DragStartElementPosition.x);
+      element.style.top = new StyleLength(_currentlyDragging.DragStartElementPosition.y);
+    }
+
+    void MouseMove(MouseMoveEvent e)
+    {
+      if (_currentlyDragging != null)
+      {
+        var diff = e.mousePosition - _currentlyDragging.DragStartMousePosition;
+        _currentlyDragging.Element.style.left = new StyleLength(_currentlyDragging.DragStartElementPosition.x + diff.x);
+        _currentlyDragging.Element.style.top = new StyleLength(_currentlyDragging.DragStartElementPosition.y + diff.y);
+
+        var withinTarget = _currentlyDragging.DragTarget.worldBound.Contains(e.mousePosition);
+        if (!_currentlyWithinDragTarget && withinTarget)
+        {
+          _currentlyWithinDragTarget = true;
+          _currentlyDragging.OnDragEnter();
+        }
+        else if (_currentlyWithinDragTarget && !withinTarget)
+        {
+          _currentlyWithinDragTarget = false;
+          _currentlyDragging.OnDragExit();
+        }
+      }
+    }
+
+    void MouseUp(MouseUpEvent e)
+    {
+      if (_currentlyDragging != null)
+      {
+        var currentlyDragging = _currentlyDragging;
+        _currentlyDragging = null;
+
+        var element = currentlyDragging.Element;
+        currentlyDragging.DisableElementDragging();
+
+        var droppedOverTarget = currentlyDragging.DragTarget.worldBound.Contains(e.mousePosition);
+
+        var targetParent = currentlyDragging.OriginalParent;
+        var targetPosition = currentlyDragging.DragStartElementPosition;
+        if (droppedOverTarget)
+        {
+          targetParent = currentlyDragging.OnDraggableReleased();
+          targetPosition = targetParent.worldBound.position +
+                           new Vector2(
+                             currentlyDragging.OriginalLeft.value.value,
+                             currentlyDragging.OriginalTop.value.value);
+        }
+
+        var currentPosition = new Vector2(element.style.left.value.value, element.style.top.value.value);
+        var distance = Vector2.Distance(currentPosition, targetPosition);
+        var animationDuration = distance < 100 ? 0.1f : 0.3f;
+
+        DOTween.Sequence()
+          .Insert(0, DOTween.To(
+            () => currentPosition.x,
+            left => element.style.left = left,
+            targetPosition.x,
+            animationDuration))
+          .Insert(0, DOTween.To(
+            () => currentPosition.y,
+            left => element.style.top = left,
+            targetPosition.y,
+            animationDuration))
+          .AppendCallback(() =>
+          {
+            element.RemoveFromHierarchy();
+            targetParent.Add(element);
+            element.style.position = currentlyDragging.OriginalPosition;
+            element.style.left = currentlyDragging.OriginalLeft;
+            element.style.top = currentlyDragging.OriginalTop;
+
+            if (droppedOverTarget)
+            {
+              currentlyDragging.OnDragReceived();
+            }
+
+            currentlyDragging.MakeElementDraggable();
+          });
+      }
     }
   }
 }

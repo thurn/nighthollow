@@ -25,6 +25,11 @@
 .card.large {
   width: 128px;
   height: 128px;
+
+  .item-image {
+    width: 96px;
+    height: 96px;
+  }
 }
 
 .card.large Image {
@@ -60,8 +65,4 @@
       margin: 4px 8px;
     }
   }
-}
-
-.rewards-title {
-  margin-top: 64px;
 }

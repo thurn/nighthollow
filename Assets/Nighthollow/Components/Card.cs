@@ -157,7 +157,7 @@ namespace Nighthollow.Components
     {
       if (_previewMode)
       {
-        var tooltip = CreatureItemTooltip.Create(Database.Instance.UserData.Stats, _data.Item);
+        var tooltip = TooltipUtil.CreateCreatureTooltip(Database.Instance.UserData.Stats, _data.Item);
         tooltip.XOffset = 64;
         Root.Instance.ScreenController.ShowTooltip(
           tooltip,

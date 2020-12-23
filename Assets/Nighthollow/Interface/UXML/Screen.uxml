@@ -50,7 +50,7 @@ limitations under the License.
         </nh:RewardsWindow>
 
         <nh:RewardChoiceWindow name="RewardChoiceWindow" class="reward-choice" style="display: none;">
-            <ui:Label class="choice-label" text="Pick Rewards"/>
+            <ui:Label class="choice-label" text="Pick Reward"/>
             <ui:VisualElement class="choice-display">
                 <ui:VisualElement name="Content" class="choice-options card-grid"/>
                 <ui:VisualElement class="choice-divider"/>

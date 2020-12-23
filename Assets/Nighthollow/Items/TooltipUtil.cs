@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Nighthollow.Data;
 using Nighthollow.Generated;
-using Nighthollow.Interface;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 
@@ -24,9 +23,21 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Items
 {
-  public static class CreatureItemTooltip
+  public static class TooltipUtil
   {
-    public static TooltipBuilder Create(StatTable ownerStats, CreatureItemData data)
+    public static TooltipBuilder CreateTooltip(StatTable ownerStats, IItemData item) =>
+      item.Switch(
+        creature => CreateCreatureTooltip(ownerStats, creature),
+        CreateResourceTooltip);
+
+    public static TooltipBuilder CreateResourceTooltip(ResourceItemData data)
+    {
+      var builder = new TooltipBuilder(data.Name);
+      builder.AppendText(data.Description);
+      return builder;
+    }
+
+    public static TooltipBuilder CreateCreatureTooltip(StatTable ownerStats, CreatureItemData data)
     {
       var builder = new TooltipBuilder(data.Name);
       var built = CreatureUtil.Build(ownerStats, data);

@@ -22,11 +22,18 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Items
 {
-  public sealed class ItemImage : VisualElement
+  public sealed class ItemImage : VisualElement, IDraggableElement<ItemImage>
   {
-    readonly bool _addTooltip;
+    const int ContainerSize = 128;
+
     readonly IItemData _item;
+    public IItemData Item => _item;
+
     readonly ScreenController _screenController;
+
+    IDragManager<ItemImage>? _dragReceiver;
+
+    public bool HasTooltip { private get; set; }
 
     public new sealed class UxmlFactory : UxmlFactory<HideableVisualElement, UxmlTraits>
     {
@@ -36,42 +43,50 @@ namespace Nighthollow.Items
     {
       _screenController = screenController;
       _item = item;
-      _addTooltip = addTooltip;
+      HasTooltip = addTooltip;
 
-      RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
+      RegisterCallback<MouseDownEvent>(OnMouseDown);
+      RegisterCallback<MouseOverEvent>(OnMouseOver);
+      RegisterCallback<MouseOutEvent>(OnMouseOut);
+
+      AddToClassList("item-image");
+      style.backgroundImage = new StyleBackground(Database.Instance.Assets.GetImage(_item.ImageAddress));
     }
 
-    public void AddTooltip()
+    public void MakeDraggable(IDragManager<ItemImage> dragManager)
     {
-      RegisterCallback<MouseOverEvent>(OnHover);
-      RegisterCallback<MouseOutEvent>(e => { _screenController.HideTooltip(); });
+      _dragReceiver = dragManager;
     }
 
-    void OnHover(MouseOverEvent e)
+    public void DisableDragging()
     {
-      var tooltipBuilder =
-        _item.Switch(creature =>
-            CreatureItemTooltip.Create(
-              Database.Instance.UserData.Stats,
-              creature),
-          resource => new TooltipBuilder(resource.Name));
-      tooltipBuilder.XOffset = 128;
-
-      _screenController.ShowTooltip(tooltipBuilder, new Vector2(worldBound.x, worldBound.y));
+      _dragReceiver = null;
     }
 
-    void OnGeometryChange(GeometryChangedEvent evt)
+    void OnMouseDown(MouseDownEvent e)
     {
-      var image = new Image();
-      image.style.backgroundImage = new StyleBackground(Database.Instance.Assets.GetImage(_item.ImageAddress));
-      Add(image);
-
-      if (_addTooltip)
+      if (_dragReceiver != null)
       {
-        AddTooltip();
+        _screenController.StartDrag(new DragInfo<ItemImage>(e, this, _dragReceiver));
       }
+    }
 
-      UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
+    void OnMouseOver(MouseOverEvent e)
+    {
+      if (HasTooltip)
+      {
+        var tooltipBuilder = TooltipUtil.CreateTooltip(Database.Instance.UserData.Stats, _item);
+        tooltipBuilder.XOffset = ContainerSize;
+        _screenController.ShowTooltip(tooltipBuilder, new Vector2(worldBound.x, worldBound.y));
+      }
+    }
+
+    void OnMouseOut(MouseOutEvent e)
+    {
+      if (HasTooltip)
+      {
+        _screenController.HideTooltip();
+      }
     }
   }
 }
