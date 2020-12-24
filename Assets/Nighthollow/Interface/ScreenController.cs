@@ -90,7 +90,7 @@ namespace Nighthollow.Interface
     ItemTooltip _itemTooltip = null!;
 
     VisualElement _screen = null!;
-    bool _currentlyWithinDragTarget;
+    int? _currentlyWithinDragTarget;
 
     public UIDocument Document => _document;
     public VisualElement Screen => _screen;
@@ -203,18 +203,32 @@ namespace Nighthollow.Interface
         _currentlyDragging.Element.style.left = new StyleLength(_currentlyDragging.DragStartElementPosition.x + diff.x);
         _currentlyDragging.Element.style.top = new StyleLength(_currentlyDragging.DragStartElementPosition.y + diff.y);
 
-        var withinTarget = _currentlyDragging.DragTarget.worldBound.Contains(e.mousePosition);
-        if (!_currentlyWithinDragTarget && withinTarget)
+        var withinDragTarget = FindWithinDragTarget(_currentlyDragging, e);
+        if (_currentlyWithinDragTarget == null && withinDragTarget != null)
         {
-          _currentlyWithinDragTarget = true;
-          _currentlyDragging.OnDragEnter();
+          _currentlyWithinDragTarget = withinDragTarget;
+          _currentlyDragging.OnDragEnter(withinDragTarget.Value);
         }
-        else if (_currentlyWithinDragTarget && !withinTarget)
+        else if (_currentlyWithinDragTarget != null && withinDragTarget == null)
         {
-          _currentlyWithinDragTarget = false;
-          _currentlyDragging.OnDragExit();
+          _currentlyDragging.OnDragExit(_currentlyWithinDragTarget.Value);
+          _currentlyWithinDragTarget = null;
         }
       }
+    }
+
+    static int? FindWithinDragTarget(DragInfo currentlyDragging, IMouseEvent e)
+    {
+      for (var i = 0; i < currentlyDragging.TargetElements.Count; ++i)
+      {
+        var target = currentlyDragging.TargetElements[i];
+        if (target.worldBound.Contains(e.mousePosition))
+        {
+          return i;
+        }
+      }
+
+      return null;
     }
 
     void MouseUp(MouseUpEvent e)
@@ -223,17 +237,18 @@ namespace Nighthollow.Interface
       {
         var currentlyDragging = _currentlyDragging;
         _currentlyDragging = null;
+        _currentlyWithinDragTarget = null;
 
         var element = currentlyDragging.Element;
-        currentlyDragging.DisableElementDragging();
+        currentlyDragging.EnableDragging = false;
 
-        var droppedOverTarget = currentlyDragging.DragTarget.worldBound.Contains(e.mousePosition);
+        var droppedOverTargetIndex = FindWithinDragTarget(currentlyDragging, e);
 
         var targetParent = currentlyDragging.OriginalParent;
         var targetPosition = currentlyDragging.DragStartElementPosition;
-        if (droppedOverTarget)
+        if (droppedOverTargetIndex != null)
         {
-          targetParent = currentlyDragging.OnDraggableReleased();
+          targetParent = currentlyDragging.GetTarget(droppedOverTargetIndex.Value);
           targetPosition = targetParent.worldBound.position +
                            new Vector2(
                              currentlyDragging.OriginalLeft.value.value,
@@ -263,12 +278,12 @@ namespace Nighthollow.Interface
             element.style.left = currentlyDragging.OriginalLeft;
             element.style.top = currentlyDragging.OriginalTop;
 
-            if (droppedOverTarget)
+            if (droppedOverTargetIndex != null)
             {
-              currentlyDragging.OnDragReceived();
+              currentlyDragging.OnDropped(droppedOverTargetIndex.Value);
             }
 
-            currentlyDragging.MakeElementDraggable();
+            currentlyDragging.EnableDragging = true;
           });
       }
     }

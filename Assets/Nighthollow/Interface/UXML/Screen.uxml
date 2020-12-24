@@ -56,16 +56,16 @@ limitations under the License.
                 <ui:VisualElement class="choice-divider"/>
                 <ui:VisualElement class="choice-arrow"/>
                 <ui:VisualElement name="Selections" class="choice-target card-grid">
-                    <ui:VisualElement class="card large"/>
-                    <ui:VisualElement class="card large">
+                    <nh:ItemSlot class="item-slot large"/>
+                    <nh:ItemSlot class="item-slot large">
                         <ui:Image class="item essence-item disabled"/>
-                    </ui:VisualElement>
-                    <ui:VisualElement class="card large">
+                    </nh:ItemSlot>
+                    <nh:ItemSlot class="item-slot large">
                         <ui:Image class="item essence-item disabled"/>
-                    </ui:VisualElement>
-                    <ui:VisualElement class="card large">
+                    </nh:ItemSlot>
+                    <nh:ItemSlot class="item-slot large">
                         <ui:Image class="item essence-item disabled"/>
-                    </ui:VisualElement>
+                    </nh:ItemSlot>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:Label class="cost-text" text="Cost: 0" style="visibility: hidden;"/>

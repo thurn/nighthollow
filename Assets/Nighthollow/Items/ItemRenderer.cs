@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using Nighthollow.Data;
 using Nighthollow.Interface;
-using Nighthollow.Utils;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -24,19 +23,13 @@ namespace Nighthollow.Items
 {
   public static class ItemRenderer
   {
-    public enum Size
-    {
-      Large,
-      Small
-    }
-
     public readonly struct Config
     {
       public readonly int? Count;
-      public readonly Size Size;
+      public readonly ItemSlot.Size Size;
       public readonly bool ShouldAddTooltip;
 
-      public Config(int? count = null, Size size = Size.Large, bool shouldAddTooltip = true)
+      public Config(int? count = null, ItemSlot.Size size = ItemSlot.Size.Large, bool shouldAddTooltip = true)
       {
         Count = count;
         Size = size;
@@ -47,47 +40,22 @@ namespace Nighthollow.Items
     public static void AddItems(
       ScreenController controller,
       VisualElement parentElement,
-      IReadOnlyList<IItemData> items,
+      IEnumerable<IItemData> items,
       Config config)
     {
       parentElement.Clear();
-      var index = 0;
-      for (; index < items.Count; ++index)
+
+      foreach (var item in items)
       {
-        parentElement.Add(RenderItem(controller, items[index], config));
+        var slot = new ItemSlot(config.Size);
+        slot.SetItem(controller, item, config.ShouldAddTooltip);
+        parentElement.Add(slot);
       }
 
-      for (; index < (config.Count ?? 0); ++index)
+      for (var index = 0; index < (config.Count ?? 0); ++index)
       {
-        parentElement.Add(EmptyItem(config));
+        parentElement.Add(new ItemSlot(config.Size));
       }
-    }
-
-    public static VisualElement EmptyItem(Config config)
-    {
-      var result = new VisualElement();
-      result.AddToClassList("card");
-      result.AddToClassList(SizeClass(config));
-      return result;
-    }
-
-    public static VisualElement RenderItem(ScreenController controller, IItemData card, Config config)
-    {
-      var result = new VisualElement();
-      result.AddToClassList("card");
-      result.AddToClassList(SizeClass(config));
-      result.Add(new ItemImage(controller, card, config.ShouldAddTooltip));
-      return result;
-    }
-
-    static string SizeClass(Config config)
-    {
-      return config.Size switch
-      {
-        Size.Large => "large",
-        Size.Small => "small",
-        _ => throw Errors.UnknownEnumValue(config.Size)
-      };
     }
   }
 }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UIElements;
 using UnityEngine;
 
@@ -19,45 +21,46 @@ using UnityEngine;
 
 namespace Nighthollow.Interface
 {
-  public interface IDragManager<in T>
+  public interface IDraggableElement<TElement, TTarget>
+    where TElement : VisualElement, IDraggableElement<TElement, TTarget>
+    where TTarget : class, IDragTarget<TElement, TTarget>
   {
-    /// <summary>
-    /// Should return the target element for drag operations -- this element's world bounds will be used to determine
-    /// the enter/exit state of the drag as well as whether or not a draggable element is 'received' when it is dropped.
-    /// </summary>
-    VisualElement GetDragTarget(T element);
+    bool EnableDragging { set; }
 
-    /// <summary>Called when a draggable element is dragged into the drag target.</summary>
-    void OnDragEnter(T element);
-
-    /// <summary>Called when a draggable element is dragged out of the drag target.</summary>
-    void OnDragExit(T element);
-
-    /// <summary>
-    /// Called when the draggable element is released over the drag target. Should return the new parent
-    /// element for the draggable element -- the element will be animated to be a child of this parent. The original
-    /// USS 'position', 'left', and 'top' attribute values will be restored. If an element is released while *not* over
-    /// the drag target, it is instead returned to its original position.
-    /// </summary>
-    VisualElement OnDraggableReleased(T element);
-
-    /// <summary>
-    /// Called when the animation re-parenting a draggable element is completed.
-    /// </summary>
-    void OnDragReceived(T element);
+    TTarget CurrentDragParent { get; set; }
   }
 
-  public interface IDraggableElement<out T>
+  public interface IDragTarget<in TElement, out TTarget>
+    where TElement : VisualElement, IDraggableElement<TElement, TTarget>
+    where TTarget : class, IDragTarget<TElement, TTarget>
   {
-    void MakeDraggable(IDragManager<T> dragManager);
+    TTarget This();
 
-    void DisableDragging();
+    VisualElement DragTargetElement { get; }
+
+    void OnDraggableElementReceived(TElement element);
+
+    void OnDraggableElementRemoved(TElement element);
+  }
+
+  public interface IDragManager<in TElement, TTarget>
+    where TElement : VisualElement, IDraggableElement<TElement, TTarget>
+    where TTarget : class, IDragTarget<TElement, TTarget>
+  {
+    /// <summary>
+    /// Should return the possible target elements for drag operations -- these element's world bounds will be used to
+    /// determine the enter/exit state of the drag as well as whether or not a draggable element is 'received' when it
+    /// is dropped.
+    ///
+    /// Targets are currently assumed to be non-overlapping.
+    /// </summary>
+    IEnumerable<IDragTarget<TElement, TTarget>> GetDragTargets(TElement element);
   }
 
   public abstract class DragInfo
   {
     public abstract VisualElement Element { get; }
-    public abstract VisualElement DragTarget { get; }
+    public abstract IReadOnlyList<VisualElement> TargetElements { get; }
     public VisualElement OriginalParent { get; }
     public Vector2 DragStartMousePosition { get; }
     public Vector2 DragStartElementPosition { get; }
@@ -65,7 +68,7 @@ namespace Nighthollow.Interface
     public StyleLength OriginalTop { get; }
     public StyleEnum<Position> OriginalPosition { get; }
 
-    protected DragInfo(MouseDownEvent e, VisualElement element)
+    protected DragInfo(IMouseEvent e, VisualElement element)
     {
       OriginalParent = element.parent;
       DragStartMousePosition = e.mousePosition;
@@ -75,44 +78,63 @@ namespace Nighthollow.Interface
       OriginalPosition = element.style.position;
     }
 
-    public abstract void OnDragEnter();
+    public abstract void OnDragEnter(int elementIndex);
 
-    public abstract void OnDragExit();
+    public abstract void OnDragExit(int elementIndex);
 
-    public abstract VisualElement OnDraggableReleased();
+    public abstract void OnDropped(int elementIndex);
 
-    public abstract void OnDragReceived();
+    public abstract VisualElement GetTarget(int elementIndex);
 
-    public abstract void MakeElementDraggable();
-
-    public abstract void DisableElementDragging();
+    public abstract bool EnableDragging { set; }
   }
 
-  public sealed class DragInfo<T> : DragInfo where T : VisualElement, IDraggableElement<T>
+  public sealed class DragInfo<TElement, TTarget> : DragInfo
+    where TElement : VisualElement, IDraggableElement<TElement, TTarget>
+    where TTarget : class, IDragTarget<TElement, TTarget>
   {
-    readonly T _element;
-    readonly IDragManager<T> _dragManager;
-    public override VisualElement DragTarget { get; }
+    readonly TElement _element;
+    readonly IDragTarget<TElement, TTarget> _originalParentTarget;
+    readonly IReadOnlyList<IDragTarget<TElement, TTarget>> _dragTargets;
 
-    public DragInfo(MouseDownEvent e, T element, IDragManager<T> dragManager) : base(e, element)
+    public DragInfo(IMouseEvent e, TElement element, IDragManager<TElement, TTarget> dragManager) : base(e, element)
     {
       _element = element;
-      _dragManager = dragManager;
-      DragTarget = _dragManager.GetDragTarget(_element);
+      _originalParentTarget = element.CurrentDragParent;
+      _dragTargets = dragManager.GetDragTargets(element).ToList();
+      TargetElements = _dragTargets.Select(t => t.DragTargetElement).ToList();
     }
 
     public override VisualElement Element => _element;
 
-    public override void OnDragEnter() => _dragManager.OnDragEnter(_element);
+    public override IReadOnlyList<VisualElement> TargetElements { get; }
 
-    public override void OnDragExit() => _dragManager.OnDragExit(_element);
+    public override void OnDragEnter(int elementIndex)
+    {
+      var target = _dragTargets[elementIndex];
+      target.DragTargetElement.AddToClassList("drag-highlight");
+    }
 
-    public override VisualElement OnDraggableReleased() => _dragManager.OnDraggableReleased(_element);
+    public override void OnDragExit(int elementIndex)
+    {
+      var target = _dragTargets[elementIndex];
+      target.DragTargetElement.RemoveFromClassList("drag-highlight");
+    }
 
-    public override void OnDragReceived() => _dragManager.OnDragReceived(_element);
+    public override void OnDropped(int elementIndex)
+    {
+      var target = _dragTargets[elementIndex];
+      target.DragTargetElement.RemoveFromClassList("drag-highlight");
+      _element.CurrentDragParent = target.This();
+      _originalParentTarget.OnDraggableElementRemoved(_element);
+      target.OnDraggableElementReceived(_element);
+    }
 
-    public override void MakeElementDraggable() => _element.MakeDraggable(_dragManager);
+    public override VisualElement GetTarget(int elementIndex) => _dragTargets[elementIndex].DragTargetElement;
 
-    public override void DisableElementDragging() => _element.DisableDragging();
+    public override bool EnableDragging
+    {
+      set => _element.EnableDragging = value;
+    }
   }
 }

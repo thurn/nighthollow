@@ -73,7 +73,7 @@ namespace Nighthollow.Interface
         Controller,
         _manaDeck,
         Database.Instance.UserData.Deck.Where(i => i.BaseType.IsManaCreature).ToList(),
-        new ItemRenderer.Config(count: 6, ItemRenderer.Size.Small));
+        new ItemRenderer.Config(count: 6, ItemSlot.Size.Small));
     }
   }
 }

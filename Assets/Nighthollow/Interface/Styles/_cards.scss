@@ -15,14 +15,14 @@
 @use "images";
 @use "window";
 
-.card {
+.item-slot {
   @include images.inventory-frame;
   align-items: center;
   justify-content: center;
   margin: 8px;
 }
 
-.card.large {
+.item-slot.large {
   width: 128px;
   height: 128px;
 
@@ -32,18 +32,18 @@
   }
 }
 
-.card.large Image {
+.item-slot.large Image {
   width: 96px;
   height: 96px;
   -unity-background-scale-mode: scale-to-fit;
 }
 
-.card.small {
+.item-slot.small {
   width: 96px;
   height: 96px;
 }
 
-.card.small Image {
+.item-slot.small Image {
   width: 80px;
   height: 80px;
   -unity-background-scale-mode: scale-to-fit;

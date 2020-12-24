@@ -44,6 +44,11 @@
   justify-content: center;
 }
 
+.drag-highlight {
+  background-color: colors.$window-background-highlight;
+  border-radius: 8px;
+}
+
 .screen-background {
   background-color: black;
   @include full-screen;

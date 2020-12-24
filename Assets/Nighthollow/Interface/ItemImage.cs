@@ -13,16 +13,16 @@
 // limitations under the License.
 
 using Nighthollow.Data;
-using Nighthollow.Interface;
+using Nighthollow.Items;
 using Nighthollow.Services;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.Items
+namespace Nighthollow.Interface
 {
-  public sealed class ItemImage : VisualElement, IDraggableElement<ItemImage>
+  public sealed class ItemImage : VisualElement, IDraggableElement<ItemImage, ItemSlot>
   {
     const int ContainerSize = 128;
 
@@ -31,16 +31,16 @@ namespace Nighthollow.Items
 
     readonly ScreenController _screenController;
 
-    IDragManager<ItemImage>? _dragReceiver;
+    IDragManager<ItemImage, ItemSlot>? _dragManager;
 
     public bool HasTooltip { private get; set; }
 
-    public new sealed class UxmlFactory : UxmlFactory<HideableVisualElement, UxmlTraits>
-    {
-    }
+    public bool EnableDragging { get; set; }
+    public ItemSlot CurrentDragParent { get; set; }
 
-    public ItemImage(ScreenController screenController, IItemData item, bool addTooltip = true)
+    public ItemImage(ScreenController screenController, ItemSlot itemSlot, IItemData item, bool addTooltip = true)
     {
+      CurrentDragParent = itemSlot;
       _screenController = screenController;
       _item = item;
       HasTooltip = addTooltip;
@@ -53,21 +53,17 @@ namespace Nighthollow.Items
       style.backgroundImage = new StyleBackground(Database.Instance.Assets.GetImage(_item.ImageAddress));
     }
 
-    public void MakeDraggable(IDragManager<ItemImage> dragManager)
+    public void MakeDraggable(IDragManager<ItemImage, ItemSlot> dragManager)
     {
-      _dragReceiver = dragManager;
-    }
-
-    public void DisableDragging()
-    {
-      _dragReceiver = null;
+      _dragManager = dragManager;
+      EnableDragging = true;
     }
 
     void OnMouseDown(MouseDownEvent e)
     {
-      if (_dragReceiver != null)
+      if (EnableDragging && _dragManager != null)
       {
-        _screenController.StartDrag(new DragInfo<ItemImage>(e, this, _dragReceiver));
+        _screenController.StartDrag(new DragInfo<ItemImage, ItemSlot>(e, this, _dragManager));
       }
     }
 
