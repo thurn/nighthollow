@@ -14,6 +14,8 @@
 
 using System;
 using System.Collections.Generic;
+using MessagePack;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using UnityEngine;
 
@@ -21,19 +23,28 @@ using UnityEngine;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct IntRangeValue
+  [MessagePackObject]
+  public readonly struct IntRangeValue : IValueData
   {
-    public static readonly IntRangeValue Zero = new IntRangeValue(low: 0, high: 0);
-    public int Low { get; }
-    public int High { get; }
-
-    public override string ToString() => $"{Low}-{High}";
-
     public IntRangeValue(int low, int high)
     {
       Low = low;
       High = high;
     }
+
+    [Key(0)] public int Low { get; }
+    [Key(1)] public int High { get; }
+
+    public T Switch<T>(
+      Func<int, T> onInt,
+      Func<bool, T> onBool,
+      Func<DurationValue, T> onDuration,
+      Func<PercentageValue, T> onPercentage,
+      Func<IntRangeValue, T> onIntRange) => onIntRange(this);
+
+    public static readonly IntRangeValue Zero = new IntRangeValue(low: 0, high: 0);
+
+    public override string ToString() => $"{Low}-{High}";
 
     public bool Equals(IntRangeValue other) => Low == other.Low && High == other.High;
 

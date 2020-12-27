@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
+using MessagePack;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using UnityEngine;
 
@@ -20,31 +23,40 @@ using UnityEngine;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct PercentageValue
+  [MessagePackObject]
+  public readonly struct PercentageValue : IValueData
   {
-    const float BasisPoints = 10_000f;
-    readonly int _basisPoints;
-
     public PercentageValue(int basisPoints)
     {
-      _basisPoints = basisPoints;
+      BasisPoints = basisPoints;
     }
 
-    public override string ToString() => $"{_basisPoints / 100f}%";
+    const float BasisPointsPerUnit = 10_000f;
 
-    public int AsBasisPoints() => _basisPoints;
+    [Key(0)] public int BasisPoints { get; }
 
-    public float AsMultiplier() => _basisPoints / BasisPoints;
+    public T Switch<T>(
+      Func<int, T> onInt,
+      Func<bool, T> onBool,
+      Func<DurationValue, T> onDuration,
+      Func<PercentageValue, T> onPercentage,
+      Func<IntRangeValue, T> onIntRange) => onPercentage(this);
 
-    public int CalculateFraction(int input) => Mathf.RoundToInt(input * _basisPoints / BasisPoints);
+    public override string ToString() => $"{BasisPoints / 100f}%";
 
-    public bool IsReduction() => _basisPoints < BasisPoints;
+    public int AsBasisPoints() => BasisPoints;
 
-    public bool Equals(PercentageValue other) => _basisPoints == other._basisPoints;
+    public float AsMultiplier() => BasisPoints / BasisPointsPerUnit;
+
+    public int CalculateFraction(int input) => Mathf.RoundToInt(input * BasisPoints / BasisPointsPerUnit);
+
+    public bool IsReduction() => BasisPoints < BasisPointsPerUnit;
+
+    public bool Equals(PercentageValue other) => BasisPoints == other.BasisPoints;
 
     public override bool Equals(object obj) => obj is PercentageValue other && Equals(other);
 
-    public override int GetHashCode() => _basisPoints;
+    public override int GetHashCode() => BasisPoints;
 
     public static bool operator ==(PercentageValue left, PercentageValue right) => left.Equals(right);
 

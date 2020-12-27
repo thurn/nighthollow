@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
+using MessagePack;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using UnityEngine;
 
@@ -20,26 +23,34 @@ using UnityEngine;
 
 namespace Nighthollow.Stats
 {
-  public readonly struct DurationValue
+  [MessagePackObject]
+  public readonly struct DurationValue : IValueData
   {
-    readonly int _timeMilliseconds;
-
     public DurationValue(int timeMilliseconds)
     {
-      _timeMilliseconds = timeMilliseconds;
+      TimeMilliseconds = timeMilliseconds;
     }
 
-    public override string ToString() => $"{_timeMilliseconds / 1000f}s";
+    [Key(0)] public int TimeMilliseconds { get; }
 
-    public float AsSeconds() => _timeMilliseconds / 1000f;
+    public T Switch<T>(
+      Func<int, T> onInt,
+      Func<bool, T> onBool,
+      Func<DurationValue, T> onDuration,
+      Func<PercentageValue, T> onPercentage,
+      Func<IntRangeValue, T> onIntRange) => onDuration(this);
 
-    public int AsMilliseconds() => _timeMilliseconds;
+    public override string ToString() => $"{TimeMilliseconds / 1000f}s";
 
-    public bool Equals(DurationValue other) => _timeMilliseconds == other._timeMilliseconds;
+    public float AsSeconds() => TimeMilliseconds / 1000f;
+
+    public int AsMilliseconds() => TimeMilliseconds;
+
+    public bool Equals(DurationValue other) => TimeMilliseconds == other.TimeMilliseconds;
 
     public override bool Equals(object? obj) => obj is DurationValue other && Equals(other);
 
-    public override int GetHashCode() => _timeMilliseconds;
+    public override int GetHashCode() => TimeMilliseconds;
 
     public static bool operator ==(DurationValue left, DurationValue right) => left.Equals(right);
 
