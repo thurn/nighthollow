@@ -20,7 +20,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
   public static class BoardPositions
   {

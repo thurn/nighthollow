@@ -12,25 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using Nighthollow.Generated;
+using Nighthollow.Utils;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
-  public sealed class ResourceItemData : IItemData
+  public static class PlayerNames
   {
-    public string Name { get; }
-    public string ImageAddress { get; }
-    public string Description { get; }
-
-    public ResourceItemData(string name, string imageAddress, string description)
+    public static PlayerName GetOpponent(this PlayerName playerName)
     {
-      Name = name;
-      ImageAddress = imageAddress;
-      Description = description;
+      switch (playerName)
+      {
+        case PlayerName.User: return PlayerName.Enemy;
+        case PlayerName.Enemy: return PlayerName.User;
+        default: throw Errors.UnknownEnumValue(playerName);
+      }
     }
-
-    public T Switch<T>(Func<CreatureItemData, T> onCreature, Func<ResourceItemData, T> onResource) => onResource(this);
   }
 }

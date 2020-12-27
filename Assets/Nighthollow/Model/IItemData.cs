@@ -12,25 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
+using System;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
-  public sealed class HexData
+  public interface IItemData
   {
-    public HexData(string name, int ownerId, int level, IReadOnlyList<AffixData> affixes)
-    {
-      Name = name;
-      OwnerId = ownerId;
-      Level = level;
-      Affixes = affixes;
-    }
+    string Name { get; }
 
-    public string Name { get; }
-    public int OwnerId { get; }
-    public int Level { get; }
-    public IReadOnlyList<AffixData> Affixes { get; }
+    string ImageAddress { get; }
+
+    T Switch<T>(
+      Func<CreatureItemData, T> onCreature,
+      Func<ResourceItemData, T> onResource);
   }
 }

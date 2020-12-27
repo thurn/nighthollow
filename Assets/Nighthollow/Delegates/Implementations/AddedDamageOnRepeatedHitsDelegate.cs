@@ -14,10 +14,10 @@
 
 
 using Nighthollow.Components;
-using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
+using Nighthollow.Model;
 using Nighthollow.State;
 using Nighthollow.Stats;
 

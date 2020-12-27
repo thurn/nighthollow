@@ -19,7 +19,7 @@ using UnityEngine.Networking;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
   public static class SpreadsheetHelper
   {

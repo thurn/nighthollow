@@ -15,8 +15,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
-using Nighthollow.Data;
 using Nighthollow.Items;
+using Nighthollow.Model;
 using Nighthollow.Services;
 using UnityEngine;
 using UnityEngine.UIElements;

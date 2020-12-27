@@ -12,18 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+using System.Linq;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
-  public static class ModifierUtil
+  public static class Influence
   {
-    public static IStatModifier? ParseModifier(ModifierTypeData modifierData, string? value) =>
-      modifierData.StatId.HasValue && modifierData.Operator.HasValue && value != null
-        ? Stat.GetStat(modifierData.StatId.Value).ParseModifier(value, modifierData.Operator.Value)
-        : null;
+    public static bool LessThanOrEqualTo(TaggedValues<School, int> a, TaggedValues<School, int> b)
+    {
+      return a.Values.All(pair => pair.Value <= b.Get(pair.Key, notFound: 0));
+    }
   }
 }

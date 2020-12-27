@@ -20,7 +20,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
   public static class DamageUtil
   {
@@ -29,7 +29,7 @@ namespace Nighthollow.Data
       return new TaggedValues<DamageType, int>(
         damage.Values.ToDictionary(
           k => k.Key,
-          v => Random.Range(v.Value.Low, v.Value.High)));
+          v => Random.Range((int) v.Value.Low, (int) v.Value.High)));
     }
 
     public static TaggedValues<DamageType, int> Multiply(

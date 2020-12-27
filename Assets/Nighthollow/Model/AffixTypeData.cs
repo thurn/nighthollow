@@ -21,7 +21,7 @@ using Nighthollow.Utils;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
   public sealed class ModifierRange
   {

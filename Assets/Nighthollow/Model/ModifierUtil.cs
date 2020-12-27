@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using Nighthollow.Generated;
+using Nighthollow.Stats;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
-  public interface IItemData
+  public static class ModifierUtil
   {
-    string Name { get; }
-
-    string ImageAddress { get; }
-
-    T Switch<T>(
-      Func<CreatureItemData, T> onCreature,
-      Func<ResourceItemData, T> onResource);
+    public static IStatModifier? ParseModifier(ModifierTypeData modifierData, string? value) =>
+      modifierData.StatId.HasValue && modifierData.Operator.HasValue && value != null
+        ? Stat.GetStat(modifierData.StatId.Value).ParseModifier(value, modifierData.Operator.Value)
+        : null;
   }
 }

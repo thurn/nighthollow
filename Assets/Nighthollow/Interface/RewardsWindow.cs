@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Data;
 using Nighthollow.Items;
+using Nighthollow.Model;
 using UnityEngine.UIElements;
 
 #nullable enable

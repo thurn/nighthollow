@@ -12,23 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Generated;
-using Nighthollow.Utils;
+using System.Collections.Generic;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
-  public static class PlayerNames
+  public sealed class HexData
   {
-    public static PlayerName GetOpponent(this PlayerName playerName)
+    public HexData(string name, int ownerId, int level, IReadOnlyList<AffixData> affixes)
     {
-      switch (playerName)
-      {
-        case PlayerName.User: return PlayerName.Enemy;
-        case PlayerName.Enemy: return PlayerName.User;
-        default: throw Errors.UnknownEnumValue(playerName);
-      }
+      Name = name;
+      OwnerId = ownerId;
+      Level = level;
+      Affixes = affixes;
     }
+
+    public string Name { get; }
+    public int OwnerId { get; }
+    public int Level { get; }
+    public IReadOnlyList<AffixData> Affixes { get; }
   }
 }

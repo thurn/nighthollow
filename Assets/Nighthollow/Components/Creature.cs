@@ -15,9 +15,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
+using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;

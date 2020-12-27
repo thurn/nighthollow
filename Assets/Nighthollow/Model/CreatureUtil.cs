@@ -21,7 +21,7 @@ using Nighthollow.Stats;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
   public static class CreatureUtil
   {

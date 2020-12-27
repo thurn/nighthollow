@@ -12,33 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Services;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using SimpleJSON;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
-  public sealed class AffixData
+  public sealed class SkillItemData
   {
-    public AffixData(AffixTypeData baseType, IReadOnlyList<ModifierData> modifiers)
+    public SkillItemData(SkillTypeData baseType, StatModifierTable stats, IReadOnlyList<AffixData> affixes)
     {
       BaseType = baseType;
-      Modifiers = modifiers;
+      Stats = stats;
+      Affixes = affixes;
     }
 
-    public AffixTypeData BaseType { get; }
-    public IReadOnlyList<ModifierData> Modifiers { get; }
+    public SkillTypeData BaseType { get; }
+    public StatModifierTable Stats { get; }
+    public IReadOnlyList<AffixData> Affixes { get; }
 
-    public static AffixData Deserialize(GameDataService gameData, JSONNode node)
+    public static SkillItemData Deserialize(GameDataService gameData, JSONNode node)
     {
-      return new AffixData(
-        gameData.GetAffixType(node["baseType"].AsInt),
-        node["modifiers"].FromJsonArray().Select(c => ModifierData.Deserialize(gameData, c)).ToList());
+      return new SkillItemData(
+        gameData.GetSkillType(node["baseType"].AsInt),
+        StatModifierTable.Deserialize(node["stats"]),
+        node["affixes"].FromJsonArray().Select(c => AffixData.Deserialize(gameData, c)).ToList());
     }
 
     public JSONNode Serialize()
@@ -46,13 +49,9 @@ namespace Nighthollow.Data
       return new JSONObject
       {
         ["baseType"] = BaseType.Id,
-        ["modifiers"] = Modifiers.Select(m => m.Serialize()).AsJsonArray()
+        ["stats"] = Stats.Serialize(),
+        ["affixes"] = Affixes.Select(a => a.Serialize()).AsJsonArray()
       };
-    }
-
-    public override string ToString()
-    {
-      return string.Join(", ", Modifiers.Select(m => m.ToString()));
     }
   }
 }

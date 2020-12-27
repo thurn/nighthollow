@@ -12,20 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using System.Linq;
-using Nighthollow.Generated;
-using Nighthollow.Stats;
+using System;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
-  public static class Influence
+  public sealed class ResourceItemData : IItemData
   {
-    public static bool LessThanOrEqualTo(TaggedValues<School, int> a, TaggedValues<School, int> b)
+    public string Name { get; }
+    public string ImageAddress { get; }
+    public string Description { get; }
+
+    public ResourceItemData(string name, string imageAddress, string description)
     {
-      return a.Values.All(pair => pair.Value <= b.Get(pair.Key, notFound: 0));
+      Name = name;
+      ImageAddress = imageAddress;
+      Description = description;
     }
+
+    public T Switch<T>(Func<CreatureItemData, T> onCreature, Func<ResourceItemData, T> onResource) => onResource(this);
   }
 }
