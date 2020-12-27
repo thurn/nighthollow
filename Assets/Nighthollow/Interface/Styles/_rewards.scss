@@ -38,9 +38,19 @@
     margin-bottom: 16px;
   }
 
-  .cost-text {
-    font-size: font-sizes.$subtitle;
-    @include fonts.text;
+  #CostText {
+    flex-direction: row;
+    align-items: center;
+
+    Label {
+      font-size: font-sizes.$subtitle;
+      @include fonts.text;
+    }
+
+    .essence-item {
+      width: 32px;
+      height: 32px;
+    }
   }
 
   .choice-display {

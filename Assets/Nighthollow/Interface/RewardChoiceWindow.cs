@@ -17,6 +17,7 @@ using System.Linq;
 using DG.Tweening;
 using Nighthollow.Data;
 using Nighthollow.Items;
+using Nighthollow.Services;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -36,6 +37,7 @@ namespace Nighthollow.Interface
     VisualElement _optionsContainer = null!;
     VisualElement _pickedItemsContainer = null!;
     VisualElement _confirmButton = null!;
+    VisualElement _costText = null!;
 
     List<ItemSlot> _optionSlots = null!;
     List<ItemSlot> _pickedItemSlots = null!;
@@ -60,6 +62,7 @@ namespace Nighthollow.Interface
       _optionsContainer = FindElement("Content");
       _pickedItemsContainer = FindElement("Selections");
       _confirmButton = FindElement("ConfirmButton");
+      _costText = FindElement("CostText");
     }
 
     protected override void OnShow(Args argument)
@@ -196,8 +199,43 @@ namespace Nighthollow.Interface
       element.style.visibility = new StyleEnum<Visibility>(Visibility.Hidden);
     }
 
-    public IEnumerable<IDragTarget<ItemImage, ItemSlot>> GetDragTargets(ItemImage element) =>
+    public IEnumerable<ItemSlot> GetDragTargets(ItemImage element) =>
       _optionSlots.Where(slot => slot.Item == null).Concat(
         _pickedItemSlots.Where(slot => slot.Item == null));
+
+    public void OnDragReceived(ItemSlot target, ItemImage element)
+    {
+      var pickCount = _pickedItemSlots.Count(slot => slot.Item != null);
+      foreach (var slot in _pickedItemSlots)
+      {
+        if (pickCount > 0 && slot.Item == null)
+        {
+          slot.SetNullStateImage(Database.Instance.GameData.GetResource(1).ImageAddress);
+        }
+        else
+        {
+          slot.ClearNullStateImage();
+        }
+      }
+
+      if (pickCount > 0)
+      {
+        _confirmButton.RemoveFromClassList("disabled");
+      }
+      else
+      {
+        _confirmButton.AddToClassList("disabled");
+      }
+
+      if (pickCount > 1)
+      {
+        _costText.style.visibility = new StyleEnum<Visibility>(Visibility.Visible);
+        _costText.Query().Children<Label>().First().text = $"Cost: {pickCount - 1}";
+      }
+      else
+      {
+        _costText.style.visibility = new StyleEnum<Visibility>(Visibility.Hidden);
+      }
+    }
   }
 }

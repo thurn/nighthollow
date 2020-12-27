@@ -54,7 +54,9 @@ namespace Nighthollow.Interface
     ///
     /// Targets are currently assumed to be non-overlapping.
     /// </summary>
-    IEnumerable<IDragTarget<TElement, TTarget>> GetDragTargets(TElement element);
+    IEnumerable<TTarget> GetDragTargets(TElement element);
+
+    void OnDragReceived(TTarget target, TElement element);
   }
 
   public abstract class DragInfo
@@ -95,13 +97,15 @@ namespace Nighthollow.Interface
   {
     readonly TElement _element;
     readonly IDragTarget<TElement, TTarget> _originalParentTarget;
-    readonly IReadOnlyList<IDragTarget<TElement, TTarget>> _dragTargets;
+    readonly IDragManager<TElement, TTarget> _dragManager;
+    readonly IReadOnlyList<TTarget> _dragTargets;
 
     public DragInfo(IMouseEvent e, TElement element, IDragManager<TElement, TTarget> dragManager) : base(e, element)
     {
       _element = element;
       _originalParentTarget = element.CurrentDragParent;
-      _dragTargets = dragManager.GetDragTargets(element).ToList();
+      _dragManager = dragManager;
+      _dragTargets = _dragManager.GetDragTargets(element).ToList();
       TargetElements = _dragTargets.Select(t => t.DragTargetElement).ToList();
     }
 
@@ -128,6 +132,7 @@ namespace Nighthollow.Interface
       _element.CurrentDragParent = target.This();
       _originalParentTarget.OnDraggableElementRemoved(_element);
       target.OnDraggableElementReceived(_element);
+      _dragManager.OnDragReceived(target, _element);
     }
 
     public override VisualElement GetTarget(int elementIndex) => _dragTargets[elementIndex].DragTargetElement;

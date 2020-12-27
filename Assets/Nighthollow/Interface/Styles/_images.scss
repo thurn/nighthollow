@@ -99,10 +99,6 @@
   background-image: url('/Assets/ThirdParty/Poneti/AvatarIcons/you.png');
 }
 
-.item.essence-item {
+.essence-item {
   background-image: url('/Assets/ThirdParty/Poneti/Resources/Icons/Essence.png');
-}
-
-.item.disabled {
-  -unity-background-image-tint-color: colors.$disabled-tint;
 }
