@@ -64,7 +64,7 @@ limitations under the License.
             </ui:VisualElement>
             <ui:VisualElement name="CostText" style="visibility: hidden;">
                 <ui:Label text="Cost: 0"/>
-                <ui:VisualElement class="essence-item" />
+                <ui:VisualElement class="essence-item"/>
             </ui:VisualElement>
             <ui:VisualElement name="ConfirmButton" class="button disabled">
                 <ui:Label text="Confirm"/>
@@ -113,5 +113,15 @@ limitations under the License.
                 <ui:Label name="Text" class="dialog-text" text="Text"/>
             </nh:Dialog>
         </ui:VisualElement>
+
+        <nh:DatabaseEditor name="DatabaseEditor" class="editor-window">
+            <ui:VisualElement name="DatabaseTabs" class="editor-tabs"/>
+            <ui:ScrollView class="editor-scroll-view">
+                <ui:VisualElement name="DatabaseContent" class="editor-content"/>
+            </ui:ScrollView>
+            <ui:VisualElement name="DatabaseTypeahead" />
+        </nh:DatabaseEditor>
+
+        <nh:Typeahead name="Typeahead" class="typeahead" style="display: none;"/>;
     </ui:VisualElement>
 </ui:UXML>

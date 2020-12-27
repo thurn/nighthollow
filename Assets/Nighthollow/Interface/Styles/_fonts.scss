@@ -33,3 +33,9 @@ Label.bold {
   white-space: normal;
   color: colors.$primary-text;
 }
+
+@mixin black-text {
+  -unity-font: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');
+  white-space: normal;
+  color: black;
+}

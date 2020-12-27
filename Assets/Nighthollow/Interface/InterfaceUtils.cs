@@ -69,5 +69,10 @@ namespace Nighthollow.Interface
     public static Vector2 ScreenPointToInterfacePoint(Vector2 screenPoint) =>
       // Not sure if there's a less hacky way to convert to GUI coordinates than Screen.height - y...
       new Vector2(screenPoint.x, Screen.height - screenPoint.y);
+
+    public static void After(float seconds, Action action)
+    {
+      DOTween.Sequence().InsertCallback(seconds, () => action()).Play();
+    }
   }
 }

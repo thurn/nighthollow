@@ -52,10 +52,7 @@ namespace Nighthollow.Data
       Func<PercentageValue, T> onPercentage,
       Func<IntRangeValue, T> onIntRange) => onInt(Int);
 
-    public override string ToString()
-    {
-      return Int.ToString();
-    }
+    public override string ToString() => Int.ToString();
   }
 
   [MessagePackObject]
@@ -75,9 +72,6 @@ namespace Nighthollow.Data
       Func<PercentageValue, T> onPercentage,
       Func<IntRangeValue, T> onIntRange) => onBool(Bool);
 
-    public override string ToString()
-    {
-      return Bool.ToString();
-    }
+    public override string ToString() => Bool.ToString();
   }
 }

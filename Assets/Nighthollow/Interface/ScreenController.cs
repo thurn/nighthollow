@@ -17,13 +17,10 @@ using System.Linq;
 using DG.Tweening;
 using Nighthollow.Items;
 using Nighthollow.Utils;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
-
-[assembly: UxmlNamespacePrefix("Nighthollow.Interface", "nh")]
 
 namespace Nighthollow.Interface
 {
@@ -69,6 +66,12 @@ namespace Nighthollow.Interface
     public static ElementKey<RewardChoiceWindow> RewardChoiceWindow =
       new ElementKey<RewardChoiceWindow>("RewardChoiceWindow");
 
+    public static ElementKey<DatabaseEditor> DatabaseEditor =
+      new ElementKey<DatabaseEditor>("DatabaseEditor");
+
+    public static ElementKey<Typeahead> Typeahead =
+      new ElementKey<Typeahead>("Typeahead");
+
     [SerializeField] UIDocument _document = null!;
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
@@ -80,7 +83,9 @@ namespace Nighthollow.Interface
       BlackoutWindow,
       GameOverMessage,
       RewardsWindow,
-      RewardChoiceWindow
+      RewardChoiceWindow,
+      DatabaseEditor,
+      Typeahead
     };
 
     DragInfo? _currentlyDragging;
