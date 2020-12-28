@@ -16,6 +16,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -29,8 +30,13 @@ namespace Nighthollow.Interface
 
     readonly ScreenController _controller;
     readonly Config _config;
-    readonly ScrollView _scrollView;
     readonly VisualElement _content;
+    readonly Dictionary<Vector2Int, EditorCell> _cells;
+    readonly ScrollView _scrollView;
+    Vector2Int? _currentlySelected;
+    Typeahead? _typeahead;
+    VisualElement? _inlineEditor;
+    bool _focusedOnInlineEditor;
 
     public static Config ForTable(Type type, IDictionary table)
     {
@@ -88,20 +94,41 @@ namespace Nighthollow.Interface
 
       Add(_scrollView);
 
-      RenderTable();
+      _cells = RenderTable();
+
+      RegisterCallback<KeyUpEvent>(OnKeyUp);
     }
 
-    void RenderTable()
+    Dictionary<Vector2Int, EditorCell> RenderTable()
     {
+      var result = new Dictionary<Vector2Int, EditorCell>();
+
       foreach (var heading in _config.Headings)
       {
         _content.Add(HeadingCell(heading));
       }
 
-      foreach (var value in _config.Rows.SelectMany(row => row.Values))
+      for (var rowIndex = 0; rowIndex < _config.Rows.Count; ++rowIndex)
       {
-        _content.Add(new EditorCell(_controller, _scrollView, value.Type, DefaultCellWidth, value.Object, value.Name));
+        var row = _config.Rows[rowIndex].Values;
+        for (var columnIndex = 0; columnIndex < row.Count; ++columnIndex)
+        {
+          var value = row[columnIndex];
+          var position = new Vector2Int(columnIndex, rowIndex);
+          var cell = new EditorCell(
+            _controller,
+            this,
+            position,
+            value.Type,
+            DefaultCellWidth,
+            value.Object,
+            value.Name);
+          result[position] = cell;
+          _content.Add(cell);
+        }
       }
+
+      return result;
     }
 
     static VisualElement HeadingCell(string? text)
@@ -119,6 +146,123 @@ namespace Nighthollow.Interface
       cell.Add(label);
       cell.style.width = DefaultCellWidth;
       return cell;
+    }
+
+    void SelectPosition(Vector2Int position)
+    {
+      if (_cells.ContainsKey(position))
+      {
+        HidePopups();
+
+        if (_currentlySelected.HasValue)
+        {
+          _cells[_currentlySelected.Value].Unselect();
+        }
+
+        _cells[position].Select();
+        _currentlySelected = position;
+        _scrollView.ScrollTo(_cells[position]);
+      }
+    }
+
+    public void OnClick(Vector2Int position) => SelectPosition(position);
+
+    void OnKeyUp(KeyUpEvent evt)
+    {
+      if (!_currentlySelected.HasValue)
+      {
+        return;
+      }
+
+      switch (evt.keyCode)
+      {
+        case KeyCode.Tab when !evt.shiftKey:
+        case KeyCode.RightArrow:
+          SelectPosition(_currentlySelected.Value + new Vector2Int(1, 0));
+          break;
+        case KeyCode.Tab when evt.shiftKey:
+        case KeyCode.LeftArrow:
+          SelectPosition(_currentlySelected.Value + new Vector2Int(-1, 0));
+          break;
+        case KeyCode.UpArrow:
+          if (_typeahead != null)
+          {
+            _typeahead.Previous();
+          }
+          else
+          {
+            SelectPosition(_currentlySelected.Value + new Vector2Int(0, -1));
+          }
+
+          break;
+        case KeyCode.DownArrow:
+          if (_typeahead != null)
+          {
+            _typeahead.Next();
+          }
+          else
+          {
+            SelectPosition(_currentlySelected.Value + new Vector2Int(0, 1));
+          }
+
+          break;
+        case KeyCode.Return:
+        case KeyCode.KeypadEnter:
+          _typeahead?.Confirm();
+          FocusOnInlineEditor(_currentlySelected.Value, true);
+          break;
+        case KeyCode.Escape:
+          HidePopups();
+          FocusOnInlineEditor(_currentlySelected.Value, false);
+          break;
+      }
+    }
+
+    void FocusOnInlineEditor(Vector2Int currentlySelected, bool focused)
+    {
+      if (_inlineEditor == null)
+      {
+        return;
+      }
+
+      _focusedOnInlineEditor = focused;
+      if (focused)
+      {
+        _cells[currentlySelected].AddToClassList("focused");
+        _inlineEditor.AddToClassList("focused");
+      }
+      else
+      {
+        _cells[currentlySelected].RemoveFromClassList("focused");
+        _inlineEditor.RemoveFromClassList("focused");
+      }
+    }
+
+    public void HidePopups()
+    {
+      _inlineEditor?.RemoveFromHierarchy();
+      _inlineEditor = null;
+
+      _typeahead?.RemoveFromHierarchy();
+      _typeahead = null;
+    }
+
+    public void ShowTypeahead(TextField field, List<string> suggestions)
+    {
+      HidePopups();
+      _typeahead = new Typeahead(field, suggestions);
+      _typeahead.AddToClassList("typeahead");
+      _controller.Screen.Add(_typeahead);
+    }
+
+    public void ShowInlineEditor(VisualElement anchor, Config config)
+    {
+      _inlineEditor = new VisualElement();
+      _inlineEditor.AddToClassList("inline-editor");
+      _inlineEditor.Add(new ObjectEditor(_controller, config));
+      _inlineEditor.style.top = anchor.worldBound.y + anchor.worldBound.height;
+      _inlineEditor.style.left = anchor.worldBound.x - config.Width + anchor.worldBound.width;
+      _controller.Screen.Add(_inlineEditor);
     }
 
     public sealed class Value
@@ -139,10 +283,10 @@ namespace Nighthollow.Interface
     {
       public Row(IEnumerable<Value> values)
       {
-        Values = values;
+        Values = values.ToList();
       }
 
-      public IEnumerable<Value> Values { get; }
+      public List<Value> Values { get; }
     }
 
     public sealed class Config
@@ -150,14 +294,13 @@ namespace Nighthollow.Interface
       public Config(IEnumerable<string> headings, IEnumerable<Row> rows, int width)
       {
         Headings = headings;
-        Rows = rows;
+        Rows = rows.ToList();
         Width = width;
       }
 
       public IEnumerable<string> Headings { get; }
-      public IEnumerable<Row> Rows { get; }
+      public List<Row> Rows { get; }
       public int Width { get; }
-      public int Height { get; }
     }
   }
 }

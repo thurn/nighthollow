@@ -115,7 +115,5 @@ limitations under the License.
         </ui:VisualElement>
 
         <nh:GameDataEditor name="GameDataEditor" class="editor-window" />
-
-        <nh:Typeahead name="Typeahead" class="typeahead" style="display: none;"/>;
     </ui:VisualElement>
 </ui:UXML>

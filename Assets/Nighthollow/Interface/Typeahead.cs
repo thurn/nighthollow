@@ -20,44 +20,25 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class Typeahead : HideableElement<Typeahead.Args>
+  public sealed class Typeahead : VisualElement
   {
-    public sealed class Args
-    {
-      public Args(TextField field, List<string> suggestions)
-      {
-        Field = field;
-        Suggestions = suggestions;
-      }
-
-      public TextField Field { get; }
-      public List<string> Suggestions { get; }
-    }
-
-    public new sealed class UxmlFactory : UxmlFactory<Typeahead, UxmlTraits>
-    {
-    }
 
     int? _selectedIndex;
-    TextField _field = null!;
-    List<Label> _suggestions = null!;
+    readonly TextField _field;
+    readonly List<Label> _suggestions;
 
-    protected override void Initialize()
-    {
-    }
-
-    protected override void OnShow(Args argument)
+    public Typeahead(TextField field, List<string> suggestions)
     {
       Clear();
       _selectedIndex = null;
 
-      _field = argument.Field;
+      _field = field;
       style.left = _field.worldBound.x;
       style.top = _field.worldBound.y + _field.worldBound.height;
       style.width = _field.worldBound.width;
 
       _suggestions = new List<Label>();
-      foreach (var suggestion in argument.Suggestions)
+      foreach (var suggestion in suggestions)
       {
         var label = new Label {text = suggestion};
         label.AddToClassList("typeahead-option");
@@ -65,7 +46,7 @@ namespace Nighthollow.Interface
         {
           _field.value = suggestion;
           _field.SelectAll();
-          Hide();
+          RemoveFromHierarchy();
         });
         _suggestions.Add(label);
         Add(label);
@@ -91,7 +72,7 @@ namespace Nighthollow.Interface
         _field.value = _suggestions[_selectedIndex.Value].text;
       }
 
-      Hide();
+      RemoveFromHierarchy();
     }
 
     void Highlight(int selected)

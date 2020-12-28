@@ -83,8 +83,18 @@
   }
 
   .editor-cell.selected {
-    border-width: 1px;
+    border-width: 2px;
     border-color: blue;
+  }
+
+  .editor-cell.focused {
+    border-color: green;
+
+    .editor-text-field {
+      * {
+        background-color: rgb(232, 245, 233);
+      }
+    }
   }
 }
 
@@ -116,7 +126,11 @@
 .inline-editor {
   position: absolute;
   background-color: rgb(255, 243, 224);
-  border-width: 2px;
+  border-width: 3px;
   border-color: black;
   border-radius: 8px;
+}
+
+.inline-editor.focused {
+  border-color: blue;
 }

@@ -69,9 +69,6 @@ namespace Nighthollow.Interface
     public static ElementKey<GameDataEditor> GameDataEditor =
       new ElementKey<GameDataEditor>("GameDataEditor");
 
-    public static ElementKey<Typeahead> Typeahead =
-      new ElementKey<Typeahead>("Typeahead");
-
     [SerializeField] UIDocument _document = null!;
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
@@ -85,7 +82,6 @@ namespace Nighthollow.Interface
       RewardsWindow,
       RewardChoiceWindow,
       GameDataEditor,
-      Typeahead
     };
 
     DragInfo? _currentlyDragging;

@@ -27,11 +27,12 @@ namespace Nighthollow.Interface
   public sealed class EditorCell : VisualElement
   {
     readonly ScreenController _controller;
-    readonly ScrollView _scrollView;
+    readonly ObjectEditor _editor;
+    readonly Vector2Int _position;
     readonly TextField _field;
     readonly List<string>? _suggestions;
+    readonly ObjectEditor.Config? _inlineEditorConfig;
     bool _confirmed;
-    ObjectEditor.Config? _inlineEditorConfig;
     VisualElement? _inlineEditor;
 
     static readonly HashSet<Type> KnownPrimitives = new HashSet<Type>
@@ -46,14 +47,16 @@ namespace Nighthollow.Interface
 
     public EditorCell(
       ScreenController controller,
-      ScrollView scrollView,
+      ObjectEditor editor,
+      Vector2Int position,
       Type type,
       int width,
       object? value = null,
       string? name = null)
     {
       _controller = controller;
-      _scrollView = scrollView;
+      _editor = editor;
+      _position = position;
       string? rendered;
       bool canModify;
       AddToClassList("editor-cell");
@@ -101,7 +104,8 @@ namespace Nighthollow.Interface
         doubleClickSelectsWord = true,
         tripleClickSelectsLine = true,
         isDelayed = true,
-        isReadOnly = !canModify
+        isReadOnly = !canModify,
+        focusable = false
       };
 
       if (!canModify)
@@ -117,9 +121,44 @@ namespace Nighthollow.Interface
       _field.AddToClassList("editor-text-field");
       Add(_field);
 
-      _field.RegisterCallback<FocusInEvent>(OnFocusIn);
-      _field.RegisterCallback<FocusOutEvent>(OnFocusOut);
-      _field.RegisterCallback<KeyDownEvent>(OnKeyDown);
+      _field.RegisterCallback<ClickEvent>(OnClick);
+    }
+
+    void OnClick(ClickEvent evt)
+    {
+      _editor.OnClick(_position);
+    }
+
+    public void Select()
+    {
+      _field.focusable = true;
+      _field.Focus();
+      AddToClassList("selected");
+
+      if (_suggestions != null)
+      {
+        _editor.ShowTypeahead(_field, _suggestions);
+      }
+
+      if (_inlineEditorConfig != null)
+      {
+        _editor.ShowInlineEditor(this, _inlineEditorConfig);
+      }
+
+      _field.SelectAll();
+
+      // Hack: Unity's SelectAll() doesn't always work for some reason, this seems to help
+      InterfaceUtils.After(0.01f, () =>
+      {
+        _field.SelectRange(0, 1);
+        _field.SelectAll();
+      });
+    }
+
+    public void Unselect()
+    {
+      _field.focusable = false;
+      RemoveFromClassList("selected");
     }
 
     void OnKeyDown(KeyDownEvent evt)
@@ -129,14 +168,14 @@ namespace Nighthollow.Interface
         switch (evt.keyCode)
         {
           case KeyCode.DownArrow:
-            _controller.Get(ScreenController.Typeahead).Next();
+            // _controller.Get(ScreenController.Typeahead).Next();
             break;
           case KeyCode.UpArrow:
-            _controller.Get(ScreenController.Typeahead).Previous();
+            // _controller.Get(ScreenController.Typeahead).Previous();
             break;
           case KeyCode.Return:
             _confirmed = true;
-            _controller.Get(ScreenController.Typeahead).Confirm();
+            // _controller.Get(ScreenController.Typeahead).Confirm();
             break;
         }
       }
@@ -146,14 +185,13 @@ namespace Nighthollow.Interface
     {
       if (_suggestions != null && !_confirmed)
       {
-        _controller.Get(ScreenController.Typeahead).Show(new Typeahead.Args(_field, _suggestions));
+        // _controller.Get(ScreenController.Typeahead).Show(new Typeahead.Args(_field, _suggestions));
       }
 
       // Focus is received after picking an option from a typeahead with the enter key, but we don't want to
       // immediately show the typeahead *again*, so we ignore one focus event after confirmation.
       _confirmed = false;
 
-      _scrollView.ScrollTo(this);
       AddToClassList("selected");
 
       if (_inlineEditorConfig != null)
@@ -180,7 +218,7 @@ namespace Nighthollow.Interface
       {
         // Hack: OnFocusOut fired when a typeahead option is clicked as well as on focus change. We look at
         // whether there is a related target to decide whether to hide the typeahead or let it process the event.
-        _controller.Get(ScreenController.Typeahead).Hide();
+        // _controller.Get(ScreenController.Typeahead).Hide();
         RemoveFromClassList("selected");
       }
     }
