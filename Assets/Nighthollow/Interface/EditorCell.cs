@@ -84,7 +84,7 @@ namespace Nighthollow.Interface
           }
         }
       }
-      else if (typeof(IDictionary).IsAssignableFrom(type))
+      else if (typeof(IDictionary).IsAssignableFrom(type) || type.Name.Contains("IReadOnlyDictionary"))
       {
         rendered = DictionaryPreview(value as IDictionary);
         canModify = false;

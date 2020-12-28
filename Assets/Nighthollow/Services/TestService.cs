@@ -14,34 +14,22 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Generated;
-using Nighthollow.Interface;
 using Nighthollow.Stats;
 using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Components
+namespace Nighthollow.Services
 {
-  public sealed class RewardsScreenInitializer : MonoBehaviour
+  public sealed class TestService : MonoBehaviour
   {
-    [SerializeField] ScreenController _screenController = null!;
-
     void Start()
     {
-      // Database.OnReady(data =>
-      // {
-      _screenController.Initialize();
-      // _screenController.Get(ScreenController.RewardsWindow)
-      //   .Show(new RewardsWindow.Args(new List<CreatureItemData>()));
-      //   var list = data.GameData.GetStaticCardList(StaticCardList.StartingDeck);
-      //   var result = list.Take<IItemData>(3).Prepend(Database.Instance.GameData.GetResource(1));
-      //   _screenController.Get(ScreenController.RewardChoiceWindow)
-      //     .Show(new RewardChoiceWindow.Args(result.ToList()));
-      // });
-
-      _screenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(TestData()));
+      var gameData = TestData();
+      var bin = MessagePackSerializer.Serialize(gameData);
     }
 
     GameData TestData()

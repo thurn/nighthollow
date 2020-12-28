@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using MessagePack;
 
@@ -23,19 +24,19 @@ namespace Nighthollow.Data
   public sealed class GameData
   {
     public GameData(
-      ImmutableDictionary<int, CreatureTypeData>? creatureTypes = null,
-      ImmutableDictionary<int, AffixTypeData>? affixTypes = null,
-      ImmutableDictionary<int, SkillTypeData>? skillTypes = null)
+      IReadOnlyDictionary<int, CreatureTypeData>? creatureTypes = null,
+      IReadOnlyDictionary<int, AffixTypeData>? affixTypes = null,
+      IReadOnlyDictionary<int, SkillTypeData>? skillTypes = null)
     {
-      CreatureTypes = creatureTypes ?? ImmutableDictionary<int, CreatureTypeData>.Empty;
-      AffixTypes = affixTypes ?? ImmutableDictionary<int, AffixTypeData>.Empty;
-      SkillTypes = skillTypes ?? ImmutableDictionary<int, SkillTypeData>.Empty;
+      CreatureTypes = creatureTypes?.ToImmutableDictionary() ?? ImmutableDictionary<int, CreatureTypeData>.Empty;
+      AffixTypes = affixTypes?.ToImmutableDictionary() ?? ImmutableDictionary<int, AffixTypeData>.Empty;
+      SkillTypes = skillTypes?.ToImmutableDictionary() ?? ImmutableDictionary<int, SkillTypeData>.Empty;
     }
 
-    [Key(0)] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
+    [Key(0)] public IReadOnlyDictionary<int, CreatureTypeData> CreatureTypes { get; }
 
-    [Key(1)] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
+    [Key(1)] public IReadOnlyDictionary<int, AffixTypeData> AffixTypes { get; }
 
-    [Key(2)] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
+    [Key(2)] public IReadOnlyDictionary<int, SkillTypeData> SkillTypes { get; }
   }
 }

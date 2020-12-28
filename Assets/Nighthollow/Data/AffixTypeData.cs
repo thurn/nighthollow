@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using MessagePack;
+using Nighthollow.Generated;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -27,16 +29,14 @@ namespace Nighthollow.Data
       int minLevel,
       int weight,
       IntRangeValue manaCost,
-      int affixPoolId,
-      ImmutableList<ModifierTypeData> modifiers,
+      IReadOnlyList<ModifierTypeData>? modifiers = null,
       bool isTargeted = false,
       School? influenceType = null)
     {
       MinLevel = minLevel;
       Weight = weight;
       ManaCost = manaCost;
-      AffixPoolId = affixPoolId;
-      Modifiers = modifiers;
+      Modifiers = modifiers?.ToImmutableList() ?? ImmutableList<ModifierTypeData>.Empty;
       IsTargeted = isTargeted;
       InfluenceType = influenceType;
     }
@@ -44,9 +44,8 @@ namespace Nighthollow.Data
     [Key(0)] public int MinLevel { get; }
     [Key(1)] public int Weight { get; }
     [Key(2)] public IntRangeValue ManaCost { get; }
-    [Key(3)] public int AffixPoolId { get; }
-    [Key(4)] public ImmutableList<ModifierTypeData> Modifiers { get; }
-    [Key(5)] public bool IsTargeted { get; }
-    [Key(6)] public School? InfluenceType { get; }
+    [Key(3)] public IReadOnlyList<ModifierTypeData> Modifiers { get; }
+    [Key(4)] public bool IsTargeted { get; }
+    [Key(5)] public School? InfluenceType { get; }
   }
 }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using MessagePack;
+using Nighthollow.Generated;
 
 #nullable enable
 
