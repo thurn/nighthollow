@@ -24,7 +24,6 @@ namespace Nighthollow.Data
   public sealed class AffixTypeData
   {
     public AffixTypeData(
-      int id,
       int minLevel,
       int weight,
       IntRangeValue manaCost,
@@ -33,7 +32,6 @@ namespace Nighthollow.Data
       bool isTargeted = false,
       School? influenceType = null)
     {
-      Id = id;
       MinLevel = minLevel;
       Weight = weight;
       ManaCost = manaCost;
@@ -43,13 +41,12 @@ namespace Nighthollow.Data
       InfluenceType = influenceType;
     }
 
-    [Key(0)] public int Id { get; }
-    [Key(1)] public int MinLevel { get; }
-    [Key(2)] public int Weight { get; }
-    [Key(3)] public IntRangeValue ManaCost { get; }
-    [Key(4)] public int AffixPoolId { get; }
-    [Key(5)] public ImmutableList<ModifierTypeData> Modifiers { get; }
-    [Key(6)] public bool IsTargeted { get; }
-    [Key(7)] public School? InfluenceType { get; }
+    [Key(0)] public int MinLevel { get; }
+    [Key(1)] public int Weight { get; }
+    [Key(2)] public IntRangeValue ManaCost { get; }
+    [Key(3)] public int AffixPoolId { get; }
+    [Key(4)] public ImmutableList<ModifierTypeData> Modifiers { get; }
+    [Key(5)] public bool IsTargeted { get; }
+    [Key(6)] public School? InfluenceType { get; }
   }
 }

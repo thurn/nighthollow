@@ -24,7 +24,6 @@ namespace Nighthollow.Data
   public sealed class CreatureTypeData
   {
     public CreatureTypeData(
-      int id,
       string name,
       string prefabAddress,
       PlayerName owner,
@@ -37,7 +36,6 @@ namespace Nighthollow.Data
       SkillTypeData? implicitSkill = null,
       bool isManaCreature = false)
     {
-      Id = id;
       Name = name;
       PrefabAddress = prefabAddress;
       Owner = owner;
@@ -51,17 +49,16 @@ namespace Nighthollow.Data
       IsManaCreature = isManaCreature;
     }
 
-    [Key(0)] public int Id { get; }
-    [Key(1)] public string Name { get; }
-    [Key(2)] public string PrefabAddress { get; }
-    [Key(3)] public PlayerName Owner { get; }
-    [Key(4)] public IntRangeValue Health { get; }
-    [Key(5)] public ImmutableDictionary<SkillAnimationNumber, SkillAnimationType> SkillAnimations { get; }
-    [Key(6)] public string? ImageAddress { get; }
-    [Key(7)] public int BaseManaCost { get; }
-    [Key(8)] public int Speed { get; }
-    [Key(9)] public AffixTypeData? ImplicitAffix { get; }
-    [Key(10)] public SkillTypeData? ImplicitSkill { get; }
-    [Key(11)] public bool IsManaCreature { get; }
+    [Key(0)] public string Name { get; }
+    [Key(1)] public string PrefabAddress { get; }
+    [Key(2)] public PlayerName Owner { get; }
+    [Key(3)] public IntRangeValue Health { get; }
+    [Key(4)] public ImmutableDictionary<SkillAnimationNumber, SkillAnimationType> SkillAnimations { get; }
+    [Key(5)] public string? ImageAddress { get; }
+    [Key(6)] public int BaseManaCost { get; }
+    [Key(7)] public int Speed { get; }
+    [Key(8)] public AffixTypeData? ImplicitAffix { get; }
+    [Key(9)] public SkillTypeData? ImplicitSkill { get; }
+    [Key(10)] public bool IsManaCreature { get; }
   }
 }

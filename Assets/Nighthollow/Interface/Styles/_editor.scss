@@ -74,12 +74,6 @@
         background-color: white;
       }
     }
-
-    .editor-text-field.read-only {
-      * {
-        background-color: rgb(228, 228, 228);
-      }
-    }
   }
 
   .editor-cell.selected {
@@ -89,12 +83,6 @@
 
   .editor-cell.focused {
     border-color: green;
-
-    .editor-text-field {
-      * {
-        background-color: rgb(232, 245, 233);
-      }
-    }
   }
 }
 

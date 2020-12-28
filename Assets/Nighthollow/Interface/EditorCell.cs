@@ -32,8 +32,6 @@ namespace Nighthollow.Interface
     readonly TextField _field;
     readonly List<string>? _suggestions;
     readonly ObjectEditor.Config? _inlineEditorConfig;
-    bool _confirmed;
-    VisualElement? _inlineEditor;
 
     static readonly HashSet<Type> KnownPrimitives = new HashSet<Type>
     {
@@ -108,11 +106,6 @@ namespace Nighthollow.Interface
         focusable = false
       };
 
-      if (!canModify)
-      {
-        _field.AddToClassList("read-only");
-      }
-
       if (rendered != null)
       {
         _field.value = rendered;
@@ -129,10 +122,20 @@ namespace Nighthollow.Interface
       _editor.OnClick(_position);
     }
 
+    public bool Focusable
+    {
+      set
+      {
+        _field.focusable = value;
+        if (value)
+        {
+          _field.Focus();
+        }
+      }
+    }
+
     public void Select()
     {
-      _field.focusable = true;
-      _field.Focus();
       AddToClassList("selected");
 
       if (_suggestions != null)
@@ -144,6 +147,9 @@ namespace Nighthollow.Interface
       {
         _editor.ShowInlineEditor(this, _inlineEditorConfig);
       }
+
+      _field.focusable = true;
+      _field.Focus();
 
       _field.SelectAll();
 
@@ -159,68 +165,6 @@ namespace Nighthollow.Interface
     {
       _field.focusable = false;
       RemoveFromClassList("selected");
-    }
-
-    void OnKeyDown(KeyDownEvent evt)
-    {
-      if (_suggestions != null)
-      {
-        switch (evt.keyCode)
-        {
-          case KeyCode.DownArrow:
-            // _controller.Get(ScreenController.Typeahead).Next();
-            break;
-          case KeyCode.UpArrow:
-            // _controller.Get(ScreenController.Typeahead).Previous();
-            break;
-          case KeyCode.Return:
-            _confirmed = true;
-            // _controller.Get(ScreenController.Typeahead).Confirm();
-            break;
-        }
-      }
-    }
-
-    void OnFocusIn(FocusInEvent evt)
-    {
-      if (_suggestions != null && !_confirmed)
-      {
-        // _controller.Get(ScreenController.Typeahead).Show(new Typeahead.Args(_field, _suggestions));
-      }
-
-      // Focus is received after picking an option from a typeahead with the enter key, but we don't want to
-      // immediately show the typeahead *again*, so we ignore one focus event after confirmation.
-      _confirmed = false;
-
-      AddToClassList("selected");
-
-      if (_inlineEditorConfig != null)
-      {
-        _inlineEditor = new VisualElement();
-        _inlineEditor.AddToClassList("inline-editor");
-        _inlineEditor.Add(new ObjectEditor(_controller, _inlineEditorConfig));
-        _inlineEditor.style.top = worldBound.y + worldBound.height;
-        _inlineEditor.style.left = worldBound.x - _inlineEditorConfig.Width + worldBound.width;
-        _controller.Screen.Add(_inlineEditor);
-      }
-
-      // Hack: Unity's text input sometimes doesn't select the text properly on focus, this fixes it for some reason
-      InterfaceUtils.After(0.01f, () =>
-      {
-        _field.SelectRange(0, 1);
-        _field.SelectAll();
-      });
-    }
-
-    void OnFocusOut(FocusOutEvent evt)
-    {
-      if (evt.relatedTarget != null)
-      {
-        // Hack: OnFocusOut fired when a typeahead option is clicked as well as on focus change. We look at
-        // whether there is a related target to decide whether to hide the typeahead or let it process the event.
-        // _controller.Get(ScreenController.Typeahead).Hide();
-        RemoveFromClassList("selected");
-      }
     }
 
     static string DictionaryPreview(IDictionary? dictionary)

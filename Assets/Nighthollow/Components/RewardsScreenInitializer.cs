@@ -52,7 +52,6 @@ namespace Nighthollow.Components
     {
       var creatures = ImmutableDictionary.CreateBuilder<int, CreatureTypeData>();
       var testCreature = new CreatureTypeData(
-        id: 1,
         name: "Test",
         prefabAddress: "/My/Address",
         owner: PlayerName.User,
@@ -61,7 +60,6 @@ namespace Nighthollow.Components
           {{SkillAnimationNumber.Skill1, SkillAnimationType.MeleeSkill}}.ToImmutableDictionary(),
         baseManaCost: 50,
         implicitAffix: new AffixTypeData(
-          id: 2,
           minLevel: 1,
           weight: 1,
           manaCost: IntRangeValue.Zero,
@@ -74,7 +72,6 @@ namespace Nighthollow.Components
               valueHigh: new IntValueData(75)))));
 
       var testCreature2 = new CreatureTypeData(
-        id: 2,
         name: "Test Two",
         prefabAddress: "/My/Address/Two",
         owner: PlayerName.Enemy,
@@ -83,7 +80,6 @@ namespace Nighthollow.Components
           {{SkillAnimationNumber.Skill3, SkillAnimationType.CastSkill}}.ToImmutableDictionary(),
         baseManaCost: 100,
         implicitAffix: new AffixTypeData(
-          id: 2,
           minLevel: 1,
           weight: 1,
           manaCost: IntRangeValue.Zero,
@@ -95,8 +91,8 @@ namespace Nighthollow.Components
               valueLow: new IntValueData(50),
               valueHigh: new IntValueData(75)))));
 
-      creatures[testCreature.Id] = testCreature;
-      creatures[testCreature2.Id] = testCreature2;
+      creatures[1] = testCreature;
+      creatures[2] = testCreature2;
 
       return new GameData(
         creatureTypes: creatures.ToImmutable(),

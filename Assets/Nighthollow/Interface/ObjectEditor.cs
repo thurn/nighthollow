@@ -33,24 +33,31 @@ namespace Nighthollow.Interface
     readonly VisualElement _content;
     readonly Dictionary<Vector2Int, EditorCell> _cells;
     readonly ScrollView _scrollView;
+    readonly ObjectEditor? _parentEditor;
+    readonly int _width;
     Vector2Int? _currentlySelected;
     Typeahead? _typeahead;
-    VisualElement? _inlineEditor;
-    bool _focusedOnInlineEditor;
+    VisualElement? _inlineEditorContainer;
+    bool _exclusiveFocused;
+    ObjectEditor? _inlineEditor;
 
     public static Config ForTable(Type type, IDictionary table)
     {
-      var rows = from object? rowId in table.Keys
-        select type.GetProperties()
-          .Select(property => new Value(property.PropertyType, property.GetValue(table[rowId]), property.Name))
-          .ToList()
-        into valueList
-        select new Row(valueList);
+      var rows = new List<Row>();
+      foreach (var rowId in table.Keys)
+      {
+        rows.Add(new Row(
+          type.GetProperties()
+            .Select(property => new Value(
+              property.PropertyType,
+              property.GetValue(table[rowId]),
+              property.Name))
+            .Prepend(new Value(rowId.GetType(), rowId, "Id"))));
+      }
 
       return new Config(
-        type.GetProperties().Select(p => p.Name),
-        rows,
-        width: (2 * ContentPadding) + (DefaultCellWidth * type.GetProperties().Length)
+        type.GetProperties().Select(p => p.Name).Prepend("ID"),
+        rows
       );
     }
 
@@ -67,21 +74,24 @@ namespace Nighthollow.Interface
           }));
       }
 
-      return new Config(
-        new List<string> {"Key", "Value"},
-        rows,
-        width: (2 * ContentPadding) + (DefaultCellWidth * 2));
+      return new Config(new List<string> {"Key", "Value"}, rows);
     }
 
-    public ObjectEditor(ScreenController controller, Config config, int? height = null)
+    public ObjectEditor(
+      ScreenController controller,
+      Config config,
+      int? height = null,
+      ObjectEditor? parentEditor = null)
     {
       _controller = controller;
       _config = config;
+      _parentEditor = parentEditor;
 
       _content = new VisualElement();
       _content.AddToClassList("editor-content");
 
-      _content.style.width = config.Width;
+      _width = (2 * ContentPadding) + (DefaultCellWidth * _config.Headings.Count);
+      _content.style.width = _width;
 
       if (height != null)
       {
@@ -95,7 +105,6 @@ namespace Nighthollow.Interface
       Add(_scrollView);
 
       _cells = RenderTable();
-
       RegisterCallback<KeyUpEvent>(OnKeyUp);
     }
 
@@ -148,9 +157,9 @@ namespace Nighthollow.Interface
       return cell;
     }
 
-    void SelectPosition(Vector2Int position)
+    void SelectPosition(Vector2Int? position)
     {
-      if (_cells.ContainsKey(position))
+      if (position.HasValue && _cells.ContainsKey(position.Value))
       {
         HidePopups();
 
@@ -159,9 +168,9 @@ namespace Nighthollow.Interface
           _cells[_currentlySelected.Value].Unselect();
         }
 
-        _cells[position].Select();
+        _cells[position.Value].Select();
         _currentlySelected = position;
-        _scrollView.ScrollTo(_cells[position]);
+        _scrollView.ScrollTo(_cells[position.Value]);
       }
     }
 
@@ -171,6 +180,24 @@ namespace Nighthollow.Interface
     {
       if (!_currentlySelected.HasValue)
       {
+        return;
+      }
+
+      if (evt.keyCode == KeyCode.Escape)
+      {
+        ExclusiveFocus(false);
+        HidePopups();
+
+        if (_parentEditor != null)
+        {
+          _parentEditor.ExclusiveFocus(false);
+          _parentEditor.HidePopups();
+        }
+      }
+
+      if (_exclusiveFocused)
+      {
+        _inlineEditor?.OnKeyUp(evt);
         return;
       }
 
@@ -209,38 +236,38 @@ namespace Nighthollow.Interface
         case KeyCode.Return:
         case KeyCode.KeypadEnter:
           _typeahead?.Confirm();
-          FocusOnInlineEditor(_currentlySelected.Value, true);
-          break;
-        case KeyCode.Escape:
-          HidePopups();
-          FocusOnInlineEditor(_currentlySelected.Value, false);
+          ExclusiveFocus(true);
           break;
       }
     }
 
-    void FocusOnInlineEditor(Vector2Int currentlySelected, bool focused)
+    void ExclusiveFocus(bool focused)
     {
-      if (_inlineEditor == null)
+      if (_inlineEditorContainer == null || _inlineEditor == null || _currentlySelected == null)
       {
         return;
       }
 
-      _focusedOnInlineEditor = focused;
+      _exclusiveFocused = focused;
+
       if (focused)
       {
-        _cells[currentlySelected].AddToClassList("focused");
-        _inlineEditor.AddToClassList("focused");
+        _cells[_currentlySelected.Value].Focusable = false;
+        _cells[_currentlySelected.Value].AddToClassList("focused");
+        _inlineEditorContainer.AddToClassList("focused");
+        _inlineEditor.SelectPosition(new Vector2Int(0, 0));
       }
       else
       {
-        _cells[currentlySelected].RemoveFromClassList("focused");
-        _inlineEditor.RemoveFromClassList("focused");
+        _cells[_currentlySelected.Value].Focusable = true;
+        _cells[_currentlySelected.Value].RemoveFromClassList("focused");
       }
     }
 
     public void HidePopups()
     {
-      _inlineEditor?.RemoveFromHierarchy();
+      _inlineEditorContainer?.RemoveFromHierarchy();
+      _inlineEditorContainer = null;
       _inlineEditor = null;
 
       _typeahead?.RemoveFromHierarchy();
@@ -257,12 +284,13 @@ namespace Nighthollow.Interface
 
     public void ShowInlineEditor(VisualElement anchor, Config config)
     {
-      _inlineEditor = new VisualElement();
-      _inlineEditor.AddToClassList("inline-editor");
-      _inlineEditor.Add(new ObjectEditor(_controller, config));
-      _inlineEditor.style.top = anchor.worldBound.y + anchor.worldBound.height;
-      _inlineEditor.style.left = anchor.worldBound.x - config.Width + anchor.worldBound.width;
-      _controller.Screen.Add(_inlineEditor);
+      _inlineEditor = new ObjectEditor(_controller, config, parentEditor: this);
+      _inlineEditorContainer = new VisualElement();
+      _inlineEditorContainer.AddToClassList("inline-editor");
+      _inlineEditorContainer.Add(_inlineEditor);
+      _inlineEditorContainer.style.top = anchor.worldBound.y + anchor.worldBound.height;
+      _inlineEditorContainer.style.left = anchor.worldBound.x - _inlineEditor._width + anchor.worldBound.width;
+      _controller.Screen.Add(_inlineEditorContainer);
     }
 
     public sealed class Value
@@ -291,16 +319,14 @@ namespace Nighthollow.Interface
 
     public sealed class Config
     {
-      public Config(IEnumerable<string> headings, IEnumerable<Row> rows, int width)
+      public Config(IEnumerable<string> headings, IEnumerable<Row> rows)
       {
-        Headings = headings;
+        Headings = headings.ToList();
         Rows = rows.ToList();
-        Width = width;
       }
 
-      public IEnumerable<string> Headings { get; }
+      public List<string> Headings { get; }
       public List<Row> Rows { get; }
-      public int Width { get; }
     }
   }
 }

@@ -22,7 +22,6 @@ namespace Nighthollow.Data
   public sealed class SkillTypeData
   {
     public SkillTypeData(
-      int id,
       string name,
       SkillAnimationType skillAnimationType,
       SkillType skillType,
@@ -33,7 +32,6 @@ namespace Nighthollow.Data
       bool canCrit = false,
       bool canStun = false)
     {
-      Id = id;
       Name = name;
       SkillAnimationType = skillAnimationType;
       SkillType = skillType;
@@ -45,15 +43,14 @@ namespace Nighthollow.Data
       CanStun = canStun;
     }
 
-    [Key(0)] public int Id { get; }
-    [Key(1)] public string Name { get; }
-    [Key(2)] public SkillAnimationType SkillAnimationType { get; }
-    [Key(3)] public SkillType SkillType { get; }
-    [Key(4)] public AffixTypeData? ImplicitAffix { get; }
-    [Key(5)] public string? Address { get; }
-    [Key(6)] public int? ProjectileSpeed { get; }
-    [Key(7)] public bool UsesAccuracy { get; }
-    [Key(8)] public bool CanCrit { get; }
-    [Key(9)] public bool CanStun { get; }
+    [Key(0)] public string Name { get; }
+    [Key(1)] public SkillAnimationType SkillAnimationType { get; }
+    [Key(2)] public SkillType SkillType { get; }
+    [Key(3)] public AffixTypeData? ImplicitAffix { get; }
+    [Key(4)] public string? Address { get; }
+    [Key(5)] public int? ProjectileSpeed { get; }
+    [Key(6)] public bool UsesAccuracy { get; }
+    [Key(7)] public bool CanCrit { get; }
+    [Key(8)] public bool CanStun { get; }
   }
 }
