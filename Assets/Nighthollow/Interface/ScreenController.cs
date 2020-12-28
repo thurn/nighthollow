@@ -66,8 +66,8 @@ namespace Nighthollow.Interface
     public static ElementKey<RewardChoiceWindow> RewardChoiceWindow =
       new ElementKey<RewardChoiceWindow>("RewardChoiceWindow");
 
-    public static ElementKey<DatabaseEditor> DatabaseEditor =
-      new ElementKey<DatabaseEditor>("DatabaseEditor");
+    public static ElementKey<GameDataEditor> GameDataEditor =
+      new ElementKey<GameDataEditor>("GameDataEditor");
 
     public static ElementKey<Typeahead> Typeahead =
       new ElementKey<Typeahead>("Typeahead");
@@ -84,7 +84,7 @@ namespace Nighthollow.Interface
       GameOverMessage,
       RewardsWindow,
       RewardChoiceWindow,
-      DatabaseEditor,
+      GameDataEditor,
       Typeahead
     };
 

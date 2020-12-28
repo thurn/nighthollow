@@ -114,12 +114,7 @@ limitations under the License.
             </nh:Dialog>
         </ui:VisualElement>
 
-        <nh:DatabaseEditor name="DatabaseEditor" class="editor-window">
-            <ui:VisualElement name="DatabaseTabs" class="editor-tabs"/>
-            <ui:ScrollView name="DatabaseScrollView" class="editor-scroll-view">
-                <ui:VisualElement name="DatabaseContent" class="editor-content"/>
-            </ui:ScrollView>
-        </nh:DatabaseEditor>
+        <nh:GameDataEditor name="GameDataEditor" class="editor-window" />
 
         <nh:Typeahead name="Typeahead" class="typeahead" style="display: none;"/>;
     </ui:VisualElement>

@@ -41,7 +41,7 @@ namespace Nighthollow.World
       _screenController.Show(ScreenController.AdvisorBar);
       _worldTutorial.Initialize();
 
-      _screenController.Get(ScreenController.DatabaseEditor).Show(new DatabaseEditor.Args(TestData()));
+      _screenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(TestData()));
     }
 
     GameData TestData()

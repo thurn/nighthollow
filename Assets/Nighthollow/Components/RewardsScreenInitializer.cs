@@ -45,7 +45,7 @@ namespace Nighthollow.Components
       //     .Show(new RewardChoiceWindow.Args(result.ToList()));
       // });
 
-      _screenController.Get(ScreenController.DatabaseEditor).Show(new DatabaseEditor.Args(TestData()));
+      _screenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(TestData()));
     }
 
     GameData TestData()

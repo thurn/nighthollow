@@ -27,10 +27,12 @@ namespace Nighthollow.Interface
   public sealed class EditorCell : VisualElement
   {
     readonly ScreenController _controller;
-    readonly DatabaseEditor _editor;
+    readonly ScrollView _scrollView;
     readonly TextField _field;
     readonly List<string>? _suggestions;
     bool _confirmed;
+    ObjectEditor.Config? _inlineEditorConfig;
+    VisualElement? _inlineEditor;
 
     static readonly HashSet<Type> KnownPrimitives = new HashSet<Type>
     {
@@ -42,15 +44,22 @@ namespace Nighthollow.Interface
       typeof(PercentageValue)
     };
 
-    public EditorCell(ScreenController controller, DatabaseEditor editor, string name, Type type, object? value)
+    public EditorCell(
+      ScreenController controller,
+      ScrollView scrollView,
+      Type type,
+      int width,
+      object? value = null,
+      string? name = null)
     {
       _controller = controller;
-      _editor = editor;
+      _scrollView = scrollView;
       string? rendered;
       bool canModify;
       AddToClassList("editor-cell");
+      style.width = width;
 
-      if (name.Equals("Id"))
+      if (name != null && name.Equals("Id"))
       {
         rendered = value?.ToString();
         canModify = false;
@@ -78,6 +87,7 @@ namespace Nighthollow.Interface
       {
         rendered = DictionaryPreview(value as IDictionary);
         canModify = false;
+        _inlineEditorConfig = ObjectEditor.ForPrimitiveDictionary(type, value as IDictionary);
       }
       else
       {
@@ -91,7 +101,7 @@ namespace Nighthollow.Interface
         doubleClickSelectsWord = true,
         tripleClickSelectsLine = true,
         isDelayed = true,
-        isReadOnly = !canModify,
+        isReadOnly = !canModify
       };
 
       if (!canModify)
@@ -143,9 +153,18 @@ namespace Nighthollow.Interface
       // immediately show the typeahead *again*, so we ignore one focus event after confirmation.
       _confirmed = false;
 
-      var scrollView = _editor.ScrollView;
-      scrollView.ScrollTo(this);
+      _scrollView.ScrollTo(this);
       AddToClassList("selected");
+
+      if (_inlineEditorConfig != null)
+      {
+        _inlineEditor = new VisualElement();
+        _inlineEditor.AddToClassList("inline-editor");
+        _inlineEditor.Add(new ObjectEditor(_controller, _inlineEditorConfig));
+        _inlineEditor.style.top = worldBound.y + worldBound.height;
+        _inlineEditor.style.left = worldBound.x - _inlineEditorConfig.Width + worldBound.width;
+        _controller.Screen.Add(_inlineEditor);
+      }
 
       // Hack: Unity's text input sometimes doesn't select the text properly on focus, this fixes it for some reason
       InterfaceUtils.After(0.01f, () =>
@@ -162,7 +181,6 @@ namespace Nighthollow.Interface
         // Hack: OnFocusOut fired when a typeahead option is clicked as well as on focus change. We look at
         // whether there is a related target to decide whether to hide the typeahead or let it process the event.
         _controller.Get(ScreenController.Typeahead).Hide();
-
         RemoveFromClassList("selected");
       }
     }
