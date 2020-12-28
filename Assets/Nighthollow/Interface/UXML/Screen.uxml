@@ -116,10 +116,9 @@ limitations under the License.
 
         <nh:DatabaseEditor name="DatabaseEditor" class="editor-window">
             <ui:VisualElement name="DatabaseTabs" class="editor-tabs"/>
-            <ui:ScrollView class="editor-scroll-view">
+            <ui:ScrollView name="DatabaseScrollView" class="editor-scroll-view">
                 <ui:VisualElement name="DatabaseContent" class="editor-content"/>
             </ui:ScrollView>
-            <ui:VisualElement name="DatabaseTypeahead" />
         </nh:DatabaseEditor>
 
         <nh:Typeahead name="Typeahead" class="typeahead" style="display: none;"/>;

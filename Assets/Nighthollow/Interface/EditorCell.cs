@@ -15,9 +15,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using UnityEditorInternal;
+using Nighthollow.Stats;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -28,13 +27,25 @@ namespace Nighthollow.Interface
   public sealed class EditorCell : VisualElement
   {
     readonly ScreenController _controller;
+    readonly DatabaseEditor _editor;
     readonly TextField _field;
-    readonly List<string>? _suggestions = null;
+    readonly List<string>? _suggestions;
     bool _confirmed;
 
-    public EditorCell(ScreenController controller, string name, Type type, object? value)
+    static readonly HashSet<Type> KnownPrimitives = new HashSet<Type>
+    {
+      typeof(int),
+      typeof(string),
+      typeof(bool),
+      typeof(IntRangeValue),
+      typeof(DurationValue),
+      typeof(PercentageValue)
+    };
+
+    public EditorCell(ScreenController controller, DatabaseEditor editor, string name, Type type, object? value)
     {
       _controller = controller;
+      _editor = editor;
       string? rendered;
       bool canModify;
       AddToClassList("editor-cell");
@@ -44,12 +55,7 @@ namespace Nighthollow.Interface
         rendered = value?.ToString();
         canModify = false;
       }
-      else if (typeof(string).IsAssignableFrom(type))
-      {
-        rendered = value?.ToString();
-        canModify = true;
-      }
-      else if (typeof(int).IsAssignableFrom(type))
+      else if (KnownPrimitives.Contains(type))
       {
         rendered = value?.ToString();
         canModify = true;
@@ -87,6 +93,11 @@ namespace Nighthollow.Interface
         isDelayed = true,
         isReadOnly = !canModify,
       };
+
+      if (!canModify)
+      {
+        _field.AddToClassList("read-only");
+      }
 
       if (rendered != null)
       {
@@ -131,15 +142,28 @@ namespace Nighthollow.Interface
       // Focus is received after picking an option from a typeahead with the enter key, but we don't want to
       // immediately show the typeahead *again*, so we ignore one focus event after confirmation.
       _confirmed = false;
+
+      var scrollView = _editor.ScrollView;
+      scrollView.ScrollTo(this);
+      AddToClassList("selected");
+
+      // Hack: Unity's text input sometimes doesn't select the text properly on focus, this fixes it for some reason
+      InterfaceUtils.After(0.01f, () =>
+      {
+        _field.SelectRange(0, 1);
+        _field.SelectAll();
+      });
     }
 
     void OnFocusOut(FocusOutEvent evt)
     {
       if (evt.relatedTarget != null)
       {
-        // Hack: OnFocusOut fired when a typeahead option is selected as well as on focus change. We look at
+        // Hack: OnFocusOut fired when a typeahead option is clicked as well as on focus change. We look at
         // whether there is a related target to decide whether to hide the typeahead or let it process the event.
         _controller.Get(ScreenController.Typeahead).Hide();
+
+        RemoveFromClassList("selected");
       }
     }
 

@@ -40,17 +40,16 @@ namespace Nighthollow.Interface
     }
 
     VisualElement _tabs = null!;
+    ScrollView _scrollView = null!;
     VisualElement _content = null!;
+
+    public ScrollView ScrollView => _scrollView;
 
     protected override void Initialize()
     {
       _tabs = FindElement("DatabaseTabs");
       _content = FindElement("DatabaseContent");
-
-      foreach (var property in typeof(GameData).GetProperties())
-      {
-        _tabs.Add(ButtonUtil.Create(new ButtonUtil.Button(property.Name, () => { })));
-      }
+      _scrollView = Find<ScrollView>("DatabaseScrollView");
     }
 
     protected override void OnShow(Args argument)
@@ -67,7 +66,7 @@ namespace Nighthollow.Interface
     {
       foreach (var property in valueType.GetProperties())
       {
-        container.Add(LabelCell(property.Name));
+        container.Add(HeadingCell(property.Name));
       }
 
       foreach (var rowId in table.Keys)
@@ -77,12 +76,12 @@ namespace Nighthollow.Interface
         {
           var value = property.GetValue(row);
           var type = property.PropertyType;
-          container.Add(new EditorCell(Controller, property.Name, type, value));
+          container.Add(new EditorCell(Controller, this, property.Name, type, value));
         }
       }
     }
 
-    static VisualElement LabelCell(string? text)
+    static VisualElement HeadingCell(string? text)
     {
       var label = new Label();
       if (text != null)
@@ -90,7 +89,7 @@ namespace Nighthollow.Interface
         label.text = text.Length > 50 ? text.Substring(0, 49) + "..." : text;
       }
 
-      label.AddToClassList("editor-text");
+      label.AddToClassList("editor-heading");
 
       var cell = new VisualElement();
       cell.AddToClassList("editor-cell");

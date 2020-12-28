@@ -72,7 +72,31 @@ namespace Nighthollow.Components
               statOperator: Operator.Add,
               valueLow: new IntValueData(25),
               valueHigh: new IntValueData(75)))));
+
+      var testCreature2 = new CreatureTypeData(
+        id: 2,
+        name: "Test Two",
+        prefabAddress: "/My/Address/Two",
+        owner: PlayerName.Enemy,
+        health: new IntRangeValue(50, 200),
+        skillAnimations: new Dictionary<SkillAnimationNumber, SkillAnimationType>
+          {{SkillAnimationNumber.Skill3, SkillAnimationType.CastSkill}}.ToImmutableDictionary(),
+        baseManaCost: 100,
+        implicitAffix: new AffixTypeData(
+          id: 2,
+          minLevel: 1,
+          weight: 1,
+          manaCost: IntRangeValue.Zero,
+          affixPoolId: 17,
+          modifiers: ImmutableList.Create(
+            new ModifierTypeData(
+              statId: StatId.Health,
+              statOperator: Operator.Add,
+              valueLow: new IntValueData(50),
+              valueHigh: new IntValueData(75)))));
+
       creatures[testCreature.Id] = testCreature;
+      creatures[testCreature2.Id] = testCreature2;
 
       return new GameData(
         creatureTypes: creatures.ToImmutable(),

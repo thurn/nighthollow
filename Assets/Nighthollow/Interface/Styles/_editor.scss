@@ -28,7 +28,6 @@
   bottom: 16px;
   left: 16px;
   background-color: white;
-  border-radius: 16px;
 
   .editor-tabs {
     flex-direction: row;
@@ -58,12 +57,11 @@
       min-width: 0;
       overflow: hidden;
       width: 250px;
-      border-width: 1px;
-      border-color: colors.$accent;
 
-      .editor-text {
+      .editor-heading {
         @include fonts.black-text;
         font-size: font-sizes.$body1;
+        -unity-font-style: bold;
       }
 
       .editor-text-field {
@@ -78,6 +76,17 @@
           background-color: white;
         }
       }
+
+      .editor-text-field.read-only {
+        * {
+          background-color: rgb(228, 228, 228);
+        }
+      }
+    }
+
+    .editor-cell.selected {
+      border-width: 1px;
+      border-color: blue;
     }
   }
 }
