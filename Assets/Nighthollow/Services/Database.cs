@@ -24,9 +24,9 @@ using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class DataService
+  public sealed class OldDataService
   {
-    public DataService(
+    public OldDataService(
       GameDataService gameData,
       AssetService assets,
       UserDataService userData,
@@ -49,12 +49,12 @@ namespace Nighthollow.Services
     const string UserDataKey = "userData";
     const string CurrentGameConfigKey = "currentGameConfig";
 
-    static DataService? _instance;
-    static readonly List<Action<DataService>> ReadyList = new List<Action<DataService>>();
+    static OldDataService? _instance;
+    static readonly List<Action<OldDataService>> ReadyList = new List<Action<OldDataService>>();
 
     public static bool IsInitialized => _instance != null;
 
-    public static DataService Instance => Errors.CheckNotNull(_instance);
+    public static OldDataService Instance => Errors.CheckNotNull(_instance);
 
     string DataPath => Path.Combine(Application.persistentDataPath, "data.json");
 
@@ -70,7 +70,7 @@ namespace Nighthollow.Services
             {
               if (json == null)
               {
-                _instance = new DataService(
+                _instance = new OldDataService(
                   gameDataService,
                   assetService,
                   new UserDataService(this, gameDataService),
@@ -79,7 +79,7 @@ namespace Nighthollow.Services
               }
               else
               {
-                _instance = new DataService(
+                _instance = new OldDataService(
                   gameDataService,
                   assetService,
                   new UserDataService(this, gameDataService, json[UserDataKey]),
@@ -98,7 +98,7 @@ namespace Nighthollow.Services
       }
     }
 
-    public static void OnReady(Action<DataService> action)
+    public static void OnReady(Action<OldDataService> action)
     {
       if (_instance == null)
       {

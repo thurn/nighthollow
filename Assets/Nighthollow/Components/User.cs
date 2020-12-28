@@ -60,7 +60,7 @@ namespace Nighthollow.Components
       }
     }
 
-    public void DrawOpeningHand(DataService data)
+    public void DrawOpeningHand(OldDataService data)
     {
       _data = data.UserData;
       var builtDeck = _data.Deck.Select(c => CreatureUtil.Build(_data.Stats, c)).ToList();
