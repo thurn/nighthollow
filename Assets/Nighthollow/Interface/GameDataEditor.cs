@@ -13,13 +13,41 @@
 // limitations under the License.
 
 using System.Linq;
+using System.Reflection;
 using Nighthollow.Data;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
 
 namespace Nighthollow.Interface
 {
+  public sealed class EditorDataHelper
+  {
+    readonly Database _database;
+    readonly TableId _tableId;
+
+    public EditorDataHelper(Database database, TableId tableId)
+    {
+      _database = database;
+      _tableId = tableId;
+    }
+
+    public void WriteProperty(int entityId, PropertyInfo property, object newValue)
+    {
+      var method =
+        typeof(EditorDataHelper).GetMethod(nameof(WritePropertyInternal),
+          BindingFlags.Instance | BindingFlags.NonPublic)!.MakeGenericMethod(_tableId.GetUnderlyingType());
+      method.Invoke(this, new[] {entityId, property, newValue});
+    }
+
+    void WritePropertyInternal<T>(int entityId, PropertyInfo property, object newValue) where T : class
+    {
+      var tableId = (TableId<T>) _tableId;
+      Debug.Log($"Table ID {tableId}");
+    }
+  }
+
   public sealed class GameDataEditor : HideableElement<GameDataEditor.Args>
   {
     public sealed class Args
@@ -43,10 +71,12 @@ namespace Nighthollow.Interface
     protected override void OnShow(Args argument)
     {
       var gameData = argument.Database.Snapshot();
-      var key = gameData.Keys.First();
+      var tableId = gameData.Keys.First();
+      var dataHelper = new EditorDataHelper(argument.Database, tableId);
+      dataHelper.WriteProperty(12, null!, null!);
       var editor = new ObjectEditor(Controller, ObjectEditor.ForTable(
-        key.GetUnderlyingType(),
-        key.LookUpIn(gameData)),
+          tableId.GetUnderlyingType(),
+          tableId.LookUpIn(gameData)),
         height: 4000);
       Add(editor);
     }

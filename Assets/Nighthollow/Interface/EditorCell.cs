@@ -115,6 +115,7 @@ namespace Nighthollow.Interface
       Add(_field);
 
       _field.RegisterCallback<ClickEvent>(OnClick);
+      _field.RegisterCallback<ChangeEvent<string>>(OnValueChanged);
     }
 
     void OnClick(ClickEvent evt)
@@ -179,6 +180,11 @@ namespace Nighthollow.Interface
       }
 
       return preview.ToString();
+    }
+
+    void OnValueChanged(ChangeEvent<string> evt)
+    {
+      Debug.Log($"OnValueChanged: {evt.newValue}");
     }
   }
 }

@@ -25,24 +25,18 @@ using UnityEngine;
 
 namespace Nighthollow.Data
 {
-  public abstract class Key
+  public abstract class TableId
   {
-    public static readonly Key<CreatureTypeData> CreatureTypes = new Key<CreatureTypeData>("CreatureTypes");
+    public static readonly TableId<CreatureTypeData> CreatureTypes = new TableId<CreatureTypeData>("CreatureTypes");
 
-    protected Key(string identifier)
+    protected TableId(string identifier)
     {
       Identifier = identifier;
     }
 
     public string Identifier { get; }
 
-#if UNITY_EDITOR
-    public string SaveFilePath() => Path.Combine(Application.dataPath, "Data", $"{Identifier}.bin");
-#else
-    public string SaveFilePath() => Path.Combine(Application.persistentDataPath, $"{Identifier}.bin");
-#endif
-    
-    public abstract Task<GameData> DeserializeAsync(GameData gameData);
+    public abstract Task<GameData?> DeserializeAsync(GameData gameData);
 
     public abstract Task SerializeAsync(GameData gameData);
 
@@ -51,22 +45,35 @@ namespace Nighthollow.Data
     public abstract IDictionary LookUpIn(GameData gameData);
   }
 
-  public sealed class Key<T> : Key where T : class
+  public sealed class TableId<T> : TableId where T : class
   {
-    public Key(string identifier) : base(identifier)
+    readonly string _writeFilePath;
+    readonly string _readFilePath;
+
+    public TableId(string identifier) : base(identifier)
     {
+      _readFilePath = Path.Combine("Data", $"{Identifier}.bytes");
+      _writeFilePath = Path.Combine(Application.dataPath, "Resources", "Data", $"{Identifier}.bytes");
     }
 
-    public override async Task<GameData> DeserializeAsync(GameData gameData)
+    public override async Task<GameData?> DeserializeAsync(GameData gameData)
     {
-      using var stream = File.OpenRead(SaveFilePath());
+      Debug.Log($"Attempting to read: {_readFilePath}");
+      var asset = Resources.Load<TextAsset>(_readFilePath);
+      if (asset == null)
+      {
+        return null;
+      }
+
+      var stream = new MemoryStream(asset.bytes);
       var result = await MessagePackSerializer.DeserializeAsync<IReadOnlyDictionary<int, T>>(stream);
       return gameData.SetItem(this, result.ToImmutableDictionary());
     }
 
     public override async Task SerializeAsync(GameData gameData)
     {
-      using var stream = File.OpenWrite(SaveFilePath());
+      Debug.Log($"Attempting to write: {_writeFilePath}");
+      using var stream = File.OpenWrite(_writeFilePath);
       await MessagePackSerializer.SerializeAsync<IReadOnlyDictionary<int, T>>(stream, gameData.Get(this));
     }
 
@@ -77,26 +84,26 @@ namespace Nighthollow.Data
 
   public sealed class GameData
   {
-    readonly ImmutableDictionary<Key, IDictionary> _tables;
+    readonly ImmutableDictionary<TableId, IDictionary> _tables;
 
     public GameData()
     {
-      _tables = ImmutableDictionary<Key, IDictionary>.Empty;
+      _tables = ImmutableDictionary<TableId, IDictionary>.Empty;
     }
 
-    GameData(ImmutableDictionary<Key, IDictionary>? value = null)
+    GameData(ImmutableDictionary<TableId, IDictionary>? value = null)
     {
-      _tables = value ?? ImmutableDictionary<Key, IDictionary>.Empty;
+      _tables = value ?? ImmutableDictionary<TableId, IDictionary>.Empty;
     }
 
-    public bool ContainsKey<T>(Key<T> key) where T : class => _tables.ContainsKey(key);
+    public bool ContainsKey<T>(TableId<T> tableId) where T : class => _tables.ContainsKey(tableId);
 
-    public ImmutableDictionary<int, T> Get<T>(Key<T> key) where T : class =>
-      (ImmutableDictionary<int, T>) _tables[key];
+    public ImmutableDictionary<int, T> Get<T>(TableId<T> tableId) where T : class =>
+      (ImmutableDictionary<int, T>) _tables[tableId];
 
-    public GameData SetItem<T>(Key<T> key, ImmutableDictionary<int, T> value) where T : class =>
-      new GameData(_tables.SetItem(key, value));
+    public GameData SetItem<T>(TableId<T> tableId, ImmutableDictionary<int, T> value) where T : class =>
+      new GameData(_tables.SetItem(tableId, value));
 
-    public IEnumerable<Key> Keys => _tables.Keys;
+    public IEnumerable<TableId> Keys => _tables.Keys;
   }
 }

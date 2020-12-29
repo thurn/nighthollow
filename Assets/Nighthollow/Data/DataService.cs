@@ -15,8 +15,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 using System.Reflection;
+using MessagePack;
+using MessagePack.Resolvers;
 using UnityEngine;
 
 #nullable enable
@@ -26,14 +27,14 @@ namespace Nighthollow.Data
   public sealed class Database
   {
     GameData _gameData;
-    readonly Dictionary<ListenerId, List<IListener>> _listeners;
+    readonly Dictionary<(TableId, int), List<IListener>> _listeners;
     readonly List<IMutation> _mutations;
     bool _writePending;
 
     public Database(GameData gameData)
     {
       _gameData = gameData;
-      _listeners = new Dictionary<ListenerId, List<IListener>>();
+      _listeners = new Dictionary<(TableId, int), List<IListener>>();
       _mutations = new List<IMutation>();
     }
 
@@ -43,30 +44,30 @@ namespace Nighthollow.Data
     /// </summary>
     public GameData Snapshot() => _gameData;
 
-    public void Subscribe<T>(Key<T> key, int entityId, Action<T> action) where T : class
+    public void Subscribe<T>(TableId<T> tableId, int entityId, Action<T> action) where T : class
     {
-      if (_gameData.ContainsKey(key) && _gameData.Get(key).ContainsKey(entityId))
+      if (_gameData.ContainsKey(tableId) && _gameData.Get(tableId).ContainsKey(entityId))
       {
-        action(_gameData.Get(key)[entityId]);
+        action(_gameData.Get(tableId)[entityId]);
       }
 
-      var listenerKey = new ListenerId(key, entityId);
+      var listenerKey = (tableId, entityId);
       if (!_listeners.ContainsKey(listenerKey))
       {
         _listeners[listenerKey] = new List<IListener>();
       }
 
-      _listeners[listenerKey].Add(new Listener<T>(key, entityId, action));
+      _listeners[listenerKey].Add(new Listener<T>(tableId, entityId, action));
     }
 
-    public void Insert<T>(Key<T> key, int entityId, T value) where T : class
+    public void Insert<T>(TableId<T> tableId, int entityId, T value) where T : class
     {
-      _mutations.Add(new Writer<T>(key, entityId, value));
+      _mutations.Add(new Writer<T>(tableId, entityId, value));
     }
 
-    public void Mutate<T>(Key<T> key, int entityId, Func<T?, T> mutation) where T : class
+    public void Mutate<T>(TableId<T> tableId, int entityId, Func<T?, T> mutation) where T : class
     {
-      _mutations.Add(new Mutation<T>(key, entityId, mutation));
+      _mutations.Add(new Mutation<T>(tableId, entityId, mutation));
     }
 
     public async void PerformWrites()
@@ -78,19 +79,19 @@ namespace Nighthollow.Data
 
       _writePending = true;
 
-      var listenerIds = new HashSet<ListenerId>();
-      var keys = new HashSet<Key>();
+      var listenerIds = new HashSet<(TableId, int)>();
+      var tableIds = new HashSet<TableId>();
       GameData gameData = _gameData;
       foreach (var mutation in _mutations)
       {
         gameData = mutation.Apply(gameData);
-        listenerIds.Add(mutation.ListenerId);
-        keys.Add(mutation.Key);
+        listenerIds.Add((mutation.TableId, mutation.EntityId));
+        tableIds.Add(mutation.TableId);
       }
 
       _mutations.Clear();
 
-      foreach (var key in keys)
+      foreach (var key in tableIds)
       {
         await key.SerializeAsync(gameData);
       }
@@ -111,129 +112,101 @@ namespace Nighthollow.Data
       _writePending = false;
     }
 
-    sealed class ListenerId
-    {
-      public ListenerId(Key key, int entityId)
-      {
-        Key = key;
-        EntityId = entityId;
-      }
-
-      Key Key { get; }
-      int EntityId { get; }
-
-      bool Equals(ListenerId other) => Key.Equals(other.Key) && EntityId == other.EntityId;
-
-      public override bool Equals(object? obj) =>
-        ReferenceEquals(this, obj) || obj is ListenerId other && Equals(other);
-
-      public override int GetHashCode()
-      {
-        unchecked
-        {
-          return (Key.GetHashCode() * 397) ^ EntityId;
-        }
-      }
-
-      public static bool operator ==(ListenerId? left, ListenerId? right) => Equals(left, right);
-
-      public static bool operator !=(ListenerId? left, ListenerId? right) => !Equals(left, right);
-    }
-
-    interface IListener
+    public interface IListener
     {
       void Invoke(GameData gameData);
+
+      TableId TableId { get; }
+
+      int EntityId { get; }
     }
 
     sealed class Listener<T> : IListener where T : class
     {
-      readonly Key<T> _key;
-      readonly int _entityId;
+      readonly TableId<T> _tableId;
       readonly Action<T> _listener;
 
-      public Listener(Key<T> key, int entityId, Action<T> listener)
+      public Listener(TableId<T> tableId, int entityId, Action<T> listener)
       {
-        _key = key;
-        _entityId = entityId;
+        _tableId = tableId;
+        EntityId = entityId;
         _listener = listener;
       }
 
+      public TableId TableId => _tableId;
+      public int EntityId { get; }
+
       public void Invoke(GameData gameData)
       {
-        if (gameData.ContainsKey(_key) && gameData.Get(_key).ContainsKey(_entityId))
+        if (gameData.ContainsKey(_tableId) && gameData.Get(_tableId).ContainsKey(EntityId))
         {
-          _listener(gameData.Get(_key)[_entityId]);
+          _listener(gameData.Get(_tableId)[EntityId]);
         }
         else
         {
-          throw new InvalidOperationException($"Error: value does not exist for key {_key} and entity ID {_entityId}");
+          throw new InvalidOperationException(
+            $"Error: value does not exist for key {_tableId} and entity ID {EntityId}");
         }
       }
     }
 
-    interface IMutation
+    public interface IMutation
     {
       GameData Apply(GameData gameData);
 
-      ListenerId ListenerId { get; }
+      TableId TableId { get; }
 
-      Key Key { get; }
+      int EntityId { get; }
     }
 
     sealed class Writer<T> : IMutation where T : class
     {
-      readonly Key<T> _key;
-      readonly int _entityId;
       readonly T _value;
+      readonly TableId<T> _tableId;
 
-      public Writer(Key<T> key, int entityId, T value)
+      public Writer(TableId<T> tableId, int entityId, T value)
       {
-        _key = key;
-        _entityId = entityId;
+        _tableId = tableId;
+        EntityId = entityId;
         _value = value;
-        ListenerId = new ListenerId(key, entityId);
       }
 
-      public ListenerId ListenerId { get; }
-
-      public Key Key => _key;
+      public TableId TableId => _tableId;
+      public int EntityId { get; }
 
       public GameData Apply(GameData gameData) =>
-        gameData.SetItem(_key,
-          gameData.ContainsKey(_key)
-            ? gameData.Get(_key).SetItem(_entityId, _value)
-            : ImmutableDictionary<int, T>.Empty.SetItem(_entityId, _value));
+        gameData.SetItem(_tableId,
+          gameData.ContainsKey(_tableId)
+            ? gameData.Get(_tableId).SetItem(EntityId, _value)
+            : ImmutableDictionary<int, T>.Empty.SetItem(EntityId, _value));
     }
 
     sealed class Mutation<T> : IMutation where T : class
     {
-      readonly Key<T> _key;
-      readonly int _entityId;
+      readonly TableId<T> _tableId;
       readonly Func<T?, T> _mutation;
 
-      public Mutation(Key<T> key, int entityId, Func<T?, T> mutation)
+      public Mutation(TableId<T> tableId, int entityId, Func<T?, T> mutation)
       {
-        _key = key;
-        _entityId = entityId;
+        _tableId = tableId;
+        EntityId = entityId;
         _mutation = mutation;
-
-        ListenerId = new ListenerId(key, entityId);
       }
 
-      public ListenerId ListenerId { get; }
-      public Key Key => _key;
+      public TableId TableId => _tableId;
+      public int EntityId { get; }
 
       public GameData Apply(GameData gameData)
       {
-        if (gameData.ContainsKey(_key))
+        if (gameData.ContainsKey(_tableId))
         {
-          var table = gameData.Get(_key);
-          return gameData.SetItem(_key,
-            table.SetItem(_entityId, _mutation(table.ContainsKey(_entityId) ? table[_entityId] : null)));
+          var table = gameData.Get(_tableId);
+          return gameData.SetItem(_tableId,
+            table.SetItem(EntityId, _mutation(table.ContainsKey(EntityId) ? table[EntityId] : null)));
         }
         else
         {
-          return gameData.SetItem(_key, ImmutableDictionary<int, T>.Empty.SetItem(_entityId, _mutation(null)));
+          return gameData.SetItem(_tableId, ImmutableDictionary<int, T>.Empty.SetItem(EntityId, _mutation(null)));
         }
       }
     }
@@ -251,6 +224,7 @@ namespace Nighthollow.Data
 
     void Start()
     {
+      MessagePackInitializer.Initialize();
       Initialize();
     }
 
@@ -258,12 +232,13 @@ namespace Nighthollow.Data
     {
       var gameData = new GameData();
 
-      foreach (var field in typeof(Key).GetFields(BindingFlags.Public | BindingFlags.Static))
+      foreach (var field in typeof(TableId).GetFields(BindingFlags.Public | BindingFlags.Static))
       {
-        var key = (Key) field.GetValue(typeof(Key));
-        if (File.Exists(key.SaveFilePath()))
+        var key = (TableId) field.GetValue(typeof(TableId));
+        var result = await key.DeserializeAsync(gameData);
+        if (result != null)
         {
-          gameData = await key.DeserializeAsync(gameData);
+          gameData = result;
         }
       }
 
@@ -297,5 +272,35 @@ namespace Nighthollow.Data
 
       _listeners.Clear();
     }
+  }
+
+  public static class MessagePackInitializer
+  {
+    static bool _serializerRegistered;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    public static void Initialize()
+    {
+      if (!_serializerRegistered)
+      {
+        Debug.Log("Registering MessagePack Serializers");
+        StaticCompositeResolver.Instance.Register(
+          GeneratedResolver.Instance,
+          StandardResolver.Instance
+        );
+
+        var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
+        MessagePackSerializer.DefaultOptions = option;
+        _serializerRegistered = true;
+      }
+    }
+
+#if UNITY_EDITOR
+    [UnityEditor.InitializeOnLoadMethod]
+    static void EditorInitialize()
+    {
+      Initialize();
+    }
+#endif
   }
 }

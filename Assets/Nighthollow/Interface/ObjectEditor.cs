@@ -159,7 +159,7 @@ namespace Nighthollow.Interface
 
     void SelectPosition(Vector2Int? position)
     {
-      if (position.HasValue && _cells.ContainsKey(position.Value))
+      if (position.HasValue && _cells.ContainsKey(position.Value) && position != _currentlySelected)
       {
         HidePopups();
 
