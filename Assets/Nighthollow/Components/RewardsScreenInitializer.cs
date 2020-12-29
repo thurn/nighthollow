@@ -12,27 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using Nighthollow.Data;
-using Nighthollow.Generated;
 using Nighthollow.Interface;
-using Nighthollow.Stats;
 using UnityEngine;
 
 #nullable enable
 
 namespace Nighthollow.Components
 {
-  public sealed class RewardsScreenInitializer : MonoBehaviour
+  public sealed class RewardsScreenInitializer : MonoBehaviour, IOnDatabaseReadyListener
   {
     [SerializeField] ScreenController _screenController = null!;
+    [SerializeField] DataService _dataService = null!;
 
     void Start()
     {
+      _screenController.Initialize();
+      _dataService.OnReady(this);
+
       // Database.OnReady(data =>
       // {
-      _screenController.Initialize();
       // _screenController.Get(ScreenController.RewardsWindow)
       //   .Show(new RewardsWindow.Args(new List<CreatureItemData>()));
       //   var list = data.GameData.GetStaticCardList(StaticCardList.StartingDeck);
@@ -40,58 +39,11 @@ namespace Nighthollow.Components
       //   _screenController.Get(ScreenController.RewardChoiceWindow)
       //     .Show(new RewardChoiceWindow.Args(result.ToList()));
       // });
-
-      _screenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(TestData()));
     }
 
-    GameData TestData()
+    public void OnDatabaseReady(Database database)
     {
-      var creatures = ImmutableDictionary.CreateBuilder<int, CreatureTypeData>();
-      var testCreature = new CreatureTypeData(
-        name: "Test",
-        prefabAddress: "/My/Address",
-        owner: PlayerName.User,
-        health: new IntRangeValue(100, 200),
-        skillAnimations: new Dictionary<SkillAnimationNumber, SkillAnimationType>
-          {{SkillAnimationNumber.Skill1, SkillAnimationType.MeleeSkill}}.ToImmutableDictionary(),
-        baseManaCost: 50,
-        implicitAffix: new AffixTypeData(
-          minLevel: 1,
-          weight: 1,
-          manaCost: IntRangeValue.Zero,
-          modifiers: ImmutableList.Create(
-            new ModifierTypeData(
-              statId: StatId.Health,
-              statOperator: Operator.Add,
-              valueLow: new IntValueData(25),
-              valueHigh: new IntValueData(75)))));
-
-      var testCreature2 = new CreatureTypeData(
-        name: "Test Two",
-        prefabAddress: "/My/Address/Two",
-        owner: PlayerName.Enemy,
-        health: new IntRangeValue(50, 200),
-        skillAnimations: new Dictionary<SkillAnimationNumber, SkillAnimationType>
-          {{SkillAnimationNumber.Skill3, SkillAnimationType.CastSkill}}.ToImmutableDictionary(),
-        baseManaCost: 100,
-        implicitAffix: new AffixTypeData(
-          minLevel: 1,
-          weight: 1,
-          manaCost: IntRangeValue.Zero,
-          modifiers: ImmutableList.Create(
-            new ModifierTypeData(
-              statId: StatId.Health,
-              statOperator: Operator.Add,
-              valueLow: new IntValueData(50),
-              valueHigh: new IntValueData(75)))));
-
-      creatures[1] = testCreature;
-      creatures[2] = testCreature2;
-
-      return new GameData(
-        creatureTypes: creatures.ToImmutable(),
-        affixTypes: ImmutableDictionary<int, AffixTypeData>.Empty,
-        skillTypes: ImmutableDictionary<int, SkillTypeData>.Empty);
+      _screenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(database));
     }
   }
 }

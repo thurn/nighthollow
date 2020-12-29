@@ -14,8 +14,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
-using MessagePack;
+using System.Reflection;
 using UnityEngine;
 
 #nullable enable
@@ -25,91 +26,82 @@ namespace Nighthollow.Data
   public sealed class Database
   {
     GameData _gameData;
-    readonly Dictionary<QueryKey, List<IQueryListener>> _listeners;
-    readonly List<IQueryWriter> _writers;
+    readonly Dictionary<ListenerId, List<IListener>> _listeners;
+    readonly List<IMutation> _mutations;
     bool _writePending;
 
     public Database(GameData gameData)
     {
       _gameData = gameData;
-      _listeners = new Dictionary<QueryKey, List<IQueryListener>>();
-      _writers = new List<IQueryWriter>();
+      _listeners = new Dictionary<ListenerId, List<IListener>>();
+      _mutations = new List<IMutation>();
     }
 
     /// <summary>
-    /// Retrieves a snapshot of the current database state. There are no guarantees about how 'up to date' this value
-    /// will be at any given time, use <see cref="Subscribe{T}"/> instead to receive updates over time in sequence.
+    /// Retrieves a snapshot of the database state. There are no guarantees about how up-to-date this value
+    /// will be at any given time, mutations may take an arbitrarily long time to be applied to it.
     /// </summary>
-    public GameData Data => _gameData;
+    public GameData Snapshot() => _gameData;
 
-    /// <summary>
-    /// Registers a listener to be invoked whenever the value for 'query' is written to. The listener will be invoked
-    /// once immediately with the current value of the query, and then will be invoked again each time the value is
-    /// updated via a corresponding call to <see cref="Write{T}"/>
-    /// </summary>
-    public void Subscribe<T>(IQuery<T> query, Action<T> listener) => Subscribe(new QueryListener<T>(query, listener));
-
-    /// <summary>Non-generic version of <see cref="Subscribe{T}"/></summary>
-    public void Subscribe(IQueryListener listener)
+    public void Subscribe<T>(Key<T> key, int entityId, Action<T> action) where T : class
     {
-      listener.Invoke(_gameData);
-
-      if (!_listeners.ContainsKey(listener.QueryKey))
+      if (_gameData.ContainsKey(key) && _gameData.Get(key).ContainsKey(entityId))
       {
-        _listeners[listener.QueryKey] = new List<IQueryListener>();
+        action(_gameData.Get(key)[entityId]);
       }
 
-      _listeners[listener.QueryKey].Add(listener);
+      var listenerKey = new ListenerId(key, entityId);
+      if (!_listeners.ContainsKey(listenerKey))
+      {
+        _listeners[listenerKey] = new List<IListener>();
+      }
+
+      _listeners[listenerKey].Add(new Listener<T>(key, entityId, action));
     }
 
-    /// <summary>
-    /// Writes a new value to the database asynchronously. This involves the following three steps:
-    ///
-    /// 1) The saved file on disk is updated asynchronously with the new content
-    /// 2) The value of <see cref="Data"/> is updated
-    /// 3) Any registered listeners for this query are invoked with the written value.
-    ///
-    /// Note that because writes are asynchronous, code should not assume that a write has completed at any particular
-    /// time, and should instead rely on <see cref="Subscribe{T}"/> to be notified about changes.
-    /// </summary>
-    public void Write<T>(IQuery<T> query, T value) => Write(new QueryWriter<T>(query, value));
-
-    /// <summary>Non-generic version of <see cref="Write{T}"/></summary>
-    public void Write(IQueryWriter writer)
+    public void Insert<T>(Key<T> key, int entityId, T value) where T : class
     {
-      _writers.Add(writer);
+      _mutations.Add(new Writer<T>(key, entityId, value));
     }
 
-    /// <summary>
-    /// Empties the write queue, performing all pending write operations. Should only be invoked by
-    /// <see cref="DataService"/>.
-    /// </summary>
+    public void Mutate<T>(Key<T> key, int entityId, Func<T?, T> mutation) where T : class
+    {
+      _mutations.Add(new Mutation<T>(key, entityId, mutation));
+    }
+
     public async void PerformWrites()
     {
-      if (_writers.Count == 0 || _writePending)
+      if (_mutations.Count == 0 || _writePending)
       {
         return;
       }
 
       _writePending = true;
 
-      var queryKeys = new HashSet<QueryKey>();
+      var listenerIds = new HashSet<ListenerId>();
+      var keys = new HashSet<Key>();
       GameData gameData = _gameData;
-      foreach (var writer in _writers)
+      foreach (var mutation in _mutations)
       {
-        gameData = writer.Write(gameData);
-        queryKeys.Add(writer.QueryKey);
+        gameData = mutation.Apply(gameData);
+        listenerIds.Add(mutation.ListenerId);
+        keys.Add(mutation.Key);
       }
-      _writers.Clear();
 
-      await MessagePackSerializer.SerializeAsync(File.OpenWrite(DataService.GameDataPath), gameData);
+      _mutations.Clear();
+
+      foreach (var key in keys)
+      {
+        await key.SerializeAsync(gameData);
+      }
+
       _gameData = gameData;
 
-      foreach (var queryKey in queryKeys)
+      foreach (var listenerId in listenerIds)
       {
-        if (_listeners.ContainsKey(queryKey))
+        if (_listeners.ContainsKey(listenerId))
         {
-          foreach (var listener in _listeners[queryKey])
+          foreach (var listener in _listeners[listenerId])
           {
             listener.Invoke(gameData);
           }
@@ -117,6 +109,133 @@ namespace Nighthollow.Data
       }
 
       _writePending = false;
+    }
+
+    sealed class ListenerId
+    {
+      public ListenerId(Key key, int entityId)
+      {
+        Key = key;
+        EntityId = entityId;
+      }
+
+      Key Key { get; }
+      int EntityId { get; }
+
+      bool Equals(ListenerId other) => Key.Equals(other.Key) && EntityId == other.EntityId;
+
+      public override bool Equals(object? obj) =>
+        ReferenceEquals(this, obj) || obj is ListenerId other && Equals(other);
+
+      public override int GetHashCode()
+      {
+        unchecked
+        {
+          return (Key.GetHashCode() * 397) ^ EntityId;
+        }
+      }
+
+      public static bool operator ==(ListenerId? left, ListenerId? right) => Equals(left, right);
+
+      public static bool operator !=(ListenerId? left, ListenerId? right) => !Equals(left, right);
+    }
+
+    interface IListener
+    {
+      void Invoke(GameData gameData);
+    }
+
+    sealed class Listener<T> : IListener where T : class
+    {
+      readonly Key<T> _key;
+      readonly int _entityId;
+      readonly Action<T> _listener;
+
+      public Listener(Key<T> key, int entityId, Action<T> listener)
+      {
+        _key = key;
+        _entityId = entityId;
+        _listener = listener;
+      }
+
+      public void Invoke(GameData gameData)
+      {
+        if (gameData.ContainsKey(_key) && gameData.Get(_key).ContainsKey(_entityId))
+        {
+          _listener(gameData.Get(_key)[_entityId]);
+        }
+        else
+        {
+          throw new InvalidOperationException($"Error: value does not exist for key {_key} and entity ID {_entityId}");
+        }
+      }
+    }
+
+    interface IMutation
+    {
+      GameData Apply(GameData gameData);
+
+      ListenerId ListenerId { get; }
+
+      Key Key { get; }
+    }
+
+    sealed class Writer<T> : IMutation where T : class
+    {
+      readonly Key<T> _key;
+      readonly int _entityId;
+      readonly T _value;
+
+      public Writer(Key<T> key, int entityId, T value)
+      {
+        _key = key;
+        _entityId = entityId;
+        _value = value;
+        ListenerId = new ListenerId(key, entityId);
+      }
+
+      public ListenerId ListenerId { get; }
+
+      public Key Key => _key;
+
+      public GameData Apply(GameData gameData) =>
+        gameData.SetItem(_key,
+          gameData.ContainsKey(_key)
+            ? gameData.Get(_key).SetItem(_entityId, _value)
+            : ImmutableDictionary<int, T>.Empty.SetItem(_entityId, _value));
+    }
+
+    sealed class Mutation<T> : IMutation where T : class
+    {
+      readonly Key<T> _key;
+      readonly int _entityId;
+      readonly Func<T?, T> _mutation;
+
+      public Mutation(Key<T> key, int entityId, Func<T?, T> mutation)
+      {
+        _key = key;
+        _entityId = entityId;
+        _mutation = mutation;
+
+        ListenerId = new ListenerId(key, entityId);
+      }
+
+      public ListenerId ListenerId { get; }
+      public Key Key => _key;
+
+      public GameData Apply(GameData gameData)
+      {
+        if (gameData.ContainsKey(_key))
+        {
+          var table = gameData.Get(_key);
+          return gameData.SetItem(_key,
+            table.SetItem(_entityId, _mutation(table.ContainsKey(_entityId) ? table[_entityId] : null)));
+        }
+        else
+        {
+          return gameData.SetItem(_key, ImmutableDictionary<int, T>.Empty.SetItem(_entityId, _mutation(null)));
+        }
+      }
     }
   }
 
@@ -128,7 +247,6 @@ namespace Nighthollow.Data
   public sealed class DataService : MonoBehaviour
   {
     Database? _database;
-    public static string GameDataPath => Path.Combine(Application.persistentDataPath, "data.bin");
     readonly List<IOnDatabaseReadyListener> _listeners = new List<IOnDatabaseReadyListener>();
 
     void Start()
@@ -138,18 +256,19 @@ namespace Nighthollow.Data
 
     async void Initialize()
     {
-      if (File.Exists(GameDataPath))
+      var gameData = new GameData();
+
+      foreach (var field in typeof(Key).GetFields(BindingFlags.Public | BindingFlags.Static))
       {
-        _database = new Database(await MessagePackSerializer.DeserializeAsync<GameData>(File.OpenRead(GameDataPath)));
-        InvokeListeners(_database);
+        var key = (Key) field.GetValue(typeof(Key));
+        if (File.Exists(key.SaveFilePath()))
+        {
+          gameData = await key.DeserializeAsync(gameData);
+        }
       }
-      else
-      {
-        var gameData = new GameData();
-        await MessagePackSerializer.SerializeAsync(File.OpenWrite(GameDataPath), gameData);
-        _database = new Database(gameData);
-        InvokeListeners(_database);
-      }
+
+      _database = new Database(gameData);
+      InvokeListeners(_database);
     }
 
     void Update()

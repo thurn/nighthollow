@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections;
 using System.Linq;
 using Nighthollow.Data;
 using UnityEngine.UIElements;
@@ -25,12 +24,12 @@ namespace Nighthollow.Interface
   {
     public sealed class Args
     {
-      public Args(GameData gameData)
+      public Args(Database database)
       {
-        GameData = gameData;
+        Database = database;
       }
 
-      public GameData GameData { get; }
+      public Database Database { get; }
     }
 
     public new sealed class UxmlFactory : UxmlFactory<GameDataEditor, UxmlTraits>
@@ -43,10 +42,11 @@ namespace Nighthollow.Interface
 
     protected override void OnShow(Args argument)
     {
-      var property = typeof(GameData).GetProperties().First();
+      var gameData = argument.Database.Snapshot();
+      var key = gameData.Keys.First();
       var editor = new ObjectEditor(Controller, ObjectEditor.ForTable(
-        property.PropertyType.GetGenericArguments()[1],
-        (property.GetValue(argument.GameData) as IDictionary)!),
+        key.GetUnderlyingType(),
+        key.LookUpIn(gameData)),
         height: 4000);
       Add(editor);
     }
