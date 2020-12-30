@@ -14,8 +14,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Reflection;
+using System.IO;
+using System.Linq;
 using MessagePack;
 using MessagePack.Resolvers;
 using UnityEngine;
@@ -28,7 +28,7 @@ namespace Nighthollow.Data
   {
     readonly MessagePackSerializerOptions _serializationOptions;
     GameData _gameData;
-    readonly Dictionary<(TableId, int), List<IListener>> _listeners;
+    readonly Dictionary<(ITableId, int), List<IListener>> _listeners;
     readonly List<IMutation> _mutations;
     bool _writePending;
 
@@ -36,7 +36,7 @@ namespace Nighthollow.Data
     {
       _serializationOptions = serializationOptions;
       _gameData = gameData;
-      _listeners = new Dictionary<(TableId, int), List<IListener>>();
+      _listeners = new Dictionary<(ITableId, int), List<IListener>>();
       _mutations = new List<IMutation>();
     }
 
@@ -48,9 +48,9 @@ namespace Nighthollow.Data
 
     public void Subscribe<T>(TableId<T> tableId, int entityId, Action<T> action) where T : class
     {
-      if (_gameData.ContainsKey(tableId) && _gameData.Get(tableId).ContainsKey(entityId))
+      if (tableId.GetIn(_gameData).ContainsKey(entityId))
       {
-        action(_gameData.Get(tableId)[entityId]);
+        action(tableId.GetIn(_gameData)[entityId]);
       }
 
       var listenerKey = (tableId, entityId);
@@ -64,15 +64,20 @@ namespace Nighthollow.Data
 
     public void Insert<T>(TableId<T> tableId, int entityId, T value) where T : class
     {
-      _mutations.Add(new Writer<T>(tableId, entityId, value));
+      _mutations.Add(new InsertMutation<T>(tableId, entityId, value));
     }
 
-    public void Mutate<T>(TableId<T> tableId, int entityId, Func<T?, T> mutation) where T : class
+    public void Update<T>(TableId<T> tableId, int entityId, Func<T?, T> mutation) where T : class
     {
-      _mutations.Add(new Mutation<T>(tableId, entityId, mutation));
+      _mutations.Add(new UpdateMutation<T>(tableId, entityId, mutation));
     }
 
-    public async void PerformWrites()
+    public void Delete<T>(TableId<T> tableId, int entityId) where T : class
+    {
+      _mutations.Add(new DeleteMutation<T>(tableId, entityId));
+    }
+
+    public void PerformWrites(string writeFilePath)
     {
       if (_mutations.Count == 0 || _writePending)
       {
@@ -81,34 +86,25 @@ namespace Nighthollow.Data
 
       _writePending = true;
 
-      var listenerIds = new HashSet<(TableId, int)>();
-      var tableIds = new HashSet<TableId>();
+      var listenerIds = new HashSet<(ITableId, int)>();
       GameData gameData = _gameData;
       foreach (var mutation in _mutations)
       {
         gameData = mutation.Apply(gameData);
         listenerIds.Add((mutation.TableId, mutation.EntityId));
-        tableIds.Add(mutation.TableId);
       }
 
       _mutations.Clear();
-
-      foreach (var key in tableIds)
-      {
-        await key.SerializeAsync(_serializationOptions, gameData);
-      }
+      using var stream = File.OpenWrite(writeFilePath);
+      MessagePackSerializer.Serialize(stream, gameData, _serializationOptions);
 
       _gameData = gameData;
 
-      foreach (var listenerId in listenerIds)
+      foreach (var listener in listenerIds
+        .Where(listenerId => _listeners.ContainsKey(listenerId))
+        .SelectMany(listenerId => _listeners[listenerId]))
       {
-        if (_listeners.ContainsKey(listenerId))
-        {
-          foreach (var listener in _listeners[listenerId])
-          {
-            listener.Invoke(gameData);
-          }
-        }
+        listener.Invoke(gameData);
       }
 
       _writePending = false;
@@ -118,9 +114,7 @@ namespace Nighthollow.Data
     {
       void Invoke(GameData gameData);
 
-      TableId TableId { get; }
-
-      int EntityId { get; }
+      ITableId TableId { get; }
     }
 
     sealed class Listener<T> : IListener where T : class
@@ -135,14 +129,14 @@ namespace Nighthollow.Data
         _listener = listener;
       }
 
-      public TableId TableId => _tableId;
-      public int EntityId { get; }
+      public ITableId TableId => _tableId;
+      int EntityId { get; }
 
       public void Invoke(GameData gameData)
       {
-        if (gameData.ContainsKey(_tableId) && gameData.Get(_tableId).ContainsKey(EntityId))
+        if (_tableId.GetIn(gameData).ContainsKey(EntityId))
         {
-          _listener(gameData.Get(_tableId)[EntityId]);
+          _listener(_tableId.GetIn(gameData)[EntityId]);
         }
         else
         {
@@ -156,61 +150,66 @@ namespace Nighthollow.Data
     {
       GameData Apply(GameData gameData);
 
-      TableId TableId { get; }
+      ITableId TableId { get; }
 
       int EntityId { get; }
     }
 
-    sealed class Writer<T> : IMutation where T : class
+    abstract class Mutation<T> : IMutation where T : class
+    {
+      protected Mutation(TableId<T> tableId, int entityId)
+      {
+        InternalTableId = tableId;
+        EntityId = entityId;
+      }
+
+      public ITableId TableId => InternalTableId;
+
+      public int EntityId { get; }
+
+      public abstract GameData Apply(GameData gameData);
+
+      protected TableId<T> InternalTableId { get; }
+    }
+
+    sealed class InsertMutation<T> : Mutation<T> where T : class
     {
       readonly T _value;
-      readonly TableId<T> _tableId;
 
-      public Writer(TableId<T> tableId, int entityId, T value)
+      public InsertMutation(TableId<T> tableId, int entityId, T value) : base(tableId, entityId)
       {
-        _tableId = tableId;
-        EntityId = entityId;
         _value = value;
       }
 
-      public TableId TableId => _tableId;
-      public int EntityId { get; }
-
-      public GameData Apply(GameData gameData) =>
-        gameData.SetItem(_tableId,
-          gameData.ContainsKey(_tableId)
-            ? gameData.Get(_tableId).SetItem(EntityId, _value)
-            : ImmutableDictionary<int, T>.Empty.SetItem(EntityId, _value));
+      public override GameData Apply(GameData gameData) =>
+        InternalTableId.Write(gameData, InternalTableId.GetIn(gameData).SetItem(EntityId, _value));
     }
 
-    sealed class Mutation<T> : IMutation where T : class
+    sealed class UpdateMutation<T> : Mutation<T> where T : class
     {
-      readonly TableId<T> _tableId;
-      readonly Func<T?, T> _mutation;
+      readonly Func<T?, T> _update;
 
-      public Mutation(TableId<T> tableId, int entityId, Func<T?, T> mutation)
+      public UpdateMutation(TableId<T> tableId, int entityId, Func<T?, T> update) : base(tableId, entityId)
       {
-        _tableId = tableId;
-        EntityId = entityId;
-        _mutation = mutation;
+        _update = update;
       }
 
-      public TableId TableId => _tableId;
-      public int EntityId { get; }
-
-      public GameData Apply(GameData gameData)
+      public override GameData Apply(GameData gameData)
       {
-        if (gameData.ContainsKey(_tableId))
-        {
-          var table = gameData.Get(_tableId);
-          return gameData.SetItem(_tableId,
-            table.SetItem(EntityId, _mutation(table.ContainsKey(EntityId) ? table[EntityId] : null)));
-        }
-        else
-        {
-          return gameData.SetItem(_tableId, ImmutableDictionary<int, T>.Empty.SetItem(EntityId, _mutation(null)));
-        }
+        var table = InternalTableId.GetIn(gameData);
+        return InternalTableId.Write(gameData,
+          table.SetItem(EntityId, _update(table.ContainsKey(EntityId) ? table[EntityId] : null)));
       }
+    }
+
+    sealed class DeleteMutation<T> : Mutation<T> where T : class
+    {
+      public DeleteMutation(TableId<T> tableId, int entityId) : base(tableId, entityId)
+      {
+      }
+
+      public override GameData Apply(GameData gameData) =>
+        InternalTableId.Write(gameData, InternalTableId.GetIn(gameData).Remove(EntityId));
     }
   }
 
@@ -221,32 +220,34 @@ namespace Nighthollow.Data
 
   public sealed class DataService : MonoBehaviour
   {
+    string? _readResourcePath;
+    string? _writeFilePath;
+
     Database? _database;
     readonly List<IOnDatabaseReadyListener> _listeners = new List<IOnDatabaseReadyListener>();
 
     void Start()
     {
-      Initialize();
+      _readResourcePath = Path.Combine("Data", "GameData");
+      _writeFilePath = Path.Combine(Application.dataPath, "Resources", "Data", "GameData.bytes");
+      StartCoroutine(Initialize());
     }
 
-    async void Initialize()
+    IEnumerator<YieldInstruction> Initialize()
     {
-      var gameData = new GameData();
-
       var serializationOptions = MessagePackSerializerOptions.Standard
         .WithResolver(CompositeResolver.Create(
           GeneratedResolver.Instance,
           StandardResolver.Instance));
 
-      foreach (var field in typeof(TableId).GetFields(BindingFlags.Public | BindingFlags.Static))
-      {
-        var key = (TableId) field.GetValue(typeof(TableId));
-        var result = await key.DeserializeAsync(serializationOptions, gameData);
-        if (result != null)
-        {
-          gameData = result;
-        }
-      }
+      // This seems like it should not be needed, but MessagePack is ignoring the provided options for dictionaries...
+      MessagePackSerializer.DefaultOptions = serializationOptions;
+
+      var fetch = Resources.LoadAsync<TextAsset>(_readResourcePath!);
+      yield return fetch;
+
+      var asset = fetch.asset as TextAsset;
+      var gameData = asset == null ? new GameData() : MessagePackSerializer.Deserialize<GameData>(asset.bytes);
 
       _database = new Database(serializationOptions, gameData);
       InvokeListeners(_database);
@@ -254,7 +255,7 @@ namespace Nighthollow.Data
 
     void Update()
     {
-      _database?.PerformWrites();
+      _database?.PerformWrites(_writeFilePath!);
     }
 
     public void OnReady(IOnDatabaseReadyListener listener)
