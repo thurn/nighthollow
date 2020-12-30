@@ -41,14 +41,34 @@ namespace Nighthollow.Data
   public static class TableId
   {
     public static readonly TableId<CreatureTypeData> CreatureTypes = new CreatureTypesTableId();
+    public static readonly TableId<AffixTypeData> AffixTypes = new AffixTypesTableId();
+    public static readonly TableId<SkillTypeData> SkillTypes = new SkillTypesTableId();
 
-    public sealed class CreatureTypesTableId : TableId<CreatureTypeData>
+    sealed class CreatureTypesTableId : TableId<CreatureTypeData>
     {
       public override ImmutableDictionary<int, CreatureTypeData> GetIn(GameData gameData) =>
         gameData.CreatureTypes;
 
       public override GameData Write(GameData gameData, ImmutableDictionary<int, CreatureTypeData> newValue) =>
         gameData.WithCreatureTypes(newValue);
+    }
+
+    sealed class AffixTypesTableId : TableId<AffixTypeData>
+    {
+      public override ImmutableDictionary<int, AffixTypeData> GetIn(GameData gameData) =>
+        gameData.AffixTypes;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, AffixTypeData> newValue) =>
+        gameData.WithAffixTypes(newValue);
+    }
+
+    sealed class SkillTypesTableId : TableId<SkillTypeData>
+    {
+      public override ImmutableDictionary<int, SkillTypeData> GetIn(GameData gameData) =>
+        gameData.SkillTypes;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, SkillTypeData> newValue) =>
+        gameData.WithSkillTypes(newValue);
     }
   }
 }
