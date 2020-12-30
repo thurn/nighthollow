@@ -36,9 +36,9 @@ namespace Nighthollow.Data
 
     public string Identifier { get; }
 
-    public abstract Task<GameData?> DeserializeAsync(GameData gameData);
+    public abstract Task<GameData?> DeserializeAsync(MessagePackSerializerOptions options, GameData gameData);
 
-    public abstract Task SerializeAsync(GameData gameData);
+    public abstract Task SerializeAsync(MessagePackSerializerOptions options, GameData gameData);
 
     public abstract Type GetUnderlyingType();
 
@@ -52,29 +52,32 @@ namespace Nighthollow.Data
 
     public TableId(string identifier) : base(identifier)
     {
-      _readFilePath = Path.Combine("Data", $"{Identifier}.bytes");
+      _readFilePath = Path.Combine("Data", $"{Identifier}");
       _writeFilePath = Path.Combine(Application.dataPath, "Resources", "Data", $"{Identifier}.bytes");
     }
 
-    public override async Task<GameData?> DeserializeAsync(GameData gameData)
+    public override async Task<GameData?> DeserializeAsync(MessagePackSerializerOptions options, GameData gameData)
     {
       Debug.Log($"Attempting to read: {_readFilePath}");
       var asset = Resources.Load<TextAsset>(_readFilePath);
       if (asset == null)
       {
+        Debug.Log("Asset Not Found");
         return null;
       }
 
       var stream = new MemoryStream(asset.bytes);
-      var result = await MessagePackSerializer.DeserializeAsync<IReadOnlyDictionary<int, T>>(stream);
+      Debug.Log("Deserializing...");
+      var result = await MessagePackSerializer.DeserializeAsync<ImmutableDictionary<int, T>>(stream, options);
+      Debug.Log("Deserialized.");
       return gameData.SetItem(this, result.ToImmutableDictionary());
     }
 
-    public override async Task SerializeAsync(GameData gameData)
+    public override async Task SerializeAsync(MessagePackSerializerOptions options, GameData gameData)
     {
       Debug.Log($"Attempting to write: {_writeFilePath}");
       using var stream = File.OpenWrite(_writeFilePath);
-      await MessagePackSerializer.SerializeAsync<IReadOnlyDictionary<int, T>>(stream, gameData.Get(this));
+      await MessagePackSerializer.SerializeAsync<ImmutableDictionary<int, T>>(stream, gameData.Get(this), options);
     }
 
     public override Type GetUnderlyingType() => typeof(T);

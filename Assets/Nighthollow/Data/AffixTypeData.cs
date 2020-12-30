@@ -29,14 +29,14 @@ namespace Nighthollow.Data
       int minLevel,
       int weight,
       IntRangeValue manaCost,
-      IReadOnlyList<ModifierTypeData>? modifiers = null,
+      ImmutableList<ModifierTypeData>? modifiers = null,
       bool isTargeted = false,
       School? influenceType = null)
     {
       MinLevel = minLevel;
       Weight = weight;
       ManaCost = manaCost;
-      Modifiers = modifiers?.ToImmutableList() ?? ImmutableList<ModifierTypeData>.Empty;
+      Modifiers = modifiers ?? ImmutableList<ModifierTypeData>.Empty;
       IsTargeted = isTargeted;
       InfluenceType = influenceType;
     }
@@ -44,7 +44,7 @@ namespace Nighthollow.Data
     [Key(0)] public int MinLevel { get; }
     [Key(1)] public int Weight { get; }
     [Key(2)] public IntRangeValue ManaCost { get; }
-    [Key(3)] public IReadOnlyList<ModifierTypeData> Modifiers { get; }
+    [Key(3)] public ImmutableList<ModifierTypeData> Modifiers { get; }
     [Key(4)] public bool IsTargeted { get; }
     [Key(5)] public School? InfluenceType { get; }
   }

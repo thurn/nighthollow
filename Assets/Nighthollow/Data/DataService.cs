@@ -26,13 +26,15 @@ namespace Nighthollow.Data
 {
   public sealed class Database
   {
+    readonly MessagePackSerializerOptions _serializationOptions;
     GameData _gameData;
     readonly Dictionary<(TableId, int), List<IListener>> _listeners;
     readonly List<IMutation> _mutations;
     bool _writePending;
 
-    public Database(GameData gameData)
+    public Database(MessagePackSerializerOptions serializationOptions, GameData gameData)
     {
+      _serializationOptions = serializationOptions;
       _gameData = gameData;
       _listeners = new Dictionary<(TableId, int), List<IListener>>();
       _mutations = new List<IMutation>();
@@ -93,7 +95,7 @@ namespace Nighthollow.Data
 
       foreach (var key in tableIds)
       {
-        await key.SerializeAsync(gameData);
+        await key.SerializeAsync(_serializationOptions, gameData);
       }
 
       _gameData = gameData;
@@ -224,7 +226,6 @@ namespace Nighthollow.Data
 
     void Start()
     {
-      MessagePackInitializer.Initialize();
       Initialize();
     }
 
@@ -232,17 +233,22 @@ namespace Nighthollow.Data
     {
       var gameData = new GameData();
 
+      var serializationOptions = MessagePackSerializerOptions.Standard
+        .WithResolver(CompositeResolver.Create(
+          GeneratedResolver.Instance,
+          StandardResolver.Instance));
+
       foreach (var field in typeof(TableId).GetFields(BindingFlags.Public | BindingFlags.Static))
       {
         var key = (TableId) field.GetValue(typeof(TableId));
-        var result = await key.DeserializeAsync(gameData);
+        var result = await key.DeserializeAsync(serializationOptions, gameData);
         if (result != null)
         {
           gameData = result;
         }
       }
 
-      _database = new Database(gameData);
+      _database = new Database(serializationOptions, gameData);
       InvokeListeners(_database);
     }
 
@@ -272,35 +278,5 @@ namespace Nighthollow.Data
 
       _listeners.Clear();
     }
-  }
-
-  public static class MessagePackInitializer
-  {
-    static bool _serializerRegistered;
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    public static void Initialize()
-    {
-      if (!_serializerRegistered)
-      {
-        Debug.Log("Registering MessagePack Serializers");
-        StaticCompositeResolver.Instance.Register(
-          GeneratedResolver.Instance,
-          StandardResolver.Instance
-        );
-
-        var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
-        MessagePackSerializer.DefaultOptions = option;
-        _serializerRegistered = true;
-      }
-    }
-
-#if UNITY_EDITOR
-    [UnityEditor.InitializeOnLoadMethod]
-    static void EditorInitialize()
-    {
-      Initialize();
-    }
-#endif
   }
 }

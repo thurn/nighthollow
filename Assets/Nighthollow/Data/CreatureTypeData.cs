@@ -30,7 +30,7 @@ namespace Nighthollow.Data
       string prefabAddress,
       PlayerName owner,
       IntRangeValue health,
-      IReadOnlyDictionary<SkillAnimationNumber, SkillAnimationType>? skillAnimations = null,
+      ImmutableDictionary<SkillAnimationNumber, SkillAnimationType>? skillAnimations = null,
       string? imageAddress = null,
       int baseManaCost = 0,
       int speed = 0,
@@ -42,8 +42,7 @@ namespace Nighthollow.Data
       PrefabAddress = prefabAddress;
       Owner = owner;
       Health = health;
-      SkillAnimations = skillAnimations?.ToImmutableDictionary() ??
-                        ImmutableDictionary<SkillAnimationNumber, SkillAnimationType>.Empty;
+      SkillAnimations = skillAnimations ?? ImmutableDictionary<SkillAnimationNumber, SkillAnimationType>.Empty;
       ImageAddress = imageAddress;
       BaseManaCost = baseManaCost;
       Speed = speed;
@@ -56,7 +55,7 @@ namespace Nighthollow.Data
     [Key(1)] public string PrefabAddress { get; }
     [Key(2)] public PlayerName Owner { get; }
     [Key(3)] public IntRangeValue Health { get; }
-    [Key(4)] public IReadOnlyDictionary<SkillAnimationNumber, SkillAnimationType> SkillAnimations { get; }
+    [Key(4)] public ImmutableDictionary<SkillAnimationNumber, SkillAnimationType> SkillAnimations { get; }
     [Key(5)] public string? ImageAddress { get; }
     [Key(6)] public int BaseManaCost { get; }
     [Key(7)] public int Speed { get; }
