@@ -85,6 +85,9 @@ namespace Nighthollow.Interface
     public static ElementKey<GameDataEditor> GameDataEditor =
       new ElementKey<GameDataEditor>("GameDataEditor", createAtRuntime: true);
 
+    public static ElementKey<EditorDropdown> EditorDropdown =
+      new ElementKey<EditorDropdown>("EditorDropdown", createAtRuntime: true);
+
     [SerializeField] UIDocument _document = null!;
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
@@ -98,6 +101,7 @@ namespace Nighthollow.Interface
       RewardsWindow,
       RewardChoiceWindow,
       GameDataEditor,
+      EditorDropdown
     };
 
     DragInfo? _currentlyDragging;

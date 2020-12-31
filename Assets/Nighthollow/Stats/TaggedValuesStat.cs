@@ -153,7 +153,7 @@ namespace Nighthollow.Stats
       IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
       IntRangeStat.Compute(operations);
 
-    protected override IntRangeValue ParseTaggedValue(string value) => IntRangeStat.ParseIntRange(value);
+    protected override IntRangeValue ParseTaggedValue(string value) => IntRangeValue.ParseIntRange(value);
   }
 
   public sealed class DamageTypeIntsStat : TaggedIntValuesStat<DamageType>

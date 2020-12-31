@@ -23,7 +23,7 @@ namespace Nighthollow.Editing
   {
     public TableEditorSheetDelegate(ReflectivePath path)
     {
-      var properties = path.TableId.GetUnderlyingType().GetProperties();
+      var properties = path.GetUnderlyingType().GetProperties();
       Headings = new List<string> {"ID"};
       Headings.AddRange(properties.Select(property => property.Name));
 

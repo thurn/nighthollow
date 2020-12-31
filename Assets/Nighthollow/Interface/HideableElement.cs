@@ -51,7 +51,7 @@ namespace Nighthollow.Interface
       }
     }
 
-    protected abstract void Initialize();
+    protected virtual void Initialize() {}
 
     protected abstract void OnShow(TShowArgument argument);
 

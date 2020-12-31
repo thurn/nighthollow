@@ -45,8 +45,6 @@ namespace Nighthollow.Editing
       _isReadOnly = isReadOnly;
     }
 
-    public ITableId TableId => _tableId;
-
     public bool IsReadOnly => _isReadOnly;
 
     public ReflectivePath EntityId(int entityId) =>
@@ -59,6 +57,8 @@ namespace Nighthollow.Editing
       new ReflectivePath(_database, _tableId, _path.Add(new ConstantSegment(constant)), isReadOnly: true);
 
     public IDictionary GetTable() => _tableId.GetInUnchecked(_database.Snapshot());
+
+    public Type GetUnderlyingType() => _path.IsEmpty ? _tableId.GetUnderlyingType() : _path.Last().GetUnderlyingType();
 
     public object? Read()
     {
@@ -81,6 +81,8 @@ namespace Nighthollow.Editing
       object? Read(object previous);
 
       object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue);
+
+      Type GetUnderlyingType();
     }
 
     sealed class PropertySegment : ISegment
@@ -109,6 +111,8 @@ namespace Nighthollow.Editing
           });
         }
       }
+
+      public Type GetUnderlyingType() => _property.PropertyType;
     }
 
     sealed class TableEntitySegement : ISegment
@@ -141,6 +145,8 @@ namespace Nighthollow.Editing
 
         ((Database) parent).Update((TableId<T>) _tableId, _entityId, UpdateFn);
       }
+
+      public Type GetUnderlyingType() => _tableId.GetUnderlyingType();
     }
 
     sealed class ConstantSegment : ISegment
@@ -156,6 +162,8 @@ namespace Nighthollow.Editing
 
       public object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue) =>
         throw new InvalidOperationException($"Cannot write to constant {_value}");
+
+      public Type GetUnderlyingType() => _value.GetType();
     }
   }
 }

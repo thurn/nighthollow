@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Nighthollow.Interface;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -22,20 +22,35 @@ namespace Nighthollow.Editing
 {
   public sealed class PrimitiveEditorCellDelegate<T> : EditorCellDelegate
   {
-    readonly Func<string, T> _parsingFunction;
+    public delegate bool ParsingFunction(string input, out T output);
 
-    public PrimitiveEditorCellDelegate(Func<string, T> parsingFunction)
+    readonly ReflectivePath _reflectivePath;
+    readonly ParsingFunction _parsingFunction;
+
+    public PrimitiveEditorCellDelegate(ReflectivePath reflectivePath, ParsingFunction parsingFunction)
     {
+      _reflectivePath = reflectivePath;
       _parsingFunction = parsingFunction;
     }
 
-    public override string? Initialize(TextField field, ReflectivePath reflectivePath)
+    public override string? Initialize(TextField field, IEditor parent)
     {
-      field.RegisterCallback<ChangeEvent<string>>(e => { reflectivePath.Write(_parsingFunction(e.newValue)); });
-      return reflectivePath.Read()?.ToString();
+      field.RegisterCallback<ChangeEvent<string>>(e =>
+      {
+        if (_parsingFunction(e.newValue, out var output))
+        {
+          _reflectivePath.Write(output);
+        }
+        else
+        {
+          field.value = e.previousValue;
+        }
+      });
+
+      return _reflectivePath.Read()?.ToString();
     }
 
-    public override void OnActivate(TextField field)
+    public override void OnActivate(TextField field, Rect worldBound)
     {
       // TextField needs time after setting focusable and calling Focus() before it works, but there is no obvious
       // event which corresponds to these operations completing.
@@ -52,8 +67,9 @@ namespace Nighthollow.Editing
       });
     }
 
-    public override void OnKeyDown(KeyDownEvent evt, IEditor parent)
+    public override void OnDeactivate(TextField field)
     {
+      field.focusable = false;
     }
   }
 }

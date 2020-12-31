@@ -33,7 +33,7 @@ namespace Nighthollow.Interface
     readonly ScreenController _controller;
     readonly Config _config;
     readonly VisualElement _content;
-    readonly Dictionary<Vector2Int, EditorCell> _cells;
+    readonly Dictionary<Vector2Int, OldCell> _cells;
     readonly ScrollView _scrollView;
     readonly ObjectEditor? _parentEditor;
     readonly int _width;
@@ -111,9 +111,9 @@ namespace Nighthollow.Interface
       RegisterCallback<KeyUpEvent>(OnKeyUp);
     }
 
-    Dictionary<Vector2Int, EditorCell> RenderTable()
+    Dictionary<Vector2Int, OldCell> RenderTable()
     {
-      var result = new Dictionary<Vector2Int, EditorCell>();
+      var result = new Dictionary<Vector2Int, OldCell>();
 
       foreach (var heading in _config.Headings)
       {
@@ -127,7 +127,7 @@ namespace Nighthollow.Interface
         {
           var value = row[columnIndex];
           var position = new Vector2Int(columnIndex, rowIndex);
-          var cell = new EditorCell(
+          var cell = new OldCell(
             _controller,
             value.ReflectivePath,
             this,

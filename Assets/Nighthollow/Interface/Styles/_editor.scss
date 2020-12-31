@@ -76,7 +76,7 @@
     border-color: blue;
 
     * {
-      background-color: rgb(227,242,253);
+      background-color: rgb(225, 245, 254);
     }
   }
 
@@ -89,28 +89,26 @@
   }
 }
 
-.typeahead {
+.dropdown {
   position: absolute;
   border-color: black;
   border-width: 1px;
   @include fonts.black-text;
   font-size: font-sizes.$body1;
-  background-color: rgb(200, 200, 200);
+  background-color: rgb(228, 228, 228);
 
-  .typeahead-option {
+  .dropdown-option {
     padding: 8px;
   }
 
-  .typeahead-option.selected {
-    background-color: rgb(228, 228, 228);
+  .dropdown-option.selected {
+    background-color: rgb(225, 245, 254);
+    border-color: blue;
+    border-width: 1px;
   }
 
-  .typeahead-option:hover {
-    background-color: rgb(214, 214, 214);
-  }
-
-  .typeahead-option:active {
-    background-color: rgb(172, 172, 172);
+  .dropdown-option:hover {
+    background-color: rgb(242, 242, 242);
   }
 }
 

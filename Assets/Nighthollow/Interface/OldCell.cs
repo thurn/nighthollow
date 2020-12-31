@@ -26,7 +26,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class EditorCell : VisualElement
+  public sealed class OldCell : VisualElement
   {
     readonly ScreenController _controller;
     readonly ReflectivePath? _reflectivePath;
@@ -46,7 +46,7 @@ namespace Nighthollow.Interface
       typeof(PercentageValue)
     };
 
-    public EditorCell(
+    public OldCell(
       ScreenController controller,
       ReflectivePath? reflectivePath,
       ObjectEditor editor,

@@ -23,7 +23,7 @@ namespace Nighthollow.Editing
 {
   public interface IEditor
   {
-    void OnChildEditingComplete();
+    void OnChildEditingComplete(string? preview);
   }
 
   public abstract class EditorSheetDelegate
@@ -40,7 +40,6 @@ namespace Nighthollow.Editing
     const int DefaultCellWidth = 250;
     const int ContentPadding = 16;
 
-    // ReSharper disable once NotAccessedField.Local
     readonly ScreenController _screenController;
     readonly EditorSheetDelegate _sheetDelegate;
     readonly ScrollView _scrollView;
@@ -48,7 +47,6 @@ namespace Nighthollow.Editing
     readonly Dictionary<Vector2Int, EditorCell> _cells;
 
     Vector2Int? _currentlySelected;
-    bool _focused;
     EditorCell? _currentlyActive;
 
     public EditorSheet(ScreenController controller, EditorSheetDelegate sheetDelegate)
@@ -77,10 +75,7 @@ namespace Nighthollow.Editing
       _cells = RenderCells();
       RegisterCallback<KeyDownEvent>(OnKeyDown);
 
-      InterfaceUtils.After(0.01f, () =>
-      {
-        SelectPosition(Vector2Int.zero);
-      });
+      InterfaceUtils.After(0.01f, () => { SelectPosition(Vector2Int.zero); });
     }
 
     Dictionary<Vector2Int, EditorCell> RenderCells()
@@ -98,7 +93,7 @@ namespace Nighthollow.Editing
         for (var columnIndex = 0; columnIndex < list.Count; columnIndex++)
         {
           var position = new Vector2Int(columnIndex, rowIndex);
-          var cell = new EditorCell(list[columnIndex], this, new PrimitiveEditorCellDelegate<string>(s => s));
+          var cell = EditorCellFactory.Create(_screenController, list[columnIndex], this);
           cell.RegisterCallback<ClickEvent>(e =>
           {
             if (position == _currentlySelected)
@@ -138,8 +133,14 @@ namespace Nighthollow.Editing
 
     void OnKeyDown(KeyDownEvent evt)
     {
-      if (!_currentlySelected.HasValue || !_focused)
+      if (!_currentlySelected.HasValue)
       {
+        return;
+      }
+
+      if (_currentlyActive != null)
+      {
+        _currentlyActive.OnParentKeyDown(evt);
         return;
       }
 
@@ -169,7 +170,6 @@ namespace Nighthollow.Editing
     void ActivateCell(Vector2Int position)
     {
       _currentlyActive?.Deactivate();
-      _focused = false;
       _currentlyActive = _cells[position];
       _scrollView.ScrollTo(_currentlyActive);
       _currentlyActive.Activate();
@@ -182,7 +182,6 @@ namespace Nighthollow.Editing
         _currentlyActive?.Deactivate();
         _currentlyActive = null;
 
-        _focused = true;
         Focus();
 
         if (_currentlySelected.HasValue)
@@ -196,10 +195,10 @@ namespace Nighthollow.Editing
       }
     }
 
-    public void OnChildEditingComplete()
+    public void OnChildEditingComplete(string? preview)
     {
+      _currentlyActive = null;
       Focus();
-      _focused = true;
     }
   }
 }

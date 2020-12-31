@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Generated;
-using UnityEngine;
 
 #nullable enable
 
@@ -61,6 +60,33 @@ namespace Nighthollow.Stats
     public static bool operator ==(IntRangeValue left, IntRangeValue right) => left.Equals(right);
 
     public static bool operator !=(IntRangeValue left, IntRangeValue right) => !left.Equals(right);
+
+    public static bool TryParse(string value, out IntRangeValue result)
+    {
+      var split = value.Split('-');
+      if (split.Length == 2 && int.TryParse(split[0], out var low) && int.TryParse(split[1], out var high))
+      {
+        result = new IntRangeValue(low, high);
+        return true;
+      }
+      else
+      {
+        result = Zero;
+        return false;
+      }
+    }
+
+    public static IntRangeValue ParseIntRange(string value)
+    {
+      if (TryParse(value, out var result))
+      {
+        return result;
+      }
+      else
+      {
+        throw new ArgumentException($"Invalid IntRange {value}");
+      }
+    }
   }
 
   public sealed class IntRangeStat : NumericStat<IntRangeValue>
@@ -79,20 +105,6 @@ namespace Nighthollow.Stats
         IntStat.Compute(operations, range => range.High));
     }
 
-    protected override IntRangeValue ParseStatValue(string value) => ParseIntRange(value);
-
-    public static IntRangeValue ParseIntRange(string value)
-    {
-      var split = value.Split('-');
-      try
-      {
-        return new IntRangeValue(int.Parse(split[0]), int.Parse(split[1]));
-      }
-      catch (FormatException)
-      {
-        Debug.LogError($"Error parsing range: {value}");
-        throw;
-      }
-    }
+    protected override IntRangeValue ParseStatValue(string value) => IntRangeValue.ParseIntRange(value);
   }
 }

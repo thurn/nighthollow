@@ -21,14 +21,16 @@ namespace Nighthollow.Editing
 {
   public abstract class EditorCellDelegate
   {
-    public abstract string? Initialize(TextField field, ReflectivePath reflectivePath);
+    public abstract string? Initialize(TextField field, IEditor parent);
 
-    public abstract void OnActivate(TextField field);
+    public abstract void OnActivate(TextField field, Rect worldBound);
 
-    public abstract void OnKeyDown(KeyDownEvent evt, IEditor parent);
+    public virtual void OnParentKeyDown(KeyDownEvent evt) { }
+
+    public virtual void OnDeactivate(TextField field) { }
   }
 
-  public sealed class EditorCell : VisualElement
+  public sealed class EditorCell : VisualElement, IEditor
   {
     readonly ReflectivePath _reflectivePath;
     readonly TextField _field;
@@ -53,8 +55,8 @@ namespace Nighthollow.Editing
       _field.AddToClassList("editor-text-field");
       Add(_field);
 
-      _field.RegisterCallback<KeyDownEvent>(OnKeyDown);
-      _field.value = _cellDelegate.Initialize(_field, _reflectivePath);
+      _field.RegisterCallback<KeyDownEvent>(OnKeyDownInternal);
+      _field.value = _cellDelegate.Initialize(_field, this);
     }
 
     public void Select()
@@ -71,25 +73,33 @@ namespace Nighthollow.Editing
     {
       if (_reflectivePath.IsReadOnly)
       {
-        _parent.OnChildEditingComplete();
+        Deactivate();
         return;
       }
 
       RemoveFromClassList("selected");
       AddToClassList("active");
 
-      _cellDelegate.OnActivate(_field);
+      _cellDelegate.OnActivate(_field, worldBound);
     }
 
     public void Deactivate()
     {
-      _field.focusable = false;
       RemoveFromClassList("active");
       AddToClassList("selected");
-      _parent.OnChildEditingComplete();
+      _cellDelegate.OnDeactivate(_field);
+      _parent.OnChildEditingComplete(null);
     }
 
-    void OnKeyDown(KeyDownEvent evt)
+    public void OnChildEditingComplete(string? preview)
+    {
+      _field.value = preview;
+      Deactivate();
+    }
+
+    // Unity just sort of randomly gives KeyDown events to whoever it feels like, so we need this method to detect
+    // the "Enter" key and the below method to detect other key presses :(
+    void OnKeyDownInternal(KeyDownEvent evt)
     {
       switch (evt.keyCode)
       {
@@ -99,6 +109,11 @@ namespace Nighthollow.Editing
           Deactivate();
           break;
       }
+    }
+
+    public void OnParentKeyDown(KeyDownEvent evt)
+    {
+      _cellDelegate.OnParentKeyDown(evt);
     }
   }
 }
