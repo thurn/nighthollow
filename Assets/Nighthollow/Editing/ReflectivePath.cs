@@ -12,64 +12,75 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+using Nighthollow.Data;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Editing
 {
   public sealed class ReflectivePath
   {
     readonly Database _database;
-    readonly ITableId? _currentTableId;
+    readonly ITableId _tableId;
     readonly ImmutableList<ISegment> _path;
+    readonly bool _isReadOnly;
 
-    public ReflectivePath(Database database)
+    public ReflectivePath(Database database, ITableId tableId)
     {
       _database = database;
+      _tableId = tableId;
       _path = ImmutableList<ISegment>.Empty;
     }
 
-    ReflectivePath(Database database, ITableId? currentTableId, ImmutableList<ISegment> segments)
+    ReflectivePath(Database database, ITableId tableId, ImmutableList<ISegment> segments, bool isReadOnly = false)
     {
       _database = database;
-      _currentTableId = currentTableId;
+      _tableId = tableId;
       _path = segments;
+      _isReadOnly = isReadOnly;
     }
 
-    public ReflectivePath TableId(ITableId tableId) =>
-      new ReflectivePath(_database, tableId, _path);
+    public ITableId TableId => _tableId;
 
-    // Current table ID is cleared, must provide a new table ID before using EntityID again.
+    public bool IsReadOnly => _isReadOnly;
+
     public ReflectivePath EntityId(int entityId) =>
-      new ReflectivePath(_database, null, _path.Add(new TableEntitySegement(_currentTableId!, entityId)));
+      new ReflectivePath(_database, _tableId, _path.Add(new TableEntitySegement(_tableId!, entityId)));
 
     public ReflectivePath Property(PropertyInfo propertyInfo) =>
-      new ReflectivePath(_database, _currentTableId, _path.Add(new PropertySegment(propertyInfo)));
+      new ReflectivePath(_database, _tableId, _path.Add(new PropertySegment(propertyInfo)));
 
-    public object Read()
+    public ReflectivePath Constant(object constant) =>
+      new ReflectivePath(_database, _tableId, _path.Add(new ConstantSegment(constant)), isReadOnly: true);
+
+    public IDictionary GetTable() => _tableId.GetInUnchecked(_database.Snapshot());
+
+    public object? Read()
     {
-      object result = _database;
+      object? result = _database;
       foreach (var segment in _path)
       {
-        result = segment.Read(result);
+        result = segment.Read(result!);
       }
 
       return result;
     }
 
-    public void Write(object newValue)
+    public void Write(object? newValue)
     {
       _path.First().Write(_path.Skip(1).ToImmutableList(), _database, newValue);
     }
 
     interface ISegment
     {
-      object Read(object previous);
+      object? Read(object previous);
 
-      object Write(ImmutableList<ISegment> remainingSegments, object parent, object newValue);
+      object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue);
     }
 
     sealed class PropertySegment : ISegment
@@ -81,9 +92,9 @@ namespace Nighthollow.Data
         _property = property;
       }
 
-      public object Read(object previous) => _property.GetValue(previous);
+      public object? Read(object previous) => _property.GetValue(previous);
 
-      public object Write(ImmutableList<ISegment> remainingSegments, object parent, object newValue)
+      public object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue)
       {
         var method = parent.GetType().GetMethod("With" + _property.Name, BindingFlags.Instance | BindingFlags.Public)!;
         if (remainingSegments.IsEmpty)
@@ -94,7 +105,7 @@ namespace Nighthollow.Data
         {
           return method.Invoke(parent, new[]
           {
-            remainingSegments.First().Write(remainingSegments.Skip(1).ToImmutableList(), Read(parent), newValue)
+            remainingSegments.First().Write(remainingSegments.Skip(1).ToImmutableList(), Read(parent)!, newValue)
           });
         }
       }
@@ -113,13 +124,14 @@ namespace Nighthollow.Data
 
       public object Read(object previous) => _tableId.GetInUnchecked(((Database) previous).Snapshot())[_entityId];
 
-      public object Write(ImmutableList<ISegment> remainingSegments, object parent, object newValue) =>
+      public object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue) =>
         typeof(TableEntitySegement)
             .GetMethod(nameof(WriteInternal), BindingFlags.Public | BindingFlags.Instance)!
           .MakeGenericMethod(_tableId.GetUnderlyingType())
           .Invoke(this, new[] {remainingSegments, parent, newValue});
 
-      public void WriteInternal<T>(ImmutableList<ISegment> remainingSegments, object parent, object newValue) where T : class
+      public void WriteInternal<T>(ImmutableList<ISegment> remainingSegments, object parent, object newValue)
+        where T : class
       {
         T UpdateFn(T? oldValue)
         {
@@ -129,6 +141,21 @@ namespace Nighthollow.Data
 
         ((Database) parent).Update((TableId<T>) _tableId, _entityId, UpdateFn);
       }
+    }
+
+    sealed class ConstantSegment : ISegment
+    {
+      readonly object _value;
+
+      public ConstantSegment(object value)
+      {
+        _value = value;
+      }
+
+      public object Read(object previous) => _value;
+
+      public object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue) =>
+        throw new InvalidOperationException($"Cannot write to constant {_value}");
     }
   }
 }

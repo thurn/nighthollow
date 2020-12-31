@@ -113,7 +113,5 @@ limitations under the License.
                 <ui:Label name="Text" class="dialog-text" text="Text"/>
             </nh:Dialog>
         </ui:VisualElement>
-
-        <nh:GameDataEditor name="GameDataEditor" class="editor-window" />
     </ui:VisualElement>
 </ui:UXML>

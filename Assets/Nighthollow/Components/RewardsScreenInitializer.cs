@@ -15,6 +15,7 @@
 using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Data;
+using Nighthollow.Editing;
 using Nighthollow.Interface;
 using UnityEngine;
 

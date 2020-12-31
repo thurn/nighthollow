@@ -15,8 +15,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using Nighthollow.Editing;
 using Nighthollow.Items;
 using Nighthollow.Utils;
+using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,16 +33,30 @@ namespace Nighthollow.Interface
     AbstractHideableElement FindByNameIn(VisualElement element);
   }
 
-  public readonly struct ElementKey<T> : IElementKey where T : AbstractHideableElement
+  public readonly struct ElementKey<T> : IElementKey where T : AbstractHideableElement, new()
   {
+    readonly bool _createAtRuntime;
     public string Name { get; }
 
-    public ElementKey(string name)
+    public ElementKey(string name, bool createAtRuntime = false)
     {
       Name = name;
+      _createAtRuntime = createAtRuntime;
     }
 
-    public AbstractHideableElement FindByNameIn(VisualElement element) => InterfaceUtils.FindByName<T>(element, Name);
+    public AbstractHideableElement FindByNameIn(VisualElement element)
+    {
+      if (_createAtRuntime)
+      {
+        var result = new T();
+        element.Add(result);
+        return result;
+      }
+      else
+      {
+        return InterfaceUtils.FindByName<T>(element, Name);
+      }
+    }
   }
 
   public sealed class ScreenController : MonoBehaviour
@@ -67,7 +83,7 @@ namespace Nighthollow.Interface
       new ElementKey<RewardChoiceWindow>("RewardChoiceWindow");
 
     public static ElementKey<GameDataEditor> GameDataEditor =
-      new ElementKey<GameDataEditor>("GameDataEditor");
+      new ElementKey<GameDataEditor>("GameDataEditor", createAtRuntime: true);
 
     [SerializeField] UIDocument _document = null!;
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
@@ -119,9 +135,9 @@ namespace Nighthollow.Interface
       _screen.RegisterCallback<MouseUpEvent>(MouseUp);
     }
 
-    public T Get<T>(ElementKey<T> key) where T : AbstractHideableElement => (T) GetElement(key);
+    public T Get<T>(ElementKey<T> key) where T : AbstractHideableElement, new() => (T) GetElement(key);
 
-    public void Show<T>(ElementKey<T> key) where T : DefaultHideableElement
+    public void Show<T>(ElementKey<T> key) where T : DefaultHideableElement, new()
     {
       Get(key).Show();
     }

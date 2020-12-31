@@ -32,13 +32,6 @@
   .editor-scroll-view {
     margin: 64px 16px 16px;
   }
-
-  .editor-tabs {
-    flex-direction: row;
-    padding: 16px;
-    width: 100%;
-    justify-content: flex-start;
-  }
 }
 
 .editor-content {
@@ -55,6 +48,9 @@
     align-items: center;
     min-width: 0;
     overflow: hidden;
+    border-color: black;
+    border-width: 1px;
+    font-size: 28px;
 
     .editor-heading {
       @include fonts.black-text;
@@ -77,12 +73,19 @@
   }
 
   .editor-cell.selected {
-    border-width: 2px;
     border-color: blue;
+
+    * {
+      background-color: rgb(227,242,253);
+    }
   }
 
-  .editor-cell.focused {
+  .editor-cell.active {
     border-color: green;
+
+    * {
+      background-color: rgb(232,245,233);
+    }
   }
 }
 

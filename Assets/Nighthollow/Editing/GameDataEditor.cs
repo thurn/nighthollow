@@ -13,11 +13,11 @@
 // limitations under the License.
 
 using Nighthollow.Data;
-using UnityEngine.UIElements;
+using Nighthollow.Interface;
 
 #nullable enable
 
-namespace Nighthollow.Interface
+namespace Nighthollow.Editing
 {
   public sealed class GameDataEditor : HideableElement<GameDataEditor.Args>
   {
@@ -31,24 +31,16 @@ namespace Nighthollow.Interface
       public Database Database { get; }
     }
 
-    public new sealed class UxmlFactory : UxmlFactory<GameDataEditor, UxmlTraits>
-    {
-    }
-
     protected override void Initialize()
     {
+      AddToClassList("editor-window");
     }
 
     protected override void OnShow(Args argument)
     {
-      var gameData = argument.Database.Snapshot();
       var tableId = (ITableId) TableId.CreatureTypes;
-      var path = new ReflectivePath(argument.Database).TableId(tableId);
-      var editor = new ObjectEditor(Controller, ObjectEditor.ForTable(
-          path,
-          tableId.GetUnderlyingType(),
-          tableId.GetInUnchecked(gameData)),
-        height: 4000);
+      var path = new ReflectivePath(argument.Database, tableId);
+      var editor = new EditorSheet(Controller, new TableEditorSheetDelegate(path));
       Add(editor);
     }
   }
