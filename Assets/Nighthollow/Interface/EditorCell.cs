@@ -16,6 +16,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Nighthollow.Data;
 using Nighthollow.Stats;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -27,6 +28,7 @@ namespace Nighthollow.Interface
   public sealed class EditorCell : VisualElement
   {
     readonly ScreenController _controller;
+    readonly ReflectivePath? _reflectivePath;
     readonly ObjectEditor _editor;
     readonly Vector2Int _position;
     readonly TextField _field;
@@ -45,6 +47,7 @@ namespace Nighthollow.Interface
 
     public EditorCell(
       ScreenController controller,
+      ReflectivePath? reflectivePath,
       ObjectEditor editor,
       Vector2Int position,
       Type type,
@@ -53,6 +56,7 @@ namespace Nighthollow.Interface
       string? name = null)
     {
       _controller = controller;
+      _reflectivePath = reflectivePath;
       _editor = editor;
       _position = position;
       string? rendered;
@@ -184,7 +188,7 @@ namespace Nighthollow.Interface
 
     void OnValueChanged(ChangeEvent<string> evt)
     {
-      Debug.Log($"OnValueChanged: {evt.newValue}");
+      _reflectivePath?.Write(evt.newValue);
     }
   }
 }

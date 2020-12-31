@@ -27,7 +27,7 @@ namespace Nighthollow.Data
     IDictionary GetInUnchecked(GameData gameData);
   }
 
-  public abstract class TableId<T> : ITableId
+  public abstract class TableId<T> : ITableId where T : class
   {
     public abstract ImmutableDictionary<int, T> GetIn(GameData gameData);
 

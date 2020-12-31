@@ -77,7 +77,7 @@ namespace Nighthollow.Data
       _mutations.Add(new DeleteMutation<T>(tableId, entityId));
     }
 
-    public void PerformWrites(string writeFilePath)
+    public void PerformWrites(string persistentFilePath, string editorFilePath)
     {
       if (_mutations.Count == 0 || _writePending)
       {
@@ -95,8 +95,23 @@ namespace Nighthollow.Data
       }
 
       _mutations.Clear();
-      using var stream = File.OpenWrite(writeFilePath);
+      using var stream = File.OpenWrite(persistentFilePath);
       MessagePackSerializer.Serialize(stream, gameData, _serializationOptions);
+      Debug.Log($"Wrote game data to {persistentFilePath}");
+
+#if UNITY_WEBGL
+#pragma warning disable 618
+      // See https://forum.unity.com/threads/how-does-saving-work-in-webgl.390385/
+      Application.ExternalEval("_JS_FileSystem_Sync();");
+#pragma warning restore 618
+#endif
+
+#if UNITY_EDITOR
+      // In the editor we write directly to assets as well for convenience
+      using var editorStream = File.OpenWrite(editorFilePath);
+      MessagePackSerializer.Serialize(editorStream, gameData, _serializationOptions);
+      Debug.Log($"Wrote game data to {editorFilePath}");
+#endif
 
       _gameData = gameData;
 
@@ -220,16 +235,19 @@ namespace Nighthollow.Data
 
   public sealed class DataService : MonoBehaviour
   {
-    string? _readResourcePath;
-    string? _writeFilePath;
+    string? _resourceAddress;
+    string? _persistentFilePath;
+    string? _editorFilePath;
 
     Database? _database;
     readonly List<IOnDatabaseReadyListener> _listeners = new List<IOnDatabaseReadyListener>();
 
     void Start()
     {
-      _readResourcePath = Path.Combine("Data", "GameData");
-      _writeFilePath = Path.Combine(Application.dataPath, "Resources", "Data", "GameData.bytes");
+      _resourceAddress = Path.Combine("Data", "GameData");
+      _persistentFilePath = Path.Combine(Application.persistentDataPath, "GameData.bytes");
+      _editorFilePath = Path.Combine(Application.dataPath, "Resources", "Data", "GameData.bytes");
+
       StartCoroutine(Initialize());
     }
 
@@ -241,13 +259,26 @@ namespace Nighthollow.Data
           StandardResolver.Instance));
 
       // This seems like it should not be needed, but MessagePack is ignoring the provided options for dictionaries...
-      MessagePackSerializer.DefaultOptions = serializationOptions;
+      // MessagePackSerializer.DefaultOptions = serializationOptions;
 
-      var fetch = Resources.LoadAsync<TextAsset>(_readResourcePath!);
-      yield return fetch;
+      GameData gameData;
+      if (File.Exists(_persistentFilePath))
+      {
+        using var file = File.OpenRead(_persistentFilePath!);
+        gameData = MessagePackSerializer.Deserialize<GameData>(file, serializationOptions);
+        Debug.Log($"Read game data from {_persistentFilePath}");
+      }
+      else
+      {
+        var fetch = Resources.LoadAsync<TextAsset>(_resourceAddress!);
+        yield return fetch;
 
-      var asset = fetch.asset as TextAsset;
-      var gameData = asset == null ? new GameData() : MessagePackSerializer.Deserialize<GameData>(asset.bytes);
+        var asset = fetch.asset as TextAsset;
+        gameData = asset == null
+          ? new GameData()
+          : MessagePackSerializer.Deserialize<GameData>(asset.bytes, serializationOptions);
+        Debug.Log($"Read game data from {_resourceAddress}");
+      }
 
       _database = new Database(serializationOptions, gameData);
       InvokeListeners(_database);
@@ -255,7 +286,7 @@ namespace Nighthollow.Data
 
     void Update()
     {
-      _database?.PerformWrites(_writeFilePath!);
+      _database?.PerformWrites(_persistentFilePath!, _editorFilePath!);
     }
 
     public void OnReady(IOnDatabaseReadyListener listener)

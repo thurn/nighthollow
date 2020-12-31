@@ -16,6 +16,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -41,7 +42,7 @@ namespace Nighthollow.Interface
     bool _exclusiveFocused;
     ObjectEditor? _inlineEditor;
 
-    public static Config ForTable(Type type, IDictionary table)
+    public static Config ForTable(ReflectivePath path, Type type, IDictionary table)
     {
       var rows = new List<Row>();
       foreach (var rowId in table.Keys)
@@ -49,10 +50,11 @@ namespace Nighthollow.Interface
         rows.Add(new Row(
           type.GetProperties()
             .Select(property => new Value(
+              path.EntityId((int) rowId).Property(property),
               property.PropertyType,
               property.GetValue(table[rowId]),
               property.Name))
-            .Prepend(new Value(rowId.GetType(), rowId, "Id"))));
+            .Prepend(new Value(reflectivePath: null, rowId.GetType(), rowId, "Id"))));
       }
 
       return new Config(
@@ -69,8 +71,8 @@ namespace Nighthollow.Interface
         rows.AddRange(from object? key in dictionary.Keys
           select new Row(new List<Value>
           {
-            new Value(key.GetType(), key),
-            new Value(dictionary[key].GetType(), dictionary[key])
+            new Value(null, key.GetType(), key),
+            new Value(null, dictionary[key].GetType(), dictionary[key])
           }));
       }
 
@@ -126,6 +128,7 @@ namespace Nighthollow.Interface
           var position = new Vector2Int(columnIndex, rowIndex);
           var cell = new EditorCell(
             _controller,
+            value.ReflectivePath,
             this,
             position,
             value.Type,
@@ -295,13 +298,15 @@ namespace Nighthollow.Interface
 
     public sealed class Value
     {
-      public Value(Type type, object? o = null, string? name = null)
+      public Value(ReflectivePath? reflectivePath, Type type, object? o = null, string? name = null)
       {
+        ReflectivePath = reflectivePath;
         Type = type;
         Object = o;
         Name = name;
       }
 
+      public ReflectivePath? ReflectivePath { get; }
       public Type Type { get; }
       public object? Object { get; }
       public string? Name { get; }

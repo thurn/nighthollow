@@ -43,7 +43,9 @@ namespace Nighthollow.Interface
     {
       var gameData = argument.Database.Snapshot();
       var tableId = (ITableId) TableId.CreatureTypes;
+      var path = new ReflectivePath(argument.Database).TableId(tableId);
       var editor = new ObjectEditor(Controller, ObjectEditor.ForTable(
+          path,
           tableId.GetUnderlyingType(),
           tableId.GetInUnchecked(gameData)),
         height: 4000);
