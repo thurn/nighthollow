@@ -22,7 +22,7 @@ using Nighthollow.Stats;
 namespace Nighthollow.Data
 {
   [MessagePackObject]
-  public sealed class CreatureTypeData
+  public sealed partial class CreatureTypeData
   {
     public CreatureTypeData(
       string name,
@@ -61,47 +61,5 @@ namespace Nighthollow.Data
     [Key(8)] public AffixTypeData? ImplicitAffix { get; }
     [Key(9)] public SkillTypeData? ImplicitSkill { get; }
     [Key(10)] public bool IsManaCreature { get; }
-
-    public CreatureTypeData WithName(string name) =>
-      new CreatureTypeData(
-        name,
-        PrefabAddress,
-        Owner,
-        Health,
-        SkillAnimations,
-        ImageAddress,
-        BaseManaCost,
-        Speed,
-        ImplicitAffix,
-        ImplicitSkill,
-        IsManaCreature);
-
-    public CreatureTypeData WithPrefabAddress(string prefabAddress) =>
-      new CreatureTypeData(
-        Name,
-        prefabAddress,
-        Owner,
-        Health,
-        SkillAnimations,
-        ImageAddress,
-        BaseManaCost,
-        Speed,
-        ImplicitAffix,
-        ImplicitSkill,
-        IsManaCreature);
-
-    public CreatureTypeData WithOwner(PlayerName owner) =>
-      new CreatureTypeData(
-        Name,
-        PrefabAddress,
-        owner,
-        Health,
-        SkillAnimations,
-        ImageAddress,
-        BaseManaCost,
-        Speed,
-        ImplicitAffix,
-        ImplicitSkill,
-        IsManaCreature);
   }
 }

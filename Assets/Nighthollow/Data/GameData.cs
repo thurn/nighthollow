@@ -20,7 +20,7 @@ using MessagePack;
 namespace Nighthollow.Data
 {
   [MessagePackObject]
-  public sealed class GameData
+  public sealed partial class GameData
   {
     public GameData(
       ImmutableDictionary<int, CreatureTypeData>? creatureTypes = null,
@@ -35,14 +35,5 @@ namespace Nighthollow.Data
     [Key(0)] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
     [Key(1)] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
     [Key(2)] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
-
-    public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
-      new GameData(creatureTypes, AffixTypes, SkillTypes);
-
-    public GameData WithAffixTypes(ImmutableDictionary<int, AffixTypeData> affixTypes) =>
-      new GameData(CreatureTypes, affixTypes, SkillTypes);
-
-    public GameData WithSkillTypes(ImmutableDictionary<int, SkillTypeData> skillTypes) =>
-      new GameData(CreatureTypes, AffixTypes, skillTypes);
   }
 }

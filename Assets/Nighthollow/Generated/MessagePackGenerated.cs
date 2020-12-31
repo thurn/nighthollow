@@ -834,7 +834,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(6);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatId?>().Serialize(ref writer, value.StatId, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.Operator?>().Serialize(ref writer, value.Operator, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.Operator?>().Serialize(ref writer, value.StatOperator, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Serialize(ref writer, value.DelegateId, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.ValueLow, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.ValueHigh, options);
@@ -852,7 +852,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
             var __StatId__ = default(global::Nighthollow.Generated.StatId?);
-            var __Operator__ = default(global::Nighthollow.Generated.Operator?);
+            var __StatOperator__ = default(global::Nighthollow.Generated.Operator?);
             var __DelegateId__ = default(global::Nighthollow.Generated.DelegateId?);
             var __ValueLow__ = default(global::Nighthollow.Data.IValueData);
             var __ValueHigh__ = default(global::Nighthollow.Data.IValueData);
@@ -866,7 +866,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                         __StatId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatId?>().Deserialize(ref reader, options);
                         break;
                     case 1:
-                        __Operator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.Operator?>().Deserialize(ref reader, options);
+                        __StatOperator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.Operator?>().Deserialize(ref reader, options);
                         break;
                     case 2:
                         __DelegateId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Deserialize(ref reader, options);
@@ -886,7 +886,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.ModifierTypeData(__StatId__, __Operator__, __DelegateId__, __ValueLow__, __ValueHigh__, __Targeted__);
+            var ____result = new global::Nighthollow.Data.ModifierTypeData(__StatId__, __StatOperator__, __DelegateId__, __ValueLow__, __ValueHigh__, __Targeted__);
             reader.Depth--;
             return ____result;
         }

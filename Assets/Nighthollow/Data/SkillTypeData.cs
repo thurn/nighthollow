@@ -20,7 +20,7 @@ using Nighthollow.Generated;
 namespace Nighthollow.Data
 {
   [MessagePackObject]
-  public sealed class SkillTypeData
+  public sealed partial class SkillTypeData
   {
     public SkillTypeData(
       string name,

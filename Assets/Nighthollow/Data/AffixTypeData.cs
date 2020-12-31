@@ -23,7 +23,7 @@ using Nighthollow.Stats;
 namespace Nighthollow.Data
 {
   [MessagePackObject]
-  public sealed class AffixTypeData
+  public sealed partial class AffixTypeData
   {
     public AffixTypeData(
       int minLevel,

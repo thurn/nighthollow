@@ -20,7 +20,7 @@ using Nighthollow.Generated;
 namespace Nighthollow.Data
 {
   [MessagePackObject]
-  public sealed class ModifierTypeData
+  public sealed partial class ModifierTypeData
   {
     public ModifierTypeData(
       StatId? statId = null,
@@ -31,7 +31,7 @@ namespace Nighthollow.Data
       bool targeted = false)
     {
       StatId = statId;
-      Operator = statOperator;
+      StatOperator = statOperator;
       DelegateId = delegateId;
       ValueLow = valueLow;
       ValueHigh = valueHigh;
@@ -39,7 +39,7 @@ namespace Nighthollow.Data
     }
 
     [Key(0)] public StatId? StatId { get; }
-    [Key(1)] public Operator? Operator { get; }
+    [Key(1)] public Operator? StatOperator { get; }
     [Key(2)] public DelegateId? DelegateId { get; }
     [Key(3)] public IValueData? ValueLow { get; }
     [Key(4)] public IValueData? ValueHigh { get; }
