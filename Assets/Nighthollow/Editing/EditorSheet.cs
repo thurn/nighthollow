@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Nighthollow.Interface;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -33,21 +31,6 @@ namespace Nighthollow.Editing
     void FocusRoot();
 
     void OnChildEditingComplete();
-  }
-
-  public abstract class EditorSheetDelegate
-  {
-    public abstract ReflectivePath ReflectivePath { get; }
-
-    public abstract List<string> Headings { get; }
-
-    public abstract List<List<ReflectivePath>> Cells { get; }
-
-    public virtual int? ContentHeightOverride => null;
-
-    public virtual string? RenderPreview(object? value) => null;
-
-    public int ColumnCount() => Math.Max(Headings.Count, Cells.Max(row => row.Count));
   }
 
   public sealed class EditorSheet : VisualElement, IEditor
@@ -127,8 +110,8 @@ namespace Nighthollow.Editing
           }
 
           var cell = columnIndex >= list.Count
-            ? EditorCellFactory.CreateBlank(_sheetDelegate.ReflectivePath, this)
-            : EditorCellFactory.Create(_screenController, list[columnIndex], this);
+            ? EditorCellFactory.CreateBlank()
+            : EditorCellFactory.Create(_screenController, this, list[columnIndex]);
           cell.RegisterCallback<ClickEvent>(e =>
           {
             if (position == _currentlySelected)
@@ -216,13 +199,10 @@ namespace Nighthollow.Editing
 
     void ActivateCell(Vector2Int position)
     {
-      if (_cells[position].CanActivate)
-      {
-        _currentlyActive?.Deactivate();
-        _currentlyActive = _cells[position];
-        _scrollView.ScrollTo(_currentlyActive);
-        _currentlyActive.Activate();
-      }
+      _currentlyActive?.Deactivate();
+      _currentlyActive = _cells[position];
+      _scrollView.ScrollTo(_currentlyActive);
+      _currentlyActive.Activate();
     }
 
     void SelectPosition(Vector2Int? position)

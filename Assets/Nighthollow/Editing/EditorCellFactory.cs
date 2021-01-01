@@ -25,22 +25,31 @@ namespace Nighthollow.Editing
 {
   public static class EditorCellFactory
   {
-    public static EditorCell CreateBlank(ReflectivePath reflectivePath, IEditor parent)
+    public static EditorCell CreateBlank()
     {
-      return new EditorCell(reflectivePath.Constant(""), parent, new ReadOnlyEditorCellDelegate());
+      return new LabelEditorCell(null);
     }
 
-    public static EditorCell Create(ScreenController screenController, ReflectivePath reflectivePath, IEditor parent)
+    public static EditorCell Create(
+      ScreenController screenController,
+      IEditor parent,
+      EditorSheetDelegate.ICellContent cellContent) =>
+      cellContent.Switch(
+        reflectivePath => CreateTextFieldEditorCell(screenController, parent, reflectivePath),
+        CreateLabelEditorCell);
+
+    static EditorCell CreateLabelEditorCell(string? text) => new LabelEditorCell(text);
+
+    static EditorCell CreateTextFieldEditorCell(
+      ScreenController screenController,
+      IEditor parent,
+      ReflectivePath reflectivePath)
     {
       var type = reflectivePath.GetUnderlyingType();
       type = TypeUtils.UnboxNullable(type);
 
       EditorCellDelegate cellDelegate;
-      if (reflectivePath.IsReadOnly)
-      {
-        cellDelegate = new ReadOnlyEditorCellDelegate();
-      }
-      else if (type == typeof(string))
+      if (type == typeof(string))
       {
         cellDelegate = new PrimitiveEditorCellDelegate<string>(reflectivePath, Identity);
       }
@@ -88,7 +97,7 @@ namespace Nighthollow.Editing
         throw new InvalidOperationException($"No editor registered for type {type}");
       }
 
-      return new EditorCell(reflectivePath, parent, cellDelegate);
+      return new TextFieldEditorCell(reflectivePath, parent, cellDelegate);
     }
 
     static bool Identity(string input, out string output)

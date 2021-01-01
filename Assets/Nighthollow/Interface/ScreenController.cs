@@ -18,7 +18,6 @@ using DG.Tweening;
 using Nighthollow.Editing;
 using Nighthollow.Items;
 using Nighthollow.Utils;
-using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.UIElements;
 

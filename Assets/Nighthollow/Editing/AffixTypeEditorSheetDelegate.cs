@@ -24,27 +24,24 @@ namespace Nighthollow.Editing
   {
     public AffixTypeEditorSheetDelegate(ReflectivePath reflectivePath, ReflectivePath listPath, string name)
     {
-      ReflectivePath = reflectivePath;
       var properties = reflectivePath.GetUnderlyingType().GetProperties();
       var childList = new NestedListEditorSheetDelegate(listPath);
 
       Headings = properties.Select(TableEditorSheetDelegate.PropertyName).ToList();
 
-      Cells = new List<List<ReflectivePath>>
+      Cells = new List<List<ICellContent>>
       {
-        properties.Select(reflectivePath.Property).ToList(),
-        CollectionUtils.Single(reflectivePath.Constant(name)).ToList(),
-        childList.Headings.Select(reflectivePath.Constant).ToList(),
+        properties.Select(reflectivePath.Property).Select(p => new ReflectivePathCell(p)).ToList<ICellContent>(),
+        CollectionUtils.Single(new LabelCell(name)).ToList<ICellContent>(),
+        childList.Headings.Select(h => new LabelCell(h)).ToList<ICellContent>()
       };
 
       Cells.AddRange(childList.Cells);
     }
 
-    public override ReflectivePath ReflectivePath { get; }
-
     public override List<string> Headings { get; }
 
-    public override List<List<ReflectivePath>> Cells { get; }
+    public override List<List<ICellContent>> Cells { get; }
 
     public override string? RenderPreview(object? value) => value?.ToString();
   }

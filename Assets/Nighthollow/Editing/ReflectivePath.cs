@@ -28,7 +28,6 @@ namespace Nighthollow.Editing
     readonly Database _database;
     readonly ITableId _tableId;
     readonly ImmutableList<ISegment> _path;
-    readonly bool _isReadOnly;
 
     public ReflectivePath(Database database, ITableId tableId)
     {
@@ -37,24 +36,18 @@ namespace Nighthollow.Editing
       _path = ImmutableList<ISegment>.Empty;
     }
 
-    ReflectivePath(Database database, ITableId tableId, ImmutableList<ISegment> segments, bool isReadOnly = false)
+    ReflectivePath(Database database, ITableId tableId, ImmutableList<ISegment> segments)
     {
       _database = database;
       _tableId = tableId;
       _path = segments;
-      _isReadOnly = isReadOnly;
     }
-
-    public bool IsReadOnly => _isReadOnly;
 
     public ReflectivePath EntityId(int entityId) =>
       new ReflectivePath(_database, _tableId, _path.Add(new TableEntitySegement(_tableId!, entityId)));
 
     public ReflectivePath Property(PropertyInfo propertyInfo) =>
       new ReflectivePath(_database, _tableId, _path.Add(new PropertySegment(propertyInfo)));
-
-    public ReflectivePath Constant(object constant) =>
-      new ReflectivePath(_database, _tableId, _path.Add(new ConstantSegment(constant)), isReadOnly: true);
 
     public ReflectivePath ListIndex(Type listType, int listIndex) =>
       new ReflectivePath(_database, _tableId, _path.Add(new ListIndexSegment(listType, listIndex)));
@@ -170,23 +163,6 @@ namespace Nighthollow.Editing
           .MakeGenericMethod(_tableId.GetUnderlyingType())
           .Invoke(database, new object[] {_tableId, _entityId, action});
       }
-    }
-
-    sealed class ConstantSegment : ISegment
-    {
-      readonly object _value;
-
-      public ConstantSegment(object value)
-      {
-        _value = value;
-      }
-
-      public object Read(object previous) => _value;
-
-      public object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue) =>
-        throw new InvalidOperationException($"Cannot write to constant {_value}");
-
-      public Type GetUnderlyingType() => _value.GetType();
     }
 
     sealed class ListIndexSegment : ISegment

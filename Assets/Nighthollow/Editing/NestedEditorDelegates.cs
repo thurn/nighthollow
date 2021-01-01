@@ -28,26 +28,25 @@ namespace Nighthollow.Editing
   {
     public NestedListEditorSheetDelegate(ReflectivePath path)
     {
-      ReflectivePath = path;
       var listType = path.GetUnderlyingType();
       var listContentType = listType.GetGenericArguments()[0];
       var properties = listContentType.GetProperties();
       Headings = properties.Select(TableEditorSheetDelegate.PropertyName).ToList();
-      Cells = new List<List<ReflectivePath>>();
+      Cells = new List<List<ICellContent>>();
       if (path.Read() is IList value)
       {
         for (var index = 0; index < value.Count; ++index)
         {
-          Cells.Add(properties.Select(property => path.ListIndex(listContentType, index).Property(property)).ToList());
+          Cells.Add(properties
+            .Select(property => new ReflectivePathCell(path.ListIndex(listContentType, index).Property(property)))
+            .ToList<ICellContent>());
         }
       }
     }
 
-    public override ReflectivePath ReflectivePath { get; }
-
     public override List<string> Headings { get; }
 
-    public override List<List<ReflectivePath>> Cells { get; }
+    public override List<List<ICellContent>> Cells { get; }
 
     public override string? RenderPreview(object? value) =>
       value is IList list ? string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())) : null;

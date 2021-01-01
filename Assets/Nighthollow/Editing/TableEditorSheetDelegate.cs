@@ -25,25 +25,24 @@ namespace Nighthollow.Editing
   {
     public TableEditorSheetDelegate(ReflectivePath path)
     {
-      ReflectivePath = path;
       var properties = path.GetUnderlyingType().GetProperties();
       Headings = new List<string> {"ID"};
       Headings.AddRange(properties.Select(PropertyName));
 
-      Cells = new List<List<ReflectivePath>>();
+      Cells = new List<List<ICellContent>>();
       foreach (int entityId in path.GetTable().Keys)
       {
-        var row = new List<ReflectivePath> {path.EntityId(entityId).Constant(entityId)};
-        row.AddRange(properties.Select(property => path.EntityId(entityId).Property(property)).ToList());
+        var row = new List<ICellContent> {new LabelCell(entityId.ToString())};
+        row.AddRange(properties
+          .Select(property => new ReflectivePathCell(path.EntityId(entityId).Property(property)))
+          .ToList());
         Cells.Add(row);
       }
     }
 
-    public override ReflectivePath ReflectivePath { get; }
-
     public override List<string> Headings { get; }
 
-    public override List<List<ReflectivePath>> Cells { get; }
+    public override List<List<ICellContent>> Cells { get; }
 
     public override int? ContentHeightOverride => 4000;
 
