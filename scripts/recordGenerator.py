@@ -13,17 +13,21 @@ def uncap(s):
 
 
 def parse(class_file):
-    match = class_regex.search(class_file)
-    if not match:
-        return None
-    class_name = match.group(1)
+    result = []
+    class_name = None
     properties = []
 
-    for line in class_file.splitlines():
+    for line in class_file.readlines():
+        if match := class_regex.search(line):
+            if class_name:
+                result.append({"class_name": class_name, "properties": properties})
+            class_name = match.group(1)
+            properties = []
         if match := property_regex.search(line):
             properties.append({"type": match.group(1), "name": match.group(2)})
-
-    return {"class_name": class_name, "properties": properties}
+    if class_name:
+        result.append({"class_name": class_name, "properties": properties})
+    return result
 
 
 def property_arg(prop, p):
@@ -50,9 +54,9 @@ targets = []
 for root, _, files in os.walk(sys.argv[1]):
     for file in files:
         if file.endswith(".cs") and "Generated" not in file:
-            parsed = parse(open(os.path.join(root, file)).read())
+            parsed = parse(open(os.path.join(root, file)))
             if parsed:
-                targets.append(parsed)
+                targets.extend(parsed)
 
 using = [
     "System.Collections.Immutable",

@@ -22,6 +22,21 @@ using Nighthollow.Stats;
 namespace Nighthollow.Data
 {
   [MessagePackObject]
+  public sealed partial class CreatureSkillAnimation
+  {
+    public CreatureSkillAnimation(SkillAnimationNumber skillAnimationNumber, SkillAnimationType skillAnimationType)
+    {
+      SkillAnimationNumber = skillAnimationNumber;
+      SkillAnimationType = skillAnimationType;
+    }
+
+    [Key(0)] public SkillAnimationNumber SkillAnimationNumber { get; }
+    [Key(1)] public SkillAnimationType SkillAnimationType { get; }
+
+    public override string ToString() => $"{SkillAnimationNumber} => {SkillAnimationType}";
+  }
+
+  [MessagePackObject]
   public sealed partial class CreatureTypeData
   {
     public CreatureTypeData(
@@ -29,7 +44,7 @@ namespace Nighthollow.Data
       string prefabAddress,
       PlayerName owner,
       IntRangeValue health,
-      ImmutableDictionary<SkillAnimationNumber, SkillAnimationType>? skillAnimations = null,
+      ImmutableList<CreatureSkillAnimation>? skillAnimations = null,
       string? imageAddress = null,
       int baseManaCost = 0,
       int speed = 0,
@@ -41,7 +56,7 @@ namespace Nighthollow.Data
       PrefabAddress = prefabAddress;
       Owner = owner;
       Health = health;
-      SkillAnimations = skillAnimations ?? ImmutableDictionary<SkillAnimationNumber, SkillAnimationType>.Empty;
+      SkillAnimations = skillAnimations ?? ImmutableList<CreatureSkillAnimation>.Empty;
       ImageAddress = imageAddress;
       BaseManaCost = baseManaCost;
       Speed = speed;
@@ -54,7 +69,7 @@ namespace Nighthollow.Data
     [Key(1)] public string PrefabAddress { get; }
     [Key(2)] public PlayerName Owner { get; }
     [Key(3)] public IntRangeValue Health { get; }
-    [Key(4)] public ImmutableDictionary<SkillAnimationNumber, SkillAnimationType> SkillAnimations { get; }
+    [Key(4)] public ImmutableList<CreatureSkillAnimation> SkillAnimations { get; }
     [Key(5)] public string? ImageAddress { get; }
     [Key(6)] public int BaseManaCost { get; }
     [Key(7)] public int Speed { get; }

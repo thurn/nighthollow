@@ -33,7 +33,7 @@ namespace Nighthollow.Editing
       _parsingFunction = parsingFunction;
     }
 
-    public override string? Initialize(TextField field, IEditor parent)
+    public override void Initialize(TextField field, IEditor parent)
     {
       field.RegisterCallback<ChangeEvent<string>>(e =>
       {
@@ -46,9 +46,9 @@ namespace Nighthollow.Editing
           field.value = e.previousValue;
         }
       });
-
-      return _reflectivePath.Read()?.ToString();
     }
+
+    public override string? RenderPreview(object? value) => _reflectivePath.Read()?.ToString();
 
     public override void OnActivate(TextField field, Rect worldBound)
     {

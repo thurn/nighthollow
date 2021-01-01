@@ -21,7 +21,11 @@ namespace Nighthollow.Editing
 {
   public abstract class EditorCellDelegate
   {
-    public abstract string? Initialize(TextField field, IEditor parent);
+    public virtual void Initialize(TextField field, IEditor parent)
+    {
+    }
+
+    public abstract string? RenderPreview(object? value);
 
     public abstract void OnActivate(TextField field, Rect worldBound);
 
@@ -56,7 +60,12 @@ namespace Nighthollow.Editing
       Add(_field);
 
       _field.RegisterCallback<KeyDownEvent>(OnKeyDownInternal);
-      _field.value = _cellDelegate.Initialize(_field, this);
+      _cellDelegate.Initialize(_field, this);
+
+      reflectivePath.Subscribe(v =>
+      {
+        _field.value = _cellDelegate.RenderPreview(v);
+      });
     }
 
     public void Select()
@@ -88,12 +97,11 @@ namespace Nighthollow.Editing
       RemoveFromClassList("active");
       AddToClassList("selected");
       _cellDelegate.OnDeactivate(_field);
-      _parent.OnChildEditingComplete(null);
+      _parent.OnChildEditingComplete();
     }
 
-    public void OnChildEditingComplete(string? preview)
+    public void OnChildEditingComplete()
     {
-      _field.value = preview;
       Deactivate();
     }
 

@@ -264,12 +264,13 @@ namespace Nighthollow.Data
       GameData gameData;
       if (File.Exists(_persistentFilePath))
       {
+        Debug.Log($"Reading game data from {_persistentFilePath}");
         using var file = File.OpenRead(_persistentFilePath!);
         gameData = MessagePackSerializer.Deserialize<GameData>(file, serializationOptions);
-        Debug.Log($"Read game data from {_persistentFilePath}");
       }
       else
       {
+        Debug.Log($"Reading game data from {_resourceAddress}");
         var fetch = Resources.LoadAsync<TextAsset>(_resourceAddress!);
         yield return fetch;
 
@@ -277,7 +278,6 @@ namespace Nighthollow.Data
         gameData = asset == null
           ? new GameData()
           : MessagePackSerializer.Deserialize<GameData>(asset.bytes, serializationOptions);
-        Debug.Log($"Read game data from {_resourceAddress}");
       }
 
       _database = new Database(serializationOptions, gameData);

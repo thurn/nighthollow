@@ -25,7 +25,6 @@ namespace Nighthollow.Editing
 {
   public sealed class EditorDropdownCellDelegate : EditorCellDelegate
   {
-    readonly ScreenController _screenController;
     readonly ReflectivePath _reflectivePath;
     readonly List<string> _options;
     IEditor _parent = null!;
@@ -33,21 +32,21 @@ namespace Nighthollow.Editing
 
     public EditorDropdownCellDelegate(ScreenController screenController, ReflectivePath reflectivePath)
     {
-      _screenController = screenController;
       _reflectivePath = reflectivePath;
       _options = Enum.GetValues(_reflectivePath.GetUnderlyingType())
         .Cast<object>()
         .Select(v => v.ToString())
         .Where(v => !v.Equals("Unknown"))
         .ToList();
-      _dropdown = _screenController.Get(ScreenController.EditorDropdown);
+      _dropdown = screenController.Get(ScreenController.EditorDropdown);
     }
 
-    public override string? Initialize(TextField field, IEditor parent)
+    public override void Initialize(TextField field, IEditor parent)
     {
       _parent = parent;
-      return _reflectivePath.Read()?.ToString();
     }
+
+    public override string? RenderPreview(object? value) => value?.ToString();
 
     public override void OnActivate(TextField field, Rect worldBound)
     {
@@ -96,9 +95,11 @@ namespace Nighthollow.Editing
     protected override void OnShow(Args argument)
     {
       Clear();
+      BringToFront();
 
       _parentEditor = argument.ParentEditor;
       _reflectivePath = argument.ReflectivePath;
+      _selectedIndex = null;
 
       style.left = argument.Anchor.x;
       style.top = argument.Anchor.y + argument.Anchor.height;
@@ -109,7 +110,10 @@ namespace Nighthollow.Editing
       {
         var label = new Label {text = option};
         label.AddToClassList("dropdown-option");
-        label.RegisterCallback<ClickEvent>(e => { WriteSelection(option); });
+        label.RegisterCallback<ClickEvent>(e =>
+        {
+          WriteSelection(option);
+        });
         _options.Add(label);
         Add(label);
       }
@@ -161,11 +165,12 @@ namespace Nighthollow.Editing
       }
 
       Hide();
-      _parentEditor.OnChildEditingComplete(value);
+      _parentEditor.OnChildEditingComplete();
     }
 
     public void OnDeactivate()
     {
+      _selectedIndex = null;
       Hide();
     }
   }

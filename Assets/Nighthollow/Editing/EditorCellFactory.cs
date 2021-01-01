@@ -51,6 +51,10 @@ namespace Nighthollow.Editing
       {
         cellDelegate = new EditorDropdownCellDelegate(screenController, reflectivePath);
       }
+      else if (type.GetInterface("IList") != null)
+      {
+        cellDelegate = new EditorNestedListCellDelegate(screenController, reflectivePath);
+      }
       else
       {
         cellDelegate = new PrimitiveEditorCellDelegate<string>(reflectivePath, Identity);

@@ -89,6 +89,20 @@ namespace Nighthollow.Data
 
   }
 
+  public sealed partial class CreatureSkillAnimation
+  {
+    public CreatureSkillAnimation WithSkillAnimationNumber(SkillAnimationNumber skillAnimationNumber) =>
+      new CreatureSkillAnimation(
+        skillAnimationNumber,
+        SkillAnimationType);
+
+    public CreatureSkillAnimation WithSkillAnimationType(SkillAnimationType skillAnimationType) =>
+      new CreatureSkillAnimation(
+        SkillAnimationNumber,
+        skillAnimationType);
+
+  }
+
   public sealed partial class CreatureTypeData
   {
     public CreatureTypeData WithName(string name) =>
@@ -147,7 +161,7 @@ namespace Nighthollow.Data
         ImplicitSkill,
         IsManaCreature);
 
-    public CreatureTypeData WithSkillAnimations(ImmutableDictionary<SkillAnimationNumber, SkillAnimationType> skillAnimations) =>
+    public CreatureTypeData WithSkillAnimations(ImmutableList<CreatureSkillAnimation> skillAnimations) =>
       new CreatureTypeData(
         Name,
         PrefabAddress,

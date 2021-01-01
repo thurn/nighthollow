@@ -47,6 +47,11 @@ namespace Nighthollow.Utils
       return dictionary.ToDictionary(p => p.Key, p => p.Value);
     }
 
+    public static IEnumerable<T> Single<T>(T element)
+    {
+      yield return element;
+    }
+
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source) where T : struct
     {
       return source.Where(t => t != null).Select(t => t.GetValueOrDefault());

@@ -14,6 +14,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 #nullable enable
 
@@ -25,12 +27,12 @@ namespace Nighthollow.Editing
     {
       var properties = path.GetUnderlyingType().GetProperties();
       Headings = new List<string> {"ID"};
-      Headings.AddRange(properties.Select(property => property.Name));
+      Headings.AddRange(properties.Select(PropertyName));
 
       Cells = new List<List<ReflectivePath>>();
       foreach (int entityId in path.GetTable().Keys)
       {
-        var row = new List<ReflectivePath> {path.Constant(entityId)};
+        var row = new List<ReflectivePath> {path.EntityId(entityId).Constant(entityId)};
         row.AddRange(properties.Select(property => path.EntityId(entityId).Property(property)).ToList());
         Cells.Add(row);
       }
@@ -41,5 +43,8 @@ namespace Nighthollow.Editing
     public override List<List<ReflectivePath>> Cells { get; }
 
     public override int? ContentHeightOverride => 4000;
+
+    public static string PropertyName(PropertyInfo info) =>
+      Regex.Replace(info.Name, @"([A-Z])(?![A-Z])", " $1").Substring(1);
   }
 }
