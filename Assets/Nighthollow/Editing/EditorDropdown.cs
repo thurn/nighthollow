@@ -112,6 +112,7 @@ namespace Nighthollow.Editing
         label.AddToClassList("dropdown-option");
         label.RegisterCallback<ClickEvent>(e =>
         {
+          _parentEditor.OnChildClickEvent(e);
           WriteSelection(option);
         });
         _options.Add(label);
@@ -138,7 +139,10 @@ namespace Nighthollow.Editing
             ? Mathf.Abs(_selectedIndex.Value - 1 % _options.Count)
             : _options.Count - 1);
           break;
+        case KeyCode.Backspace:
         case KeyCode.Escape:
+          WriteSelection(null);
+          break;
         case KeyCode.KeypadEnter:
         case KeyCode.Return:
           WriteSelection(_selectedIndex.HasValue ? _options[_selectedIndex.Value].text : null);

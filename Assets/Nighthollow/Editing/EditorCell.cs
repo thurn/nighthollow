@@ -123,5 +123,10 @@ namespace Nighthollow.Editing
     {
       _cellDelegate.OnParentKeyDown(evt);
     }
+
+    public void OnChildClickEvent(ClickEvent e)
+    {
+      _parent.OnChildClickEvent(e);
+    }
   }
 }

@@ -25,19 +25,18 @@ namespace Nighthollow.Data
   [MessagePackObject]
   public sealed partial class AffixTypeData
   {
+    [SerializationConstructor]
     public AffixTypeData(
       int minLevel,
       int weight,
       IntRangeValue manaCost,
       ImmutableList<ModifierTypeData>? modifiers = null,
-      bool isTargeted = false,
       School? influenceType = null)
     {
       MinLevel = minLevel;
       Weight = weight;
       ManaCost = manaCost;
       Modifiers = modifiers ?? ImmutableList<ModifierTypeData>.Empty;
-      IsTargeted = isTargeted;
       InfluenceType = influenceType;
     }
 
@@ -45,7 +44,6 @@ namespace Nighthollow.Data
     [Key(1)] public int Weight { get; }
     [Key(2)] public IntRangeValue ManaCost { get; }
     [Key(3)] public ImmutableList<ModifierTypeData> Modifiers { get; }
-    [Key(4)] public bool IsTargeted { get; }
-    [Key(5)] public School? InfluenceType { get; }
+    [Key(4)] public School? InfluenceType { get; }
   }
 }

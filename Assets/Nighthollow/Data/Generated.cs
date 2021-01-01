@@ -17,7 +17,6 @@ namespace Nighthollow.Data
         Weight,
         ManaCost,
         Modifiers,
-        IsTargeted,
         InfluenceType);
 
     public AffixTypeData WithWeight(int weight) =>
@@ -26,7 +25,6 @@ namespace Nighthollow.Data
         weight,
         ManaCost,
         Modifiers,
-        IsTargeted,
         InfluenceType);
 
     public AffixTypeData WithManaCost(IntRangeValue manaCost) =>
@@ -35,7 +33,6 @@ namespace Nighthollow.Data
         Weight,
         manaCost,
         Modifiers,
-        IsTargeted,
         InfluenceType);
 
     public AffixTypeData WithModifiers(ImmutableList<ModifierTypeData> modifiers) =>
@@ -44,16 +41,6 @@ namespace Nighthollow.Data
         Weight,
         ManaCost,
         modifiers,
-        IsTargeted,
-        InfluenceType);
-
-    public AffixTypeData WithIsTargeted(bool isTargeted) =>
-      new AffixTypeData(
-        MinLevel,
-        Weight,
-        ManaCost,
-        Modifiers,
-        isTargeted,
         InfluenceType);
 
     public AffixTypeData WithInfluenceType(School? influenceType) =>
@@ -62,7 +49,6 @@ namespace Nighthollow.Data
         Weight,
         ManaCost,
         Modifiers,
-        IsTargeted,
         influenceType);
 
   }
@@ -116,7 +102,7 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitAffix,
-        ImplicitSkill,
+        ImplicitSkills,
         IsManaCreature);
 
     public CreatureTypeData WithPrefabAddress(string prefabAddress) =>
@@ -130,7 +116,7 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitAffix,
-        ImplicitSkill,
+        ImplicitSkills,
         IsManaCreature);
 
     public CreatureTypeData WithOwner(PlayerName owner) =>
@@ -144,7 +130,7 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitAffix,
-        ImplicitSkill,
+        ImplicitSkills,
         IsManaCreature);
 
     public CreatureTypeData WithHealth(IntRangeValue health) =>
@@ -158,7 +144,7 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitAffix,
-        ImplicitSkill,
+        ImplicitSkills,
         IsManaCreature);
 
     public CreatureTypeData WithSkillAnimations(ImmutableList<CreatureSkillAnimation> skillAnimations) =>
@@ -172,7 +158,7 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitAffix,
-        ImplicitSkill,
+        ImplicitSkills,
         IsManaCreature);
 
     public CreatureTypeData WithImageAddress(string? imageAddress) =>
@@ -186,7 +172,7 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitAffix,
-        ImplicitSkill,
+        ImplicitSkills,
         IsManaCreature);
 
     public CreatureTypeData WithBaseManaCost(int baseManaCost) =>
@@ -200,7 +186,7 @@ namespace Nighthollow.Data
         baseManaCost,
         Speed,
         ImplicitAffix,
-        ImplicitSkill,
+        ImplicitSkills,
         IsManaCreature);
 
     public CreatureTypeData WithSpeed(int speed) =>
@@ -214,7 +200,7 @@ namespace Nighthollow.Data
         BaseManaCost,
         speed,
         ImplicitAffix,
-        ImplicitSkill,
+        ImplicitSkills,
         IsManaCreature);
 
     public CreatureTypeData WithImplicitAffix(AffixTypeData? implicitAffix) =>
@@ -228,10 +214,10 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         implicitAffix,
-        ImplicitSkill,
+        ImplicitSkills,
         IsManaCreature);
 
-    public CreatureTypeData WithImplicitSkill(SkillTypeData? implicitSkill) =>
+    public CreatureTypeData WithImplicitSkills(ImmutableList<SkillTypeData> implicitSkills) =>
       new CreatureTypeData(
         Name,
         PrefabAddress,
@@ -242,7 +228,7 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitAffix,
-        implicitSkill,
+        implicitSkills,
         IsManaCreature);
 
     public CreatureTypeData WithIsManaCreature(bool isManaCreature) =>
@@ -256,7 +242,7 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitAffix,
-        ImplicitSkill,
+        ImplicitSkills,
         isManaCreature);
 
   }

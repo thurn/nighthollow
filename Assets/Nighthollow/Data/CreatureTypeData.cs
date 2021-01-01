@@ -49,7 +49,7 @@ namespace Nighthollow.Data
       int baseManaCost = 0,
       int speed = 0,
       AffixTypeData? implicitAffix = null,
-      SkillTypeData? implicitSkill = null,
+      ImmutableList<SkillTypeData>? implicitSkills = null,
       bool isManaCreature = false)
     {
       Name = name;
@@ -61,7 +61,7 @@ namespace Nighthollow.Data
       BaseManaCost = baseManaCost;
       Speed = speed;
       ImplicitAffix = implicitAffix;
-      ImplicitSkill = implicitSkill;
+      ImplicitSkills = implicitSkills ?? ImmutableList<SkillTypeData>.Empty;
       IsManaCreature = isManaCreature;
     }
 
@@ -74,7 +74,7 @@ namespace Nighthollow.Data
     [Key(6)] public int BaseManaCost { get; }
     [Key(7)] public int Speed { get; }
     [Key(8)] public AffixTypeData? ImplicitAffix { get; }
-    [Key(9)] public SkillTypeData? ImplicitSkill { get; }
+    [Key(9)] public ImmutableList<SkillTypeData> ImplicitSkills { get; }
     [Key(10)] public bool IsManaCreature { get; }
   }
 }

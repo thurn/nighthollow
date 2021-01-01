@@ -23,6 +23,14 @@ namespace Nighthollow.Editing
 {
   public interface IEditor
   {
+
+    /// <summary>
+    /// When you click on things, Unity takes focus away and drops your next KeyDown event, even if what you clicked
+    /// on has `focusable` set to false. So all click handlers need to call this method to re-focus the sheet properly
+    /// to get click events.
+    /// </summary>
+    void OnChildClickEvent(ClickEvent e);
+
     void OnChildEditingComplete();
   }
 
@@ -112,6 +120,8 @@ namespace Nighthollow.Editing
             {
               SelectPosition(position);
             }
+
+            _parent?.OnChildClickEvent(e);
           });
           cell.style.width = DefaultCellWidth;
           result[position] = cell;
@@ -207,6 +217,14 @@ namespace Nighthollow.Editing
         _cells[position.Value].Select();
         _currentlySelected = position;
         _scrollView.ScrollTo(_cells[position.Value]);
+      }
+    }
+
+    public void OnChildClickEvent(ClickEvent e)
+    {
+      if (_parent == null)
+      {
+        Focus();
       }
     }
 
