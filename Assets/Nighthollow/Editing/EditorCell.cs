@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Security.Permissions;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -36,37 +38,36 @@ namespace Nighthollow.Editing
 
   public sealed class EditorCell : VisualElement, IEditor
   {
-    readonly ReflectivePath _reflectivePath;
-    readonly TextField _field;
+    readonly TextField? _field;
     readonly IEditor _parent;
     readonly EditorCellDelegate _cellDelegate;
     bool _active;
 
     public EditorCell(ReflectivePath reflectivePath, IEditor parent, EditorCellDelegate cellDelegate)
     {
-      _reflectivePath = reflectivePath;
       _parent = parent;
       _cellDelegate = cellDelegate;
       AddToClassList("editor-cell");
 
-      _field = new TextField
-      {
-        multiline = false,
-        doubleClickSelectsWord = true,
-        tripleClickSelectsLine = true,
-        isDelayed = true,
-        focusable = false,
-      };
-      _field.AddToClassList("editor-text-field");
-      Add(_field);
-
       if (reflectivePath.IsReadOnly)
       {
         AddToClassList("editor-emphasized");
-        _field.value = _cellDelegate.RenderPreview(reflectivePath.Read());
+        var label = new Label {text = _cellDelegate.RenderPreview(reflectivePath.Read())};
+        Add(label);
+        CanActivate = false;
       }
       else
       {
+        _field = new TextField
+        {
+          multiline = false,
+          doubleClickSelectsWord = true,
+          tripleClickSelectsLine = true,
+          isDelayed = true,
+          focusable = false,
+        };
+        _field.AddToClassList("editor-text-field");
+        Add(_field);
         _field.RegisterCallback<KeyDownEvent>(OnKeyDownInternal);
         _cellDelegate.Initialize(_field, this);
 
@@ -74,8 +75,11 @@ namespace Nighthollow.Editing
         {
           _field.value = _cellDelegate.RenderPreview(v);
         });
+        CanActivate = true;
       }
     }
+
+    public bool CanActivate { get; }
 
     public void Select()
     {
@@ -89,16 +93,15 @@ namespace Nighthollow.Editing
 
     public void Activate()
     {
-      if (_reflectivePath.IsReadOnly)
+      if (!CanActivate)
       {
-        Deactivate();
-        return;
+        throw new InvalidOperationException($"Cannot activate {this}");
       }
 
       RemoveFromClassList("selected");
       AddToClassList("active");
 
-      _cellDelegate.OnActivate(_field, worldBound);
+      _cellDelegate.OnActivate(_field!, worldBound);
       _active = true;
     }
 
@@ -108,9 +111,9 @@ namespace Nighthollow.Editing
       {
         RemoveFromClassList("active");
         AddToClassList("selected");
-        _cellDelegate.OnDeactivate(_field);
-        _parent.OnChildEditingComplete();
+        _cellDelegate.OnDeactivate(_field!);
         _active = false;
+        _parent.OnChildEditingComplete();
       }
     }
 
@@ -138,9 +141,9 @@ namespace Nighthollow.Editing
       _cellDelegate.OnParentKeyDown(evt);
     }
 
-    public void OnChildClickEvent(ClickEvent e)
+    public void FocusRoot()
     {
-      _parent.OnChildClickEvent(e);
+      _parent.FocusRoot();
     }
   }
 }

@@ -27,10 +27,10 @@ namespace Nighthollow.Editing
   {
     /// <summary>
     /// When you click on things, Unity takes focus away and drops your next KeyDown event, even if what you clicked
-    /// on has `focusable` set to false. So all click handlers need to call this method to re-focus the sheet properly
-    /// to get click events.
+    /// on has `focusable` set to false. So all child click and key handlers need to call this method to re-focus the
+    /// sheet properly to get click events.
     /// </summary>
-    void OnChildClickEvent(ClickEvent e);
+    void FocusRoot();
 
     void OnChildEditingComplete();
   }
@@ -53,7 +53,7 @@ namespace Nighthollow.Editing
   public sealed class EditorSheet : VisualElement, IEditor
   {
     const int DefaultCellWidth = 250;
-    const int ContentPadding = 16;
+    const int ContentPadding = 32;
 
     readonly ScreenController _screenController;
     readonly EditorSheetDelegate _sheetDelegate;
@@ -74,7 +74,7 @@ namespace Nighthollow.Editing
       _content = new VisualElement();
       _content.AddToClassList("editor-content");
 
-      Width = (2 * ContentPadding) + (DefaultCellWidth * _sheetDelegate.ColumnCount());
+      Width = ContentPadding + (DefaultCellWidth * _sheetDelegate.ColumnCount());
       _content.style.width = Width;
 
       if (_sheetDelegate.ContentHeightOverride != null)
@@ -118,10 +118,17 @@ namespace Nighthollow.Editing
         for (var columnIndex = 0; columnIndex < _sheetDelegate.ColumnCount(); columnIndex++)
         {
           var position = new Vector2Int(columnIndex, rowIndex);
-          var cell = EditorCellFactory.Create(
-            _screenController,
-            columnIndex >= list.Count ? _sheetDelegate.ReflectivePath.Constant("") : list[columnIndex],
-            this);
+
+          if (columnIndex != 0 && list.Count == 1)
+          {
+            // Full width column support
+            result[position] = result[new Vector2Int(0, rowIndex)];
+            continue;
+          }
+
+          var cell = columnIndex >= list.Count
+            ? EditorCellFactory.CreateBlank(_sheetDelegate.ReflectivePath, this)
+            : EditorCellFactory.Create(_screenController, list[columnIndex], this);
           cell.RegisterCallback<ClickEvent>(e =>
           {
             if (position == _currentlySelected)
@@ -133,9 +140,16 @@ namespace Nighthollow.Editing
               SelectPosition(position);
             }
 
-            _parent?.OnChildClickEvent(e);
+            _parent?.FocusRoot();
           });
+
           cell.style.width = DefaultCellWidth;
+          if (list.Count == 1)
+          {
+            cell.style.width = Width - ContentPadding;
+            cell.AddToClassList("full-width-cell");
+          }
+
           result[position] = cell;
           _content.Add(cell);
         }
@@ -202,10 +216,13 @@ namespace Nighthollow.Editing
 
     void ActivateCell(Vector2Int position)
     {
-      _currentlyActive?.Deactivate();
-      _currentlyActive = _cells[position];
-      _scrollView.ScrollTo(_currentlyActive);
-      _currentlyActive.Activate();
+      if (_cells[position].CanActivate)
+      {
+        _currentlyActive?.Deactivate();
+        _currentlyActive = _cells[position];
+        _scrollView.ScrollTo(_currentlyActive);
+        _currentlyActive.Activate();
+      }
     }
 
     void SelectPosition(Vector2Int? position)
@@ -231,7 +248,7 @@ namespace Nighthollow.Editing
       }
     }
 
-    public void OnChildClickEvent(ClickEvent e)
+    public void FocusRoot()
     {
       if (_parent == null)
       {
@@ -239,17 +256,14 @@ namespace Nighthollow.Editing
       }
       else
       {
-        _parent.OnChildClickEvent(e);
+        _parent.FocusRoot();
       }
     }
 
     public void OnChildEditingComplete()
     {
       _currentlyActive = null;
-      if (_parent == null)
-      {
-        Focus();
-      }
+      FocusRoot();
     }
 
     public void DeactivateAllCells()

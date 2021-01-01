@@ -117,7 +117,7 @@ namespace Nighthollow.Editing
         label.AddToClassList("dropdown-option");
         label.RegisterCallback<ClickEvent>(e =>
         {
-          _parentEditor.OnChildClickEvent(e);
+          _parentEditor.FocusRoot();
           WriteSelection(option);
         });
         _options.Add(label);

@@ -50,7 +50,7 @@ namespace Nighthollow.Editing
     public override List<List<ReflectivePath>> Cells { get; }
 
     public override string? RenderPreview(object? value) =>
-      value is IList list ? string.Join(",\n", list.Cast<object>().Take(3).Select(o => o.ToString())) : null;
+      value is IList list ? string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())) : null;
   }
 
   public sealed class NestedEditorCellDelegate : EditorCellDelegate

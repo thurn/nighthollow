@@ -25,6 +25,11 @@ namespace Nighthollow.Editing
 {
   public static class EditorCellFactory
   {
+    public static EditorCell CreateBlank(ReflectivePath reflectivePath, IEditor parent)
+    {
+      return new EditorCell(reflectivePath.Constant(""), parent, new ReadOnlyEditorCellDelegate());
+    }
+
     public static EditorCell Create(ScreenController screenController, ReflectivePath reflectivePath, IEditor parent)
     {
       var type = reflectivePath.GetUnderlyingType();
@@ -75,8 +80,8 @@ namespace Nighthollow.Editing
           screenController,
           new AffixTypeEditorSheetDelegate(
             reflectivePath,
-            reflectivePath.Property(type.GetProperty("Modifiers:")!),
-            "Modifiers"));
+            reflectivePath.Property(type.GetProperty("Modifiers")!),
+            "Modifiers:"));
       }
       else
       {

@@ -36,7 +36,7 @@ namespace Nighthollow.Data
     [Key("skillAnimationNumber")] public SkillAnimationNumber SkillAnimationNumber { get; }
     [Key("skillAnimationType")] public SkillAnimationType SkillAnimationType { get; }
 
-    public override string ToString() => $"{SkillAnimationNumber} => {SkillAnimationType}";
+    public override string ToString() => $"{SkillAnimationNumber}: {SkillAnimationType}";
   }
 
   [MessagePackObject]

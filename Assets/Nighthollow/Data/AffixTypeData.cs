@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using MessagePack;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
@@ -45,5 +45,7 @@ namespace Nighthollow.Data
     [Key("manaCost")] public IntRangeValue ManaCost { get; }
     [Key("modifiers")] public ImmutableList<ModifierTypeData> Modifiers { get; }
     [Key("influenceType")] public School? InfluenceType { get; }
+
+    public override string ToString() => string.Join("\n", Modifiers.Select(m => m.ToString()));
   }
 }

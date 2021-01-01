@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using System.Text;
 using MessagePack;
 using Nighthollow.Generated;
 
@@ -44,5 +46,27 @@ namespace Nighthollow.Data
     [Key("valueLow")] public IValueData? ValueLow { get; }
     [Key("valueHigh")] public IValueData? ValueHigh { get; }
     [Key("targeted")] public bool Targeted { get; } // If false, modifier automatically applies to owner
+
+    public override string ToString()
+    {
+      var result = new List<string>();
+
+      if (StatOperator.HasValue)
+      {
+        result.Add(StatOperator.ToString());
+      }
+
+      if (StatId.HasValue)
+      {
+        result.Add(StatId.ToString());
+      }
+
+      if (DelegateId.HasValue)
+      {
+        result.Add(DelegateId.ToString());
+      }
+
+      return string.Join(" ", result);
+    }
   }
 }
