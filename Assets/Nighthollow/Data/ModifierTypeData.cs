@@ -38,16 +38,11 @@ namespace Nighthollow.Data
       Targeted = targeted;
     }
 
-    [Key(0)] public StatId? StatId { get; }
-    [Key(1)] public Operator? StatOperator { get; }
-    [Key(2)] public DelegateId? DelegateId { get; }
-    [Key(3)] public IValueData? ValueLow { get; }
-    [Key(4)] public IValueData? ValueHigh { get; }
-
-    /// <summary>
-    /// If false, modifier is applied to owner automatically. If true, it requires manual application to a target.
-    /// </summary>
-    [Key(5)]
-    public bool Targeted { get; }
+    [Key("statId")] public StatId? StatId { get; }
+    [Key("statOperator")] public Operator? StatOperator { get; }
+    [Key("delegateId")] public DelegateId? DelegateId { get; }
+    [Key("valueLow")] public IValueData? ValueLow { get; }
+    [Key("valueHigh")] public IValueData? ValueHigh { get; }
+    [Key("targeted")] public bool Targeted { get; } // If false, modifier automatically applies to owner
   }
 }

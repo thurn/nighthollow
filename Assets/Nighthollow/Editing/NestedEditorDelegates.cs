@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,11 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Editing
 {
-  public sealed class EditorNestedListSheetDelegate : EditorSheetDelegate
+  public sealed class NestedListEditorSheetDelegate : EditorSheetDelegate
   {
-    public EditorNestedListSheetDelegate(ReflectivePath path)
+    public NestedListEditorSheetDelegate(ReflectivePath path)
     {
+      ReflectivePath = path;
       var listType = path.GetUnderlyingType();
       var listContentType = listType.GetGenericArguments()[0];
       var properties = listContentType.GetProperties();
@@ -41,26 +43,29 @@ namespace Nighthollow.Editing
       }
     }
 
+    public override ReflectivePath ReflectivePath { get; }
+
     public override List<string> Headings { get; }
 
     public override List<List<ReflectivePath>> Cells { get; }
+
+    public override string? RenderPreview(object? value) =>
+      value is IList list ? string.Join(",\n", list.Cast<object>().Take(3).Select(o => o.ToString())) : null;
   }
 
-  public sealed class EditorNestedListCellDelegate : EditorCellDelegate
+  public sealed class NestedEditorCellDelegate : EditorCellDelegate
   {
     readonly ScreenController _screenController;
-    readonly ReflectivePath _reflectivePath;
     readonly EditorSheetDelegate _sheetDelegate;
 
     IEditor _parent = null!;
     EditorSheet? _sheet;
     VisualElement? _editorContainer;
 
-    public EditorNestedListCellDelegate(ScreenController screenController, ReflectivePath reflectivePath)
+    public NestedEditorCellDelegate(ScreenController screenController, EditorSheetDelegate sheetDelegate)
     {
       _screenController = screenController;
-      _reflectivePath = reflectivePath;
-      _sheetDelegate = new EditorNestedListSheetDelegate(reflectivePath);
+      _sheetDelegate = sheetDelegate;
     }
 
     public override void Initialize(TextField field, IEditor parent)
@@ -68,10 +73,7 @@ namespace Nighthollow.Editing
       _parent = parent;
     }
 
-    public override string? RenderPreview(object? value) =>
-      value is IList list ?
-        string.Join(",\n", list.Cast<object>().Take(3).Select(o => o.ToString())) :
-        null;
+    public override string? RenderPreview(object? value) => _sheetDelegate.RenderPreview(value);
 
     public override void OnActivate(TextField field, Rect worldBound)
     {
@@ -79,8 +81,8 @@ namespace Nighthollow.Editing
       _editorContainer = new VisualElement();
       _editorContainer.AddToClassList("inline-editor");
       _editorContainer.Add(_sheet);
-      _editorContainer.style.top = worldBound.y + worldBound.height;
-      _editorContainer.style.left = worldBound.x - _sheet.Width + worldBound.width;
+      _editorContainer.style.top = Math.Max(16, worldBound.y + worldBound.height);
+      _editorContainer.style.left = Math.Max(16, worldBound.x - _sheet.Width + worldBound.width);
       _screenController.Screen.Add(_editorContainer);
     }
 

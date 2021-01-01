@@ -40,6 +40,7 @@ namespace Nighthollow.Editing
     readonly TextField _field;
     readonly IEditor _parent;
     readonly EditorCellDelegate _cellDelegate;
+    bool _active;
 
     public EditorCell(ReflectivePath reflectivePath, IEditor parent, EditorCellDelegate cellDelegate)
     {
@@ -59,13 +60,21 @@ namespace Nighthollow.Editing
       _field.AddToClassList("editor-text-field");
       Add(_field);
 
-      _field.RegisterCallback<KeyDownEvent>(OnKeyDownInternal);
-      _cellDelegate.Initialize(_field, this);
-
-      reflectivePath.Subscribe(v =>
+      if (reflectivePath.IsReadOnly)
       {
-        _field.value = _cellDelegate.RenderPreview(v);
-      });
+        AddToClassList("editor-emphasized");
+        _field.value = _cellDelegate.RenderPreview(reflectivePath.Read());
+      }
+      else
+      {
+        _field.RegisterCallback<KeyDownEvent>(OnKeyDownInternal);
+        _cellDelegate.Initialize(_field, this);
+
+        reflectivePath.Subscribe(v =>
+        {
+          _field.value = _cellDelegate.RenderPreview(v);
+        });
+      }
     }
 
     public void Select()
@@ -90,14 +99,19 @@ namespace Nighthollow.Editing
       AddToClassList("active");
 
       _cellDelegate.OnActivate(_field, worldBound);
+      _active = true;
     }
 
     public void Deactivate()
     {
-      RemoveFromClassList("active");
-      AddToClassList("selected");
-      _cellDelegate.OnDeactivate(_field);
-      _parent.OnChildEditingComplete();
+      if (_active)
+      {
+        RemoveFromClassList("active");
+        AddToClassList("selected");
+        _cellDelegate.OnDeactivate(_field);
+        _parent.OnChildEditingComplete();
+        _active = false;
+      }
     }
 
     public void OnChildEditingComplete()

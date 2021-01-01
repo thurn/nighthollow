@@ -55,6 +55,30 @@ namespace Nighthollow.Stats
     public static bool operator ==(DurationValue left, DurationValue right) => left.Equals(right);
 
     public static bool operator !=(DurationValue left, DurationValue right) => !left.Equals(right);
+
+    public static bool TryParse(string value, out DurationValue result)
+    {
+      if (float.TryParse(value.Replace("s", ""), out var f))
+      {
+        result = new DurationValue(Mathf.RoundToInt(f * 1000f));
+        return true;
+      }
+
+      result = default;
+      return false;
+    }
+
+    public static DurationValue ParseDuration(string value)
+    {
+      if (TryParse(value, out var result))
+      {
+        return result;
+      }
+      else
+      {
+        throw new ArgumentException($"Invalid Duration {value}");
+      }
+    }
   }
 
   public sealed class DurationStat : NumericStat<DurationValue>
@@ -68,9 +92,6 @@ namespace Nighthollow.Stats
       return new DurationValue(IntStat.Compute(operations, duration => duration.AsMilliseconds()));
     }
 
-    protected override DurationValue ParseStatValue(string value) => ParseDuration(value);
-
-    public static DurationValue ParseDuration(string value) =>
-      new DurationValue(Mathf.RoundToInt(float.Parse(value.Replace("s", "")) * 1000f));
+    protected override DurationValue ParseStatValue(string value) => DurationValue.ParseDuration(value);
   }
 }

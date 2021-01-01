@@ -275,9 +275,9 @@ namespace Nighthollow.Data
         yield return fetch;
 
         var asset = fetch.asset as TextAsset;
-        gameData = asset == null
-          ? new GameData()
-          : MessagePackSerializer.Deserialize<GameData>(asset.bytes, serializationOptions);
+        gameData = asset
+          ? MessagePackSerializer.Deserialize<GameData>(asset!.bytes, serializationOptions)
+          : new GameData();
       }
 
       _database = new Database(serializationOptions, gameData);

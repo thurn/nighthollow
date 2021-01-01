@@ -61,6 +61,30 @@ namespace Nighthollow.Stats
     public static bool operator ==(PercentageValue left, PercentageValue right) => left.Equals(right);
 
     public static bool operator !=(PercentageValue left, PercentageValue right) => !left.Equals(right);
+
+    public static bool TryParse(string value, out PercentageValue result)
+    {
+      if (float.TryParse(value.Replace("%", ""), out var f))
+      {
+        result = new PercentageValue(Mathf.RoundToInt(f * 100f));
+        return true;
+      }
+
+      result = default;
+      return false;
+    }
+
+    public static PercentageValue ParsePercentage(string value)
+    {
+      if (TryParse(value, out var result))
+      {
+        return result;
+      }
+      else
+      {
+        throw new ArgumentException($"Invalid Percentage {value}");
+      }
+    }
   }
 
   public sealed class PercentageStat : NumericStat<PercentageValue>
@@ -77,9 +101,6 @@ namespace Nighthollow.Stats
       return new PercentageValue(IntStat.Compute(operations, duration => duration.AsBasisPoints()));
     }
 
-    protected override PercentageValue ParseStatValue(string value) => ParsePercentage(value);
-
-    public static PercentageValue ParsePercentage(string value) =>
-      new PercentageValue(Mathf.RoundToInt(float.Parse(value.Replace("%", "")) * 100f));
+    protected override PercentageValue ParseStatValue(string value) => PercentageValue.ParsePercentage(value);
   }
 }

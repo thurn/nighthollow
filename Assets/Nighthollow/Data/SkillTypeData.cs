@@ -44,14 +44,14 @@ namespace Nighthollow.Data
       CanStun = canStun;
     }
 
-    [Key(0)] public string Name { get; }
-    [Key(1)] public SkillAnimationType SkillAnimationType { get; }
-    [Key(2)] public SkillType SkillType { get; }
-    [Key(3)] public AffixTypeData? ImplicitAffix { get; }
-    [Key(4)] public string? Address { get; }
-    [Key(5)] public int? ProjectileSpeed { get; }
-    [Key(6)] public bool UsesAccuracy { get; }
-    [Key(7)] public bool CanCrit { get; }
-    [Key(8)] public bool CanStun { get; }
+    [Key("name")] public string Name { get; }
+    [Key("skillAnimationType")] public SkillAnimationType SkillAnimationType { get; }
+    [Key("skillType")] public SkillType SkillType { get; }
+    [Key("implicitAffix")] public AffixTypeData? ImplicitAffix { get; }
+    [Key("address")] public string? Address { get; }
+    [Key("projectileSpeed")] public int? ProjectileSpeed { get; }
+    [Key("usesAccuracy")] public bool UsesAccuracy { get; }
+    [Key("canCrit")] public bool CanCrit { get; }
+    [Key("canStun")] public bool CanStun { get; }
   }
 }

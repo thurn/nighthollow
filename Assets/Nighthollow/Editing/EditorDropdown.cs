@@ -27,17 +27,22 @@ namespace Nighthollow.Editing
   {
     readonly ReflectivePath _reflectivePath;
     readonly List<string> _options;
+    readonly EditorDropdown _dropdown;
     IEditor _parent = null!;
-    EditorDropdown _dropdown;
 
     public EditorDropdownCellDelegate(ScreenController screenController, ReflectivePath reflectivePath)
     {
       _reflectivePath = reflectivePath;
-      _options = Enum.GetValues(_reflectivePath.GetUnderlyingType())
+      _options = Enum.GetValues(TypeUtils.UnboxNullable(_reflectivePath.GetUnderlyingType()))
         .Cast<object>()
         .Select(v => v.ToString())
         .Where(v => !v.Equals("Unknown"))
         .ToList();
+      if (TypeUtils.IsNullable(_reflectivePath.GetUnderlyingType()))
+      {
+        _options.Insert(0, "<None>");
+      }
+
       _dropdown = screenController.Get(ScreenController.EditorDropdown);
     }
 
@@ -165,7 +170,14 @@ namespace Nighthollow.Editing
     {
       if (value != null)
       {
-        _reflectivePath.Write(Enum.Parse(_reflectivePath.GetUnderlyingType(), value));
+        if (value.Equals("<None>"))
+        {
+          _reflectivePath.Write(null);
+        }
+        else
+        {
+          _reflectivePath.Write(Enum.Parse(TypeUtils.UnboxNullable(_reflectivePath.GetUnderlyingType()), value));
+        }
       }
 
       Hide();

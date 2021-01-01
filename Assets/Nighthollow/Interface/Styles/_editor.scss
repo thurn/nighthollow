@@ -41,6 +41,12 @@
   justify-content: space-between;
   align-items: stretch;
 
+  .editor-emphasized {
+    @include fonts.black-text;
+    font-size: font-sizes.$body1;
+    -unity-font-style: bold;
+  }
+
   .editor-cell {
     flex-direction: row;
     flex-shrink: 0;
@@ -51,12 +57,6 @@
     border-color: black;
     border-width: 1px;
     font-size: 28px;
-
-    .editor-heading {
-      @include fonts.black-text;
-      font-size: font-sizes.$body1;
-      -unity-font-style: bold;
-    }
 
     .editor-text-field {
       width: 100%;

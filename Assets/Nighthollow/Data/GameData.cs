@@ -32,8 +32,8 @@ namespace Nighthollow.Data
       SkillTypes = skillTypes ?? ImmutableDictionary<int, SkillTypeData>.Empty;
     }
 
-    [Key(0)] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
-    [Key(1)] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
-    [Key(2)] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
+    [Key("creatureTypes")] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
+    [Key("affixTypes")] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
+    [Key("skillTypes")] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
   }
 }

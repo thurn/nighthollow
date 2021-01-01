@@ -13,8 +13,11 @@
 // limitations under the License.
 
 using System;
+using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Stats;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 #nullable enable
 
@@ -25,9 +28,14 @@ namespace Nighthollow.Editing
     public static EditorCell Create(ScreenController screenController, ReflectivePath reflectivePath, IEditor parent)
     {
       var type = reflectivePath.GetUnderlyingType();
+      type = TypeUtils.UnboxNullable(type);
 
       EditorCellDelegate cellDelegate;
-      if (type == typeof(string))
+      if (reflectivePath.IsReadOnly)
+      {
+        cellDelegate = new ReadOnlyEditorCellDelegate();
+      }
+      else if (type == typeof(string))
       {
         cellDelegate = new PrimitiveEditorCellDelegate<string>(reflectivePath, Identity);
       }
@@ -47,17 +55,32 @@ namespace Nighthollow.Editing
       {
         cellDelegate = new PrimitiveEditorCellDelegate<IntRangeValue>(reflectivePath, IntRangeValue.TryParse);
       }
+      else if (type == typeof(IValueData))
+      {
+        cellDelegate = new PrimitiveEditorCellDelegate<IValueData>(reflectivePath, ValueDataUtil.TryParse);
+      }
       else if (type.IsSubclassOf(typeof(Enum)))
       {
         cellDelegate = new EditorDropdownCellDelegate(screenController, reflectivePath);
       }
       else if (type.GetInterface("IList") != null)
       {
-        cellDelegate = new EditorNestedListCellDelegate(screenController, reflectivePath);
+        cellDelegate = new NestedEditorCellDelegate(
+          screenController,
+          new NestedListEditorSheetDelegate(reflectivePath));
+      }
+      else if (type == typeof(AffixTypeData))
+      {
+        cellDelegate = new NestedEditorCellDelegate(
+          screenController,
+          new AffixTypeEditorSheetDelegate(
+            reflectivePath,
+            reflectivePath.Property(type.GetProperty("Modifiers:")!),
+            "Modifiers"));
       }
       else
       {
-        cellDelegate = new PrimitiveEditorCellDelegate<string>(reflectivePath, Identity);
+        throw new InvalidOperationException($"No editor registered for type {type}");
       }
 
       return new EditorCell(reflectivePath, parent, cellDelegate);
@@ -67,6 +90,15 @@ namespace Nighthollow.Editing
     {
       output = input;
       return true;
+    }
+  }
+
+  public sealed class ReadOnlyEditorCellDelegate : EditorCellDelegate
+  {
+    public override string? RenderPreview(object? value) => value?.ToString();
+
+    public override void OnActivate(TextField field, Rect worldBound)
+    {
     }
   }
 }

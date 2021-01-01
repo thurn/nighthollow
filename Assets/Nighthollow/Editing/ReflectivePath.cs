@@ -96,13 +96,20 @@ namespace Nighthollow.Editing
     sealed class PropertySegment : ISegment
     {
       readonly PropertyInfo _property;
+      readonly bool _nullable;
 
       public PropertySegment(PropertyInfo property)
       {
         _property = property;
+        // ReSharper disable once OperatorIsCanBeUsed
+        _nullable = _property.GetType() == typeof(Nullable<>);
       }
 
-      public object? Read(object previous) => _property.GetValue(previous);
+      public object? Read(object previous)
+      {
+        var result = _property.GetValue(previous);
+        return _nullable ? _property.GetType().GetProperty("Value")!.GetValue(result) : result;
+      }
 
       public object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue)
       {

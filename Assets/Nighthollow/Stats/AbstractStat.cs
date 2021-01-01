@@ -60,7 +60,7 @@ namespace Nighthollow.Stats
       {
         Operator.Add => StaticModifier(NumericOperation.Add(ParseStatValue(value))),
         Operator.Overwrite => StaticModifier(NumericOperation.Overwrite(ParseStatValue(value))),
-        Operator.Increase => StaticModifier(NumericOperation.Increase<TValue>(PercentageStat.ParsePercentage(value))),
+        Operator.Increase => StaticModifier(NumericOperation.Increase<TValue>(PercentageValue.ParsePercentage(value))),
         _ => throw new ArgumentException($"Unsupported operator type: {op}")
       };
     }

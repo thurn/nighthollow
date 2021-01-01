@@ -40,10 +40,10 @@ namespace Nighthollow.Data
       InfluenceType = influenceType;
     }
 
-    [Key(0)] public int MinLevel { get; }
-    [Key(1)] public int Weight { get; }
-    [Key(2)] public IntRangeValue ManaCost { get; }
-    [Key(3)] public ImmutableList<ModifierTypeData> Modifiers { get; }
-    [Key(4)] public School? InfluenceType { get; }
+    [Key("minLevel")] public int MinLevel { get; }
+    [Key("weight")] public int Weight { get; }
+    [Key("manaCost")] public IntRangeValue ManaCost { get; }
+    [Key("modifiers")] public ImmutableList<ModifierTypeData> Modifiers { get; }
+    [Key("influenceType")] public School? InfluenceType { get; }
   }
 }

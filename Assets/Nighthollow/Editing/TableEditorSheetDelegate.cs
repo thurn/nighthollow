@@ -25,6 +25,7 @@ namespace Nighthollow.Editing
   {
     public TableEditorSheetDelegate(ReflectivePath path)
     {
+      ReflectivePath = path;
       var properties = path.GetUnderlyingType().GetProperties();
       Headings = new List<string> {"ID"};
       Headings.AddRange(properties.Select(PropertyName));
@@ -37,6 +38,8 @@ namespace Nighthollow.Editing
         Cells.Add(row);
       }
     }
+
+    public override ReflectivePath ReflectivePath { get; }
 
     public override List<string> Headings { get; }
 

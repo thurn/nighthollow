@@ -35,6 +35,45 @@ namespace Nighthollow.Data
       Func<IntRangeValue, T> onIntRange);
   }
 
+  public static class ValueDataUtil
+  {
+    public static bool TryParse(string input, out IValueData value)
+    {
+      if (int.TryParse(input, out var i))
+      {
+        value = new IntValueData(i);
+        return true;
+      }
+
+      if (bool.TryParse(input, out var b))
+      {
+        value = new BoolValueData(b);
+        return true;
+      }
+
+      if (DurationValue.TryParse(input, out var d))
+      {
+        value = d;
+        return true;
+      }
+
+      if (PercentageValue.TryParse(input, out var p))
+      {
+        value = p;
+        return true;
+      }
+
+      if (IntRangeValue.TryParse(input, out var ir))
+      {
+        value = ir;
+        return true;
+      }
+
+      value = null!;
+      return false;
+    }
+  }
+
   [MessagePackObject]
   public readonly struct IntValueData : IValueData
   {

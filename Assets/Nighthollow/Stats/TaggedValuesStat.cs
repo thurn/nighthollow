@@ -89,7 +89,7 @@ namespace Nighthollow.Stats
       foreach (var instance in value.Split(','))
       {
         var tagged = instance.Split(' ');
-        result[ParseTag(tagged[1])] = PercentageStat.ParsePercentage(tagged[0]);
+        result[ParseTag(tagged[1])] = PercentageValue.ParsePercentage(tagged[0]);
       }
 
       return new TaggedValues<TTag, PercentageValue>(result);
@@ -140,7 +140,7 @@ namespace Nighthollow.Stats
     protected override PercentageValue ComputeTagged(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
       PercentageStat.Compute(operations);
 
-    protected override PercentageValue ParseTaggedValue(string value) => PercentageStat.ParsePercentage(value);
+    protected override PercentageValue ParseTaggedValue(string value) => PercentageValue.ParsePercentage(value);
   }
 
   public abstract class TaggedIntRangesStat<TTag> : TaggedValuesStat<TTag, IntRangeValue> where TTag : struct, Enum

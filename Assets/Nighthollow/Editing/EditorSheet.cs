@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Interface;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -23,7 +25,6 @@ namespace Nighthollow.Editing
 {
   public interface IEditor
   {
-
     /// <summary>
     /// When you click on things, Unity takes focus away and drops your next KeyDown event, even if what you clicked
     /// on has `focusable` set to false. So all click handlers need to call this method to re-focus the sheet properly
@@ -36,11 +37,17 @@ namespace Nighthollow.Editing
 
   public abstract class EditorSheetDelegate
   {
+    public abstract ReflectivePath ReflectivePath { get; }
+
     public abstract List<string> Headings { get; }
 
     public abstract List<List<ReflectivePath>> Cells { get; }
 
     public virtual int? ContentHeightOverride => null;
+
+    public virtual string? RenderPreview(object? value) => null;
+
+    public int ColumnCount() => Math.Max(Headings.Count, Cells.Max(row => row.Count));
   }
 
   public sealed class EditorSheet : VisualElement, IEditor
@@ -67,7 +74,7 @@ namespace Nighthollow.Editing
       _content = new VisualElement();
       _content.AddToClassList("editor-content");
 
-      Width = (2 * ContentPadding) + (DefaultCellWidth * _sheetDelegate.Headings.Count);
+      Width = (2 * ContentPadding) + (DefaultCellWidth * _sheetDelegate.ColumnCount());
       _content.style.width = Width;
 
       if (_sheetDelegate.ContentHeightOverride != null)
@@ -98,18 +105,23 @@ namespace Nighthollow.Editing
     {
       var result = new Dictionary<Vector2Int, EditorCell>();
 
-      foreach (var heading in _sheetDelegate.Headings)
+      for (var index = 0; index < _sheetDelegate.ColumnCount(); index++)
       {
-        _content.Add(HeadingCell(heading));
+        _content.Add(index >= _sheetDelegate.Headings.Count
+          ? HeadingCell("")
+          : HeadingCell(_sheetDelegate.Headings[index]));
       }
 
       for (var rowIndex = 0; rowIndex < _sheetDelegate.Cells.Count; rowIndex++)
       {
         var list = _sheetDelegate.Cells[rowIndex];
-        for (var columnIndex = 0; columnIndex < list.Count; columnIndex++)
+        for (var columnIndex = 0; columnIndex < _sheetDelegate.ColumnCount(); columnIndex++)
         {
           var position = new Vector2Int(columnIndex, rowIndex);
-          var cell = EditorCellFactory.Create(_screenController, list[columnIndex], this);
+          var cell = EditorCellFactory.Create(
+            _screenController,
+            columnIndex >= list.Count ? _sheetDelegate.ReflectivePath.Constant("") : list[columnIndex],
+            this);
           cell.RegisterCallback<ClickEvent>(e =>
           {
             if (position == _currentlySelected)
@@ -140,10 +152,9 @@ namespace Nighthollow.Editing
         label.text = text.Length > 50 ? text.Substring(0, 49) + "..." : text;
       }
 
-      label.AddToClassList("editor-heading");
-
       var cell = new VisualElement();
       cell.AddToClassList("editor-cell");
+      cell.AddToClassList("editor-emphasized");
       cell.Add(label);
       cell.style.width = DefaultCellWidth;
       return cell;
@@ -225,6 +236,10 @@ namespace Nighthollow.Editing
       if (_parent == null)
       {
         Focus();
+      }
+      else
+      {
+        _parent.OnChildClickEvent(e);
       }
     }
 

@@ -9,7 +9,7 @@ using Nighthollow.Stats;
 namespace Nighthollow.Data
 {
 
-  public sealed partial class AffixTypeData
+  public sealed partial class AffixTypeData : IData
   {
     public AffixTypeData WithMinLevel(int minLevel) =>
       new AffixTypeData(
@@ -53,7 +53,7 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class GameData
+  public sealed partial class GameData : IData
   {
     public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
       new GameData(
@@ -75,7 +75,7 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class CreatureSkillAnimation
+  public sealed partial class CreatureSkillAnimation : IData
   {
     public CreatureSkillAnimation WithSkillAnimationNumber(SkillAnimationNumber skillAnimationNumber) =>
       new CreatureSkillAnimation(
@@ -89,7 +89,7 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class CreatureTypeData
+  public sealed partial class CreatureTypeData : IData
   {
     public CreatureTypeData WithName(string name) =>
       new CreatureTypeData(
@@ -247,7 +247,7 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class SkillTypeData
+  public sealed partial class SkillTypeData : IData
   {
     public SkillTypeData WithName(string name) =>
       new SkillTypeData(
@@ -359,7 +359,7 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class ModifierTypeData
+  public sealed partial class ModifierTypeData : IData
   {
     public ModifierTypeData WithStatId(StatId? statId) =>
       new ModifierTypeData(
@@ -367,7 +367,8 @@ namespace Nighthollow.Data
         StatOperator,
         DelegateId,
         ValueLow,
-        ValueHigh);
+        ValueHigh,
+        Targeted);
 
     public ModifierTypeData WithStatOperator(Operator? statOperator) =>
       new ModifierTypeData(
@@ -375,7 +376,8 @@ namespace Nighthollow.Data
         statOperator,
         DelegateId,
         ValueLow,
-        ValueHigh);
+        ValueHigh,
+        Targeted);
 
     public ModifierTypeData WithDelegateId(DelegateId? delegateId) =>
       new ModifierTypeData(
@@ -383,7 +385,8 @@ namespace Nighthollow.Data
         StatOperator,
         delegateId,
         ValueLow,
-        ValueHigh);
+        ValueHigh,
+        Targeted);
 
     public ModifierTypeData WithValueLow(IValueData? valueLow) =>
       new ModifierTypeData(
@@ -391,7 +394,8 @@ namespace Nighthollow.Data
         StatOperator,
         DelegateId,
         valueLow,
-        ValueHigh);
+        ValueHigh,
+        Targeted);
 
     public ModifierTypeData WithValueHigh(IValueData? valueHigh) =>
       new ModifierTypeData(
@@ -399,7 +403,17 @@ namespace Nighthollow.Data
         StatOperator,
         DelegateId,
         ValueLow,
-        valueHigh);
+        valueHigh,
+        Targeted);
+
+    public ModifierTypeData WithTargeted(bool targeted) =>
+      new ModifierTypeData(
+        StatId,
+        StatOperator,
+        DelegateId,
+        ValueLow,
+        ValueHigh,
+        targeted);
 
   }
 }
