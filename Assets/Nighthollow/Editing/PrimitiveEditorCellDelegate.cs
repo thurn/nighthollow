@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Editing
 {
-  public sealed class PrimitiveEditorCellDelegate<T> : EditorCellDelegate
+  public sealed class PrimitiveEditorCellDelegate<T> : TextFieldEditorCellDelegate
   {
     public delegate bool ParsingFunction(string input, out T output);
 

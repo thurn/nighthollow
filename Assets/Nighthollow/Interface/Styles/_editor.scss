@@ -20,7 +20,7 @@
 
 .editor-window {
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   position: absolute;
   top: 16px;
@@ -40,6 +40,7 @@
   padding: 16px;
   justify-content: space-between;
   align-items: stretch;
+  margin-right: 1920px;
 
   .editor-emphasized {
     @include fonts.black-text;
@@ -141,6 +142,8 @@
 
   .dropdown-option {
     padding: 8px;
+    border-width: 1px;
+    border-color: rgb(228, 228, 228);
   }
 
   .dropdown-option.selected {

@@ -44,7 +44,7 @@ namespace Nighthollow.Editing
       var properties = _reflectivePath.GetUnderlyingType().GetProperties();
       var result = new List<List<ICellContent>>
       {
-        properties.Select(p => new LabelCell(TableEditorSheetDelegate.NameWithSpaces(p.Name))).ToList<ICellContent>(),
+        properties.Select(p => new LabelCell(TypeUtils.NameWithSpaces(p.Name))).ToList<ICellContent>(),
         properties
           .Select(_reflectivePath.Property).Select(p => new ReflectivePathCell(p)).ToList<ICellContent>(),
         CollectionUtils.Single(new LabelCell(_name)).ToList<ICellContent>()

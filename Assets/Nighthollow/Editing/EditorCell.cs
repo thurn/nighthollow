@@ -52,7 +52,7 @@ namespace Nighthollow.Editing
     }
   }
 
-  public abstract class EditorCellDelegate
+  public abstract class TextFieldEditorCellDelegate
   {
     public virtual void Initialize(TextField field, IEditor parent)
     {

@@ -27,13 +27,16 @@ namespace Nighthollow.Editing
   public sealed class TableEditorSheetDelegate : EditorSheetDelegate
   {
     const int AddButtonKey = 1;
+
     readonly ReflectivePath _reflectivePath;
     readonly Type _underlyingType;
+    readonly DropdownCell _tableSelector;
 
-    public TableEditorSheetDelegate(ReflectivePath path)
+    public TableEditorSheetDelegate(ReflectivePath path, DropdownCell tableSelector)
     {
       _reflectivePath = path;
       _underlyingType = _reflectivePath.GetUnderlyingType();
+      _tableSelector = tableSelector;
     }
 
     public override void Initialize(Action onModified)
@@ -53,8 +56,9 @@ namespace Nighthollow.Editing
       var properties = _underlyingType.GetProperties();
       var result = new List<List<ICellContent>>
       {
+        new List<ICellContent> {_tableSelector},
         new List<ICellContent> {new LabelCell("x"), new LabelCell("ID")}
-          .Concat(properties.Select(p => new LabelCell(NameWithSpaces(p.Name))))
+          .Concat(properties.Select(p => new LabelCell(TypeUtils.NameWithSpaces(p.Name))))
           .ToList()
       };
 
@@ -71,7 +75,7 @@ namespace Nighthollow.Editing
 
       result.Add(CollectionUtils
         .Single(new ButtonCell(
-          $"Add {NameWithSpaces(_underlyingType.Name)}",
+          $"Add {TypeUtils.NameWithSpaces(_underlyingType.Name)}",
           () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(_underlyingType)); },
           (AddButtonKey, 0)))
         .ToList<ICellContent>());
@@ -87,9 +91,6 @@ namespace Nighthollow.Editing
         .ToList();
 
     public override int? ContentHeightOverride => 4000;
-
-    public static string NameWithSpaces(string name) =>
-      Regex.Replace(name, @"([A-Z])(?![A-Z])", " $1").Substring(1);
 
     void DatabaseDelete(int entityId)
     {

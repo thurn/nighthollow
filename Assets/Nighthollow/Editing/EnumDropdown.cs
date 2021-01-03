@@ -23,11 +23,13 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Editing
 {
-  public sealed class EditorDropdownCellDelegate : EditorCellDelegate
+  public sealed class EditorDropdownCellDelegate : TextFieldEditorCellDelegate
   {
+    public const string NullEnumString = "<None>";
+
     readonly ReflectivePath _reflectivePath;
     readonly List<string> _options;
-    readonly EditorDropdown _dropdown;
+    readonly EnumDropdown _dropdown;
     IEditor _parent = null!;
 
     public EditorDropdownCellDelegate(ScreenController screenController, ReflectivePath reflectivePath)
@@ -40,7 +42,7 @@ namespace Nighthollow.Editing
         .ToList();
       if (TypeUtils.IsNullable(_reflectivePath.GetUnderlyingType()))
       {
-        _options.Insert(0, "<None>");
+        _options.Insert(0, NullEnumString);
       }
 
       _dropdown = screenController.Get(ScreenController.EditorDropdown);
@@ -55,7 +57,7 @@ namespace Nighthollow.Editing
 
     public override void OnActivate(TextField field, Rect worldBound)
     {
-      _dropdown.Show(new EditorDropdown.Args(_options, worldBound, _reflectivePath, _parent));
+      _dropdown.Show(new EnumDropdown.Args(_options, worldBound, _reflectivePath, _parent));
     }
 
     public override void OnParentKeyDown(KeyDownEvent evt)
@@ -69,7 +71,7 @@ namespace Nighthollow.Editing
     }
   }
 
-  public sealed class EditorDropdown : HideableElement<EditorDropdown.Args>
+  public sealed class EnumDropdown : HideableElement<EnumDropdown.Args>
   {
     public readonly struct Args
     {
@@ -170,7 +172,7 @@ namespace Nighthollow.Editing
     {
       if (value != null)
       {
-        if (value.Equals("<None>"))
+        if (value.Equals(EditorDropdownCellDelegate.NullEnumString))
         {
           _reflectivePath.Write(null);
         }

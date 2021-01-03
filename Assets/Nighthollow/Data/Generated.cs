@@ -53,6 +53,50 @@ namespace Nighthollow.Data
 
   }
 
+  public sealed partial class StatData : IData
+  {
+    public StatData WithName(string name) =>
+      new StatData(
+        name,
+        StatType,
+        DefaultValue,
+        Description,
+        Comment);
+
+    public StatData WithStatType(StatType statType) =>
+      new StatData(
+        Name,
+        statType,
+        DefaultValue,
+        Description,
+        Comment);
+
+    public StatData WithDefaultValue(IValueData defaultValue) =>
+      new StatData(
+        Name,
+        StatType,
+        defaultValue,
+        Description,
+        Comment);
+
+    public StatData WithDescription(string description) =>
+      new StatData(
+        Name,
+        StatType,
+        DefaultValue,
+        description,
+        Comment);
+
+    public StatData WithComment(string comment) =>
+      new StatData(
+        Name,
+        StatType,
+        DefaultValue,
+        Description,
+        comment);
+
+  }
+
   public sealed partial class GameData : IData
   {
     public GameData WithTableMetadata(ImmutableDictionary<int, TableMetadata> tableMetadata) =>
@@ -60,28 +104,40 @@ namespace Nighthollow.Data
         tableMetadata,
         CreatureTypes,
         AffixTypes,
-        SkillTypes);
+        SkillTypes,
+        StatData);
 
     public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
       new GameData(
         TableMetadata,
         creatureTypes,
         AffixTypes,
-        SkillTypes);
+        SkillTypes,
+        StatData);
 
     public GameData WithAffixTypes(ImmutableDictionary<int, AffixTypeData> affixTypes) =>
       new GameData(
         TableMetadata,
         CreatureTypes,
         affixTypes,
-        SkillTypes);
+        SkillTypes,
+        StatData);
 
     public GameData WithSkillTypes(ImmutableDictionary<int, SkillTypeData> skillTypes) =>
       new GameData(
         TableMetadata,
         CreatureTypes,
         AffixTypes,
-        skillTypes);
+        skillTypes,
+        StatData);
+
+    public GameData WithStatData(ImmutableDictionary<int, StatData> statData) =>
+      new GameData(
+        TableMetadata,
+        CreatureTypes,
+        AffixTypes,
+        SkillTypes,
+        statData);
 
   }
 

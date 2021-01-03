@@ -51,6 +51,7 @@ namespace Nighthollow.Data
     public static readonly TableId<CreatureTypeData> CreatureTypes = new CreatureTypesTableId(1);
     public static readonly TableId<AffixTypeData> AffixTypes = new AffixTypesTableId(2);
     public static readonly TableId<SkillTypeData> SkillTypes = new SkillTypesTableId(3);
+    public static readonly TableId<StatData> StatData = new StatDataTableId(4);
 
     sealed class TableMetadataTableId : TableId<TableMetadata>
     {
@@ -102,6 +103,19 @@ namespace Nighthollow.Data
 
       public override GameData Write(GameData gameData, ImmutableDictionary<int, SkillTypeData> newValue) =>
         gameData.WithSkillTypes(newValue);
+    }
+
+    sealed class StatDataTableId : TableId<StatData>
+    {
+      public StatDataTableId(int id) : base(id)
+      {
+      }
+
+      public override ImmutableDictionary<int, StatData> GetIn(GameData gameData) =>
+        gameData.StatData;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, StatData> newValue) =>
+        gameData.WithStatData(newValue);
     }
   }
 }

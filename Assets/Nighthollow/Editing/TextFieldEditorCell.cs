@@ -23,10 +23,10 @@ namespace Nighthollow.Editing
   {
     readonly TextField? _field;
     readonly IEditor _parent;
-    readonly EditorCellDelegate _cellDelegate;
+    readonly TextFieldEditorCellDelegate _cellDelegate;
     bool _active;
 
-    public TextFieldEditorCell(ReflectivePath reflectivePath, IEditor parent, EditorCellDelegate cellDelegate)
+    public TextFieldEditorCell(ReflectivePath reflectivePath, IEditor parent, TextFieldEditorCellDelegate cellDelegate)
     {
       _parent = parent;
       _cellDelegate = cellDelegate;
@@ -82,6 +82,7 @@ namespace Nighthollow.Editing
     {
       switch (evt.keyCode)
       {
+        case KeyCode.Tab:
         case KeyCode.Escape:
         case KeyCode.KeypadEnter:
         case KeyCode.Return:

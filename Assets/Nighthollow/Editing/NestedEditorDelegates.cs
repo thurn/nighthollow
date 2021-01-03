@@ -50,7 +50,7 @@ namespace Nighthollow.Editing
       {
         CollectionUtils.Single(new LabelCell("x")).Concat(
             _contentType.GetProperties()
-              .Select(p => new LabelCell(TableEditorSheetDelegate.NameWithSpaces(p.Name))))
+              .Select(p => new LabelCell(TypeUtils.NameWithSpaces(p.Name))))
           .ToList<ICellContent>()
       };
       if (_reflectivePath.Read() is IList value)
@@ -70,7 +70,7 @@ namespace Nighthollow.Editing
 
       result.Add(CollectionUtils
         .Single(new ButtonCell(
-          $"Add {TableEditorSheetDelegate.NameWithSpaces(_contentType.Name)}",
+          $"Add {TypeUtils.NameWithSpaces(_contentType.Name)}",
           () => { Insert(TypeUtils.InstantiateWithDefaults(_contentType)); },
           (AddButtonKey, 0)))
         .ToList<ICellContent>());
@@ -124,7 +124,7 @@ namespace Nighthollow.Editing
         .ToList();
   }
 
-  public sealed class NestedEditorCellDelegate : EditorCellDelegate
+  public sealed class NestedEditorCellDelegate : TextFieldEditorCellDelegate
   {
     readonly ScreenController _screenController;
     readonly EditorSheetDelegate _sheetDelegate;

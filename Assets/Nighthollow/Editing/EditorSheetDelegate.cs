@@ -36,7 +36,8 @@ namespace Nighthollow.Editing
       T Switch<T>(
         Func<ReflectivePath, T> onReflectivePath,
         Func<string?, T> onLabel,
-        Func<ButtonCell, T> onButton);
+        Func<ButtonCell, T> onButton,
+        Func<DropdownCell, T> onDropdown);
     }
 
     protected sealed class ReflectivePathCell : ICellContent
@@ -51,7 +52,8 @@ namespace Nighthollow.Editing
       public T Switch<T>(
         Func<ReflectivePath, T> onReflectivePath,
         Func<string?, T> onLabel,
-        Func<ButtonCell, T> onButton) =>
+        Func<ButtonCell, T> onButton,
+        Func<DropdownCell, T> onDropdown) =>
         onReflectivePath(ReflectivePath);
     }
 
@@ -67,7 +69,8 @@ namespace Nighthollow.Editing
       public T Switch<T>(
         Func<ReflectivePath, T> onReflectivePath,
         Func<string?, T> onLabel,
-        Func<ButtonCell, T> onButton) =>
+        Func<ButtonCell, T> onButton,
+        Func<DropdownCell, T> onDropdown) =>
         onLabel(Text);
     }
 
@@ -87,7 +90,28 @@ namespace Nighthollow.Editing
       public T Switch<T>(
         Func<ReflectivePath, T> onReflectivePath,
         Func<string?, T> onLabel,
-        Func<ButtonCell, T> onButton) => onButton(this);
+        Func<ButtonCell, T> onButton,
+        Func<DropdownCell, T> onDropdown) => onButton(this);
+    }
+
+    public sealed class DropdownCell : ICellContent
+    {
+      public DropdownCell(List<string> options, int? currentlySelected, Action<int> onSelected)
+      {
+        Options = options;
+        CurrentlySelected = currentlySelected;
+        OnSelected = onSelected;
+      }
+
+      public List<string> Options { get; }
+      public int? CurrentlySelected { get; }
+      public Action<int> OnSelected { get; }
+
+      public T Switch<T>(
+        Func<ReflectivePath, T> onReflectivePath,
+        Func<string?, T> onLabel,
+        Func<ButtonCell, T> onButton,
+        Func<DropdownCell, T> onDropdown) => onDropdown(this);
     }
   }
 }

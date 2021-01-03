@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Interface;
 
@@ -21,6 +24,14 @@ namespace Nighthollow.Editing
 {
   public sealed class GameDataEditor : HideableElement<GameDataEditor.Args>
   {
+    readonly List<PropertyInfo> _properties;
+    Database _database = null!;
+
+    public GameDataEditor()
+    {
+      _properties = typeof(GameData).GetProperties().ToList();
+    }
+
     public sealed class Args
     {
       public Args(Database database)
@@ -38,9 +49,20 @@ namespace Nighthollow.Editing
 
     protected override void OnShow(Args argument)
     {
-      var tableId = (ITableId) TableId.CreatureTypes;
-      var path = new ReflectivePath(argument.Database, tableId);
-      var editor = new EditorSheet(Controller, new TableEditorSheetDelegate(path));
+      _database = argument.Database;
+      Render(1);
+    }
+
+    void Render(int propertyIndex)
+    {
+      Clear();
+      var fields = typeof(TableId).GetFields(BindingFlags.Public | BindingFlags.Static);
+      var path = new ReflectivePath(_database, (ITableId) fields[propertyIndex].GetValue(typeof(TableId)));
+      var tableSelector = new EditorSheetDelegate.DropdownCell(
+        fields.Select(f => TypeUtils.NameWithSpaces(f.Name)).ToList(),
+        propertyIndex,
+        Render);
+      var editor = new EditorSheet(Controller, new TableEditorSheetDelegate(path, tableSelector));
       Add(editor);
     }
   }

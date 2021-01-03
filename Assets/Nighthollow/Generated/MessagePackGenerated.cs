@@ -49,7 +49,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(33)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(36)
             {
                 { typeof(global::Nighthollow.Generated.DelegateId?), 0 },
                 { typeof(global::Nighthollow.Generated.Operator?), 1 },
@@ -58,32 +58,35 @@ namespace MessagePack.Resolvers
                 { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>), 4 },
                 { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>), 5 },
                 { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>), 6 },
-                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>), 7 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>), 8 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>), 9 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>), 10 },
-                { typeof(global::Nighthollow.Generated.DelegateId), 11 },
-                { typeof(global::Nighthollow.Generated.Operator), 12 },
-                { typeof(global::Nighthollow.Generated.PlayerName), 13 },
-                { typeof(global::Nighthollow.Generated.School), 14 },
-                { typeof(global::Nighthollow.Generated.SkillAnimationNumber), 15 },
-                { typeof(global::Nighthollow.Generated.SkillAnimationType), 16 },
-                { typeof(global::Nighthollow.Generated.SkillType), 17 },
-                { typeof(global::Nighthollow.Generated.StatId), 18 },
-                { typeof(global::Nighthollow.Data.IValueData), 19 },
-                { typeof(global::Nighthollow.Components.GameDataHolder), 20 },
-                { typeof(global::Nighthollow.Data.AffixTypeData), 21 },
-                { typeof(global::Nighthollow.Data.BoolValueData), 22 },
-                { typeof(global::Nighthollow.Data.CreatureSkillAnimation), 23 },
-                { typeof(global::Nighthollow.Data.CreatureTypeData), 24 },
-                { typeof(global::Nighthollow.Data.GameData), 25 },
-                { typeof(global::Nighthollow.Data.IntValueData), 26 },
-                { typeof(global::Nighthollow.Data.ModifierTypeData), 27 },
-                { typeof(global::Nighthollow.Data.SkillTypeData), 28 },
-                { typeof(global::Nighthollow.Data.TableMetadata), 29 },
-                { typeof(global::Nighthollow.Stats.DurationValue), 30 },
-                { typeof(global::Nighthollow.Stats.IntRangeValue), 31 },
-                { typeof(global::Nighthollow.Stats.PercentageValue), 32 },
+                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>), 7 },
+                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>), 8 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>), 9 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>), 10 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>), 11 },
+                { typeof(global::Nighthollow.Generated.DelegateId), 12 },
+                { typeof(global::Nighthollow.Generated.Operator), 13 },
+                { typeof(global::Nighthollow.Generated.PlayerName), 14 },
+                { typeof(global::Nighthollow.Generated.School), 15 },
+                { typeof(global::Nighthollow.Generated.SkillAnimationNumber), 16 },
+                { typeof(global::Nighthollow.Generated.SkillAnimationType), 17 },
+                { typeof(global::Nighthollow.Generated.SkillType), 18 },
+                { typeof(global::Nighthollow.Generated.StatId), 19 },
+                { typeof(global::Nighthollow.Generated.StatType), 20 },
+                { typeof(global::Nighthollow.Data.IValueData), 21 },
+                { typeof(global::Nighthollow.Components.GameDataHolder), 22 },
+                { typeof(global::Nighthollow.Data.AffixTypeData), 23 },
+                { typeof(global::Nighthollow.Data.BoolValueData), 24 },
+                { typeof(global::Nighthollow.Data.CreatureSkillAnimation), 25 },
+                { typeof(global::Nighthollow.Data.CreatureTypeData), 26 },
+                { typeof(global::Nighthollow.Data.GameData), 27 },
+                { typeof(global::Nighthollow.Data.IntValueData), 28 },
+                { typeof(global::Nighthollow.Data.ModifierTypeData), 29 },
+                { typeof(global::Nighthollow.Data.SkillTypeData), 30 },
+                { typeof(global::Nighthollow.Data.StatData), 31 },
+                { typeof(global::Nighthollow.Data.TableMetadata), 32 },
+                { typeof(global::Nighthollow.Stats.DurationValue), 33 },
+                { typeof(global::Nighthollow.Stats.IntRangeValue), 34 },
+                { typeof(global::Nighthollow.Stats.PercentageValue), 35 },
             };
         }
 
@@ -104,32 +107,35 @@ namespace MessagePack.Resolvers
                 case 4: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.AffixTypeData>();
                 case 5: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.CreatureTypeData>();
                 case 6: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.SkillTypeData>();
-                case 7: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.TableMetadata>();
-                case 8: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.CreatureSkillAnimation>();
-                case 9: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.ModifierTypeData>();
-                case 10: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.SkillTypeData>();
-                case 11: return new MessagePack.Formatters.Nighthollow.Generated.DelegateIdFormatter();
-                case 12: return new MessagePack.Formatters.Nighthollow.Generated.OperatorFormatter();
-                case 13: return new MessagePack.Formatters.Nighthollow.Generated.PlayerNameFormatter();
-                case 14: return new MessagePack.Formatters.Nighthollow.Generated.SchoolFormatter();
-                case 15: return new MessagePack.Formatters.Nighthollow.Generated.SkillAnimationNumberFormatter();
-                case 16: return new MessagePack.Formatters.Nighthollow.Generated.SkillAnimationTypeFormatter();
-                case 17: return new MessagePack.Formatters.Nighthollow.Generated.SkillTypeFormatter();
-                case 18: return new MessagePack.Formatters.Nighthollow.Generated.StatIdFormatter();
-                case 19: return new MessagePack.Formatters.Nighthollow.Data.IValueDataFormatter();
-                case 20: return new MessagePack.Formatters.Nighthollow.Components.GameDataHolderFormatter();
-                case 21: return new MessagePack.Formatters.Nighthollow.Data.AffixTypeDataFormatter();
-                case 22: return new MessagePack.Formatters.Nighthollow.Data.BoolValueDataFormatter();
-                case 23: return new MessagePack.Formatters.Nighthollow.Data.CreatureSkillAnimationFormatter();
-                case 24: return new MessagePack.Formatters.Nighthollow.Data.CreatureTypeDataFormatter();
-                case 25: return new MessagePack.Formatters.Nighthollow.Data.GameDataFormatter();
-                case 26: return new MessagePack.Formatters.Nighthollow.Data.IntValueDataFormatter();
-                case 27: return new MessagePack.Formatters.Nighthollow.Data.ModifierTypeDataFormatter();
-                case 28: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeDataFormatter();
-                case 29: return new MessagePack.Formatters.Nighthollow.Data.TableMetadataFormatter();
-                case 30: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
-                case 31: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
-                case 32: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
+                case 7: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.StatData>();
+                case 8: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.TableMetadata>();
+                case 9: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.CreatureSkillAnimation>();
+                case 10: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.ModifierTypeData>();
+                case 11: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.SkillTypeData>();
+                case 12: return new MessagePack.Formatters.Nighthollow.Generated.DelegateIdFormatter();
+                case 13: return new MessagePack.Formatters.Nighthollow.Generated.OperatorFormatter();
+                case 14: return new MessagePack.Formatters.Nighthollow.Generated.PlayerNameFormatter();
+                case 15: return new MessagePack.Formatters.Nighthollow.Generated.SchoolFormatter();
+                case 16: return new MessagePack.Formatters.Nighthollow.Generated.SkillAnimationNumberFormatter();
+                case 17: return new MessagePack.Formatters.Nighthollow.Generated.SkillAnimationTypeFormatter();
+                case 18: return new MessagePack.Formatters.Nighthollow.Generated.SkillTypeFormatter();
+                case 19: return new MessagePack.Formatters.Nighthollow.Generated.StatIdFormatter();
+                case 20: return new MessagePack.Formatters.Nighthollow.Generated.StatTypeFormatter();
+                case 21: return new MessagePack.Formatters.Nighthollow.Data.IValueDataFormatter();
+                case 22: return new MessagePack.Formatters.Nighthollow.Components.GameDataHolderFormatter();
+                case 23: return new MessagePack.Formatters.Nighthollow.Data.AffixTypeDataFormatter();
+                case 24: return new MessagePack.Formatters.Nighthollow.Data.BoolValueDataFormatter();
+                case 25: return new MessagePack.Formatters.Nighthollow.Data.CreatureSkillAnimationFormatter();
+                case 26: return new MessagePack.Formatters.Nighthollow.Data.CreatureTypeDataFormatter();
+                case 27: return new MessagePack.Formatters.Nighthollow.Data.GameDataFormatter();
+                case 28: return new MessagePack.Formatters.Nighthollow.Data.IntValueDataFormatter();
+                case 29: return new MessagePack.Formatters.Nighthollow.Data.ModifierTypeDataFormatter();
+                case 30: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeDataFormatter();
+                case 31: return new MessagePack.Formatters.Nighthollow.Data.StatDataFormatter();
+                case 32: return new MessagePack.Formatters.Nighthollow.Data.TableMetadataFormatter();
+                case 33: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
+                case 34: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
+                case 35: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
                 default: return null;
             }
         }
@@ -266,6 +272,19 @@ namespace MessagePack.Formatters.Nighthollow.Generated
         public global::Nighthollow.Generated.StatId Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             return (global::Nighthollow.Generated.StatId)reader.ReadInt32();
+        }
+    }
+
+    public sealed class StatTypeFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Generated.StatType>
+    {
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Generated.StatType value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.Write((Int32)value);
+        }
+
+        public global::Nighthollow.Generated.StatType Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            return (global::Nighthollow.Generated.StatType)reader.ReadInt32();
         }
     }
 }
@@ -882,6 +901,8 @@ namespace MessagePack.Formatters.Nighthollow.Data
         private static global::System.ReadOnlySpan<byte> GetSpan_AffixTypes() => new byte[1 + 10] { 170, 97, 102, 102, 105, 120, 84, 121, 112, 101, 115 };
         // skillTypes
         private static global::System.ReadOnlySpan<byte> GetSpan_SkillTypes() => new byte[1 + 10] { 170, 115, 107, 105, 108, 108, 84, 121, 112, 101, 115 };
+        // statData
+        private static global::System.ReadOnlySpan<byte> GetSpan_StatData() => new byte[1 + 8] { 168, 115, 116, 97, 116, 68, 97, 116, 97 };
 
         public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Nighthollow.Data.GameData value, global::MessagePack.MessagePackSerializerOptions options)
         {
@@ -892,7 +913,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteMapHeader(4);
+            writer.WriteMapHeader(5);
             writer.WriteRaw(GetSpan_TableMetadata());
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>>().Serialize(ref writer, value.TableMetadata, options);
             writer.WriteRaw(GetSpan_CreatureTypes());
@@ -901,6 +922,8 @@ namespace MessagePack.Formatters.Nighthollow.Data
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>>().Serialize(ref writer, value.AffixTypes, options);
             writer.WriteRaw(GetSpan_SkillTypes());
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>>().Serialize(ref writer, value.SkillTypes, options);
+            writer.WriteRaw(GetSpan_StatData());
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>>().Serialize(ref writer, value.StatData, options);
         }
 
         public global::Nighthollow.Data.GameData Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -917,6 +940,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var __CreatureTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>);
             var __AffixTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>);
             var __SkillTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>);
+            var __StatData__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>);
 
             for (int i = 0; i < length; i++)
             {
@@ -961,11 +985,16 @@ namespace MessagePack.Formatters.Nighthollow.Data
                                 continue;
 
                         }
+                    case 8:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 7022344665615660147UL) { goto FAIL; }
+
+                        __StatData__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>>().Deserialize(ref reader, options);
+                        continue;
 
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.GameData(__TableMetadata__, __CreatureTypes__, __AffixTypes__, __SkillTypes__)
+            var ____result = new global::Nighthollow.Data.GameData(__TableMetadata__, __CreatureTypes__, __AffixTypes__, __SkillTypes__, __StatData__)
             {
             };
 
@@ -1212,6 +1241,104 @@ namespace MessagePack.Formatters.Nighthollow.Data
             }
 
             var ____result = new global::Nighthollow.Data.SkillTypeData(__Name__, __SkillAnimationType__, __SkillType__, __ImplicitAffix__, __Address__, __ProjectileSpeed__, __UsesAccuracy__, __CanCrit__, __CanStun__)
+            {
+            };
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class StatDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.StatData>
+    {
+        // name
+        private static global::System.ReadOnlySpan<byte> GetSpan_Name() => new byte[1 + 4] { 164, 110, 97, 109, 101 };
+        // statType
+        private static global::System.ReadOnlySpan<byte> GetSpan_StatType() => new byte[1 + 8] { 168, 115, 116, 97, 116, 84, 121, 112, 101 };
+        // defaultValue
+        private static global::System.ReadOnlySpan<byte> GetSpan_DefaultValue() => new byte[1 + 12] { 172, 100, 101, 102, 97, 117, 108, 116, 86, 97, 108, 117, 101 };
+        // description
+        private static global::System.ReadOnlySpan<byte> GetSpan_Description() => new byte[1 + 11] { 171, 100, 101, 115, 99, 114, 105, 112, 116, 105, 111, 110 };
+        // comment
+        private static global::System.ReadOnlySpan<byte> GetSpan_Comment() => new byte[1 + 7] { 167, 99, 111, 109, 109, 101, 110, 116 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Nighthollow.Data.StatData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteMapHeader(5);
+            writer.WriteRaw(GetSpan_Name());
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            writer.WriteRaw(GetSpan_StatType());
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatType>().Serialize(ref writer, value.StatType, options);
+            writer.WriteRaw(GetSpan_DefaultValue());
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.DefaultValue, options);
+            writer.WriteRaw(GetSpan_Description());
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Description, options);
+            writer.WriteRaw(GetSpan_Comment());
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Comment, options);
+        }
+
+        public global::Nighthollow.Data.StatData Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var __Name__ = default(string);
+            var __StatType__ = default(global::Nighthollow.Generated.StatType);
+            var __DefaultValue__ = default(global::Nighthollow.Data.IValueData);
+            var __Description__ = default(string);
+            var __Comment__ = default(string);
+
+            for (int i = 0; i < length; i++)
+            {
+                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 4:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1701667182UL) { goto FAIL; }
+
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        continue;
+                    case 8:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 7309475598859072627UL) { goto FAIL; }
+
+                        __StatType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatType>().Deserialize(ref reader, options);
+                        continue;
+                    case 12:
+                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_DefaultValue().Slice(1))) { goto FAIL; }
+
+                        __DefaultValue__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Deserialize(ref reader, options);
+                        continue;
+                    case 11:
+                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_Description().Slice(1))) { goto FAIL; }
+
+                        __Description__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        continue;
+                    case 7:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 32772479205076835UL) { goto FAIL; }
+
+                        __Comment__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        continue;
+
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.StatData(__Name__, __StatType__, __DefaultValue__, __Description__, __Comment__)
             {
             };
 

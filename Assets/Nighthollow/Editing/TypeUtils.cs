@@ -14,6 +14,7 @@
 
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 #nullable enable
 
@@ -35,5 +36,8 @@ namespace Nighthollow.Editing
           parameter.ParameterType.IsValueType ? Activator.CreateInstance(parameter.ParameterType) : null!);
       return constructor.Invoke(arguments.ToArray());
     }
+
+    public static string NameWithSpaces(string name) =>
+      Regex.Replace(name, @"([A-Z])(?![A-Z])", " $1").Substring(1);
   }
 }

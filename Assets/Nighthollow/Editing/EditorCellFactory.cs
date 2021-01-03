@@ -25,10 +25,7 @@ namespace Nighthollow.Editing
 {
   public static class EditorCellFactory
   {
-    public static EditorCell CreateBlank()
-    {
-      return new LabelEditorCell(null);
-    }
+    public static EditorCell CreateBlank() => new LabelEditorCell(null);
 
     public static EditorCell Create(
       ScreenController screenController,
@@ -37,7 +34,8 @@ namespace Nighthollow.Editing
       cellContent.Switch(
         reflectivePath => CreateTextFieldEditorCell(screenController, parent, reflectivePath),
         CreateLabelEditorCell,
-        content => CreateButtonCell(content, parent));
+        button => CreateButtonCell(button, parent),
+        dropdown => CreateDropdownCell(screenController, dropdown, parent));
 
     static EditorCell CreateTextFieldEditorCell(
       ScreenController screenController,
@@ -47,7 +45,7 @@ namespace Nighthollow.Editing
       var type = reflectivePath.GetUnderlyingType();
       type = TypeUtils.UnboxNullable(type);
 
-      EditorCellDelegate cellDelegate;
+      TextFieldEditorCellDelegate cellDelegate;
       if (type == typeof(string))
       {
         cellDelegate = new PrimitiveEditorCellDelegate<string>(reflectivePath, Identity);
@@ -104,19 +102,16 @@ namespace Nighthollow.Editing
     static EditorCell CreateButtonCell(EditorSheetDelegate.ButtonCell content, IEditor parent) =>
       new ButtonEditorCell(content, parent);
 
+    static EditorCell CreateDropdownCell(
+      ScreenController screenController,
+      EditorSheetDelegate.DropdownCell content,
+      IEditor parent) =>
+      new SelectorDropdownEditorCell(screenController, content, parent);
+
     static bool Identity(string input, out string output)
     {
       output = input;
       return true;
-    }
-  }
-
-  public sealed class ReadOnlyEditorCellDelegate : EditorCellDelegate
-  {
-    public override string? RenderPreview(object? value) => value?.ToString();
-
-    public override void OnActivate(TextField field, Rect worldBound)
-    {
     }
   }
 }
