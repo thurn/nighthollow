@@ -22,21 +22,24 @@ namespace Nighthollow.Editing
 {
   public abstract class EditorSheetDelegate
   {
-    public abstract List<string> Headings { get; }
+    public abstract void Initialize(Action onModified);
 
-    public abstract List<List<ICellContent>> Cells { get; }
+    public abstract List<string> GetHeadings();
+
+    public abstract List<List<ICellContent>> GetCells();
 
     public virtual int? ContentHeightOverride => null;
 
     public virtual string? RenderPreview(object? value) => null;
 
-    public int ColumnCount() => Math.Max(Headings.Count, Cells.Max(row => row.Count));
+    public int ColumnCount() => Math.Max(GetHeadings().Count, GetCells().Max(row => row.Count));
 
     public interface ICellContent
     {
-      public T Switch<T>(
+      T Switch<T>(
         Func<ReflectivePath, T> onReflectivePath,
-        Func<string?, T> onLabel);
+        Func<string?, T> onLabel,
+        Func<ButtonCell, T> onButton);
     }
 
     protected sealed class ReflectivePathCell : ICellContent
@@ -48,7 +51,10 @@ namespace Nighthollow.Editing
 
       public ReflectivePath ReflectivePath { get; }
 
-      public T Switch<T>(Func<ReflectivePath, T> onReflectivePath, Func<string?, T> onLabel) =>
+      public T Switch<T>(
+        Func<ReflectivePath, T> onReflectivePath,
+        Func<string?, T> onLabel,
+        Func<ButtonCell, T> onButton) =>
         onReflectivePath(ReflectivePath);
     }
 
@@ -61,8 +67,30 @@ namespace Nighthollow.Editing
 
       public string? Text { get; }
 
-      public T Switch<T>(Func<ReflectivePath, T> onReflectivePath, Func<string?, T> onLabel) =>
+      public T Switch<T>(
+        Func<ReflectivePath, T> onReflectivePath,
+        Func<string?, T> onLabel,
+        Func<ButtonCell, T> onButton) =>
         onLabel(Text);
+    }
+
+    public sealed class ButtonCell : ICellContent
+    {
+      public ButtonCell(string text, (int, int) key, Action onClick)
+      {
+        Text = text;
+        Key = key;
+        OnClick = onClick;
+      }
+
+      public string Text { get; }
+      public (int, int) Key { get; }
+      public Action OnClick { get; }
+
+      public T Switch<T>(
+        Func<ReflectivePath, T> onReflectivePath,
+        Func<string?, T> onLabel,
+        Func<ButtonCell, T> onButton) => onButton(this);
     }
   }
 }

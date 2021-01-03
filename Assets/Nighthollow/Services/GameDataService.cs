@@ -130,7 +130,7 @@ namespace Nighthollow.Services
       foreach (var row in parsed["CardValues"])
       {
         _modifierValues
-          .GetOrCreateDefault(Parse.IntRequired(row, "Card ID"), new ModifierValues())
+          .GetOrInsertDefault(Parse.IntRequired(row, "Card ID"), new ModifierValues())
           .AddValue(this, row);
       }
 
@@ -221,8 +221,8 @@ namespace Nighthollow.Services
         creatureType,
         school,
         stats,
-        _modifierValues.GetOrCreateDefault(cardId, new ModifierValues()).BuildSkills(this, creatureType),
-        _modifierValues.GetOrCreateDefault(cardId, new ModifierValues()).BuildAffixes(this, creatureType));
+        _modifierValues.GetOrInsertDefault(cardId, new ModifierValues()).BuildSkills(this, creatureType),
+        _modifierValues.GetOrInsertDefault(cardId, new ModifierValues()).BuildAffixes(this, creatureType));
 
       _staticCardLists[list].Add(result);
     }

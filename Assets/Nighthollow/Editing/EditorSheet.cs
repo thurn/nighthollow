@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Interface;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -43,8 +44,8 @@ namespace Nighthollow.Editing
     readonly IEditor? _parent;
     readonly ScrollView _scrollView;
     readonly VisualElement _content;
-    readonly Dictionary<Vector2Int, EditorCell> _cells;
 
+    Dictionary<Vector2Int, EditorCell> _cells;
     Vector2Int? _currentlySelected;
     EditorCell? _currentlyActive;
 
@@ -72,6 +73,7 @@ namespace Nighthollow.Editing
       Add(_scrollView);
 
       _cells = RenderCells();
+      _sheetDelegate.Initialize(OnDataChanged);
 
       focusable = _parent == null;
       if (_parent == null)
@@ -79,25 +81,29 @@ namespace Nighthollow.Editing
         RegisterCallback<KeyDownEvent>(OnKeyDown);
       }
 
-      InterfaceUtils.After(0.01f, () => { SelectPosition(Vector2Int.zero); });
+      SelectPosition(Vector2Int.zero);
     }
 
     public int Width { get; }
 
     Dictionary<Vector2Int, EditorCell> RenderCells()
     {
+      _content.Clear();
+      var headings = _sheetDelegate.GetHeadings();
+      var cells = _sheetDelegate.GetCells();
+
       var result = new Dictionary<Vector2Int, EditorCell>();
 
       for (var index = 0; index < _sheetDelegate.ColumnCount(); index++)
       {
-        _content.Add(index >= _sheetDelegate.Headings.Count
+        _content.Add(index >= headings.Count
           ? HeadingCell("")
-          : HeadingCell(_sheetDelegate.Headings[index]));
+          : HeadingCell(headings[index]));
       }
 
-      for (var rowIndex = 0; rowIndex < _sheetDelegate.Cells.Count; rowIndex++)
+      for (var rowIndex = 0; rowIndex < cells.Count; rowIndex++)
       {
-        var list = _sheetDelegate.Cells[rowIndex];
+        var list = cells[rowIndex];
         for (var columnIndex = 0; columnIndex < _sheetDelegate.ColumnCount(); columnIndex++)
         {
           var position = new Vector2Int(columnIndex, rowIndex);
@@ -157,6 +163,19 @@ namespace Nighthollow.Editing
       return cell;
     }
 
+    void OnDataChanged()
+    {
+      var key = _currentlySelected.HasValue ? _cells[_currentlySelected.Value].Key : null;
+      _currentlySelected = null;
+      _currentlyActive = null;
+      _cells = RenderCells();
+
+      if (key != null)
+      {
+        SelectPosition(_cells.FirstOrDefault(p => p.Value.Key == key).Key);
+      }
+    }
+
     public void OnKeyDown(KeyDownEvent evt)
     {
       if (!_currentlySelected.HasValue)
@@ -201,7 +220,6 @@ namespace Nighthollow.Editing
     {
       _currentlyActive?.Deactivate();
       _currentlyActive = _cells[position];
-      _scrollView.ScrollTo(_currentlyActive);
       _currentlyActive.Activate();
     }
 
@@ -224,7 +242,11 @@ namespace Nighthollow.Editing
 
         _cells[position.Value].Select();
         _currentlySelected = position;
-        _scrollView.ScrollTo(_cells[position.Value]);
+
+        if (!_cells[position.Value].ClassListContains("full-width-cell"))
+        {
+          _scrollView.ScrollTo(_cells[position.Value]);
+        }
       }
     }
 

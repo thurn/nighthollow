@@ -39,7 +39,7 @@ namespace Nighthollow.Stats
 
     public void InsertModifier(IStatModifier modifier)
     {
-      Modifiers.GetOrCreateDefault(modifier.Stat.Id, new List<IStatModifier>()).Add(modifier);
+      Modifiers.GetOrInsertDefault(modifier.Stat.Id, new List<IStatModifier>()).Add(modifier);
     }
 
     public void InsertModifier<TOperation, TValue>(
@@ -63,7 +63,7 @@ namespace Nighthollow.Stats
       foreach (var row in node["modifiers"].AsArray.Children)
       {
         var statId = (StatId) row["statId"].AsInt;
-        dictionary.GetOrCreateDefault(statId, new List<IStatModifier>()).Add(StatModifierUtil.Deserialize(row));
+        dictionary.GetOrInsertDefault(statId, new List<IStatModifier>()).Add(StatModifierUtil.Deserialize(row));
       }
 
       return dictionary;

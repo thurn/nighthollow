@@ -36,9 +36,8 @@ namespace Nighthollow.Editing
       EditorSheetDelegate.ICellContent cellContent) =>
       cellContent.Switch(
         reflectivePath => CreateTextFieldEditorCell(screenController, parent, reflectivePath),
-        CreateLabelEditorCell);
-
-    static EditorCell CreateLabelEditorCell(string? text) => new LabelEditorCell(text);
+        CreateLabelEditorCell,
+        content => CreateButtonCell(content, parent));
 
     static EditorCell CreateTextFieldEditorCell(
       ScreenController screenController,
@@ -99,6 +98,11 @@ namespace Nighthollow.Editing
 
       return new TextFieldEditorCell(reflectivePath, parent, cellDelegate);
     }
+
+    static EditorCell CreateLabelEditorCell(string? text) => new LabelEditorCell(text);
+
+    static EditorCell CreateButtonCell(EditorSheetDelegate.ButtonCell content, IEditor parent) =>
+      new ButtonEditorCell(content, parent);
 
     static bool Identity(string input, out string output)
     {

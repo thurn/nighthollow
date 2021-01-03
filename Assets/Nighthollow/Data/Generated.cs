@@ -55,20 +55,30 @@ namespace Nighthollow.Data
 
   public sealed partial class GameData : IData
   {
+    public GameData WithTableMetadata(ImmutableDictionary<int, TableMetadata> tableMetadata) =>
+      new GameData(
+        tableMetadata,
+        CreatureTypes,
+        AffixTypes,
+        SkillTypes);
+
     public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
       new GameData(
+        TableMetadata,
         creatureTypes,
         AffixTypes,
         SkillTypes);
 
     public GameData WithAffixTypes(ImmutableDictionary<int, AffixTypeData> affixTypes) =>
       new GameData(
+        TableMetadata,
         CreatureTypes,
         affixTypes,
         SkillTypes);
 
     public GameData WithSkillTypes(ImmutableDictionary<int, SkillTypeData> skillTypes) =>
       new GameData(
+        TableMetadata,
         CreatureTypes,
         AffixTypes,
         skillTypes);
@@ -356,6 +366,14 @@ namespace Nighthollow.Data
         UsesAccuracy,
         CanCrit,
         canStun);
+
+  }
+
+  public sealed partial class TableMetadata : IData
+  {
+    public TableMetadata WithNextId(int nextId) =>
+      new TableMetadata(
+        nextId);
 
   }
 

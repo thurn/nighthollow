@@ -23,15 +23,18 @@ namespace Nighthollow.Data
   public sealed partial class GameData
   {
     public GameData(
+      ImmutableDictionary<int, TableMetadata>? tableMetadata = null,
       ImmutableDictionary<int, CreatureTypeData>? creatureTypes = null,
       ImmutableDictionary<int, AffixTypeData>? affixTypes = null,
       ImmutableDictionary<int, SkillTypeData>? skillTypes = null)
     {
+      TableMetadata = tableMetadata ?? ImmutableDictionary<int, TableMetadata>.Empty;
       CreatureTypes = creatureTypes ?? ImmutableDictionary<int, CreatureTypeData>.Empty;
       AffixTypes = affixTypes ?? ImmutableDictionary<int, AffixTypeData>.Empty;
       SkillTypes = skillTypes ?? ImmutableDictionary<int, SkillTypeData>.Empty;
     }
 
+    [Key("tableMetadata")] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
     [Key("creatureTypes")] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
     [Key("affixTypes")] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
     [Key("skillTypes")] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }

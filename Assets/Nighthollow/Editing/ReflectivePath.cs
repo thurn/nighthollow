@@ -43,6 +43,10 @@ namespace Nighthollow.Editing
       _path = segments;
     }
 
+    public Database Database => _database;
+
+    public ITableId TableId => _tableId;
+
     public ReflectivePath EntityId(int entityId) =>
       new ReflectivePath(_database, _tableId, _path.Add(new TableEntitySegement(_tableId!, entityId)));
 
@@ -61,7 +65,11 @@ namespace Nighthollow.Editing
       object? result = _database;
       foreach (var segment in _path)
       {
-        result = segment.Read(result!);
+        result = segment.Read(result);
+        if (result == null)
+        {
+          return null;
+        }
       }
 
       return result;
@@ -72,9 +80,9 @@ namespace Nighthollow.Editing
       _path.First().Write(_path.Skip(1).ToImmutableList(), _database, newValue);
     }
 
-    public void Subscribe(Action<object?> action)
+    public void OnEntityUpdated(Action<object?> action)
     {
-      ((TableEntitySegement) _path.First()).Subscribe(_database, _ => action(Read()));
+      ((TableEntitySegement) _path.First()).OnEntityUpdated(_database, _ => action(Read()));
     }
 
     interface ISegment
@@ -156,10 +164,10 @@ namespace Nighthollow.Editing
 
       public Type GetUnderlyingType() => _tableId.GetUnderlyingType();
 
-      public void Subscribe(Database database, Action<object> action)
+      public void OnEntityUpdated(Database database, Action<object> action)
       {
         database.GetType()
-            .GetMethod("Subscribe")!
+            .GetMethod(nameof(Database.OnEntityUpdated))!
           .MakeGenericMethod(_tableId.GetUnderlyingType())
           .Invoke(database, new object[] {_tableId, _entityId, action});
       }

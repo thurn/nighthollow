@@ -29,6 +29,13 @@ namespace Nighthollow.Data
 
   public abstract class TableId<T> : ITableId where T : class
   {
+    protected TableId(int id)
+    {
+      Id = id;
+    }
+
+    public int Id { get; }
+
     public abstract ImmutableDictionary<int, T> GetIn(GameData gameData);
 
     public abstract GameData Write(GameData gameData, ImmutableDictionary<int, T> newValue);
@@ -40,12 +47,30 @@ namespace Nighthollow.Data
 
   public static class TableId
   {
-    public static readonly TableId<CreatureTypeData> CreatureTypes = new CreatureTypesTableId();
-    public static readonly TableId<AffixTypeData> AffixTypes = new AffixTypesTableId();
-    public static readonly TableId<SkillTypeData> SkillTypes = new SkillTypesTableId();
+    public static readonly TableId<TableMetadata> TableMetadata = new TableMetadataTableId(0);
+    public static readonly TableId<CreatureTypeData> CreatureTypes = new CreatureTypesTableId(1);
+    public static readonly TableId<AffixTypeData> AffixTypes = new AffixTypesTableId(2);
+    public static readonly TableId<SkillTypeData> SkillTypes = new SkillTypesTableId(3);
+
+    sealed class TableMetadataTableId : TableId<TableMetadata>
+    {
+      public TableMetadataTableId(int id) : base(id)
+      {
+      }
+
+      public override ImmutableDictionary<int, TableMetadata> GetIn(GameData gameData) =>
+        gameData.TableMetadata;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, TableMetadata> newValue) =>
+        gameData.WithTableMetadata(newValue);
+    }
 
     sealed class CreatureTypesTableId : TableId<CreatureTypeData>
     {
+      public CreatureTypesTableId(int id) : base(id)
+      {
+      }
+
       public override ImmutableDictionary<int, CreatureTypeData> GetIn(GameData gameData) =>
         gameData.CreatureTypes;
 
@@ -55,6 +80,10 @@ namespace Nighthollow.Data
 
     sealed class AffixTypesTableId : TableId<AffixTypeData>
     {
+      public AffixTypesTableId(int id) : base(id)
+      {
+      }
+
       public override ImmutableDictionary<int, AffixTypeData> GetIn(GameData gameData) =>
         gameData.AffixTypes;
 
@@ -64,6 +93,10 @@ namespace Nighthollow.Data
 
     sealed class SkillTypesTableId : TableId<SkillTypeData>
     {
+      public SkillTypesTableId(int id) : base(id)
+      {
+      }
+
       public override ImmutableDictionary<int, SkillTypeData> GetIn(GameData gameData) =>
         gameData.SkillTypes;
 

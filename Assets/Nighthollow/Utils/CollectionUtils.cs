@@ -22,13 +22,13 @@ namespace Nighthollow.Utils
 {
   public static class CollectionUtils
   {
-    public static TValue GetValueOrDefault<TKey, TValue>(
+    public static TValue GetOrReturnDefault<TKey, TValue>(
       this IReadOnlyDictionary<TKey, TValue> dictionary,
       TKey key,
       TValue defaultValue) =>
       dictionary.TryGetValue(key, out var value) ? value : defaultValue;
 
-    public static TValue GetOrCreateDefault<TKey, TValue>(
+    public static TValue GetOrInsertDefault<TKey, TValue>(
       this IDictionary<TKey, TValue> dictionary,
       TKey key,
       TValue defaultValue)

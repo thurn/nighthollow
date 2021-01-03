@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Utils;
@@ -22,26 +23,40 @@ namespace Nighthollow.Editing
 {
   public sealed class AffixTypeEditorSheetDelegate : EditorSheetDelegate
   {
+    readonly ReflectivePath _reflectivePath;
+    readonly NestedListEditorSheetDelegate _childDelegate;
+    readonly string _name;
+
     public AffixTypeEditorSheetDelegate(ReflectivePath reflectivePath, ReflectivePath listPath, string name)
     {
-      var properties = reflectivePath.GetUnderlyingType().GetProperties();
-      var childList = new NestedListEditorSheetDelegate(listPath);
-
-      Headings = properties.Select(TableEditorSheetDelegate.PropertyName).ToList();
-
-      Cells = new List<List<ICellContent>>
-      {
-        properties.Select(reflectivePath.Property).Select(p => new ReflectivePathCell(p)).ToList<ICellContent>(),
-        CollectionUtils.Single(new LabelCell(name)).ToList<ICellContent>(),
-        childList.Headings.Select(h => new LabelCell(h)).ToList<ICellContent>()
-      };
-
-      Cells.AddRange(childList.Cells);
+      _reflectivePath = reflectivePath;
+      _childDelegate = new NestedListEditorSheetDelegate(listPath);
+      _name = name;
     }
 
-    public override List<string> Headings { get; }
+    public override void Initialize(Action onModified)
+    {
+      _reflectivePath.OnEntityUpdated(_ => onModified());
+    }
 
-    public override List<List<ICellContent>> Cells { get; }
+    public override List<string> GetHeadings()
+    {
+      return _reflectivePath.GetUnderlyingType().GetProperties()
+        .Select(p => TableEditorSheetDelegate.NameWithSpaces(p.Name)).ToList();
+    }
+
+    public override List<List<ICellContent>> GetCells()
+    {
+      var result = new List<List<ICellContent>>
+      {
+        _reflectivePath.GetUnderlyingType().GetProperties()
+          .Select(_reflectivePath.Property).Select(p => new ReflectivePathCell(p)).ToList<ICellContent>(),
+        CollectionUtils.Single(new LabelCell(_name)).ToList<ICellContent>(),
+        _childDelegate.GetHeadings().Select(h => new LabelCell(h)).ToList<ICellContent>()
+      };
+      result.AddRange(_childDelegate.GetCells());
+      return result;
+    }
 
     public override string? RenderPreview(object? value) => value?.ToString();
   }

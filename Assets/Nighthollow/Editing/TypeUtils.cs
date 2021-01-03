@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Linq;
 
 #nullable enable
 
@@ -20,19 +21,19 @@ namespace Nighthollow.Editing
 {
   public static class TypeUtils
   {
-    public static Type UnboxNullable(Type type)
-    {
-      if (IsNullable(type))
-      {
-        return type.GetGenericArguments()[0];
-      }
-      else
-      {
-        return type;
-      }
-    }
+    public static Type UnboxNullable(Type type) =>
+      IsNullable(type) ? type.GetGenericArguments()[0] : type;
 
     public static bool IsNullable(Type type) =>
       type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+
+    public static object InstantiateWithDefaults(Type type)
+    {
+      var constructor = type.GetConstructors()[0];
+      var arguments = constructor.GetParameters()
+        .Select(parameter =>
+          parameter.ParameterType.IsValueType ? Activator.CreateInstance(parameter.ParameterType) : null!);
+      return constructor.Invoke(arguments.ToArray());
+    }
   }
 }

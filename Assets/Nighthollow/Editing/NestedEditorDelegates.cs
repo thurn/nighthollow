@@ -26,27 +26,41 @@ namespace Nighthollow.Editing
 {
   public sealed class NestedListEditorSheetDelegate : EditorSheetDelegate
   {
+    readonly ReflectivePath _reflectivePath;
+    readonly Type _contentType;
+
     public NestedListEditorSheetDelegate(ReflectivePath path)
     {
-      var listType = path.GetUnderlyingType();
-      var listContentType = listType.GetGenericArguments()[0];
-      var properties = listContentType.GetProperties();
-      Headings = properties.Select(TableEditorSheetDelegate.PropertyName).ToList();
-      Cells = new List<List<ICellContent>>();
-      if (path.Read() is IList value)
+      _reflectivePath = path;
+      _contentType = path.GetUnderlyingType().GetGenericArguments()[0];
+    }
+
+    public override void Initialize(Action onModified)
+    {
+      _reflectivePath.OnEntityUpdated(_ => onModified());
+    }
+
+    public override List<string> GetHeadings()
+    {
+      return _contentType.GetProperties().Select(p => TableEditorSheetDelegate.NameWithSpaces(p.Name)).ToList();
+    }
+
+    public override List<List<ICellContent>> GetCells()
+    {
+      var result = new List<List<ICellContent>>();
+      if (_reflectivePath.Read() is IList value)
       {
         for (var index = 0; index < value.Count; ++index)
         {
-          Cells.Add(properties
-            .Select(property => new ReflectivePathCell(path.ListIndex(listContentType, index).Property(property)))
+          result.Add(_contentType.GetProperties()
+            .Select(property =>
+              new ReflectivePathCell(_reflectivePath.ListIndex(_contentType, index).Property(property)))
             .ToList<ICellContent>());
         }
       }
+
+      return result;
     }
-
-    public override List<string> Headings { get; }
-
-    public override List<List<ICellContent>> Cells { get; }
 
     public override string? RenderPreview(object? value) =>
       value is IList list ? string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())) : null;

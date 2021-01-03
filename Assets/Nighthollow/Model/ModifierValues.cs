@@ -47,7 +47,7 @@ namespace Nighthollow.Model
         var value = Parse.String(row, "Value");
         if (value != null)
         {
-          _affixModifiers.GetOrCreateDefault(affixId, new Dictionary<int, IStatModifier>())[modifierId] =
+          _affixModifiers.GetOrInsertDefault(affixId, new Dictionary<int, IStatModifier>())[modifierId] =
             Stat.GetStat(Errors.CheckNotNull(modifier.StatId))
               .ParseModifier(Parse.StringRequired(row, "Value"), Errors.CheckNotNull(modifier.Operator));
         }
@@ -55,7 +55,7 @@ namespace Nighthollow.Model
 
       public AffixData BuildAffix(AffixTypeData affixType)
       {
-        var modifierValues = _affixModifiers.GetValueOrDefault(affixType.Id, new Dictionary<int, IStatModifier>());
+        var modifierValues = _affixModifiers.GetOrReturnDefault(affixType.Id, new Dictionary<int, IStatModifier>());
         var result = new List<ModifierData>();
         foreach (var modifierRange in affixType.ModifierRanges)
         {
@@ -83,7 +83,7 @@ namespace Nighthollow.Model
       var skillId = Parse.Int(row, "Skill");
       var affixId = Parse.IntRequired(row, "Affix ID");
       var values = skillId.HasValue
-        ? _skillModifiers.GetOrCreateDefault(skillId.Value, new AffixModifierValues())
+        ? _skillModifiers.GetOrInsertDefault(skillId.Value, new AffixModifierValues())
         : _creatureModifiers;
       values.AddValueForAffix(service, affixId, row);
     }

@@ -32,7 +32,7 @@ namespace Nighthollow.Stats
 
     public IReadOnlyDictionary<TTag, TValue> Values { get; }
 
-    public TValue Get(TTag tag, TValue notFound) => Values.GetValueOrDefault(tag, notFound);
+    public TValue Get(TTag tag, TValue notFound) => Values.GetOrReturnDefault(tag, notFound);
 
     public override string ToString()
     {

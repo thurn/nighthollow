@@ -78,6 +78,8 @@
   }
 
   .editor-cell.full-width-cell {
+    justify-content: flex-start;
+
     Label {
       font-size: 30px;
       padding: 8px;
@@ -90,6 +92,10 @@
     * {
       background-color: rgb(225, 245, 254);
     }
+
+    .editor-cell-button {
+      border-color: blue;
+    }
   }
 
   .editor-cell.active {
@@ -98,6 +104,24 @@
     * {
       background-color: rgb(232, 245, 233);
     }
+  }
+
+  .editor-cell-button {
+    font-size: 28px;
+    @include fonts.black-text;
+    margin: 8px;
+    padding: 8px 16px;
+    border-width: 4px;
+    border-color: white;
+    border-radius: 8px;
+  }
+
+  .editor-cell-button:hover {
+    background-color: rgb(242, 242, 242);
+  }
+
+  .editor-cell-button:active {
+    background-color: rgb(228, 228, 228);
   }
 }
 

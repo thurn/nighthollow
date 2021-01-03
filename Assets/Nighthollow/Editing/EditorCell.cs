@@ -27,6 +27,8 @@ namespace Nighthollow.Editing
       AddToClassList("editor-cell");
     }
 
+    public virtual (int, int)? Key => null;
+
     public virtual void Select()
     {
       AddToClassList("selected");
