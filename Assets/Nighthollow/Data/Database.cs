@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using MessagePack;
 using Nighthollow.Utils;
@@ -26,11 +27,10 @@ namespace Nighthollow.Data
   public sealed class Database
   {
     readonly MessagePackSerializerOptions _serializationOptions;
-    readonly Dictionary<(ITableId, int), List<IListener>> _updatedListeners;
-    readonly Dictionary<ITableId, List<IListener>> _addedListeners;
-    readonly Dictionary<ITableId, List<IListener>> _removedListeners;
-    readonly List<IMutation> _mutations;
-
+    ImmutableDictionary<(ITableId, int), ImmutableList<IListener>> _updatedListeners;
+    ImmutableDictionary<ITableId, ImmutableList<IListener>> _addedListeners;
+    ImmutableDictionary<ITableId, ImmutableList<IListener>> _removedListeners;
+    ImmutableList<IMutation> _mutations;
     GameData _gameData;
     bool _writePending;
 
@@ -38,10 +38,10 @@ namespace Nighthollow.Data
     {
       _serializationOptions = serializationOptions;
       _gameData = gameData;
-      _updatedListeners = new Dictionary<(ITableId, int), List<IListener>>();
-      _addedListeners = new Dictionary<ITableId, List<IListener>>();
-      _removedListeners = new Dictionary<ITableId, List<IListener>>();
-      _mutations = new List<IMutation>();
+      _updatedListeners = ImmutableDictionary<(ITableId, int), ImmutableList<IListener>>.Empty;
+      _addedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
+      _removedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
+      _mutations = ImmutableList<IMutation>.Empty;
     }
 
     /// <summary>
@@ -57,35 +57,54 @@ namespace Nighthollow.Data
         action(tableId.GetIn(_gameData)[entityId]);
       }
 
-      _updatedListeners.GetOrInsertDefault((tableId, entityId), new List<IListener>())
-        .Add(new EntityUpdatedListener<T>(tableId, action));
+      var key = (tableId, entityId);
+      if (!_updatedListeners.ContainsKey(key))
+      {
+        _updatedListeners = _updatedListeners.Add(key, ImmutableList<IListener>.Empty);
+      }
+
+      _updatedListeners = _updatedListeners.SetItem(
+        key,
+        _updatedListeners[key].Add(new EntityUpdatedListener<T>(tableId, action)));
     }
 
     public void OnEntityAdded<T>(TableId<T> tableId, Action<int, T> action) where T : class
     {
-      _addedListeners.GetOrInsertDefault(tableId, new List<IListener>())
-        .Add(new EntityAddedListener<T>(tableId, action));
+      if (!_addedListeners.ContainsKey(tableId))
+      {
+        _addedListeners = _addedListeners.Add(tableId, ImmutableList<IListener>.Empty);
+      }
+
+      _addedListeners = _addedListeners.SetItem(
+        tableId,
+        _addedListeners[tableId].Add(new EntityAddedListener<T>(tableId, action)));
     }
 
     public void OnEntityRemoved<T>(TableId<T> tableId, Action<int> action) where T : class
     {
-      _removedListeners.GetOrInsertDefault(tableId, new List<IListener>())
-        .Add(new EntityRemovedListener(action));
+      if (!_removedListeners.ContainsKey(tableId))
+      {
+        _removedListeners = _removedListeners.Add(tableId, ImmutableList<IListener>.Empty);
+      }
+
+      _removedListeners = _removedListeners.SetItem(
+        tableId,
+        _removedListeners[tableId].Add(new EntityRemovedListener(action)));
     }
 
     public void Insert<T>(TableId<T> tableId, T value) where T : class
     {
-      _mutations.Add(new InsertMutation<T>(tableId, value));
+      _mutations = _mutations.Add(new InsertMutation<T>(tableId, value));
     }
 
     public void Update<T>(TableId<T> tableId, int entityId, Func<T?, T> mutation) where T : class
     {
-      _mutations.Add(new UpdateMutation<T>(tableId, entityId, mutation));
+      _mutations = _mutations.Add(new UpdateMutation<T>(tableId, entityId, mutation));
     }
 
     public void Delete<T>(TableId<T> tableId, int entityId) where T : class
     {
-      _mutations.Add(new DeleteMutation<T>(tableId, entityId));
+      _mutations = _mutations.Add(new DeleteMutation<T>(tableId, entityId));
     }
 
     /// <summary>Should only be invoked from <see cref="DataService"/>.</summary>
@@ -105,7 +124,7 @@ namespace Nighthollow.Data
         gameData = mutation.Apply(gameData, events);
       }
 
-      _mutations.Clear();
+      _mutations = ImmutableList<IMutation>.Empty;
       using var stream = File.OpenWrite(persistentFilePath);
       MessagePackSerializer.Serialize(stream, gameData, _serializationOptions);
       Debug.Log($"Wrote game data to {persistentFilePath}");

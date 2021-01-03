@@ -53,5 +53,7 @@ namespace Nighthollow.Data
     [Key("usesAccuracy")] public bool UsesAccuracy { get; }
     [Key("canCrit")] public bool CanCrit { get; }
     [Key("canStun")] public bool CanStun { get; }
+
+    public override string ToString() => Name;
   }
 }

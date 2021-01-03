@@ -15,8 +15,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
 using Nighthollow.Interface;
+using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,11 +29,14 @@ namespace Nighthollow.Editing
 {
   public sealed class NestedListEditorSheetDelegate : EditorSheetDelegate
   {
+    const int AddButtonKey = 2;
     readonly ReflectivePath _reflectivePath;
+    readonly Type _contentType;
 
     public NestedListEditorSheetDelegate(ReflectivePath path)
     {
       _reflectivePath = path;
+      _contentType = _reflectivePath.GetUnderlyingType().GetGenericArguments()[0];
     }
 
     public override void Initialize(Action onModified)
@@ -40,28 +46,82 @@ namespace Nighthollow.Editing
 
     public override List<List<ICellContent>> GetCells()
     {
-      var contentType = _reflectivePath.GetUnderlyingType().GetGenericArguments()[0];
       var result = new List<List<ICellContent>>
       {
-        contentType.GetProperties()
-          .Select(p => new LabelCell(TableEditorSheetDelegate.NameWithSpaces(p.Name))).ToList<ICellContent>()
+        CollectionUtils.Single(new LabelCell("x")).Concat(
+            _contentType.GetProperties()
+              .Select(p => new LabelCell(TableEditorSheetDelegate.NameWithSpaces(p.Name))))
+          .ToList<ICellContent>()
       };
       if (_reflectivePath.Read() is IList value)
       {
         for (var index = 0; index < value.Count; ++index)
         {
-          result.Add(contentType.GetProperties()
-            .Select(property =>
-              new ReflectivePathCell(_reflectivePath.ListIndex(contentType, index).Property(property)))
-            .ToList<ICellContent>());
+          var entityIndex = index;
+          result.Add(
+            CollectionUtils.Single<ICellContent>(new ButtonCell("x", () => Delete(entityIndex)))
+              .Concat(
+                _contentType.GetProperties()
+                  .Select(property =>
+                    new ReflectivePathCell(_reflectivePath.ListIndex(_contentType, index).Property(property))))
+              .ToList());
         }
       }
+
+      result.Add(CollectionUtils
+        .Single(new ButtonCell(
+          $"Add {TableEditorSheetDelegate.NameWithSpaces(_contentType.Name)}",
+          () => { Insert(TypeUtils.InstantiateWithDefaults(_contentType)); },
+          (AddButtonKey, 0)))
+        .ToList<ICellContent>());
 
       return result;
     }
 
-    public override string RenderPreview(object? value) =>
-      value is IList list ? string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())) : "None";
+    void Insert(object value)
+    {
+      GetType()
+          .GetMethod(nameof(InsertInternal), BindingFlags.Instance | BindingFlags.NonPublic)!
+        .MakeGenericMethod(_contentType)
+        .Invoke(this, new[] {value});
+    }
+
+    void InsertInternal<T>(object value)
+    {
+      var list = (ImmutableList<T>?) _reflectivePath.Read();
+      _reflectivePath.Write(list == null ? ImmutableList.Create<T>((T) value) : list.Add((T) value));
+    }
+
+    void Delete(int index)
+    {
+      GetType()
+          .GetMethod(nameof(DeleteInternal), BindingFlags.Instance | BindingFlags.NonPublic)!
+        .MakeGenericMethod(_contentType)
+        .Invoke(this, new object[] {index});
+    }
+
+    void DeleteInternal<T>(int index)
+    {
+      var list = (ImmutableList<T>) _reflectivePath.Read()!;
+      _reflectivePath.Write(list.RemoveAt(index));
+    }
+
+    public override string RenderPreview(object? value)
+    {
+      return value switch
+      {
+        IList list when list.Count > 0 => string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())),
+        IList _ => "[]",
+        _ => "None"
+      };
+    }
+
+    public override List<int> GetColumnWidths() =>
+      new List<int> {50}
+        .Concat(Enumerable.Repeat(
+          EditorSheet.DefaultCellWidth,
+          _contentType.GetProperties().Length))
+        .ToList();
   }
 
   public sealed class NestedEditorCellDelegate : EditorCellDelegate

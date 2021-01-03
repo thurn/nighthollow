@@ -28,10 +28,12 @@ namespace Nighthollow.Editing
   {
     const int AddButtonKey = 1;
     readonly ReflectivePath _reflectivePath;
+    readonly Type _underlyingType;
 
     public TableEditorSheetDelegate(ReflectivePath path)
     {
       _reflectivePath = path;
+      _underlyingType = _reflectivePath.GetUnderlyingType();
     }
 
     public override void Initialize(Action onModified)
@@ -48,8 +50,7 @@ namespace Nighthollow.Editing
 
     public override List<List<ICellContent>> GetCells()
     {
-      var underlyingType = _reflectivePath.GetUnderlyingType();
-      var properties = underlyingType.GetProperties();
+      var properties = _underlyingType.GetProperties();
       var result = new List<List<ICellContent>>
       {
         new List<ICellContent> {new LabelCell("x"), new LabelCell("ID")}
@@ -61,7 +62,7 @@ namespace Nighthollow.Editing
       {
         result.Add(new List<ICellContent>
           {
-            new ButtonCell("x", () => Remove(entityId)),
+            new ButtonCell("x", () => DatabaseDelete(entityId)),
             new LabelCell(entityId.ToString())
           }.Concat(properties
             .Select(property => new ReflectivePathCell(_reflectivePath.EntityId(entityId).Property(property))))
@@ -70,8 +71,8 @@ namespace Nighthollow.Editing
 
       result.Add(CollectionUtils
         .Single(new ButtonCell(
-          $"Add {NameWithSpaces(underlyingType.Name)}",
-          () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(underlyingType)); },
+          $"Add {NameWithSpaces(_underlyingType.Name)}",
+          () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(_underlyingType)); },
           (AddButtonKey, 0)))
         .ToList<ICellContent>());
 
@@ -82,7 +83,7 @@ namespace Nighthollow.Editing
       new List<int> {50, 50}
         .Concat(Enumerable.Repeat(
           EditorSheet.DefaultCellWidth,
-          _reflectivePath.GetUnderlyingType().GetProperties().Length))
+          _underlyingType.GetProperties().Length))
         .ToList();
 
     public override int? ContentHeightOverride => 4000;
@@ -90,14 +91,16 @@ namespace Nighthollow.Editing
     public static string NameWithSpaces(string name) =>
       Regex.Replace(name, @"([A-Z])(?![A-Z])", " $1").Substring(1);
 
-    void Remove(int entityId)
+    void DatabaseDelete(int entityId)
     {
+      typeof(Database).GetMethod(nameof(Database.Delete))!
+        .MakeGenericMethod(_underlyingType)
+        .Invoke(_reflectivePath.Database, new object[] {_reflectivePath.TableId, entityId});
     }
 
     void DatabaseInsert(object value)
     {
-      typeof(Database)
-          .GetMethod(nameof(Database.Insert))!
+      typeof(Database).GetMethod(nameof(Database.Insert))!
         .MakeGenericMethod(_reflectivePath.GetUnderlyingType())
         .Invoke(_reflectivePath.Database, new[] {_reflectivePath.TableId, value});
     }

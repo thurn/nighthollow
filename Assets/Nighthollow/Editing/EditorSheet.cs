@@ -79,6 +79,7 @@ namespace Nighthollow.Editing
       }
 
       SelectPosition(Vector2Int.zero);
+      InterfaceUtils.After(0.1f, FocusRoot);
     }
 
     public int Width { get; private set; }
@@ -143,15 +144,13 @@ namespace Nighthollow.Editing
 
     void OnDataChanged()
     {
+      var previouslySelected = _currentlySelected;
       var key = _currentlySelected.HasValue ? _cells[_currentlySelected.Value].Key : null;
       _currentlySelected = null;
       _currentlyActive = null;
       _cells = RenderCells();
 
-      if (key != null)
-      {
-        SelectPosition(_cells.FirstOrDefault(p => p.Value.Key == key).Key);
-      }
+      SelectPosition(key != null ? _cells.FirstOrDefault(p => p.Value.Key == key).Key : previouslySelected);
     }
 
     public void OnKeyDown(KeyDownEvent evt)

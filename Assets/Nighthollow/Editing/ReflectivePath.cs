@@ -121,9 +121,10 @@ namespace Nighthollow.Editing
         }
         else
         {
+          var parentValue = Read(parent) ?? TypeUtils.InstantiateWithDefaults(GetUnderlyingType());
           return method.Invoke(parent, new[]
           {
-            remainingSegments.First().Write(remainingSegments.Skip(1).ToImmutableList(), Read(parent)!, newValue)
+            remainingSegments.First().Write(remainingSegments.Skip(1).ToImmutableList(), parentValue, newValue)
           });
         }
       }
@@ -184,7 +185,7 @@ namespace Nighthollow.Editing
         _index = index;
       }
 
-      public object? Read(object previous) => ((IList) previous)[_index];
+      public object? Read(object previous) => previous is IList list && list.Count > _index ? list[_index] : null;
 
       public object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue)
       {
@@ -194,7 +195,9 @@ namespace Nighthollow.Editing
           .Invoke(this, new[] {remainingSegments, parent, newValue});
       }
 
-      ImmutableList<T> WriteInternal<T>(ImmutableList<ISegment> remainingSegments, ImmutableList<T> parent,
+      ImmutableList<T> WriteInternal<T>(
+        ImmutableList<ISegment> remainingSegments,
+        ImmutableList<T> parent,
         object? newValue)
       {
         if (newValue == null)
