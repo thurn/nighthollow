@@ -36,7 +36,7 @@ namespace Nighthollow.Editing
 
   public sealed class EditorSheet : VisualElement, IEditor
   {
-    const int DefaultCellWidth = 250;
+    public const int DefaultCellWidth = 250;
     const int ContentPadding = 32;
 
     readonly ScreenController _screenController;
@@ -57,9 +57,6 @@ namespace Nighthollow.Editing
 
       _content = new VisualElement();
       _content.AddToClassList("editor-content");
-
-      Width = ContentPadding + (DefaultCellWidth * _sheetDelegate.ColumnCount());
-      _content.style.width = Width;
 
       if (_sheetDelegate.ContentHeightOverride != null)
       {
@@ -84,27 +81,21 @@ namespace Nighthollow.Editing
       SelectPosition(Vector2Int.zero);
     }
 
-    public int Width { get; }
+    public int Width { get; private set; }
 
     Dictionary<Vector2Int, EditorCell> RenderCells()
     {
       _content.Clear();
-      var headings = _sheetDelegate.GetHeadings();
       var cells = _sheetDelegate.GetCells();
-
       var result = new Dictionary<Vector2Int, EditorCell>();
-
-      for (var index = 0; index < _sheetDelegate.ColumnCount(); index++)
-      {
-        _content.Add(index >= headings.Count
-          ? HeadingCell("")
-          : HeadingCell(headings[index]));
-      }
+      var columnCount = cells.Max(row => row.Count);
+      var columnWidths = _sheetDelegate.GetColumnWidths();
+      Width = ContentPadding + (columnWidths?.Sum() ?? (DefaultCellWidth * columnCount));
 
       for (var rowIndex = 0; rowIndex < cells.Count; rowIndex++)
       {
         var list = cells[rowIndex];
-        for (var columnIndex = 0; columnIndex < _sheetDelegate.ColumnCount(); columnIndex++)
+        for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
         {
           var position = new Vector2Int(columnIndex, rowIndex);
 
@@ -132,7 +123,8 @@ namespace Nighthollow.Editing
             _parent?.FocusRoot();
           });
 
-          cell.style.width = DefaultCellWidth;
+          cell.style.width = columnWidths?[columnIndex] ?? DefaultCellWidth;
+
           if (list.Count == 1)
           {
             cell.style.width = Width - ContentPadding;
@@ -144,23 +136,9 @@ namespace Nighthollow.Editing
         }
       }
 
+      _content.style.width = Width;
+
       return result;
-    }
-
-    static VisualElement HeadingCell(string? text)
-    {
-      var label = new Label();
-      if (text != null)
-      {
-        label.text = text.Length > 50 ? text.Substring(0, 49) + "..." : text;
-      }
-
-      var cell = new VisualElement();
-      cell.AddToClassList("editor-cell");
-      cell.AddToClassList("editor-emphasized");
-      cell.Add(label);
-      cell.style.width = DefaultCellWidth;
-      return cell;
     }
 
     void OnDataChanged()

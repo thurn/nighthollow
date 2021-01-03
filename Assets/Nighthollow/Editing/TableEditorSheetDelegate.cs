@@ -46,43 +46,53 @@ namespace Nighthollow.Editing
       _reflectivePath.Database.OnEntityRemoved((TableId<T>) _reflectivePath.TableId, eid => onModified());
     }
 
-    public override List<string> GetHeadings()
-    {
-      var underlyingType = _reflectivePath.GetUnderlyingType();
-      var properties = underlyingType.GetProperties();
-      var result = new List<string> {"ID"};
-      result.AddRange(properties.Select(p => NameWithSpaces(p.Name)));
-      return result;
-    }
-
     public override List<List<ICellContent>> GetCells()
     {
       var underlyingType = _reflectivePath.GetUnderlyingType();
       var properties = underlyingType.GetProperties();
-      var result = new List<List<ICellContent>>();
+      var result = new List<List<ICellContent>>
+      {
+        new List<ICellContent> {new LabelCell("x"), new LabelCell("ID")}
+          .Concat(properties.Select(p => new LabelCell(NameWithSpaces(p.Name))))
+          .ToList()
+      };
+
       foreach (int entityId in _reflectivePath.GetTable().Keys)
       {
-        var row = new List<ICellContent> {new LabelCell(entityId.ToString())};
-        row.AddRange(properties
-          .Select(property => new ReflectivePathCell(_reflectivePath.EntityId(entityId).Property(property)))
+        result.Add(new List<ICellContent>
+          {
+            new ButtonCell("x", () => Remove(entityId)),
+            new LabelCell(entityId.ToString())
+          }.Concat(properties
+            .Select(property => new ReflectivePathCell(_reflectivePath.EntityId(entityId).Property(property))))
           .ToList());
-        result.Add(row);
       }
 
       result.Add(CollectionUtils
         .Single(new ButtonCell(
           $"Add {NameWithSpaces(underlyingType.Name)}",
-          (AddButtonKey, 0),
-          () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(underlyingType)); }))
+          () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(underlyingType)); },
+          (AddButtonKey, 0)))
         .ToList<ICellContent>());
 
       return result;
     }
 
+    public override List<int> GetColumnWidths() =>
+      new List<int> {50, 50}
+        .Concat(Enumerable.Repeat(
+          EditorSheet.DefaultCellWidth,
+          _reflectivePath.GetUnderlyingType().GetProperties().Length))
+        .ToList();
+
     public override int? ContentHeightOverride => 4000;
 
     public static string NameWithSpaces(string name) =>
       Regex.Replace(name, @"([A-Z])(?![A-Z])", " $1").Substring(1);
+
+    void Remove(int entityId)
+    {
+    }
 
     void DatabaseInsert(object value)
     {

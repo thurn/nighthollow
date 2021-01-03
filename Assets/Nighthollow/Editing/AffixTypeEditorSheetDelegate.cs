@@ -39,20 +39,15 @@ namespace Nighthollow.Editing
       _reflectivePath.OnEntityUpdated(_ => onModified());
     }
 
-    public override List<string> GetHeadings()
-    {
-      return _reflectivePath.GetUnderlyingType().GetProperties()
-        .Select(p => TableEditorSheetDelegate.NameWithSpaces(p.Name)).ToList();
-    }
-
     public override List<List<ICellContent>> GetCells()
     {
+      var properties = _reflectivePath.GetUnderlyingType().GetProperties();
       var result = new List<List<ICellContent>>
       {
-        _reflectivePath.GetUnderlyingType().GetProperties()
+        properties.Select(p => new LabelCell(TableEditorSheetDelegate.NameWithSpaces(p.Name))).ToList<ICellContent>(),
+        properties
           .Select(_reflectivePath.Property).Select(p => new ReflectivePathCell(p)).ToList<ICellContent>(),
-        CollectionUtils.Single(new LabelCell(_name)).ToList<ICellContent>(),
-        _childDelegate.GetHeadings().Select(h => new LabelCell(h)).ToList<ICellContent>()
+        CollectionUtils.Single(new LabelCell(_name)).ToList<ICellContent>()
       };
       result.AddRange(_childDelegate.GetCells());
       return result;

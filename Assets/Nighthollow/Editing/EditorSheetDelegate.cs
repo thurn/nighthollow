@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 #nullable enable
 
@@ -24,15 +23,13 @@ namespace Nighthollow.Editing
   {
     public abstract void Initialize(Action onModified);
 
-    public abstract List<string> GetHeadings();
-
     public abstract List<List<ICellContent>> GetCells();
 
     public virtual int? ContentHeightOverride => null;
 
     public virtual string? RenderPreview(object? value) => null;
 
-    public int ColumnCount() => Math.Max(GetHeadings().Count, GetCells().Max(row => row.Count));
+    public virtual List<int>? GetColumnWidths() => null;
 
     public interface ICellContent
     {
@@ -76,7 +73,7 @@ namespace Nighthollow.Editing
 
     public sealed class ButtonCell : ICellContent
     {
-      public ButtonCell(string text, (int, int) key, Action onClick)
+      public ButtonCell(string text, Action onClick, (int, int)? key = null)
       {
         Text = text;
         Key = key;
@@ -84,7 +81,7 @@ namespace Nighthollow.Editing
       }
 
       public string Text { get; }
-      public (int, int) Key { get; }
+      public (int, int)? Key { get; }
       public Action OnClick { get; }
 
       public T Switch<T>(

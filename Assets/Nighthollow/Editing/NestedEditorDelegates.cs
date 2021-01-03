@@ -27,12 +27,10 @@ namespace Nighthollow.Editing
   public sealed class NestedListEditorSheetDelegate : EditorSheetDelegate
   {
     readonly ReflectivePath _reflectivePath;
-    readonly Type _contentType;
 
     public NestedListEditorSheetDelegate(ReflectivePath path)
     {
       _reflectivePath = path;
-      _contentType = path.GetUnderlyingType().GetGenericArguments()[0];
     }
 
     public override void Initialize(Action onModified)
@@ -40,21 +38,21 @@ namespace Nighthollow.Editing
       _reflectivePath.OnEntityUpdated(_ => onModified());
     }
 
-    public override List<string> GetHeadings()
-    {
-      return _contentType.GetProperties().Select(p => TableEditorSheetDelegate.NameWithSpaces(p.Name)).ToList();
-    }
-
     public override List<List<ICellContent>> GetCells()
     {
-      var result = new List<List<ICellContent>>();
+      var contentType = _reflectivePath.GetUnderlyingType().GetGenericArguments()[0];
+      var result = new List<List<ICellContent>>
+      {
+        contentType.GetProperties()
+          .Select(p => new LabelCell(TableEditorSheetDelegate.NameWithSpaces(p.Name))).ToList<ICellContent>()
+      };
       if (_reflectivePath.Read() is IList value)
       {
         for (var index = 0; index < value.Count; ++index)
         {
-          result.Add(_contentType.GetProperties()
+          result.Add(contentType.GetProperties()
             .Select(property =>
-              new ReflectivePathCell(_reflectivePath.ListIndex(_contentType, index).Property(property)))
+              new ReflectivePathCell(_reflectivePath.ListIndex(contentType, index).Property(property)))
             .ToList<ICellContent>());
         }
       }
@@ -62,8 +60,8 @@ namespace Nighthollow.Editing
       return result;
     }
 
-    public override string? RenderPreview(object? value) =>
-      value is IList list ? string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())) : null;
+    public override string RenderPreview(object? value) =>
+      value is IList list ? string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())) : "None";
   }
 
   public sealed class NestedEditorCellDelegate : EditorCellDelegate

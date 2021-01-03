@@ -45,7 +45,7 @@ namespace Nighthollow.Editing
       _field.RegisterCallback<KeyDownEvent>(OnKeyDownInternal);
       _cellDelegate.Initialize(_field, this);
 
-      reflectivePath.OnEntityUpdated(v => { _field.value = _cellDelegate.RenderPreview(v); });
+      reflectivePath.OnEntityUpdated(v => { _field.value = _cellDelegate.RenderPreview(v) ?? "None"; });
     }
 
     public VisualElement VisualElement => this;
