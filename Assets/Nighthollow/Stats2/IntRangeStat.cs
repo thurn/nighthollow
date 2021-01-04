@@ -35,12 +35,7 @@ namespace Nighthollow.Stats2
     [Key(0)] public int Low { get; }
     [Key(1)] public int High { get; }
 
-    public T Switch<T>(
-      Func<int, T> onInt,
-      Func<bool, T> onBool,
-      Func<DurationValue, T> onDuration,
-      Func<PercentageValue, T> onPercentage,
-      Func<IntRangeValue, T> onIntRange) => onIntRange(this);
+    public T Cast<T>() => (T) (object) this;
 
     public static readonly IntRangeValue Zero = new IntRangeValue(low: 0, high: 0);
 

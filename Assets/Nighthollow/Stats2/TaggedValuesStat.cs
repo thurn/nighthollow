@@ -23,41 +23,25 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats2
 {
-  public sealed class TaggedValues<TTag, TValue> where TTag : Enum where TValue : struct
-  {
-    public TaggedValues(ImmutableDictionary<TTag, TValue> values)
-    {
-      Values = values;
-    }
-
-    public ImmutableDictionary<TTag, TValue> Values { get; }
-
-    public TValue Get(TTag tag, TValue notFound) => Values.GetOrReturnDefault(tag, notFound);
-
-    public override string ToString() =>
-      string.Join(",", Values.Select(pair => $"{pair.Value} {pair.Key}").ToArray());
-  }
-
   public class TaggedValuesStat<TTag, TValue> :
-    AbstractStat<TaggedNumericOperation<TTag, TValue>, TaggedValues<TTag, TValue>>
+    AbstractStat<TaggedNumericOperation<TTag, TValue>, ImmutableDictionary<TTag, TValue>>
     where TTag : Enum where TValue : struct
   {
     readonly AbstractStat<NumericOperation<TValue>, TValue> _childStat;
 
-    protected TaggedValuesStat(StatId statId,
-      AbstractStat<NumericOperation<TValue>, TValue> childStat) : base(statId)
+    protected TaggedValuesStat(StatId statId, AbstractStat<NumericOperation<TValue>, TValue> childStat) : base(statId)
     {
       _childStat = childStat;
     }
 
-    public override TaggedValues<TTag, TValue> ComputeValue(
+    public override ImmutableDictionary<TTag, TValue> ComputeValue(
       IReadOnlyDictionary<OperationType, IEnumerable<TaggedNumericOperation<TTag, TValue>>> groups)
     {
       var result = ImmutableDictionary<TTag, TValue>.Empty;
-      var overwrites = groups[OperationType.Overwrite].ToList();
+      var overwrites = groups[OperationType.Set].ToList();
       if (overwrites.Any())
       {
-        result = overwrites.Last().OverwriteWith!.Values;
+        result = overwrites.Last().OverwriteWith!;
       }
 
       var allTags = groups.Values.SelectMany(x => x)
@@ -72,7 +56,7 @@ namespace Nighthollow.Stats2
             p => p.Value.Select(o => o.AsNumericOperation(tag)).WhereNotNull())));
       }
 
-      return new TaggedValues<TTag, TValue>(result);
+      return result;
     }
   }
 }

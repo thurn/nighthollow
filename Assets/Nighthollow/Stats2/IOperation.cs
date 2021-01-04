@@ -12,10 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using MessagePack;
+using Nighthollow.Generated;
+
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
+  [Union(0, typeof(NumericOperation<int>))]
+  [Union(1, typeof(NumericOperation<DurationValue>))]
+  [Union(2, typeof(NumericOperation<PercentageValue>))]
+  [Union(3, typeof(NumericOperation<IntRangeValue>))]
+  [Union(4, typeof(BooleanOperation))]
+  [Union(5, typeof(TaggedNumericOperation<DamageType, int>))]
+  [Union(6, typeof(TaggedNumericOperation<DamageType, PercentageValue>))]
+  [Union(7, typeof(TaggedNumericOperation<DamageType, IntRangeValue>))]
+  [Union(8, typeof(TaggedNumericOperation<School, int>))]
   public interface IOperation
   {
     OperationType Type { get; }

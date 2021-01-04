@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using MessagePack;
 using Nighthollow.Generated;
 using Nighthollow.Utils;
 
@@ -22,25 +23,34 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats2
 {
-  public interface IStatTableBuilder
+  public sealed class StatMap
   {
-    IStatTableBuilder InsertModifier(IStatModifier modifier);
+    public StatMap(ImmutableDictionary<StatId, ImmutableList<IStatModifier>> modifiers)
+    {
+      Modifiers = modifiers;
+    }
 
-    StatTable Build(StatTable parent);
+    public ImmutableDictionary<StatId, ImmutableList<IStatModifier>> Modifiers { get; }
+
+    public StatMap InsertModifier(IStatModifier modifier) =>
+      new StatMap(Modifiers.AppendOrCreateList(modifier.Stat.StatId, modifier));
+
+    public StatTable Build(StatTable parent) => new StatTable(parent, Modifiers);
   }
 
-  public sealed class StatTable : IStatTableBuilder
+  public sealed class StatTable
   {
+    public static readonly StatTable Defaults =
+      new StatTable(null, ImmutableDictionary<StatId, ImmutableList<IStatModifier>>.Empty);
+
     readonly StatTable? _parent;
     readonly ImmutableDictionary<StatId, ImmutableList<IStatModifier>> _modifiers;
 
-    StatTable(StatTable? parent, ImmutableDictionary<StatId, ImmutableList<IStatModifier>> modifiers)
+    public StatTable(StatTable? parent, ImmutableDictionary<StatId, ImmutableList<IStatModifier>> modifiers)
     {
       _parent = parent;
       _modifiers = modifiers;
     }
-
-    IStatTableBuilder IStatTableBuilder.InsertModifier(IStatModifier modifier) => InsertModifier(modifier);
 
     public StatTable InsertModifier(IStatModifier modifier) =>
       new StatTable(_parent, _modifiers.AppendOrCreateList(modifier.Stat.StatId, modifier));
@@ -51,8 +61,6 @@ namespace Nighthollow.Stats2
           .Select(modifier => (TOperation) modifier.Operation)
           .GroupBy(op => op.Type)
           .ToDictionary(g => g.Key, g => g.Select(o => o)));
-
-    public StatTable Build(StatTable parent) => new StatTable(parent, _modifiers);
 
     IEnumerable<IStatModifier> ModifiersForStat(StatId statId)
     {

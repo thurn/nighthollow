@@ -19,38 +19,38 @@ using System.Collections.Immutable;
 
 namespace Nighthollow.Stats2
 {
-  public sealed class TaggedNumericOperation<TTag, TValue> : IOperation where TTag: Enum where TValue: struct
+  public sealed class TaggedNumericOperation<TTag, TValue> : IOperation where TTag : Enum where TValue : struct
   {
-    public static TaggedNumericOperation<TTag, TValue> Add(TaggedValues<TTag, TValue> value) =>
+    public static TaggedNumericOperation<TTag, TValue> Add(ImmutableDictionary<TTag, TValue> value) =>
       new TaggedNumericOperation<TTag, TValue>(OperationType.Add, value, null, null);
 
-    public static TaggedNumericOperation<TTag, TValue> Increase(TaggedValues<TTag, PercentageValue> value) =>
+    public static TaggedNumericOperation<TTag, TValue> Increase(ImmutableDictionary<TTag, PercentageValue> value) =>
       new TaggedNumericOperation<TTag, TValue>(OperationType.Increase, null, value, null);
 
-    public static TaggedNumericOperation<TTag, TValue> Overwrite(TaggedValues<TTag, TValue> value) =>
-      new TaggedNumericOperation<TTag, TValue>(OperationType.Overwrite, null, null, value);
+    public static TaggedNumericOperation<TTag, TValue> Overwrite(ImmutableDictionary<TTag, TValue> value) =>
+      new TaggedNumericOperation<TTag, TValue>(OperationType.Set, null, null, value);
 
     TaggedNumericOperation(
       OperationType type,
-      TaggedValues<TTag, TValue>? addTo,
-      TaggedValues<TTag, PercentageValue>? increaseBy,
-      TaggedValues<TTag, TValue>? overwriteWith)
+      ImmutableDictionary<TTag, TValue>? addTo,
+      ImmutableDictionary<TTag, PercentageValue>? increaseBy,
+      ImmutableDictionary<TTag, TValue>? overwriteWith)
     {
       Type = type;
       AddTo = addTo;
       IncreaseBy = increaseBy;
       OverwriteWith = overwriteWith;
       AllTags = ImmutableHashSet<TTag>.Empty
-        .Union(addTo?.Values.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty)
-        .Union(increaseBy?.Values.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty)
-        .Union(overwriteWith?.Values.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty);
+        .Union(addTo?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty)
+        .Union(increaseBy?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty)
+        .Union(overwriteWith?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty);
     }
 
     public OperationType Type { get; }
     public ImmutableHashSet<TTag> AllTags { get; }
-    public TaggedValues<TTag, TValue>? AddTo { get; }
-    public TaggedValues<TTag, PercentageValue>? IncreaseBy { get; }
-    public TaggedValues<TTag, TValue>? OverwriteWith { get; }
+    public ImmutableDictionary<TTag, TValue>? AddTo { get; }
+    public ImmutableDictionary<TTag, PercentageValue>? IncreaseBy { get; }
+    public ImmutableDictionary<TTag, TValue>? OverwriteWith { get; }
 
     public NumericOperation<TValue>? AsNumericOperation(TTag tag)
     {
@@ -61,9 +61,9 @@ namespace Nighthollow.Stats2
 
       return Type switch
       {
-        OperationType.Add => NumericOperation<TValue>.Add(AddTo!.Values[tag]),
-        OperationType.Increase => NumericOperation<TValue>.Increase(IncreaseBy!.Values[tag]),
-        OperationType.Overwrite => NumericOperation<TValue>.Overwrite(OverwriteWith!.Values[tag]),
+        OperationType.Add => NumericOperation<TValue>.Add(AddTo![tag]),
+        OperationType.Increase => NumericOperation<TValue>.Increase(IncreaseBy![tag]),
+        OperationType.Set => NumericOperation<TValue>.Overwrite(OverwriteWith![tag]),
         _ => throw new ArgumentOutOfRangeException()
       };
     }

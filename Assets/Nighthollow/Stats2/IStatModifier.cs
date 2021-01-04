@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using MessagePack;
+using Nighthollow.Generated;
+
 #nullable enable
 
 namespace Nighthollow.Stats2
@@ -21,5 +24,23 @@ namespace Nighthollow.Stats2
     IStat Stat { get; }
 
     IOperation Operation { get; }
+  }
+
+  [MessagePackObject]
+  public sealed class StatModifier<TOperation, TValue> : IStatModifier where TOperation : IOperation
+  {
+    public StatModifier(AbstractStat<TOperation, TValue> stat, TOperation operation)
+    {
+      ModifierStat = stat;
+      ModifierOperation = operation;
+    }
+
+    [Key(0)] public AbstractStat<TOperation, TValue> ModifierStat { get; }
+
+    [Key(1)] public TOperation ModifierOperation { get; }
+
+    [IgnoreMember] public IStat Stat => ModifierStat;
+
+    [IgnoreMember] public IOperation Operation => ModifierOperation;
   }
 }

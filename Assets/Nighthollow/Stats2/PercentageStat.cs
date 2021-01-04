@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Generated;
@@ -36,12 +34,7 @@ namespace Nighthollow.Stats2
 
     [Key(0)] public int BasisPoints { get; }
 
-    public T Switch<T>(
-      Func<int, T> onInt,
-      Func<bool, T> onBool,
-      Func<DurationValue, T> onDuration,
-      Func<PercentageValue, T> onPercentage,
-      Func<IntRangeValue, T> onIntRange) => onPercentage(this);
+    public T Cast<T>() => (T) (object) this;
 
     public override string ToString() => $"{BasisPoints / 100f}%";
 

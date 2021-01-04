@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using MessagePack;
 using Nighthollow.Generated;
+using Nighthollow.Stats2;
 
 #nullable enable
 
@@ -25,7 +26,7 @@ namespace Nighthollow.Data
   {
     public ModifierTypeData(
       StatId? statId = null,
-      Operator? statOperator = null,
+      OperationType? statOperator = null,
       DelegateId? delegateId = null,
       IValueData? valueLow = null,
       IValueData? valueHigh = null,
@@ -40,7 +41,7 @@ namespace Nighthollow.Data
     }
 
     [Key(0)] public StatId? StatId { get; }
-    [Key(1)] public Operator? StatOperator { get; }
+    [Key(1)] public OperationType? StatOperator { get; }
     [Key(2)] public DelegateId? DelegateId { get; }
     [Key(3)] public IValueData? ValueLow { get; }
     [Key(4)] public IValueData? ValueHigh { get; }

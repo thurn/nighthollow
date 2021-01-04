@@ -28,7 +28,7 @@ namespace Nighthollow.Stats2
 
     public override bool ComputeValue(
       IReadOnlyDictionary<OperationType, IEnumerable<BooleanOperation>> groups) =>
-      groups[OperationType.Overwrite].Count(op => op.SetValue) > 0 &&
-      groups[OperationType.Overwrite].Count(op => op.SetValue == false) == 0;
+      groups[OperationType.Set].Count(op => op.SetValue) > 0 &&
+      groups[OperationType.Set].Count(op => op.SetValue == false) == 0;
   }
 }

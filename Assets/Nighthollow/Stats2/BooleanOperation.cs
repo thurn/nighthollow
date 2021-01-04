@@ -20,7 +20,7 @@ namespace Nighthollow.Stats2
   {
     public BooleanOperation(bool setValue)
     {
-      Type = OperationType.Overwrite;
+      Type = OperationType.Set;
       SetValue = setValue;
     }
 

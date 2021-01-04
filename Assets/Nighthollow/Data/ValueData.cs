@@ -13,7 +13,9 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Immutable;
 using MessagePack;
+using Nighthollow.Generated;
 using Nighthollow.Stats2;
 
 #nullable enable
@@ -25,14 +27,13 @@ namespace Nighthollow.Data
   [Union(2, typeof(DurationValue))]
   [Union(3, typeof(PercentageValue))]
   [Union(4, typeof(IntRangeValue))]
+  [Union(5, typeof(TaggedValueData<DamageType, int>))]
+  [Union(6, typeof(TaggedValueData<DamageType, PercentageValue>))]
+  [Union(7, typeof(TaggedValueData<DamageType, IntRangeValue>))]
+  [Union(8, typeof(TaggedValueData<School, int>))]
   public interface IValueData
   {
-    T Switch<T>(
-      Func<int, T> onInt,
-      Func<bool, T> onBool,
-      Func<DurationValue, T> onDuration,
-      Func<PercentageValue, T> onPercentage,
-      Func<IntRangeValue, T> onIntRange);
+    public T Cast<T>();
   }
 
   public static class ValueDataUtil
@@ -84,14 +85,9 @@ namespace Nighthollow.Data
 
     [Key(0)] public int Int { get; }
 
-    public T Switch<T>(
-      Func<int, T> onInt,
-      Func<bool, T> onBool,
-      Func<DurationValue, T> onDuration,
-      Func<PercentageValue, T> onPercentage,
-      Func<IntRangeValue, T> onIntRange) => onInt(Int);
-
     public override string ToString() => Int.ToString();
+
+    public T Cast<T>() => (T) (object) Int;
   }
 
   [MessagePackObject]
@@ -104,13 +100,21 @@ namespace Nighthollow.Data
 
     [Key(0)] public bool Bool { get; }
 
-    public T Switch<T>(
-      Func<int, T> onInt,
-      Func<bool, T> onBool,
-      Func<DurationValue, T> onDuration,
-      Func<PercentageValue, T> onPercentage,
-      Func<IntRangeValue, T> onIntRange) => onBool(Bool);
-
     public override string ToString() => Bool.ToString();
+
+    public T Cast<T>() => (T) (object) Bool;
+  }
+
+  [MessagePackObject]
+  public sealed class TaggedValueData<TTag, TValue> : IValueData where TTag : Enum where TValue : struct
+  {
+    public TaggedValueData(ImmutableDictionary<TTag, TValue> dictionary)
+    {
+      Dictionary = dictionary;
+    }
+
+    [Key(0)] public ImmutableDictionary<TTag, TValue> Dictionary { get; }
+
+    public T Cast<T>() => (T) (object) Dictionary;
   }
 }

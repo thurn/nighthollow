@@ -25,7 +25,7 @@ namespace Nighthollow.Stats2
       new NumericOperation<T>(OperationType.Increase, null, value, null);
 
     public static NumericOperation<T> Overwrite(T value) =>
-      new NumericOperation<T>(OperationType.Overwrite, null, null, value);
+      new NumericOperation<T>(OperationType.Set, null, null, value);
 
     NumericOperation(OperationType type, T? add, PercentageValue? increase, T? ovewrite)
     {

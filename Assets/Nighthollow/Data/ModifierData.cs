@@ -12,14 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using MessagePack;
+
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Data
 {
-  public enum OperationType
+  [MessagePackObject]
+  public sealed class ModifierData
   {
-    Add,
-    Increase,
-    Set
+    public ModifierData(ModifierTypeData baseType, IValueData? argument)
+    {
+      BaseType = baseType;
+      Argument = argument;
+    }
+
+    [Key(0)] public ModifierTypeData BaseType { get; }
+    [Key(1)] public IValueData? Argument { get; }
   }
 }

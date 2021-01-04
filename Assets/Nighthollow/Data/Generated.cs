@@ -444,7 +444,7 @@ namespace Nighthollow.Data
         ValueHigh,
         Targeted);
 
-    public ModifierTypeData WithStatOperator(Operator? statOperator) =>
+    public ModifierTypeData WithStatOperator(OperationType? statOperator) =>
       new ModifierTypeData(
         StatId,
         statOperator,

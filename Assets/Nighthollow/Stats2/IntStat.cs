@@ -34,7 +34,7 @@ namespace Nighthollow.Stats2
       where TValue : struct
     {
       var result = 0;
-      var overwrites = groups[OperationType.Overwrite].ToList();
+      var overwrites = groups[OperationType.Set].ToList();
       if (overwrites.Any())
       {
         result = toInt(overwrites.Last().OvewriteWith!.Value);
