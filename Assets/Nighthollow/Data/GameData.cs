@@ -36,10 +36,10 @@ namespace Nighthollow.Data
       StatData = statData ?? ImmutableDictionary<int, StatData>.Empty;
     }
 
-    [Key("tableMetadata")] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
-    [Key("creatureTypes")] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
-    [Key("affixTypes")] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
-    [Key("skillTypes")] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
-    [Key("statData")] public ImmutableDictionary<int, StatData> StatData { get; }
+    [Key(0)] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
+    [Key(1)] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
+    [Key(2)] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
+    [Key(3)] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
+    [Key(4)] public ImmutableDictionary<int, StatData> StatData { get; }
   }
 }

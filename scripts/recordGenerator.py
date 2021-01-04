@@ -5,7 +5,7 @@ import os
 import re
 
 class_regex = re.compile(r'public sealed partial class (\w+)')
-property_regex = re.compile(r'\[Key\("\w+"\)] public (.*?) (\w+) { get; }')
+property_regex = re.compile(r'\[Key\(\d+\)] public (.*?) (\w+) { get; }')
 
 
 def uncap(s):

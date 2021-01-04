@@ -541,45 +541,29 @@ namespace MessagePack.Formatters.Nighthollow.Data
 {
     using System;
     using System.Buffers;
-    using System.Runtime.InteropServices;
     using MessagePack;
 
     public sealed class AffixTypeDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.AffixTypeData>
     {
-        // minLevel
-        private static global::System.ReadOnlySpan<byte> GetSpan_MinLevel() => new byte[1 + 8] { 168, 109, 105, 110, 76, 101, 118, 101, 108 };
-        // weight
-        private static global::System.ReadOnlySpan<byte> GetSpan_Weight() => new byte[1 + 6] { 166, 119, 101, 105, 103, 104, 116 };
-        // manaCost
-        private static global::System.ReadOnlySpan<byte> GetSpan_ManaCost() => new byte[1 + 8] { 168, 109, 97, 110, 97, 67, 111, 115, 116 };
-        // modifiers
-        private static global::System.ReadOnlySpan<byte> GetSpan_Modifiers() => new byte[1 + 9] { 169, 109, 111, 100, 105, 102, 105, 101, 114, 115 };
-        // influenceType
-        private static global::System.ReadOnlySpan<byte> GetSpan_InfluenceType() => new byte[1 + 13] { 173, 105, 110, 102, 108, 117, 101, 110, 99, 101, 84, 121, 112, 101 };
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Nighthollow.Data.AffixTypeData value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.AffixTypeData value, global::MessagePack.MessagePackSerializerOptions options)
         {
-            if (value is null)
+            if (value == null)
             {
                 writer.WriteNil();
                 return;
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteMapHeader(5);
-            writer.WriteRaw(GetSpan_MinLevel());
+            writer.WriteArrayHeader(5);
             writer.Write(value.MinLevel);
-            writer.WriteRaw(GetSpan_Weight());
             writer.Write(value.Weight);
-            writer.WriteRaw(GetSpan_ManaCost());
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Serialize(ref writer, value.ManaCost, options);
-            writer.WriteRaw(GetSpan_Modifiers());
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>>().Serialize(ref writer, value.Modifiers, options);
-            writer.WriteRaw(GetSpan_InfluenceType());
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.School?>().Serialize(ref writer, value.InfluenceType, options);
         }
 
-        public global::Nighthollow.Data.AffixTypeData Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Data.AffixTypeData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -588,7 +572,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
 
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadMapHeader();
+            var length = reader.ReadArrayHeader();
             var __MinLevel__ = default(int);
             var __Weight__ = default(int);
             var __ManaCost__ = default(global::Nighthollow.Stats.IntRangeValue);
@@ -597,834 +581,34 @@ namespace MessagePack.Formatters.Nighthollow.Data
 
             for (int i = 0; i < length; i++)
             {
-                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
-                switch (stringKey.Length)
+                switch (i)
                 {
-                    default:
-                    FAIL:
-                      reader.Skip();
-                      continue;
-                    case 8:
-                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
-                        {
-                            default: goto FAIL;
-                            case 7810779306190072173UL:
-                                __MinLevel__ = reader.ReadInt32();
-                                continue;
-                            case 8391172865909481837UL:
-                                __ManaCost__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Deserialize(ref reader, options);
-                                continue;
-                        }
-                    case 6:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 127991760381303UL) { goto FAIL; }
-
+                    case 0:
+                        __MinLevel__ = reader.ReadInt32();
+                        break;
+                    case 1:
                         __Weight__ = reader.ReadInt32();
-                        continue;
-                    case 9:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_Modifiers().Slice(1))) { goto FAIL; }
-
+                        break;
+                    case 2:
+                        __ManaCost__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Deserialize(ref reader, options);
+                        break;
+                    case 3:
                         __Modifiers__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>>().Deserialize(ref reader, options);
-                        continue;
-                    case 13:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_InfluenceType().Slice(1))) { goto FAIL; }
-
+                        break;
+                    case 4:
                         __InfluenceType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.School?>().Deserialize(ref reader, options);
-                        continue;
-
-                }
-            }
-
-            var ____result = new global::Nighthollow.Data.AffixTypeData(__MinLevel__, __Weight__, __ManaCost__, __Modifiers__, __InfluenceType__)
-            {
-            };
-
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class CreatureSkillAnimationFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.CreatureSkillAnimation>
-    {
-        // skillAnimationNumber
-        private static global::System.ReadOnlySpan<byte> GetSpan_SkillAnimationNumber() => new byte[1 + 20] { 180, 115, 107, 105, 108, 108, 65, 110, 105, 109, 97, 116, 105, 111, 110, 78, 117, 109, 98, 101, 114 };
-        // skillAnimationType
-        private static global::System.ReadOnlySpan<byte> GetSpan_SkillAnimationType() => new byte[1 + 18] { 178, 115, 107, 105, 108, 108, 65, 110, 105, 109, 97, 116, 105, 111, 110, 84, 121, 112, 101 };
-
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Nighthollow.Data.CreatureSkillAnimation value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteMapHeader(2);
-            writer.WriteRaw(GetSpan_SkillAnimationNumber());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationNumber>().Serialize(ref writer, value.SkillAnimationNumber, options);
-            writer.WriteRaw(GetSpan_SkillAnimationType());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationType>().Serialize(ref writer, value.SkillAnimationType, options);
-        }
-
-        public global::Nighthollow.Data.CreatureSkillAnimation Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadMapHeader();
-            var __SkillAnimationNumber__ = default(global::Nighthollow.Generated.SkillAnimationNumber);
-            var __SkillAnimationType__ = default(global::Nighthollow.Generated.SkillAnimationType);
-
-            for (int i = 0; i < length; i++)
-            {
-                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
-                switch (stringKey.Length)
-                {
+                        break;
                     default:
-                    FAIL:
-                      reader.Skip();
-                      continue;
-                    case 20:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_SkillAnimationNumber().Slice(1))) { goto FAIL; }
-
-                        __SkillAnimationNumber__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationNumber>().Deserialize(ref reader, options);
-                        continue;
-                    case 18:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_SkillAnimationType().Slice(1))) { goto FAIL; }
-
-                        __SkillAnimationType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationType>().Deserialize(ref reader, options);
-                        continue;
-
+                        reader.Skip();
+                        break;
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.CreatureSkillAnimation(__SkillAnimationNumber__, __SkillAnimationType__)
-            {
-            };
-
+            var ____result = new global::Nighthollow.Data.AffixTypeData(__MinLevel__, __Weight__, __ManaCost__, __Modifiers__, __InfluenceType__);
             reader.Depth--;
             return ____result;
         }
     }
-
-    public sealed class CreatureTypeDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.CreatureTypeData>
-    {
-        // name
-        private static global::System.ReadOnlySpan<byte> GetSpan_Name() => new byte[1 + 4] { 164, 110, 97, 109, 101 };
-        // prefabAddress
-        private static global::System.ReadOnlySpan<byte> GetSpan_PrefabAddress() => new byte[1 + 13] { 173, 112, 114, 101, 102, 97, 98, 65, 100, 100, 114, 101, 115, 115 };
-        // owner
-        private static global::System.ReadOnlySpan<byte> GetSpan_Owner() => new byte[1 + 5] { 165, 111, 119, 110, 101, 114 };
-        // health
-        private static global::System.ReadOnlySpan<byte> GetSpan_Health() => new byte[1 + 6] { 166, 104, 101, 97, 108, 116, 104 };
-        // skillAnimations
-        private static global::System.ReadOnlySpan<byte> GetSpan_SkillAnimations() => new byte[1 + 15] { 175, 115, 107, 105, 108, 108, 65, 110, 105, 109, 97, 116, 105, 111, 110, 115 };
-        // imageAddress
-        private static global::System.ReadOnlySpan<byte> GetSpan_ImageAddress() => new byte[1 + 12] { 172, 105, 109, 97, 103, 101, 65, 100, 100, 114, 101, 115, 115 };
-        // baseManaCost
-        private static global::System.ReadOnlySpan<byte> GetSpan_BaseManaCost() => new byte[1 + 12] { 172, 98, 97, 115, 101, 77, 97, 110, 97, 67, 111, 115, 116 };
-        // speed
-        private static global::System.ReadOnlySpan<byte> GetSpan_Speed() => new byte[1 + 5] { 165, 115, 112, 101, 101, 100 };
-        // implicitAffix
-        private static global::System.ReadOnlySpan<byte> GetSpan_ImplicitAffix() => new byte[1 + 13] { 173, 105, 109, 112, 108, 105, 99, 105, 116, 65, 102, 102, 105, 120 };
-        // implicitSkills
-        private static global::System.ReadOnlySpan<byte> GetSpan_ImplicitSkills() => new byte[1 + 14] { 174, 105, 109, 112, 108, 105, 99, 105, 116, 83, 107, 105, 108, 108, 115 };
-        // isManaCreature
-        private static global::System.ReadOnlySpan<byte> GetSpan_IsManaCreature() => new byte[1 + 14] { 174, 105, 115, 77, 97, 110, 97, 67, 114, 101, 97, 116, 117, 114, 101 };
-
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Nighthollow.Data.CreatureTypeData value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteMapHeader(11);
-            writer.WriteRaw(GetSpan_Name());
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
-            writer.WriteRaw(GetSpan_PrefabAddress());
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.PrefabAddress, options);
-            writer.WriteRaw(GetSpan_Owner());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.PlayerName>().Serialize(ref writer, value.Owner, options);
-            writer.WriteRaw(GetSpan_Health());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Serialize(ref writer, value.Health, options);
-            writer.WriteRaw(GetSpan_SkillAnimations());
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>>().Serialize(ref writer, value.SkillAnimations, options);
-            writer.WriteRaw(GetSpan_ImageAddress());
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.ImageAddress, options);
-            writer.WriteRaw(GetSpan_BaseManaCost());
-            writer.Write(value.BaseManaCost);
-            writer.WriteRaw(GetSpan_Speed());
-            writer.Write(value.Speed);
-            writer.WriteRaw(GetSpan_ImplicitAffix());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Serialize(ref writer, value.ImplicitAffix, options);
-            writer.WriteRaw(GetSpan_ImplicitSkills());
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>>().Serialize(ref writer, value.ImplicitSkills, options);
-            writer.WriteRaw(GetSpan_IsManaCreature());
-            writer.Write(value.IsManaCreature);
-        }
-
-        public global::Nighthollow.Data.CreatureTypeData Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadMapHeader();
-            var __Name__ = default(string);
-            var __PrefabAddress__ = default(string);
-            var __Owner__ = default(global::Nighthollow.Generated.PlayerName);
-            var __Health__ = default(global::Nighthollow.Stats.IntRangeValue);
-            var __SkillAnimations__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>);
-            var __ImageAddress__ = default(string);
-            var __BaseManaCost__ = default(int);
-            var __Speed__ = default(int);
-            var __ImplicitAffix__ = default(global::Nighthollow.Data.AffixTypeData);
-            var __ImplicitSkills__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>);
-            var __IsManaCreature__ = default(bool);
-
-            for (int i = 0; i < length; i++)
-            {
-                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
-                switch (stringKey.Length)
-                {
-                    default:
-                    FAIL:
-                      reader.Skip();
-                      continue;
-                    case 4:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1701667182UL) { goto FAIL; }
-
-                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        continue;
-                    case 13:
-                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
-                        {
-                            default: goto FAIL;
-                            case 7224163447748260464UL:
-                                if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 495857267300UL) { goto FAIL; }
-
-                                __PrefabAddress__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                                continue;
-
-                            case 8388345085396282729UL:
-                                if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 517164394049UL) { goto FAIL; }
-
-                                __ImplicitAffix__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Deserialize(ref reader, options);
-                                continue;
-
-                        }
-                    case 5:
-                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
-                        {
-                            default: goto FAIL;
-                            case 491328010095UL:
-                                __Owner__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.PlayerName>().Deserialize(ref reader, options);
-                                continue;
-                            case 431197876339UL:
-                                __Speed__ = reader.ReadInt32();
-                                continue;
-                        }
-                    case 6:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 114849243817320UL) { goto FAIL; }
-
-                        __Health__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Deserialize(ref reader, options);
-                        continue;
-                    case 15:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_SkillAnimations().Slice(1))) { goto FAIL; }
-
-                        __SkillAnimations__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>>().Deserialize(ref reader, options);
-                        continue;
-                    case 12:
-                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
-                        {
-                            default: goto FAIL;
-                            case 7233978805245799785UL:
-                                if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1936942450UL) { goto FAIL; }
-
-                                __ImageAddress__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                                continue;
-
-                            case 7020655854159618402UL:
-                                if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1953722179UL) { goto FAIL; }
-
-                                __BaseManaCost__ = reader.ReadInt32();
-                                continue;
-
-                        }
-                    case 14:
-                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
-                        {
-                            default: goto FAIL;
-                            case 8388345085396282729UL:
-                                if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 126909512510291UL) { goto FAIL; }
-
-                                __ImplicitSkills__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>>().Deserialize(ref reader, options);
-                                continue;
-
-                            case 8233531670470161257UL:
-                                if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 111542271238501UL) { goto FAIL; }
-
-                                __IsManaCreature__ = reader.ReadBoolean();
-                                continue;
-
-                        }
-
-                }
-            }
-
-            var ____result = new global::Nighthollow.Data.CreatureTypeData(__Name__, __PrefabAddress__, __Owner__, __Health__, __SkillAnimations__, __ImageAddress__, __BaseManaCost__, __Speed__, __ImplicitAffix__, __ImplicitSkills__, __IsManaCreature__)
-            {
-            };
-
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class GameDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.GameData>
-    {
-        // tableMetadata
-        private static global::System.ReadOnlySpan<byte> GetSpan_TableMetadata() => new byte[1 + 13] { 173, 116, 97, 98, 108, 101, 77, 101, 116, 97, 100, 97, 116, 97 };
-        // creatureTypes
-        private static global::System.ReadOnlySpan<byte> GetSpan_CreatureTypes() => new byte[1 + 13] { 173, 99, 114, 101, 97, 116, 117, 114, 101, 84, 121, 112, 101, 115 };
-        // affixTypes
-        private static global::System.ReadOnlySpan<byte> GetSpan_AffixTypes() => new byte[1 + 10] { 170, 97, 102, 102, 105, 120, 84, 121, 112, 101, 115 };
-        // skillTypes
-        private static global::System.ReadOnlySpan<byte> GetSpan_SkillTypes() => new byte[1 + 10] { 170, 115, 107, 105, 108, 108, 84, 121, 112, 101, 115 };
-        // statData
-        private static global::System.ReadOnlySpan<byte> GetSpan_StatData() => new byte[1 + 8] { 168, 115, 116, 97, 116, 68, 97, 116, 97 };
-
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Nighthollow.Data.GameData value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteMapHeader(5);
-            writer.WriteRaw(GetSpan_TableMetadata());
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>>().Serialize(ref writer, value.TableMetadata, options);
-            writer.WriteRaw(GetSpan_CreatureTypes());
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>>().Serialize(ref writer, value.CreatureTypes, options);
-            writer.WriteRaw(GetSpan_AffixTypes());
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>>().Serialize(ref writer, value.AffixTypes, options);
-            writer.WriteRaw(GetSpan_SkillTypes());
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>>().Serialize(ref writer, value.SkillTypes, options);
-            writer.WriteRaw(GetSpan_StatData());
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>>().Serialize(ref writer, value.StatData, options);
-        }
-
-        public global::Nighthollow.Data.GameData Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadMapHeader();
-            var __TableMetadata__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>);
-            var __CreatureTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>);
-            var __AffixTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>);
-            var __SkillTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>);
-            var __StatData__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>);
-
-            for (int i = 0; i < length; i++)
-            {
-                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
-                switch (stringKey.Length)
-                {
-                    default:
-                    FAIL:
-                      reader.Skip();
-                      continue;
-                    case 13:
-                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
-                        {
-                            default: goto FAIL;
-                            case 8387194979052839284UL:
-                                if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 418564367457UL) { goto FAIL; }
-
-                                __TableMetadata__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>>().Deserialize(ref reader, options);
-                                continue;
-
-                            case 7310034287886430819UL:
-                                if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 495623108948UL) { goto FAIL; }
-
-                                __CreatureTypes__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>>().Deserialize(ref reader, options);
-                                continue;
-
-                        }
-                    case 10:
-                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
-                        {
-                            default: goto FAIL;
-                            case 8104601880571045473UL:
-                                if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 29541UL) { goto FAIL; }
-
-                                __AffixTypes__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>>().Deserialize(ref reader, options);
-                                continue;
-
-                            case 8104601829081967475UL:
-                                if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 29541UL) { goto FAIL; }
-
-                                __SkillTypes__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>>().Deserialize(ref reader, options);
-                                continue;
-
-                        }
-                    case 8:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 7022344665615660147UL) { goto FAIL; }
-
-                        __StatData__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>>().Deserialize(ref reader, options);
-                        continue;
-
-                }
-            }
-
-            var ____result = new global::Nighthollow.Data.GameData(__TableMetadata__, __CreatureTypes__, __AffixTypes__, __SkillTypes__, __StatData__)
-            {
-            };
-
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class ModifierTypeDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.ModifierTypeData>
-    {
-        // statId
-        private static global::System.ReadOnlySpan<byte> GetSpan_StatId() => new byte[1 + 6] { 166, 115, 116, 97, 116, 73, 100 };
-        // statOperator
-        private static global::System.ReadOnlySpan<byte> GetSpan_StatOperator() => new byte[1 + 12] { 172, 115, 116, 97, 116, 79, 112, 101, 114, 97, 116, 111, 114 };
-        // delegateId
-        private static global::System.ReadOnlySpan<byte> GetSpan_DelegateId() => new byte[1 + 10] { 170, 100, 101, 108, 101, 103, 97, 116, 101, 73, 100 };
-        // valueLow
-        private static global::System.ReadOnlySpan<byte> GetSpan_ValueLow() => new byte[1 + 8] { 168, 118, 97, 108, 117, 101, 76, 111, 119 };
-        // valueHigh
-        private static global::System.ReadOnlySpan<byte> GetSpan_ValueHigh() => new byte[1 + 9] { 169, 118, 97, 108, 117, 101, 72, 105, 103, 104 };
-        // targeted
-        private static global::System.ReadOnlySpan<byte> GetSpan_Targeted() => new byte[1 + 8] { 168, 116, 97, 114, 103, 101, 116, 101, 100 };
-
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Nighthollow.Data.ModifierTypeData value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteMapHeader(6);
-            writer.WriteRaw(GetSpan_StatId());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatId?>().Serialize(ref writer, value.StatId, options);
-            writer.WriteRaw(GetSpan_StatOperator());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.Operator?>().Serialize(ref writer, value.StatOperator, options);
-            writer.WriteRaw(GetSpan_DelegateId());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Serialize(ref writer, value.DelegateId, options);
-            writer.WriteRaw(GetSpan_ValueLow());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.ValueLow, options);
-            writer.WriteRaw(GetSpan_ValueHigh());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.ValueHigh, options);
-            writer.WriteRaw(GetSpan_Targeted());
-            writer.Write(value.Targeted);
-        }
-
-        public global::Nighthollow.Data.ModifierTypeData Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadMapHeader();
-            var __StatId__ = default(global::Nighthollow.Generated.StatId?);
-            var __StatOperator__ = default(global::Nighthollow.Generated.Operator?);
-            var __DelegateId__ = default(global::Nighthollow.Generated.DelegateId?);
-            var __ValueLow__ = default(global::Nighthollow.Data.IValueData);
-            var __ValueHigh__ = default(global::Nighthollow.Data.IValueData);
-            var __Targeted__ = default(bool);
-
-            for (int i = 0; i < length; i++)
-            {
-                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
-                switch (stringKey.Length)
-                {
-                    default:
-                    FAIL:
-                      reader.Skip();
-                      continue;
-                    case 6:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 110266647934067UL) { goto FAIL; }
-
-                        __StatId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatId?>().Deserialize(ref reader, options);
-                        continue;
-                    case 12:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_StatOperator().Slice(1))) { goto FAIL; }
-
-                        __StatOperator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.Operator?>().Deserialize(ref reader, options);
-                        continue;
-                    case 10:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_DelegateId().Slice(1))) { goto FAIL; }
-
-                        __DelegateId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Deserialize(ref reader, options);
-                        continue;
-                    case 8:
-                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
-                        {
-                            default: goto FAIL;
-                            case 8606181411573752182UL:
-                                __ValueLow__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Deserialize(ref reader, options);
-                                continue;
-                            case 7234316355316638068UL:
-                                __Targeted__ = reader.ReadBoolean();
-                                continue;
-                        }
-                    case 9:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_ValueHigh().Slice(1))) { goto FAIL; }
-
-                        __ValueHigh__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Deserialize(ref reader, options);
-                        continue;
-
-                }
-            }
-
-            var ____result = new global::Nighthollow.Data.ModifierTypeData(__StatId__, __StatOperator__, __DelegateId__, __ValueLow__, __ValueHigh__, __Targeted__)
-            {
-            };
-
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class SkillTypeDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.SkillTypeData>
-    {
-        // name
-        private static global::System.ReadOnlySpan<byte> GetSpan_Name() => new byte[1 + 4] { 164, 110, 97, 109, 101 };
-        // skillAnimationType
-        private static global::System.ReadOnlySpan<byte> GetSpan_SkillAnimationType() => new byte[1 + 18] { 178, 115, 107, 105, 108, 108, 65, 110, 105, 109, 97, 116, 105, 111, 110, 84, 121, 112, 101 };
-        // skillType
-        private static global::System.ReadOnlySpan<byte> GetSpan_SkillType() => new byte[1 + 9] { 169, 115, 107, 105, 108, 108, 84, 121, 112, 101 };
-        // implicitAffix
-        private static global::System.ReadOnlySpan<byte> GetSpan_ImplicitAffix() => new byte[1 + 13] { 173, 105, 109, 112, 108, 105, 99, 105, 116, 65, 102, 102, 105, 120 };
-        // address
-        private static global::System.ReadOnlySpan<byte> GetSpan_Address() => new byte[1 + 7] { 167, 97, 100, 100, 114, 101, 115, 115 };
-        // projectileSpeed
-        private static global::System.ReadOnlySpan<byte> GetSpan_ProjectileSpeed() => new byte[1 + 15] { 175, 112, 114, 111, 106, 101, 99, 116, 105, 108, 101, 83, 112, 101, 101, 100 };
-        // usesAccuracy
-        private static global::System.ReadOnlySpan<byte> GetSpan_UsesAccuracy() => new byte[1 + 12] { 172, 117, 115, 101, 115, 65, 99, 99, 117, 114, 97, 99, 121 };
-        // canCrit
-        private static global::System.ReadOnlySpan<byte> GetSpan_CanCrit() => new byte[1 + 7] { 167, 99, 97, 110, 67, 114, 105, 116 };
-        // canStun
-        private static global::System.ReadOnlySpan<byte> GetSpan_CanStun() => new byte[1 + 7] { 167, 99, 97, 110, 83, 116, 117, 110 };
-
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Nighthollow.Data.SkillTypeData value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteMapHeader(9);
-            writer.WriteRaw(GetSpan_Name());
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
-            writer.WriteRaw(GetSpan_SkillAnimationType());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationType>().Serialize(ref writer, value.SkillAnimationType, options);
-            writer.WriteRaw(GetSpan_SkillType());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillType>().Serialize(ref writer, value.SkillType, options);
-            writer.WriteRaw(GetSpan_ImplicitAffix());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Serialize(ref writer, value.ImplicitAffix, options);
-            writer.WriteRaw(GetSpan_Address());
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Address, options);
-            writer.WriteRaw(GetSpan_ProjectileSpeed());
-            formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.ProjectileSpeed, options);
-            writer.WriteRaw(GetSpan_UsesAccuracy());
-            writer.Write(value.UsesAccuracy);
-            writer.WriteRaw(GetSpan_CanCrit());
-            writer.Write(value.CanCrit);
-            writer.WriteRaw(GetSpan_CanStun());
-            writer.Write(value.CanStun);
-        }
-
-        public global::Nighthollow.Data.SkillTypeData Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadMapHeader();
-            var __Name__ = default(string);
-            var __SkillAnimationType__ = default(global::Nighthollow.Generated.SkillAnimationType);
-            var __SkillType__ = default(global::Nighthollow.Generated.SkillType);
-            var __ImplicitAffix__ = default(global::Nighthollow.Data.AffixTypeData);
-            var __Address__ = default(string);
-            var __ProjectileSpeed__ = default(int?);
-            var __UsesAccuracy__ = default(bool);
-            var __CanCrit__ = default(bool);
-            var __CanStun__ = default(bool);
-
-            for (int i = 0; i < length; i++)
-            {
-                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
-                switch (stringKey.Length)
-                {
-                    default:
-                    FAIL:
-                      reader.Skip();
-                      continue;
-                    case 4:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1701667182UL) { goto FAIL; }
-
-                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        continue;
-                    case 18:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_SkillAnimationType().Slice(1))) { goto FAIL; }
-
-                        __SkillAnimationType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationType>().Deserialize(ref reader, options);
-                        continue;
-                    case 9:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_SkillType().Slice(1))) { goto FAIL; }
-
-                        __SkillType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillType>().Deserialize(ref reader, options);
-                        continue;
-                    case 13:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_ImplicitAffix().Slice(1))) { goto FAIL; }
-
-                        __ImplicitAffix__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Deserialize(ref reader, options);
-                        continue;
-                    case 7:
-                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
-                        {
-                            default: goto FAIL;
-                            case 32496501869798497UL:
-                                __Address__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                                continue;
-                            case 32767036776931683UL:
-                                __CanCrit__ = reader.ReadBoolean();
-                                continue;
-                            case 31091389914571107UL:
-                                __CanStun__ = reader.ReadBoolean();
-                                continue;
-                        }
-                    case 15:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_ProjectileSpeed().Slice(1))) { goto FAIL; }
-
-                        __ProjectileSpeed__ = formatterResolver.GetFormatterWithVerify<int?>().Deserialize(ref reader, options);
-                        continue;
-                    case 12:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_UsesAccuracy().Slice(1))) { goto FAIL; }
-
-                        __UsesAccuracy__ = reader.ReadBoolean();
-                        continue;
-
-                }
-            }
-
-            var ____result = new global::Nighthollow.Data.SkillTypeData(__Name__, __SkillAnimationType__, __SkillType__, __ImplicitAffix__, __Address__, __ProjectileSpeed__, __UsesAccuracy__, __CanCrit__, __CanStun__)
-            {
-            };
-
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class StatDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.StatData>
-    {
-        // name
-        private static global::System.ReadOnlySpan<byte> GetSpan_Name() => new byte[1 + 4] { 164, 110, 97, 109, 101 };
-        // statType
-        private static global::System.ReadOnlySpan<byte> GetSpan_StatType() => new byte[1 + 8] { 168, 115, 116, 97, 116, 84, 121, 112, 101 };
-        // defaultValue
-        private static global::System.ReadOnlySpan<byte> GetSpan_DefaultValue() => new byte[1 + 12] { 172, 100, 101, 102, 97, 117, 108, 116, 86, 97, 108, 117, 101 };
-        // description
-        private static global::System.ReadOnlySpan<byte> GetSpan_Description() => new byte[1 + 11] { 171, 100, 101, 115, 99, 114, 105, 112, 116, 105, 111, 110 };
-        // comment
-        private static global::System.ReadOnlySpan<byte> GetSpan_Comment() => new byte[1 + 7] { 167, 99, 111, 109, 109, 101, 110, 116 };
-
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Nighthollow.Data.StatData value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteMapHeader(5);
-            writer.WriteRaw(GetSpan_Name());
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
-            writer.WriteRaw(GetSpan_StatType());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatType>().Serialize(ref writer, value.StatType, options);
-            writer.WriteRaw(GetSpan_DefaultValue());
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.DefaultValue, options);
-            writer.WriteRaw(GetSpan_Description());
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Description, options);
-            writer.WriteRaw(GetSpan_Comment());
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Comment, options);
-        }
-
-        public global::Nighthollow.Data.StatData Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadMapHeader();
-            var __Name__ = default(string);
-            var __StatType__ = default(global::Nighthollow.Generated.StatType);
-            var __DefaultValue__ = default(global::Nighthollow.Data.IValueData);
-            var __Description__ = default(string);
-            var __Comment__ = default(string);
-
-            for (int i = 0; i < length; i++)
-            {
-                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
-                switch (stringKey.Length)
-                {
-                    default:
-                    FAIL:
-                      reader.Skip();
-                      continue;
-                    case 4:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1701667182UL) { goto FAIL; }
-
-                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        continue;
-                    case 8:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 7309475598859072627UL) { goto FAIL; }
-
-                        __StatType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatType>().Deserialize(ref reader, options);
-                        continue;
-                    case 12:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_DefaultValue().Slice(1))) { goto FAIL; }
-
-                        __DefaultValue__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Deserialize(ref reader, options);
-                        continue;
-                    case 11:
-                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_Description().Slice(1))) { goto FAIL; }
-
-                        __Description__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        continue;
-                    case 7:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 32772479205076835UL) { goto FAIL; }
-
-                        __Comment__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        continue;
-
-                }
-            }
-
-            var ____result = new global::Nighthollow.Data.StatData(__Name__, __StatType__, __DefaultValue__, __Description__, __Comment__)
-            {
-            };
-
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class TableMetadataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.TableMetadata>
-    {
-        // nextId
-        private static global::System.ReadOnlySpan<byte> GetSpan_NextId() => new byte[1 + 6] { 166, 110, 101, 120, 116, 73, 100 };
-
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Nighthollow.Data.TableMetadata value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            writer.WriteMapHeader(1);
-            writer.WriteRaw(GetSpan_NextId());
-            writer.Write(value.NextId);
-        }
-
-        public global::Nighthollow.Data.TableMetadata Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            var length = reader.ReadMapHeader();
-            var __NextId__ = default(int);
-
-            for (int i = 0; i < length; i++)
-            {
-                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
-                switch (stringKey.Length)
-                {
-                    default:
-                    FAIL:
-                      reader.Skip();
-                      continue;
-                    case 6:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 110266649437550UL) { goto FAIL; }
-
-                        __NextId__ = reader.ReadInt32();
-                        continue;
-
-                }
-            }
-
-            var ____result = new global::Nighthollow.Data.TableMetadata(__NextId__)
-            {
-            };
-
-            reader.Depth--;
-            return ____result;
-        }
-    }
-}
-
-// <auto-generated>
-// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
-// </auto-generated>
-
-#pragma warning disable 618
-#pragma warning disable 612
-#pragma warning disable 414
-#pragma warning disable 168
-
-#pragma warning disable SA1129 // Do not use default value type constructor
-#pragma warning disable SA1200 // Using directives should be placed correctly
-#pragma warning disable SA1309 // Field names should not begin with underscore
-#pragma warning disable SA1312 // Variable names should begin with lower-case letter
-#pragma warning disable SA1403 // File may only contain a single namespace
-#pragma warning disable SA1649 // File name should match first type name
-
-namespace MessagePack.Formatters.Nighthollow.Data
-{
-    using System;
-    using System.Buffers;
-    using MessagePack;
 
     public sealed class BoolValueDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.BoolValueData>
     {
@@ -1465,6 +649,222 @@ namespace MessagePack.Formatters.Nighthollow.Data
         }
     }
 
+    public sealed class CreatureSkillAnimationFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.CreatureSkillAnimation>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.CreatureSkillAnimation value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(2);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationNumber>().Serialize(ref writer, value.SkillAnimationNumber, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationType>().Serialize(ref writer, value.SkillAnimationType, options);
+        }
+
+        public global::Nighthollow.Data.CreatureSkillAnimation Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __SkillAnimationNumber__ = default(global::Nighthollow.Generated.SkillAnimationNumber);
+            var __SkillAnimationType__ = default(global::Nighthollow.Generated.SkillAnimationType);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __SkillAnimationNumber__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationNumber>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __SkillAnimationType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationType>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.CreatureSkillAnimation(__SkillAnimationNumber__, __SkillAnimationType__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class CreatureTypeDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.CreatureTypeData>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.CreatureTypeData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(11);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.PrefabAddress, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.PlayerName>().Serialize(ref writer, value.Owner, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Serialize(ref writer, value.Health, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>>().Serialize(ref writer, value.SkillAnimations, options);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.ImageAddress, options);
+            writer.Write(value.BaseManaCost);
+            writer.Write(value.Speed);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Serialize(ref writer, value.ImplicitAffix, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>>().Serialize(ref writer, value.ImplicitSkills, options);
+            writer.Write(value.IsManaCreature);
+        }
+
+        public global::Nighthollow.Data.CreatureTypeData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Name__ = default(string);
+            var __PrefabAddress__ = default(string);
+            var __Owner__ = default(global::Nighthollow.Generated.PlayerName);
+            var __Health__ = default(global::Nighthollow.Stats.IntRangeValue);
+            var __SkillAnimations__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>);
+            var __ImageAddress__ = default(string);
+            var __BaseManaCost__ = default(int);
+            var __Speed__ = default(int);
+            var __ImplicitAffix__ = default(global::Nighthollow.Data.AffixTypeData);
+            var __ImplicitSkills__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>);
+            var __IsManaCreature__ = default(bool);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __PrefabAddress__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __Owner__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.PlayerName>().Deserialize(ref reader, options);
+                        break;
+                    case 3:
+                        __Health__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        __SkillAnimations__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>>().Deserialize(ref reader, options);
+                        break;
+                    case 5:
+                        __ImageAddress__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 6:
+                        __BaseManaCost__ = reader.ReadInt32();
+                        break;
+                    case 7:
+                        __Speed__ = reader.ReadInt32();
+                        break;
+                    case 8:
+                        __ImplicitAffix__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Deserialize(ref reader, options);
+                        break;
+                    case 9:
+                        __ImplicitSkills__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>>().Deserialize(ref reader, options);
+                        break;
+                    case 10:
+                        __IsManaCreature__ = reader.ReadBoolean();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.CreatureTypeData(__Name__, __PrefabAddress__, __Owner__, __Health__, __SkillAnimations__, __ImageAddress__, __BaseManaCost__, __Speed__, __ImplicitAffix__, __ImplicitSkills__, __IsManaCreature__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class GameDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.GameData>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.GameData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(5);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>>().Serialize(ref writer, value.TableMetadata, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>>().Serialize(ref writer, value.CreatureTypes, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>>().Serialize(ref writer, value.AffixTypes, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>>().Serialize(ref writer, value.SkillTypes, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>>().Serialize(ref writer, value.StatData, options);
+        }
+
+        public global::Nighthollow.Data.GameData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __TableMetadata__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>);
+            var __CreatureTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>);
+            var __AffixTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>);
+            var __SkillTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>);
+            var __StatData__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __TableMetadata__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __CreatureTypes__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __AffixTypes__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>>().Deserialize(ref reader, options);
+                        break;
+                    case 3:
+                        __SkillTypes__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>>().Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        __StatData__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.GameData(__TableMetadata__, __CreatureTypes__, __AffixTypes__, __SkillTypes__, __StatData__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
     public sealed class IntValueDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.IntValueData>
     {
 
@@ -1499,6 +899,277 @@ namespace MessagePack.Formatters.Nighthollow.Data
             }
 
             var ____result = new global::Nighthollow.Data.IntValueData(__Int__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class ModifierTypeDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.ModifierTypeData>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.ModifierTypeData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(6);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatId?>().Serialize(ref writer, value.StatId, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.Operator?>().Serialize(ref writer, value.StatOperator, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Serialize(ref writer, value.DelegateId, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.ValueLow, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.ValueHigh, options);
+            writer.Write(value.Targeted);
+        }
+
+        public global::Nighthollow.Data.ModifierTypeData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __StatId__ = default(global::Nighthollow.Generated.StatId?);
+            var __StatOperator__ = default(global::Nighthollow.Generated.Operator?);
+            var __DelegateId__ = default(global::Nighthollow.Generated.DelegateId?);
+            var __ValueLow__ = default(global::Nighthollow.Data.IValueData);
+            var __ValueHigh__ = default(global::Nighthollow.Data.IValueData);
+            var __Targeted__ = default(bool);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __StatId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatId?>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __StatOperator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.Operator?>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __DelegateId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Deserialize(ref reader, options);
+                        break;
+                    case 3:
+                        __ValueLow__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        __ValueHigh__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Deserialize(ref reader, options);
+                        break;
+                    case 5:
+                        __Targeted__ = reader.ReadBoolean();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.ModifierTypeData(__StatId__, __StatOperator__, __DelegateId__, __ValueLow__, __ValueHigh__, __Targeted__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class SkillTypeDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.SkillTypeData>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.SkillTypeData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(9);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationType>().Serialize(ref writer, value.SkillAnimationType, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillType>().Serialize(ref writer, value.SkillType, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Serialize(ref writer, value.ImplicitAffix, options);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Address, options);
+            formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.ProjectileSpeed, options);
+            writer.Write(value.UsesAccuracy);
+            writer.Write(value.CanCrit);
+            writer.Write(value.CanStun);
+        }
+
+        public global::Nighthollow.Data.SkillTypeData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Name__ = default(string);
+            var __SkillAnimationType__ = default(global::Nighthollow.Generated.SkillAnimationType);
+            var __SkillType__ = default(global::Nighthollow.Generated.SkillType);
+            var __ImplicitAffix__ = default(global::Nighthollow.Data.AffixTypeData);
+            var __Address__ = default(string);
+            var __ProjectileSpeed__ = default(int?);
+            var __UsesAccuracy__ = default(bool);
+            var __CanCrit__ = default(bool);
+            var __CanStun__ = default(bool);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __SkillAnimationType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationType>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __SkillType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillType>().Deserialize(ref reader, options);
+                        break;
+                    case 3:
+                        __ImplicitAffix__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        __Address__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 5:
+                        __ProjectileSpeed__ = formatterResolver.GetFormatterWithVerify<int?>().Deserialize(ref reader, options);
+                        break;
+                    case 6:
+                        __UsesAccuracy__ = reader.ReadBoolean();
+                        break;
+                    case 7:
+                        __CanCrit__ = reader.ReadBoolean();
+                        break;
+                    case 8:
+                        __CanStun__ = reader.ReadBoolean();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.SkillTypeData(__Name__, __SkillAnimationType__, __SkillType__, __ImplicitAffix__, __Address__, __ProjectileSpeed__, __UsesAccuracy__, __CanCrit__, __CanStun__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class StatDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.StatData>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.StatData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(5);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatType>().Serialize(ref writer, value.StatType, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.DefaultValue, options);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Description, options);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Comment, options);
+        }
+
+        public global::Nighthollow.Data.StatData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Name__ = default(string);
+            var __StatType__ = default(global::Nighthollow.Generated.StatType);
+            var __DefaultValue__ = default(global::Nighthollow.Data.IValueData);
+            var __Description__ = default(string);
+            var __Comment__ = default(string);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __StatType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatType>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __DefaultValue__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Deserialize(ref reader, options);
+                        break;
+                    case 3:
+                        __Description__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        __Comment__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.StatData(__Name__, __StatType__, __DefaultValue__, __Description__, __Comment__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class TableMetadataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.TableMetadata>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.TableMetadata value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            writer.WriteArrayHeader(1);
+            writer.Write(value.NextId);
+        }
+
+        public global::Nighthollow.Data.TableMetadata Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadArrayHeader();
+            var __NextId__ = default(int);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __NextId__ = reader.ReadInt32();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.TableMetadata(__NextId__);
             reader.Depth--;
             return ____result;
         }

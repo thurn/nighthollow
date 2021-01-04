@@ -33,8 +33,8 @@ namespace Nighthollow.Data
       SkillAnimationType = skillAnimationType;
     }
 
-    [Key("skillAnimationNumber")] public SkillAnimationNumber SkillAnimationNumber { get; }
-    [Key("skillAnimationType")] public SkillAnimationType SkillAnimationType { get; }
+    [Key(0)] public SkillAnimationNumber SkillAnimationNumber { get; }
+    [Key(1)] public SkillAnimationType SkillAnimationType { get; }
 
     public override string ToString() => $"{SkillAnimationNumber}: {SkillAnimationType}";
   }
@@ -68,16 +68,16 @@ namespace Nighthollow.Data
       IsManaCreature = isManaCreature;
     }
 
-    [Key("name")] public string Name { get; }
-    [Key("prefabAddress")] public string PrefabAddress { get; }
-    [Key("owner")] public PlayerName Owner { get; }
-    [Key("health")] public IntRangeValue Health { get; }
-    [Key("skillAnimations")] public ImmutableList<CreatureSkillAnimation> SkillAnimations { get; }
-    [Key("imageAddress")] public string? ImageAddress { get; }
-    [Key("baseManaCost")] public int BaseManaCost { get; }
-    [Key("speed")] public int Speed { get; }
-    [Key("implicitAffix")] public AffixTypeData? ImplicitAffix { get; }
-    [Key("implicitSkills")] public ImmutableList<SkillTypeData> ImplicitSkills { get; }
-    [Key("isManaCreature")] public bool IsManaCreature { get; }
+    [Key(0)] public string Name { get; }
+    [Key(1)] public string PrefabAddress { get; }
+    [Key(2)] public PlayerName Owner { get; }
+    [Key(3)] public IntRangeValue Health { get; }
+    [Key(4)] public ImmutableList<CreatureSkillAnimation> SkillAnimations { get; }
+    [Key(5)] public string? ImageAddress { get; }
+    [Key(6)] public int BaseManaCost { get; }
+    [Key(7)] public int Speed { get; }
+    [Key(8)] public AffixTypeData? ImplicitAffix { get; }
+    [Key(9)] public ImmutableList<SkillTypeData> ImplicitSkills { get; }
+    [Key(10)] public bool IsManaCreature { get; }
   }
 }

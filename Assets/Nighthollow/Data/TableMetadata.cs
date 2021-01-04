@@ -26,6 +26,6 @@ namespace Nighthollow.Data
       NextId = nextId;
     }
 
-    [Key("nextId")] public int NextId { get; }
+    [Key(0)] public int NextId { get; }
   }
 }

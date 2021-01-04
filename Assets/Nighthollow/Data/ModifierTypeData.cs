@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using System.Text;
 using MessagePack;
 using Nighthollow.Generated;
 
@@ -40,12 +39,12 @@ namespace Nighthollow.Data
       Targeted = targeted;
     }
 
-    [Key("statId")] public StatId? StatId { get; }
-    [Key("statOperator")] public Operator? StatOperator { get; }
-    [Key("delegateId")] public DelegateId? DelegateId { get; }
-    [Key("valueLow")] public IValueData? ValueLow { get; }
-    [Key("valueHigh")] public IValueData? ValueHigh { get; }
-    [Key("targeted")] public bool Targeted { get; } // If false, modifier automatically applies to owner
+    [Key(0)] public StatId? StatId { get; }
+    [Key(1)] public Operator? StatOperator { get; }
+    [Key(2)] public DelegateId? DelegateId { get; }
+    [Key(3)] public IValueData? ValueLow { get; }
+    [Key(4)] public IValueData? ValueHigh { get; }
+    [Key(5)] public bool Targeted { get; } // If false, modifier automatically applies to owner
 
     public override string ToString()
     {

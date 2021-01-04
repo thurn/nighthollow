@@ -31,10 +31,10 @@ namespace Nighthollow.Data
       Comment = comment;
     }
 
-    [Key("name")] public string Name { get; }
-    [Key("statType")] public StatType StatType { get; }
-    [Key("defaultValue")] public IValueData DefaultValue { get; }
-    [Key("description")] public string Description { get; }
-    [Key("comment")] public string Comment { get; }
+    [Key(0)] public string Name { get; }
+    [Key(1)] public StatType StatType { get; }
+    [Key(2)] public IValueData DefaultValue { get; }
+    [Key(3)] public string Description { get; }
+    [Key(4)] public string Comment { get; }
   }
 }
