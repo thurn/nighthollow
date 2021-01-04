@@ -14,13 +14,16 @@
 
 using System;
 using System.Collections.Immutable;
+using MessagePack;
 
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
+  [MessagePackObject]
   public sealed class TaggedNumericOperation<TTag, TValue> : IOperation where TTag : Enum where TValue : struct
   {
+#pragma warning disable 618 // Using Obsolete
     public static TaggedNumericOperation<TTag, TValue> Add(ImmutableDictionary<TTag, TValue> value) =>
       new TaggedNumericOperation<TTag, TValue>(OperationType.Add, value, null, null);
 
@@ -29,8 +32,10 @@ namespace Nighthollow.Stats2
 
     public static TaggedNumericOperation<TTag, TValue> Overwrite(ImmutableDictionary<TTag, TValue> value) =>
       new TaggedNumericOperation<TTag, TValue>(OperationType.Set, null, null, value);
+#pragma warning restore 618
 
-    TaggedNumericOperation(
+    [Obsolete("This constructor is visible only for use by the serialization system.")]
+    public TaggedNumericOperation(
       OperationType type,
       ImmutableDictionary<TTag, TValue>? addTo,
       ImmutableDictionary<TTag, PercentageValue>? increaseBy,
@@ -46,11 +51,11 @@ namespace Nighthollow.Stats2
         .Union(overwriteWith?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty);
     }
 
-    public OperationType Type { get; }
-    public ImmutableHashSet<TTag> AllTags { get; }
-    public ImmutableDictionary<TTag, TValue>? AddTo { get; }
-    public ImmutableDictionary<TTag, PercentageValue>? IncreaseBy { get; }
-    public ImmutableDictionary<TTag, TValue>? OverwriteWith { get; }
+    [Key(0)] public OperationType Type { get; }
+    [Key(1)] public ImmutableDictionary<TTag, TValue>? AddTo { get; }
+    [Key(2)] public ImmutableDictionary<TTag, PercentageValue>? IncreaseBy { get; }
+    [Key(3)] public ImmutableDictionary<TTag, TValue>? OverwriteWith { get; }
+    [IgnoreMember] public ImmutableHashSet<TTag> AllTags { get; }
 
     public NumericOperation<TValue>? AsNumericOperation(TTag tag)
     {

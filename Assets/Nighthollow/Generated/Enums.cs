@@ -15,6 +15,8 @@
 
 // Generated Code - Do Not Modify!
 
+using MessagePack;
+
 #nullable enable
 
 namespace Nighthollow.Generated

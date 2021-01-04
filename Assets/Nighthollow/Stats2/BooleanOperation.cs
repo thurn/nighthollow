@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using MessagePack;
+
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
+  [MessagePackObject]
   public sealed class BooleanOperation : IOperation
   {
     public BooleanOperation(bool setValue)
@@ -24,7 +27,7 @@ namespace Nighthollow.Stats2
       SetValue = setValue;
     }
 
-    public OperationType Type { get; }
-    public bool SetValue { get; }
+    [IgnoreMember] public OperationType Type { get; }
+    [Key(0)] public bool SetValue { get; }
   }
 }

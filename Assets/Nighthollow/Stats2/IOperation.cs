@@ -32,4 +32,20 @@ namespace Nighthollow.Stats2
   {
     OperationType Type { get; }
   }
+
+  // Hack: MessagePack can't find types that are only ever used in a union declaration, so we need to have a concrete
+  // list of all types we expect to appear as well.
+  [MessagePackObject]
+  public sealed class SerializationHack
+  {
+    [Key(0)] public NumericOperation<int> Zero = null!;
+    [Key(1)] public NumericOperation<DurationValue> One = null!;
+    [Key(2)] public NumericOperation<PercentageValue> Two = null!;
+    [Key(3)] public NumericOperation<IntRangeValue> Three = null!;
+    [Key(4)] public BooleanOperation Four = null!;
+    [Key(5)] public TaggedNumericOperation<DamageType, int> Five = null!;
+    [Key(6)] public TaggedNumericOperation<DamageType, PercentageValue> Six = null!;
+    [Key(7)] public TaggedNumericOperation<DamageType, IntRangeValue> Seven = null!;
+    [Key(8)] public TaggedNumericOperation<School, int> Eight = null!;
+  }
 }

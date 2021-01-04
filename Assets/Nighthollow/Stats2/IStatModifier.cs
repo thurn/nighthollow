@@ -26,7 +26,6 @@ namespace Nighthollow.Stats2
     IOperation Operation { get; }
   }
 
-  [MessagePackObject]
   public sealed class StatModifier<TOperation, TValue> : IStatModifier where TOperation : IOperation
   {
     public StatModifier(AbstractStat<TOperation, TValue> stat, TOperation operation)
@@ -35,12 +34,12 @@ namespace Nighthollow.Stats2
       ModifierOperation = operation;
     }
 
-    [Key(0)] public AbstractStat<TOperation, TValue> ModifierStat { get; }
+    public AbstractStat<TOperation, TValue> ModifierStat { get; }
 
-    [Key(1)] public TOperation ModifierOperation { get; }
+    public TOperation ModifierOperation { get; }
 
-    [IgnoreMember] public IStat Stat => ModifierStat;
+    public IStat Stat => ModifierStat;
 
-    [IgnoreMember] public IOperation Operation => ModifierOperation;
+    public IOperation Operation => ModifierOperation;
   }
 }

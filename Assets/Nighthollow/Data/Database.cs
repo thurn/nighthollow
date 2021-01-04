@@ -108,7 +108,7 @@ namespace Nighthollow.Data
     }
 
     /// <summary>Should only be invoked from <see cref="DataService"/>.</summary>
-    public void PerformWritesInternal(string persistentFilePath, string editorFilePath)
+    public void PerformWritesInternal(bool disablePersistence, string persistentFilePath, string editorFilePath)
     {
       if (_mutations.Count == 0 || _writePending)
       {
@@ -125,19 +125,23 @@ namespace Nighthollow.Data
       }
 
       _mutations = ImmutableList<IMutation>.Empty;
-      using var stream = File.OpenWrite(persistentFilePath);
-      MessagePackSerializer.Serialize(stream, gameData, _serializationOptions);
-      Debug.Log($"Wrote game data to {persistentFilePath}");
 
-#if UNITY_WEBGL
+      if (!disablePersistence)
+      {
+        using var stream = File.OpenWrite(persistentFilePath);
+        MessagePackSerializer.Serialize(stream, gameData, _serializationOptions);
+        Debug.Log($"Wrote game data to {persistentFilePath}");
+
+#if UNITY_WEBGL_API
 #pragma warning disable 618
-      // See https://forum.unity.com/threads/how-does-saving-work-in-webgl.390385/
-      Application.ExternalEval("_JS_FileSystem_Sync();");
+        // See https://forum.unity.com/threads/how-does-saving-work-in-webgl.390385/
+        Application.ExternalEval("_JS_FileSystem_Sync();");
 #pragma warning restore 618
 #endif
+      }
 
 #if UNITY_EDITOR
-      // In the editor we write directly to assets as well for convenience
+      // In the editor we write directly to assets
       using var editorStream = File.OpenWrite(editorFilePath);
       MessagePackSerializer.Serialize(editorStream, gameData, _serializationOptions);
       Debug.Log($"Wrote game data to {editorFilePath}");

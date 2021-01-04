@@ -32,9 +32,9 @@ namespace Nighthollow.Data
     string? _resourceAddress;
     string? _persistentFilePath;
     string? _editorFilePath;
-
     Database? _database;
     readonly List<IOnDatabaseReadyListener> _listeners = new List<IOnDatabaseReadyListener>();
+    [SerializeField] bool _disablePersistence;
 
     void Start()
     {
@@ -50,13 +50,12 @@ namespace Nighthollow.Data
       var serializationOptions = MessagePackSerializerOptions.Standard
         .WithResolver(CompositeResolver.Create(
           GeneratedResolver.Instance,
-          StandardResolver.Instance));
+          StandardResolverAllowPrivate.Instance));
 
-      // This seems like it should not be needed, but MessagePack is ignoring the provided options for dictionaries...
-      // MessagePackSerializer.DefaultOptions = serializationOptions;
+      File.Delete(_persistentFilePath!);
 
       GameData gameData;
-      if (File.Exists(_persistentFilePath))
+      if (File.Exists(_persistentFilePath) && !_disablePersistence)
       {
         Debug.Log($"Reading game data from {_persistentFilePath}");
         using var file = File.OpenRead(_persistentFilePath!);
@@ -80,7 +79,7 @@ namespace Nighthollow.Data
 
     void Update()
     {
-      _database?.PerformWritesInternal(_persistentFilePath!, _editorFilePath!);
+      _database?.PerformWritesInternal(_disablePersistence, _persistentFilePath!, _editorFilePath!);
     }
 
     public void OnReady(IOnDatabaseReadyListener listener)

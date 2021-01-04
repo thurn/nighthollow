@@ -12,12 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using MessagePack;
+
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
+  [MessagePackObject]
   public sealed class NumericOperation<T> : IOperation where T : struct
   {
+#pragma warning disable 618 // Using Obsolete
     public static NumericOperation<T> Add(T value) =>
       new NumericOperation<T>(OperationType.Add, value, null, null);
 
@@ -26,8 +31,10 @@ namespace Nighthollow.Stats2
 
     public static NumericOperation<T> Overwrite(T value) =>
       new NumericOperation<T>(OperationType.Set, null, null, value);
+#pragma warning restore 618
 
-    NumericOperation(OperationType type, T? add, PercentageValue? increase, T? ovewrite)
+    [Obsolete("This constructor is visible only for use by the serialization system.")]
+    public NumericOperation(OperationType type, T? add, PercentageValue? increase, T? ovewrite)
     {
       Type = type;
       AddTo = add;
@@ -35,9 +42,9 @@ namespace Nighthollow.Stats2
       OvewriteWith = ovewrite;
     }
 
-    public OperationType Type { get; }
-    public T? AddTo { get; }
-    public PercentageValue? IncreaseBy { get; }
-    public T? OvewriteWith { get; }
+    [Key(0)] public OperationType Type { get; }
+    [Key(1)] public T? AddTo { get; }
+    [Key(2)] public PercentageValue? IncreaseBy { get; }
+    [Key(3)] public T? OvewriteWith { get; }
   }
 }
