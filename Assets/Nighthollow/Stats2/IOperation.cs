@@ -30,6 +30,8 @@ namespace Nighthollow.Stats2
   [Union(8, typeof(TaggedNumericOperation<School, int>))]
   public interface IOperation
   {
+    public StatId StatId { get; }
+
     OperationType Type { get; }
   }
 

@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Immutable;
 using MessagePack;
+using Nighthollow.Generated;
 
 #nullable enable
 
@@ -24,23 +25,31 @@ namespace Nighthollow.Stats2
   public sealed class TaggedNumericOperation<TTag, TValue> : IOperation where TTag : Enum where TValue : struct
   {
 #pragma warning disable 618 // Using Obsolete
-    public static TaggedNumericOperation<TTag, TValue> Add(ImmutableDictionary<TTag, TValue> value) =>
-      new TaggedNumericOperation<TTag, TValue>(OperationType.Add, value, null, null);
+    public static TaggedNumericOperation<TTag, TValue> Add(
+      AbstractStat<TaggedNumericOperation<TTag, TValue>, ImmutableDictionary<TTag, TValue>> stat,
+      ImmutableDictionary<TTag, TValue> value) =>
+      new TaggedNumericOperation<TTag, TValue>(stat.StatId, OperationType.Add, value, null, null);
 
-    public static TaggedNumericOperation<TTag, TValue> Increase(ImmutableDictionary<TTag, PercentageValue> value) =>
-      new TaggedNumericOperation<TTag, TValue>(OperationType.Increase, null, value, null);
+    public static TaggedNumericOperation<TTag, TValue> Increase(
+      AbstractStat<TaggedNumericOperation<TTag, TValue>, ImmutableDictionary<TTag, TValue>> stat,
+      ImmutableDictionary<TTag, PercentageValue> value) =>
+      new TaggedNumericOperation<TTag, TValue>(stat.StatId, OperationType.Increase, null, value, null);
 
-    public static TaggedNumericOperation<TTag, TValue> Overwrite(ImmutableDictionary<TTag, TValue> value) =>
-      new TaggedNumericOperation<TTag, TValue>(OperationType.Set, null, null, value);
+    public static TaggedNumericOperation<TTag, TValue> Overwrite(
+      AbstractStat<TaggedNumericOperation<TTag, TValue>, ImmutableDictionary<TTag, TValue>> stat,
+      ImmutableDictionary<TTag, TValue> value) =>
+      new TaggedNumericOperation<TTag, TValue>(stat.StatId, OperationType.Set, null, null, value);
 #pragma warning restore 618
 
     [Obsolete("This constructor is visible only for use by the serialization system.")]
     public TaggedNumericOperation(
+      StatId statId,
       OperationType type,
       ImmutableDictionary<TTag, TValue>? addTo,
       ImmutableDictionary<TTag, PercentageValue>? increaseBy,
       ImmutableDictionary<TTag, TValue>? overwriteWith)
     {
+      StatId = statId;
       Type = type;
       AddTo = addTo;
       IncreaseBy = increaseBy;
@@ -51,13 +60,15 @@ namespace Nighthollow.Stats2
         .Union(overwriteWith?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty);
     }
 
-    [Key(0)] public OperationType Type { get; }
-    [Key(1)] public ImmutableDictionary<TTag, TValue>? AddTo { get; }
-    [Key(2)] public ImmutableDictionary<TTag, PercentageValue>? IncreaseBy { get; }
-    [Key(3)] public ImmutableDictionary<TTag, TValue>? OverwriteWith { get; }
+    [Key(0)] public StatId StatId { get; }
+    [Key(1)] public OperationType Type { get; }
+    [Key(2)] public ImmutableDictionary<TTag, TValue>? AddTo { get; }
+    [Key(3)] public ImmutableDictionary<TTag, PercentageValue>? IncreaseBy { get; }
+    [Key(4)] public ImmutableDictionary<TTag, TValue>? OverwriteWith { get; }
     [IgnoreMember] public ImmutableHashSet<TTag> AllTags { get; }
 
-    public NumericOperation<TValue>? AsNumericOperation(TTag tag)
+    public NumericOperation<TValue>? AsNumericOperation(
+      AbstractStat<NumericOperation<TValue>, TValue> stat, TTag tag)
     {
       if (!AllTags.Contains(tag))
       {
@@ -66,9 +77,9 @@ namespace Nighthollow.Stats2
 
       return Type switch
       {
-        OperationType.Add => NumericOperation<TValue>.Add(AddTo![tag]),
-        OperationType.Increase => NumericOperation<TValue>.Increase(IncreaseBy![tag]),
-        OperationType.Set => NumericOperation<TValue>.Overwrite(OverwriteWith![tag]),
+        OperationType.Add => NumericOperation<TValue>.Add(stat, AddTo![tag]),
+        OperationType.Increase => NumericOperation<TValue>.Increase(stat, IncreaseBy![tag]),
+        OperationType.Set => NumericOperation<TValue>.Overwrite(stat, OverwriteWith![tag]),
         _ => throw new ArgumentOutOfRangeException()
       };
     }

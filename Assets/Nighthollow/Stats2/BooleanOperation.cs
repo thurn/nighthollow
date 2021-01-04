@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using MessagePack;
+using Nighthollow.Generated;
 
 #nullable enable
 
@@ -21,13 +23,25 @@ namespace Nighthollow.Stats2
   [MessagePackObject]
   public sealed class BooleanOperation : IOperation
   {
-    public BooleanOperation(bool setValue)
+#pragma warning disable 618 // Using Obsolete
+    public static BooleanOperation SetTrue(AbstractStat<BooleanOperation, bool> stat) =>
+      new BooleanOperation(stat.StatId, true);
+
+    public static BooleanOperation SetFalse(AbstractStat<BooleanOperation, bool> stat) =>
+      new BooleanOperation(stat.StatId, false);
+#pragma warning restore 618
+
+    [SerializationConstructor]
+    [Obsolete("This constructor is visible only for use by the serialization system.")]
+    public BooleanOperation(StatId statId, bool setValue)
     {
-      Type = OperationType.Set;
+      StatId = statId;
       SetValue = setValue;
+      Type = OperationType.Set;
     }
 
+    [Key(0)] public StatId StatId { get; }
+    [Key(1)] public bool SetValue { get; }
     [IgnoreMember] public OperationType Type { get; }
-    [Key(0)] public bool SetValue { get; }
   }
 }

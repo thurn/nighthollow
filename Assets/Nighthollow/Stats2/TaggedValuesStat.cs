@@ -53,7 +53,7 @@ namespace Nighthollow.Stats2
           tag,
           _childStat.ComputeValue(groups.ToDictionary(
             p => p.Key,
-            p => p.Value.Select(o => o.AsNumericOperation(tag)).WhereNotNull())));
+            p => p.Value.Select(o => o.AsNumericOperation(_childStat, tag)).WhereNotNull())));
       }
 
       return result;
