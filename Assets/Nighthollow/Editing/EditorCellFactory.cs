@@ -16,8 +16,6 @@ using System;
 using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Stats;
-using UnityEngine;
-using UnityEngine.UIElements;
 
 #nullable enable
 
@@ -35,7 +33,8 @@ namespace Nighthollow.Editing
         reflectivePath => CreateTextFieldEditorCell(screenController, parent, reflectivePath),
         CreateLabelEditorCell,
         button => CreateButtonCell(button, parent),
-        dropdown => CreateDropdownCell(screenController, dropdown, parent));
+        dropdown => CreateDropdownCell(screenController, dropdown, parent),
+        CreateImageCell);
 
     static EditorCell CreateTextFieldEditorCell(
       ScreenController screenController,
@@ -107,6 +106,8 @@ namespace Nighthollow.Editing
       EditorSheetDelegate.DropdownCell content,
       IEditor parent) =>
       new SelectorDropdownEditorCell(screenController, content, parent);
+
+    static EditorCell CreateImageCell(EditorSheetDelegate.ImageCell cell) => new ImageEditorCell(cell.ImagePath);
 
     static bool Identity(string input, out string output)
     {

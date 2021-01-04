@@ -16,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using Nighthollow.Data;
 using Nighthollow.Utils;
 
@@ -31,6 +30,7 @@ namespace Nighthollow.Editing
     readonly ReflectivePath _reflectivePath;
     readonly Type _underlyingType;
     readonly DropdownCell _tableSelector;
+    List<int> _columnWidths = null!;
 
     public TableEditorSheetDelegate(ReflectivePath path, DropdownCell tableSelector)
     {
@@ -54,21 +54,34 @@ namespace Nighthollow.Editing
     public override List<List<ICellContent>> GetCells()
     {
       var properties = _underlyingType.GetProperties();
+      var imageProperty = properties.FirstOrDefault(p => p.Name.Equals("ImageAddress"));
+      var staticHeadings = new List<ICellContent> {new LabelCell("x"), new LabelCell("ID")};
+      if (imageProperty != null)
+      {
+        staticHeadings.Add(new LabelCell("Image"));
+      }
+
       var result = new List<List<ICellContent>>
       {
         new List<ICellContent> {_tableSelector},
-        new List<ICellContent> {new LabelCell("x"), new LabelCell("ID")}
+        staticHeadings
           .Concat(properties.Select(p => new LabelCell(TypeUtils.NameWithSpaces(p.Name))))
           .ToList()
       };
 
       foreach (int entityId in _reflectivePath.GetTable().Keys)
       {
-        result.Add(new List<ICellContent>
-          {
-            new ButtonCell("x", () => DatabaseDelete(entityId)),
-            new LabelCell(entityId.ToString())
-          }.Concat(properties
+        var staticColumns = new List<ICellContent>
+        {
+          new ButtonCell("x", () => DatabaseDelete(entityId)),
+          new LabelCell(entityId.ToString())
+        };
+        if (imageProperty != null)
+        {
+          staticColumns.Add(new ImageCell(_reflectivePath.EntityId(entityId).Property(imageProperty)));
+        }
+
+        result.Add(staticColumns.Concat(properties
             .Select(property => new ReflectivePathCell(_reflectivePath.EntityId(entityId).Property(property))))
           .ToList());
       }
@@ -80,15 +93,20 @@ namespace Nighthollow.Editing
           (AddButtonKey, 0)))
         .ToList<ICellContent>());
 
+      _columnWidths = new List<int> {50, 50};
+      if (imageProperty != null)
+      {
+        _columnWidths.Add(ImageEditorCell.ImageSize);
+      }
+
+      _columnWidths.AddRange(Enumerable.Repeat(
+        EditorSheet.DefaultCellWidth,
+        _underlyingType.GetProperties().Length));
+
       return result;
     }
 
-    public override List<int> GetColumnWidths() =>
-      new List<int> {50, 50}
-        .Concat(Enumerable.Repeat(
-          EditorSheet.DefaultCellWidth,
-          _underlyingType.GetProperties().Length))
-        .ToList();
+    public override List<int> GetColumnWidths() => _columnWidths;
 
     public override int? ContentHeightOverride => 4000;
 

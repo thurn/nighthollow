@@ -37,7 +37,8 @@ namespace Nighthollow.Editing
         Func<ReflectivePath, T> onReflectivePath,
         Func<string?, T> onLabel,
         Func<ButtonCell, T> onButton,
-        Func<DropdownCell, T> onDropdown);
+        Func<DropdownCell, T> onDropdown,
+        Func<ImageCell, T> onImage);
     }
 
     protected sealed class ReflectivePathCell : ICellContent
@@ -53,7 +54,8 @@ namespace Nighthollow.Editing
         Func<ReflectivePath, T> onReflectivePath,
         Func<string?, T> onLabel,
         Func<ButtonCell, T> onButton,
-        Func<DropdownCell, T> onDropdown) =>
+        Func<DropdownCell, T> onDropdown,
+        Func<ImageCell, T> onImage) =>
         onReflectivePath(ReflectivePath);
     }
 
@@ -70,7 +72,8 @@ namespace Nighthollow.Editing
         Func<ReflectivePath, T> onReflectivePath,
         Func<string?, T> onLabel,
         Func<ButtonCell, T> onButton,
-        Func<DropdownCell, T> onDropdown) =>
+        Func<DropdownCell, T> onDropdown,
+        Func<ImageCell, T> onImage) =>
         onLabel(Text);
     }
 
@@ -91,7 +94,8 @@ namespace Nighthollow.Editing
         Func<ReflectivePath, T> onReflectivePath,
         Func<string?, T> onLabel,
         Func<ButtonCell, T> onButton,
-        Func<DropdownCell, T> onDropdown) => onButton(this);
+        Func<DropdownCell, T> onDropdown,
+        Func<ImageCell, T> onImage) => onButton(this);
     }
 
     public sealed class DropdownCell : ICellContent
@@ -111,7 +115,25 @@ namespace Nighthollow.Editing
         Func<ReflectivePath, T> onReflectivePath,
         Func<string?, T> onLabel,
         Func<ButtonCell, T> onButton,
-        Func<DropdownCell, T> onDropdown) => onDropdown(this);
+        Func<DropdownCell, T> onDropdown,
+        Func<ImageCell, T> onImage) => onDropdown(this);
+    }
+
+    public sealed class ImageCell : ICellContent
+    {
+      public ImageCell(ReflectivePath imagePath)
+      {
+        ImagePath = imagePath;
+      }
+
+      public ReflectivePath ImagePath { get; }
+
+      public T Switch<T>(
+        Func<ReflectivePath, T> onReflectivePath,
+        Func<string?, T> onLabel,
+        Func<ButtonCell, T> onButton,
+        Func<DropdownCell, T> onDropdown,
+        Func<ImageCell, T> onImage) => onImage(this);
     }
   }
 }
