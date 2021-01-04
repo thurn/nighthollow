@@ -14,7 +14,7 @@
 
 using System;
 using MessagePack;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 
 #nullable enable
 

@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Generated;
@@ -21,10 +22,10 @@ using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Stats
+namespace Nighthollow.Stats2
 {
   [MessagePackObject]
-  public readonly struct DurationValue
+  public readonly struct DurationValue : IValueData
   {
     public DurationValue(int timeMilliseconds)
     {
@@ -32,6 +33,13 @@ namespace Nighthollow.Stats
     }
 
     [Key(0)] public int TimeMilliseconds { get; }
+
+    public T Switch<T>(
+      Func<int, T> onInt,
+      Func<bool, T> onBool,
+      Func<DurationValue, T> onDuration,
+      Func<PercentageValue, T> onPercentage,
+      Func<IntRangeValue, T> onIntRange) => onDuration(this);
 
     public override string ToString() => $"{TimeMilliseconds / 1000f}s";
 
@@ -60,31 +68,16 @@ namespace Nighthollow.Stats
       result = default;
       return false;
     }
-
-    public static DurationValue ParseDuration(string value)
-    {
-      if (TryParse(value, out var result))
-      {
-        return result;
-      }
-      else
-      {
-        throw new ArgumentException($"Invalid Duration {value}");
-      }
-    }
   }
 
-  public sealed class DurationStat : NumericStat<DurationValue>
+  public sealed class DurationStat : AbstractStat<NumericOperation<DurationValue>, DurationValue>
   {
-    public DurationStat(StatId id) : base(id)
+    public DurationStat(StatId statId) : base(statId)
     {
     }
 
-    public override DurationValue ComputeValue(IReadOnlyList<NumericOperation<DurationValue>> operations)
-    {
-      return new DurationValue(IntStat.Compute(operations, duration => duration.AsMilliseconds()));
-    }
-
-    protected override DurationValue ParseStatValue(string value) => DurationValue.ParseDuration(value);
+    public override DurationValue ComputeValue(
+      IReadOnlyDictionary<OperationType, IEnumerable<NumericOperation<DurationValue>>> groups) =>
+      new DurationValue(IntStat.Compute(groups, duration => duration.AsMilliseconds()));
   }
 }

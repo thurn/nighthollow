@@ -14,16 +14,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Generated;
 
 #nullable enable
 
-namespace Nighthollow.Stats
+namespace Nighthollow.Stats2
 {
   [MessagePackObject]
-  public readonly struct IntRangeValue
+  public readonly struct IntRangeValue : IValueData
   {
     public IntRangeValue(int low, int high)
     {
@@ -33,6 +34,13 @@ namespace Nighthollow.Stats
 
     [Key(0)] public int Low { get; }
     [Key(1)] public int High { get; }
+
+    public T Switch<T>(
+      Func<int, T> onInt,
+      Func<bool, T> onBool,
+      Func<DurationValue, T> onDuration,
+      Func<PercentageValue, T> onPercentage,
+      Func<IntRangeValue, T> onIntRange) => onIntRange(this);
 
     public static readonly IntRangeValue Zero = new IntRangeValue(low: 0, high: 0);
 
@@ -68,36 +76,20 @@ namespace Nighthollow.Stats
         return false;
       }
     }
-
-    public static IntRangeValue ParseIntRange(string value)
-    {
-      if (TryParse(value, out var result))
-      {
-        return result;
-      }
-      else
-      {
-        throw new ArgumentException($"Invalid IntRange {value}");
-      }
-    }
   }
 
-  public sealed class IntRangeStat : NumericStat<IntRangeValue>
+  public sealed class IntRangeStat : AbstractStat<NumericOperation<IntRangeValue>, IntRangeValue>
   {
-    public IntRangeStat(StatId id) : base(id)
+    public IntRangeStat(StatId statId) : base(statId)
     {
     }
 
-    public override IntRangeValue ComputeValue(IReadOnlyList<NumericOperation<IntRangeValue>> operations) =>
-      Compute(operations);
-
-    public static IntRangeValue Compute(IReadOnlyList<NumericOperation<IntRangeValue>> operations)
+    public override IntRangeValue ComputeValue(
+      IReadOnlyDictionary<OperationType, IEnumerable<NumericOperation<IntRangeValue>>> groups)
     {
       return new IntRangeValue(
-        IntStat.Compute(operations, range => range.Low),
-        IntStat.Compute(operations, range => range.High));
+        IntStat.Compute(groups, range => range.Low),
+        IntStat.Compute(groups, range => range.High));
     }
-
-    protected override IntRangeValue ParseStatValue(string value) => IntRangeValue.ParseIntRange(value);
   }
 }

@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Generated;
@@ -21,10 +22,10 @@ using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Stats
+namespace Nighthollow.Stats2
 {
   [MessagePackObject]
-  public readonly struct PercentageValue
+  public readonly struct PercentageValue : IValueData
   {
     public PercentageValue(int basisPoints)
     {
@@ -34,6 +35,13 @@ namespace Nighthollow.Stats
     const float BasisPointsPerUnit = 10_000f;
 
     [Key(0)] public int BasisPoints { get; }
+
+    public T Switch<T>(
+      Func<int, T> onInt,
+      Func<bool, T> onBool,
+      Func<DurationValue, T> onDuration,
+      Func<PercentageValue, T> onPercentage,
+      Func<IntRangeValue, T> onIntRange) => onPercentage(this);
 
     public override string ToString() => $"{BasisPoints / 100f}%";
 
@@ -66,34 +74,16 @@ namespace Nighthollow.Stats
       result = default;
       return false;
     }
-
-    public static PercentageValue ParsePercentage(string value)
-    {
-      if (TryParse(value, out var result))
-      {
-        return result;
-      }
-      else
-      {
-        throw new ArgumentException($"Invalid Percentage {value}");
-      }
-    }
   }
 
-  public sealed class PercentageStat : NumericStat<PercentageValue>
+  public sealed class PercentageStat : AbstractStat<NumericOperation<PercentageValue>, PercentageValue>
   {
-    public PercentageStat(StatId id) : base(id)
+    public PercentageStat(StatId statId) : base(statId)
     {
     }
 
-    public override PercentageValue ComputeValue(IReadOnlyList<NumericOperation<PercentageValue>> operations) =>
-      Compute(operations);
-
-    public static PercentageValue Compute(IReadOnlyList<NumericOperation<PercentageValue>> operations)
-    {
-      return new PercentageValue(IntStat.Compute(operations, duration => duration.AsBasisPoints()));
-    }
-
-    protected override PercentageValue ParseStatValue(string value) => PercentageValue.ParsePercentage(value);
+    public override PercentageValue ComputeValue(
+      IReadOnlyDictionary<OperationType, IEnumerable<NumericOperation<PercentageValue>>> groups) =>
+      new PercentageValue(IntStat.Compute(groups, duration => duration.AsBasisPoints()));
   }
 }

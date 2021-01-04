@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 #nullable enable
@@ -40,6 +41,16 @@ namespace Nighthollow.Utils
 
       dictionary[key] = defaultValue;
       return defaultValue;
+    }
+
+    public static ImmutableDictionary<TKey, ImmutableList<TValue>> AppendOrCreateList<TKey, TValue>(
+      this ImmutableDictionary<TKey, ImmutableList<TValue>> dictionary,
+      TKey key,
+      TValue value)
+      where TKey : notnull
+    {
+      return dictionary.SetItem(key,
+        dictionary.TryGetValue(key, out var list) ? list.Add(value) : ImmutableList.Create(value));
     }
 
     public static Dictionary<TKey, TValue> Clone<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary)

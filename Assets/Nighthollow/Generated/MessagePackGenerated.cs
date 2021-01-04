@@ -49,7 +49,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(36)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(39)
             {
                 { typeof(global::Nighthollow.Generated.DelegateId?), 0 },
                 { typeof(global::Nighthollow.Generated.Operator?), 1 },
@@ -87,6 +87,9 @@ namespace MessagePack.Resolvers
                 { typeof(global::Nighthollow.Stats.DurationValue), 33 },
                 { typeof(global::Nighthollow.Stats.IntRangeValue), 34 },
                 { typeof(global::Nighthollow.Stats.PercentageValue), 35 },
+                { typeof(global::Nighthollow.Stats2.DurationValue), 36 },
+                { typeof(global::Nighthollow.Stats2.IntRangeValue), 37 },
+                { typeof(global::Nighthollow.Stats2.PercentageValue), 38 },
             };
         }
 
@@ -136,6 +139,9 @@ namespace MessagePack.Resolvers
                 case 33: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
                 case 34: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
                 case 35: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
+                case 36: return new MessagePack.Formatters.Nighthollow.Stats2.DurationValueFormatter();
+                case 37: return new MessagePack.Formatters.Nighthollow.Stats2.IntRangeValueFormatter();
+                case 38: return new MessagePack.Formatters.Nighthollow.Stats2.PercentageValueFormatter();
                 default: return null;
             }
         }
@@ -330,9 +336,9 @@ namespace MessagePack.Formatters.Nighthollow.Data
             {
                 { typeof(global::Nighthollow.Data.IntValueData).TypeHandle, new KeyValuePair<int, int>(0, 0) },
                 { typeof(global::Nighthollow.Data.BoolValueData).TypeHandle, new KeyValuePair<int, int>(1, 1) },
-                { typeof(global::Nighthollow.Stats.DurationValue).TypeHandle, new KeyValuePair<int, int>(2, 2) },
-                { typeof(global::Nighthollow.Stats.PercentageValue).TypeHandle, new KeyValuePair<int, int>(3, 3) },
-                { typeof(global::Nighthollow.Stats.IntRangeValue).TypeHandle, new KeyValuePair<int, int>(4, 4) },
+                { typeof(global::Nighthollow.Stats2.DurationValue).TypeHandle, new KeyValuePair<int, int>(2, 2) },
+                { typeof(global::Nighthollow.Stats2.PercentageValue).TypeHandle, new KeyValuePair<int, int>(3, 3) },
+                { typeof(global::Nighthollow.Stats2.IntRangeValue).TypeHandle, new KeyValuePair<int, int>(4, 4) },
             };
             this.keyToJumpMap = new Dictionary<int, int>(5)
             {
@@ -360,13 +366,13 @@ namespace MessagePack.Formatters.Nighthollow.Data
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.BoolValueData>().Serialize(ref writer, (global::Nighthollow.Data.BoolValueData)value, options);
                         break;
                     case 2:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue>().Serialize(ref writer, (global::Nighthollow.Stats.DurationValue)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.DurationValue>().Serialize(ref writer, (global::Nighthollow.Stats2.DurationValue)value, options);
                         break;
                     case 3:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats.PercentageValue>().Serialize(ref writer, (global::Nighthollow.Stats.PercentageValue)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.PercentageValue>().Serialize(ref writer, (global::Nighthollow.Stats2.PercentageValue)value, options);
                         break;
                     case 4:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Serialize(ref writer, (global::Nighthollow.Stats.IntRangeValue)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IntRangeValue>().Serialize(ref writer, (global::Nighthollow.Stats2.IntRangeValue)value, options);
                         break;
                     default:
                         break;
@@ -408,13 +414,13 @@ namespace MessagePack.Formatters.Nighthollow.Data
                     result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.BoolValueData>().Deserialize(ref reader, options);
                     break;
                 case 2:
-                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.DurationValue>().Deserialize(ref reader, options);
                     break;
                 case 3:
-                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats.PercentageValue>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.PercentageValue>().Deserialize(ref reader, options);
                     break;
                 case 4:
-                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IntRangeValue>().Deserialize(ref reader, options);
                     break;
                 default:
                     reader.Skip();
@@ -558,7 +564,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             writer.WriteArrayHeader(5);
             writer.Write(value.MinLevel);
             writer.Write(value.Weight);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Serialize(ref writer, value.ManaCost, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IntRangeValue>().Serialize(ref writer, value.ManaCost, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>>().Serialize(ref writer, value.Modifiers, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.School?>().Serialize(ref writer, value.InfluenceType, options);
         }
@@ -575,7 +581,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var length = reader.ReadArrayHeader();
             var __MinLevel__ = default(int);
             var __Weight__ = default(int);
-            var __ManaCost__ = default(global::Nighthollow.Stats.IntRangeValue);
+            var __ManaCost__ = default(global::Nighthollow.Stats2.IntRangeValue);
             var __Modifiers__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>);
             var __InfluenceType__ = default(global::Nighthollow.Generated.School?);
 
@@ -590,7 +596,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                         __Weight__ = reader.ReadInt32();
                         break;
                     case 2:
-                        __ManaCost__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Deserialize(ref reader, options);
+                        __ManaCost__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IntRangeValue>().Deserialize(ref reader, options);
                         break;
                     case 3:
                         __Modifiers__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>>().Deserialize(ref reader, options);
@@ -717,7 +723,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.PrefabAddress, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.PlayerName>().Serialize(ref writer, value.Owner, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Serialize(ref writer, value.Health, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IntRangeValue>().Serialize(ref writer, value.Health, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>>().Serialize(ref writer, value.SkillAnimations, options);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.ImageAddress, options);
             writer.Write(value.BaseManaCost);
@@ -740,7 +746,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var __Name__ = default(string);
             var __PrefabAddress__ = default(string);
             var __Owner__ = default(global::Nighthollow.Generated.PlayerName);
-            var __Health__ = default(global::Nighthollow.Stats.IntRangeValue);
+            var __Health__ = default(global::Nighthollow.Stats2.IntRangeValue);
             var __SkillAnimations__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>);
             var __ImageAddress__ = default(string);
             var __BaseManaCost__ = default(int);
@@ -763,7 +769,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                         __Owner__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.PlayerName>().Deserialize(ref reader, options);
                         break;
                     case 3:
-                        __Health__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.IntRangeValue>().Deserialize(ref reader, options);
+                        __Health__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IntRangeValue>().Deserialize(ref reader, options);
                         break;
                     case 4:
                         __SkillAnimations__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>>().Deserialize(ref reader, options);
@@ -1327,6 +1333,163 @@ namespace MessagePack.Formatters.Nighthollow.Stats
             }
 
             var ____result = new global::Nighthollow.Stats.PercentageValue(__BasisPoints__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+}
+
+#pragma warning restore 168
+#pragma warning restore 414
+#pragma warning restore 618
+#pragma warning restore 612
+
+#pragma warning restore SA1129 // Do not use default value type constructor
+#pragma warning restore SA1200 // Using directives should be placed correctly
+#pragma warning restore SA1309 // Field names should not begin with underscore
+#pragma warning restore SA1312 // Variable names should begin with lower-case letter
+#pragma warning restore SA1403 // File may only contain a single namespace
+#pragma warning restore SA1649 // File name should match first type name
+
+// <auto-generated>
+// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
+// </auto-generated>
+
+#pragma warning disable 618
+#pragma warning disable 612
+#pragma warning disable 414
+#pragma warning disable 168
+
+#pragma warning disable SA1129 // Do not use default value type constructor
+#pragma warning disable SA1200 // Using directives should be placed correctly
+#pragma warning disable SA1309 // Field names should not begin with underscore
+#pragma warning disable SA1312 // Variable names should begin with lower-case letter
+#pragma warning disable SA1403 // File may only contain a single namespace
+#pragma warning disable SA1649 // File name should match first type name
+
+namespace MessagePack.Formatters.Nighthollow.Stats2
+{
+    using System;
+    using System.Buffers;
+    using MessagePack;
+
+    public sealed class DurationValueFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.DurationValue>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.DurationValue value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.WriteArrayHeader(1);
+            writer.Write(value.TimeMilliseconds);
+        }
+
+        public global::Nighthollow.Stats2.DurationValue Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                throw new InvalidOperationException("typecode is null, struct not supported");
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadArrayHeader();
+            var __TimeMilliseconds__ = default(int);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __TimeMilliseconds__ = reader.ReadInt32();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Stats2.DurationValue(__TimeMilliseconds__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class IntRangeValueFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.IntRangeValue>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.IntRangeValue value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.WriteArrayHeader(2);
+            writer.Write(value.Low);
+            writer.Write(value.High);
+        }
+
+        public global::Nighthollow.Stats2.IntRangeValue Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                throw new InvalidOperationException("typecode is null, struct not supported");
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadArrayHeader();
+            var __Low__ = default(int);
+            var __High__ = default(int);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Low__ = reader.ReadInt32();
+                        break;
+                    case 1:
+                        __High__ = reader.ReadInt32();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Stats2.IntRangeValue(__Low__, __High__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class PercentageValueFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.PercentageValue>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.PercentageValue value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.WriteArrayHeader(1);
+            writer.Write(value.BasisPoints);
+        }
+
+        public global::Nighthollow.Stats2.PercentageValue Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                throw new InvalidOperationException("typecode is null, struct not supported");
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadArrayHeader();
+            var __BasisPoints__ = default(int);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __BasisPoints__ = reader.ReadInt32();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Stats2.PercentageValue(__BasisPoints__);
             reader.Depth--;
             return ____result;
         }

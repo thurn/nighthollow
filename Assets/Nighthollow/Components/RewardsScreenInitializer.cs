@@ -65,48 +65,48 @@ namespace Nighthollow.Components
       // database.Insert(TableId.CreatureTypes, 1, TestCreatures()[1]);
     }
 
-    List<CreatureTypeData> TestCreatures()
-    {
-      var testCreature = new CreatureTypeData(
-        name: "Test",
-        prefabAddress: "/My/Address",
-        owner: PlayerName.User,
-        health: new IntRangeValue(100, 200),
-        skillAnimations: ImmutableList.Create(
-          new CreatureSkillAnimation(SkillAnimationNumber.Skill1, SkillAnimationType.MeleeSkill)),
-        baseManaCost: 50,
-        implicitAffix: new AffixTypeData(
-          minLevel: 1,
-          weight: 1,
-          manaCost: IntRangeValue.Zero,
-          modifiers: ImmutableList.Create(
-            new ModifierTypeData(
-              statId: StatId.Health,
-              statOperator: Operator.Add,
-              valueLow: new IntValueData(25),
-              valueHigh: new IntValueData(75)))));
-
-      var testCreature2 = new CreatureTypeData(
-        name: "Test Two",
-        prefabAddress: "/My/Address/Two",
-        owner: PlayerName.Enemy,
-        health: new IntRangeValue(50, 200),
-        skillAnimations: ImmutableList.Create(
-          new CreatureSkillAnimation(SkillAnimationNumber.Skill3, SkillAnimationType.CastSkill),
-          new CreatureSkillAnimation(SkillAnimationNumber.Skill5, SkillAnimationType.MeleeSkill)),
-        baseManaCost: 100,
-        implicitAffix: new AffixTypeData(
-          minLevel: 1,
-          weight: 1,
-          manaCost: IntRangeValue.Zero,
-          modifiers: ImmutableList.Create(
-            new ModifierTypeData(
-              statId: StatId.Health,
-              statOperator: Operator.Add,
-              valueLow: new IntValueData(50),
-              valueHigh: new IntValueData(75)))));
-
-      return new List<CreatureTypeData> {testCreature, testCreature2};
-    }
+    // List<CreatureTypeData> TestCreatures()
+    // {
+    //   var testCreature = new CreatureTypeData(
+    //     name: "Test",
+    //     prefabAddress: "/My/Address",
+    //     owner: PlayerName.User,
+    //     health: new IntRangeValue(100, 200),
+    //     skillAnimations: ImmutableList.Create(
+    //       new CreatureSkillAnimation(SkillAnimationNumber.Skill1, SkillAnimationType.MeleeSkill)),
+    //     baseManaCost: 50,
+    //     implicitAffix: new AffixTypeData(
+    //       minLevel: 1,
+    //       weight: 1,
+    //       manaCost: IntRangeValue.Zero,
+    //       modifiers: ImmutableList.Create(
+    //         new ModifierTypeData(
+    //           statId: StatId.Health,
+    //           statOperator: Operator.Add,
+    //           valueLow: new IntValueData(25),
+    //           valueHigh: new IntValueData(75)))));
+    //
+    //   var testCreature2 = new CreatureTypeData(
+    //     name: "Test Two",
+    //     prefabAddress: "/My/Address/Two",
+    //     owner: PlayerName.Enemy,
+    //     health: new IntRangeValue(50, 200),
+    //     skillAnimations: ImmutableList.Create(
+    //       new CreatureSkillAnimation(SkillAnimationNumber.Skill3, SkillAnimationType.CastSkill),
+    //       new CreatureSkillAnimation(SkillAnimationNumber.Skill5, SkillAnimationType.MeleeSkill)),
+    //     baseManaCost: 100,
+    //     implicitAffix: new AffixTypeData(
+    //       minLevel: 1,
+    //       weight: 1,
+    //       manaCost: IntRangeValue.Zero,
+    //       modifiers: ImmutableList.Create(
+    //         new ModifierTypeData(
+    //           statId: StatId.Health,
+    //           statOperator: Operator.Add,
+    //           valueLow: new IntValueData(50),
+    //           valueHigh: new IntValueData(75)))));
+    //
+    //   return new List<CreatureTypeData> {testCreature, testCreature2};
+    // }
   }
 }
