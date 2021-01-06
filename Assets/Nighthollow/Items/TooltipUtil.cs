@@ -41,9 +41,9 @@ namespace Nighthollow.Items
     {
       var builder = new TooltipBuilder(data.Name);
       var built = CreatureUtil.Build(ownerStats, data);
-      builder.AppendText($"Health: {built.GetInt(Stat.Health)}");
+      builder.AppendText($"Health: {built.GetInt(OldStat.Health)}");
 
-      var baseDamage = built.Stats.Get(Stat.BaseDamage);
+      var baseDamage = built.Stats.Get(OldStat.BaseDamage);
       foreach (var damageType in CollectionUtils.AllNonDefaultEnumValues<DamageType>(typeof(DamageType)))
       {
         var range = baseDamage.Get(damageType, IntRangeValue.Zero);
@@ -53,24 +53,24 @@ namespace Nighthollow.Items
         }
       }
 
-      if (built.GetInt(Stat.Accuracy) != ownerStats.Get(Stat.Accuracy))
+      if (built.GetInt(OldStat.Accuracy) != ownerStats.Get(OldStat.Accuracy))
       {
-        builder.AppendText($"Accuracy: {built.GetInt(Stat.Accuracy)}");
+        builder.AppendText($"Accuracy: {built.GetInt(OldStat.Accuracy)}");
       }
 
-      if (built.GetInt(Stat.Evasion) != ownerStats.Get(Stat.Evasion))
+      if (built.GetInt(OldStat.Evasion) != ownerStats.Get(OldStat.Evasion))
       {
-        builder.AppendText($"Evasion: {built.GetInt(Stat.Evasion)}");
+        builder.AppendText($"Evasion: {built.GetInt(OldStat.Evasion)}");
       }
 
-      if (built.GetStat(Stat.CritChance) != ownerStats.Get(Stat.CritChance))
+      if (built.GetStat(OldStat.CritChance) != ownerStats.Get(OldStat.CritChance))
       {
-        builder.AppendText($"Critical Hit Chance: {built.GetStat(Stat.CritChance)}");
+        builder.AppendText($"Critical Hit Chance: {built.GetStat(OldStat.CritChance)}");
       }
 
-      if (built.GetStat(Stat.CritMultiplier) != ownerStats.Get(Stat.CritMultiplier))
+      if (built.GetStat(OldStat.CritMultiplier) != ownerStats.Get(OldStat.CritMultiplier))
       {
-        builder.AppendText($"Critical Hit Multiplier: {built.GetStat(Stat.CritMultiplier)}");
+        builder.AppendText($"Critical Hit Multiplier: {built.GetStat(OldStat.CritMultiplier)}");
       }
 
       builder.AppendDivider();

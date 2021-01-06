@@ -22,7 +22,12 @@ namespace Nighthollow.Data
   [MessagePackObject]
   public sealed partial class StatData
   {
-    public StatData(string name, StatType statType, IValueData defaultValue, string description, string comment)
+    public StatData(
+      string name,
+      StatType statType,
+      IValueData defaultValue,
+      string description,
+      string comment)
     {
       Name = name;
       StatType = statType;

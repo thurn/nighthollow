@@ -76,7 +76,7 @@ namespace Nighthollow.Stats
 
   public sealed class DurationStat : NumericStat<DurationValue>
   {
-    public DurationStat(StatId id) : base(id)
+    public DurationStat(OldStatId id) : base(id)
     {
     }
 

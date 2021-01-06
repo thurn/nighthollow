@@ -49,68 +49,79 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(60)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(71)
             {
                 { typeof(global::Nighthollow.Generated.DelegateId?), 0 },
                 { typeof(global::Nighthollow.Generated.School?), 1 },
-                { typeof(global::Nighthollow.Generated.StatId?), 2 },
-                { typeof(global::Nighthollow.Stats2.DurationValue?), 3 },
-                { typeof(global::Nighthollow.Stats2.IntRangeValue?), 4 },
-                { typeof(global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.DurationValue>), 5 },
-                { typeof(global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.IntRangeValue>), 6 },
-                { typeof(global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.PercentageValue>), 7 },
-                { typeof(global::Nighthollow.Stats2.NumericOperation<int>), 8 },
-                { typeof(global::Nighthollow.Stats2.OperationType?), 9 },
-                { typeof(global::Nighthollow.Stats2.PercentageValue?), 10 },
-                { typeof(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>), 11 },
-                { typeof(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>), 12 },
-                { typeof(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, int>), 13 },
-                { typeof(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.School, int>), 14 },
+                { typeof(global::Nighthollow.Stats2.DurationValue?), 2 },
+                { typeof(global::Nighthollow.Stats2.IntRangeValue?), 3 },
+                { typeof(global::Nighthollow.Stats2.ModifierType?), 4 },
+                { typeof(global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.DurationValue>), 5 },
+                { typeof(global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.IntRangeValue>), 6 },
+                { typeof(global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.PercentageValue>), 7 },
+                { typeof(global::Nighthollow.Stats2.NumericStatModifier<int>), 8 },
+                { typeof(global::Nighthollow.Stats2.PercentageValue?), 9 },
+                { typeof(global::Nighthollow.Stats2.StatId?), 10 },
+                { typeof(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>), 11 },
+                { typeof(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>), 12 },
+                { typeof(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, int>), 13 },
+                { typeof(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.School, int>), 14 },
                 { typeof(global::System.Collections.Immutable.ImmutableDictionary<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>), 15 },
                 { typeof(global::System.Collections.Immutable.ImmutableDictionary<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>), 16 },
                 { typeof(global::System.Collections.Immutable.ImmutableDictionary<global::Nighthollow.Generated.DamageType, int>), 17 },
                 { typeof(global::System.Collections.Immutable.ImmutableDictionary<global::Nighthollow.Generated.School, global::Nighthollow.Stats2.PercentageValue>), 18 },
                 { typeof(global::System.Collections.Immutable.ImmutableDictionary<global::Nighthollow.Generated.School, int>), 19 },
                 { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>), 20 },
-                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>), 21 },
-                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>), 22 },
-                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>), 23 },
-                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>), 24 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>), 25 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>), 26 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>), 27 },
-                { typeof(global::Nighthollow.Generated.DamageType), 28 },
-                { typeof(global::Nighthollow.Generated.DelegateId), 29 },
-                { typeof(global::Nighthollow.Generated.PlayerName), 30 },
-                { typeof(global::Nighthollow.Generated.School), 31 },
-                { typeof(global::Nighthollow.Generated.SkillAnimationNumber), 32 },
-                { typeof(global::Nighthollow.Generated.SkillAnimationType), 33 },
-                { typeof(global::Nighthollow.Generated.SkillType), 34 },
-                { typeof(global::Nighthollow.Generated.StatId), 35 },
-                { typeof(global::Nighthollow.Generated.StatType), 36 },
-                { typeof(global::Nighthollow.Stats2.OperationType), 37 },
-                { typeof(global::Nighthollow.Data.IValueData), 38 },
-                { typeof(global::Nighthollow.Stats2.IOperation), 39 },
-                { typeof(global::Nighthollow.Components.GameDataHolder), 40 },
-                { typeof(global::Nighthollow.Data.AffixTypeData), 41 },
-                { typeof(global::Nighthollow.Data.BoolValueData), 42 },
-                { typeof(global::Nighthollow.Data.CreatureSkillAnimation), 43 },
-                { typeof(global::Nighthollow.Data.CreatureTypeData), 44 },
-                { typeof(global::Nighthollow.Data.GameData), 45 },
-                { typeof(global::Nighthollow.Data.IntValueData), 46 },
-                { typeof(global::Nighthollow.Data.ModifierData), 47 },
-                { typeof(global::Nighthollow.Data.ModifierTypeData), 48 },
-                { typeof(global::Nighthollow.Data.SkillTypeData), 49 },
-                { typeof(global::Nighthollow.Data.StatData), 50 },
-                { typeof(global::Nighthollow.Data.TableMetadata), 51 },
-                { typeof(global::Nighthollow.Stats.DurationValue), 52 },
-                { typeof(global::Nighthollow.Stats.IntRangeValue), 53 },
-                { typeof(global::Nighthollow.Stats.PercentageValue), 54 },
-                { typeof(global::Nighthollow.Stats2.BooleanOperation), 55 },
-                { typeof(global::Nighthollow.Stats2.DurationValue), 56 },
-                { typeof(global::Nighthollow.Stats2.IntRangeValue), 57 },
-                { typeof(global::Nighthollow.Stats2.PercentageValue), 58 },
-                { typeof(global::Nighthollow.Stats2.SerializationHack), 59 },
+                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>), 21 },
+                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>), 22 },
+                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.ModifierData>), 23 },
+                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>), 24 },
+                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>), 25 },
+                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StaticCreatureListData>), 26 },
+                { typeof(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>), 27 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.AffixData>), 28 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>), 29 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureSkillAnimation>), 30 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>), 31 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>), 32 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillItemData>), 33 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>), 34 },
+                { typeof(global::Nighthollow.Generated.DamageType), 35 },
+                { typeof(global::Nighthollow.Generated.DelegateId), 36 },
+                { typeof(global::Nighthollow.Generated.PlayerName), 37 },
+                { typeof(global::Nighthollow.Generated.School), 38 },
+                { typeof(global::Nighthollow.Generated.SkillAnimationNumber), 39 },
+                { typeof(global::Nighthollow.Generated.SkillAnimationType), 40 },
+                { typeof(global::Nighthollow.Generated.SkillType), 41 },
+                { typeof(global::Nighthollow.Generated.StatType), 42 },
+                { typeof(global::Nighthollow.Stats2.ModifierType), 43 },
+                { typeof(global::Nighthollow.Stats2.StatId), 44 },
+                { typeof(global::Nighthollow.Data.IValueData), 45 },
+                { typeof(global::Nighthollow.Stats2.IStatModifier), 46 },
+                { typeof(global::Nighthollow.Components.GameDataHolder), 47 },
+                { typeof(global::Nighthollow.Data.AffixData), 48 },
+                { typeof(global::Nighthollow.Data.AffixTypeData), 49 },
+                { typeof(global::Nighthollow.Data.BoolValueData), 50 },
+                { typeof(global::Nighthollow.Data.CreatureItemData), 51 },
+                { typeof(global::Nighthollow.Data.CreatureSkillAnimation), 52 },
+                { typeof(global::Nighthollow.Data.CreatureTypeData), 53 },
+                { typeof(global::Nighthollow.Data.GameData), 54 },
+                { typeof(global::Nighthollow.Data.IntValueData), 55 },
+                { typeof(global::Nighthollow.Data.ModifierData), 56 },
+                { typeof(global::Nighthollow.Data.ModifierTypeData), 57 },
+                { typeof(global::Nighthollow.Data.SkillItemData), 58 },
+                { typeof(global::Nighthollow.Data.SkillTypeData), 59 },
+                { typeof(global::Nighthollow.Data.StatData), 60 },
+                { typeof(global::Nighthollow.Data.StaticCreatureListData), 61 },
+                { typeof(global::Nighthollow.Data.TableMetadata), 62 },
+                { typeof(global::Nighthollow.Stats.DurationValue), 63 },
+                { typeof(global::Nighthollow.Stats.IntRangeValue), 64 },
+                { typeof(global::Nighthollow.Stats.PercentageValue), 65 },
+                { typeof(global::Nighthollow.Stats2.BooleanStatModifier), 66 },
+                { typeof(global::Nighthollow.Stats2.DurationValue), 67 },
+                { typeof(global::Nighthollow.Stats2.IntRangeValue), 68 },
+                { typeof(global::Nighthollow.Stats2.PercentageValue), 69 },
+                { typeof(global::Nighthollow.Stats2.SerializationHack), 70 },
             };
         }
 
@@ -126,64 +137,75 @@ namespace MessagePack.Resolvers
             {
                 case 0: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Generated.DelegateId>();
                 case 1: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Generated.School>();
-                case 2: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Generated.StatId>();
-                case 3: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Stats2.DurationValue>();
-                case 4: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Stats2.IntRangeValue>();
-                case 5: return new MessagePack.Formatters.Nighthollow.Stats2.NumericOperationFormatter<global::Nighthollow.Stats2.DurationValue>();
-                case 6: return new MessagePack.Formatters.Nighthollow.Stats2.NumericOperationFormatter<global::Nighthollow.Stats2.IntRangeValue>();
-                case 7: return new MessagePack.Formatters.Nighthollow.Stats2.NumericOperationFormatter<global::Nighthollow.Stats2.PercentageValue>();
-                case 8: return new MessagePack.Formatters.Nighthollow.Stats2.NumericOperationFormatter<int>();
-                case 9: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Stats2.OperationType>();
-                case 10: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Stats2.PercentageValue>();
-                case 11: return new MessagePack.Formatters.Nighthollow.Stats2.TaggedNumericOperationFormatter<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>();
-                case 12: return new MessagePack.Formatters.Nighthollow.Stats2.TaggedNumericOperationFormatter<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>();
-                case 13: return new MessagePack.Formatters.Nighthollow.Stats2.TaggedNumericOperationFormatter<global::Nighthollow.Generated.DamageType, int>();
-                case 14: return new MessagePack.Formatters.Nighthollow.Stats2.TaggedNumericOperationFormatter<global::Nighthollow.Generated.School, int>();
+                case 2: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Stats2.DurationValue>();
+                case 3: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Stats2.IntRangeValue>();
+                case 4: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Stats2.ModifierType>();
+                case 5: return new MessagePack.Formatters.Nighthollow.Stats2.NumericStatModifierFormatter<global::Nighthollow.Stats2.DurationValue>();
+                case 6: return new MessagePack.Formatters.Nighthollow.Stats2.NumericStatModifierFormatter<global::Nighthollow.Stats2.IntRangeValue>();
+                case 7: return new MessagePack.Formatters.Nighthollow.Stats2.NumericStatModifierFormatter<global::Nighthollow.Stats2.PercentageValue>();
+                case 8: return new MessagePack.Formatters.Nighthollow.Stats2.NumericStatModifierFormatter<int>();
+                case 9: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Stats2.PercentageValue>();
+                case 10: return new global::MessagePack.Formatters.NullableFormatter<global::Nighthollow.Stats2.StatId>();
+                case 11: return new MessagePack.Formatters.Nighthollow.Stats2.TaggedNumericStatModifierFormatter<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>();
+                case 12: return new MessagePack.Formatters.Nighthollow.Stats2.TaggedNumericStatModifierFormatter<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>();
+                case 13: return new MessagePack.Formatters.Nighthollow.Stats2.TaggedNumericStatModifierFormatter<global::Nighthollow.Generated.DamageType, int>();
+                case 14: return new MessagePack.Formatters.Nighthollow.Stats2.TaggedNumericStatModifierFormatter<global::Nighthollow.Generated.School, int>();
                 case 15: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>();
                 case 16: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>();
                 case 17: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<global::Nighthollow.Generated.DamageType, int>();
                 case 18: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<global::Nighthollow.Generated.School, global::Nighthollow.Stats2.PercentageValue>();
                 case 19: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<global::Nighthollow.Generated.School, int>();
                 case 20: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.AffixTypeData>();
-                case 21: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.CreatureTypeData>();
-                case 22: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.SkillTypeData>();
-                case 23: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.StatData>();
-                case 24: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.TableMetadata>();
-                case 25: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.CreatureSkillAnimation>();
-                case 26: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.ModifierTypeData>();
-                case 27: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.SkillTypeData>();
-                case 28: return new MessagePack.Formatters.Nighthollow.Generated.DamageTypeFormatter();
-                case 29: return new MessagePack.Formatters.Nighthollow.Generated.DelegateIdFormatter();
-                case 30: return new MessagePack.Formatters.Nighthollow.Generated.PlayerNameFormatter();
-                case 31: return new MessagePack.Formatters.Nighthollow.Generated.SchoolFormatter();
-                case 32: return new MessagePack.Formatters.Nighthollow.Generated.SkillAnimationNumberFormatter();
-                case 33: return new MessagePack.Formatters.Nighthollow.Generated.SkillAnimationTypeFormatter();
-                case 34: return new MessagePack.Formatters.Nighthollow.Generated.SkillTypeFormatter();
-                case 35: return new MessagePack.Formatters.Nighthollow.Generated.StatIdFormatter();
-                case 36: return new MessagePack.Formatters.Nighthollow.Generated.StatTypeFormatter();
-                case 37: return new MessagePack.Formatters.Nighthollow.Stats2.OperationTypeFormatter();
-                case 38: return new MessagePack.Formatters.Nighthollow.Data.IValueDataFormatter();
-                case 39: return new MessagePack.Formatters.Nighthollow.Stats2.IOperationFormatter();
-                case 40: return new MessagePack.Formatters.Nighthollow.Components.GameDataHolderFormatter();
-                case 41: return new MessagePack.Formatters.Nighthollow.Data.AffixTypeDataFormatter();
-                case 42: return new MessagePack.Formatters.Nighthollow.Data.BoolValueDataFormatter();
-                case 43: return new MessagePack.Formatters.Nighthollow.Data.CreatureSkillAnimationFormatter();
-                case 44: return new MessagePack.Formatters.Nighthollow.Data.CreatureTypeDataFormatter();
-                case 45: return new MessagePack.Formatters.Nighthollow.Data.GameDataFormatter();
-                case 46: return new MessagePack.Formatters.Nighthollow.Data.IntValueDataFormatter();
-                case 47: return new MessagePack.Formatters.Nighthollow.Data.ModifierDataFormatter();
-                case 48: return new MessagePack.Formatters.Nighthollow.Data.ModifierTypeDataFormatter();
-                case 49: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeDataFormatter();
-                case 50: return new MessagePack.Formatters.Nighthollow.Data.StatDataFormatter();
-                case 51: return new MessagePack.Formatters.Nighthollow.Data.TableMetadataFormatter();
-                case 52: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
-                case 53: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
-                case 54: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
-                case 55: return new MessagePack.Formatters.Nighthollow.Stats2.BooleanOperationFormatter();
-                case 56: return new MessagePack.Formatters.Nighthollow.Stats2.DurationValueFormatter();
-                case 57: return new MessagePack.Formatters.Nighthollow.Stats2.IntRangeValueFormatter();
-                case 58: return new MessagePack.Formatters.Nighthollow.Stats2.PercentageValueFormatter();
-                case 59: return new MessagePack.Formatters.Nighthollow.Stats2.SerializationHackFormatter();
+                case 21: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.CreatureItemData>();
+                case 22: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.CreatureTypeData>();
+                case 23: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.ModifierData>();
+                case 24: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.SkillTypeData>();
+                case 25: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.StatData>();
+                case 26: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.StaticCreatureListData>();
+                case 27: return new global::MessagePack.ImmutableCollection.ImmutableDictionaryFormatter<int, global::Nighthollow.Data.TableMetadata>();
+                case 28: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.AffixData>();
+                case 29: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.CreatureItemData>();
+                case 30: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.CreatureSkillAnimation>();
+                case 31: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.ModifierData>();
+                case 32: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.ModifierTypeData>();
+                case 33: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.SkillItemData>();
+                case 34: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.SkillTypeData>();
+                case 35: return new MessagePack.Formatters.Nighthollow.Generated.DamageTypeFormatter();
+                case 36: return new MessagePack.Formatters.Nighthollow.Generated.DelegateIdFormatter();
+                case 37: return new MessagePack.Formatters.Nighthollow.Generated.PlayerNameFormatter();
+                case 38: return new MessagePack.Formatters.Nighthollow.Generated.SchoolFormatter();
+                case 39: return new MessagePack.Formatters.Nighthollow.Generated.SkillAnimationNumberFormatter();
+                case 40: return new MessagePack.Formatters.Nighthollow.Generated.SkillAnimationTypeFormatter();
+                case 41: return new MessagePack.Formatters.Nighthollow.Generated.SkillTypeFormatter();
+                case 42: return new MessagePack.Formatters.Nighthollow.Generated.StatTypeFormatter();
+                case 43: return new MessagePack.Formatters.Nighthollow.Stats2.ModifierTypeFormatter();
+                case 44: return new MessagePack.Formatters.Nighthollow.Stats2.StatIdFormatter();
+                case 45: return new MessagePack.Formatters.Nighthollow.Data.IValueDataFormatter();
+                case 46: return new MessagePack.Formatters.Nighthollow.Stats2.IStatModifierFormatter();
+                case 47: return new MessagePack.Formatters.Nighthollow.Components.GameDataHolderFormatter();
+                case 48: return new MessagePack.Formatters.Nighthollow.Data.AffixDataFormatter();
+                case 49: return new MessagePack.Formatters.Nighthollow.Data.AffixTypeDataFormatter();
+                case 50: return new MessagePack.Formatters.Nighthollow.Data.BoolValueDataFormatter();
+                case 51: return new MessagePack.Formatters.Nighthollow.Data.CreatureItemDataFormatter();
+                case 52: return new MessagePack.Formatters.Nighthollow.Data.CreatureSkillAnimationFormatter();
+                case 53: return new MessagePack.Formatters.Nighthollow.Data.CreatureTypeDataFormatter();
+                case 54: return new MessagePack.Formatters.Nighthollow.Data.GameDataFormatter();
+                case 55: return new MessagePack.Formatters.Nighthollow.Data.IntValueDataFormatter();
+                case 56: return new MessagePack.Formatters.Nighthollow.Data.ModifierDataFormatter();
+                case 57: return new MessagePack.Formatters.Nighthollow.Data.ModifierTypeDataFormatter();
+                case 58: return new MessagePack.Formatters.Nighthollow.Data.SkillItemDataFormatter();
+                case 59: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeDataFormatter();
+                case 60: return new MessagePack.Formatters.Nighthollow.Data.StatDataFormatter();
+                case 61: return new MessagePack.Formatters.Nighthollow.Data.StaticCreatureListDataFormatter();
+                case 62: return new MessagePack.Formatters.Nighthollow.Data.TableMetadataFormatter();
+                case 63: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
+                case 64: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
+                case 65: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
+                case 66: return new MessagePack.Formatters.Nighthollow.Stats2.BooleanStatModifierFormatter();
+                case 67: return new MessagePack.Formatters.Nighthollow.Stats2.DurationValueFormatter();
+                case 68: return new MessagePack.Formatters.Nighthollow.Stats2.IntRangeValueFormatter();
+                case 69: return new MessagePack.Formatters.Nighthollow.Stats2.PercentageValueFormatter();
+                case 70: return new MessagePack.Formatters.Nighthollow.Stats2.SerializationHackFormatter();
                 default: return null;
             }
         }
@@ -310,19 +332,6 @@ namespace MessagePack.Formatters.Nighthollow.Generated
         }
     }
 
-    public sealed class StatIdFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Generated.StatId>
-    {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Generated.StatId value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((Int32)value);
-        }
-
-        public global::Nighthollow.Generated.StatId Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::Nighthollow.Generated.StatId)reader.ReadInt32();
-        }
-    }
-
     public sealed class StatTypeFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Generated.StatType>
     {
         public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Generated.StatType value, global::MessagePack.MessagePackSerializerOptions options)
@@ -365,16 +374,29 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
     using System.Buffers;
     using MessagePack;
 
-    public sealed class OperationTypeFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.OperationType>
+    public sealed class ModifierTypeFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.ModifierType>
     {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.OperationType value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.ModifierType value, global::MessagePack.MessagePackSerializerOptions options)
         {
             writer.Write((Int32)value);
         }
 
-        public global::Nighthollow.Stats2.OperationType Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Stats2.ModifierType Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
-            return (global::Nighthollow.Stats2.OperationType)reader.ReadInt32();
+            return (global::Nighthollow.Stats2.ModifierType)reader.ReadInt32();
+        }
+    }
+
+    public sealed class StatIdFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.StatId>
+    {
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.StatId value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.Write((Int32)value);
+        }
+
+        public global::Nighthollow.Stats2.StatId Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            return (global::Nighthollow.Stats2.StatId)reader.ReadInt32();
         }
     }
 }
@@ -419,14 +441,14 @@ namespace MessagePack.Formatters.Nighthollow.Data
             this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(9, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
             {
                 { typeof(global::Nighthollow.Data.IntValueData).TypeHandle, new KeyValuePair<int, int>(0, 0) },
-                { typeof(global::Nighthollow.Data.BoolValueData).TypeHandle, new KeyValuePair<int, int>(1, 1) },
-                { typeof(global::Nighthollow.Stats2.DurationValue).TypeHandle, new KeyValuePair<int, int>(2, 2) },
-                { typeof(global::Nighthollow.Stats2.PercentageValue).TypeHandle, new KeyValuePair<int, int>(3, 3) },
-                { typeof(global::Nighthollow.Stats2.IntRangeValue).TypeHandle, new KeyValuePair<int, int>(4, 4) },
-                { typeof(global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, int>).TypeHandle, new KeyValuePair<int, int>(5, 5) },
-                { typeof(global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>).TypeHandle, new KeyValuePair<int, int>(6, 6) },
-                { typeof(global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>).TypeHandle, new KeyValuePair<int, int>(7, 7) },
-                { typeof(global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.School, int>).TypeHandle, new KeyValuePair<int, int>(8, 8) },
+                { typeof(global::Nighthollow.Stats2.DurationValue).TypeHandle, new KeyValuePair<int, int>(1, 1) },
+                { typeof(global::Nighthollow.Stats2.PercentageValue).TypeHandle, new KeyValuePair<int, int>(2, 2) },
+                { typeof(global::Nighthollow.Stats2.IntRangeValue).TypeHandle, new KeyValuePair<int, int>(3, 3) },
+                { typeof(global::Nighthollow.Data.BoolValueData).TypeHandle, new KeyValuePair<int, int>(4, 4) },
+                { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, int>).TypeHandle, new KeyValuePair<int, int>(5, 5) },
+                { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>).TypeHandle, new KeyValuePair<int, int>(6, 6) },
+                { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>).TypeHandle, new KeyValuePair<int, int>(7, 7) },
+                { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.School, int>).TypeHandle, new KeyValuePair<int, int>(8, 8) },
             };
             this.keyToJumpMap = new Dictionary<int, int>(9)
             {
@@ -455,28 +477,28 @@ namespace MessagePack.Formatters.Nighthollow.Data
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.IntValueData>().Serialize(ref writer, (global::Nighthollow.Data.IntValueData)value, options);
                         break;
                     case 1:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.BoolValueData>().Serialize(ref writer, (global::Nighthollow.Data.BoolValueData)value, options);
-                        break;
-                    case 2:
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.DurationValue>().Serialize(ref writer, (global::Nighthollow.Stats2.DurationValue)value, options);
                         break;
-                    case 3:
+                    case 2:
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.PercentageValue>().Serialize(ref writer, (global::Nighthollow.Stats2.PercentageValue)value, options);
                         break;
-                    case 4:
+                    case 3:
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IntRangeValue>().Serialize(ref writer, (global::Nighthollow.Stats2.IntRangeValue)value, options);
                         break;
+                    case 4:
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.BoolValueData>().Serialize(ref writer, (global::Nighthollow.Data.BoolValueData)value, options);
+                        break;
                     case 5:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, int>>().Serialize(ref writer, (global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, int>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, int>>().Serialize(ref writer, (global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, int>)value, options);
                         break;
                     case 6:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, (global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, (global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>)value, options);
                         break;
                     case 7:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Serialize(ref writer, (global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Serialize(ref writer, (global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>)value, options);
                         break;
                     case 8:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.School, int>>().Serialize(ref writer, (global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.School, int>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.School, int>>().Serialize(ref writer, (global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.School, int>)value, options);
                         break;
                     default:
                         break;
@@ -515,28 +537,28 @@ namespace MessagePack.Formatters.Nighthollow.Data
                     result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.IntValueData>().Deserialize(ref reader, options);
                     break;
                 case 1:
-                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.BoolValueData>().Deserialize(ref reader, options);
-                    break;
-                case 2:
                     result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.DurationValue>().Deserialize(ref reader, options);
                     break;
-                case 3:
+                case 2:
                     result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.PercentageValue>().Deserialize(ref reader, options);
                     break;
-                case 4:
+                case 3:
                     result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IntRangeValue>().Deserialize(ref reader, options);
                     break;
+                case 4:
+                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.BoolValueData>().Deserialize(ref reader, options);
+                    break;
                 case 5:
-                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, int>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, int>>().Deserialize(ref reader, options);
                     break;
                 case 6:
-                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
                     break;
                 case 7:
-                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Deserialize(ref reader, options);
                     break;
                 case 8:
-                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.TaggedValueData<global::Nighthollow.Generated.School, int>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Data.IValueData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Generated.School, int>>().Deserialize(ref reader, options);
                     break;
                 default:
                     reader.Skip();
@@ -580,24 +602,24 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
     using System.Collections.Generic;
     using MessagePack;
 
-    public sealed class IOperationFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.IOperation>
+    public sealed class IStatModifierFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.IStatModifier>
     {
         private readonly Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>> typeToKeyAndJumpMap;
         private readonly Dictionary<int, int> keyToJumpMap;
 
-        public IOperationFormatter()
+        public IStatModifierFormatter()
         {
             this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(9, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
             {
-                { typeof(global::Nighthollow.Stats2.NumericOperation<int>).TypeHandle, new KeyValuePair<int, int>(0, 0) },
-                { typeof(global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.DurationValue>).TypeHandle, new KeyValuePair<int, int>(1, 1) },
-                { typeof(global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.PercentageValue>).TypeHandle, new KeyValuePair<int, int>(2, 2) },
-                { typeof(global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.IntRangeValue>).TypeHandle, new KeyValuePair<int, int>(3, 3) },
-                { typeof(global::Nighthollow.Stats2.BooleanOperation).TypeHandle, new KeyValuePair<int, int>(4, 4) },
-                { typeof(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, int>).TypeHandle, new KeyValuePair<int, int>(5, 5) },
-                { typeof(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>).TypeHandle, new KeyValuePair<int, int>(6, 6) },
-                { typeof(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>).TypeHandle, new KeyValuePair<int, int>(7, 7) },
-                { typeof(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.School, int>).TypeHandle, new KeyValuePair<int, int>(8, 8) },
+                { typeof(global::Nighthollow.Stats2.NumericStatModifier<int>).TypeHandle, new KeyValuePair<int, int>(0, 0) },
+                { typeof(global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.DurationValue>).TypeHandle, new KeyValuePair<int, int>(1, 1) },
+                { typeof(global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.PercentageValue>).TypeHandle, new KeyValuePair<int, int>(2, 2) },
+                { typeof(global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.IntRangeValue>).TypeHandle, new KeyValuePair<int, int>(3, 3) },
+                { typeof(global::Nighthollow.Stats2.BooleanStatModifier).TypeHandle, new KeyValuePair<int, int>(4, 4) },
+                { typeof(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, int>).TypeHandle, new KeyValuePair<int, int>(5, 5) },
+                { typeof(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>).TypeHandle, new KeyValuePair<int, int>(6, 6) },
+                { typeof(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>).TypeHandle, new KeyValuePair<int, int>(7, 7) },
+                { typeof(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.School, int>).TypeHandle, new KeyValuePair<int, int>(8, 8) },
             };
             this.keyToJumpMap = new Dictionary<int, int>(9)
             {
@@ -613,7 +635,7 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
             };
         }
 
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.IOperation value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.IStatModifier value, global::MessagePack.MessagePackSerializerOptions options)
         {
             KeyValuePair<int, int> keyValuePair;
             if (value != null && this.typeToKeyAndJumpMap.TryGetValue(value.GetType().TypeHandle, out keyValuePair))
@@ -623,31 +645,31 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
                 switch (keyValuePair.Value)
                 {
                     case 0:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<int>>().Serialize(ref writer, (global::Nighthollow.Stats2.NumericOperation<int>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<int>>().Serialize(ref writer, (global::Nighthollow.Stats2.NumericStatModifier<int>)value, options);
                         break;
                     case 1:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.DurationValue>>().Serialize(ref writer, (global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.DurationValue>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.DurationValue>>().Serialize(ref writer, (global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.DurationValue>)value, options);
                         break;
                     case 2:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, (global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.PercentageValue>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, (global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.PercentageValue>)value, options);
                         break;
                     case 3:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.IntRangeValue>>().Serialize(ref writer, (global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.IntRangeValue>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.IntRangeValue>>().Serialize(ref writer, (global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.IntRangeValue>)value, options);
                         break;
                     case 4:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.BooleanOperation>().Serialize(ref writer, (global::Nighthollow.Stats2.BooleanOperation)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.BooleanStatModifier>().Serialize(ref writer, (global::Nighthollow.Stats2.BooleanStatModifier)value, options);
                         break;
                     case 5:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, int>>().Serialize(ref writer, (global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, int>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, int>>().Serialize(ref writer, (global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, int>)value, options);
                         break;
                     case 6:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, (global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, (global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>)value, options);
                         break;
                     case 7:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Serialize(ref writer, (global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Serialize(ref writer, (global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>)value, options);
                         break;
                     case 8:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.School, int>>().Serialize(ref writer, (global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.School, int>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.School, int>>().Serialize(ref writer, (global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.School, int>)value, options);
                         break;
                     default:
                         break;
@@ -659,7 +681,7 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
             writer.WriteNil();
         }
 
-        public global::Nighthollow.Stats2.IOperation Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Stats2.IStatModifier Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -668,7 +690,7 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
 
             if (reader.ReadArrayHeader() != 2)
             {
-                throw new InvalidOperationException("Invalid Union data was detected. Type:global::Nighthollow.Stats2.IOperation");
+                throw new InvalidOperationException("Invalid Union data was detected. Type:global::Nighthollow.Stats2.IStatModifier");
             }
 
             options.Security.DepthStep(ref reader);
@@ -679,35 +701,35 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
                 key = -1;
             }
 
-            global::Nighthollow.Stats2.IOperation result = null;
+            global::Nighthollow.Stats2.IStatModifier result = null;
             switch (key)
             {
                 case 0:
-                    result = (global::Nighthollow.Stats2.IOperation)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<int>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Stats2.IStatModifier)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<int>>().Deserialize(ref reader, options);
                     break;
                 case 1:
-                    result = (global::Nighthollow.Stats2.IOperation)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.DurationValue>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Stats2.IStatModifier)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.DurationValue>>().Deserialize(ref reader, options);
                     break;
                 case 2:
-                    result = (global::Nighthollow.Stats2.IOperation)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Stats2.IStatModifier)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
                     break;
                 case 3:
-                    result = (global::Nighthollow.Stats2.IOperation)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.IntRangeValue>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Stats2.IStatModifier)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.IntRangeValue>>().Deserialize(ref reader, options);
                     break;
                 case 4:
-                    result = (global::Nighthollow.Stats2.IOperation)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.BooleanOperation>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Stats2.IStatModifier)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.BooleanStatModifier>().Deserialize(ref reader, options);
                     break;
                 case 5:
-                    result = (global::Nighthollow.Stats2.IOperation)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, int>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Stats2.IStatModifier)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, int>>().Deserialize(ref reader, options);
                     break;
                 case 6:
-                    result = (global::Nighthollow.Stats2.IOperation)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Stats2.IStatModifier)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
                     break;
                 case 7:
-                    result = (global::Nighthollow.Stats2.IOperation)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Stats2.IStatModifier)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Deserialize(ref reader, options);
                     break;
                 case 8:
-                    result = (global::Nighthollow.Stats2.IOperation)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.School, int>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Stats2.IStatModifier)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.School, int>>().Deserialize(ref reader, options);
                     break;
                 default:
                     reader.Skip();
@@ -836,6 +858,58 @@ namespace MessagePack.Formatters.Nighthollow.Data
     using System.Buffers;
     using MessagePack;
 
+    public sealed class AffixDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.AffixData>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.AffixData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(2);
+            writer.Write(value.AffixTypeId);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>>().Serialize(ref writer, value.Modifiers, options);
+        }
+
+        public global::Nighthollow.Data.AffixData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __AffixTypeId__ = default(int);
+            var __Modifiers__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __AffixTypeId__ = reader.ReadInt32();
+                        break;
+                    case 1:
+                        __Modifiers__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.AffixData(__AffixTypeId__, __Modifiers__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
     public sealed class AffixTypeDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.AffixTypeData>
     {
 
@@ -942,6 +1016,73 @@ namespace MessagePack.Formatters.Nighthollow.Data
         }
     }
 
+    public sealed class CreatureItemDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.CreatureItemData>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.CreatureItemData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(5);
+            writer.Write(value.CreatureTypeId);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.School>().Serialize(ref writer, value.School, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillItemData>>().Serialize(ref writer, value.Skills, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.AffixData>>().Serialize(ref writer, value.Affixes, options);
+        }
+
+        public global::Nighthollow.Data.CreatureItemData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __CreatureTypeId__ = default(int);
+            var __Name__ = default(string);
+            var __School__ = default(global::Nighthollow.Generated.School);
+            var __Skills__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillItemData>);
+            var __Affixes__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.AffixData>);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __CreatureTypeId__ = reader.ReadInt32();
+                        break;
+                    case 1:
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __School__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.School>().Deserialize(ref reader, options);
+                        break;
+                    case 3:
+                        __Skills__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillItemData>>().Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        __Affixes__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.AffixData>>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.CreatureItemData(__CreatureTypeId__, __Name__, __School__, __Skills__, __Affixes__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
     public sealed class CreatureSkillAnimationFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.CreatureSkillAnimation>
     {
 
@@ -1015,7 +1156,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.ImageAddress, options);
             writer.Write(value.BaseManaCost);
             writer.Write(value.Speed);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Serialize(ref writer, value.ImplicitAffix, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>>().Serialize(ref writer, value.ImplicitModifiers, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>>().Serialize(ref writer, value.ImplicitSkills, options);
             writer.Write(value.IsManaCreature);
         }
@@ -1038,7 +1179,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var __ImageAddress__ = default(string);
             var __BaseManaCost__ = default(int);
             var __Speed__ = default(int);
-            var __ImplicitAffix__ = default(global::Nighthollow.Data.AffixTypeData);
+            var __ImplicitModifiers__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>);
             var __ImplicitSkills__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>);
             var __IsManaCreature__ = default(bool);
 
@@ -1071,7 +1212,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                         __Speed__ = reader.ReadInt32();
                         break;
                     case 8:
-                        __ImplicitAffix__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Deserialize(ref reader, options);
+                        __ImplicitModifiers__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>>().Deserialize(ref reader, options);
                         break;
                     case 9:
                         __ImplicitSkills__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillTypeData>>().Deserialize(ref reader, options);
@@ -1085,7 +1226,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.CreatureTypeData(__Name__, __PrefabAddress__, __Owner__, __Health__, __SkillAnimations__, __ImageAddress__, __BaseManaCost__, __Speed__, __ImplicitAffix__, __ImplicitSkills__, __IsManaCreature__);
+            var ____result = new global::Nighthollow.Data.CreatureTypeData(__Name__, __PrefabAddress__, __Owner__, __Health__, __SkillAnimations__, __ImageAddress__, __BaseManaCost__, __Speed__, __ImplicitModifiers__, __ImplicitSkills__, __IsManaCreature__);
             reader.Depth--;
             return ____result;
         }
@@ -1103,12 +1244,16 @@ namespace MessagePack.Formatters.Nighthollow.Data
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(5);
+            writer.WriteArrayHeader(9);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.TableMetadata>>().Serialize(ref writer, value.TableMetadata, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureTypeData>>().Serialize(ref writer, value.CreatureTypes, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>>().Serialize(ref writer, value.AffixTypes, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>>().Serialize(ref writer, value.SkillTypes, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>>().Serialize(ref writer, value.StatData, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StaticCreatureListData>>().Serialize(ref writer, value.CreatureLists, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.ModifierData>>().Serialize(ref writer, value.UserModifiers, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>>().Serialize(ref writer, value.Collection, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>>().Serialize(ref writer, value.Deck, options);
         }
 
         public global::Nighthollow.Data.GameData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -1126,6 +1271,10 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var __AffixTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.AffixTypeData>);
             var __SkillTypes__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.SkillTypeData>);
             var __StatData__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>);
+            var __CreatureLists__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StaticCreatureListData>);
+            var __UserModifiers__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.ModifierData>);
+            var __Collection__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>);
+            var __Deck__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>);
 
             for (int i = 0; i < length; i++)
             {
@@ -1146,13 +1295,73 @@ namespace MessagePack.Formatters.Nighthollow.Data
                     case 4:
                         __StatData__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatData>>().Deserialize(ref reader, options);
                         break;
+                    case 5:
+                        __CreatureLists__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StaticCreatureListData>>().Deserialize(ref reader, options);
+                        break;
+                    case 6:
+                        __UserModifiers__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.ModifierData>>().Deserialize(ref reader, options);
+                        break;
+                    case 7:
+                        __Collection__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>>().Deserialize(ref reader, options);
+                        break;
+                    case 8:
+                        __Deck__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>>().Deserialize(ref reader, options);
+                        break;
                     default:
                         reader.Skip();
                         break;
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.GameData(__TableMetadata__, __CreatureTypes__, __AffixTypes__, __SkillTypes__, __StatData__);
+            var ____result = new global::Nighthollow.Data.GameData(__TableMetadata__, __CreatureTypes__, __AffixTypes__, __SkillTypes__, __StatData__, __CreatureLists__, __UserModifiers__, __Collection__, __Deck__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class ImmutableDictionaryValueFormatter<TTag,TValue> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.ImmutableDictionaryValue<TTag, TValue>>
+        where TTag : notnull
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.ImmutableDictionaryValue<TTag, TValue> value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(1);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Serialize(ref writer, value.Dictionary, options);
+        }
+
+        public global::Nighthollow.Data.ImmutableDictionaryValue<TTag, TValue> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Dictionary__ = default(global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Dictionary__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.ImmutableDictionaryValue<TTag, TValue>(__Dictionary__);
             reader.Depth--;
             return ____result;
         }
@@ -1209,9 +1418,10 @@ namespace MessagePack.Formatters.Nighthollow.Data
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.ModifierTypeData>().Serialize(ref writer, value.BaseType, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.Argument, options);
+            writer.WriteArrayHeader(3);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Serialize(ref writer, value.DelegateId, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IStatModifier>().Serialize(ref writer, value.StatModifier, options);
+            writer.Write(value.Targeted);
         }
 
         public global::Nighthollow.Data.ModifierData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -1224,18 +1434,22 @@ namespace MessagePack.Formatters.Nighthollow.Data
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __BaseType__ = default(global::Nighthollow.Data.ModifierTypeData);
-            var __Argument__ = default(global::Nighthollow.Data.IValueData);
+            var __DelegateId__ = default(global::Nighthollow.Generated.DelegateId?);
+            var __Modifier__ = default(global::Nighthollow.Stats2.IStatModifier);
+            var __Targeted__ = default(bool);
 
             for (int i = 0; i < length; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        __BaseType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.ModifierTypeData>().Deserialize(ref reader, options);
+                        __DelegateId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Deserialize(ref reader, options);
                         break;
                     case 1:
-                        __Argument__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Deserialize(ref reader, options);
+                        __Modifier__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IStatModifier>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __Targeted__ = reader.ReadBoolean();
                         break;
                     default:
                         reader.Skip();
@@ -1243,7 +1457,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.ModifierData(__BaseType__, __Argument__);
+            var ____result = new global::Nighthollow.Data.ModifierData(__DelegateId__, __Modifier__, __Targeted__);
             reader.Depth--;
             return ____result;
         }
@@ -1262,8 +1476,8 @@ namespace MessagePack.Formatters.Nighthollow.Data
 
             IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(6);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatId?>().Serialize(ref writer, value.StatId, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.OperationType?>().Serialize(ref writer, value.StatOperator, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.StatId?>().Serialize(ref writer, value.StatId, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.ModifierType?>().Serialize(ref writer, value.ModifierType, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Serialize(ref writer, value.DelegateId, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.ValueLow, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.IValueData>().Serialize(ref writer, value.ValueHigh, options);
@@ -1280,8 +1494,8 @@ namespace MessagePack.Formatters.Nighthollow.Data
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __StatId__ = default(global::Nighthollow.Generated.StatId?);
-            var __StatOperator__ = default(global::Nighthollow.Stats2.OperationType?);
+            var __StatId__ = default(global::Nighthollow.Stats2.StatId?);
+            var __ModifierType__ = default(global::Nighthollow.Stats2.ModifierType?);
             var __DelegateId__ = default(global::Nighthollow.Generated.DelegateId?);
             var __ValueLow__ = default(global::Nighthollow.Data.IValueData);
             var __ValueHigh__ = default(global::Nighthollow.Data.IValueData);
@@ -1292,10 +1506,10 @@ namespace MessagePack.Formatters.Nighthollow.Data
                 switch (i)
                 {
                     case 0:
-                        __StatId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.StatId?>().Deserialize(ref reader, options);
+                        __StatId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.StatId?>().Deserialize(ref reader, options);
                         break;
                     case 1:
-                        __StatOperator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.OperationType?>().Deserialize(ref reader, options);
+                        __ModifierType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.ModifierType?>().Deserialize(ref reader, options);
                         break;
                     case 2:
                         __DelegateId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Deserialize(ref reader, options);
@@ -1315,7 +1529,59 @@ namespace MessagePack.Formatters.Nighthollow.Data
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.ModifierTypeData(__StatId__, __StatOperator__, __DelegateId__, __ValueLow__, __ValueHigh__, __Targeted__);
+            var ____result = new global::Nighthollow.Data.ModifierTypeData(__StatId__, __ModifierType__, __DelegateId__, __ValueLow__, __ValueHigh__, __Targeted__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class SkillItemDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.SkillItemData>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.SkillItemData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(2);
+            writer.Write(value.SkillTypeId);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.AffixData>>().Serialize(ref writer, value.Affixes, options);
+        }
+
+        public global::Nighthollow.Data.SkillItemData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __SkillTypeId__ = default(int);
+            var __Affixes__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.AffixData>);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __SkillTypeId__ = reader.ReadInt32();
+                        break;
+                    case 1:
+                        __Affixes__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.AffixData>>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.SkillItemData(__SkillTypeId__, __Affixes__);
             reader.Depth--;
             return ____result;
         }
@@ -1337,7 +1603,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillAnimationType>().Serialize(ref writer, value.SkillAnimationType, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillType>().Serialize(ref writer, value.SkillType, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Serialize(ref writer, value.ImplicitAffix, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>>().Serialize(ref writer, value.ImplicitModifiers, options);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Address, options);
             formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.ProjectileSpeed, options);
             writer.Write(value.UsesAccuracy);
@@ -1358,7 +1624,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var __Name__ = default(string);
             var __SkillAnimationType__ = default(global::Nighthollow.Generated.SkillAnimationType);
             var __SkillType__ = default(global::Nighthollow.Generated.SkillType);
-            var __ImplicitAffix__ = default(global::Nighthollow.Data.AffixTypeData);
+            var __ImplicitModifiers__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>);
             var __Address__ = default(string);
             var __ProjectileSpeed__ = default(int?);
             var __UsesAccuracy__ = default(bool);
@@ -1379,7 +1645,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                         __SkillType__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.SkillType>().Deserialize(ref reader, options);
                         break;
                     case 3:
-                        __ImplicitAffix__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.AffixTypeData>().Deserialize(ref reader, options);
+                        __ImplicitModifiers__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierTypeData>>().Deserialize(ref reader, options);
                         break;
                     case 4:
                         __Address__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
@@ -1402,7 +1668,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.SkillTypeData(__Name__, __SkillAnimationType__, __SkillType__, __ImplicitAffix__, __Address__, __ProjectileSpeed__, __UsesAccuracy__, __CanCrit__, __CanStun__);
+            var ____result = new global::Nighthollow.Data.SkillTypeData(__Name__, __SkillAnimationType__, __SkillType__, __ImplicitModifiers__, __Address__, __ProjectileSpeed__, __UsesAccuracy__, __CanCrit__, __CanStun__);
             reader.Depth--;
             return ____result;
         }
@@ -1475,6 +1741,58 @@ namespace MessagePack.Formatters.Nighthollow.Data
         }
     }
 
+    public sealed class StaticCreatureListDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.StaticCreatureListData>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.StaticCreatureListData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(2);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>>().Serialize(ref writer, value.List, options);
+        }
+
+        public global::Nighthollow.Data.StaticCreatureListData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Name__ = default(string);
+            var __List__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __List__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.StaticCreatureListData(__Name__, __List__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
     public sealed class TableMetadataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.TableMetadata>
     {
 
@@ -1515,55 +1833,6 @@ namespace MessagePack.Formatters.Nighthollow.Data
             }
 
             var ____result = new global::Nighthollow.Data.TableMetadata(__NextId__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class TaggedValueDataFormatter<TTag,TValue> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.TaggedValueData<TTag, TValue>>
-        where TTag : global::System.Enum
-        where TValue : struct
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.TaggedValueData<TTag, TValue> value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(1);
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Serialize(ref writer, value.Dictionary, options);
-        }
-
-        public global::Nighthollow.Data.TaggedValueData<TTag, TValue> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __Dictionary__ = default(global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __Dictionary__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Deserialize(ref reader, options);
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Data.TaggedValueData<TTag, TValue>(__Dictionary__);
             reader.Depth--;
             return ____result;
         }
@@ -1761,10 +2030,10 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
     using System.Buffers;
     using MessagePack;
 
-    public sealed class BooleanOperationFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.BooleanOperation>
+    public sealed class BooleanStatModifierFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.BooleanStatModifier>
     {
 
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.BooleanOperation value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.BooleanStatModifier value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -1772,11 +2041,13 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
                 return;
             }
 
-            writer.WriteArrayHeader(1);
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(2);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.StatId>().Serialize(ref writer, value.StatId, options);
             writer.Write(value.SetValue);
         }
 
-        public global::Nighthollow.Stats2.BooleanOperation Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Stats2.BooleanStatModifier Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -1784,7 +2055,9 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
             }
 
             options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
+            var __StatId__ = default(global::Nighthollow.Stats2.StatId);
             var __SetValue__ = default(bool);
 
             for (int i = 0; i < length; i++)
@@ -1792,6 +2065,9 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
                 switch (i)
                 {
                     case 0:
+                        __StatId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.StatId>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
                         __SetValue__ = reader.ReadBoolean();
                         break;
                     default:
@@ -1800,7 +2076,7 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
                 }
             }
 
-            var ____result = new global::Nighthollow.Stats2.BooleanOperation(__SetValue__);
+            var ____result = new global::Nighthollow.Stats2.BooleanStatModifier(__StatId__, __SetValue__);
             reader.Depth--;
             return ____result;
         }
@@ -1889,11 +2165,11 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
         }
     }
 
-    public sealed class NumericOperationFormatter<T> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.NumericOperation<T>>
+    public sealed class NumericStatModifierFormatter<T> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.NumericStatModifier<T>>
         where T : struct
     {
 
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.NumericOperation<T> value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.NumericStatModifier<T> value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -1902,14 +2178,15 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(4);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.OperationType>().Serialize(ref writer, value.Type, options);
+            writer.WriteArrayHeader(5);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.StatId>().Serialize(ref writer, value.StatId, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.ModifierType>().Serialize(ref writer, value.Type, options);
             formatterResolver.GetFormatterWithVerify<T?>().Serialize(ref writer, value.AddTo, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.PercentageValue?>().Serialize(ref writer, value.IncreaseBy, options);
-            formatterResolver.GetFormatterWithVerify<T?>().Serialize(ref writer, value.OvewriteWith, options);
+            formatterResolver.GetFormatterWithVerify<T?>().Serialize(ref writer, value.SetTo, options);
         }
 
-        public global::Nighthollow.Stats2.NumericOperation<T> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Stats2.NumericStatModifier<T> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -1919,26 +2196,30 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __Type__ = default(global::Nighthollow.Stats2.OperationType);
+            var __StatId__ = default(global::Nighthollow.Stats2.StatId);
+            var __Type__ = default(global::Nighthollow.Stats2.ModifierType);
             var __AddTo__ = default(T?);
             var __IncreaseBy__ = default(global::Nighthollow.Stats2.PercentageValue?);
-            var __OvewriteWith__ = default(T?);
+            var __SetTo__ = default(T?);
 
             for (int i = 0; i < length; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        __Type__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.OperationType>().Deserialize(ref reader, options);
+                        __StatId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.StatId>().Deserialize(ref reader, options);
                         break;
                     case 1:
-                        __AddTo__ = formatterResolver.GetFormatterWithVerify<T?>().Deserialize(ref reader, options);
+                        __Type__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.ModifierType>().Deserialize(ref reader, options);
                         break;
                     case 2:
-                        __IncreaseBy__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.PercentageValue?>().Deserialize(ref reader, options);
+                        __AddTo__ = formatterResolver.GetFormatterWithVerify<T?>().Deserialize(ref reader, options);
                         break;
                     case 3:
-                        __OvewriteWith__ = formatterResolver.GetFormatterWithVerify<T?>().Deserialize(ref reader, options);
+                        __IncreaseBy__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.PercentageValue?>().Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        __SetTo__ = formatterResolver.GetFormatterWithVerify<T?>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -1946,7 +2227,7 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
                 }
             }
 
-            var ____result = new global::Nighthollow.Stats2.NumericOperation<T>(__Type__, __AddTo__, __IncreaseBy__, __OvewriteWith__);
+            var ____result = new global::Nighthollow.Stats2.NumericStatModifier<T>(__StatId__, __Type__, __AddTo__, __IncreaseBy__, __SetTo__);
             reader.Depth--;
             return ____result;
         }
@@ -2004,15 +2285,15 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
 
             IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(9);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<int>>().Serialize(ref writer, value.Zero, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.DurationValue>>().Serialize(ref writer, value.One, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, value.Two, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.IntRangeValue>>().Serialize(ref writer, value.Three, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.BooleanOperation>().Serialize(ref writer, value.Four, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, int>>().Serialize(ref writer, value.Five, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, value.Six, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Serialize(ref writer, value.Seven, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.School, int>>().Serialize(ref writer, value.Eight, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<int>>().Serialize(ref writer, value.Zero, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.DurationValue>>().Serialize(ref writer, value.One, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, value.Two, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.IntRangeValue>>().Serialize(ref writer, value.Three, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.BooleanStatModifier>().Serialize(ref writer, value.Four, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, int>>().Serialize(ref writer, value.Five, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, value.Six, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Serialize(ref writer, value.Seven, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.School, int>>().Serialize(ref writer, value.Eight, options);
         }
 
         public global::Nighthollow.Stats2.SerializationHack Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -2025,46 +2306,46 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __Zero__ = default(global::Nighthollow.Stats2.NumericOperation<int>);
-            var __One__ = default(global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.DurationValue>);
-            var __Two__ = default(global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.PercentageValue>);
-            var __Three__ = default(global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.IntRangeValue>);
-            var __Four__ = default(global::Nighthollow.Stats2.BooleanOperation);
-            var __Five__ = default(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, int>);
-            var __Six__ = default(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>);
-            var __Seven__ = default(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>);
-            var __Eight__ = default(global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.School, int>);
+            var __Zero__ = default(global::Nighthollow.Stats2.NumericStatModifier<int>);
+            var __One__ = default(global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.DurationValue>);
+            var __Two__ = default(global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.PercentageValue>);
+            var __Three__ = default(global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.IntRangeValue>);
+            var __Four__ = default(global::Nighthollow.Stats2.BooleanStatModifier);
+            var __Five__ = default(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, int>);
+            var __Six__ = default(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>);
+            var __Seven__ = default(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>);
+            var __Eight__ = default(global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.School, int>);
 
             for (int i = 0; i < length; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        __Zero__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<int>>().Deserialize(ref reader, options);
+                        __Zero__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<int>>().Deserialize(ref reader, options);
                         break;
                     case 1:
-                        __One__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.DurationValue>>().Deserialize(ref reader, options);
+                        __One__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.DurationValue>>().Deserialize(ref reader, options);
                         break;
                     case 2:
-                        __Two__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
+                        __Two__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
                         break;
                     case 3:
-                        __Three__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericOperation<global::Nighthollow.Stats2.IntRangeValue>>().Deserialize(ref reader, options);
+                        __Three__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.NumericStatModifier<global::Nighthollow.Stats2.IntRangeValue>>().Deserialize(ref reader, options);
                         break;
                     case 4:
-                        __Four__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.BooleanOperation>().Deserialize(ref reader, options);
+                        __Four__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.BooleanStatModifier>().Deserialize(ref reader, options);
                         break;
                     case 5:
-                        __Five__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, int>>().Deserialize(ref reader, options);
+                        __Five__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, int>>().Deserialize(ref reader, options);
                         break;
                     case 6:
-                        __Six__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
+                        __Six__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
                         break;
                     case 7:
-                        __Seven__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Deserialize(ref reader, options);
+                        __Seven__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.DamageType, global::Nighthollow.Stats2.IntRangeValue>>().Deserialize(ref reader, options);
                         break;
                     case 8:
-                        __Eight__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericOperation<global::Nighthollow.Generated.School, int>>().Deserialize(ref reader, options);
+                        __Eight__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.TaggedNumericStatModifier<global::Nighthollow.Generated.School, int>>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -2087,12 +2368,12 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
         }
     }
 
-    public sealed class TaggedNumericOperationFormatter<TTag,TValue> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.TaggedNumericOperation<TTag, TValue>>
+    public sealed class TaggedNumericStatModifierFormatter<TTag,TValue> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Stats2.TaggedNumericStatModifier<TTag, TValue>>
         where TTag : global::System.Enum
         where TValue : struct
     {
 
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.TaggedNumericOperation<TTag, TValue> value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Stats2.TaggedNumericStatModifier<TTag, TValue> value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -2101,14 +2382,15 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(4);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.OperationType>().Serialize(ref writer, value.Type, options);
+            writer.WriteArrayHeader(5);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.StatId>().Serialize(ref writer, value.StatId, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.ModifierType>().Serialize(ref writer, value.Type, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Serialize(ref writer, value.AddTo, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, global::Nighthollow.Stats2.PercentageValue>>().Serialize(ref writer, value.IncreaseBy, options);
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Serialize(ref writer, value.OverwriteWith, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Serialize(ref writer, value.SetTo, options);
         }
 
-        public global::Nighthollow.Stats2.TaggedNumericOperation<TTag, TValue> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Stats2.TaggedNumericStatModifier<TTag, TValue> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -2118,26 +2400,30 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __Type__ = default(global::Nighthollow.Stats2.OperationType);
+            var __StatId__ = default(global::Nighthollow.Stats2.StatId);
+            var __Type__ = default(global::Nighthollow.Stats2.ModifierType);
             var __AddTo__ = default(global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>);
             var __IncreaseBy__ = default(global::System.Collections.Immutable.ImmutableDictionary<TTag, global::Nighthollow.Stats2.PercentageValue>);
-            var __OverwriteWith__ = default(global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>);
+            var __SetTo__ = default(global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>);
 
             for (int i = 0; i < length; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        __Type__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.OperationType>().Deserialize(ref reader, options);
+                        __StatId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.StatId>().Deserialize(ref reader, options);
                         break;
                     case 1:
-                        __AddTo__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Deserialize(ref reader, options);
+                        __Type__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.ModifierType>().Deserialize(ref reader, options);
                         break;
                     case 2:
-                        __IncreaseBy__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
+                        __AddTo__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Deserialize(ref reader, options);
                         break;
                     case 3:
-                        __OverwriteWith__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Deserialize(ref reader, options);
+                        __IncreaseBy__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, global::Nighthollow.Stats2.PercentageValue>>().Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        __SetTo__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<TTag, TValue>>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -2145,7 +2431,7 @@ namespace MessagePack.Formatters.Nighthollow.Stats2
                 }
             }
 
-            var ____result = new global::Nighthollow.Stats2.TaggedNumericOperation<TTag, TValue>(__Type__, __AddTo__, __IncreaseBy__, __OverwriteWith__);
+            var ____result = new global::Nighthollow.Stats2.TaggedNumericStatModifier<TTag, TValue>(__StatId__, __Type__, __AddTo__, __IncreaseBy__, __SetTo__);
             reader.Depth--;
             return ____result;
         }

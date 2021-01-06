@@ -26,7 +26,7 @@ namespace Nighthollow.Stats
 {
   public sealed class IntStat : NumericStat<int>
   {
-    public IntStat(StatId id) : base(id)
+    public IntStat(OldStatId id) : base(id)
     {
     }
 

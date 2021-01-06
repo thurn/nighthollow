@@ -12,14 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+using MessagePack;
+
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Data
 {
-  public enum OperationType
+  [MessagePackObject]
+  public sealed partial class StaticCreatureListData
   {
-    Add,
-    Increase,
-    Set
+    public StaticCreatureListData(
+      string name,
+      ImmutableList<CreatureItemData> list)
+    {
+      Name = name;
+      List = list;
+    }
+
+    [Key(0)] public string Name { get; }
+    [Key(1)] public ImmutableList<CreatureItemData> List { get; }
   }
 }

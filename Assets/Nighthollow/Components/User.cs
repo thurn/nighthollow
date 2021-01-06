@@ -56,7 +56,7 @@ namespace Nighthollow.Components
       if (_statusDisplay != null)
       {
         _statusDisplay.Mana = Mana;
-        _statusDisplay.Influence = _data.Stats.Get(Stat.Influence).Values;
+        _statusDisplay.Influence = _data.Stats.Get(OldStat.Influence).Values;
       }
     }
 
@@ -67,7 +67,7 @@ namespace Nighthollow.Components
       _deck.OnStartGame(builtDeck, _data.TutorialState != UserDataService.Tutorial.Completed);
 
       var openingHand = new List<CreatureData>();
-      for (var i = 0; i < Errors.CheckPositive(data.UserData.GetInt(Stat.StartingHandSize)); ++i)
+      for (var i = 0; i < Errors.CheckPositive(data.UserData.GetInt(OldStat.StartingHandSize)); ++i)
       {
         openingHand.Add(_deck.Draw());
       }
@@ -102,7 +102,7 @@ namespace Nighthollow.Components
       _statusDisplay = Root.Instance.ScreenController.Get(ScreenController.UserStatus);
       _statusDisplay.Show(animate: true);
 
-      Mana = _data.GetInt(Stat.StartingMana);
+      Mana = _data.GetInt(OldStat.StartingMana);
     }
 
     public void SpendMana(int amount)
@@ -119,8 +119,8 @@ namespace Nighthollow.Components
     {
       while (!GameOver)
       {
-        yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.ManaGainInterval));
-        Mana += _data.GetInt(Stat.ManaGain);
+        yield return new WaitForSeconds(_data.GetDurationSeconds(OldStat.ManaGainInterval));
+        Mana += _data.GetInt(OldStat.ManaGain);
       }
     }
 
@@ -128,8 +128,8 @@ namespace Nighthollow.Components
     {
       while (!GameOver)
       {
-        Errors.CheckArgument(_data.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
-        yield return new WaitForSeconds(_data.GetDurationSeconds(Stat.CardDrawInterval));
+        Errors.CheckArgument(_data.GetDurationSeconds(OldStat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
+        yield return new WaitForSeconds(_data.GetDurationSeconds(OldStat.CardDrawInterval));
         _hand.DrawCards(new List<CreatureData> {_deck.Draw()});
       }
     }

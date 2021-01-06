@@ -32,7 +32,7 @@ namespace Nighthollow.Stats2
 
     [Key(0)] public int TimeMilliseconds { get; }
 
-    public T Cast<T>() => (T) (object) this;
+    public object Get() => this;
 
     public override string ToString() => $"{TimeMilliseconds / 1000f}s";
 
@@ -63,14 +63,14 @@ namespace Nighthollow.Stats2
     }
   }
 
-  public sealed class DurationStat : AbstractStat<NumericOperation<DurationValue>, DurationValue>
+  public sealed class DurationStat : NumericStat<DurationValue>
   {
     public DurationStat(StatId statId) : base(statId)
     {
     }
 
     public override DurationValue ComputeValue(
-      IReadOnlyDictionary<OperationType, IEnumerable<NumericOperation<DurationValue>>> groups) =>
+      IReadOnlyDictionary<ModifierType, IEnumerable<NumericStatModifier<DurationValue>>> groups) =>
       new DurationValue(IntStat.Compute(groups, duration => duration.AsMilliseconds()));
   }
 }

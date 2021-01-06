@@ -27,13 +27,21 @@ namespace Nighthollow.Data
       ImmutableDictionary<int, CreatureTypeData>? creatureTypes = null,
       ImmutableDictionary<int, AffixTypeData>? affixTypes = null,
       ImmutableDictionary<int, SkillTypeData>? skillTypes = null,
-      ImmutableDictionary<int, StatData>? statData = null)
+      ImmutableDictionary<int, StatData>? statData = null,
+      ImmutableDictionary<int, StaticCreatureListData>? creatureLists = null,
+      ImmutableDictionary<int, ModifierData>? userModifiers = null,
+      ImmutableDictionary<int, CreatureItemData>? collection = null,
+      ImmutableDictionary<int, CreatureItemData>? deck = null)
     {
       TableMetadata = tableMetadata ?? ImmutableDictionary<int, TableMetadata>.Empty;
       CreatureTypes = creatureTypes ?? ImmutableDictionary<int, CreatureTypeData>.Empty;
       AffixTypes = affixTypes ?? ImmutableDictionary<int, AffixTypeData>.Empty;
       SkillTypes = skillTypes ?? ImmutableDictionary<int, SkillTypeData>.Empty;
       StatData = statData ?? ImmutableDictionary<int, StatData>.Empty;
+      CreatureLists = creatureLists ?? ImmutableDictionary<int, StaticCreatureListData>.Empty;
+      UserModifiers = userModifiers ?? ImmutableDictionary<int, ModifierData>.Empty;
+      Collection = collection ?? ImmutableDictionary<int, CreatureItemData>.Empty;
+      Deck = deck ?? ImmutableDictionary<int, CreatureItemData>.Empty;
     }
 
     [Key(0)] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
@@ -41,5 +49,9 @@ namespace Nighthollow.Data
     [Key(2)] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
     [Key(3)] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
     [Key(4)] public ImmutableDictionary<int, StatData> StatData { get; }
+    [Key(5)] public ImmutableDictionary<int, StaticCreatureListData> CreatureLists { get; }
+    [Key(6)] public ImmutableDictionary<int, ModifierData> UserModifiers { get; }
+    [Key(7)] public ImmutableDictionary<int, CreatureItemData> Collection { get; }
+    [Key(8)] public ImmutableDictionary<int, CreatureItemData> Deck { get; }
   }
 }

@@ -30,7 +30,7 @@ namespace Nighthollow.Delegates.Implementations
   public sealed class ChainingProjectilesDelegate : AbstractDelegate
   {
     public override string Describe(StatEntity entity) =>
-      $"Projectiles Chain {entity.GetInt(Stat.ProjectileChainCount)} Times on Hit";
+      $"Projectiles Chain {entity.GetInt(OldStat.ProjectileChainCount)} Times on Hit";
 
     public override bool ShouldSkipProjectileImpact(SkillContext c)
     {
@@ -46,11 +46,11 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
-      Errors.CheckPositive(c.GetInt(Stat.ProjectileChainCount));
-      if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) < c.GetInt(Stat.MaxProjectileTimesChained))
+      Errors.CheckPositive(c.GetInt(OldStat.ProjectileChainCount));
+      if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) < c.GetInt(OldStat.MaxProjectileTimesChained))
       {
         // TODO: This works, but it probably shouldn't...
-        var chainCount = c.GetInt(Stat.ProjectileChainCount);
+        var chainCount = c.GetInt(OldStat.ProjectileChainCount);
         var add = chainCount % 2 == 0 ? 1f : 0f;
         for (var i = 0; i < chainCount; ++i)
         {

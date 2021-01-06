@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Generated;
-
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
-  public interface IStat
+  public enum ModifierType
   {
-    StatId StatId { get; }
+    Add,
+    Increase,
+    Set
   }
 }

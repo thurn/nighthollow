@@ -14,21 +14,24 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Generated;
 
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
-  public sealed class BoolStat : AbstractStat<BooleanOperation, bool>
+  public sealed class BoolStat : AbstractStat<BooleanStatModifier, bool>
   {
     public BoolStat(StatId statId) : base(statId)
     {
     }
 
+    public IStatModifier Set(bool value) => BooleanStatModifier.Set(this, value);
+
+    public IStatModifier? SetIfTrue(bool value) => value ? Set(value) : null;
+
     public override bool ComputeValue(
-      IReadOnlyDictionary<OperationType, IEnumerable<BooleanOperation>> groups) =>
-      groups[OperationType.Set].Count(op => op.SetValue) > 0 &&
-      groups[OperationType.Set].Count(op => op.SetValue == false) == 0;
+      IReadOnlyDictionary<ModifierType, IEnumerable<BooleanStatModifier>> groups) =>
+      groups[ModifierType.Set].Count(op => op.SetValue) > 0 &&
+      groups[ModifierType.Set].Count(op => op.SetValue == false) == 0;
   }
 }

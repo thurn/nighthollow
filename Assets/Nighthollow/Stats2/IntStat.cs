@@ -22,35 +22,35 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats2
 {
-  public sealed class IntStat : AbstractStat<NumericOperation<int>, int>
+  public sealed class IntStat : NumericStat<int>
   {
     public IntStat(StatId statId) : base(statId)
     {
     }
 
     public static int Compute<TValue>(
-      IReadOnlyDictionary<OperationType, IEnumerable<NumericOperation<TValue>>> groups,
+      IReadOnlyDictionary<ModifierType, IEnumerable<NumericStatModifier<TValue>>> groups,
       Func<TValue, int> toInt)
       where TValue : struct
     {
       var result = 0;
-      var overwrites = groups[OperationType.Set].ToList();
+      var overwrites = groups[ModifierType.Set].ToList();
       if (overwrites.Any())
       {
-        result = toInt(overwrites.Last().OvewriteWith!.Value);
+        result = toInt(overwrites.Last().SetTo!.Value);
       }
 
-      result += groups[OperationType.Add].Select(op => toInt(op.AddTo!.Value)).Sum();
+      result += groups[ModifierType.Add].Select(op => toInt(op.AddTo!.Value)).Sum();
 
       var increaseBy =
-        10000 + groups[OperationType.Increase]
+        10000 + groups[ModifierType.Increase]
           .Select(op => op.IncreaseBy!.Value)
           .Sum(increase => increase.AsBasisPoints());
       return Constants.FractionBasisPoints(result, increaseBy);
     }
 
     public override int ComputeValue(
-      IReadOnlyDictionary<OperationType, IEnumerable<NumericOperation<int>>> groups) =>
+      IReadOnlyDictionary<ModifierType, IEnumerable<NumericStatModifier<int>>> groups) =>
       Compute(groups, i => i);
   }
 }

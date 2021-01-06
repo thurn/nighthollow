@@ -19,27 +19,35 @@ using Nighthollow.Generated;
 
 namespace Nighthollow.Stats2
 {
+  [Union(0, typeof(NumericStatModifier<int>))]
+  [Union(1, typeof(NumericStatModifier<DurationValue>))]
+  [Union(2, typeof(NumericStatModifier<PercentageValue>))]
+  [Union(3, typeof(NumericStatModifier<IntRangeValue>))]
+  [Union(4, typeof(BooleanStatModifier))]
+  [Union(5, typeof(TaggedNumericStatModifier<DamageType, int>))]
+  [Union(6, typeof(TaggedNumericStatModifier<DamageType, PercentageValue>))]
+  [Union(7, typeof(TaggedNumericStatModifier<DamageType, IntRangeValue>))]
+  [Union(8, typeof(TaggedNumericStatModifier<School, int>))]
   public interface IStatModifier
   {
-    IStat Stat { get; }
+    public StatId StatId { get; }
 
-    IOperation Operation { get; }
+    ModifierType Type { get; }
   }
 
-  public sealed class StatModifier<TOperation, TValue> : IStatModifier where TOperation : IOperation
+  // Hack: MessagePack can't find types that are only ever used in a union declaration, so we need to have a concrete
+  // list of all types we expect to appear as well.
+  [MessagePackObject]
+  public sealed class SerializationHack
   {
-    public StatModifier(AbstractStat<TOperation, TValue> stat, TOperation operation)
-    {
-      ModifierStat = stat;
-      ModifierOperation = operation;
-    }
-
-    public AbstractStat<TOperation, TValue> ModifierStat { get; }
-
-    public TOperation ModifierOperation { get; }
-
-    public IStat Stat => ModifierStat;
-
-    public IOperation Operation => ModifierOperation;
+    [Key(0)] public NumericStatModifier<int> Zero = null!;
+    [Key(1)] public NumericStatModifier<DurationValue> One = null!;
+    [Key(2)] public NumericStatModifier<PercentageValue> Two = null!;
+    [Key(3)] public NumericStatModifier<IntRangeValue> Three = null!;
+    [Key(4)] public BooleanStatModifier Four = null!;
+    [Key(5)] public TaggedNumericStatModifier<DamageType, int> Five = null!;
+    [Key(6)] public TaggedNumericStatModifier<DamageType, PercentageValue> Six = null!;
+    [Key(7)] public TaggedNumericStatModifier<DamageType, IntRangeValue> Seven = null!;
+    [Key(8)] public TaggedNumericStatModifier<School, int> Eight = null!;
   }
 }

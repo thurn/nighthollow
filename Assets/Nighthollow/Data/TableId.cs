@@ -52,6 +52,10 @@ namespace Nighthollow.Data
     public static readonly TableId<AffixTypeData> AffixTypes = new AffixTypesTableId(2);
     public static readonly TableId<SkillTypeData> SkillTypes = new SkillTypesTableId(3);
     public static readonly TableId<StatData> StatData = new StatDataTableId(4);
+    public static readonly TableId<StaticCreatureListData> CreatureLists = new CreatureListsTableId(5);
+    public static readonly TableId<ModifierData> UserModifiers = new UserModifiersTableId(6);
+    public static readonly TableId<CreatureItemData> Collection = new CollectionTableId(7);
+    public static readonly TableId<CreatureItemData> Deck = new DeckTableId(8);
 
     sealed class TableMetadataTableId : TableId<TableMetadata>
     {
@@ -116,6 +120,58 @@ namespace Nighthollow.Data
 
       public override GameData Write(GameData gameData, ImmutableDictionary<int, StatData> newValue) =>
         gameData.WithStatData(newValue);
+    }
+
+    sealed class CreatureListsTableId : TableId<StaticCreatureListData>
+    {
+      public CreatureListsTableId(int id) : base(id)
+      {
+      }
+
+      public override ImmutableDictionary<int, StaticCreatureListData> GetIn(GameData gameData) =>
+        gameData.CreatureLists;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, StaticCreatureListData> newValue) =>
+        gameData.WithCreatureLists(newValue);
+    }
+
+    sealed class UserModifiersTableId : TableId<ModifierData>
+    {
+      public UserModifiersTableId(int id) : base(id)
+      {
+      }
+
+      public override ImmutableDictionary<int, ModifierData> GetIn(GameData gameData) =>
+        gameData.UserModifiers;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, ModifierData> newValue) =>
+        gameData.WithUserModifiers(newValue);
+    }
+
+    sealed class CollectionTableId : TableId<CreatureItemData>
+    {
+      public CollectionTableId(int id) : base(id)
+      {
+      }
+
+      public override ImmutableDictionary<int, CreatureItemData> GetIn(GameData gameData) =>
+        gameData.Collection;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, CreatureItemData> newValue) =>
+        gameData.WithCollection(newValue);
+    }
+
+    sealed class DeckTableId : TableId<CreatureItemData>
+    {
+      public DeckTableId(int id) : base(id)
+      {
+      }
+
+      public override ImmutableDictionary<int, CreatureItemData> GetIn(GameData gameData) =>
+        gameData.Deck;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, CreatureItemData> newValue) =>
+        gameData.WithDeck(newValue);
     }
   }
 }

@@ -21,23 +21,23 @@ using Nighthollow.Generated;
 namespace Nighthollow.Stats2
 {
   [MessagePackObject]
-  public sealed class NumericOperation<T> : IOperation where T : struct
+  public sealed class NumericStatModifier<T> : IStatModifier where T : struct
   {
 #pragma warning disable 618 // Using Obsolete
-    public static NumericOperation<T> Add(AbstractStat<NumericOperation<T>, T> stat, T value) =>
-      new NumericOperation<T>(stat.StatId, OperationType.Add, value, null, null);
+    public static NumericStatModifier<T> Add(AbstractStat<NumericStatModifier<T>, T> stat, T value) =>
+      new NumericStatModifier<T>(stat.StatId, ModifierType.Add, value, null, null);
 
-    public static NumericOperation<T> Increase(AbstractStat<NumericOperation<T>, T> stat, PercentageValue value) =>
-      new NumericOperation<T>(stat.StatId, OperationType.Increase, null, value, null);
+    public static NumericStatModifier<T> Increase(AbstractStat<NumericStatModifier<T>, T> stat, PercentageValue value) =>
+      new NumericStatModifier<T>(stat.StatId, ModifierType.Increase, null, value, null);
 
-    public static NumericOperation<T> Overwrite(AbstractStat<NumericOperation<T>, T> stat, T value) =>
-      new NumericOperation<T>(stat.StatId, OperationType.Set, null, null, value);
+    public static NumericStatModifier<T> Set(AbstractStat<NumericStatModifier<T>, T> stat, T value) =>
+      new NumericStatModifier<T>(stat.StatId, ModifierType.Set, null, null, value);
 #pragma warning restore 618
 
     [Obsolete("This constructor is visible only for use by the serialization system.")]
-    public NumericOperation(
+    public NumericStatModifier(
       StatId statId,
-      OperationType type,
+      ModifierType type,
       T? add,
       PercentageValue? increase,
       T? ovewrite)
@@ -46,13 +46,13 @@ namespace Nighthollow.Stats2
       Type = type;
       AddTo = add;
       IncreaseBy = increase;
-      OvewriteWith = ovewrite;
+      SetTo = ovewrite;
     }
 
     [Key(0)] public StatId StatId { get; }
-    [Key(1)] public OperationType Type { get; }
+    [Key(1)] public ModifierType Type { get; }
     [Key(2)] public T? AddTo { get; }
     [Key(3)] public PercentageValue? IncreaseBy { get; }
-    [Key(4)] public T? OvewriteWith { get; }
+    [Key(4)] public T? SetTo { get; }
   }
 }

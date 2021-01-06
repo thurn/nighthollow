@@ -39,7 +39,7 @@ def property_arg(prop, p):
 
 def generate(out, data):
     class_name = data["class_name"]
-    out.write(f'\n  public sealed partial class {class_name} : IData\n')
+    out.write(f'\n  public sealed partial class {class_name}\n')
     out.write('  {\n')
     for prop in data["properties"]:
         out.write(f'    public {class_name} With{prop["name"]}({prop["type"]} {uncap(prop["name"])}) =>\n')

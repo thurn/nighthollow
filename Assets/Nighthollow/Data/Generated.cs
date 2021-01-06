@@ -9,7 +9,7 @@ using Nighthollow.Stats2;
 namespace Nighthollow.Data
 {
 
-  public sealed partial class AffixTypeData : IData
+  public sealed partial class AffixTypeData
   {
     public AffixTypeData WithMinLevel(int minLevel) =>
       new AffixTypeData(
@@ -53,7 +53,7 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class StatData : IData
+  public sealed partial class StatData
   {
     public StatData WithName(string name) =>
       new StatData(
@@ -97,7 +97,21 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class GameData : IData
+  public sealed partial class AffixData
+  {
+    public AffixData WithAffixTypeId(int affixTypeId) =>
+      new AffixData(
+        affixTypeId,
+        Modifiers);
+
+    public AffixData WithModifiers(ImmutableList<ModifierData> modifiers) =>
+      new AffixData(
+        AffixTypeId,
+        modifiers);
+
+  }
+
+  public sealed partial class GameData
   {
     public GameData WithTableMetadata(ImmutableDictionary<int, TableMetadata> tableMetadata) =>
       new GameData(
@@ -105,7 +119,11 @@ namespace Nighthollow.Data
         CreatureTypes,
         AffixTypes,
         SkillTypes,
-        StatData);
+        StatData,
+        CreatureLists,
+        UserModifiers,
+        Collection,
+        Deck);
 
     public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
       new GameData(
@@ -113,7 +131,11 @@ namespace Nighthollow.Data
         creatureTypes,
         AffixTypes,
         SkillTypes,
-        StatData);
+        StatData,
+        CreatureLists,
+        UserModifiers,
+        Collection,
+        Deck);
 
     public GameData WithAffixTypes(ImmutableDictionary<int, AffixTypeData> affixTypes) =>
       new GameData(
@@ -121,7 +143,11 @@ namespace Nighthollow.Data
         CreatureTypes,
         affixTypes,
         SkillTypes,
-        StatData);
+        StatData,
+        CreatureLists,
+        UserModifiers,
+        Collection,
+        Deck);
 
     public GameData WithSkillTypes(ImmutableDictionary<int, SkillTypeData> skillTypes) =>
       new GameData(
@@ -129,7 +155,11 @@ namespace Nighthollow.Data
         CreatureTypes,
         AffixTypes,
         skillTypes,
-        StatData);
+        StatData,
+        CreatureLists,
+        UserModifiers,
+        Collection,
+        Deck);
 
     public GameData WithStatData(ImmutableDictionary<int, StatData> statData) =>
       new GameData(
@@ -137,11 +167,63 @@ namespace Nighthollow.Data
         CreatureTypes,
         AffixTypes,
         SkillTypes,
-        statData);
+        statData,
+        CreatureLists,
+        UserModifiers,
+        Collection,
+        Deck);
+
+    public GameData WithCreatureLists(ImmutableDictionary<int, StaticCreatureListData> creatureLists) =>
+      new GameData(
+        TableMetadata,
+        CreatureTypes,
+        AffixTypes,
+        SkillTypes,
+        StatData,
+        creatureLists,
+        UserModifiers,
+        Collection,
+        Deck);
+
+    public GameData WithUserModifiers(ImmutableDictionary<int, ModifierData> userModifiers) =>
+      new GameData(
+        TableMetadata,
+        CreatureTypes,
+        AffixTypes,
+        SkillTypes,
+        StatData,
+        CreatureLists,
+        userModifiers,
+        Collection,
+        Deck);
+
+    public GameData WithCollection(ImmutableDictionary<int, CreatureItemData> collection) =>
+      new GameData(
+        TableMetadata,
+        CreatureTypes,
+        AffixTypes,
+        SkillTypes,
+        StatData,
+        CreatureLists,
+        UserModifiers,
+        collection,
+        Deck);
+
+    public GameData WithDeck(ImmutableDictionary<int, CreatureItemData> deck) =>
+      new GameData(
+        TableMetadata,
+        CreatureTypes,
+        AffixTypes,
+        SkillTypes,
+        StatData,
+        CreatureLists,
+        UserModifiers,
+        Collection,
+        deck);
 
   }
 
-  public sealed partial class CreatureSkillAnimation : IData
+  public sealed partial class CreatureSkillAnimation
   {
     public CreatureSkillAnimation WithSkillAnimationNumber(SkillAnimationNumber skillAnimationNumber) =>
       new CreatureSkillAnimation(
@@ -155,7 +237,7 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class CreatureTypeData : IData
+  public sealed partial class CreatureTypeData
   {
     public CreatureTypeData WithName(string name) =>
       new CreatureTypeData(
@@ -167,7 +249,7 @@ namespace Nighthollow.Data
         ImageAddress,
         BaseManaCost,
         Speed,
-        ImplicitAffix,
+        ImplicitModifiers,
         ImplicitSkills,
         IsManaCreature);
 
@@ -181,7 +263,7 @@ namespace Nighthollow.Data
         ImageAddress,
         BaseManaCost,
         Speed,
-        ImplicitAffix,
+        ImplicitModifiers,
         ImplicitSkills,
         IsManaCreature);
 
@@ -195,7 +277,7 @@ namespace Nighthollow.Data
         ImageAddress,
         BaseManaCost,
         Speed,
-        ImplicitAffix,
+        ImplicitModifiers,
         ImplicitSkills,
         IsManaCreature);
 
@@ -209,7 +291,7 @@ namespace Nighthollow.Data
         ImageAddress,
         BaseManaCost,
         Speed,
-        ImplicitAffix,
+        ImplicitModifiers,
         ImplicitSkills,
         IsManaCreature);
 
@@ -223,7 +305,7 @@ namespace Nighthollow.Data
         ImageAddress,
         BaseManaCost,
         Speed,
-        ImplicitAffix,
+        ImplicitModifiers,
         ImplicitSkills,
         IsManaCreature);
 
@@ -237,7 +319,7 @@ namespace Nighthollow.Data
         imageAddress,
         BaseManaCost,
         Speed,
-        ImplicitAffix,
+        ImplicitModifiers,
         ImplicitSkills,
         IsManaCreature);
 
@@ -251,7 +333,7 @@ namespace Nighthollow.Data
         ImageAddress,
         baseManaCost,
         Speed,
-        ImplicitAffix,
+        ImplicitModifiers,
         ImplicitSkills,
         IsManaCreature);
 
@@ -265,11 +347,11 @@ namespace Nighthollow.Data
         ImageAddress,
         BaseManaCost,
         speed,
-        ImplicitAffix,
+        ImplicitModifiers,
         ImplicitSkills,
         IsManaCreature);
 
-    public CreatureTypeData WithImplicitAffix(AffixTypeData? implicitAffix) =>
+    public CreatureTypeData WithImplicitModifiers(ImmutableList<ModifierTypeData>? implicitModifiers) =>
       new CreatureTypeData(
         Name,
         PrefabAddress,
@@ -279,7 +361,7 @@ namespace Nighthollow.Data
         ImageAddress,
         BaseManaCost,
         Speed,
-        implicitAffix,
+        implicitModifiers,
         ImplicitSkills,
         IsManaCreature);
 
@@ -293,7 +375,7 @@ namespace Nighthollow.Data
         ImageAddress,
         BaseManaCost,
         Speed,
-        ImplicitAffix,
+        ImplicitModifiers,
         implicitSkills,
         IsManaCreature);
 
@@ -307,20 +389,20 @@ namespace Nighthollow.Data
         ImageAddress,
         BaseManaCost,
         Speed,
-        ImplicitAffix,
+        ImplicitModifiers,
         ImplicitSkills,
         isManaCreature);
 
   }
 
-  public sealed partial class SkillTypeData : IData
+  public sealed partial class SkillTypeData
   {
     public SkillTypeData WithName(string name) =>
       new SkillTypeData(
         name,
         SkillAnimationType,
         SkillType,
-        ImplicitAffix,
+        ImplicitModifiers,
         Address,
         ProjectileSpeed,
         UsesAccuracy,
@@ -332,7 +414,7 @@ namespace Nighthollow.Data
         Name,
         skillAnimationType,
         SkillType,
-        ImplicitAffix,
+        ImplicitModifiers,
         Address,
         ProjectileSpeed,
         UsesAccuracy,
@@ -344,19 +426,19 @@ namespace Nighthollow.Data
         Name,
         SkillAnimationType,
         skillType,
-        ImplicitAffix,
+        ImplicitModifiers,
         Address,
         ProjectileSpeed,
         UsesAccuracy,
         CanCrit,
         CanStun);
 
-    public SkillTypeData WithImplicitAffix(AffixTypeData? implicitAffix) =>
+    public SkillTypeData WithImplicitModifiers(ImmutableList<ModifierTypeData>? implicitModifiers) =>
       new SkillTypeData(
         Name,
         SkillAnimationType,
         SkillType,
-        implicitAffix,
+        implicitModifiers,
         Address,
         ProjectileSpeed,
         UsesAccuracy,
@@ -368,7 +450,7 @@ namespace Nighthollow.Data
         Name,
         SkillAnimationType,
         SkillType,
-        ImplicitAffix,
+        ImplicitModifiers,
         address,
         ProjectileSpeed,
         UsesAccuracy,
@@ -380,7 +462,7 @@ namespace Nighthollow.Data
         Name,
         SkillAnimationType,
         SkillType,
-        ImplicitAffix,
+        ImplicitModifiers,
         Address,
         projectileSpeed,
         UsesAccuracy,
@@ -392,7 +474,7 @@ namespace Nighthollow.Data
         Name,
         SkillAnimationType,
         SkillType,
-        ImplicitAffix,
+        ImplicitModifiers,
         Address,
         ProjectileSpeed,
         usesAccuracy,
@@ -404,7 +486,7 @@ namespace Nighthollow.Data
         Name,
         SkillAnimationType,
         SkillType,
-        ImplicitAffix,
+        ImplicitModifiers,
         Address,
         ProjectileSpeed,
         UsesAccuracy,
@@ -416,7 +498,7 @@ namespace Nighthollow.Data
         Name,
         SkillAnimationType,
         SkillType,
-        ImplicitAffix,
+        ImplicitModifiers,
         Address,
         ProjectileSpeed,
         UsesAccuracy,
@@ -425,7 +507,65 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class TableMetadata : IData
+  public sealed partial class SkillItemData
+  {
+    public SkillItemData WithSkillTypeId(int skillTypeId) =>
+      new SkillItemData(
+        skillTypeId,
+        Affixes);
+
+    public SkillItemData WithAffixes(ImmutableList<AffixData> affixes) =>
+      new SkillItemData(
+        SkillTypeId,
+        affixes);
+
+  }
+
+  public sealed partial class ModifierData
+  {
+    public ModifierData WithDelegateId(DelegateId? delegateId) =>
+      new ModifierData(
+        delegateId,
+        StatModifier,
+        Targeted);
+
+    public ModifierData WithModifier(IStatModifier? modifier) =>
+      new ModifierData(
+        DelegateId,
+        modifier,
+        Targeted);
+
+    public ModifierData WithTargeted(bool targeted) =>
+      new ModifierData(
+        DelegateId,
+        StatModifier,
+        targeted);
+
+  }
+
+  public sealed partial class SkillData
+  {
+  }
+
+  public sealed partial class StaticCreatureListData
+  {
+    public StaticCreatureListData WithName(string name) =>
+      new StaticCreatureListData(
+        name,
+        List);
+
+    public StaticCreatureListData WithList(ImmutableList<CreatureItemData> list) =>
+      new StaticCreatureListData(
+        Name,
+        list);
+
+  }
+
+  public sealed partial class CreatureData
+  {
+  }
+
+  public sealed partial class TableMetadata
   {
     public TableMetadata WithNextId(int nextId) =>
       new TableMetadata(
@@ -433,21 +573,65 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class ModifierTypeData : IData
+  public sealed partial class CreatureItemData
+  {
+    public CreatureItemData WithCreatureTypeId(int creatureTypeId) =>
+      new CreatureItemData(
+        creatureTypeId,
+        Name,
+        School,
+        Skills,
+        Affixes);
+
+    public CreatureItemData WithName(string name) =>
+      new CreatureItemData(
+        CreatureTypeId,
+        name,
+        School,
+        Skills,
+        Affixes);
+
+    public CreatureItemData WithSchool(School school) =>
+      new CreatureItemData(
+        CreatureTypeId,
+        Name,
+        school,
+        Skills,
+        Affixes);
+
+    public CreatureItemData WithSkills(ImmutableList<SkillItemData> skills) =>
+      new CreatureItemData(
+        CreatureTypeId,
+        Name,
+        School,
+        skills,
+        Affixes);
+
+    public CreatureItemData WithAffixes(ImmutableList<AffixData> affixes) =>
+      new CreatureItemData(
+        CreatureTypeId,
+        Name,
+        School,
+        Skills,
+        affixes);
+
+  }
+
+  public sealed partial class ModifierTypeData
   {
     public ModifierTypeData WithStatId(StatId? statId) =>
       new ModifierTypeData(
         statId,
-        StatOperator,
+        ModifierType,
         DelegateId,
         ValueLow,
         ValueHigh,
         Targeted);
 
-    public ModifierTypeData WithStatOperator(OperationType? statOperator) =>
+    public ModifierTypeData WithModifierType(ModifierType? modifierType) =>
       new ModifierTypeData(
         StatId,
-        statOperator,
+        modifierType,
         DelegateId,
         ValueLow,
         ValueHigh,
@@ -456,7 +640,7 @@ namespace Nighthollow.Data
     public ModifierTypeData WithDelegateId(DelegateId? delegateId) =>
       new ModifierTypeData(
         StatId,
-        StatOperator,
+        ModifierType,
         delegateId,
         ValueLow,
         ValueHigh,
@@ -465,7 +649,7 @@ namespace Nighthollow.Data
     public ModifierTypeData WithValueLow(IValueData? valueLow) =>
       new ModifierTypeData(
         StatId,
-        StatOperator,
+        ModifierType,
         DelegateId,
         valueLow,
         ValueHigh,
@@ -474,7 +658,7 @@ namespace Nighthollow.Data
     public ModifierTypeData WithValueHigh(IValueData? valueHigh) =>
       new ModifierTypeData(
         StatId,
-        StatOperator,
+        ModifierType,
         DelegateId,
         ValueLow,
         valueHigh,
@@ -483,11 +667,15 @@ namespace Nighthollow.Data
     public ModifierTypeData WithTargeted(bool targeted) =>
       new ModifierTypeData(
         StatId,
-        StatOperator,
+        ModifierType,
         DelegateId,
         ValueLow,
         ValueHigh,
         targeted);
 
+  }
+
+  public sealed partial class UserData
+  {
   }
 }

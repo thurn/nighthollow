@@ -73,14 +73,14 @@ namespace Nighthollow.Delegates.Implementations
         return null;
       }
 
-      var maxCooldown = available.Max(s => s.GetDurationSeconds(Stat.Cooldown));
-      return available.FirstOrDefault(s => s.GetDurationSeconds(Stat.Cooldown) >= maxCooldown);
+      var maxCooldown = available.Max(s => s.GetDurationSeconds(OldStat.Cooldown));
+      return available.FirstOrDefault(s => s.GetDurationSeconds(OldStat.Cooldown) >= maxCooldown);
     }
 
     static bool CooldownAvailable(CreatureContext c, SkillData skill)
     {
       var lastUsed = c.Self.TimeLastUsedSeconds(skill.BaseType);
-      return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
+      return !lastUsed.HasValue || skill.GetDurationSeconds(OldStat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
     public override bool MeleeCouldHit(CreatureContext c) =>

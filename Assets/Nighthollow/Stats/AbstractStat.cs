@@ -24,12 +24,12 @@ namespace Nighthollow.Stats
   public abstract class AbstractStat<TOperation, TValue> : IStat
     where TOperation : IOperation
   {
-    protected AbstractStat(StatId id)
+    protected AbstractStat(OldStatId id)
     {
       Id = id;
     }
 
-    public StatId Id { get; }
+    public OldStatId Id { get; }
 
     public abstract IStatModifier ParseModifier(string value, Operator op);
 
@@ -50,7 +50,7 @@ namespace Nighthollow.Stats
   public abstract class NumericStat<TValue> : AbstractStat<NumericOperation<TValue>, TValue>
     where TValue : struct
   {
-    protected NumericStat(StatId id) : base(id)
+    protected NumericStat(OldStatId id) : base(id)
     {
     }
 

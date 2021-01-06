@@ -43,7 +43,7 @@ namespace Nighthollow.Delegates.Implementations
           c.Results.Add(new ApplyModifierEffect(
             target.Data,
             modifier.StatModifier
-              .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(Stat.CurseDuration)))));
+              .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(OldStat.CurseDuration)))));
         }
       }
     }

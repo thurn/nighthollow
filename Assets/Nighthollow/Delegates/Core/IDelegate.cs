@@ -68,12 +68,8 @@ namespace Nighthollow.Delegates.Core
     /// <summary>
     ///   Adds the effects for this skill as a result of a hit.
     /// </summary>
-    /// Normally this is invoked by the default skill delegate's
-    /// <see cref="OnImpact" />
-    /// implementation for each target
-    /// returned from
-    /// <see cref="FindTargets" />
-    /// for a skill. The default implementation implements the standard
+    /// Normally this is invoked by the default skill delegate's <see cref="OnImpact" /> implementation for each target
+    /// returned from <see cref="FindTargets" /> for a skill. The default implementation implements the standard
     /// algorithm for applying the skill's BaseDamage, including things like checking for hit, checking for critical
     /// hit, applying damage, applying health drain, and applying stun.
     void OnApplyToTarget(SkillContext c, Creature target);

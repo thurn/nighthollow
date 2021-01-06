@@ -21,7 +21,7 @@ namespace Nighthollow.Stats
 {
   public interface IStat
   {
-    StatId Id { get; }
+    OldStatId Id { get; }
 
     IStatModifier ParseModifier(string value, Operator op);
 

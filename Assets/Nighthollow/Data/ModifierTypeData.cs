@@ -26,14 +26,14 @@ namespace Nighthollow.Data
   {
     public ModifierTypeData(
       StatId? statId = null,
-      OperationType? statOperator = null,
+      ModifierType? modifierType = null,
       DelegateId? delegateId = null,
       IValueData? valueLow = null,
       IValueData? valueHigh = null,
       bool targeted = false)
     {
       StatId = statId;
-      StatOperator = statOperator;
+      ModifierType = modifierType;
       DelegateId = delegateId;
       ValueLow = valueLow;
       ValueHigh = valueHigh;
@@ -41,7 +41,7 @@ namespace Nighthollow.Data
     }
 
     [Key(0)] public StatId? StatId { get; }
-    [Key(1)] public OperationType? StatOperator { get; }
+    [Key(1)] public ModifierType? ModifierType { get; }
     [Key(2)] public DelegateId? DelegateId { get; }
     [Key(3)] public IValueData? ValueLow { get; }
     [Key(4)] public IValueData? ValueHigh { get; }
@@ -51,9 +51,9 @@ namespace Nighthollow.Data
     {
       var result = new List<string>();
 
-      if (StatOperator.HasValue)
+      if (ModifierType.HasValue)
       {
-        result.Add(StatOperator.ToString());
+        result.Add(ModifierType.ToString());
       }
 
       if (StatId.HasValue)

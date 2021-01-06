@@ -145,7 +145,7 @@ namespace Nighthollow.Components
         Root.Instance.Enemy.OnEnemyCreatureAtEndzone(this);
       }
 
-      var health = _data.GetInt(Stat.Health);
+      var health = _data.GetInt(OldStat.Health);
       if (health > 0)
       {
         _statusBars.HealthBar.Value = (health - _damageTaken) / (float) health;
@@ -156,14 +156,14 @@ namespace Nighthollow.Components
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
 
-      var speedMultiplier = _data.Stats.Get(Stat.SkillSpeedMultiplier).AsMultiplier();
+      var speedMultiplier = _data.Stats.Get(OldStat.SkillSpeedMultiplier).AsMultiplier();
       Errors.CheckState(speedMultiplier > 0.05f, "Skill speed must be > 5%");
       _animator.SetFloat(SkillSpeed, speedMultiplier);
 
       if (_state == CreatureState.Moving)
       {
         _animator.SetBool(Moving, value: true);
-        transform.Translate(Vector3.right * (Time.deltaTime * (_data.GetInt(Stat.CreatureSpeed) / 1000f)));
+        transform.Translate(Vector3.right * (Time.deltaTime * (_data.GetInt(OldStat.CreatureSpeed) / 1000f)));
       }
       else
       {
@@ -278,7 +278,7 @@ namespace Nighthollow.Components
 
     void ToDefaultState()
     {
-      SetState(_data.GetInt(Stat.CreatureSpeed) > 0 ? CreatureState.Moving : CreatureState.Idle);
+      SetState(_data.GetInt(OldStat.CreatureSpeed) > 0 ? CreatureState.Moving : CreatureState.Idle);
     }
 
     void Kill()
@@ -323,7 +323,7 @@ namespace Nighthollow.Components
     public void AddDamage(Creature appliedBy, int damage)
     {
       Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
-      var health = _data.GetInt(Stat.Health);
+      var health = _data.GetInt(OldStat.Health);
       _damageTaken = Mathf.Clamp(value: 0, _damageTaken + damage, health);
       if (_damageTaken >= health)
       {
@@ -335,7 +335,7 @@ namespace Nighthollow.Components
     public void Heal(int healing)
     {
       Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
-      var health = _data.GetInt(Stat.Health);
+      var health = _data.GetInt(OldStat.Health);
       _damageTaken = Mathf.Clamp(value: 0, _damageTaken - healing, health);
     }
 
@@ -406,7 +406,7 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(seconds: 1);
-        Heal(_data.GetInt(Stat.HealthRegenerationPerSecond));
+        Heal(_data.GetInt(OldStat.HealthRegenerationPerSecond));
       }
 
       // ReSharper disable once IteratorNeverReturns

@@ -14,34 +14,30 @@
 
 using System;
 using MessagePack;
-using Nighthollow.Generated;
 
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
   [MessagePackObject]
-  public sealed class BooleanOperation : IOperation
+  public sealed class BooleanStatModifier : IStatModifier
   {
 #pragma warning disable 618 // Using Obsolete
-    public static BooleanOperation SetTrue(AbstractStat<BooleanOperation, bool> stat) =>
-      new BooleanOperation(stat.StatId, true);
-
-    public static BooleanOperation SetFalse(AbstractStat<BooleanOperation, bool> stat) =>
-      new BooleanOperation(stat.StatId, false);
+    public static BooleanStatModifier Set(AbstractStat<BooleanStatModifier, bool> stat, bool value) =>
+      new BooleanStatModifier(stat.StatId, value);
 #pragma warning restore 618
 
     [SerializationConstructor]
     [Obsolete("This constructor is visible only for use by the serialization system.")]
-    public BooleanOperation(StatId statId, bool setValue)
+    public BooleanStatModifier(StatId statId, bool setValue)
     {
       StatId = statId;
       SetValue = setValue;
-      Type = OperationType.Set;
+      Type = ModifierType.Set;
     }
 
     [Key(0)] public StatId StatId { get; }
     [Key(1)] public bool SetValue { get; }
-    [IgnoreMember] public OperationType Type { get; }
+    [IgnoreMember] public ModifierType Type { get; }
   }
 }

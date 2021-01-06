@@ -77,10 +77,10 @@ namespace Nighthollow.Components
       Errors.CheckNotNull(_data);
       _cardImage.sprite = Database.Instance.Assets.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
 
-      var manaCost = _data.GetInt(Stat.ManaCost);
-      var influenceCost = _data.Stats.Get(Stat.InfluenceCost);
+      var manaCost = _data.GetInt(OldStat.ManaCost);
+      var influenceCost = _data.Stats.Get(OldStat.InfluenceCost);
       _canPlay = manaCost <= _user.Mana &&
-                 Influence.LessThanOrEqualTo(influenceCost, _user.Data.Stats.Get(Stat.Influence));
+                 Influence.LessThanOrEqualTo(influenceCost, _user.Data.Stats.Get(OldStat.Influence));
 
       _outline.enabled = _canPlay;
       _cost.text = manaCost.ToString();
@@ -196,7 +196,7 @@ namespace Nighthollow.Components
     public void OnPlayed()
     {
       _user.Hand.RemoveFromHand(this);
-      _user.SpendMana(_data.GetInt(Stat.ManaCost));
+      _user.SpendMana(_data.GetInt(OldStat.ManaCost));
       Destroy(gameObject);
     }
 

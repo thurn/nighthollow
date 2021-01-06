@@ -30,8 +30,8 @@ namespace Nighthollow.Delegates.Implementations
     {
       c.Results.Add(
         new ApplyModifierToOwnerEffect(c.Self,
-          Stat.ManaGain.Modifier(
-            NumericOperation.Add(c.GetStat(Stat.AddedManaGain)),
+          OldStat.ManaGain.Modifier(
+            NumericOperation.Add(c.GetStat(OldStat.AddedManaGain)),
             new WhileAliveLifetime(c.Self))));
     }
   }

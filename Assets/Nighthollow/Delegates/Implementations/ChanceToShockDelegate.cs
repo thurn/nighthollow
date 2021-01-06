@@ -25,20 +25,20 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChanceToShockDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) => $"{entity.GetStat(Stat.ShockChance)} Chance to Shock";
+    public override string Describe(StatEntity entity) => $"{entity.GetStat(OldStat.ShockChance)} Chance to Shock";
 
     public override void OnApplyToTarget(SkillContext c, Creature target)
     {
-      if (Random.value > c.GetStat(Stat.ShockChance).AsMultiplier())
+      if (Random.value > c.GetStat(OldStat.ShockChance).AsMultiplier())
       {
         return;
       }
 
-      var lifetime = new TimedLifetime(c.GetDurationMilliseconds(Stat.ShockDuration));
-      target.Data.Stats.InsertModifier(Stat.IsShocked, new BooleanOperation(setBoolean: true), lifetime);
+      var lifetime = new TimedLifetime(c.GetDurationMilliseconds(OldStat.ShockDuration));
+      target.Data.Stats.InsertModifier(OldStat.IsShocked, new BooleanOperation(setBoolean: true), lifetime);
       target.Data.Stats.InsertModifier(
-        Stat.ReceiveCritsChance,
-        NumericOperation.Add(c.GetStat(Stat.ShockAddedReceiveCritsChance)),
+        OldStat.ReceiveCritsChance,
+        NumericOperation.Add(c.GetStat(OldStat.ShockAddedReceiveCritsChance)),
         lifetime);
     }
   }

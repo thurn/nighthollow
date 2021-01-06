@@ -47,7 +47,7 @@ namespace Nighthollow.Delegates.Implementations
           c.Results.Add(new ApplyModifierEffect(
             creature.Data,
             modifier.StatModifier
-              .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(Stat.BuffDuration)))));
+              .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(OldStat.BuffDuration)))));
         }
       }
     }

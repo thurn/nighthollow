@@ -23,7 +23,7 @@ namespace Nighthollow.Stats
 {
   public sealed class BoolStat : AbstractStat<BooleanOperation, bool>
   {
-    public BoolStat(StatId id) : base(id)
+    public BoolStat(OldStatId id) : base(id)
     {
     }
 

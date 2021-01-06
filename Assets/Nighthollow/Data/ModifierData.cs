@@ -13,21 +13,28 @@
 // limitations under the License.
 
 using MessagePack;
+using Nighthollow.Generated;
+using Nighthollow.Stats2;
 
 #nullable enable
 
 namespace Nighthollow.Data
 {
   [MessagePackObject]
-  public sealed class ModifierData
+  public sealed partial class ModifierData
   {
-    public ModifierData(ModifierTypeData baseType, IValueData? argument)
+    public ModifierData(
+      DelegateId? delegateId,
+      IStatModifier? statModifier,
+      bool targeted)
     {
-      BaseType = baseType;
-      Argument = argument;
+      DelegateId = delegateId;
+      StatModifier = statModifier;
+      Targeted = targeted;
     }
 
-    [Key(0)] public ModifierTypeData BaseType { get; }
-    [Key(1)] public IValueData? Argument { get; }
+    [Key(0)] public DelegateId? DelegateId { get; }
+    [Key(1)] public IStatModifier? StatModifier { get; }
+    [Key(2)] public bool Targeted { get; }
   }
 }

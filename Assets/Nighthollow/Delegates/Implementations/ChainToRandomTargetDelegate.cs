@@ -30,7 +30,7 @@ namespace Nighthollow.Delegates.Implementations
   public sealed class ChainToRandomTargetDelegate : AbstractDelegate
   {
     public override string Describe(StatEntity entity) =>
-      $"Projectiles Chain {entity.GetInt(Stat.MaxProjectileTimesChained)} Times to Random Targets";
+      $"Projectiles Chain {entity.GetInt(OldStat.MaxProjectileTimesChained)} Times to Random Targets";
 
     public override bool ShouldSkipProjectileImpact(SkillContext c)
     {
@@ -46,7 +46,7 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
-      if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) < c.GetInt(Stat.MaxProjectileTimesChained))
+      if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) < c.GetInt(OldStat.MaxProjectileTimesChained))
       {
         var enemies = Root.Instance.CreatureService.EnemyCreatures()
           .Except(c.Projectile.Values.Get(Key.SkipProjectileImpacts))

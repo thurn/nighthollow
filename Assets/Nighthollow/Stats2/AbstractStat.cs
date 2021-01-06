@@ -13,13 +13,17 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Generated;
 
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
-  public abstract class AbstractStat<TOperation, TValue> : IStat where TOperation : IOperation
+  public interface IStat
+  {
+    StatId StatId { get; }
+  }
+
+  public abstract class AbstractStat<TModifier, TValue> : IStat where TModifier : IStatModifier
   {
     protected AbstractStat(StatId statId)
     {
@@ -28,7 +32,6 @@ namespace Nighthollow.Stats2
 
     public StatId StatId { get; }
 
-    public abstract TValue ComputeValue(
-      IReadOnlyDictionary<OperationType, IEnumerable<TOperation>> groups);
+    public abstract TValue ComputeValue(IReadOnlyDictionary<ModifierType, IEnumerable<TModifier>> groups);
   }
 }

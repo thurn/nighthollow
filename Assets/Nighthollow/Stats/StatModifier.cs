@@ -41,7 +41,7 @@ namespace Nighthollow.Stats
     public static IStatModifier Deserialize(JSONNode node)
     {
       Errors.CheckNotNull(node);
-      var stat = Stat.GetStat(node["statId"].AsInt);
+      var stat = OldStat.GetStat(node["statId"].AsInt);
       return stat.ParseModifier(node["value"].Value, (Operator) node["operator"].AsInt);
     }
   }
@@ -70,7 +70,7 @@ namespace Nighthollow.Stats
 
     public string? Describe()
     {
-      var statDescription = Generated.Stat.GetDescription(Stat.Id);
+      var statDescription = Generated.OldStat.GetDescription(Stat.Id);
       return statDescription == null ? null : _operation.Describe(statDescription);
     }
 

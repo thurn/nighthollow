@@ -34,7 +34,7 @@ namespace Nighthollow.Stats2
 
     [Key(0)] public int BasisPoints { get; }
 
-    public T Cast<T>() => (T) (object) this;
+    public object Get() => this;
 
     public override string ToString() => $"{BasisPoints / 100f}%";
 
@@ -69,14 +69,14 @@ namespace Nighthollow.Stats2
     }
   }
 
-  public sealed class PercentageStat : AbstractStat<NumericOperation<PercentageValue>, PercentageValue>
+  public sealed class PercentageStat : NumericStat<PercentageValue>
   {
     public PercentageStat(StatId statId) : base(statId)
     {
     }
 
     public override PercentageValue ComputeValue(
-      IReadOnlyDictionary<OperationType, IEnumerable<NumericOperation<PercentageValue>>> groups) =>
+      IReadOnlyDictionary<ModifierType, IEnumerable<NumericStatModifier<PercentageValue>>> groups) =>
       new PercentageValue(IntStat.Compute(groups, duration => duration.AsBasisPoints()));
   }
 }

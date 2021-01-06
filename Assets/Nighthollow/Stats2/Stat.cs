@@ -14,12 +14,12 @@
 
 
 using System;
-using Nighthollow.Stats;
+using Nighthollow.Generated;
 
 // Generated Code - Do Not Modify!
 #nullable enable
 
-namespace Nighthollow.Generated
+namespace Nighthollow.Stats2
 {
   public enum StatId
   {
@@ -94,14 +94,17 @@ namespace Nighthollow.Generated
   public static class Stat
   {
     public static readonly IntStat Health = new IntStat(StatId.Health);
-    public static readonly DamageTypeIntRangesStat BaseDamage = new DamageTypeIntRangesStat(StatId.BaseDamage);
+    public static readonly TaggedValuesStat<DamageType, IntRangeValue> BaseDamage =
+      new TaggedValuesStat<DamageType, IntRangeValue>(StatId.BaseDamage, new IntRangeStat(0));
     public static readonly IntStat CreatureSpeed = new IntStat(StatId.CreatureSpeed);
     public static readonly PercentageStat CritChance = new PercentageStat(StatId.CritChance);
     public static readonly PercentageStat CritMultiplier = new PercentageStat(StatId.CritMultiplier);
     public static readonly IntStat Accuracy = new IntStat(StatId.Accuracy);
     public static readonly IntStat Evasion = new IntStat(StatId.Evasion);
-    public static readonly DamageTypeIntsStat DamageResistance = new DamageTypeIntsStat(StatId.DamageResistance);
-    public static readonly DamageTypeIntsStat DamageReduction = new DamageTypeIntsStat(StatId.DamageReduction);
+    public static readonly TaggedValuesStat<DamageType, int> DamageResistance =
+      new TaggedValuesStat<DamageType, int>(StatId.DamageResistance, new IntStat(0));
+    public static readonly TaggedValuesStat<DamageType, int> DamageReduction =
+      new TaggedValuesStat<DamageType, int>(StatId.DamageReduction, new IntStat(0));
     public static readonly PercentageStat MeleeHealthDrainPercent = new PercentageStat(StatId.MeleeHealthDrainPercent);
     public static readonly IntStat HealthGainOnMeleeHit = new IntStat(StatId.HealthGainOnMeleeHit);
     public static readonly PercentageStat SkillSpeedMultiplier = new PercentageStat(StatId.SkillSpeedMultiplier);
@@ -110,11 +113,13 @@ namespace Nighthollow.Generated
     public static readonly IntStat MeleeReflect = new IntStat(StatId.MeleeReflect);
     public static readonly IntStat HealthRegenerationPerSecond = new IntStat(StatId.HealthRegenerationPerSecond);
     public static readonly IntStat ManaCost = new IntStat(StatId.ManaCost);
-    public static readonly SchoolIntsStat InfluenceCost = new SchoolIntsStat(StatId.InfluenceCost);
+    public static readonly TaggedValuesStat<School, int> InfluenceCost =
+      new TaggedValuesStat<School, int>(StatId.InfluenceCost, new IntStat(0));
     public static readonly IntStat ProjectileSpeed = new IntStat(StatId.ProjectileSpeed);
     public static readonly IntStat HitboxRadius = new IntStat(StatId.HitboxRadius);
     public static readonly IntStat StartingMana = new IntStat(StatId.StartingMana);
-    public static readonly SchoolIntsStat Influence = new SchoolIntsStat(StatId.Influence);
+    public static readonly TaggedValuesStat<School, int> Influence =
+      new TaggedValuesStat<School, int>(StatId.Influence, new IntStat(0));
     public static readonly IntStat StartingHandSize = new IntStat(StatId.StartingHandSize);
     public static readonly IntStat ManaGain = new IntStat(StatId.ManaGain);
     public static readonly DurationStat CardDrawInterval = new DurationStat(StatId.CardDrawInterval);
@@ -122,7 +127,8 @@ namespace Nighthollow.Generated
     public static readonly DurationStat InitialEnemySpawnDelay = new DurationStat(StatId.InitialEnemySpawnDelay);
     public static readonly IntStat EnemiesToSpawn = new IntStat(StatId.EnemiesToSpawn);
     public static readonly BoolStat IsManaCreature = new BoolStat(StatId.IsManaCreature);
-    public static readonly DamageTypeIntsStat GainedDamageOnKill = new DamageTypeIntsStat(StatId.GainedDamageOnKill);
+    public static readonly TaggedValuesStat<DamageType, int> GainedDamageOnKill =
+      new TaggedValuesStat<DamageType, int>(StatId.GainedDamageOnKill, new IntStat(0));
     public static readonly IntStat MaxMeleeAreaTargets = new IntStat(StatId.MaxMeleeAreaTargets);
 
     public static readonly PercentageStat ProjectileDamageMultiplier =
@@ -159,8 +165,8 @@ namespace Nighthollow.Generated
     public static readonly IntStat MaxProjectileTimesChained = new IntStat(StatId.MaxProjectileTimesChained);
     public static readonly BoolStat Untargeted = new BoolStat(StatId.Untargeted);
 
-    public static readonly DamageTypeIntRangesStat SameTargetAddedDamage =
-      new DamageTypeIntRangesStat(StatId.SameTargetAddedDamage);
+    public static readonly TaggedValuesStat<DamageType, IntRangeValue> SameTargetAddedDamage =
+      new TaggedValuesStat<DamageType, IntRangeValue>(StatId.SameTargetAddedDamage, new IntRangeStat(0));
 
     public static readonly DurationStat CurseDuration = new DurationStat(StatId.CurseDuration);
     public static readonly PercentageStat GlobalDamageMultiplier = new PercentageStat(StatId.GlobalDamageMultiplier);
@@ -245,54 +251,6 @@ namespace Nighthollow.Generated
         case 68: return ShockAddedReceiveCritsChance;
         case 69: return BuffDuration;
         default: throw new ArgumentOutOfRangeException(statId.ToString());
-      }
-    }
-
-    public static string? GetDescription(StatId statId)
-    {
-      switch (statId)
-      {
-        case StatId.Health: return "Health";
-        case StatId.BaseDamage: return "Damage";
-        case StatId.CreatureSpeed: return "Speed";
-        case StatId.CritChance: return "Critical Hit Chance";
-        case StatId.CritMultiplier: return "Critical Hit Multiplier";
-        case StatId.Accuracy: return "Accuracy";
-        case StatId.Evasion: return "Evasion";
-        case StatId.DamageResistance: return "Damage Resistance";
-        case StatId.DamageReduction: return "Damage Reduction";
-        case StatId.MeleeHealthDrainPercent: return "Melee Health Drain";
-        case StatId.HealthGainOnMeleeHit: return "Health Gained on Melee Hit";
-        case StatId.SkillSpeedMultiplier: return "Skill Speed Multiplier";
-        case StatId.StunDurationOnEnemies: return "Stun Duration";
-        case StatId.AddedStunChance: return "Added Stun Chance";
-        case StatId.MeleeReflect: return "Melee Damage Reflect";
-        case StatId.HealthRegenerationPerSecond: return "Health Regeneration Per Second";
-        case StatId.ManaCost: return "Mana Cost";
-        case StatId.InfluenceCost: return "Influence Cost";
-        case StatId.ProjectileSpeed: return "Projectile Speed";
-        case StatId.StartingMana: return "Starting Mana";
-        case StatId.Influence: return "Influence";
-        case StatId.StartingHandSize: return "Starting Hand Size";
-        case StatId.ManaGain: return "Mana Generation";
-        case StatId.CardDrawInterval: return "Card Draw Interval";
-        case StatId.MaxMeleeAreaTargets: return "Melee Attacks Hit up to # Targets";
-        case StatId.ProjectileDamageMultiplier: return "Projectile Damage";
-        case StatId.ChainProjectileDamageMultiplier: return "Chain Projectile Damage";
-        case StatId.SkillCooldownRecovery: return "Skill Cooldown Recovery";
-        case StatId.KnockbackDuration: return "Knockback Duration";
-        case StatId.ManaGainInterval: return "Mana Generation Interval";
-        case StatId.CanCrit: return "Can Critically Hit / Cannot Critically Hit";
-        case StatId.CanStun: return "Can Stun / Cannot Stun";
-        case StatId.IgnoresDamageResistance: return "Ignores Damage Resistance / Respects Damage Resistance";
-        case StatId.IgnoresDamageReduction: return "Ignores Damage Reduction / Respects Damage Reduction";
-        case StatId.MaximumDamageReduction: return "Maximum Damage Reduction";
-        case StatId.MaximumDamageResistance: return "Maximum Damage Resistance";
-        case StatId.MaximumStunChance: return "Maximum Stun Chance";
-        case StatId.Cooldown: return "Cooldown";
-        case StatId.AddedManaGain: return "Mana Generation";
-        case StatId.MeleeDamageMultiplier: return "Melee Damage";
-        default: return null;
       }
     }
   }

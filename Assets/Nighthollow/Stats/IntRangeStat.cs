@@ -84,7 +84,7 @@ namespace Nighthollow.Stats
 
   public sealed class IntRangeStat : NumericStat<IntRangeValue>
   {
-    public IntRangeStat(StatId id) : base(id)
+    public IntRangeStat(OldStatId id) : base(id)
     {
     }
 

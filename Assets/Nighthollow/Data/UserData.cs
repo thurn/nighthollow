@@ -12,27 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 
 #nullable enable
 
-namespace Nighthollow.Delegates.Implementations
+namespace Nighthollow.Data
 {
-  public sealed class InfluenceAddedDelegate : AbstractDelegate
+  public sealed partial class UserData
   {
-    public override string Describe(StatEntity entity) => $"+1 Influence";
-
-    public override void OnActivate(CreatureContext c)
+    public UserData(StatTable stats)
     {
-      c.Results.Add(
-        new ApplyModifierToOwnerEffect(c.Self,
-          OldStat.Influence.Modifier(
-            TaggedNumericOperation.Add(c.Self.Data.School, value: 1),
-            new WhileAliveLifetime(c.Self))));
+      Stats = stats;
     }
+
+    public StatTable Stats { get; }
   }
 }

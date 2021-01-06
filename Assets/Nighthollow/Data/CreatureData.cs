@@ -12,27 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+using System.Collections.Immutable;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 
 #nullable enable
 
-namespace Nighthollow.Delegates.Implementations
+namespace Nighthollow.Data
 {
-  public sealed class InfluenceAddedDelegate : AbstractDelegate
+  public sealed partial class CreatureData
   {
-    public override string Describe(StatEntity entity) => $"+1 Influence";
-
-    public override void OnActivate(CreatureContext c)
+    public CreatureData(
+      IDelegate @delegate,
+      StatTable stats,
+      ImmutableList<SkillData> skills,
+      CreatureTypeData baseType,
+      CreatureItemData itemData)
     {
-      c.Results.Add(
-        new ApplyModifierToOwnerEffect(c.Self,
-          OldStat.Influence.Modifier(
-            TaggedNumericOperation.Add(c.Self.Data.School, value: 1),
-            new WhileAliveLifetime(c.Self))));
+      Delegate = @delegate;
+      Stats = stats;
+      Skills = skills;
+      BaseType = baseType;
+      ItemData = itemData;
     }
+
+    public IDelegate Delegate { get; }
+    public StatTable Stats { get; }
+    public ImmutableList<SkillData> Skills { get; }
+    public CreatureTypeData BaseType { get; }
+    public CreatureItemData ItemData { get; }
   }
 }

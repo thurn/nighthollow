@@ -49,7 +49,7 @@ namespace Nighthollow.Components
     public void OnEnemyCreatureKilled()
     {
       _deathCount++;
-      if (_deathCount >= _stats.Get(Stat.EnemiesToSpawn))
+      if (_deathCount >= _stats.Get(OldStat.EnemiesToSpawn))
       {
         Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
           .Show(new GameOverMessage.Args("Victory!", "World"), animate: true);
@@ -66,16 +66,16 @@ namespace Nighthollow.Components
 
     IEnumerator<YieldInstruction> SpawnAsync()
     {
-      yield return new WaitForSeconds(_stats.Get(Stat.InitialEnemySpawnDelay).AsSeconds());
+      yield return new WaitForSeconds(_stats.Get(OldStat.InitialEnemySpawnDelay).AsSeconds());
 
-      while (_spawnCount < _stats.Get(Stat.EnemiesToSpawn))
+      while (_spawnCount < _stats.Get(OldStat.EnemiesToSpawn))
       {
         _spawnCount++;
         Root.Instance.CreatureService.CreateMovingCreature(
           RandomEnemy(),
           RandomFile(),
           Constants.EnemyCreatureStartingX);
-        yield return new WaitForSeconds(_stats.Get(Stat.EnemySpawnDelay).AsSeconds());
+        yield return new WaitForSeconds(_stats.Get(OldStat.EnemySpawnDelay).AsSeconds());
       }
 
       // ReSharper disable once IteratorNeverReturns

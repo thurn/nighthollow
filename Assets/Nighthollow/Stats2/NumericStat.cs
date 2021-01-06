@@ -12,27 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-using Nighthollow.Stats;
-
 #nullable enable
 
-namespace Nighthollow.Delegates.Implementations
+namespace Nighthollow.Stats2
 {
-  public sealed class InfluenceAddedDelegate : AbstractDelegate
+  public abstract class NumericStat<T> : AbstractStat<NumericStatModifier<T>, T> where T : struct
   {
-    public override string Describe(StatEntity entity) => $"+1 Influence";
-
-    public override void OnActivate(CreatureContext c)
+    protected NumericStat(StatId statId) : base(statId)
     {
-      c.Results.Add(
-        new ApplyModifierToOwnerEffect(c.Self,
-          OldStat.Influence.Modifier(
-            TaggedNumericOperation.Add(c.Self.Data.School, value: 1),
-            new WhileAliveLifetime(c.Self))));
     }
+
+    public IStatModifier Add(T value) => NumericStatModifier<T>.Add(this, value);
+
+    public IStatModifier Increase(PercentageValue value) => NumericStatModifier<T>.Increase(this, value);
+
+    public IStatModifier Set(T value) => NumericStatModifier<T>.Set(this, value);
+
+    public IStatModifier? Set(T? nullable) =>
+      nullable.HasValue ? NumericStatModifier<T>.Set(this, nullable.Value) : null;
   }
 }

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Generated;
 
@@ -26,7 +27,7 @@ namespace Nighthollow.Data
       string name,
       SkillAnimationType skillAnimationType,
       SkillType skillType,
-      AffixTypeData? implicitAffix = null,
+      ImmutableList<ModifierTypeData>? implicitModifiers = null,
       string? address = null,
       int? projectileSpeed = null,
       bool usesAccuracy = false,
@@ -36,7 +37,7 @@ namespace Nighthollow.Data
       Name = name;
       SkillAnimationType = skillAnimationType;
       SkillType = skillType;
-      ImplicitAffix = implicitAffix;
+      ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierTypeData>.Empty;
       Address = address;
       ProjectileSpeed = projectileSpeed;
       UsesAccuracy = usesAccuracy;
@@ -47,7 +48,7 @@ namespace Nighthollow.Data
     [Key(0)] public string Name { get; }
     [Key(1)] public SkillAnimationType SkillAnimationType { get; }
     [Key(2)] public SkillType SkillType { get; }
-    [Key(3)] public AffixTypeData? ImplicitAffix { get; }
+    [Key(3)] public ImmutableList<ModifierTypeData>? ImplicitModifiers { get; }
     [Key(4)] public string? Address { get; }
     [Key(5)] public int? ProjectileSpeed { get; }
     [Key(6)] public bool UsesAccuracy { get; }

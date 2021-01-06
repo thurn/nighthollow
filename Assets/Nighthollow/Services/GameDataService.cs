@@ -105,7 +105,7 @@ namespace Nighthollow.Services
 
         var statId = Parse.IntRequired(stat, "Stat ID");
         StatTable.Defaults.InsertModifier(
-          Stat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Overwrite));
+          OldStat.GetStat(statId).ParseModifier(stat["Default Value"], Operator.Overwrite));
       }
 
       foreach (var modifier in parsed["Modifiers"].Select(row => new ModifierTypeData(row)))
@@ -200,19 +200,19 @@ namespace Nighthollow.Services
       var creatureType = GetCreatureType(Parse.IntRequired(row, "Base Creature"));
 
       var stats = new StatModifierTable();
-      stats.InsertModifier(Stat.Health.Add(Parse.IntRequired(row, "Health")));
-      stats.InsertModifier(Stat.ManaCost.Add(Parse.Int(row, "Mana Cost") ?? 0));
+      stats.InsertModifier(OldStat.Health.Add(Parse.IntRequired(row, "Health")));
+      stats.InsertModifier(OldStat.ManaCost.Add(Parse.Int(row, "Mana Cost") ?? 0));
 
       var costString = Parse.String(row, "Influence Cost");
       if (costString != null)
       {
-        stats.InsertModifier(Stat.InfluenceCost.ParseModifier(costString, Operator.Add));
+        stats.InsertModifier(OldStat.InfluenceCost.ParseModifier(costString, Operator.Add));
       }
 
       var baseDamageString = Parse.String(row, "Base Damage");
       if (baseDamageString != null)
       {
-        stats.InsertModifier(Stat.BaseDamage.ParseModifier(baseDamageString, Operator.Overwrite));
+        stats.InsertModifier(OldStat.BaseDamage.ParseModifier(baseDamageString, Operator.Overwrite));
       }
 
       var cardName = Parse.String(row, "Card Name");

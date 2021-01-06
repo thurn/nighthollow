@@ -25,14 +25,14 @@ namespace Nighthollow.Stats
 {
   public class StatModifierTable
   {
-    protected readonly Dictionary<StatId, List<IStatModifier>> Modifiers;
+    protected readonly Dictionary<OldStatId, List<IStatModifier>> Modifiers;
 
     public StatModifierTable()
     {
-      Modifiers = new Dictionary<StatId, List<IStatModifier>>();
+      Modifiers = new Dictionary<OldStatId, List<IStatModifier>>();
     }
 
-    protected StatModifierTable(Dictionary<StatId, List<IStatModifier>> modifiers)
+    protected StatModifierTable(Dictionary<OldStatId, List<IStatModifier>> modifiers)
     {
       Modifiers = modifiers.ToDictionary(k => k.Key, v => v.Value.Select(o => o).ToList());
     }
@@ -57,12 +57,12 @@ namespace Nighthollow.Stats
 
     public static StatModifierTable Deserialize(JSONNode node) => new StatModifierTable(DeserializeInternal(node));
 
-    protected static Dictionary<StatId, List<IStatModifier>> DeserializeInternal(JSONNode node)
+    protected static Dictionary<OldStatId, List<IStatModifier>> DeserializeInternal(JSONNode node)
     {
-      var dictionary = new Dictionary<StatId, List<IStatModifier>>();
+      var dictionary = new Dictionary<OldStatId, List<IStatModifier>>();
       foreach (var row in node["modifiers"].AsArray.Children)
       {
-        var statId = (StatId) row["statId"].AsInt;
+        var statId = (OldStatId) row["statId"].AsInt;
         dictionary.GetOrInsertDefault(statId, new List<IStatModifier>()).Add(StatModifierUtil.Deserialize(row));
       }
 
@@ -86,7 +86,7 @@ namespace Nighthollow.Stats
   public sealed class StatTable : StatModifierTable
   {
     public static readonly StatTable Defaults =
-      new StatTable(parent: null, new Dictionary<StatId, List<IStatModifier>>());
+      new StatTable(parent: null, new Dictionary<OldStatId, List<IStatModifier>>());
 
     readonly StatTable? _parent;
 
@@ -95,7 +95,7 @@ namespace Nighthollow.Stats
       _parent = parent;
     }
 
-    public StatTable(StatTable? parent, Dictionary<StatId, List<IStatModifier>> modifiers) : base(modifiers)
+    public StatTable(StatTable? parent, Dictionary<OldStatId, List<IStatModifier>> modifiers) : base(modifiers)
     {
       _parent = parent;
     }
@@ -108,7 +108,7 @@ namespace Nighthollow.Stats
     public static StatTable Deserialize(JSONNode node, StatTable parent) =>
       new StatTable(parent, DeserializeInternal(node));
 
-    IEnumerable<IStatModifier> OperationsForStatId(StatId statId)
+    IEnumerable<IStatModifier> OperationsForStatId(OldStatId statId)
     {
       if (Modifiers.ContainsKey(statId))
       {

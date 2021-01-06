@@ -38,12 +38,12 @@ namespace Nighthollow.Components
       _cards = cards.ToList();
       _orderedDraws = orderedDraws;
 
-      var manaCreatureCount = _cards.Count(c => c.GetBool(Stat.IsManaCreature));
+      var manaCreatureCount = _cards.Count(c => c.GetBool(OldStat.IsManaCreature));
       var manaCreatureWeight = 4000 * ((2.0 * _cards.Count - manaCreatureCount) / 3.0);
 
       foreach (var card in _cards)
       {
-        _weights.Add(card.GetBool(Stat.IsManaCreature) ? (int) Math.Round(manaCreatureWeight) : 4000);
+        _weights.Add(card.GetBool(OldStat.IsManaCreature) ? (int) Math.Round(manaCreatureWeight) : 4000);
       }
     }
 

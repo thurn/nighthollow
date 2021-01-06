@@ -82,7 +82,7 @@ namespace Nighthollow.Stats
 
   public sealed class PercentageStat : NumericStat<PercentageValue>
   {
-    public PercentageStat(StatId id) : base(id)
+    public PercentageStat(OldStatId id) : base(id)
     {
     }
 

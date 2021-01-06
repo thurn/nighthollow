@@ -15,28 +15,12 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Nighthollow.Generated;
 using Nighthollow.Utils;
 
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
-  public sealed class StatMap
-  {
-    public StatMap(ImmutableDictionary<StatId, ImmutableList<IStatModifier>> modifiers)
-    {
-      Modifiers = modifiers;
-    }
-
-    public ImmutableDictionary<StatId, ImmutableList<IStatModifier>> Modifiers { get; }
-
-    public StatMap InsertModifier(IStatModifier modifier) =>
-      new StatMap(Modifiers.AppendOrCreateList(modifier.Stat.StatId, modifier));
-
-    public StatTable Build(StatTable parent) => new StatTable(parent, Modifiers);
-  }
-
   public sealed class StatTable
   {
     public static readonly StatTable Defaults =
@@ -45,21 +29,29 @@ namespace Nighthollow.Stats2
     readonly StatTable? _parent;
     readonly ImmutableDictionary<StatId, ImmutableList<IStatModifier>> _modifiers;
 
-    public StatTable(StatTable? parent, ImmutableDictionary<StatId, ImmutableList<IStatModifier>> modifiers)
+    public StatTable(StatTable? parent = null) : this(parent,
+      ImmutableDictionary<StatId, ImmutableList<IStatModifier>>.Empty)
+    {
+    }
+
+    StatTable(StatTable? parent, ImmutableDictionary<StatId, ImmutableList<IStatModifier>> modifiers)
     {
       _parent = parent;
       _modifiers = modifiers;
     }
 
     public StatTable InsertModifier(IStatModifier modifier) =>
-      new StatTable(_parent, _modifiers.AppendOrCreateList(modifier.Stat.StatId, modifier));
+      new StatTable(_parent, _modifiers.AppendOrCreateList(modifier.StatId, modifier));
 
-    public TValue Get<TOperation, TValue>(AbstractStat<TOperation, TValue> stat) where TOperation : IOperation =>
+    public StatTable InsertNullableModifier(IStatModifier? modifier) =>
+      modifier == null ? this : InsertModifier(modifier);
+
+    public TValue Get<TModifier, TValue>(AbstractStat<TModifier, TValue> stat) where TModifier : IStatModifier =>
       stat.ComputeValue(
         ModifiersForStat(stat.StatId)
-          .Select(modifier => (TOperation) modifier.Operation)
-          .GroupBy(op => op.Type)
-          .ToDictionary(g => g.Key, g => g.Select(o => o)));
+          .Select(operation => (TModifier) operation)
+          .GroupBy(operation => operation.Type)
+          .ToDictionary(g => g.Key, g => g.Select(m => m)));
 
     IEnumerable<IStatModifier> ModifiersForStat(StatId statId)
     {

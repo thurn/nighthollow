@@ -26,7 +26,7 @@ namespace Nighthollow.Delegates.Implementations
   public sealed class MultipleProjectilesDelegate : AbstractDelegate
   {
     public override string Describe(StatEntity entity) =>
-      $"Fires {entity.GetInt(Stat.ProjectileSequenceCount)} Projectiles in Sequence";
+      $"Fires {entity.GetInt(OldStat.ProjectileSequenceCount)} Projectiles in Sequence";
 
     public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
     {
@@ -37,7 +37,7 @@ namespace Nighthollow.Delegates.Implementations
       }
 
       // 1 less projectile since we already fired one
-      for (var i = 1; i < c.GetInt(Stat.ProjectileSequenceCount); ++i)
+      for (var i = 1; i < c.GetInt(OldStat.ProjectileSequenceCount); ++i)
       {
         c.Results.Add(new FireProjectileEffect(
           c.Self,
@@ -45,7 +45,7 @@ namespace Nighthollow.Delegates.Implementations
           c.DelegateIndex,
           c.Self.ProjectileSource.position,
           Vector2.zero,
-          firingDelayMs: i * c.GetStat(Stat.ProjectileSequenceDelay).AsMilliseconds()));
+          firingDelayMs: i * c.GetStat(OldStat.ProjectileSequenceDelay).AsMilliseconds()));
       }
     }
   }

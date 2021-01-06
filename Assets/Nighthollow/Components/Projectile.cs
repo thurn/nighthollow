@@ -46,7 +46,7 @@ namespace Nighthollow.Components
         transform.LookAt(_trackCreature.transform.position);
       }
 
-      transform.position += Errors.CheckPositive(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f
+      transform.position += Errors.CheckPositive(_skillData.GetInt(OldStat.ProjectileSpeed)) / 1000f
                             * Time.deltaTime * transform.forward;
 
       if (Mathf.Abs(transform.position.x) > 25 || Mathf.Abs(transform.position.y) > 25)

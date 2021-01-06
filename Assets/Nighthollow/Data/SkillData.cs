@@ -12,12 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Delegates.Core;
+using Nighthollow.Stats2;
+
 #nullable enable
 
 namespace Nighthollow.Data
 {
-  public interface IData
+  public sealed partial class SkillData
   {
+    public SkillData(
+      IDelegate @delegate,
+      StatTable stats,
+      SkillTypeData baseType,
+      SkillItemData itemData)
+    {
+      Delegate = @delegate;
+      Stats = stats;
+      BaseType = baseType;
+      ItemData = itemData;
+    }
 
+    public IDelegate Delegate { get; }
+    public StatTable Stats { get; }
+    public SkillTypeData BaseType { get; }
+    public SkillItemData ItemData { get; }
   }
 }

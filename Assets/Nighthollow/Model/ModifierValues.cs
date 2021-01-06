@@ -48,7 +48,7 @@ namespace Nighthollow.Model
         if (value != null)
         {
           _affixModifiers.GetOrInsertDefault(affixId, new Dictionary<int, IStatModifier>())[modifierId] =
-            Stat.GetStat(Errors.CheckNotNull(modifier.StatId))
+            OldStat.GetStat(Errors.CheckNotNull(modifier.StatId))
               .ParseModifier(Parse.StringRequired(row, "Value"), Errors.CheckNotNull(modifier.Operator));
         }
       }
@@ -68,7 +68,7 @@ namespace Nighthollow.Model
           }
           else if (baseType.StatId.HasValue && baseType.Operator.HasValue)
           {
-            statModifier = Stat.GetStat(baseType.StatId!.Value).StaticModifierForOperator(baseType.Operator!.Value);
+            statModifier = OldStat.GetStat(baseType.StatId!.Value).StaticModifierForOperator(baseType.Operator!.Value);
           }
 
           result.Add(new ModifierData(baseType.DelegateId, statModifier));
@@ -144,7 +144,7 @@ namespace Nighthollow.Model
             IStatModifier? statModifier = null;
             if (baseType.StatId.HasValue)
             {
-              statModifier = Stat.GetStat(Errors.CheckNotNull(baseType.StatId))
+              statModifier = OldStat.GetStat(Errors.CheckNotNull(baseType.StatId))
                 .StaticModifierForOperator(Errors.CheckNotNull(baseType.Operator));
             }
 

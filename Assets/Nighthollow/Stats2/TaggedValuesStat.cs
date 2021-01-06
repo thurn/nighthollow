@@ -23,25 +23,34 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats2
 {
-  public class TaggedValuesStat<TTag, TValue> :
-    AbstractStat<TaggedNumericOperation<TTag, TValue>, ImmutableDictionary<TTag, TValue>>
+  public sealed class TaggedValuesStat<TTag, TValue> :
+    AbstractStat<TaggedNumericStatModifier<TTag, TValue>, ImmutableDictionary<TTag, TValue>>
     where TTag : Enum where TValue : struct
   {
-    readonly AbstractStat<NumericOperation<TValue>, TValue> _childStat;
+    readonly AbstractStat<NumericStatModifier<TValue>, TValue> _childStat;
 
-    protected TaggedValuesStat(StatId statId, AbstractStat<NumericOperation<TValue>, TValue> childStat) : base(statId)
+    public TaggedValuesStat(StatId statId, AbstractStat<NumericStatModifier<TValue>, TValue> childStat) : base(statId)
     {
       _childStat = childStat;
     }
 
+    public IStatModifier Add(ImmutableDictionary<TTag, TValue> value) =>
+      TaggedNumericStatModifier<TTag, TValue>.Add(this, value);
+
+    public IStatModifier Increase(ImmutableDictionary<TTag, PercentageValue> value) =>
+      TaggedNumericStatModifier<TTag, TValue>.Increase(this, value);
+
+    public IStatModifier Set(ImmutableDictionary<TTag, TValue> value) =>
+      TaggedNumericStatModifier<TTag, TValue>.Set(this, value);
+
     public override ImmutableDictionary<TTag, TValue> ComputeValue(
-      IReadOnlyDictionary<OperationType, IEnumerable<TaggedNumericOperation<TTag, TValue>>> groups)
+      IReadOnlyDictionary<ModifierType, IEnumerable<TaggedNumericStatModifier<TTag, TValue>>> groups)
     {
       var result = ImmutableDictionary<TTag, TValue>.Empty;
-      var overwrites = groups[OperationType.Set].ToList();
+      var overwrites = groups[ModifierType.Set].ToList();
       if (overwrites.Any())
       {
-        result = overwrites.Last().OverwriteWith!;
+        result = overwrites.Last().SetTo!;
       }
 
       var allTags = groups.Values.SelectMany(x => x)

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Immutable;
+using System.Linq;
 using MessagePack;
 using Nighthollow.Generated;
 using Nighthollow.Stats2;
@@ -23,17 +23,17 @@ using Nighthollow.Stats2;
 namespace Nighthollow.Data
 {
   [Union(0, typeof(IntValueData))]
-  [Union(1, typeof(BoolValueData))]
-  [Union(2, typeof(DurationValue))]
-  [Union(3, typeof(PercentageValue))]
-  [Union(4, typeof(IntRangeValue))]
-  [Union(5, typeof(TaggedValueData<DamageType, int>))]
-  [Union(6, typeof(TaggedValueData<DamageType, PercentageValue>))]
-  [Union(7, typeof(TaggedValueData<DamageType, IntRangeValue>))]
-  [Union(8, typeof(TaggedValueData<School, int>))]
+  [Union(1, typeof(DurationValue))]
+  [Union(2, typeof(PercentageValue))]
+  [Union(3, typeof(IntRangeValue))]
+  [Union(4, typeof(BoolValueData))]
+  [Union(5, typeof(ImmutableDictionaryValue<DamageType, int>))]
+  [Union(6, typeof(ImmutableDictionaryValue<DamageType, PercentageValue>))]
+  [Union(7, typeof(ImmutableDictionaryValue<DamageType, IntRangeValue>))]
+  [Union(8, typeof(ImmutableDictionaryValue<School, int>))]
   public interface IValueData
   {
-    public T Cast<T>();
+    object Get();
   }
 
   public static class ValueDataUtil
@@ -85,9 +85,9 @@ namespace Nighthollow.Data
 
     [Key(0)] public int Int { get; }
 
-    public override string ToString() => Int.ToString();
+    public object Get() => Int;
 
-    public T Cast<T>() => (T) (object) Int;
+    public override string ToString() => Int.ToString();
   }
 
   [MessagePackObject]
@@ -100,21 +100,23 @@ namespace Nighthollow.Data
 
     [Key(0)] public bool Bool { get; }
 
-    public override string ToString() => Bool.ToString();
+    public object Get() => Bool;
 
-    public T Cast<T>() => (T) (object) Bool;
+    public override string ToString() => Bool.ToString();
   }
 
   [MessagePackObject]
-  public sealed class TaggedValueData<TTag, TValue> : IValueData where TTag : Enum where TValue : struct
+  public sealed class ImmutableDictionaryValue<TTag, TValue> : IValueData where TTag : notnull
   {
-    public TaggedValueData(ImmutableDictionary<TTag, TValue> dictionary)
+    public ImmutableDictionaryValue(ImmutableDictionary<TTag, TValue> dictionary)
     {
       Dictionary = dictionary;
     }
 
     [Key(0)] public ImmutableDictionary<TTag, TValue> Dictionary { get; }
 
-    public T Cast<T>() => (T) (object) Dictionary;
+    public object Get() => Dictionary;
+
+    public override string ToString() => string.Join(",", Dictionary.Select(pair => $"{pair.Key}: {pair.Value}"));
   }
 }

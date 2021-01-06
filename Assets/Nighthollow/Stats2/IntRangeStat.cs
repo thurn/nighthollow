@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Generated;
@@ -35,7 +33,7 @@ namespace Nighthollow.Stats2
     [Key(0)] public int Low { get; }
     [Key(1)] public int High { get; }
 
-    public T Cast<T>() => (T) (object) this;
+    public object Get() => this;
 
     public static readonly IntRangeValue Zero = new IntRangeValue(low: 0, high: 0);
 
@@ -73,14 +71,14 @@ namespace Nighthollow.Stats2
     }
   }
 
-  public sealed class IntRangeStat : AbstractStat<NumericOperation<IntRangeValue>, IntRangeValue>
+  public sealed class IntRangeStat : NumericStat<IntRangeValue>
   {
     public IntRangeStat(StatId statId) : base(statId)
     {
     }
 
     public override IntRangeValue ComputeValue(
-      IReadOnlyDictionary<OperationType, IEnumerable<NumericOperation<IntRangeValue>>> groups)
+      IReadOnlyDictionary<ModifierType, IEnumerable<NumericStatModifier<IntRangeValue>>> groups)
     {
       return new IntRangeValue(
         IntStat.Compute(groups, range => range.Low),

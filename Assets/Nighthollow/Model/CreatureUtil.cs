@@ -29,11 +29,11 @@ namespace Nighthollow.Model
     {
       var stats = item.Stats.Clone(parentStats);
 
-      stats.InsertModifier(Stat.CreatureSpeed.Add(item.BaseType.Speed));
+      stats.InsertModifier(OldStat.CreatureSpeed.Add(item.BaseType.Speed));
 
       if (item.BaseType.IsManaCreature)
       {
-        stats.InsertModifier(Stat.IsManaCreature.SetTrue());
+        stats.InsertModifier(OldStat.IsManaCreature.SetTrue());
       }
 
       var (delegates, targetedAffixes) = ProcessAffixes(item.Affixes, stats);
@@ -56,22 +56,22 @@ namespace Nighthollow.Model
       var stats = item.Stats.Clone(parentStats);
       if (item.BaseType.ProjectileSpeed.HasValue)
       {
-        stats.InsertModifier(Stat.ProjectileSpeed.Add(item.BaseType.ProjectileSpeed.Value));
+        stats.InsertModifier(OldStat.ProjectileSpeed.Add(item.BaseType.ProjectileSpeed.Value));
       }
 
       if (item.BaseType.UsesAccuracy)
       {
-        stats.InsertModifier(Stat.UsesAccuracy.SetTrue());
+        stats.InsertModifier(OldStat.UsesAccuracy.SetTrue());
       }
 
       if (item.BaseType.CanCrit)
       {
-        stats.InsertModifier(Stat.CanCrit.SetTrue());
+        stats.InsertModifier(OldStat.CanCrit.SetTrue());
       }
 
       if (item.BaseType.CanStun)
       {
-        stats.InsertModifier(Stat.CanStun.SetTrue());
+        stats.InsertModifier(OldStat.CanStun.SetTrue());
       }
 
       var (delegates, targetedAffixes) = ProcessAffixes(item.Affixes, stats);

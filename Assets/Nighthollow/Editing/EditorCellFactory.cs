@@ -79,15 +79,6 @@ namespace Nighthollow.Editing
           screenController,
           new NestedListEditorSheetDelegate(reflectivePath));
       }
-      else if (type == typeof(AffixTypeData))
-      {
-        cellDelegate = new NestedEditorCellDelegate(
-          screenController,
-          new AffixTypeEditorSheetDelegate(
-            reflectivePath,
-            reflectivePath.Property(type.GetProperty("Modifiers")!),
-            "Modifiers:"));
-      }
       else
       {
         throw new InvalidOperationException($"No editor registered for type {type}");
