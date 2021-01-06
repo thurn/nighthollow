@@ -12,14 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Immutable;
-using MessagePack;
 
 #nullable enable
 
 namespace Nighthollow.Data
 {
-  [MessagePackObject]
+  public sealed class FieldAttribute : Attribute
+  {
+  }
+
   public sealed partial class GameData
   {
     public GameData(
@@ -44,14 +47,14 @@ namespace Nighthollow.Data
       Deck = deck ?? ImmutableDictionary<int, CreatureItemData>.Empty;
     }
 
-    [Key(0)] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
-    [Key(1)] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
-    [Key(2)] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
-    [Key(3)] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
-    [Key(4)] public ImmutableDictionary<int, StatData> StatData { get; }
-    [Key(5)] public ImmutableDictionary<int, StaticCreatureListData> CreatureLists { get; }
-    [Key(6)] public ImmutableDictionary<int, ModifierData> UserModifiers { get; }
-    [Key(7)] public ImmutableDictionary<int, CreatureItemData> Collection { get; }
-    [Key(8)] public ImmutableDictionary<int, CreatureItemData> Deck { get; }
+    [Field] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
+    [Field] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
+    [Field] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
+    [Field] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
+    [Field] public ImmutableDictionary<int, StatData> StatData { get; }
+    [Field] public ImmutableDictionary<int, StaticCreatureListData> CreatureLists { get; }
+    [Field] public ImmutableDictionary<int, ModifierData> UserModifiers { get; }
+    [Field] public ImmutableDictionary<int, CreatureItemData> Collection { get; }
+    [Field] public ImmutableDictionary<int, CreatureItemData> Deck { get; }
   }
 }

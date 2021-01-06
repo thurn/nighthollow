@@ -54,10 +54,13 @@ namespace Nighthollow.Data
           StandardResolverAllowPrivate.Instance));
 
       GameData gameData = new GameData();
+      File.Delete(Path.Combine(Application.persistentDataPath, $"GameData.bytes"));
 
-      foreach (var tableId in TableId.AllTableIds)
+      foreach (var tableId in TableId.AllTableIds.Reverse())
       {
         var persistentFilePath = PersistentFilePath(tableId);
+        File.Delete(persistentFilePath);
+
         if (File.Exists(persistentFilePath) && !_disablePersistence)
         {
           Debug.Log($"Reading game data from {persistentFilePath}");

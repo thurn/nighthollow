@@ -1,5 +1,5 @@
 #!/bin/sh
 
-rm "$HOME/Library/Application Support/DefaultCompany/Nighthollow/GameData.bytes"
-rm "Assets/Resources/Data/GameData.bytes"
-rm "Assets/Resources/Data/GameData.bytes.meta"
+rm "$HOME/Library/Application Support/DefaultCompany/Nighthollow/*.bytes"
+rm "Assets/Resources/Data/*.bytes"
+rm "Assets/Resources/Data/*.bytes.meta"

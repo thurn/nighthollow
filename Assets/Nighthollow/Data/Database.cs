@@ -150,7 +150,7 @@ namespace Nighthollow.Data
       foreach (var tableId in tableIds)
       {
         using var editorStream = File.OpenWrite(DataService.EditorFilePath(tableId));
-        MessagePackSerializer.Serialize(editorStream, gameData, _serializationOptions);
+        tableId.Serialize(gameData, editorStream, _serializationOptions);;
         Debug.Log($"Wrote game data to {DataService.EditorFilePath(tableId)}");
       }
 #endif
