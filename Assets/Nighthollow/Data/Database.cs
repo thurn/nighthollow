@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 using MessagePack;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -108,7 +109,7 @@ namespace Nighthollow.Data
     }
 
     /// <summary>Should only be invoked from <see cref="DataService"/>.</summary>
-    public void PerformWritesInternal(bool disablePersistence, string persistentFilePath, string editorFilePath)
+    public void PerformWritesInternal(bool disablePersistence)
     {
       if (_mutations.Count == 0 || _writePending)
       {
@@ -125,12 +126,16 @@ namespace Nighthollow.Data
       }
 
       _mutations = ImmutableList<IMutation>.Empty;
+      var tableIds = events.Select(e => e.TableId).ToImmutableHashSet();
 
       if (!disablePersistence)
       {
-        using var stream = File.OpenWrite(persistentFilePath);
-        MessagePackSerializer.Serialize(stream, gameData, _serializationOptions);
-        Debug.Log($"Wrote game data to {persistentFilePath}");
+        foreach (var tableId in tableIds)
+        {
+          using var stream = File.OpenWrite(DataService.PersistentFilePath(tableId));
+          tableId.Serialize(gameData, stream, _serializationOptions);
+          Debug.Log($"Wrote game data to {DataService.PersistentFilePath(tableId)}");
+        }
 
 #if UNITY_WEBGL_API
 #pragma warning disable 618
@@ -141,10 +146,13 @@ namespace Nighthollow.Data
       }
 
 #if UNITY_EDITOR
-      // In the editor we write directly to assets
-      using var editorStream = File.OpenWrite(editorFilePath);
-      MessagePackSerializer.Serialize(editorStream, gameData, _serializationOptions);
-      Debug.Log($"Wrote game data to {editorFilePath}");
+      // In the editor we write directly to assets too
+      foreach (var tableId in tableIds)
+      {
+        using var editorStream = File.OpenWrite(DataService.EditorFilePath(tableId));
+        MessagePackSerializer.Serialize(editorStream, gameData, _serializationOptions);
+        Debug.Log($"Wrote game data to {DataService.EditorFilePath(tableId)}");
+      }
 #endif
 
       _gameData = gameData;
@@ -307,6 +315,7 @@ namespace Nighthollow.Data
         var metadata = gameData.TableMetadata.GetOrReturnDefault(_tableId.Id, new TableMetadata());
         var newId = metadata.NextId;
         events.Add(new EntityEvent(EntityEventType.Added, _tableId, newId));
+        events.Add(new EntityEvent(EntityEventType.Updated, TableId.TableMetadata, _tableId.Id));
         return _tableId.Write(
           gameData.WithTableMetadata(gameData.TableMetadata.SetItem(_tableId.Id, metadata.WithNextId(newId + 1))),
           _tableId.GetIn(gameData).SetItem(newId, _value));

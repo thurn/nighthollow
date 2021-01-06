@@ -29,21 +29,22 @@ namespace Nighthollow.Data
 
   public sealed class DataService : MonoBehaviour
   {
-    string? _resourceAddress;
-    string? _persistentFilePath;
-    string? _editorFilePath;
     Database? _database;
     readonly List<IOnDatabaseReadyListener> _listeners = new List<IOnDatabaseReadyListener>();
     [SerializeField] bool _disablePersistence;
 
     void Start()
     {
-      _resourceAddress = Path.Combine("Data", "GameData");
-      _persistentFilePath = Path.Combine(Application.persistentDataPath, "GameData.bytes");
-      _editorFilePath = Path.Combine(Application.dataPath, "Resources", "Data", "GameData.bytes");
-
       StartCoroutine(Initialize());
     }
+
+    static string ResourceAddress(ITableId tableId) => $"Data/{tableId.TableName}";
+
+    public static string PersistentFilePath(ITableId tableId) =>
+      Path.Combine(Application.persistentDataPath, $"{tableId.TableName}.bytes");
+
+    public static string EditorFilePath(ITableId tableId) =>
+      Path.Combine(Application.dataPath, "Resources", "Data", $"{tableId.TableName}.bytes");
 
     IEnumerator<YieldInstruction> Initialize()
     {
@@ -52,25 +53,29 @@ namespace Nighthollow.Data
           GeneratedResolver.Instance,
           StandardResolverAllowPrivate.Instance));
 
-      File.Delete(_persistentFilePath!);
+      GameData gameData = new GameData();
 
-      GameData gameData;
-      if (File.Exists(_persistentFilePath) && !_disablePersistence)
+      foreach (var tableId in TableId.AllTableIds)
       {
-        Debug.Log($"Reading game data from {_persistentFilePath}");
-        using var file = File.OpenRead(_persistentFilePath!);
-        gameData = MessagePackSerializer.Deserialize<GameData>(file, serializationOptions);
-      }
-      else
-      {
-        Debug.Log($"Reading game data from {_resourceAddress}");
-        var fetch = Resources.LoadAsync<TextAsset>(_resourceAddress!);
-        yield return fetch;
+        var persistentFilePath = PersistentFilePath(tableId);
+        if (File.Exists(persistentFilePath) && !_disablePersistence)
+        {
+          Debug.Log($"Reading game data from {persistentFilePath}");
+          using var file = File.OpenRead(persistentFilePath!);
+          gameData = tableId.Deserialize(gameData, file, serializationOptions);
+        }
+        else
+        {
+          Debug.Log($"Reading game data from {ResourceAddress(tableId)}");
+          var fetch = Resources.LoadAsync<TextAsset>(ResourceAddress(tableId!)!);
+          yield return fetch;
 
-        var asset = fetch.asset as TextAsset;
-        gameData = asset
-          ? MessagePackSerializer.Deserialize<GameData>(asset!.bytes, serializationOptions)
-          : new GameData();
+          var asset = fetch.asset as TextAsset;
+          if (asset && asset != null)
+          {
+            gameData = tableId.Deserialize(gameData, asset.bytes, serializationOptions);
+          }
+        }
       }
 
       _database = new Database(serializationOptions, gameData);
@@ -79,7 +84,7 @@ namespace Nighthollow.Data
 
     void Update()
     {
-      _database?.PerformWritesInternal(_disablePersistence, _persistentFilePath!, _editorFilePath!);
+      _database?.PerformWritesInternal(_disablePersistence);
     }
 
     public void OnReady(IOnDatabaseReadyListener listener)

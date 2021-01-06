@@ -15,6 +15,8 @@
 using System;
 using System.Collections;
 using System.Collections.Immutable;
+using System.IO;
+using MessagePack;
 
 #nullable enable
 
@@ -22,23 +24,45 @@ namespace Nighthollow.Data
 {
   public interface ITableId
   {
+    string TableName { get; }
+
     Type GetUnderlyingType();
 
     IDictionary GetInUnchecked(GameData gameData);
+
+    void Serialize(GameData gameData, FileStream fileStream, MessagePackSerializerOptions options);
+
+    GameData Deserialize(GameData gameData, FileStream fileStream, MessagePackSerializerOptions options);
+
+    GameData Deserialize(GameData gameData, ReadOnlyMemory<byte> bytes, MessagePackSerializerOptions options);
   }
 
   public abstract class TableId<T> : ITableId where T : class
   {
-    protected TableId(int id)
+    protected TableId(int id, string tableName)
     {
       Id = id;
+      TableName = tableName;
     }
 
     public int Id { get; }
 
+    public string TableName { get; }
+
     public abstract ImmutableDictionary<int, T> GetIn(GameData gameData);
 
     public abstract GameData Write(GameData gameData, ImmutableDictionary<int, T> newValue);
+
+    public void Serialize(GameData gameData, FileStream fileStream, MessagePackSerializerOptions options)
+    {
+      MessagePackSerializer.Serialize(fileStream, GetIn(gameData), options);
+    }
+
+    public GameData Deserialize(GameData gameData, FileStream fileStream, MessagePackSerializerOptions options) =>
+      Write(gameData, MessagePackSerializer.Deserialize<ImmutableDictionary<int, T>>(fileStream, options));
+
+    public GameData Deserialize(GameData gameData, ReadOnlyMemory<byte> bytes, MessagePackSerializerOptions options) =>
+      Write(gameData, MessagePackSerializer.Deserialize<ImmutableDictionary<int, T>>(bytes, options));
 
     public Type GetUnderlyingType() => typeof(T);
 
@@ -47,19 +71,31 @@ namespace Nighthollow.Data
 
   public static class TableId
   {
-    public static readonly TableId<TableMetadata> TableMetadata = new TableMetadataTableId(0);
-    public static readonly TableId<CreatureTypeData> CreatureTypes = new CreatureTypesTableId(1);
-    public static readonly TableId<AffixTypeData> AffixTypes = new AffixTypesTableId(2);
-    public static readonly TableId<SkillTypeData> SkillTypes = new SkillTypesTableId(3);
-    public static readonly TableId<StatData> StatData = new StatDataTableId(4);
-    public static readonly TableId<StaticCreatureListData> CreatureLists = new CreatureListsTableId(5);
-    public static readonly TableId<ModifierData> UserModifiers = new UserModifiersTableId(6);
-    public static readonly TableId<CreatureItemData> Collection = new CollectionTableId(7);
-    public static readonly TableId<CreatureItemData> Deck = new DeckTableId(8);
+    public static readonly TableId<TableMetadata> TableMetadata = new TableMetadataTableId(0, "TableMetadata");
+    public static readonly TableId<CreatureTypeData> CreatureTypes = new CreatureTypesTableId(1, "CreatureTypes");
+    public static readonly TableId<AffixTypeData> AffixTypes = new AffixTypesTableId(2, "AffixTypes");
+    public static readonly TableId<SkillTypeData> SkillTypes = new SkillTypesTableId(3, "SkillTypes");
+    public static readonly TableId<StatData> Stats = new StatDataTableId(4, "Stats");
+    public static readonly TableId<StaticCreatureListData> CreatureLists = new CreatureListsTableId(5, "CreatureLists");
+    public static readonly TableId<ModifierData> UserModifiers = new UserModifiersTableId(6, "UserModifiers");
+    public static readonly TableId<CreatureItemData> Collection = new CollectionTableId(7, "Collection");
+    public static readonly TableId<CreatureItemData> Deck = new DeckTableId(8, "Deck");
+
+    public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
+      TableMetadata,
+      CreatureTypes,
+      AffixTypes,
+      SkillTypes,
+      Stats,
+      CreatureLists,
+      UserModifiers,
+      Collection,
+      Deck
+    );
 
     sealed class TableMetadataTableId : TableId<TableMetadata>
     {
-      public TableMetadataTableId(int id) : base(id)
+      public TableMetadataTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
@@ -72,7 +108,7 @@ namespace Nighthollow.Data
 
     sealed class CreatureTypesTableId : TableId<CreatureTypeData>
     {
-      public CreatureTypesTableId(int id) : base(id)
+      public CreatureTypesTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
@@ -85,7 +121,7 @@ namespace Nighthollow.Data
 
     sealed class AffixTypesTableId : TableId<AffixTypeData>
     {
-      public AffixTypesTableId(int id) : base(id)
+      public AffixTypesTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
@@ -98,7 +134,7 @@ namespace Nighthollow.Data
 
     sealed class SkillTypesTableId : TableId<SkillTypeData>
     {
-      public SkillTypesTableId(int id) : base(id)
+      public SkillTypesTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
@@ -111,7 +147,7 @@ namespace Nighthollow.Data
 
     sealed class StatDataTableId : TableId<StatData>
     {
-      public StatDataTableId(int id) : base(id)
+      public StatDataTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
@@ -124,7 +160,7 @@ namespace Nighthollow.Data
 
     sealed class CreatureListsTableId : TableId<StaticCreatureListData>
     {
-      public CreatureListsTableId(int id) : base(id)
+      public CreatureListsTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
@@ -137,7 +173,7 @@ namespace Nighthollow.Data
 
     sealed class UserModifiersTableId : TableId<ModifierData>
     {
-      public UserModifiersTableId(int id) : base(id)
+      public UserModifiersTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
@@ -150,7 +186,7 @@ namespace Nighthollow.Data
 
     sealed class CollectionTableId : TableId<CreatureItemData>
     {
-      public CollectionTableId(int id) : base(id)
+      public CollectionTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
@@ -163,7 +199,7 @@ namespace Nighthollow.Data
 
     sealed class DeckTableId : TableId<CreatureItemData>
     {
-      public DeckTableId(int id) : base(id)
+      public DeckTableId(int id, string tableName) : base(id, tableName)
       {
       }
 

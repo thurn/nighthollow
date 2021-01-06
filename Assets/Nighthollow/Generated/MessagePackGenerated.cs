@@ -1435,7 +1435,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
             var __DelegateId__ = default(global::Nighthollow.Generated.DelegateId?);
-            var __Modifier__ = default(global::Nighthollow.Stats2.IStatModifier);
+            var __StatModifier__ = default(global::Nighthollow.Stats2.IStatModifier);
             var __Targeted__ = default(bool);
 
             for (int i = 0; i < length; i++)
@@ -1446,7 +1446,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                         __DelegateId__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Generated.DelegateId?>().Deserialize(ref reader, options);
                         break;
                     case 1:
-                        __Modifier__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IStatModifier>().Deserialize(ref reader, options);
+                        __StatModifier__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats2.IStatModifier>().Deserialize(ref reader, options);
                         break;
                     case 2:
                         __Targeted__ = reader.ReadBoolean();
@@ -1457,7 +1457,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.ModifierData(__DelegateId__, __Modifier__, __Targeted__);
+            var ____result = new global::Nighthollow.Data.ModifierData(__DelegateId__, __StatModifier__, __Targeted__);
             reader.Depth--;
             return ____result;
         }

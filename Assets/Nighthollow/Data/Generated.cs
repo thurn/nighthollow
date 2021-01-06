@@ -529,10 +529,10 @@ namespace Nighthollow.Data
         StatModifier,
         Targeted);
 
-    public ModifierData WithModifier(IStatModifier? modifier) =>
+    public ModifierData WithStatModifier(IStatModifier? statModifier) =>
       new ModifierData(
         DelegateId,
-        modifier,
+        statModifier,
         Targeted);
 
     public ModifierData WithTargeted(bool targeted) =>
