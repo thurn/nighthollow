@@ -14,11 +14,12 @@
 
 using System.Collections.Generic;
 using Nighthollow.Components;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
-using Nighthollow.Model;
 using Nighthollow.Stats;
 using UnityEngine;
+using SkillData = Nighthollow.Model.SkillData;
 
 #nullable enable
 

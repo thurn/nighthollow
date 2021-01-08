@@ -15,11 +15,9 @@
 
 // Generated Code - Do Not Modify!
 
-using MessagePack;
-
 #nullable enable
 
-namespace Nighthollow.Generated
+namespace Nighthollow.Data
 {
   public enum PlayerName
   {
@@ -74,19 +72,6 @@ namespace Nighthollow.Generated
     File5 = 5
   }
 
-  public enum StatType
-  {
-    Unknown = 0,
-    Int = 1,
-    Bool = 2,
-    SchoolInts = 3,
-    DamageTypeInts = 4,
-    Percentage = 5,
-    Duration = 6,
-    IntRange = 7,
-    DamageTypeIntRanges = 8
-  }
-
   public enum SkillAnimationNumber
   {
     Unknown = 0,
@@ -97,35 +82,6 @@ namespace Nighthollow.Generated
     Skill5 = 5
   }
 
-  public enum Operator
-  {
-    Unknown = 0,
-    Add = 1,
-    Increase = 2,
-    SetFalse = 3,
-    SetTrue = 4,
-    Overwrite = 5
-  }
-
-  public enum StaticCardList
-  {
-    Unknown = 0,
-    StartingDeck = 1,
-    TutorialDraws = 2,
-    TutorialEnemy = 3,
-    TutorialReward1 = 4,
-    TutorialReward2 = 5,
-    TutorialReward3 = 6,
-    Summons = 7
-  }
-
-  public enum AffixPool
-  {
-    Unknown = 0,
-    CreatureImplicits = 1,
-    SkillImplicits = 2
-  }
-
   public enum SkillAnimationType
   {
     Unknown = 0,
@@ -133,13 +89,6 @@ namespace Nighthollow.Generated
     CastSkill = 2,
     ImplicitSkill = 3,
     Unused = 4
-  }
-
-  public enum ModifierApplicationType
-  {
-    Unknown = 0,
-    Self = 1,
-    Targeted = 2
   }
 
   public enum SkillType

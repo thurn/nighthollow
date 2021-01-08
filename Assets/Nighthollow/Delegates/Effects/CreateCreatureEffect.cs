@@ -13,9 +13,11 @@
 // limitations under the License.
 
 
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Model;
 using Nighthollow.Services;
+using CreatureItemData = Nighthollow.Model.CreatureItemData;
 
 #nullable enable
 

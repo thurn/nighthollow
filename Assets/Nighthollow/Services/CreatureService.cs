@@ -17,9 +17,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Components;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Model;
 using UnityEngine;
+using CreatureData = Nighthollow.Model.CreatureData;
 
 #nullable enable
 

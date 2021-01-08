@@ -15,11 +15,13 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Model;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using SimpleJSON;
+using CreatureItemData = Nighthollow.Model.CreatureItemData;
 
 #nullable enable
 

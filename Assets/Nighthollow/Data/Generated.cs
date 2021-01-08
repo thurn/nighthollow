@@ -595,17 +595,39 @@ namespace Nighthollow.Data
   {
   }
 
+  public sealed partial class ColumnMetadata
+  {
+    public ColumnMetadata WithColumnNumber(int columnNumber) =>
+      new ColumnMetadata(
+        columnNumber,
+        Width);
+
+    public ColumnMetadata WithWidth(int? width) =>
+      new ColumnMetadata(
+        ColumnNumber,
+        width);
+
+  }
+
   public sealed partial class TableMetadata
   {
     public TableMetadata WithNextId(int nextId) =>
       new TableMetadata(
         nextId,
-        LastAccessedTime);
+        LastAccessedTime,
+        ColumnMetadata);
 
     public TableMetadata WithLastAccessedTime(long lastAccessedTime) =>
       new TableMetadata(
         NextId,
-        lastAccessedTime);
+        lastAccessedTime,
+        ColumnMetadata);
+
+    public TableMetadata WithColumnMetadata(ImmutableList<ColumnMetadata> columnMetadata) =>
+      new TableMetadata(
+        NextId,
+        LastAccessedTime,
+        columnMetadata);
 
   }
 

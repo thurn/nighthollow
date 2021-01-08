@@ -23,11 +23,21 @@ namespace Nighthollow.Editing
   {
     public abstract void Initialize(Action onModified);
 
-    public abstract List<List<ICellContent>> GetCells();
+    public abstract TableContent GetCells();
 
     public virtual string? RenderPreview(object? value) => null;
 
-    public virtual List<int>? GetColumnWidths() => null;
+    public sealed class TableContent
+    {
+      public TableContent(List<List<ICellContent>> cells, List<int> columnWidths)
+      {
+        Cells = cells;
+        ColumnWidths = columnWidths;
+      }
+
+      public List<List<ICellContent>> Cells { get; }
+      public List<int> ColumnWidths { get; }
+    }
 
     public interface ICellContent
     {

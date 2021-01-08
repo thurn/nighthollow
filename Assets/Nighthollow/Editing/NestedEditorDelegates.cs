@@ -44,7 +44,7 @@ namespace Nighthollow.Editing
       _reflectivePath.OnEntityUpdated(_ => onModified());
     }
 
-    public override List<List<ICellContent>> GetCells()
+    public override TableContent GetCells()
     {
       var result = new List<List<ICellContent>>
       {
@@ -75,7 +75,13 @@ namespace Nighthollow.Editing
           (AddButtonKey, 0)))
         .ToList<ICellContent>());
 
-      return result;
+      var widths = new List<int> {50}
+        .Concat(Enumerable.Repeat(
+          EditorSheet.DefaultCellWidth,
+          _contentType.GetProperties().Length))
+        .ToList();
+
+      return new TableContent(result, widths);
     }
 
     void Insert(object value)
@@ -115,13 +121,6 @@ namespace Nighthollow.Editing
         _ => "None"
       };
     }
-
-    public override List<int> GetColumnWidths() =>
-      new List<int> {50}
-        .Concat(Enumerable.Repeat(
-          EditorSheet.DefaultCellWidth,
-          _contentType.GetProperties().Length))
-        .ToList();
   }
 
   public sealed class NestedEditorCellDelegate : TextFieldEditorCellDelegate

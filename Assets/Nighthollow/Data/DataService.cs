@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using MessagePack;
@@ -46,7 +47,7 @@ namespace Nighthollow.Data
     public static string EditorFilePath(ITableId tableId) =>
       Path.Combine(Application.dataPath, "Resources", "Data", $"{tableId.TableName}.bytes");
 
-    IEnumerator<YieldInstruction> Initialize()
+    public IEnumerator<YieldInstruction> Initialize(bool synchronous = false)
     {
       var serializationOptions = MessagePackSerializerOptions.Standard
         .WithResolver(CompositeResolver.Create(
@@ -63,17 +64,23 @@ namespace Nighthollow.Data
 
         if (File.Exists(persistentFilePath) && !_disablePersistence)
         {
-          Debug.Log($"Reading game data from {persistentFilePath}");
           using var file = File.OpenRead(persistentFilePath!);
           gameData = tableId.Deserialize(gameData, file, serializationOptions);
         }
         else
         {
-          Debug.Log($"Reading game data from {ResourceAddress(tableId)}");
-          var fetch = Resources.LoadAsync<TextAsset>(ResourceAddress(tableId!)!);
-          yield return fetch;
+          TextAsset? asset;
+          if (synchronous)
+          {
+            asset = Resources.Load<TextAsset>(ResourceAddress(tableId));
+          }
+          else
+          {
+            var fetch = Resources.LoadAsync<TextAsset>(ResourceAddress(tableId));
+            yield return fetch;
+            asset = fetch.asset as TextAsset;
+          }
 
-          var asset = fetch.asset as TextAsset;
           if (asset && asset != null)
           {
             gameData = tableId.Deserialize(gameData, asset.bytes, serializationOptions);
@@ -88,6 +95,11 @@ namespace Nighthollow.Data
     void Update()
     {
       _database?.PerformWritesInternal(_disablePersistence);
+    }
+
+    public void OnReady(Action<Database> action)
+    {
+      OnReady(new DatabaseReadyActionListener(action));
     }
 
     public void OnReady(IOnDatabaseReadyListener listener)
@@ -110,6 +122,21 @@ namespace Nighthollow.Data
       }
 
       _listeners.Clear();
+    }
+
+    sealed class DatabaseReadyActionListener : IOnDatabaseReadyListener
+    {
+      readonly Action<Database> _action;
+
+      public DatabaseReadyActionListener(Action<Database> action)
+      {
+        _action = action;
+      }
+
+      public void OnDatabaseReady(Database database)
+      {
+        _action(database);
+      }
     }
   }
 }

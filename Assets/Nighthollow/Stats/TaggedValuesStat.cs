@@ -16,7 +16,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Generated;
+using Nighthollow.Model;
 using Nighthollow.Utils;
 
 #nullable enable

@@ -15,6 +15,7 @@
 
 using System;
 using System.Text;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Interface;
 using UnityEngine.UIElements;

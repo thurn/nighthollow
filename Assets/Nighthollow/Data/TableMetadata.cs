@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
 
 #nullable enable
@@ -19,15 +20,33 @@ using MessagePack;
 namespace Nighthollow.Data
 {
   [MessagePackObject]
+  public sealed partial class ColumnMetadata
+  {
+    public ColumnMetadata(int columnNumber, int? width)
+    {
+      ColumnNumber = columnNumber;
+      Width = width;
+    }
+
+    [Key(0)] public int ColumnNumber { get; }
+    [Key(1)] public int? Width { get; }
+  }
+
+  [MessagePackObject]
   public sealed partial class TableMetadata
   {
-    public TableMetadata(int nextId = 1, long lastAccessedTime = 0)
+    public TableMetadata(
+      int nextId = 1,
+      long lastAccessedTime = 0,
+      ImmutableList<ColumnMetadata>? columnMetadata = null)
     {
       NextId = nextId;
       LastAccessedTime = lastAccessedTime;
+      ColumnMetadata = columnMetadata ?? ImmutableList<ColumnMetadata>.Empty;
     }
 
     [Key(0)] public int NextId { get; }
     [Key(1)] public long LastAccessedTime { get; }
+    [Key(2)] public ImmutableList<ColumnMetadata> ColumnMetadata { get; }
   }
 }

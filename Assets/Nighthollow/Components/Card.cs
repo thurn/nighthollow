@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using DG.Tweening;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Interface;
 using Nighthollow.Items;
@@ -24,6 +25,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using CreatureData = Nighthollow.Model.CreatureData;
+using Database = Nighthollow.Services.Database;
 
 #nullable enable
 

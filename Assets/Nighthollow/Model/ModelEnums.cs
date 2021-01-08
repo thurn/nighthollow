@@ -12,24 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
-using Nighthollow.Generated;
-using Nighthollow.Utils;
-
 #nullable enable
 
 namespace Nighthollow.Model
 {
-  public static class PlayerNames
+  public enum Operator
   {
-    public static PlayerName GetOpponent(this PlayerName playerName)
-    {
-      switch (playerName)
-      {
-        case PlayerName.User: return PlayerName.Enemy;
-        case PlayerName.Enemy: return PlayerName.User;
-        default: throw Errors.UnknownEnumValue(playerName);
-      }
-    }
+    Unknown = 0,
+    Add = 1,
+    Increase = 2,
+    SetFalse = 3,
+    SetTrue = 4,
+    Overwrite = 5
+  }
+
+  public enum StaticCardList
+  {
+    Unknown = 0,
+    StartingDeck = 1,
+    TutorialDraws = 2,
+    TutorialEnemy = 3,
+    TutorialReward1 = 4,
+    TutorialReward2 = 5,
+    TutorialReward3 = 6,
+    Summons = 7
+  }
+
+  public enum AffixPool
+  {
+    Unknown = 0,
+    CreatureImplicits = 1,
+    SkillImplicits = 2
   }
 }

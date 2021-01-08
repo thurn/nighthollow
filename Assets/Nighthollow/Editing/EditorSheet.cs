@@ -83,11 +83,12 @@ namespace Nighthollow.Editing
     {
       _content.Clear();
 
-      var cells = _sheetDelegate.GetCells();
+      var content = _sheetDelegate.GetCells();
+      var cells = content.Cells;
       var result = new Dictionary<Vector2Int, EditorCell>();
       var columnCount = cells.Max(row => row.Count);
-      var columnWidths = _sheetDelegate.GetColumnWidths();
-      Width = ContentPadding + (columnWidths?.Sum() ?? (DefaultCellWidth * columnCount));
+      var columnWidths = content.ColumnWidths;
+      Width = ContentPadding + columnWidths.Sum();
 
       for (var rowIndex = 0; rowIndex < cells.Count; rowIndex++)
       {
@@ -120,7 +121,7 @@ namespace Nighthollow.Editing
             _parent?.FocusRoot();
           });
 
-          cell.style.width = columnWidths?[columnIndex] ?? DefaultCellWidth;
+          cell.style.width = columnWidths[columnIndex];
 
           if (list.Count == 1)
           {
@@ -218,7 +219,7 @@ namespace Nighthollow.Editing
 
         _cells[position.Value].Select();
         _currentlySelected = position;
-        _scrollView.ScrollTo(_cells[position.Value]);
+        Scroll(position.Value);
       }
     }
 
@@ -245,6 +246,22 @@ namespace Nighthollow.Editing
       foreach (var cell in _cells.Values)
       {
         cell.Deactivate();
+      }
+    }
+
+    void Scroll(Vector2Int position)
+    {
+      _scrollView.ScrollTo(InterfaceUtils.FirstLeaf(_cells[position]));
+
+      // Fix unity refusing to scroll all the way to the edge, triggering me endlessly.
+      if (position.y == 0)
+      {
+        _scrollView.scrollOffset -= new Vector2(0, 50);
+      }
+
+      if (position.x == 0)
+      {
+        _scrollView.scrollOffset -= new Vector2(50, 0);
       }
     }
   }

@@ -19,6 +19,7 @@ using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
+using StaticCardList = Nighthollow.Model.StaticCardList;
 
 #nullable enable
 

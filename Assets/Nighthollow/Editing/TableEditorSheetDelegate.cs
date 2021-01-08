@@ -30,7 +30,6 @@ namespace Nighthollow.Editing
     readonly ReflectivePath _reflectivePath;
     readonly Type _underlyingType;
     readonly DropdownCell _tableSelector;
-    List<int> _columnWidths = null!;
 
     public TableEditorSheetDelegate(ReflectivePath path, DropdownCell tableSelector)
     {
@@ -51,11 +50,11 @@ namespace Nighthollow.Editing
       _reflectivePath.Database.OnEntityRemoved((TableId<T>) _reflectivePath.TableId, eid => onModified());
     }
 
-    public override List<List<ICellContent>> GetCells()
+    public override TableContent GetCells()
     {
       var properties = _underlyingType.GetProperties();
       var imageProperty = properties.FirstOrDefault(p => p.Name.Equals("ImageAddress"));
-      var staticHeadings = new List<ICellContent> {new LabelCell("x"), new LabelCell("ID")};
+      var staticHeadings = new List<ICellContent> {new LabelCell("x")};
       if (imageProperty != null)
       {
         staticHeadings.Add(new LabelCell("Image"));
@@ -74,7 +73,6 @@ namespace Nighthollow.Editing
         var staticColumns = new List<ICellContent>
         {
           new ButtonCell("x", () => DatabaseDelete(entityId)),
-          new LabelCell(entityId.ToString())
         };
         if (imageProperty != null)
         {
@@ -93,20 +91,23 @@ namespace Nighthollow.Editing
           (AddButtonKey, 0)))
         .ToList<ICellContent>());
 
-      _columnWidths = new List<int> {50, 50};
+      var columnWidths = new List<int> {50};
       if (imageProperty != null)
       {
-        _columnWidths.Add(ImageEditorCell.ImageSize);
+        columnWidths.Add(ImageEditorCell.ImageSize);
       }
 
-      _columnWidths.AddRange(Enumerable.Repeat(
-        EditorSheet.DefaultCellWidth,
-        _underlyingType.GetProperties().Length));
+      var widthMap = _reflectivePath.GetTableMetadata().ColumnMetadata.ToDictionary(m => m.ColumnNumber, m => m);
+      for (var i = 0; i < _underlyingType.GetProperties().Length; ++i)
+      {
+        columnWidths.Add(
+          widthMap.ContainsKey(i)
+            ? widthMap[i].Width.GetValueOrDefault(EditorSheet.DefaultCellWidth)
+            : EditorSheet.DefaultCellWidth);
+      }
 
-      return result;
+      return new TableContent(result, columnWidths);
     }
-
-    public override List<int> GetColumnWidths() => _columnWidths;
 
     void DatabaseDelete(int entityId)
     {

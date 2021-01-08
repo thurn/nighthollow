@@ -14,6 +14,7 @@
 
 
 using Nighthollow.Components;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Utils;

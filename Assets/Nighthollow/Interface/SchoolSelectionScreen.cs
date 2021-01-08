@@ -20,6 +20,7 @@ using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using School = Nighthollow.Data.School;
 
 #nullable enable
 

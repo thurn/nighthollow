@@ -16,12 +16,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Model;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using SimpleJSON;
 using UnityEngine;
+using AffixData = Nighthollow.Model.AffixData;
+using AffixTypeData = Nighthollow.Model.AffixTypeData;
+using CreatureItemData = Nighthollow.Model.CreatureItemData;
+using CreatureTypeData = Nighthollow.Model.CreatureTypeData;
+using ModifierTypeData = Nighthollow.Model.ModifierTypeData;
+using SkillItemData = Nighthollow.Model.SkillItemData;
+using SkillTypeData = Nighthollow.Model.SkillTypeData;
 
 #nullable enable
 

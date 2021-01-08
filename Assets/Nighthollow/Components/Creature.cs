@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Model;
@@ -22,7 +23,10 @@ using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
+using CreatureData = Nighthollow.Model.CreatureData;
 using Random = UnityEngine.Random;
+using SkillData = Nighthollow.Model.SkillData;
+using SkillTypeData = Nighthollow.Model.SkillTypeData;
 
 #nullable enable
 

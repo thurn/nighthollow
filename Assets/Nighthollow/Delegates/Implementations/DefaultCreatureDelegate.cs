@@ -15,6 +15,7 @@
 
 using System;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
@@ -22,6 +23,7 @@ using Nighthollow.Model;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
+using SkillData = Nighthollow.Model.SkillData;
 
 #nullable enable
 

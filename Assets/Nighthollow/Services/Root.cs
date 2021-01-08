@@ -14,6 +14,7 @@
 
 using System;
 using Nighthollow.Components;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Interface;
 using Nighthollow.Stats;

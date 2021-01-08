@@ -14,6 +14,7 @@
 
 
 using System;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -74,5 +75,8 @@ namespace Nighthollow.Interface
     {
       DOTween.Sequence().InsertCallback(seconds, () => action()).Play();
     }
+
+    public static VisualElement FirstLeaf(VisualElement visualElement) =>
+      visualElement.childCount == 0 ? visualElement : FirstLeaf(visualElement.Children().First());
   }
 }

@@ -14,10 +14,13 @@
 
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Model;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
+using AffixData = Nighthollow.Model.AffixData;
+using CreatureItemData = Nighthollow.Model.CreatureItemData;
 
 #nullable enable
 
