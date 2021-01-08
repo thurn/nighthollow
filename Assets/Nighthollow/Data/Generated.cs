@@ -1,7 +1,7 @@
 // Generated Code - Do not Edit!
 
 using System.Collections.Immutable;
-using Nighthollow.Generated;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Stats2;
 
 #nullable enable
@@ -258,12 +258,20 @@ namespace Nighthollow.Data
     public CreatureSkillAnimation WithSkillAnimationNumber(SkillAnimationNumber skillAnimationNumber) =>
       new CreatureSkillAnimation(
         skillAnimationNumber,
-        SkillAnimationType);
+        SkillAnimationType,
+        Duration);
 
     public CreatureSkillAnimation WithSkillAnimationType(SkillAnimationType skillAnimationType) =>
       new CreatureSkillAnimation(
         SkillAnimationNumber,
-        skillAnimationType);
+        skillAnimationType,
+        Duration);
+
+    public CreatureSkillAnimation WithDuration(DurationValue? duration) =>
+      new CreatureSkillAnimation(
+        SkillAnimationNumber,
+        SkillAnimationType,
+        duration);
 
   }
 
@@ -275,12 +283,12 @@ namespace Nighthollow.Data
         PrefabAddress,
         Owner,
         Health,
-        SkillAnimations,
         ImageAddress,
         BaseManaCost,
         Speed,
         ImplicitModifiers,
         ImplicitSkills,
+        SkillAnimations,
         IsManaCreature);
 
     public CreatureTypeData WithPrefabAddress(string prefabAddress) =>
@@ -289,12 +297,12 @@ namespace Nighthollow.Data
         prefabAddress,
         Owner,
         Health,
-        SkillAnimations,
         ImageAddress,
         BaseManaCost,
         Speed,
         ImplicitModifiers,
         ImplicitSkills,
+        SkillAnimations,
         IsManaCreature);
 
     public CreatureTypeData WithOwner(PlayerName owner) =>
@@ -303,12 +311,12 @@ namespace Nighthollow.Data
         PrefabAddress,
         owner,
         Health,
-        SkillAnimations,
         ImageAddress,
         BaseManaCost,
         Speed,
         ImplicitModifiers,
         ImplicitSkills,
+        SkillAnimations,
         IsManaCreature);
 
     public CreatureTypeData WithHealth(IntRangeValue health) =>
@@ -317,26 +325,12 @@ namespace Nighthollow.Data
         PrefabAddress,
         Owner,
         health,
+        ImageAddress,
+        BaseManaCost,
+        Speed,
+        ImplicitModifiers,
+        ImplicitSkills,
         SkillAnimations,
-        ImageAddress,
-        BaseManaCost,
-        Speed,
-        ImplicitModifiers,
-        ImplicitSkills,
-        IsManaCreature);
-
-    public CreatureTypeData WithSkillAnimations(ImmutableList<CreatureSkillAnimation> skillAnimations) =>
-      new CreatureTypeData(
-        Name,
-        PrefabAddress,
-        Owner,
-        Health,
-        skillAnimations,
-        ImageAddress,
-        BaseManaCost,
-        Speed,
-        ImplicitModifiers,
-        ImplicitSkills,
         IsManaCreature);
 
     public CreatureTypeData WithImageAddress(string? imageAddress) =>
@@ -345,12 +339,12 @@ namespace Nighthollow.Data
         PrefabAddress,
         Owner,
         Health,
-        SkillAnimations,
         imageAddress,
         BaseManaCost,
         Speed,
         ImplicitModifiers,
         ImplicitSkills,
+        SkillAnimations,
         IsManaCreature);
 
     public CreatureTypeData WithBaseManaCost(int baseManaCost) =>
@@ -359,12 +353,12 @@ namespace Nighthollow.Data
         PrefabAddress,
         Owner,
         Health,
-        SkillAnimations,
         ImageAddress,
         baseManaCost,
         Speed,
         ImplicitModifiers,
         ImplicitSkills,
+        SkillAnimations,
         IsManaCreature);
 
     public CreatureTypeData WithSpeed(int speed) =>
@@ -373,12 +367,12 @@ namespace Nighthollow.Data
         PrefabAddress,
         Owner,
         Health,
-        SkillAnimations,
         ImageAddress,
         BaseManaCost,
         speed,
         ImplicitModifiers,
         ImplicitSkills,
+        SkillAnimations,
         IsManaCreature);
 
     public CreatureTypeData WithImplicitModifiers(ImmutableList<ModifierTypeData>? implicitModifiers) =>
@@ -387,12 +381,12 @@ namespace Nighthollow.Data
         PrefabAddress,
         Owner,
         Health,
-        SkillAnimations,
         ImageAddress,
         BaseManaCost,
         Speed,
         implicitModifiers,
         ImplicitSkills,
+        SkillAnimations,
         IsManaCreature);
 
     public CreatureTypeData WithImplicitSkills(ImmutableList<SkillTypeData> implicitSkills) =>
@@ -401,12 +395,26 @@ namespace Nighthollow.Data
         PrefabAddress,
         Owner,
         Health,
-        SkillAnimations,
         ImageAddress,
         BaseManaCost,
         Speed,
         ImplicitModifiers,
         implicitSkills,
+        SkillAnimations,
+        IsManaCreature);
+
+    public CreatureTypeData WithSkillAnimations(ImmutableList<CreatureSkillAnimation> skillAnimations) =>
+      new CreatureTypeData(
+        Name,
+        PrefabAddress,
+        Owner,
+        Health,
+        ImageAddress,
+        BaseManaCost,
+        Speed,
+        ImplicitModifiers,
+        ImplicitSkills,
+        skillAnimations,
         IsManaCreature);
 
     public CreatureTypeData WithIsManaCreature(bool isManaCreature) =>
@@ -415,12 +423,12 @@ namespace Nighthollow.Data
         PrefabAddress,
         Owner,
         Health,
-        SkillAnimations,
         ImageAddress,
         BaseManaCost,
         Speed,
         ImplicitModifiers,
         ImplicitSkills,
+        SkillAnimations,
         isManaCreature);
 
   }

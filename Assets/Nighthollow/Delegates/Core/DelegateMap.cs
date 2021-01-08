@@ -14,13 +14,11 @@
 
 
 using System.Collections.Generic;
-using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Implementations;
 
-// Generated Code - Do Not Modify!
 #nullable enable
 
-namespace Nighthollow.Generated
+namespace Nighthollow.Delegates.Core
 {
   public enum DelegateId
   {

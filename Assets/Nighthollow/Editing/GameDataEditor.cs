@@ -14,8 +14,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
-using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Interface;
 
@@ -25,13 +25,8 @@ namespace Nighthollow.Editing
 {
   public sealed class GameDataEditor : HideableElement<GameDataEditor.Args>
   {
-    readonly List<PropertyInfo> _properties;
+    List<ITableId> _tables = new List<ITableId>();
     Database _database = null!;
-
-    public GameDataEditor()
-    {
-      _properties = typeof(GameData).GetProperties().ToList();
-    }
 
     public sealed class Args
     {
@@ -52,27 +47,26 @@ namespace Nighthollow.Editing
     {
       _database = argument.Database;
       var metadata = _database.Snapshot().TableMetadata;
-      Render(metadata.IsEmpty
-        ? 1
-        : metadata
-          .OrderByDescending(pair => pair.Value.LastAccessedTime)
-          .First()
-          .Key);
+      _tables = TableId.AllTableIds
+        .OrderByDescending(tid => metadata.GetValueOrDefault(tid.Id, new TableMetadata()).LastAccessedTime)
+        .ToList();
+
+      Render(0);
     }
 
-    void Render(int id)
+    void Render(int index)
     {
       Clear();
-      var tableId = TableId.AllTableIds.First(t => t.Id == id);
+      var tableId = _tables[index];
       _database.Upsert(TableId.TableMetadata,
-        id,
+        index,
         new TableMetadata(),
         metadata => metadata.WithLastAccessedTime(DateTime.UtcNow.Ticks));
 
       var path = new ReflectivePath(_database, tableId);
       var tableSelector = new EditorSheetDelegate.DropdownCell(
-        TableId.AllTableIds.Select(t => TypeUtils.NameWithSpaces(t.TableName)).ToList(),
-        id,
+        _tables.Select(tid => TypeUtils.NameWithSpaces(tid.TableName)).ToList(),
+        index,
         Render);
       var editor = new EditorSheet(Controller, new TableEditorSheetDelegate(path, tableSelector));
       Add(editor);

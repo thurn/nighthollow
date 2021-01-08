@@ -14,7 +14,6 @@
 
 using System.Collections.Immutable;
 using MessagePack;
-using Nighthollow.Generated;
 using Nighthollow.Stats2;
 
 #nullable enable
@@ -27,14 +26,17 @@ namespace Nighthollow.Data
     [SerializationConstructor]
     public CreatureSkillAnimation(
       SkillAnimationNumber skillAnimationNumber,
-      SkillAnimationType skillAnimationType)
+      SkillAnimationType skillAnimationType,
+      DurationValue? duration)
     {
       SkillAnimationNumber = skillAnimationNumber;
       SkillAnimationType = skillAnimationType;
+      Duration = duration;
     }
 
     [Key(0)] public SkillAnimationNumber SkillAnimationNumber { get; }
     [Key(1)] public SkillAnimationType SkillAnimationType { get; }
+    [Key(2)] public DurationValue? Duration { get; }
 
     public override string ToString() => $"{SkillAnimationNumber}: {SkillAnimationType}";
   }
@@ -47,24 +49,24 @@ namespace Nighthollow.Data
       string prefabAddress,
       PlayerName owner,
       IntRangeValue health,
-      ImmutableList<CreatureSkillAnimation>? skillAnimations = null,
       string? imageAddress = null,
       int baseManaCost = 0,
       int speed = 0,
       ImmutableList<ModifierTypeData>? implicitModifiers = null,
       ImmutableList<SkillTypeData>? implicitSkills = null,
+      ImmutableList<CreatureSkillAnimation>? skillAnimations = null,
       bool isManaCreature = false)
     {
       Name = name;
       PrefabAddress = prefabAddress;
       Owner = owner;
       Health = health;
-      SkillAnimations = skillAnimations ?? ImmutableList<CreatureSkillAnimation>.Empty;
       ImageAddress = imageAddress;
       BaseManaCost = baseManaCost;
       Speed = speed;
       ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierTypeData>.Empty;
       ImplicitSkills = implicitSkills ?? ImmutableList<SkillTypeData>.Empty;
+      SkillAnimations = skillAnimations ?? ImmutableList<CreatureSkillAnimation>.Empty;
       IsManaCreature = isManaCreature;
     }
 
@@ -72,12 +74,12 @@ namespace Nighthollow.Data
     [Key(1)] public string PrefabAddress { get; }
     [Key(2)] public PlayerName Owner { get; }
     [Key(3)] public IntRangeValue Health { get; }
-    [Key(4)] public ImmutableList<CreatureSkillAnimation> SkillAnimations { get; }
-    [Key(5)] public string? ImageAddress { get; }
-    [Key(6)] public int BaseManaCost { get; }
-    [Key(7)] public int Speed { get; }
-    [Key(8)] public ImmutableList<ModifierTypeData>? ImplicitModifiers { get; }
-    [Key(9)] public ImmutableList<SkillTypeData> ImplicitSkills { get; }
+    [Key(4)] public string? ImageAddress { get; }
+    [Key(5)] public int BaseManaCost { get; }
+    [Key(6)] public int Speed { get; }
+    [Key(7)] public ImmutableList<ModifierTypeData>? ImplicitModifiers { get; }
+    [Key(8)] public ImmutableList<SkillTypeData> ImplicitSkills { get; }
+    [Key(9)] public ImmutableList<CreatureSkillAnimation> SkillAnimations { get; }
     [Key(10)] public bool IsManaCreature { get; }
   }
 }

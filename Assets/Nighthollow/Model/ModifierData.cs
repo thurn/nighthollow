@@ -13,6 +13,8 @@
 // limitations under the License.
 
 
+using Nighthollow.Delegates;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Stats;

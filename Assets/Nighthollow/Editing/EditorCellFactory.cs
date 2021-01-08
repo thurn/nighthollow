@@ -65,6 +65,14 @@ namespace Nighthollow.Editing
       {
         cellDelegate = new PrimitiveEditorCellDelegate<int>(reflectivePath, int.TryParse);
       }
+      else if (type == typeof(DurationValue))
+      {
+        cellDelegate = new PrimitiveEditorCellDelegate<DurationValue>(reflectivePath, DurationValue.TryParse);
+      }
+      else if (type == typeof(PercentageValue))
+      {
+        cellDelegate = new PrimitiveEditorCellDelegate<PercentageValue>(reflectivePath, PercentageValue.TryParse);
+      }
       else if (type == typeof(IntRangeValue))
       {
         cellDelegate = new PrimitiveEditorCellDelegate<IntRangeValue>(reflectivePath, IntRangeValue.TryParse);

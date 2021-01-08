@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using MessagePack;
+using Nighthollow.Delegates;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Stats2;
 
