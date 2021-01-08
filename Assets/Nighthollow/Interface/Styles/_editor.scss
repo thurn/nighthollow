@@ -144,6 +144,13 @@
   font-size: font-sizes.$body1;
   background-color: rgb(228, 228, 228);
 
+  .dropdown-content {
+    height: 300px;
+  }
+
+  .dropdown-scroll-view {
+  }
+
   .dropdown-option {
     padding: 8px;
     border-width: 1px;

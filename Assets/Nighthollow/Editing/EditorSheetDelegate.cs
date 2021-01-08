@@ -108,16 +108,22 @@ namespace Nighthollow.Editing
 
     public sealed class DropdownCell : ICellContent
     {
-      public DropdownCell(List<string> options, int? currentlySelected, Action<int> onSelected)
+      public DropdownCell(
+        List<string> options,
+        int? currentlySelected,
+        Action<int> onSelected,
+        string? defaultText = null)
       {
         Options = options;
         CurrentlySelected = currentlySelected;
         OnSelected = onSelected;
+        DefaultText = defaultText ?? "None";
       }
 
       public List<string> Options { get; }
       public int? CurrentlySelected { get; }
       public Action<int> OnSelected { get; }
+      public string DefaultText { get; }
 
       public T Switch<T>(
         Func<ReflectivePath, T> onReflectivePath,

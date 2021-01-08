@@ -76,6 +76,23 @@ namespace Nighthollow.Interface
       DOTween.Sequence().InsertCallback(seconds, () => action()).Play();
     }
 
+    public static void FocusTextField(TextField field)
+    {
+      // TextField needs time after setting focusable and calling Focus() before it works, but there is no obvious
+      // event which corresponds to these operations completing.
+      field.focusable = true;
+      InterfaceUtils.After(0.01f, () =>
+      {
+        field.Focus();
+        InterfaceUtils.After(0.01f, () =>
+        {
+          // For some reason SelectAll() only works if you SelectRange() first?
+          field.SelectRange(0, 1);
+          field.SelectAll();
+        });
+      });
+    }
+
     public static VisualElement FirstLeaf(VisualElement visualElement) =>
       visualElement.childCount == 0 ? visualElement : FirstLeaf(visualElement.Children().First());
   }

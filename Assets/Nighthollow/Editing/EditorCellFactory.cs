@@ -47,39 +47,39 @@ namespace Nighthollow.Editing
       TextFieldEditorCellDelegate cellDelegate;
       if (type == typeof(string))
       {
-        cellDelegate = new PrimitiveEditorCellDelegate<string>(reflectivePath, Identity);
+        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<string>(reflectivePath, Identity);
       }
       else if (type == typeof(int))
       {
-        cellDelegate = new PrimitiveEditorCellDelegate<int>(reflectivePath, int.TryParse);
+        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<int>(reflectivePath, int.TryParse);
       }
       else if (type == typeof(long))
       {
-        cellDelegate = new PrimitiveEditorCellDelegate<long>(reflectivePath, long.TryParse);
+        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<long>(reflectivePath, long.TryParse);
       }
       else if (type == typeof(bool))
       {
-        cellDelegate = new PrimitiveEditorCellDelegate<bool>(reflectivePath, bool.TryParse);
+        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<bool>(reflectivePath, bool.TryParse);
       }
       else if (type == typeof(int))
       {
-        cellDelegate = new PrimitiveEditorCellDelegate<int>(reflectivePath, int.TryParse);
+        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<int>(reflectivePath, int.TryParse);
       }
       else if (type == typeof(DurationValue))
       {
-        cellDelegate = new PrimitiveEditorCellDelegate<DurationValue>(reflectivePath, DurationValue.TryParse);
+        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<DurationValue>(reflectivePath, DurationValue.TryParse);
       }
       else if (type == typeof(PercentageValue))
       {
-        cellDelegate = new PrimitiveEditorCellDelegate<PercentageValue>(reflectivePath, PercentageValue.TryParse);
+        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<PercentageValue>(reflectivePath, PercentageValue.TryParse);
       }
       else if (type == typeof(IntRangeValue))
       {
-        cellDelegate = new PrimitiveEditorCellDelegate<IntRangeValue>(reflectivePath, IntRangeValue.TryParse);
+        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<IntRangeValue>(reflectivePath, IntRangeValue.TryParse);
       }
       else if (type == typeof(IValueData))
       {
-        cellDelegate = new PrimitiveEditorCellDelegate<IValueData>(reflectivePath, ValueDataUtil.TryParse);
+        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<IValueData>(reflectivePath, ValueDataUtil.TryParse);
       }
       else if (type.IsSubclassOf(typeof(Enum)))
       {

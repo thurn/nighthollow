@@ -30,7 +30,6 @@ namespace Nighthollow.Editing
     {
       _parent = parent;
       _cellDelegate = cellDelegate;
-      AddToClassList("editor-cell");
 
       _field = new TextField
       {

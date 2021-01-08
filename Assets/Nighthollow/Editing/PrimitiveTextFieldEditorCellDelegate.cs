@@ -20,14 +20,14 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Editing
 {
-  public sealed class PrimitiveEditorCellDelegate<T> : TextFieldEditorCellDelegate
+  public sealed class PrimitiveTextFieldEditorCellDelegate<T> : TextFieldEditorCellDelegate
   {
     public delegate bool ParsingFunction(string input, out T output);
 
     readonly ReflectivePath _reflectivePath;
     readonly ParsingFunction _parsingFunction;
 
-    public PrimitiveEditorCellDelegate(ReflectivePath reflectivePath, ParsingFunction parsingFunction)
+    public PrimitiveTextFieldEditorCellDelegate(ReflectivePath reflectivePath, ParsingFunction parsingFunction)
     {
       _reflectivePath = reflectivePath;
       _parsingFunction = parsingFunction;
@@ -52,19 +52,7 @@ namespace Nighthollow.Editing
 
     public override void OnActivate(TextField field, Rect worldBound)
     {
-      // TextField needs time after setting focusable and calling Focus() before it works, but there is no obvious
-      // event which corresponds to these operations completing.
-      field.focusable = true;
-      InterfaceUtils.After(0.01f, () =>
-      {
-        field.Focus();
-        InterfaceUtils.After(0.01f, () =>
-        {
-          // For some reason SelectAll() only works if you SelectRange() first?
-          field.SelectRange(0, 1);
-          field.SelectAll();
-        });
-      });
+      InterfaceUtils.FocusTextField(field);
     }
 
     public override void OnDeactivate(TextField field)

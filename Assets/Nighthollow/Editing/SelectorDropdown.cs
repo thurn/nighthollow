@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Interface;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -26,8 +27,9 @@ namespace Nighthollow.Editing
   {
     readonly ScreenController _screenController;
     readonly IEditor _parent;
-    readonly List<string> _options;
+    readonly IReadOnlyList<string> _options;
     readonly Action<int> _onSelected;
+    readonly TextField _field;
     SelectorDropdown? _dropdown;
     int? _currentlySelected;
 
@@ -42,13 +44,32 @@ namespace Nighthollow.Editing
       _currentlySelected = content.CurrentlySelected;
       _parent = parent;
 
-      var button = new Button {text = _currentlySelected.HasValue ? _options[_currentlySelected.Value] : "Dropdown:"};
-      button.AddToClassList("editor-cell-button");
-      Add(button);
+      _field = new TextField
+      {
+        multiline = false,
+        doubleClickSelectsWord = true,
+        tripleClickSelectsLine = true,
+        isDelayed = false,
+        focusable = false,
+        value = _currentlySelected.HasValue ? _options[_currentlySelected.Value] : content.DefaultText
+      };
+
+      _field.AddToClassList("editor-text-field");
+      Add(_field);
+
+      _field.RegisterCallback<KeyDownEvent>(OnKeyDownInternal);
+      _field.RegisterCallback<ChangeEvent<string>>(OnTextFieldChanged);
+    }
+
+    void OnTextFieldChanged(ChangeEvent<string> evt)
+    {
+      _dropdown?.FilterOptions(evt.newValue);
     }
 
     public override void Activate()
     {
+      InterfaceUtils.FocusTextField(_field);
+
       _dropdown = new SelectorDropdown(
         _screenController,
         _parent!,
@@ -57,14 +78,31 @@ namespace Nighthollow.Editing
         _currentlySelected,
         selected =>
         {
-          _currentlySelected = selected;
-          _onSelected(selected);
+          var index = _options.ToList().FindIndex(o => o.Equals(selected));
+          _currentlySelected = index;
+          _onSelected(index);
         });
     }
 
     public override void Deactivate()
     {
       _dropdown?.Hide();
+      _parent.OnChildEditingComplete();
+    }
+
+    void OnKeyDownInternal(KeyDownEvent evt)
+    {
+      switch (evt.keyCode)
+      {
+        case KeyCode.Tab:
+        case KeyCode.Escape:
+        case KeyCode.KeypadEnter:
+        case KeyCode.Return:
+        case KeyCode.DownArrow:
+        case KeyCode.UpArrow:
+          _dropdown?.OnParentKeyDown(evt);
+          break;
+      }
     }
 
     public override void OnParentKeyDown(KeyDownEvent evt)
@@ -76,8 +114,11 @@ namespace Nighthollow.Editing
   public sealed class SelectorDropdown : VisualElement
   {
     readonly IEditor _parentEditor;
-    readonly List<Label> _options;
-    readonly Action<int> _onSelected;
+    readonly IReadOnlyList<string> _options;
+    readonly List<Label> _optionLabels;
+    readonly Action<string> _onSelected;
+    readonly VisualElement _content;
+    readonly ScrollView _scrollView;
     int? _currentlySelected;
 
     public SelectorDropdown(
@@ -86,10 +127,12 @@ namespace Nighthollow.Editing
       Rect worldAnchor,
       IReadOnlyList<string> options,
       int? currentlySelected,
-      Action<int> onSelected)
+      Action<string> onSelected)
     {
       _parentEditor = parentEditor;
       _onSelected = onSelected;
+      _options = options;
+      _optionLabels = new List<Label>();
 
       AddToClassList("dropdown");
       style.left = worldAnchor.x;
@@ -97,26 +140,45 @@ namespace Nighthollow.Editing
       style.position = new StyleEnum<Position>(Position.Absolute);
       controller.Screen.Add(this);
 
-      _options = new List<Label>();
-      for (var i = 0; i < options.Count; i++)
+      _content = new VisualElement();
+      _content.AddToClassList("dropdown-content");
+
+      _scrollView = new ScrollView();
+      _scrollView.AddToClassList("dropdown-scroll-view");
+      _scrollView.Add(_content);
+
+      Add(_scrollView);
+
+      RenderOptions(currentlySelected, "");
+    }
+
+    void RenderOptions(int? currentlySelected, string inputFilter)
+    {
+      _content.Clear();
+      _optionLabels.Clear();
+      var lookup = _options.ToLookup(o => MatchesFilter(o, inputFilter));
+
+      foreach (var option in lookup[true].Concat(lookup[false]))
       {
-        var option = options[i];
         var label = new Label {text = option};
         label.AddToClassList("dropdown-option");
-        var index = i;
         label.RegisterCallback<ClickEvent>(e =>
         {
           _parentEditor.FocusRoot();
-          _onSelected(index);
+          OnSelected(option);
           Hide();
         });
-        _options.Add(label);
-        Add(label);
+        _optionLabels.Add(label);
+        _content.Add(label);
       }
 
-      if (currentlySelected.HasValue)
+      if (currentlySelected != null && MatchesFilter(_options[currentlySelected.Value], inputFilter))
       {
         Select(currentlySelected.Value);
+      }
+      else
+      {
+        _currentlySelected = null;
       }
     }
 
@@ -125,12 +187,20 @@ namespace Nighthollow.Editing
       switch (evt.keyCode)
       {
         case KeyCode.DownArrow:
-          Select(_currentlySelected.HasValue ? (_currentlySelected.Value + 1) % _options.Count : 0);
+          Select(_currentlySelected.HasValue ? (_currentlySelected.Value + 1) % _optionLabels.Count : 0);
           break;
         case KeyCode.UpArrow:
-          Select(_currentlySelected.HasValue
-            ? Mathf.Abs(_currentlySelected.Value - 1 % _options.Count)
-            : _options.Count - 1);
+          if (_currentlySelected.HasValue)
+          {
+            Select(_currentlySelected.Value == 0
+              ? _optionLabels.Count - 1
+              : (_currentlySelected.Value - 1) % _options.Count);
+          }
+          else
+          {
+            Select(_optionLabels.Count - 1);
+          }
+
           break;
         case KeyCode.Backspace:
         case KeyCode.Escape:
@@ -138,14 +208,23 @@ namespace Nighthollow.Editing
           break;
         case KeyCode.KeypadEnter:
         case KeyCode.Return:
-          if (_currentlySelected.HasValue)
-          {
-            _onSelected(_currentlySelected.Value);
-          }
+          var currentlySelected = _currentlySelected;
           Hide();
+
+          if (currentlySelected.HasValue)
+          {
+            OnSelected(_optionLabels[currentlySelected.Value].text);
+          }
 
           break;
       }
+    }
+
+    void OnSelected(string value)
+    {
+      // Insert a delay before invoking callback, otherwise you get into a weird situation where the key event
+      // handler from the parent is still running and sees the event too.
+      InterfaceUtils.After(0.01f, () => _onSelected(value));
     }
 
     public void Hide()
@@ -155,15 +234,28 @@ namespace Nighthollow.Editing
       _parentEditor.OnChildEditingComplete();
     }
 
-    void Select(int index)
+    void Select(int value)
     {
-      if (_currentlySelected.HasValue)
+      if (value == -1)
       {
-        _options[_currentlySelected.Value].RemoveFromClassList("selected");
+        return;
       }
 
-      _options[index].AddToClassList("selected");
-      _currentlySelected = index;
+      if (_currentlySelected != null)
+      {
+        _optionLabels[_currentlySelected.Value].RemoveFromClassList("selected");
+      }
+
+      _optionLabels[value].AddToClassList("selected");
+      _scrollView.ScrollTo(_optionLabels[value]);
+      _currentlySelected = value;
     }
+
+    public void FilterOptions(string input)
+    {
+      RenderOptions(_currentlySelected, input);
+    }
+
+    static bool MatchesFilter(string text, string filter) => text.Contains(filter);
   }
 }

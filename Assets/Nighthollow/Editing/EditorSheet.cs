@@ -47,7 +47,7 @@ namespace Nighthollow.Editing
 
     Dictionary<Vector2Int, EditorCell> _cells;
     Vector2Int? _currentlySelected;
-    EditorCell? _currentlyActive;
+    Vector2Int? _currentlyActive;
 
     public EditorSheet(ScreenController controller, EditorSheetDelegate sheetDelegate, IEditor? parent = null)
     {
@@ -160,9 +160,9 @@ namespace Nighthollow.Editing
         return;
       }
 
-      if (_currentlyActive != null)
+      if (_currentlyActive.HasValue)
       {
-        _currentlyActive.OnParentKeyDown(evt);
+        _cells[_currentlyActive.Value].OnParentKeyDown(evt);
         return;
       }
 
@@ -184,7 +184,10 @@ namespace Nighthollow.Editing
           break;
         case KeyCode.KeypadEnter:
         case KeyCode.Return:
-          ActivateCell(_currentlySelected.Value);
+          if (_currentlyActive == null)
+          {
+            ActivateCell(_currentlySelected.Value);
+          }
           break;
         case KeyCode.Escape:
         case KeyCode.Backspace:
@@ -195,16 +198,27 @@ namespace Nighthollow.Editing
 
     void ActivateCell(Vector2Int position)
     {
-      _currentlyActive?.Deactivate();
-      _currentlyActive = _cells[position];
-      _currentlyActive.Activate();
+      if (position != _currentlyActive)
+      {
+        if (_currentlyActive.HasValue)
+        {
+          _cells[_currentlyActive.Value].Deactivate();
+        }
+
+        _currentlyActive = position;
+        _cells[position].Activate();
+      }
     }
 
     void SelectPosition(Vector2Int? position)
     {
       if (position.HasValue && _cells.ContainsKey(position.Value) && position != _currentlySelected)
       {
-        _currentlyActive?.Deactivate();
+        if (_currentlyActive.HasValue)
+        {
+          _cells[_currentlyActive.Value].Deactivate();
+        }
+
         _currentlyActive = null;
 
         if (_parent == null)

@@ -67,7 +67,8 @@ namespace Nighthollow.Editing
       var tableSelector = new EditorSheetDelegate.DropdownCell(
         _tables.Select(tid => TypeUtils.NameWithSpaces(tid.TableName)).ToList(),
         index,
-        Render);
+        Render,
+        "Select Table");
       var editor = new EditorSheet(Controller, new TableEditorSheetDelegate(path, tableSelector));
       Add(editor);
     }
