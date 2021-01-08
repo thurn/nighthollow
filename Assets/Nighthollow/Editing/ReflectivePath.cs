@@ -58,7 +58,8 @@ namespace Nighthollow.Editing
 
     public IDictionary GetTable() => _tableId.GetInUnchecked(_database.Snapshot());
 
-    public TableMetadata GetTableMetadata() => _database.Snapshot().TableMetadata[_tableId.Id];
+    public TableMetadata GetTableMetadata() =>
+      _database.Snapshot().TableMetadata.GetValueOrDefault(_tableId.Id, new TableMetadata());
 
     public Type GetUnderlyingType() => _path.IsEmpty ? _tableId.GetUnderlyingType() : _path.Last().GetUnderlyingType();
 

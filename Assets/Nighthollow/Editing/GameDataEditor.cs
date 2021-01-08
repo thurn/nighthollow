@@ -59,7 +59,7 @@ namespace Nighthollow.Editing
       Clear();
       var tableId = _tables[index];
       _database.Upsert(TableId.TableMetadata,
-        index,
+        tableId.Id,
         new TableMetadata(),
         metadata => metadata.WithLastAccessedTime(DateTime.UtcNow.Ticks));
 
