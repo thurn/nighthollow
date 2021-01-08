@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Interface;
 using UnityEngine;
@@ -23,7 +24,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Editing
 {
-  public sealed class SelectorDropdownEditorCell : EditorCell
+  public class SelectorDropdownEditorCell : EditorCell
   {
     readonly ScreenController _screenController;
     readonly IEditor _parent;
@@ -64,6 +65,11 @@ namespace Nighthollow.Editing
     void OnTextFieldChanged(ChangeEvent<string> evt)
     {
       _dropdown?.FilterOptions(evt.newValue);
+    }
+
+    protected void SetTextFieldValue(string? newValue)
+    {
+      _field.value = newValue;
     }
 
     public override void Activate()
@@ -111,10 +117,48 @@ namespace Nighthollow.Editing
     }
   }
 
+  public sealed class EnumDropdownEditorCell : SelectorDropdownEditorCell
+  {
+    public EnumDropdownEditorCell(
+      ScreenController screenController,
+      ReflectivePath reflectivePath,
+      Type type,
+      IEditor parent) : base(screenController, BuildContent(reflectivePath, type), parent)
+    {
+      reflectivePath.OnEntityUpdated(_ => { SetTextFieldValue(reflectivePath.Read()?.ToString()); });
+    }
+
+    static EditorSheetDelegate.DropdownCell BuildContent(ReflectivePath reflectivePath, Type type)
+    {
+      var values = Enum.GetValues(type)!;
+      var options = new List<string>();
+      for (var i = 0; i < values.Length; ++i)
+      {
+        var value = values.GetValue(i);
+        if (value.ToString().Equals("Unknown"))
+        {
+          continue;
+        }
+
+        options.Add(value.ToString());
+      }
+
+      var current = reflectivePath.Read()?.ToString();
+      var currentlySelected = options.FindIndex(o => o.Equals(current));
+      return new EditorSheetDelegate.DropdownCell(options,
+        currentlySelected == -1 ? (int?) null : currentlySelected,
+        selected =>
+        {
+          var value = Enum.Parse(type, options[selected]);
+          reflectivePath.Write(value);
+        });
+    }
+  }
+
   public sealed class SelectorDropdown : VisualElement
   {
     readonly IEditor _parentEditor;
-    readonly IReadOnlyList<string> _options;
+    readonly ISet<string> _options;
     readonly List<Label> _optionLabels;
     readonly Action<string> _onSelected;
     readonly VisualElement _content;
@@ -131,7 +175,7 @@ namespace Nighthollow.Editing
     {
       _parentEditor = parentEditor;
       _onSelected = onSelected;
-      _options = options;
+      _options = options.ToImmutableHashSet();
       _optionLabels = new List<Label>();
 
       AddToClassList("dropdown");
@@ -142,6 +186,10 @@ namespace Nighthollow.Editing
 
       _content = new VisualElement();
       _content.AddToClassList("dropdown-content");
+      if (_options.Count >= 5)
+      {
+        _content.style.height = 300;
+      }
 
       _scrollView = new ScrollView();
       _scrollView.AddToClassList("dropdown-scroll-view");
@@ -149,10 +197,10 @@ namespace Nighthollow.Editing
 
       Add(_scrollView);
 
-      RenderOptions(currentlySelected, "");
+      RenderOptions(currentlySelected.HasValue ? options[currentlySelected.Value] : null, "");
     }
 
-    void RenderOptions(int? currentlySelected, string inputFilter)
+    void RenderOptions(string? currentlySelected, string inputFilter)
     {
       _content.Clear();
       _optionLabels.Clear();
@@ -172,13 +220,13 @@ namespace Nighthollow.Editing
         _content.Add(label);
       }
 
-      if (currentlySelected != null && MatchesFilter(_options[currentlySelected.Value], inputFilter))
+      if (currentlySelected != null && MatchesFilter(currentlySelected, inputFilter))
       {
-        Select(currentlySelected.Value);
+        Select(_optionLabels.FindIndex(label => label.text.Equals(currentlySelected)));
       }
       else
       {
-        _currentlySelected = null;
+        ClearSelection();
       }
     }
 
@@ -251,9 +299,19 @@ namespace Nighthollow.Editing
       _currentlySelected = value;
     }
 
+    void ClearSelection()
+    {
+      if (_currentlySelected != null)
+      {
+        _optionLabels[_currentlySelected.Value].RemoveFromClassList("selected");
+      }
+
+      _currentlySelected = null;
+    }
+
     public void FilterOptions(string input)
     {
-      RenderOptions(_currentlySelected, input);
+      RenderOptions(_currentlySelected.HasValue ? _optionLabels[_currentlySelected.Value].text : null, input);
     }
 
     static bool MatchesFilter(string text, string filter) => text.Contains(filter);

@@ -41,8 +41,12 @@ namespace Nighthollow.Editing
       IEditor parent,
       ReflectivePath reflectivePath)
     {
-      var type = reflectivePath.GetUnderlyingType();
-      type = TypeUtils.UnboxNullable(type);
+      var type = TypeUtils.UnboxNullable(reflectivePath.GetUnderlyingType());
+
+      if (type.IsSubclassOf(typeof(Enum)))
+      {
+        return new EnumDropdownEditorCell(screenController, reflectivePath, type, parent);
+      }
 
       TextFieldEditorCellDelegate cellDelegate;
       if (type == typeof(string))
@@ -80,10 +84,6 @@ namespace Nighthollow.Editing
       else if (type == typeof(IValueData))
       {
         cellDelegate = new PrimitiveTextFieldEditorCellDelegate<IValueData>(reflectivePath, ValueDataUtil.TryParse);
-      }
-      else if (type.IsSubclassOf(typeof(Enum)))
-      {
-        cellDelegate = new EditorDropdownCellDelegate(screenController, reflectivePath);
       }
       else if (type.GetInterface("IList") != null)
       {
