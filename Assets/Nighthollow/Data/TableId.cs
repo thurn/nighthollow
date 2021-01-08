@@ -24,6 +24,8 @@ namespace Nighthollow.Data
 {
   public interface ITableId
   {
+    int Id { get; }
+
     string TableName { get; }
 
     Type GetUnderlyingType();

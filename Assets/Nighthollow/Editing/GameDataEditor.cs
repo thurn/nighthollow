@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -50,17 +51,28 @@ namespace Nighthollow.Editing
     protected override void OnShow(Args argument)
     {
       _database = argument.Database;
-      Render(1);
+      var metadata = _database.Snapshot().TableMetadata;
+      Render(metadata.IsEmpty
+        ? 1
+        : metadata
+          .OrderByDescending(pair => pair.Value.LastAccessedTime)
+          .First()
+          .Key);
     }
 
-    void Render(int propertyIndex)
+    void Render(int id)
     {
       Clear();
-      var fields = typeof(TableId).GetFields(BindingFlags.Public | BindingFlags.Static);
-      var path = new ReflectivePath(_database, (ITableId) fields[propertyIndex].GetValue(typeof(TableId)));
+      var tableId = TableId.AllTableIds.First(t => t.Id == id);
+      _database.Upsert(TableId.TableMetadata,
+        id,
+        new TableMetadata(),
+        metadata => metadata.WithLastAccessedTime(DateTime.UtcNow.Ticks));
+
+      var path = new ReflectivePath(_database, tableId);
       var tableSelector = new EditorSheetDelegate.DropdownCell(
-        fields.Select(f => TypeUtils.NameWithSpaces(f.Name)).ToList(),
-        propertyIndex,
+        TableId.AllTableIds.Select(t => TypeUtils.NameWithSpaces(t.TableName)).ToList(),
+        id,
         Render);
       var editor = new EditorSheet(Controller, new TableEditorSheetDelegate(path, tableSelector));
       Add(editor);

@@ -59,40 +59,70 @@ namespace Nighthollow.Data
       new StatData(
         name,
         StatType,
+        DescriptionTemplate,
         DefaultValue,
-        Description,
+        TagType,
+        StatValueType,
         Comment);
 
     public StatData WithStatType(StatType statType) =>
       new StatData(
         Name,
         statType,
+        DescriptionTemplate,
         DefaultValue,
-        Description,
+        TagType,
+        StatValueType,
         Comment);
 
-    public StatData WithDefaultValue(IValueData defaultValue) =>
+    public StatData WithDescriptionTemplate(string? descriptionTemplate) =>
       new StatData(
         Name,
         StatType,
+        descriptionTemplate,
+        DefaultValue,
+        TagType,
+        StatValueType,
+        Comment);
+
+    public StatData WithDefaultValue(IValueData? defaultValue) =>
+      new StatData(
+        Name,
+        StatType,
+        DescriptionTemplate,
         defaultValue,
-        Description,
+        TagType,
+        StatValueType,
         Comment);
 
-    public StatData WithDescription(string description) =>
+    public StatData WithTagType(StatTagType? tagType) =>
       new StatData(
         Name,
         StatType,
+        DescriptionTemplate,
         DefaultValue,
-        description,
+        tagType,
+        StatValueType,
         Comment);
 
-    public StatData WithComment(string comment) =>
+    public StatData WithStatValueType(StatType? statValueType) =>
       new StatData(
         Name,
         StatType,
+        DescriptionTemplate,
         DefaultValue,
-        Description,
+        TagType,
+        statValueType,
+        Comment);
+
+    public StatData WithComment(string? comment) =>
+      new StatData(
+        Name,
+        StatType,
+        DescriptionTemplate,
+        DefaultValue,
+        TagType,
+        StatValueType,
         comment);
 
   }
@@ -569,7 +599,13 @@ namespace Nighthollow.Data
   {
     public TableMetadata WithNextId(int nextId) =>
       new TableMetadata(
-        nextId);
+        nextId,
+        LastAccessedTime);
+
+    public TableMetadata WithLastAccessedTime(long lastAccessedTime) =>
+      new TableMetadata(
+        NextId,
+        lastAccessedTime);
 
   }
 

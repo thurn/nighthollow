@@ -25,8 +25,6 @@ namespace Nighthollow.Editing
 
     public abstract List<List<ICellContent>> GetCells();
 
-    public virtual int? ContentHeightOverride => null;
-
     public virtual string? RenderPreview(object? value) => null;
 
     public virtual List<int>? GetColumnWidths() => null;

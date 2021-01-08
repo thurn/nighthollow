@@ -21,11 +21,13 @@ namespace Nighthollow.Data
   [MessagePackObject]
   public sealed partial class TableMetadata
   {
-    public TableMetadata(int nextId = 1)
+    public TableMetadata(int nextId = 1, long lastAccessedTime = 0)
     {
       NextId = nextId;
+      LastAccessedTime = lastAccessedTime;
     }
 
     [Key(0)] public int NextId { get; }
+    [Key(1)] public long LastAccessedTime { get; }
   }
 }

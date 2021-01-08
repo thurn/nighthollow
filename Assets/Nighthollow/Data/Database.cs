@@ -98,11 +98,28 @@ namespace Nighthollow.Data
       _mutations = _mutations.Add(new InsertMutation<T>(tableId, value));
     }
 
-    public void Update<T>(TableId<T> tableId, int entityId, Func<T?, T> mutation) where T : class
+    /// <summary>
+    /// Mutates an entity within a table by applying the provided mutation function to it. If no entity with the
+    /// provided ID exists at the time when this mutation is processed, it will be silently ignored.
+    /// </summary>
+    public void Update<T>(TableId<T> tableId, int entityId, Func<T, T> mutation) where T : class
     {
-      _mutations = _mutations.Add(new UpdateMutation<T>(tableId, entityId, mutation));
+      _mutations = _mutations.Add(new UpdateMutation<T>(tableId, entityId, null, mutation));
     }
 
+    /// <summary>
+    /// Equivalent to <see cref="Update{T}"/>, except that if no entity with the provided ID is found, the mutation
+    /// function will be applied to <paramref name="defaultValue"/> instead.
+    /// </summary>
+    public void Upsert<T>(TableId<T> tableId, int entityId, T defaultValue, Func<T, T> mutation) where T : class
+    {
+      _mutations = _mutations.Add(new UpdateMutation<T>(tableId, entityId, defaultValue, mutation));
+    }
+
+    /// <summary>
+    /// Removes an entity from a table.  If no entity with the provided ID exists at the time when this mutation is
+    /// processed, it will be silently ignored.
+    /// </summary>
     public void Delete<T>(TableId<T> tableId, int entityId) where T : class
     {
       _mutations = _mutations.Add(new DeleteMutation<T>(tableId, entityId));
@@ -150,7 +167,7 @@ namespace Nighthollow.Data
       foreach (var tableId in tableIds)
       {
         using var editorStream = File.OpenWrite(DataService.EditorFilePath(tableId));
-        tableId.Serialize(gameData, editorStream, _serializationOptions);;
+        tableId.Serialize(gameData, editorStream, _serializationOptions);
         Debug.Log($"Wrote game data to {DataService.EditorFilePath(tableId)}");
       }
 #endif
@@ -307,7 +324,7 @@ namespace Nighthollow.Data
       public InsertMutation(TableId<T> tableId, T value)
       {
         _tableId = tableId;
-        _value = value;
+        _value = Errors.CheckNotNull(value);
       }
 
       public GameData Apply(GameData gameData, List<EntityEvent> events)
@@ -326,21 +343,36 @@ namespace Nighthollow.Data
     {
       readonly TableId<T> _tableId;
       readonly int _entityId;
-      readonly Func<T?, T> _update;
+      readonly T? _defaultValue;
+      readonly Func<T, T> _update;
 
-      public UpdateMutation(TableId<T> tableId, int entityId, Func<T?, T> update)
+      public UpdateMutation(TableId<T> tableId, int entityId, T? defaultValue, Func<T, T> update)
       {
         _tableId = tableId;
         _entityId = entityId;
+        _defaultValue = defaultValue;
         _update = update;
       }
 
       public GameData Apply(GameData gameData, List<EntityEvent> events)
       {
         var table = _tableId.GetIn(gameData);
+        T result;
+        if (table.ContainsKey(_entityId))
+        {
+          result = _update(table[_entityId]);
+        }
+        else if (_defaultValue != null)
+        {
+          result = _update(_defaultValue);
+        }
+        else
+        {
+          return gameData;
+        }
+
         events.Add(new EntityEvent(EntityEventType.Updated, _tableId, _entityId));
-        return _tableId.Write(gameData,
-          table.SetItem(_entityId, _update(table.ContainsKey(_entityId) ? table[_entityId] : null)));
+        return _tableId.Write(gameData, table.SetItem(_entityId, Errors.CheckNotNull(result)));
       }
     }
 

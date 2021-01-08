@@ -58,11 +58,6 @@ namespace Nighthollow.Editing
       _content = new VisualElement();
       _content.AddToClassList("editor-content");
 
-      if (_sheetDelegate.ContentHeightOverride != null)
-      {
-        _content.style.height = _sheetDelegate.ContentHeightOverride.Value;
-      }
-
       _scrollView = new ScrollView();
       _scrollView.AddToClassList("editor-scroll-view");
       _scrollView.Add(_content);
@@ -87,6 +82,7 @@ namespace Nighthollow.Editing
     Dictionary<Vector2Int, EditorCell> RenderCells()
     {
       _content.Clear();
+
       var cells = _sheetDelegate.GetCells();
       var result = new Dictionary<Vector2Int, EditorCell>();
       var columnCount = cells.Max(row => row.Count);
@@ -138,6 +134,9 @@ namespace Nighthollow.Editing
       }
 
       _content.style.width = Width;
+      var footer = new VisualElement();
+      footer.AddToClassList("editor-footer");
+      _content.Add(footer);
 
       return result;
     }
@@ -219,11 +218,7 @@ namespace Nighthollow.Editing
 
         _cells[position.Value].Select();
         _currentlySelected = position;
-
-        if (!_cells[position.Value].ClassListContains("full-width-cell"))
-        {
-          _scrollView.ScrollTo(_cells[position.Value]);
-        }
+        _scrollView.ScrollTo(_cells[position.Value]);
       }
     }
 

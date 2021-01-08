@@ -108,8 +108,6 @@ namespace Nighthollow.Editing
 
     public override List<int> GetColumnWidths() => _columnWidths;
 
-    public override int? ContentHeightOverride => 4000;
-
     void DatabaseDelete(int entityId)
     {
       typeof(Database).GetMethod(nameof(Database.Delete))!

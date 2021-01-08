@@ -53,6 +53,10 @@ namespace Nighthollow.Editing
       {
         cellDelegate = new PrimitiveEditorCellDelegate<int>(reflectivePath, int.TryParse);
       }
+      else if (type == typeof(long))
+      {
+        cellDelegate = new PrimitiveEditorCellDelegate<long>(reflectivePath, long.TryParse);
+      }
       else if (type == typeof(bool))
       {
         cellDelegate = new PrimitiveEditorCellDelegate<bool>(reflectivePath, bool.TryParse);

@@ -13,33 +13,56 @@
 // limitations under the License.
 
 using MessagePack;
-using Nighthollow.Generated;
 
 #nullable enable
 
 namespace Nighthollow.Data
 {
+  public enum StatType
+  {
+    Unknown = 0,
+    Int = 1,
+    Bool = 2,
+    IntRange = 3,
+    Duration = 4,
+    Percentage = 5,
+    TaggedValues = 6
+  }
+
+  public enum StatTagType
+  {
+    Unknown = 0,
+    DamageType = 1,
+    School = 2
+  }
+
   [MessagePackObject]
   public sealed partial class StatData
   {
     public StatData(
       string name,
       StatType statType,
-      IValueData defaultValue,
-      string description,
-      string comment)
+      string? descriptionTemplate = null,
+      IValueData? defaultValue = null,
+      StatTagType? tagType = null,
+      StatType? statValueType = null,
+      string? comment = null)
     {
       Name = name;
       StatType = statType;
+      DescriptionTemplate = descriptionTemplate;
       DefaultValue = defaultValue;
-      Description = description;
+      TagType = tagType;
+      StatValueType = statValueType;
       Comment = comment;
     }
 
     [Key(0)] public string Name { get; }
     [Key(1)] public StatType StatType { get; }
-    [Key(2)] public IValueData DefaultValue { get; }
-    [Key(3)] public string Description { get; }
-    [Key(4)] public string Comment { get; }
+    [Key(2)] public string? DescriptionTemplate { get; }
+    [Key(3)] public IValueData? DefaultValue { get; }
+    [Key(4)] public StatTagType? TagType { get; }
+    [Key(5)] public StatType? StatValueType { get; }
+    [Key(6)] public string? Comment { get; }
   }
 }
