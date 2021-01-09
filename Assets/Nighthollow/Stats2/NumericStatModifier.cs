@@ -14,12 +14,36 @@
 
 using System;
 using MessagePack;
-using Nighthollow.Generated;
+using Nighthollow.Data;
 
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
+  public static class NumericStatModifier
+  {
+    public static string NumericModifierString(
+      string? addTo,
+      PercentageValue? increaseBy,
+      string? setTo,
+      string? highValue)
+    {
+      var high = highValue == null ? "" : $"-{highValue}";
+      if (addTo != null)
+      {
+        return $"+{addTo}{high}";
+      }
+      else if (increaseBy.HasValue)
+      {
+        return increaseBy.Value.IsReduction()
+          ? $"{increaseBy}{high} Reduced"
+          : $"{increaseBy}{high} Increased";
+      }
+
+      return $"{setTo}{high}";
+    }
+  }
+
   [MessagePackObject]
   public sealed class NumericStatModifier<T> : IStatModifier where T : struct
   {
@@ -27,7 +51,8 @@ namespace Nighthollow.Stats2
     public static NumericStatModifier<T> Add(AbstractStat<NumericStatModifier<T>, T> stat, T value) =>
       new NumericStatModifier<T>(stat.StatId, ModifierType.Add, value, null, null);
 
-    public static NumericStatModifier<T> Increase(AbstractStat<NumericStatModifier<T>, T> stat, PercentageValue value) =>
+    public static NumericStatModifier<T>
+      Increase(AbstractStat<NumericStatModifier<T>, T> stat, PercentageValue value) =>
       new NumericStatModifier<T>(stat.StatId, ModifierType.Increase, null, value, null);
 
     public static NumericStatModifier<T> Set(AbstractStat<NumericStatModifier<T>, T> stat, T value) =>
@@ -54,5 +79,13 @@ namespace Nighthollow.Stats2
     [Key(2)] public T? AddTo { get; }
     [Key(3)] public PercentageValue? IncreaseBy { get; }
     [Key(4)] public T? SetTo { get; }
+
+    public string Describe(string template, IValueData? highValue) =>
+      template.Replace("#",
+        NumericStatModifier.NumericModifierString(
+          AddTo?.ToString(),
+          IncreaseBy,
+          SetTo?.ToString(),
+          highValue?.ToString()));
   }
 }

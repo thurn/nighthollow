@@ -29,7 +29,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChainingProjectilesDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) =>
+    public override string DescribeOld(StatEntity entity) =>
       $"Projectiles Chain {entity.GetInt(OldStat.ProjectileChainCount)} Times on Hit";
 
     public override bool ShouldSkipProjectileImpact(SkillContext c)

@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using Nighthollow.Data;
+
 #nullable enable
 
 namespace Nighthollow.Stats2
@@ -30,5 +33,14 @@ namespace Nighthollow.Stats2
 
     public IStatModifier? Set(T? nullable) =>
       nullable.HasValue ? NumericStatModifier<T>.Set(this, nullable.Value) : null;
+
+    public override IStatModifier BuildModifier(ModifierType type, IValueData value) =>
+      type switch
+      {
+        ModifierType.Add => Add((T) value.Get()),
+        ModifierType.Increase => Increase((PercentageValue) value.Get()),
+        ModifierType.Set => Set((T) value.Get()),
+        _ => throw new InvalidOperationException($"Unsupported modifier type: {type}")
+      };
   }
 }

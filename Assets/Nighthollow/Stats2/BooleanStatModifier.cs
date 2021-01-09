@@ -14,6 +14,7 @@
 
 using System;
 using MessagePack;
+using Nighthollow.Data;
 
 #nullable enable
 
@@ -39,5 +40,11 @@ namespace Nighthollow.Stats2
     [Key(0)] public StatId StatId { get; }
     [Key(1)] public bool SetValue { get; }
     [IgnoreMember] public ModifierType Type { get; }
+
+    public string Describe(string template, IValueData? highValue)
+    {
+      var split = template.Split('/');
+      return SetValue ? split[0] : split[1];
+    }
   }
 }

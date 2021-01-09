@@ -15,9 +15,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
-using Nighthollow.Delegates;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Generated;
 using Nighthollow.Stats2;
 
 #nullable enable
@@ -48,10 +46,7 @@ namespace Nighthollow.Data
           delegates.Add(modifier.DelegateId.Value);
         }
 
-        if (modifier.StatModifier != null)
-        {
-          stats = stats.InsertModifier(modifier.StatModifier);
-        }
+        stats = stats.InsertNullableModifier(modifier.BuildStatModifier());
       }
 
       return (stats, delegates.ToImmutable());

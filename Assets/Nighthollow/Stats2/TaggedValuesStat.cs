@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Nighthollow.Generated;
+using Nighthollow.Data;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -62,10 +62,19 @@ namespace Nighthollow.Stats2
           tag,
           _childStat.ComputeValue(groups.ToDictionary(
             p => p.Key,
-            p => p.Value.Select(o => o.AsNumericOperation(_childStat, tag)).WhereNotNull())));
+            p => p.Value.Select(o => o.AsNumericModifier(_childStat, tag)).WhereNotNull())));
       }
 
       return result;
     }
+
+    public override IStatModifier BuildModifier(ModifierType type, IValueData value) =>
+      type switch
+      {
+        ModifierType.Add => Add((ImmutableDictionary<TTag, TValue>) value.Get()),
+        ModifierType.Increase => Increase((ImmutableDictionary<TTag, PercentageValue>) value.Get()),
+        ModifierType.Set => Set((ImmutableDictionary<TTag, TValue>) value.Get()),
+        _ => throw new InvalidOperationException($"Unsupported modifier type: {type}")
+      };
   }
 }

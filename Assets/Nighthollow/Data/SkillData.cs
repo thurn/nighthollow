@@ -19,7 +19,7 @@ using Nighthollow.Stats2;
 
 namespace Nighthollow.Data
 {
-  public sealed partial class SkillData
+  public sealed partial class SkillData : StatEntity
   {
     public SkillData(
       IDelegate @delegate,
@@ -33,9 +33,9 @@ namespace Nighthollow.Data
       ItemData = itemData;
     }
 
-    public IDelegate Delegate { get; }
-    public StatTable Stats { get; }
-    public SkillTypeData BaseType { get; }
-    public SkillItemData ItemData { get; }
+    [Field] public IDelegate Delegate { get; }
+    [Field] public override StatTable Stats { get; }
+    [Field] public SkillTypeData BaseType { get; }
+    [Field] public SkillItemData ItemData { get; }
   }
 }

@@ -35,7 +35,7 @@ namespace Nighthollow.Data
         Modifiers,
         InfluenceType);
 
-    public AffixTypeData WithModifiers(ImmutableList<ModifierTypeData> modifiers) =>
+    public AffixTypeData WithModifiers(ImmutableList<ModifierData> modifiers) =>
       new AffixTypeData(
         MinLevel,
         Weight,
@@ -375,7 +375,7 @@ namespace Nighthollow.Data
         SkillAnimations,
         IsManaCreature);
 
-    public CreatureTypeData WithImplicitModifiers(ImmutableList<ModifierTypeData>? implicitModifiers) =>
+    public CreatureTypeData WithImplicitModifiers(ImmutableList<ModifierData>? implicitModifiers) =>
       new CreatureTypeData(
         Name,
         PrefabAddress,
@@ -471,7 +471,7 @@ namespace Nighthollow.Data
         CanCrit,
         CanStun);
 
-    public SkillTypeData WithImplicitModifiers(ImmutableList<ModifierTypeData>? implicitModifiers) =>
+    public SkillTypeData WithImplicitModifiers(ImmutableList<ModifierData>? implicitModifiers) =>
       new SkillTypeData(
         Name,
         SkillAnimationType,
@@ -561,28 +561,108 @@ namespace Nighthollow.Data
 
   public sealed partial class ModifierData
   {
-    public ModifierData WithDelegateId(DelegateId? delegateId) =>
+    public ModifierData WithStatId(StatId? statId) =>
       new ModifierData(
-        delegateId,
-        StatModifier,
+        statId,
+        ModifierType,
+        DelegateId,
+        Value,
+        ValueLow,
+        ValueHigh,
         Targeted);
 
-    public ModifierData WithStatModifier(IStatModifier? statModifier) =>
+    public ModifierData WithModifierType(ModifierType? modifierType) =>
       new ModifierData(
+        StatId,
+        modifierType,
         DelegateId,
-        statModifier,
+        Value,
+        ValueLow,
+        ValueHigh,
+        Targeted);
+
+    public ModifierData WithDelegateId(DelegateId? delegateId) =>
+      new ModifierData(
+        StatId,
+        ModifierType,
+        delegateId,
+        Value,
+        ValueLow,
+        ValueHigh,
+        Targeted);
+
+    public ModifierData WithValue(IValueData? value) =>
+      new ModifierData(
+        StatId,
+        ModifierType,
+        DelegateId,
+        value,
+        ValueLow,
+        ValueHigh,
+        Targeted);
+
+    public ModifierData WithValueLow(IValueData? valueLow) =>
+      new ModifierData(
+        StatId,
+        ModifierType,
+        DelegateId,
+        Value,
+        valueLow,
+        ValueHigh,
+        Targeted);
+
+    public ModifierData WithValueHigh(IValueData? valueHigh) =>
+      new ModifierData(
+        StatId,
+        ModifierType,
+        DelegateId,
+        Value,
+        ValueLow,
+        valueHigh,
         Targeted);
 
     public ModifierData WithTargeted(bool targeted) =>
       new ModifierData(
+        StatId,
+        ModifierType,
         DelegateId,
-        StatModifier,
+        Value,
+        ValueLow,
+        ValueHigh,
         targeted);
 
   }
 
   public sealed partial class SkillData
   {
+    public SkillData WithDelegate(IDelegate @delegate) =>
+      new SkillData(
+        @delegate,
+        Stats,
+        BaseType,
+        ItemData);
+
+    public SkillData WithStats(StatTable stats) =>
+      new SkillData(
+        Delegate,
+        stats,
+        BaseType,
+        ItemData);
+
+    public SkillData WithBaseType(SkillTypeData baseType) =>
+      new SkillData(
+        Delegate,
+        Stats,
+        baseType,
+        ItemData);
+
+    public SkillData WithItemData(SkillItemData itemData) =>
+      new SkillData(
+        Delegate,
+        Stats,
+        BaseType,
+        itemData);
+
   }
 
   public sealed partial class StaticCreatureListData
@@ -601,6 +681,46 @@ namespace Nighthollow.Data
 
   public sealed partial class CreatureData
   {
+    public CreatureData WithDelegate(IDelegate @delegate) =>
+      new CreatureData(
+        @delegate,
+        Stats,
+        Skills,
+        BaseType,
+        ItemData);
+
+    public CreatureData WithStats(StatTable stats) =>
+      new CreatureData(
+        Delegate,
+        stats,
+        Skills,
+        BaseType,
+        ItemData);
+
+    public CreatureData WithSkills(ImmutableList<SkillData> skills) =>
+      new CreatureData(
+        Delegate,
+        Stats,
+        skills,
+        BaseType,
+        ItemData);
+
+    public CreatureData WithBaseType(CreatureTypeData baseType) =>
+      new CreatureData(
+        Delegate,
+        Stats,
+        Skills,
+        baseType,
+        ItemData);
+
+    public CreatureData WithItemData(CreatureItemData itemData) =>
+      new CreatureData(
+        Delegate,
+        Stats,
+        Skills,
+        BaseType,
+        itemData);
+
   }
 
   public sealed partial class ColumnMetadata
@@ -680,64 +800,6 @@ namespace Nighthollow.Data
         School,
         Skills,
         affixes);
-
-  }
-
-  public sealed partial class ModifierTypeData
-  {
-    public ModifierTypeData WithStatId(StatId? statId) =>
-      new ModifierTypeData(
-        statId,
-        ModifierType,
-        DelegateId,
-        ValueLow,
-        ValueHigh,
-        Targeted);
-
-    public ModifierTypeData WithModifierType(ModifierType? modifierType) =>
-      new ModifierTypeData(
-        StatId,
-        modifierType,
-        DelegateId,
-        ValueLow,
-        ValueHigh,
-        Targeted);
-
-    public ModifierTypeData WithDelegateId(DelegateId? delegateId) =>
-      new ModifierTypeData(
-        StatId,
-        ModifierType,
-        delegateId,
-        ValueLow,
-        ValueHigh,
-        Targeted);
-
-    public ModifierTypeData WithValueLow(IValueData? valueLow) =>
-      new ModifierTypeData(
-        StatId,
-        ModifierType,
-        DelegateId,
-        valueLow,
-        ValueHigh,
-        Targeted);
-
-    public ModifierTypeData WithValueHigh(IValueData? valueHigh) =>
-      new ModifierTypeData(
-        StatId,
-        ModifierType,
-        DelegateId,
-        ValueLow,
-        valueHigh,
-        Targeted);
-
-    public ModifierTypeData WithTargeted(bool targeted) =>
-      new ModifierTypeData(
-        StatId,
-        ModifierType,
-        DelegateId,
-        ValueLow,
-        ValueHigh,
-        targeted);
 
   }
 

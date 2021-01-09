@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
 using SkillData = Nighthollow.Model.SkillData;
@@ -28,7 +27,9 @@ namespace Nighthollow.Delegates.Core
 {
   public abstract class AbstractDelegate : IDelegate
   {
-    public abstract string? Describe(StatEntity entity);
+    public string? Describe(Stats2.StatEntity entity) => null;
+
+    public abstract string? DescribeOld(StatEntity entity);
 
     public virtual void OnActivate(CreatureContext c)
     {

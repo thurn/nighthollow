@@ -14,7 +14,6 @@
 
 using MessagePack;
 using Nighthollow.Data;
-using Nighthollow.Generated;
 
 #nullable enable
 
@@ -34,6 +33,16 @@ namespace Nighthollow.Stats2
     public StatId StatId { get; }
 
     ModifierType Type { get; }
+
+    /// <summary>
+    /// Produce a description of this modifier based on the provided template. Templates for numeric stats contain the
+    /// character '#' which should be replaced with the modifier description. Templates for boolean stats contain two
+    /// descriptions separated by the '/' character, which correspond to true / false respectively.
+    ///
+    /// If <paramref name="highValue"/> is provided, this description is for a range of numeric modifier values, and
+    /// the # character should be replaced with a hyphen-separated range of currentValue - highValue.
+    /// </summary>
+    public string Describe(string template, IValueData? highValue);
   }
 
   // Hack: MessagePack can't find types that are only ever used in a union declaration, so we need to have a concrete

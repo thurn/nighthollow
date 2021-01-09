@@ -17,10 +17,10 @@ using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
 using SkillData = Nighthollow.Model.SkillData;
+using StatEntity = Nighthollow.Stats2.StatEntity;
 
 #nullable enable
 
@@ -32,7 +32,9 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
-    public string Describe(StatEntity entity) => "Delegate List";
+    public string? Describe(StatEntity entity) => null;
+
+    public string DescribeOld(Stats.StatEntity entity) => "Delegate List";
 
     public void OnActivate(CreatureContext context) =>
       ExecuteEvent(context, (d, c) => d.OnActivate(c));

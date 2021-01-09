@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
-using Nighthollow.Delegates;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Generated;
 using Nighthollow.Stats2;
 
 #nullable enable
@@ -26,17 +25,96 @@ namespace Nighthollow.Data
   public sealed partial class ModifierData
   {
     public ModifierData(
-      DelegateId? delegateId,
-      IStatModifier? statModifier,
-      bool targeted)
+      StatId? statId = null,
+      ModifierType? modifierType = null,
+      DelegateId? delegateId = null,
+      IValueData? value = null,
+      IValueData? valueLow = null,
+      IValueData? valueHigh = null,
+      bool targeted = false)
     {
+      StatId = statId;
+      ModifierType = modifierType;
       DelegateId = delegateId;
-      StatModifier = statModifier;
+      Value = value;
+      ValueLow = valueLow;
+      ValueHigh = valueHigh;
       Targeted = targeted;
     }
 
-    [Key(0)] public DelegateId? DelegateId { get; }
-    [Key(1)] public IStatModifier? StatModifier { get; }
-    [Key(2)] public bool Targeted { get; }
+    /// <summary>The Stat which this modifier is operating on.</summary>
+    [Key(0)] public StatId? StatId { get; }
+
+    /// <summary>Operation to apply to the provided Stat.</summary>
+    [Key(1)] public ModifierType? ModifierType { get; }
+
+    /// <summary>Delegate which should be added to the modifier target.</summary>
+    [Key(2)] public DelegateId? DelegateId { get; }
+
+    /// <summary>
+    /// Value for the modifier -- the stat value is set by applying <see cref="ModifierType"/> to this value. Will be
+    /// null when we are representing a range of possible modifier values (e.g. in a base type) instead of just a single
+    /// value.
+    /// </summary>
+    [Key(3)] public IValueData? Value { get; }
+
+    /// <summary>
+    /// Low value for the modifier. Setting this implies that we are representing a range of possible modifiers here,
+    /// not just a single instance of one.
+    /// </summary>
+    [Key(4)] public IValueData? ValueLow { get; }
+
+    /// <summary>
+    /// High value for the modifier. Setting this implies that we are representing a range of possible modifiers here,
+    /// not just a single instance of one.
+    /// </summary>
+    [Key(5)] public IValueData? ValueHigh { get; }
+
+    /// <summary>
+    /// Whether the modifier is manually applied to a target. If false, the modifier is automatically
+    /// applied to the owner.
+    /// </summary>
+    [Key(6)] public bool Targeted { get; }
+
+    public IStatModifier? BuildStatModifier() => ModifierForValue(Value);
+
+    public string? Describe(StatEntity entity, ImmutableDictionary<int, StatData> stats)
+    {
+      if (DelegateId.HasValue)
+      {
+        var description = DelegateMap.Get(DelegateId.Value).Describe(entity);
+        if (description != null)
+        {
+          // Delegate descriptions take priority
+          return description;
+        }
+      }
+
+      if (StatId != null)
+      {
+        var template = stats[(int) StatId.Value].DescriptionTemplate;
+        if (template != null)
+        {
+          if (!template.Contains("#"))
+          {
+            template = "# " + template; // Default position
+          }
+
+          return PopulateTemplate(template);
+        }
+      }
+
+      return null;
+    }
+
+    IStatModifier? ModifierForValue(IValueData? value) =>
+      StatId.HasValue && ModifierType.HasValue && value != null
+        ? Stat.GetStat(StatId.Value).BuildModifier(ModifierType.Value, value)
+        : null;
+
+    string? PopulateTemplate(string template) =>
+      Value != null
+        ? BuildStatModifier()?.Describe(template, null)
+        : ModifierForValue(ValueLow)?.Describe(template, ValueHigh);
   }
 }

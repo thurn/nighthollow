@@ -25,7 +25,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class MultipleProjectilesDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) =>
+    public override string DescribeOld(StatEntity entity) =>
       $"Fires {entity.GetInt(OldStat.ProjectileSequenceCount)} Projectiles in Sequence";
 
     public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)

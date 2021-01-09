@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 
 #nullable enable
 
@@ -33,5 +35,12 @@ namespace Nighthollow.Stats2
       IReadOnlyDictionary<ModifierType, IEnumerable<BooleanStatModifier>> groups) =>
       groups[ModifierType.Set].Count(op => op.SetValue) > 0 &&
       groups[ModifierType.Set].Count(op => op.SetValue == false) == 0;
+
+    public override IStatModifier BuildModifier(ModifierType type, IValueData value) =>
+      type switch
+      {
+        ModifierType.Set => BooleanStatModifier.Set(this, (bool) value.Get()),
+        _ => throw new InvalidOperationException($"Unsupported modifier type: {type}")
+      };
   }
 }

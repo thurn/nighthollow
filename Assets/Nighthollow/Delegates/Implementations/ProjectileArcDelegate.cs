@@ -25,7 +25,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ProjectileArcDelegate : AbstractProjectileOffsetDelegate
   {
-    public override string Describe(StatEntity entity) =>
+    public override string DescribeOld(StatEntity entity) =>
       $"Fires an Arc of {entity.GetInt(OldStat.ProjectileArcCount)} Projectiles";
 
     protected override int GetProjectileCount(DelegateContext c) => c.GetInt(OldStat.ProjectileArcCount);

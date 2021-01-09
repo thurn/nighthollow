@@ -28,7 +28,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ApplyToAdjacentAlliesOnUseDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) => "Buffs Adjacent Allies With:";
+    public override string DescribeOld(StatEntity entity) => "Buffs Adjacent Allies With:";
 
     public override void OnUse(SkillContext c)
     {

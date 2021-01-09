@@ -27,7 +27,7 @@ namespace Nighthollow.Data
       string name,
       SkillAnimationType skillAnimationType,
       SkillType skillType,
-      ImmutableList<ModifierTypeData>? implicitModifiers = null,
+      ImmutableList<ModifierData>? implicitModifiers = null,
       string? address = null,
       int? projectileSpeed = null,
       bool usesAccuracy = false,
@@ -37,7 +37,7 @@ namespace Nighthollow.Data
       Name = name;
       SkillAnimationType = skillAnimationType;
       SkillType = skillType;
-      ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierTypeData>.Empty;
+      ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
       Address = address;
       ProjectileSpeed = projectileSpeed;
       UsesAccuracy = usesAccuracy;
@@ -48,7 +48,7 @@ namespace Nighthollow.Data
     [Key(0)] public string Name { get; }
     [Key(1)] public SkillAnimationType SkillAnimationType { get; }
     [Key(2)] public SkillType SkillType { get; }
-    [Key(3)] public ImmutableList<ModifierTypeData>? ImplicitModifiers { get; }
+    [Key(3)] public ImmutableList<ModifierData>? ImplicitModifiers { get; }
     [Key(4)] public string? Address { get; }
     [Key(5)] public int? ProjectileSpeed { get; }
     [Key(6)] public bool UsesAccuracy { get; }

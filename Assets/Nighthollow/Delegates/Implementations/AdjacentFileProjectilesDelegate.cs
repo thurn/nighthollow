@@ -25,7 +25,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class AdjacentFileProjectilesDelegate : AbstractProjectileOffsetDelegate
   {
-    public override string Describe(StatEntity entity) =>
+    public override string DescribeOld(StatEntity entity) =>
       $"Fires {entity.GetInt(OldStat.ProjectileAdjacentsCount)} Projectiles in Adjacent Files";
 
     protected override int GetProjectileCount(DelegateContext c) => c.GetInt(OldStat.ProjectileAdjacentsCount);

@@ -108,7 +108,7 @@ namespace Nighthollow.Items
       {
         if (modifier.DelegateId.HasValue)
         {
-          builder.AppendNullable(DelegateMap.Get(modifier.DelegateId.Value).Describe(built));
+          builder.AppendNullable(DelegateMap.Get(modifier.DelegateId.Value).DescribeOld(built));
         }
 
         if (modifier.StatModifier != null)

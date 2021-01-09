@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using Nighthollow.Data;
 
 #nullable enable
 
@@ -21,6 +22,8 @@ namespace Nighthollow.Stats2
   public interface IStat
   {
     StatId StatId { get; }
+
+    IStatModifier BuildModifier(ModifierType type, IValueData value);
   }
 
   public abstract class AbstractStat<TModifier, TValue> : IStat where TModifier : IStatModifier
@@ -33,5 +36,7 @@ namespace Nighthollow.Stats2
     public StatId StatId { get; }
 
     public abstract TValue ComputeValue(IReadOnlyDictionary<ModifierType, IEnumerable<TModifier>> groups);
+
+    public abstract IStatModifier BuildModifier(ModifierType type, IValueData value);
   }
 }

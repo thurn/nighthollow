@@ -314,6 +314,7 @@ namespace Nighthollow.Editing
       RenderOptions(_currentlySelected.HasValue ? _optionLabels[_currentlySelected.Value].text : null, input);
     }
 
-    static bool MatchesFilter(string text, string filter) => text.Contains(filter);
+    static bool MatchesFilter(string text, string filter) =>
+      text.ToLowerInvariant().Contains(filter.ToLowerInvariant());
   }
 }

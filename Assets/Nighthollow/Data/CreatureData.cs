@@ -20,7 +20,7 @@ using Nighthollow.Stats2;
 
 namespace Nighthollow.Data
 {
-  public sealed partial class CreatureData
+  public sealed partial class CreatureData : StatEntity
   {
     public CreatureData(
       IDelegate @delegate,
@@ -36,10 +36,10 @@ namespace Nighthollow.Data
       ItemData = itemData;
     }
 
-    public IDelegate Delegate { get; }
-    public StatTable Stats { get; }
-    public ImmutableList<SkillData> Skills { get; }
-    public CreatureTypeData BaseType { get; }
-    public CreatureItemData ItemData { get; }
+    [Field] public IDelegate Delegate { get; }
+    [Field] public override StatTable Stats { get; }
+    [Field] public ImmutableList<SkillData> Skills { get; }
+    [Field] public CreatureTypeData BaseType { get; }
+    [Field] public CreatureItemData ItemData { get; }
   }
 }

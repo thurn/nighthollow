@@ -30,20 +30,20 @@ namespace Nighthollow.Data
       int minLevel,
       int weight,
       IntRangeValue manaCost,
-      ImmutableList<ModifierTypeData>? modifiers = null,
+      ImmutableList<ModifierData>? modifiers = null,
       School? influenceType = null)
     {
       MinLevel = minLevel;
       Weight = weight;
       ManaCost = manaCost;
-      Modifiers = modifiers ?? ImmutableList<ModifierTypeData>.Empty;
+      Modifiers = modifiers ?? ImmutableList<ModifierData>.Empty;
       InfluenceType = influenceType;
     }
 
     [Key(0)] public int MinLevel { get; }
     [Key(1)] public int Weight { get; }
     [Key(2)] public IntRangeValue ManaCost { get; }
-    [Key(3)] public ImmutableList<ModifierTypeData> Modifiers { get; }
+    [Key(3)] public ImmutableList<ModifierData> Modifiers { get; }
     [Key(4)] public School? InfluenceType { get; }
 
     public override string ToString() => string.Join("\n", Modifiers.Select(m => m.ToString()));

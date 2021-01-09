@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class DefaultCreatureDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) => "Default Creature Delegate";
+    public override string DescribeOld(StatEntity entity) => "Default Creature Delegate";
 
     public override void OnDeath(CreatureContext c)
     {

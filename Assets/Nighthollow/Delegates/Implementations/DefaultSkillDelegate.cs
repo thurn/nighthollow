@@ -33,7 +33,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class DefaultSkillDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) => "Default Skill Delegate";
+    public override string DescribeOld(StatEntity entity) => "Default Skill Delegate";
 
     public override void OnUse(SkillContext c)
     {

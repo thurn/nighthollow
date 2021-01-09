@@ -25,7 +25,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class KnockbackOnHitDelegate : AbstractDelegate
   {
-    public override string Describe(StatEntity entity) =>
+    public override string DescribeOld(StatEntity entity) =>
       $"Knocks Back Targets for {entity.GetDurationSeconds(OldStat.KnockbackDuration)} Seconds on Hit";
 
     public override void OnHitTarget(SkillContext c, Creature target, int damage)

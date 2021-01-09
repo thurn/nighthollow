@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
 using Nighthollow.Stats;
 using UnityEngine;
 using SkillData = Nighthollow.Model.SkillData;
@@ -27,7 +26,9 @@ namespace Nighthollow.Delegates.Core
 {
   public interface IDelegate
   {
-    string? Describe(StatEntity entity);
+    string? Describe(Stats2.StatEntity entity);
+
+    string? DescribeOld(StatEntity entity);
 
     #region Events
 

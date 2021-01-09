@@ -52,7 +52,7 @@ namespace Nighthollow.Data
       string? imageAddress = null,
       int baseManaCost = 0,
       int speed = 0,
-      ImmutableList<ModifierTypeData>? implicitModifiers = null,
+      ImmutableList<ModifierData>? implicitModifiers = null,
       ImmutableList<SkillTypeData>? implicitSkills = null,
       ImmutableList<CreatureSkillAnimation>? skillAnimations = null,
       bool isManaCreature = false)
@@ -64,7 +64,7 @@ namespace Nighthollow.Data
       ImageAddress = imageAddress;
       BaseManaCost = baseManaCost;
       Speed = speed;
-      ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierTypeData>.Empty;
+      ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
       ImplicitSkills = implicitSkills ?? ImmutableList<SkillTypeData>.Empty;
       SkillAnimations = skillAnimations ?? ImmutableList<CreatureSkillAnimation>.Empty;
       IsManaCreature = isManaCreature;
@@ -77,7 +77,7 @@ namespace Nighthollow.Data
     [Key(4)] public string? ImageAddress { get; }
     [Key(5)] public int BaseManaCost { get; }
     [Key(6)] public int Speed { get; }
-    [Key(7)] public ImmutableList<ModifierTypeData>? ImplicitModifiers { get; }
+    [Key(7)] public ImmutableList<ModifierData>? ImplicitModifiers { get; }
     [Key(8)] public ImmutableList<SkillTypeData> ImplicitSkills { get; }
     [Key(9)] public ImmutableList<CreatureSkillAnimation> SkillAnimations { get; }
     [Key(10)] public bool IsManaCreature { get; }

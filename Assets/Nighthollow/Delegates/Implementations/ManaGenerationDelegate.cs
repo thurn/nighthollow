@@ -24,7 +24,7 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ManaGenerationDelegate : AbstractDelegate
   {
-    public override string? Describe(StatEntity entity) => null;
+    public override string? DescribeOld(StatEntity entity) => null;
 
     public override void OnActivate(CreatureContext c)
     {

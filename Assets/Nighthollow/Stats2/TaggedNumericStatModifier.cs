@@ -13,9 +13,10 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using MessagePack;
-using Nighthollow.Generated;
+using Nighthollow.Data;
 
 #nullable enable
 
@@ -67,7 +68,7 @@ namespace Nighthollow.Stats2
     [Key(4)] public ImmutableDictionary<TTag, TValue>? SetTo { get; }
     [IgnoreMember] public ImmutableHashSet<TTag> AllTags { get; }
 
-    public NumericStatModifier<TValue>? AsNumericOperation(
+    public NumericStatModifier<TValue>? AsNumericModifier(
       AbstractStat<NumericStatModifier<TValue>, TValue> stat, TTag tag)
     {
       if (!AllTags.Contains(tag))
@@ -82,6 +83,20 @@ namespace Nighthollow.Stats2
         ModifierType.Set => NumericStatModifier<TValue>.Set(stat, SetTo![tag]),
         _ => throw new ArgumentOutOfRangeException()
       };
+    }
+
+    public string Describe(string template, IValueData? highValue)
+    {
+      var high = highValue?.Get() as ImmutableDictionary<TTag, TValue>;
+      var result = new List<string>();
+      foreach (var tag in AllTags)
+      {
+        var modifierString = NumericStatModifier.NumericModifierString(
+          AddTo?[tag].ToString(), IncreaseBy?[tag], SetTo?[tag].ToString(), high?[tag].ToString());
+        result.Add(template.Replace("#", $"{modifierString} {tag}"));
+      }
+
+      return string.Join("\n", result);
     }
   }
 }

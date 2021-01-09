@@ -12,27 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-using Nighthollow.Stats;
-
 #nullable enable
 
-namespace Nighthollow.Delegates.Implementations
+namespace Nighthollow.Stats2
 {
-  public sealed class InfluenceAddedDelegate : AbstractDelegate
+  public abstract class StatEntity
   {
-    public override string DescribeOld(StatEntity entity) => $"+1 Influence";
+    public abstract StatTable Stats { get; }
 
-    public override void OnActivate(CreatureContext c)
-    {
-      c.Results.Add(
-        new ApplyModifierToOwnerEffect(c.Self,
-          OldStat.Influence.Modifier(
-            TaggedNumericOperation.Add(c.Self.Data.School, value: 1),
-            new WhileAliveLifetime(c.Self))));
-    }
+    public TValue Get<TModifier, TValue>(AbstractStat<TModifier, TValue> stat) where TModifier : IStatModifier =>
+      Stats.Get(stat);
+
+    public int GetInt(IntStat statId) => Stats.Get(statId);
+
+    public bool GetBool(BoolStat statId) => Stats.Get(statId);
+
+    public int GetDurationMilliseconds(DurationStat statId) => Stats.Get(statId).AsMilliseconds();
+
+    public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
   }
 }
