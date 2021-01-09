@@ -27,7 +27,7 @@ namespace Nighthollow.Delegates.Core
 {
   public abstract class AbstractDelegate : IDelegate
   {
-    public string? Describe(Stats2.StatEntity entity) => null;
+    public virtual string? Describe(IStatDescriptionProvider provider) => "<Delegate>";
 
     public abstract string? DescribeOld(StatEntity entity);
 

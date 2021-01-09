@@ -22,7 +22,7 @@ using Nighthollow.Generated;
 namespace Nighthollow.Stats2
 {
   [MessagePackObject]
-  public readonly struct IntRangeValue : IValueData
+  public readonly struct IntRangeValue : IValueData, IIsNegative
   {
     public IntRangeValue(int low, int high)
     {
@@ -36,6 +36,8 @@ namespace Nighthollow.Stats2
     public object Get() => this;
 
     public static readonly IntRangeValue Zero = new IntRangeValue(low: 0, high: 0);
+
+    public bool IsNegative() => Low < 0 && High < 0;
 
     public override string ToString() => $"{Low}-{High}";
 

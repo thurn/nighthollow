@@ -12,16 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
+using System;
 
 #nullable enable
 
 namespace Nighthollow.Stats2
 {
-  public interface IStat
+  public static class NumberUtil
   {
-    IStatModifier BuildModifier(ModifierType type, IValueData value);
+    public static bool IsNegative(object value) => value switch
+    {
+      int integer => integer < 0,
+      IIsNegative n => n.IsNegative(),
+      _ => throw new ArgumentException($"Unsupported value type {value}")
+    };
+  }
 
-    bool TryParse(string input, ModifierType type, out IValueData result);
+  public interface IIsNegative
+  {
+    bool IsNegative();
   }
 }

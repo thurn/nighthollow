@@ -18,15 +18,22 @@ using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Stats;
 using UnityEngine;
+using IStatModifier = Nighthollow.Stats2.IStatModifier;
 using SkillData = Nighthollow.Model.SkillData;
 
 #nullable enable
 
 namespace Nighthollow.Delegates.Core
 {
+  public interface IStatDescriptionProvider
+  {
+    string Get<TModifier, TValue>(Stats2.AbstractStat<TModifier, TValue> stat)
+      where TModifier : IStatModifier where TValue : notnull;
+  }
+
   public interface IDelegate
   {
-    string? Describe(Stats2.StatEntity entity);
+    string? Describe(IStatDescriptionProvider provider);
 
     string? DescribeOld(StatEntity entity);
 

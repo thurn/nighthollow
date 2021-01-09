@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using JetBrains.Annotations;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -46,7 +47,8 @@ namespace Nighthollow.Stats2
     public StatTable InsertNullableModifier(IStatModifier? modifier) =>
       modifier == null ? this : InsertModifier(modifier);
 
-    public TValue Get<TModifier, TValue>(AbstractStat<TModifier, TValue> stat) where TModifier : IStatModifier =>
+    public TValue Get<TModifier, TValue>(AbstractStat<TModifier, TValue> stat)
+      where TModifier : IStatModifier where TValue : notnull =>
       stat.ComputeValue(
         ModifiersForStat(stat.StatId)
           .Select(operation => (TModifier) operation)

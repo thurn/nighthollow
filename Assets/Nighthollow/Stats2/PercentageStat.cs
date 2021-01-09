@@ -22,7 +22,7 @@ using UnityEngine;
 namespace Nighthollow.Stats2
 {
   [MessagePackObject]
-  public readonly struct PercentageValue : IValueData
+  public readonly struct PercentageValue : IValueData, IIsNegative
   {
     public PercentageValue(int basisPoints)
     {
@@ -43,7 +43,7 @@ namespace Nighthollow.Stats2
 
     public int CalculateFraction(int input) => Mathf.RoundToInt(input * BasisPoints / BasisPointsPerUnit);
 
-    public bool IsReduction() => BasisPoints < 0;
+    public bool IsNegative() => BasisPoints < 0;
 
     public bool Equals(PercentageValue other) => BasisPoints == other.BasisPoints;
 

@@ -44,7 +44,7 @@ namespace Nighthollow.Stats2
     public string Describe(string template, IValueData? highValue)
     {
       var split = template.Split('/');
-      return SetValue ? split[0] : split[1];
+      return SetValue ? split[0].Trim() : split[1].Trim();
     }
   }
 }

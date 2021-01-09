@@ -79,11 +79,11 @@ namespace Nighthollow.Data
     /// <summary>Returns a <see cref="IStatModifier"/> for this modifier's <see cref="Value"/> if one is set.</summary>
     public IStatModifier? BuildStatModifier() => ModifierForValue(Value);
 
-    public string? Describe(StatEntity entity, ImmutableDictionary<int, StatData> stats)
+    public string? Describe(IStatDescriptionProvider descriptionProvider, ImmutableDictionary<int, StatData> stats)
     {
       if (DelegateId.HasValue)
       {
-        var description = DelegateMap.Get(DelegateId.Value).Describe(entity);
+        var description = DelegateMap.Get(DelegateId.Value).Describe(descriptionProvider);
         if (description != null)
         {
           // Delegate descriptions take priority
@@ -120,7 +120,7 @@ namespace Nighthollow.Data
       return null;
     }
 
-    IStatModifier? ModifierForValue(IValueData? value) =>
+    public IStatModifier? ModifierForValue(IValueData? value) =>
       StatId.HasValue && ModifierType.HasValue && value != null
         ? Stat.GetStat(StatId.Value).BuildModifier(ModifierType.Value, value)
         : null;

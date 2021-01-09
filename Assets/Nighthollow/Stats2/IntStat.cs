@@ -34,16 +34,20 @@ namespace Nighthollow.Stats2
       where TValue : struct
     {
       var result = 0;
-      var overwrites = groups[ModifierType.Set].ToList();
+      var overwrites = groups
+        .GetOrReturnDefault(ModifierType.Set, Enumerable.Empty<NumericStatModifier<TValue>>())
+        .ToList();
       if (overwrites.Any())
       {
         result = toInt(overwrites.Last().SetTo!.Value);
       }
 
-      result += groups[ModifierType.Add].Select(op => toInt(op.AddTo!.Value)).Sum();
+      result += groups
+        .GetOrReturnDefault(ModifierType.Add, Enumerable.Empty<NumericStatModifier<TValue>>())
+        .Select(op => toInt(op.AddTo!.Value)).Sum();
 
       var increaseBy =
-        10000 + groups[ModifierType.Increase]
+        10000 + groups.GetOrReturnDefault(ModifierType.Increase, Enumerable.Empty<NumericStatModifier<TValue>>())
           .Select(op => op.IncreaseBy!.Value)
           .Sum(increase => increase.AsBasisPoints());
       return Constants.FractionBasisPoints(result, increaseBy);

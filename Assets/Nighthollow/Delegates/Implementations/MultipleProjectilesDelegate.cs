@@ -16,8 +16,9 @@
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 using UnityEngine;
+using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -25,6 +26,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class MultipleProjectilesDelegate : AbstractDelegate
   {
+    public override string Describe(IStatDescriptionProvider provider) =>
+      $"Fires {provider.Get(Stat.ProjectileSequenceCount)} Projectiles in Sequence";
+
     public override string DescribeOld(StatEntity entity) =>
       $"Fires {entity.GetInt(OldStat.ProjectileSequenceCount)} Projectiles in Sequence";
 

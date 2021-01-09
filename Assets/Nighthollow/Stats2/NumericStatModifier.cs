@@ -23,20 +23,21 @@ namespace Nighthollow.Stats2
   public static class NumericStatModifier
   {
     public static string NumericModifierString(
-      string? addTo,
+      object? addTo,
       PercentageValue? increaseBy,
       string? setTo,
       string? highValue)
     {
       var highLeft = highValue == null ? "" : "(";
-      var highRight = highValue == null ? "" : $"-{highValue})";
+      var highRight = highValue == null ? "" : $" to {highValue.Replace("-", "")})";
       if (addTo != null)
       {
-        return $"+{highLeft}{addTo}{highRight}";
+        var add = addTo.ToString().Replace("-", "");
+        return NumberUtil.IsNegative(addTo) ? $"{highLeft}{add}{highRight} Less" : $"+{highLeft}{add}{highRight}";
       }
       else if (increaseBy.HasValue)
       {
-        return increaseBy.Value.IsReduction()
+        return increaseBy.Value.IsNegative()
           ? $"{highLeft}{increaseBy}{highRight} Reduced"
           : $"{highLeft}{increaseBy}{highRight} Increased";
       }
@@ -84,7 +85,7 @@ namespace Nighthollow.Stats2
     public string Describe(string template, IValueData? highValue) =>
       template.Replace("#",
         NumericStatModifier.NumericModifierString(
-          AddTo?.ToString(),
+          AddTo,
           IncreaseBy,
           SetTo?.ToString(),
           highValue?.ToString()));

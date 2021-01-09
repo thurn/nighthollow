@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
+using Nighthollow.Delegates.Core;
 using Nighthollow.Stats2;
 
 #nullable enable
@@ -27,6 +28,41 @@ namespace Nighthollow.Editing
   public interface IEditorCellPreviewer
   {
     string Preview(GameData gameData, object container, string propertyName, object? propertyValue);
+  }
+
+  public sealed class ModifierDescriptionProvider : IStatDescriptionProvider
+  {
+    readonly StatTable? _values;
+    readonly StatTable? _low;
+    readonly StatTable? _high;
+
+    public ModifierDescriptionProvider(StatTable? values = null, StatTable? low = null, StatTable? high = null)
+    {
+      _values = values;
+      _low = low;
+      _high = high;
+    }
+
+    public ModifierDescriptionProvider Insert(ModifierData modifier)
+    {
+      var valueModifier = modifier.BuildStatModifier();
+      if (valueModifier != null)
+      {
+        return new ModifierDescriptionProvider((_values ?? new StatTable()).InsertModifier(valueModifier), _low, _high);
+      }
+      else
+      {
+        return new ModifierDescriptionProvider(
+          _values,
+          (_low ?? new StatTable()).InsertNullableModifier(modifier.ModifierForValue(modifier.ValueLow)),
+          (_high ?? new StatTable()).InsertNullableModifier(modifier.ModifierForValue(modifier.ValueHigh))
+        );
+      }
+    }
+
+    public string Get<TModifier, TValue>(AbstractStat<TModifier, TValue> stat)
+      where TModifier : IStatModifier where TValue : notnull =>
+      _values != null ? _values.Get(stat).ToString() : $"({_low!.Get(stat)} to {_high!.Get(stat)})";
   }
 
   abstract class EditorCellPreviewer<T> : IEditorCellPreviewer
@@ -60,8 +96,8 @@ namespace Nighthollow.Editing
         return "[]";
       }
 
-      var entity = data.ImplicitModifiers.Aggregate(new StatContainer(),
-        (current, modifier) => current.Insert(modifier.BuildStatModifier()));
+      var entity = data.ImplicitModifiers.Aggregate(new ModifierDescriptionProvider(),
+        (current, modifier) => current.Insert(modifier));
       return string.Join("\n", data.ImplicitModifiers.Select(m => m.Describe(entity, gameData.StatData)));
     }
   }

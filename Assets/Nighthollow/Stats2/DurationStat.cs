@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using MessagePack;
 using Nighthollow.Data;
-using Nighthollow.Generated;
 using UnityEngine;
 
 #nullable enable
@@ -23,7 +22,7 @@ using UnityEngine;
 namespace Nighthollow.Stats2
 {
   [MessagePackObject]
-  public readonly struct DurationValue : IValueData
+  public readonly struct DurationValue : IValueData, IIsNegative
   {
     public DurationValue(int timeMilliseconds)
     {
@@ -35,6 +34,8 @@ namespace Nighthollow.Stats2
     public object Get() => this;
 
     public override string ToString() => $"{TimeMilliseconds / 1000f}s";
+
+    public bool IsNegative() => false;
 
     public float AsSeconds() => TimeMilliseconds / 1000f;
 

@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
-    public string? Describe(StatEntity entity) => null;
+    public string? Describe(IStatDescriptionProvider provider) => "<Delegate List>";
 
     public string DescribeOld(Stats.StatEntity entity) => "Delegate List";
 

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using MessagePack;
@@ -87,12 +88,12 @@ namespace Nighthollow.Stats2
 
     public string Describe(string template, IValueData? highValue)
     {
-      var high = highValue?.Get() as ImmutableDictionary<TTag, TValue>;
+      var high = highValue?.Get() as IDictionary;
       var result = new List<string>();
       foreach (var tag in AllTags)
       {
         var modifierString = NumericStatModifier.NumericModifierString(
-          AddTo?[tag].ToString(), IncreaseBy?[tag], SetTo?[tag].ToString(), high?[tag].ToString());
+          AddTo?[tag], IncreaseBy?[tag], SetTo?[tag].ToString(), high?[tag].ToString());
         result.Add(template.Replace("#", $"{modifierString} {tag}"));
       }
 
