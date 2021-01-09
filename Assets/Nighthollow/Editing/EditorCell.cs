@@ -58,8 +58,6 @@ namespace Nighthollow.Editing
     {
     }
 
-    public abstract string? RenderPreview(object? value);
-
     public abstract void OnActivate(TextField field, Rect worldBound);
 
     public virtual void OnParentKeyDown(KeyDownEvent evt)

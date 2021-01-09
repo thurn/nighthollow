@@ -20,14 +20,14 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Editing
 {
-  public sealed class PrimitiveTextFieldEditorCellDelegate<T> : TextFieldEditorCellDelegate
+  public sealed class PrimitiveTextFieldCellDelegate<T> : TextFieldEditorCellDelegate
   {
     public delegate bool ParsingFunction(string input, out T output);
 
     readonly ReflectivePath _reflectivePath;
     readonly ParsingFunction _parsingFunction;
 
-    public PrimitiveTextFieldEditorCellDelegate(ReflectivePath reflectivePath, ParsingFunction parsingFunction)
+    public PrimitiveTextFieldCellDelegate(ReflectivePath reflectivePath, ParsingFunction parsingFunction)
     {
       _reflectivePath = reflectivePath;
       _parsingFunction = parsingFunction;
@@ -47,8 +47,6 @@ namespace Nighthollow.Editing
         }
       });
     }
-
-    public override string? RenderPreview(object? value) => _reflectivePath.Read()?.ToString();
 
     public override void OnActivate(TextField field, Rect worldBound)
     {

@@ -76,6 +76,7 @@ namespace Nighthollow.Data
     /// </summary>
     [Key(6)] public bool Targeted { get; }
 
+    /// <summary>Returns a <see cref="IStatModifier"/> for this modifier's <see cref="Value"/> if one is set.</summary>
     public IStatModifier? BuildStatModifier() => ModifierForValue(Value);
 
     public string? Describe(StatEntity entity, ImmutableDictionary<int, StatData> stats)

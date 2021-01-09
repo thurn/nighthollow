@@ -31,4 +31,17 @@ namespace Nighthollow.Stats2
 
     public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
   }
+
+  public sealed class StatContainer : StatEntity
+  {
+    public StatContainer(StatTable? stats = null)
+    {
+      Stats = stats ?? new StatTable();
+    }
+
+    public override StatTable Stats { get; }
+
+    public StatContainer Insert(IStatModifier? modifier) =>
+      new StatContainer(Stats.InsertNullableModifier(modifier));
+  }
 }

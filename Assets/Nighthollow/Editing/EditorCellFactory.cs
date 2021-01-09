@@ -51,43 +51,43 @@ namespace Nighthollow.Editing
       TextFieldEditorCellDelegate cellDelegate;
       if (type == typeof(string))
       {
-        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<string>(reflectivePath, Identity);
+        cellDelegate = new PrimitiveTextFieldCellDelegate<string>(reflectivePath, Identity);
       }
       else if (type == typeof(int))
       {
-        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<int>(reflectivePath, int.TryParse);
+        cellDelegate = new PrimitiveTextFieldCellDelegate<int>(reflectivePath, int.TryParse);
       }
       else if (type == typeof(long))
       {
-        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<long>(reflectivePath, long.TryParse);
+        cellDelegate = new PrimitiveTextFieldCellDelegate<long>(reflectivePath, long.TryParse);
       }
       else if (type == typeof(bool))
       {
-        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<bool>(reflectivePath, bool.TryParse);
+        cellDelegate = new PrimitiveTextFieldCellDelegate<bool>(reflectivePath, bool.TryParse);
       }
       else if (type == typeof(int))
       {
-        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<int>(reflectivePath, int.TryParse);
+        cellDelegate = new PrimitiveTextFieldCellDelegate<int>(reflectivePath, int.TryParse);
       }
       else if (type == typeof(DurationValue))
       {
-        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<DurationValue>(reflectivePath, DurationValue.TryParse);
+        cellDelegate = new PrimitiveTextFieldCellDelegate<DurationValue>(reflectivePath, DurationValue.TryParse);
       }
       else if (type == typeof(PercentageValue))
       {
-        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<PercentageValue>(reflectivePath, PercentageValue.TryParse);
+        cellDelegate = new PrimitiveTextFieldCellDelegate<PercentageValue>(reflectivePath, PercentageValue.TryParse);
       }
       else if (type == typeof(IntRangeValue))
       {
-        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<IntRangeValue>(reflectivePath, IntRangeValue.TryParse);
+        cellDelegate = new PrimitiveTextFieldCellDelegate<IntRangeValue>(reflectivePath, IntRangeValue.TryParse);
       }
       else if (type == typeof(IValueData))
       {
-        cellDelegate = new PrimitiveTextFieldEditorCellDelegate<IValueData>(reflectivePath, ValueDataUtil.TryParse);
+        cellDelegate = new PrimitiveTextFieldCellDelegate<IValueData>(reflectivePath, ValueDataUtil.TryParse);
       }
       else if (type.GetInterface("IList") != null)
       {
-        cellDelegate = new NestedEditorCellDelegate(
+        cellDelegate = new NestedSheetTextFieldCellDelegate(
           screenController,
           new NestedListEditorSheetDelegate(reflectivePath));
       }

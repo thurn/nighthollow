@@ -88,6 +88,19 @@ namespace Nighthollow.Editing
       ((TableEntitySegement) _path.First()).OnEntityUpdated(_database, _ => action(Read()));
     }
 
+    public string RenderPreview()
+    {
+      if (_path.Count >= 2 && _path.Last() is PropertySegment p)
+      {
+        var parent = new ReflectivePath(_database, _tableId, _path.Take(_path.Count - 1).ToImmutableList());
+        return CellPreviewFactory.RenderPropertyPreview(_database.Snapshot(), parent.Read()!, p.Property);
+      }
+      else
+      {
+        return Read()?.ToString() ?? "None";
+      }
+    }
+
     interface ISegment
     {
       object? Read(object previous);
@@ -108,6 +121,8 @@ namespace Nighthollow.Editing
         // ReSharper disable once OperatorIsCanBeUsed
         _nullable = _property.GetType() == typeof(Nullable<>);
       }
+
+      public PropertyInfo Property => _property;
 
       public object? Read(object previous)
       {

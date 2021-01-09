@@ -77,7 +77,7 @@ namespace Nighthollow.Data
     [Key(4)] public string? ImageAddress { get; }
     [Key(5)] public int BaseManaCost { get; }
     [Key(6)] public int Speed { get; }
-    [Key(7)] public ImmutableList<ModifierData>? ImplicitModifiers { get; }
+    [Key(7)] public ImmutableList<ModifierData> ImplicitModifiers { get; }
     [Key(8)] public ImmutableList<SkillTypeData> ImplicitSkills { get; }
     [Key(9)] public ImmutableList<CreatureSkillAnimation> SkillAnimations { get; }
     [Key(10)] public bool IsManaCreature { get; }

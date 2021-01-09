@@ -28,19 +28,20 @@ namespace Nighthollow.Stats2
       string? setTo,
       string? highValue)
     {
-      var high = highValue == null ? "" : $"-{highValue}";
+      var highLeft = highValue == null ? "" : "(";
+      var highRight = highValue == null ? "" : $"-{highValue})";
       if (addTo != null)
       {
-        return $"+{addTo}{high}";
+        return $"+{highLeft}{addTo}{highRight}";
       }
       else if (increaseBy.HasValue)
       {
         return increaseBy.Value.IsReduction()
-          ? $"{increaseBy}{high} Reduced"
-          : $"{increaseBy}{high} Increased";
+          ? $"{highLeft}{increaseBy}{highRight} Reduced"
+          : $"{highLeft}{increaseBy}{highRight} Increased";
       }
 
-      return $"{setTo}{high}";
+      return $"{highLeft}{setTo}{highRight}";
     }
   }
 

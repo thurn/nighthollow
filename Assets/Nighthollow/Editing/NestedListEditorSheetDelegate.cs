@@ -18,10 +18,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
-using Nighthollow.Interface;
 using Nighthollow.Utils;
-using UnityEngine;
-using UnityEngine.UIElements;
 
 #nullable enable
 
@@ -112,61 +109,14 @@ namespace Nighthollow.Editing
       _reflectivePath.Write(list.RemoveAt(index));
     }
 
-    public override string RenderPreview(object? value)
-    {
-      return value switch
-      {
-        IList list when list.Count > 0 => string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())),
-        IList _ => "[]",
-        _ => "None"
-      };
-    }
-  }
-
-  public sealed class NestedEditorCellDelegate : TextFieldEditorCellDelegate
-  {
-    readonly ScreenController _screenController;
-    readonly EditorSheetDelegate _sheetDelegate;
-
-    IEditor _parent = null!;
-    EditorSheet? _sheet;
-    VisualElement? _editorContainer;
-
-    public NestedEditorCellDelegate(ScreenController screenController, EditorSheetDelegate sheetDelegate)
-    {
-      _screenController = screenController;
-      _sheetDelegate = sheetDelegate;
-    }
-
-    public override void Initialize(TextField field, IEditor parent)
-    {
-      _parent = parent;
-    }
-
-    public override string? RenderPreview(object? value) => _sheetDelegate.RenderPreview(value);
-
-    public override void OnActivate(TextField field, Rect worldBound)
-    {
-      _sheet = new EditorSheet(_screenController, _sheetDelegate, _parent);
-      _editorContainer = new VisualElement();
-      _editorContainer.AddToClassList("inline-editor");
-      _editorContainer.Add(_sheet);
-      _editorContainer.style.top = Math.Max(16, worldBound.y + worldBound.height);
-      _editorContainer.style.left = Math.Max(16, worldBound.x - _sheet.Width + worldBound.width);
-      _screenController.Screen.Add(_editorContainer);
-    }
-
-    public override void OnParentKeyDown(KeyDownEvent evt)
-    {
-      _sheet!.OnKeyDown(evt);
-    }
-
-    public override void OnDeactivate(TextField field)
-    {
-      _sheet!.DeactivateAllCells();
-      _editorContainer!.RemoveFromHierarchy();
-      _sheet = null;
-      _editorContainer = null;
-    }
+    // public override string RenderPreview(object? value)
+    // {
+    //   return value switch
+    //   {
+    //     IList list when list.Count > 0 => string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())),
+    //     IList _ => "[]",
+    //     _ => "None"
+    //   };
+    // }
   }
 }

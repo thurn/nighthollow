@@ -25,8 +25,6 @@ namespace Nighthollow.Editing
 
     public abstract TableContent GetCells();
 
-    public virtual string? RenderPreview(object? value) => null;
-
     public sealed class TableContent
     {
       public TableContent(List<List<ICellContent>> cells, List<int> columnWidths)
