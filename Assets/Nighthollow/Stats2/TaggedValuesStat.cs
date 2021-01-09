@@ -76,5 +76,60 @@ namespace Nighthollow.Stats2
         ModifierType.Set => Set((ImmutableDictionary<TTag, TValue>) value.Get()),
         _ => throw new InvalidOperationException($"Unsupported modifier type: {type}")
       };
+
+    protected override bool TryParseValue(string input, out IValueData result) =>
+      TryParseInternal<TValue>(input, _childStat, out result);
+
+    protected override bool TryParseIncrease(string input, out IValueData result) =>
+      TryParseInternal<PercentageValue>(input, new PercentageStat(StatId), out result);
+
+    static bool TryParseInternal<TType>(string input, IStat childStat, out IValueData result)
+    {
+      var builder = ImmutableDictionary.CreateBuilder<TTag, TType>();
+      // Tag/value pairs should be separated by commas, each value should be written followed by a space and then the
+      // full name of tag.
+      foreach (var pairString in input.Split(','))
+      {
+        if (!TryParsePair(pairString, childStat, builder))
+        {
+          result = null!;
+          return false;
+        }
+      }
+
+      result = new ImmutableDictionaryValue<TTag, TType>(builder.ToImmutable());
+      return true;
+    }
+
+    static bool TryParsePair<TType>
+    (string pairString,
+      IStat childStat,
+      ImmutableDictionary<TTag, TType>.Builder builder)
+    {
+      var split = pairString.Split(' ');
+      if (split.Length != 2)
+      {
+        return false;
+      }
+
+      var (valueString, tagString) = (split[0], split[1]);
+
+      // Just using a fake modifier type here, probably doesn't matter...
+      if (!childStat.TryParse(valueString, ModifierType.Set, out var result))
+      {
+        return false;
+      }
+
+      var tagNames = CollectionUtils
+        .AllNonDefaultEnumValues<TTag>(typeof(TTag))
+        .ToDictionary(v => v.ToString(), v => v);
+      if (!tagNames.ContainsKey(tagString))
+      {
+        return false;
+      }
+
+      builder[tagNames[tagString]] = (TType) result.Get();
+      return true;
+    }
   }
 }

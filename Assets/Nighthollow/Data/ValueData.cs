@@ -15,7 +15,6 @@
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
-using Nighthollow.Generated;
 using Nighthollow.Stats2;
 
 #nullable enable
@@ -117,6 +116,6 @@ namespace Nighthollow.Data
 
     public object Get() => Dictionary;
 
-    public override string ToString() => string.Join(",", Dictionary.Select(pair => $"{pair.Key}: {pair.Value}"));
+    public override string ToString() => string.Join(",", Dictionary.Select(pair => $"{pair.Value} {pair.Key}"));
   }
 }

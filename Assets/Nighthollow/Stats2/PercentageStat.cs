@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using MessagePack;
 using Nighthollow.Data;
-using Nighthollow.Generated;
 using UnityEngine;
 
 #nullable enable
@@ -44,7 +43,7 @@ namespace Nighthollow.Stats2
 
     public int CalculateFraction(int input) => Mathf.RoundToInt(input * BasisPoints / BasisPointsPerUnit);
 
-    public bool IsReduction() => BasisPoints < BasisPointsPerUnit;
+    public bool IsReduction() => BasisPoints < 0;
 
     public bool Equals(PercentageValue other) => BasisPoints == other.BasisPoints;
 
@@ -67,6 +66,18 @@ namespace Nighthollow.Stats2
       result = default;
       return false;
     }
+
+    public static bool TryParseValue(string input, out IValueData result)
+    {
+      if (TryParse(input, out var percentage))
+      {
+        result = percentage;
+        return true;
+      }
+
+      result = null!;
+      return false;
+    }
   }
 
   public sealed class PercentageStat : NumericStat<PercentageValue>
@@ -78,5 +89,8 @@ namespace Nighthollow.Stats2
     public override PercentageValue ComputeValue(
       IReadOnlyDictionary<ModifierType, IEnumerable<NumericStatModifier<PercentageValue>>> groups) =>
       new PercentageValue(IntStat.Compute(groups, duration => duration.AsBasisPoints()));
+
+    protected override bool TryParseValue(string input, out IValueData result) =>
+      PercentageValue.TryParseValue(input, out result);
   }
 }

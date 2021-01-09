@@ -16,6 +16,7 @@ using System;
 using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Stats2;
+using UnityEngine;
 
 #nullable enable
 
@@ -83,7 +84,8 @@ namespace Nighthollow.Editing
       }
       else if (type == typeof(IValueData))
       {
-        cellDelegate = new PrimitiveTextFieldCellDelegate<IValueData>(reflectivePath, ValueDataUtil.TryParse);
+        cellDelegate = new PrimitiveTextFieldCellDelegate<IValueData>(reflectivePath,
+          (string s, out IValueData d) => TryParseValueData(reflectivePath, s, out d));
       }
       else if (type.GetInterface("IList") != null)
       {
@@ -99,6 +101,12 @@ namespace Nighthollow.Editing
       return new TextFieldEditorCell(reflectivePath, parent, cellDelegate);
     }
 
+    static bool Identity(string input, out string output)
+    {
+      output = input;
+      return true;
+    }
+
     static EditorCell CreateLabelEditorCell(string? text) => new LabelEditorCell(text);
 
     static EditorCell CreateButtonCell(EditorSheetDelegate.ButtonCell content, IEditor parent) =>
@@ -112,10 +120,12 @@ namespace Nighthollow.Editing
 
     static EditorCell CreateImageCell(EditorSheetDelegate.ImageCell cell) => new ImageEditorCell(cell.ImagePath);
 
-    static bool Identity(string input, out string output)
+    static bool TryParseValueData(ReflectivePath path, string input, out IValueData result)
     {
-      output = input;
-      return true;
+      var parent = path.Parent().Read();
+      result = (parent!.GetType().GetMethod("Parse")!.Invoke(parent, new object[] {input}) as IValueData)!;
+      // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+      return result != null;
     }
   }
 }

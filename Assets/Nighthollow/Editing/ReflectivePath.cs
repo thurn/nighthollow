@@ -88,12 +88,14 @@ namespace Nighthollow.Editing
       ((TableEntitySegement) _path.First()).OnEntityUpdated(_database, _ => action(Read()));
     }
 
+    public ReflectivePath Parent() =>
+      new ReflectivePath(_database, _tableId, _path.Take(_path.Count - 1).ToImmutableList());
+
     public string RenderPreview()
     {
       if (_path.Count >= 2 && _path.Last() is PropertySegment p)
       {
-        var parent = new ReflectivePath(_database, _tableId, _path.Take(_path.Count - 1).ToImmutableList());
-        return CellPreviewFactory.RenderPropertyPreview(_database.Snapshot(), parent.Read()!, p.Property);
+        return CellPreviewFactory.RenderPropertyPreview(_database.Snapshot(), Parent().Read()!, p.Property);
       }
       else
       {

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using MessagePack;
+using Nighthollow.Stats2;
 
 #nullable enable
 
@@ -64,5 +65,51 @@ namespace Nighthollow.Data
     [Key(4)] public StatTagType? TagType { get; }
     [Key(5)] public StatType? StatValueType { get; }
     [Key(6)] public string? Comment { get; }
+
+    public IValueData? Parse(string input)
+    {
+      switch (StatType)
+      {
+        case StatType.Int:
+          if (int.TryParse(input, out var i))
+          {
+            return new IntValueData(i);
+          }
+
+          break;
+        case StatType.Bool:
+          if (bool.TryParse(input, out var b))
+          {
+            return new BoolValueData(b);
+          }
+
+          break;
+        case StatType.Duration:
+          if (DurationValue.TryParse(input, out var d))
+          {
+            return d;
+          }
+
+          break;
+
+        case StatType.Percentage:
+          if (PercentageValue.TryParse(input, out var p))
+          {
+            return p;
+          }
+
+          break;
+
+        case StatType.IntRange:
+          if (IntRangeValue.TryParse(input, out var ir))
+          {
+            return ir;
+          }
+
+          break;
+      }
+
+      return null;
+    }
   }
 }

@@ -15,7 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Generated;
+using Nighthollow.Data;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -52,5 +52,17 @@ namespace Nighthollow.Stats2
     public override int ComputeValue(
       IReadOnlyDictionary<ModifierType, IEnumerable<NumericStatModifier<int>>> groups) =>
       Compute(groups, i => i);
+
+    protected override bool TryParseValue(string input, out IValueData result)
+    {
+      if (int.TryParse(input, out var integer))
+      {
+        result = new IntValueData(integer);
+        return true;
+      }
+
+      result = null!;
+      return false;
+    }
   }
 }

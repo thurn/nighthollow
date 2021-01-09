@@ -55,6 +55,11 @@ namespace Nighthollow.Editing
 
     static string RenderImplicitModifiers(GameData gameData, CreatureTypeData data)
     {
+      if (data.ImplicitModifiers.Count == 0)
+      {
+        return "[]";
+      }
+
       var entity = data.ImplicitModifiers.Aggregate(new StatContainer(),
         (current, modifier) => current.Insert(modifier.BuildStatModifier()));
       return string.Join("\n", data.ImplicitModifiers.Select(m => m.Describe(entity, gameData.StatData)));

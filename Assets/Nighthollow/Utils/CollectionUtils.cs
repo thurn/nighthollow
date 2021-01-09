@@ -47,11 +47,9 @@ namespace Nighthollow.Utils
       this ImmutableDictionary<TKey, ImmutableList<TValue>> dictionary,
       TKey key,
       TValue value)
-      where TKey : notnull
-    {
-      return dictionary.SetItem(key,
+      where TKey : notnull =>
+      dictionary.SetItem(key,
         dictionary.TryGetValue(key, out var list) ? list.Add(value) : ImmutableList.Create(value));
-    }
 
     public static Dictionary<TKey, TValue> Clone<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary)
     {
@@ -87,7 +85,7 @@ namespace Nighthollow.Utils
       // ReSharper disable once IteratorNeverReturns
     }
 
-    public static IEnumerable<T> AllNonDefaultEnumValues<T>(Type type) where T : struct, Enum
+    public static IEnumerable<T> AllNonDefaultEnumValues<T>(Type type) where T : Enum
     {
       return Enum.GetValues(type).Cast<T>().Where(v => !v.Equals(obj: default));
     }

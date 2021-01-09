@@ -19,13 +19,6 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Stats2
 {
-  public interface IStat
-  {
-    StatId StatId { get; }
-
-    IStatModifier BuildModifier(ModifierType type, IValueData value);
-  }
-
   public abstract class AbstractStat<TModifier, TValue> : IStat where TModifier : IStatModifier
   {
     protected AbstractStat(StatId statId)
@@ -38,5 +31,17 @@ namespace Nighthollow.Stats2
     public abstract TValue ComputeValue(IReadOnlyDictionary<ModifierType, IEnumerable<TModifier>> groups);
 
     public abstract IStatModifier BuildModifier(ModifierType type, IValueData value);
+
+    public bool TryParse(string input, ModifierType modifierType, out IValueData result) =>
+      modifierType switch
+      {
+        ModifierType.Increase => TryParseIncrease(input, out result),
+        _ => TryParseValue(input, out result)
+      };
+
+    protected abstract bool TryParseValue(string input, out IValueData result);
+
+    protected virtual bool TryParseIncrease(string input, out IValueData result) =>
+      PercentageValue.TryParseValue(input, out result);
   }
 }

@@ -43,7 +43,8 @@ namespace Nighthollow.Editing
         }
         else
         {
-          field.value = e.previousValue;
+          // Prevent infinite loop of change events.
+          field.SetValueWithoutNotify(e.previousValue);
         }
       });
     }

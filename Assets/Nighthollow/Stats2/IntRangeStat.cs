@@ -84,5 +84,17 @@ namespace Nighthollow.Stats2
         IntStat.Compute(groups, range => range.Low),
         IntStat.Compute(groups, range => range.High));
     }
+
+    protected override bool TryParseValue(string input, out IValueData result)
+    {
+      if (IntRangeValue.TryParse(input, out var range))
+      {
+        result = range;
+        return true;
+      }
+
+      result = null!;
+      return false;
+    }
   }
 }

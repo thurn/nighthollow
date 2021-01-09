@@ -72,5 +72,17 @@ namespace Nighthollow.Stats2
     public override DurationValue ComputeValue(
       IReadOnlyDictionary<ModifierType, IEnumerable<NumericStatModifier<DurationValue>>> groups) =>
       new DurationValue(IntStat.Compute(groups, duration => duration.AsMilliseconds()));
+
+    protected override bool TryParseValue(string input, out IValueData result)
+    {
+      if (DurationValue.TryParse(input, out var duration))
+      {
+        result = duration;
+        return true;
+      }
+
+      result = null!;
+      return false;
+    }
   }
 }

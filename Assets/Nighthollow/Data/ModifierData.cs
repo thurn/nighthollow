@@ -108,6 +108,18 @@ namespace Nighthollow.Data
       return null;
     }
 
+    public IValueData? Parse(string input)
+    {
+      if (StatId.HasValue &&
+          ModifierType.HasValue &&
+          Stat.GetStat(StatId.Value).TryParse(input, ModifierType.Value, out var result))
+      {
+        return result;
+      }
+
+      return null;
+    }
+
     IStatModifier? ModifierForValue(IValueData? value) =>
       StatId.HasValue && ModifierType.HasValue && value != null
         ? Stat.GetStat(StatId.Value).BuildModifier(ModifierType.Value, value)

@@ -42,5 +42,17 @@ namespace Nighthollow.Stats2
         ModifierType.Set => BooleanStatModifier.Set(this, (bool) value.Get()),
         _ => throw new InvalidOperationException($"Unsupported modifier type: {type}")
       };
+
+    protected override bool TryParseValue(string input, out IValueData result)
+    {
+      if (bool.TryParse(input, out var boolean))
+      {
+        result = new BoolValueData(boolean);
+        return true;
+      }
+
+      result = null!;
+      return false;
+    }
   }
 }
