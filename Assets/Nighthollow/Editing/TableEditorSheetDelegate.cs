@@ -38,6 +38,8 @@ namespace Nighthollow.Editing
       _tableSelector = tableSelector;
     }
 
+    public override string SheetName() => TypeUtils.NameWithSpaces(_reflectivePath.GetUnderlyingType().Name);
+
     public override void Initialize(Action onModified)
     {
       GetType().GetMethod(nameof(InitializeInternal), BindingFlags.Instance | BindingFlags.NonPublic)!

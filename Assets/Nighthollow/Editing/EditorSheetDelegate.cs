@@ -21,6 +21,8 @@ namespace Nighthollow.Editing
 {
   public abstract class EditorSheetDelegate
   {
+    public abstract string SheetName();
+
     public abstract void Initialize(Action onModified);
 
     public abstract TableContent GetCells();

@@ -125,6 +125,13 @@ namespace Nighthollow.Data
       _mutations = _mutations.Add(new DeleteMutation<T>(tableId, entityId));
     }
 
+    public void ClearListeners()
+    {
+      _addedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
+      _updatedListeners = ImmutableDictionary<(ITableId, int), ImmutableList<IListener>>.Empty;
+      _removedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
+    }
+
     /// <summary>Should only be invoked from <see cref="DataService"/>.</summary>
     public void PerformWritesInternal(bool disablePersistence)
     {

@@ -36,6 +36,8 @@ namespace Nighthollow.Editing
       _contentType = _reflectivePath.GetUnderlyingType().GetGenericArguments()[0];
     }
 
+    public override string SheetName() => TypeUtils.NameWithSpaces(_reflectivePath.GetUnderlyingType().Name);
+
     public override void Initialize(Action onModified)
     {
       _reflectivePath.OnEntityUpdated(_ => onModified());
@@ -108,15 +110,5 @@ namespace Nighthollow.Editing
       var list = (ImmutableList<T>) _reflectivePath.Read()!;
       _reflectivePath.Write(list.RemoveAt(index));
     }
-
-    // public override string RenderPreview(object? value)
-    // {
-    //   return value switch
-    //   {
-    //     IList list when list.Count > 0 => string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())),
-    //     IList _ => "[]",
-    //     _ => "None"
-    //   };
-    // }
   }
 }

@@ -46,7 +46,7 @@ namespace Nighthollow.Editing
     public override void Activate()
     {
       _onClick();
-      _parent.OnChildEditingComplete();
+      // _parent.OnChildEditingComplete();
     }
   }
 }

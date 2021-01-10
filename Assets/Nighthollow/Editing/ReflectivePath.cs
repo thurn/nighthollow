@@ -63,6 +63,22 @@ namespace Nighthollow.Editing
 
     public Type GetUnderlyingType() => _path.IsEmpty ? _tableId.GetUnderlyingType() : _path.Last().GetUnderlyingType();
 
+    public (ITableId?, ReflectivePath?) FindParentTable()
+    {
+      var parent = Parent();
+      while (parent != null)
+      {
+        if (!parent._path.IsEmpty && parent._path.Last() is PropertySegment)
+        {
+          return (null, parent);
+        }
+
+        parent = parent.Parent();
+      }
+
+      return (_tableId, null);
+    }
+
     public object? Read()
     {
       object? result = _database;
@@ -88,14 +104,14 @@ namespace Nighthollow.Editing
       ((TableEntitySegement) _path.First()).OnEntityUpdated(_database, _ => action(Read()));
     }
 
-    public ReflectivePath Parent() =>
-      new ReflectivePath(_database, _tableId, _path.Take(_path.Count - 1).ToImmutableList());
+    public ReflectivePath? Parent() =>
+      _path.IsEmpty ? null : new ReflectivePath(_database, _tableId, _path.Take(_path.Count - 1).ToImmutableList());
 
     public string RenderPreview()
     {
       if (_path.Count >= 2 && _path.Last() is PropertySegment p)
       {
-        return CellPreviewFactory.RenderPropertyPreview(_database.Snapshot(), Parent().Read()!, p.Property);
+        return CellPreviewFactory.RenderPropertyPreview(_database.Snapshot(), Parent()!.Read(), p.Property);
       }
       else
       {

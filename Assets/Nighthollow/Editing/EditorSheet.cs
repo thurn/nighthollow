@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Interface;
@@ -40,20 +41,29 @@ namespace Nighthollow.Editing
     const int ContentPadding = 32;
 
     readonly ScreenController _screenController;
+
     readonly EditorSheetDelegate _sheetDelegate;
-    readonly IEditor? _parent;
+
+    readonly Action? _onEscape;
     readonly ScrollView _scrollView;
     readonly VisualElement _content;
+    readonly Vector2Int? _initiallySelected;
 
     Dictionary<Vector2Int, EditorCell> _cells;
-    Vector2Int? _currentlySelected;
-    Vector2Int? _currentlyActive;
 
-    public EditorSheet(ScreenController controller, EditorSheetDelegate sheetDelegate, IEditor? parent = null)
+    public Vector2Int? CurrentlySelected;
+    Vector2Int? CurrentlyActive { get; set; }
+
+    public EditorSheet(
+      ScreenController controller,
+      EditorSheetDelegate sheetDelegate,
+      Vector2Int? selected,
+      Action? onEscape = null)
     {
       _screenController = controller;
       _sheetDelegate = sheetDelegate;
-      _parent = parent;
+      _onEscape = onEscape;
+      _initiallySelected = selected;
 
       _content = new VisualElement();
       _content.AddToClassList("editor-content");
@@ -67,14 +77,16 @@ namespace Nighthollow.Editing
       _cells = RenderCells();
       _sheetDelegate.Initialize(OnDataChanged);
 
-      focusable = _parent == null;
-      if (_parent == null)
-      {
-        RegisterCallback<KeyDownEvent>(OnKeyDown);
-      }
+      focusable = true;
+      RegisterCallback<KeyDownEvent>(OnKeyDown);
+      RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+    }
 
-      SelectPosition(Vector2Int.zero);
-      InterfaceUtils.After(0.1f, FocusRoot);
+    void OnGeometryChanged(GeometryChangedEvent evt)
+    {
+      Focus();
+      SelectPosition(_initiallySelected ?? Vector2Int.zero);
+      UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
     }
 
     public int Width { get; private set; }
@@ -109,7 +121,7 @@ namespace Nighthollow.Editing
             : EditorCellFactory.Create(_screenController, this, list[columnIndex]);
           cell.RegisterCallback<ClickEvent>(e =>
           {
-            if (position == _currentlySelected)
+            if (position == CurrentlySelected)
             {
               ActivateCell(position);
             }
@@ -117,8 +129,6 @@ namespace Nighthollow.Editing
             {
               SelectPosition(position);
             }
-
-            _parent?.FocusRoot();
           });
 
           cell.style.width = columnWidths[columnIndex];
@@ -144,10 +154,10 @@ namespace Nighthollow.Editing
 
     void OnDataChanged()
     {
-      var previouslySelected = _currentlySelected;
-      var key = _currentlySelected.HasValue ? _cells[_currentlySelected.Value].Key : null;
-      _currentlySelected = null;
-      _currentlyActive = null;
+      var previouslySelected = CurrentlySelected;
+      var key = CurrentlySelected.HasValue ? _cells[CurrentlySelected.Value].Key : null;
+      CurrentlySelected = null;
+      CurrentlyActive = null;
       _cells = RenderCells();
 
       SelectPosition(key != null ? _cells.FirstOrDefault(p => p.Value.Key == key).Key : previouslySelected);
@@ -155,14 +165,14 @@ namespace Nighthollow.Editing
 
     public void OnKeyDown(KeyDownEvent evt)
     {
-      if (!_currentlySelected.HasValue)
+      if (!CurrentlySelected.HasValue)
       {
         return;
       }
 
-      if (_currentlyActive.HasValue)
+      if (CurrentlyActive.HasValue)
       {
-        _cells[_currentlyActive.Value].OnParentKeyDown(evt);
+        _cells[CurrentlyActive.Value].OnParentKeyDown(evt);
         return;
       }
 
@@ -170,88 +180,78 @@ namespace Nighthollow.Editing
       {
         case KeyCode.Tab when !evt.shiftKey:
         case KeyCode.RightArrow:
-          SelectPosition(_currentlySelected.Value + new Vector2Int(1, 0));
+          SelectPosition(CurrentlySelected.Value + new Vector2Int(1, 0));
           break;
         case KeyCode.Tab when evt.shiftKey:
         case KeyCode.LeftArrow:
-          SelectPosition(_currentlySelected.Value + new Vector2Int(-1, 0));
+          SelectPosition(CurrentlySelected.Value + new Vector2Int(-1, 0));
           break;
         case KeyCode.UpArrow:
-          SelectPosition(_currentlySelected.Value + new Vector2Int(0, -1));
+          SelectPosition(CurrentlySelected.Value + new Vector2Int(0, -1));
           break;
         case KeyCode.DownArrow:
-          SelectPosition(_currentlySelected.Value + new Vector2Int(0, 1));
+          SelectPosition(CurrentlySelected.Value + new Vector2Int(0, 1));
           break;
         case KeyCode.KeypadEnter:
         case KeyCode.Return:
-          if (_currentlyActive == null)
+          if (CurrentlyActive == null)
           {
-            ActivateCell(_currentlySelected.Value);
+            ActivateCell(CurrentlySelected.Value);
           }
+
           break;
         case KeyCode.Escape:
         case KeyCode.Backspace:
-          _parent?.OnChildEditingComplete();
+          _onEscape?.Invoke();
           break;
       }
     }
 
     void ActivateCell(Vector2Int position)
     {
-      if (position != _currentlyActive)
+      if (position != CurrentlyActive)
       {
-        if (_currentlyActive.HasValue)
+        if (CurrentlyActive.HasValue)
         {
-          _cells[_currentlyActive.Value].Deactivate();
+          _cells[CurrentlyActive.Value].Deactivate();
         }
 
-        _currentlyActive = position;
+        CurrentlyActive = position;
         _cells[position].Activate();
       }
     }
 
     void SelectPosition(Vector2Int? position)
     {
-      if (position.HasValue && _cells.ContainsKey(position.Value) && position != _currentlySelected)
+      if (position.HasValue && _cells.ContainsKey(position.Value) && position != CurrentlySelected)
       {
-        if (_currentlyActive.HasValue)
+        if (CurrentlyActive.HasValue)
         {
-          _cells[_currentlyActive.Value].Deactivate();
+          _cells[CurrentlyActive.Value].Deactivate();
         }
 
-        _currentlyActive = null;
+        CurrentlyActive = null;
+        Focus();
 
-        if (_parent == null)
+        if (CurrentlySelected.HasValue)
         {
-          Focus();
-        }
-
-        if (_currentlySelected.HasValue)
-        {
-          _cells[_currentlySelected.Value].Unselect();
+          _cells[CurrentlySelected.Value].Unselect();
         }
 
         _cells[position.Value].Select();
-        _currentlySelected = position;
+        CurrentlySelected = position;
         Scroll(position.Value);
       }
     }
 
     public void FocusRoot()
     {
-      if (_parent == null)
-      {
-        Focus();
-      }
-      else
-      {
-        _parent.FocusRoot();
-      }
+      Focus();
     }
 
     public void OnChildEditingComplete()
     {
-      _currentlyActive = null;
+      CurrentlyActive = null;
       FocusRoot();
     }
 

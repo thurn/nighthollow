@@ -18,6 +18,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using UnityEngine;
 
 #nullable enable
 
@@ -27,6 +28,8 @@ namespace Nighthollow.Editing
   {
     List<ITableId> _tables = new List<ITableId>();
     Database _database = null!;
+    EditorSheet? _sheet;
+    List<Vector2Int?> _selectionStack = new List<Vector2Int?>();
 
     public sealed class Args
     {
@@ -51,13 +54,58 @@ namespace Nighthollow.Editing
         .OrderByDescending(tid => metadata.GetValueOrDefault(tid.Id, new TableMetadata()).LastAccessedTime)
         .ToList();
 
-      Render(0);
+      RenderTableIndex(0);
     }
 
-    void Render(int index)
+    public void RenderChildSheet(
+      ReflectivePath reflectivePath,
+      Vector2Int? initiallySelected = null,
+      bool isBackOperation = false)
     {
-      Clear();
-      var tableId = _tables[index];
+      if (_sheet != null && !isBackOperation)
+      {
+        _selectionStack.Add(_sheet.CurrentlySelected);
+      }
+
+      ClearCurrentSheet();
+      _sheet = new EditorSheet(
+        Controller,
+        new NestedListEditorSheetDelegate(reflectivePath),
+        initiallySelected,
+        () => { PreviousSheet(reflectivePath); });
+      Add(_sheet);
+    }
+
+    void PreviousSheet(ReflectivePath reflectivePath)
+    {
+      Vector2Int? selection = null;
+      if (_selectionStack.Count > 0)
+      {
+        selection = _selectionStack.Last();
+        _selectionStack.RemoveAt(_selectionStack.Count - 1);
+      }
+
+      var (tableId, parentPath) = reflectivePath.FindParentTable();
+      if (parentPath != null)
+      {
+        RenderChildSheet(parentPath, initiallySelected: selection, isBackOperation: true);
+      }
+      else if (tableId != null)
+      {
+        RenderTableId(tableId, selection);
+      }
+    }
+
+    void RenderTableIndex(int index)
+    {
+      RenderTableId(_tables[index]);
+    }
+
+    void RenderTableId(ITableId tableId, Vector2Int? initiallySelected = null)
+    {
+      _selectionStack.Clear();
+
+      ClearCurrentSheet();
       _database.Upsert(TableId.TableMetadata,
         tableId.Id,
         new TableMetadata(),
@@ -66,11 +114,19 @@ namespace Nighthollow.Editing
       var path = new ReflectivePath(_database, tableId);
       var tableSelector = new EditorSheetDelegate.DropdownCell(
         _tables.Select(tid => TypeUtils.NameWithSpaces(tid.TableName)).ToList(),
-        index,
-        Render,
+        _tables.FindIndex(t => t.Id == tableId.Id),
+        RenderTableIndex,
         "Select Table");
-      var editor = new EditorSheet(Controller, new TableEditorSheetDelegate(path, tableSelector));
-      Add(editor);
+      _sheet = new EditorSheet(Controller, new TableEditorSheetDelegate(path, tableSelector), initiallySelected);
+      Add(_sheet);
+    }
+
+    void ClearCurrentSheet()
+    {
+      _sheet?.DeactivateAllCells();
+      _database.ClearListeners();
+      Clear();
+      _sheet = null;
     }
   }
 }

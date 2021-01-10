@@ -160,15 +160,3 @@
     background-color: rgb(242, 242, 242);
   }
 }
-
-.inline-editor {
-  position: absolute;
-  background-color: rgb(255, 243, 224);
-  border-width: 3px;
-  border-color: black;
-  border-radius: 8px;
-}
-
-.inline-editor.focused {
-  border-color: blue;
-}

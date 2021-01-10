@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Interface;
 using UnityEngine;
@@ -158,7 +157,7 @@ namespace Nighthollow.Editing
   public sealed class SelectorDropdown : VisualElement
   {
     readonly IEditor _parentEditor;
-    readonly ISet<string> _options;
+    readonly IReadOnlyList<string> _options;
     readonly List<Label> _optionLabels;
     readonly Action<string> _onSelected;
     readonly VisualElement _content;
@@ -175,7 +174,7 @@ namespace Nighthollow.Editing
     {
       _parentEditor = parentEditor;
       _onSelected = onSelected;
-      _options = options.ToImmutableHashSet();
+      _options = options;
       _optionLabels = new List<Label>();
 
       AddToClassList("dropdown");

@@ -15,6 +15,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
@@ -89,27 +90,38 @@ namespace Nighthollow.Editing
       _propertyPreviewers.ContainsKey(propertyName)
         ? _propertyPreviewers[propertyName](gameData, (T) container)
         : CellPreviewFactory.RenderDefault(propertyValue);
+
+
+    protected static string RenderModifiers(GameData gameData, ImmutableList<ModifierData> modifiers)
+    {
+      if (modifiers.Count == 0)
+      {
+        return "[]";
+      }
+
+      var entity = modifiers.Aggregate(new ModifierDescriptionProvider(),
+        (current, modifier) => current.Insert(modifier));
+      return string.Join("\n", modifiers.Select(m => m.Describe(entity, gameData.StatData)));
+    }
   }
 
   sealed class CreatureTypeCellPreviewer : EditorCellPreviewer<CreatureTypeData>
   {
     public CreatureTypeCellPreviewer() : base(new Dictionary<string, Func<GameData, CreatureTypeData, string>>
     {
-      {nameof(CreatureTypeData.ImplicitModifiers), RenderImplicitModifiers}
+      {nameof(CreatureTypeData.ImplicitModifiers), (g, d) => RenderModifiers(g, d.ImplicitModifiers)}
     })
     {
     }
+  }
 
-    static string RenderImplicitModifiers(GameData gameData, CreatureTypeData data)
+  sealed class SkillTypeCellPreviewer : EditorCellPreviewer<SkillTypeData>
+  {
+    public SkillTypeCellPreviewer() : base(new Dictionary<string, Func<GameData, SkillTypeData, string>>
     {
-      if (data.ImplicitModifiers.Count == 0)
-      {
-        return "[]";
-      }
-
-      var entity = data.ImplicitModifiers.Aggregate(new ModifierDescriptionProvider(),
-        (current, modifier) => current.Insert(modifier));
-      return string.Join("\n", data.ImplicitModifiers.Select(m => m.Describe(entity, gameData.StatData)));
+      {nameof(SkillTypeData.ImplicitModifiers), (g, d) => RenderModifiers(g, d.ImplicitModifiers)}
+    })
+    {
     }
   }
 
@@ -118,11 +130,17 @@ namespace Nighthollow.Editing
     static readonly IReadOnlyDictionary<Type, IEditorCellPreviewer> Previewers =
       new Dictionary<Type, IEditorCellPreviewer>
       {
-        {typeof(CreatureTypeData), new CreatureTypeCellPreviewer()}
+        {typeof(CreatureTypeData), new CreatureTypeCellPreviewer()},
+        {typeof(SkillTypeData), new SkillTypeCellPreviewer()}
       };
 
-    public static string RenderPropertyPreview(GameData gameData, object parentValue, PropertyInfo property)
+    public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)
     {
+      if (parentValue == null)
+      {
+        return "Null Parent";
+      }
+
       var value = property.GetValue(parentValue);
       return Previewers.ContainsKey(parentValue.GetType())
         ? Previewers[parentValue.GetType()].Preview(gameData, parentValue, property.Name, value)

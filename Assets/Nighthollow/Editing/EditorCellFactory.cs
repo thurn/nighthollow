@@ -88,9 +88,10 @@ namespace Nighthollow.Editing
       }
       else if (type.GetInterface("IList") != null)
       {
-        cellDelegate = new NestedSheetTextFieldCellDelegate(
-          screenController,
-          new NestedListEditorSheetDelegate(reflectivePath));
+        cellDelegate = new NestedSheetTextFieldCellDelegate(screenController, reflectivePath);
+        // cellDelegate = new NestedSheetTextFieldCellDelegate(
+        //   screenController,
+        //   new NestedListEditorSheetDelegate(reflectivePath));
       }
       else
       {
@@ -121,8 +122,14 @@ namespace Nighthollow.Editing
 
     static bool TryParseValueData(ReflectivePath path, string input, out IValueData result)
     {
-      var parent = path.Parent().Read();
-      result = (parent!.GetType().GetMethod("Parse")!.Invoke(parent, new object[] {input}) as IValueData)!;
+      var parent = path.Parent()?.Read();
+      if (parent == null)
+      {
+        result = null!;
+        return false;
+      }
+
+      result = (parent.GetType().GetMethod("Parse")!.Invoke(parent, new object[] {input}) as IValueData)!;
       // ReSharper disable once ConditionIsAlwaysTrueOrFalse
       return result != null;
     }
