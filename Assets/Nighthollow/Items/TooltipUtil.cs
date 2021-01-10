@@ -13,9 +13,7 @@
 // limitations under the License.
 
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Nighthollow.Data;
-using Nighthollow.Delegates;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Model;

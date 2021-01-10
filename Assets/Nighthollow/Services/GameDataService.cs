@@ -27,7 +27,6 @@ using AffixData = Nighthollow.Model.AffixData;
 using AffixTypeData = Nighthollow.Model.AffixTypeData;
 using CreatureItemData = Nighthollow.Model.CreatureItemData;
 using CreatureTypeData = Nighthollow.Model.CreatureTypeData;
-using ModifierTypeData = Nighthollow.Model.ModifierTypeData;
 using SkillItemData = Nighthollow.Model.SkillItemData;
 using SkillTypeData = Nighthollow.Model.SkillTypeData;
 

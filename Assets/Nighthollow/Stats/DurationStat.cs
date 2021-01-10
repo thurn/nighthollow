@@ -15,7 +15,6 @@
 using System;
 using System.Collections.Generic;
 using MessagePack;
-using Nighthollow.Data;
 using Nighthollow.Generated;
 using UnityEngine;
 

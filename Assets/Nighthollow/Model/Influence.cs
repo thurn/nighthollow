@@ -15,7 +15,6 @@
 
 using System.Linq;
 using Nighthollow.Data;
-using Nighthollow.Generated;
 using Nighthollow.Stats;
 
 #nullable enable

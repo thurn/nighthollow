@@ -14,8 +14,6 @@
 
 
 using System;
-using Nighthollow.Data;
-using Nighthollow.Generated;
 using Nighthollow.Model;
 
 #nullable enable

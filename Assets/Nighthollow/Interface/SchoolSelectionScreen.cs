@@ -14,13 +14,13 @@
 
 
 using System.Collections.Generic;
-using Nighthollow.Generated;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using School = Nighthollow.Data.School;
+using Database = Nighthollow.Services.Database;
 
 #nullable enable
 

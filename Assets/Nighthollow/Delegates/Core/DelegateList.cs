@@ -20,7 +20,6 @@ using Nighthollow.Delegates.Effects;
 using Nighthollow.Stats;
 using UnityEngine;
 using SkillData = Nighthollow.Model.SkillData;
-using StatEntity = Nighthollow.Stats2.StatEntity;
 
 #nullable enable
 
@@ -34,7 +33,7 @@ namespace Nighthollow.Delegates.Core
 
     public string? Describe(IStatDescriptionProvider provider) => "<Delegate List>";
 
-    public string DescribeOld(Stats.StatEntity entity) => "Delegate List";
+    public string DescribeOld(StatEntity entity) => "Delegate List";
 
     public void OnActivate(CreatureContext context) =>
       ExecuteEvent(context, (d, c) => d.OnActivate(c));

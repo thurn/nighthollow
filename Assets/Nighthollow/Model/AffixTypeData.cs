@@ -15,7 +15,6 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
-using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;

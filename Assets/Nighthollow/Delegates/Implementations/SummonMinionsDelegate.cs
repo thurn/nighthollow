@@ -15,10 +15,10 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
+using Nighthollow.Model;
 using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
-using StaticCardList = Nighthollow.Model.StaticCardList;
 
 #nullable enable
 

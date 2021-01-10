@@ -14,7 +14,6 @@
 
 
 using Nighthollow.Data;
-using Nighthollow.Generated;
 using UnityEngine;
 
 #nullable enable

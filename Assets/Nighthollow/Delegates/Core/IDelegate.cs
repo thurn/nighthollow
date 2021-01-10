@@ -20,6 +20,7 @@ using Nighthollow.Stats;
 using UnityEngine;
 using IStatModifier = Nighthollow.Stats2.IStatModifier;
 using SkillData = Nighthollow.Model.SkillData;
+using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 

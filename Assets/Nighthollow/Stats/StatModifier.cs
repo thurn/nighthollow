@@ -13,7 +13,6 @@
 // limitations under the License.
 
 
-using Nighthollow.Data;
 using Nighthollow.Generated;
 using Nighthollow.Model;
 using Nighthollow.Utils;
@@ -72,7 +71,7 @@ namespace Nighthollow.Stats
 
     public string? Describe()
     {
-      var statDescription = Generated.OldStat.GetDescription(Stat.Id);
+      var statDescription = OldStat.GetDescription(Stat.Id);
       return statDescription == null ? null : _operation.Describe(statDescription);
     }
 

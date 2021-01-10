@@ -14,7 +14,6 @@
 
 using System.Collections.Immutable;
 using MessagePack;
-using Nighthollow.Generated;
 
 #nullable enable
 

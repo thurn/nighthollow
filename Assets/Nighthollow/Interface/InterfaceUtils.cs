@@ -81,10 +81,10 @@ namespace Nighthollow.Interface
       // TextField needs time after setting focusable and calling Focus() before it works, but there is no obvious
       // event which corresponds to these operations completing.
       field.focusable = true;
-      InterfaceUtils.After(0.01f, () =>
+      After(0.01f, () =>
       {
         field.Focus();
-        InterfaceUtils.After(0.01f, () =>
+        After(0.01f, () =>
         {
           // For some reason SelectAll() only works if you SelectRange() first?
           field.SelectRange(0, 1);

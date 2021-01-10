@@ -14,7 +14,6 @@
 
 using Nighthollow.Components;
 using Nighthollow.Data;
-using Nighthollow.Generated;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UI;
