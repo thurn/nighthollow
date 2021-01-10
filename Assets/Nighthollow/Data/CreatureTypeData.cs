@@ -13,8 +13,10 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using System.Linq;
 using MessagePack;
 using Nighthollow.Stats2;
+using Nighthollow.Utils;
 
 #nullable enable
 
@@ -27,16 +29,24 @@ namespace Nighthollow.Data
     public CreatureSkillAnimation(
       SkillAnimationNumber skillAnimationNumber,
       SkillAnimationType skillAnimationType,
-      DurationValue? duration)
+      DurationValue? duration = null,
+      int? skillTypeId = null)
     {
       SkillAnimationNumber = skillAnimationNumber;
       SkillAnimationType = skillAnimationType;
       Duration = duration;
+      SkillTypeId = skillTypeId;
     }
 
     [Key(0)] public SkillAnimationNumber SkillAnimationNumber { get; }
     [Key(1)] public SkillAnimationType SkillAnimationType { get; }
     [Key(2)] public DurationValue? Duration { get; }
+
+    /// <summary>
+    /// Describes a skill type which is implicitly associated with this creature and this animation.
+    /// </summary>
+    [ForeignKey(typeof(SkillTypeData))]
+    [Key(3)] public int? SkillTypeId { get; }
 
     public override string ToString() => $"{SkillAnimationNumber}: {SkillAnimationType}";
   }
@@ -53,7 +63,6 @@ namespace Nighthollow.Data
       int baseManaCost = 0,
       int speed = 0,
       ImmutableList<ModifierData>? implicitModifiers = null,
-      ImmutableList<SkillTypeData>? implicitSkills = null,
       ImmutableList<CreatureSkillAnimation>? skillAnimations = null,
       bool isManaCreature = false)
     {
@@ -65,7 +74,6 @@ namespace Nighthollow.Data
       BaseManaCost = baseManaCost;
       Speed = speed;
       ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
-      ImplicitSkills = implicitSkills ?? ImmutableList<SkillTypeData>.Empty;
       SkillAnimations = skillAnimations ?? ImmutableList<CreatureSkillAnimation>.Empty;
       IsManaCreature = isManaCreature;
     }
@@ -78,10 +86,26 @@ namespace Nighthollow.Data
     [Key(5)] public int BaseManaCost { get; }
     [Key(6)] public int Speed { get; }
     [Key(7)] public ImmutableList<ModifierData> ImplicitModifiers { get; }
-    [Key(8)] public ImmutableList<SkillTypeData> ImplicitSkills { get; }
-    [Key(9)] public ImmutableList<CreatureSkillAnimation> SkillAnimations { get; }
-    [Key(10)] public bool IsManaCreature { get; }
+    [Key(8)] public ImmutableList<CreatureSkillAnimation> SkillAnimations { get; }
+    [Key(9)] public bool IsManaCreature { get; }
 
     public override string ToString() => Name;
+
+    public static CreatureItemData DefaultItem(int typeId, GameData gameData)
+    {
+      var value = gameData.CreatureTypes[typeId];
+      return new CreatureItemData(
+        typeId,
+        value.Name,
+        School.Flame,
+        value.SkillAnimations
+          .Select(a => a.SkillTypeId)
+          .WhereNotNull()
+          .Select(id => SkillTypeData.DefaultItem(gameData, id))
+          .ToImmutableList(),
+        ImmutableList<AffixData>.Empty,
+        value.ImplicitModifiers.Select(m => m.Value != null ? m : m.WithValue(m.ValueLow)).ToImmutableList(),
+        value.Health.Low);
+    }
   }
 }

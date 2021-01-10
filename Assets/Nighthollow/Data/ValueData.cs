@@ -118,6 +118,9 @@ namespace Nighthollow.Data
   [MessagePackObject]
   public sealed class ImmutableDictionaryValue<TTag, TValue> : IValueData where TTag : notnull
   {
+    public static readonly ImmutableDictionaryValue<TTag, TValue> Empty =
+      new ImmutableDictionaryValue<TTag, TValue>(ImmutableDictionary<TTag, TValue>.Empty);
+
     public ImmutableDictionaryValue(ImmutableDictionary<TTag, TValue> dictionary)
     {
       Dictionary = dictionary;
@@ -129,29 +132,17 @@ namespace Nighthollow.Data
 
     public override string ToString() => string.Join(",", Dictionary.Select(pair => $"{pair.Value} {pair.Key}"));
 
-    bool Equals(ImmutableDictionaryValue<TTag, TValue> other)
-    {
-      return Dictionary.Equals(other.Dictionary);
-    }
+    bool Equals(ImmutableDictionaryValue<TTag, TValue> other) => Dictionary.Equals(other.Dictionary);
 
-    public override bool Equals(object? obj)
-    {
-      return ReferenceEquals(this, obj) || obj is ImmutableDictionaryValue<TTag, TValue> other && Equals(other);
-    }
+    public override bool Equals(object? obj) => ReferenceEquals(this, obj) ||
+                                                obj is ImmutableDictionaryValue<TTag, TValue> other && Equals(other);
 
-    public override int GetHashCode()
-    {
-      return Dictionary.GetHashCode();
-    }
+    public override int GetHashCode() => Dictionary.GetHashCode();
 
-    public static bool operator ==(ImmutableDictionaryValue<TTag, TValue>? left, ImmutableDictionaryValue<TTag, TValue>? right)
-    {
-      return Equals(left, right);
-    }
+    public static bool operator ==(ImmutableDictionaryValue<TTag, TValue>? left,
+      ImmutableDictionaryValue<TTag, TValue>? right) => Equals(left, right);
 
-    public static bool operator !=(ImmutableDictionaryValue<TTag, TValue>? left, ImmutableDictionaryValue<TTag, TValue>? right)
-    {
-      return !Equals(left, right);
-    }
+    public static bool operator !=(ImmutableDictionaryValue<TTag, TValue>? left,
+      ImmutableDictionaryValue<TTag, TValue>? right) => !Equals(left, right);
   }
 }

@@ -259,19 +259,29 @@ namespace Nighthollow.Data
       new CreatureSkillAnimation(
         skillAnimationNumber,
         SkillAnimationType,
-        Duration);
+        Duration,
+        SkillTypeId);
 
     public CreatureSkillAnimation WithSkillAnimationType(SkillAnimationType skillAnimationType) =>
       new CreatureSkillAnimation(
         SkillAnimationNumber,
         skillAnimationType,
-        Duration);
+        Duration,
+        SkillTypeId);
 
     public CreatureSkillAnimation WithDuration(DurationValue? duration) =>
       new CreatureSkillAnimation(
         SkillAnimationNumber,
         SkillAnimationType,
-        duration);
+        duration,
+        SkillTypeId);
+
+    public CreatureSkillAnimation WithSkillTypeId(int? skillTypeId) =>
+      new CreatureSkillAnimation(
+        SkillAnimationNumber,
+        SkillAnimationType,
+        Duration,
+        skillTypeId);
 
   }
 
@@ -287,7 +297,6 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitModifiers,
-        ImplicitSkills,
         SkillAnimations,
         IsManaCreature);
 
@@ -301,7 +310,6 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitModifiers,
-        ImplicitSkills,
         SkillAnimations,
         IsManaCreature);
 
@@ -315,7 +323,6 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitModifiers,
-        ImplicitSkills,
         SkillAnimations,
         IsManaCreature);
 
@@ -329,7 +336,6 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitModifiers,
-        ImplicitSkills,
         SkillAnimations,
         IsManaCreature);
 
@@ -343,7 +349,6 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitModifiers,
-        ImplicitSkills,
         SkillAnimations,
         IsManaCreature);
 
@@ -357,7 +362,6 @@ namespace Nighthollow.Data
         baseManaCost,
         Speed,
         ImplicitModifiers,
-        ImplicitSkills,
         SkillAnimations,
         IsManaCreature);
 
@@ -371,7 +375,6 @@ namespace Nighthollow.Data
         BaseManaCost,
         speed,
         ImplicitModifiers,
-        ImplicitSkills,
         SkillAnimations,
         IsManaCreature);
 
@@ -385,21 +388,6 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         implicitModifiers,
-        ImplicitSkills,
-        SkillAnimations,
-        IsManaCreature);
-
-    public CreatureTypeData WithImplicitSkills(ImmutableList<SkillTypeData> implicitSkills) =>
-      new CreatureTypeData(
-        Name,
-        PrefabAddress,
-        Owner,
-        Health,
-        ImageAddress,
-        BaseManaCost,
-        Speed,
-        ImplicitModifiers,
-        implicitSkills,
         SkillAnimations,
         IsManaCreature);
 
@@ -413,7 +401,6 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitModifiers,
-        ImplicitSkills,
         skillAnimations,
         IsManaCreature);
 
@@ -427,7 +414,6 @@ namespace Nighthollow.Data
         BaseManaCost,
         Speed,
         ImplicitModifiers,
-        ImplicitSkills,
         SkillAnimations,
         isManaCreature);
 
@@ -595,19 +581,29 @@ namespace Nighthollow.Data
       new SkillItemData(
         skillTypeId,
         Affixes,
-        ImplicitModifiers);
+        ImplicitModifiers,
+        Name);
 
     public SkillItemData WithAffixes(ImmutableList<AffixData> affixes) =>
       new SkillItemData(
         SkillTypeId,
         affixes,
-        ImplicitModifiers);
+        ImplicitModifiers,
+        Name);
 
     public SkillItemData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
       new SkillItemData(
         SkillTypeId,
         Affixes,
-        implicitModifiers);
+        implicitModifiers,
+        Name);
+
+    public SkillItemData WithName(string name) =>
+      new SkillItemData(
+        SkillTypeId,
+        Affixes,
+        ImplicitModifiers,
+        name);
 
   }
 
@@ -806,7 +802,11 @@ namespace Nighthollow.Data
         School,
         Skills,
         Affixes,
-        ImplicitModifiers);
+        ImplicitModifiers,
+        Health,
+        ManaCost,
+        InfluenceCost,
+        BaseDamage);
 
     public CreatureItemData WithName(string name) =>
       new CreatureItemData(
@@ -815,7 +815,11 @@ namespace Nighthollow.Data
         School,
         Skills,
         Affixes,
-        ImplicitModifiers);
+        ImplicitModifiers,
+        Health,
+        ManaCost,
+        InfluenceCost,
+        BaseDamage);
 
     public CreatureItemData WithSchool(School school) =>
       new CreatureItemData(
@@ -824,7 +828,11 @@ namespace Nighthollow.Data
         school,
         Skills,
         Affixes,
-        ImplicitModifiers);
+        ImplicitModifiers,
+        Health,
+        ManaCost,
+        InfluenceCost,
+        BaseDamage);
 
     public CreatureItemData WithSkills(ImmutableList<SkillItemData> skills) =>
       new CreatureItemData(
@@ -833,7 +841,11 @@ namespace Nighthollow.Data
         School,
         skills,
         Affixes,
-        ImplicitModifiers);
+        ImplicitModifiers,
+        Health,
+        ManaCost,
+        InfluenceCost,
+        BaseDamage);
 
     public CreatureItemData WithAffixes(ImmutableList<AffixData> affixes) =>
       new CreatureItemData(
@@ -842,7 +854,11 @@ namespace Nighthollow.Data
         School,
         Skills,
         affixes,
-        ImplicitModifiers);
+        ImplicitModifiers,
+        Health,
+        ManaCost,
+        InfluenceCost,
+        BaseDamage);
 
     public CreatureItemData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
       new CreatureItemData(
@@ -851,7 +867,63 @@ namespace Nighthollow.Data
         School,
         Skills,
         Affixes,
-        implicitModifiers);
+        implicitModifiers,
+        Health,
+        ManaCost,
+        InfluenceCost,
+        BaseDamage);
+
+    public CreatureItemData WithHealth(int health) =>
+      new CreatureItemData(
+        CreatureTypeId,
+        Name,
+        School,
+        Skills,
+        Affixes,
+        ImplicitModifiers,
+        health,
+        ManaCost,
+        InfluenceCost,
+        BaseDamage);
+
+    public CreatureItemData WithManaCost(int manaCost) =>
+      new CreatureItemData(
+        CreatureTypeId,
+        Name,
+        School,
+        Skills,
+        Affixes,
+        ImplicitModifiers,
+        Health,
+        manaCost,
+        InfluenceCost,
+        BaseDamage);
+
+    public CreatureItemData WithInfluenceCost(ImmutableDictionaryValue<School, int> influenceCost) =>
+      new CreatureItemData(
+        CreatureTypeId,
+        Name,
+        School,
+        Skills,
+        Affixes,
+        ImplicitModifiers,
+        Health,
+        ManaCost,
+        influenceCost,
+        BaseDamage);
+
+    public CreatureItemData WithBaseDamage(ImmutableDictionaryValue<DamageType, IntRangeValue> baseDamage) =>
+      new CreatureItemData(
+        CreatureTypeId,
+        Name,
+        School,
+        Skills,
+        Affixes,
+        ImplicitModifiers,
+        Health,
+        ManaCost,
+        InfluenceCost,
+        baseDamage);
 
   }
 

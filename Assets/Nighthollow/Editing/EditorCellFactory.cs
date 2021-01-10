@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Interface;
@@ -90,6 +89,11 @@ namespace Nighthollow.Editing
       {
         cellDelegate = new PrimitiveTextFieldCellDelegate<IntRangeValue>(reflectivePath, IntRangeValue.TryParse);
       }
+      else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ImmutableDictionaryValue<,>))
+      {
+        cellDelegate = new PrimitiveTextFieldCellDelegate<IValueData>(reflectivePath,
+          (string s, out IValueData d) => AnyStatCanParse(type, s, out d));
+      }
       else if (type == typeof(IValueData))
       {
         cellDelegate = new PrimitiveTextFieldCellDelegate<IValueData>(reflectivePath,
@@ -98,9 +102,6 @@ namespace Nighthollow.Editing
       else if (type.GetInterface("IList") != null)
       {
         cellDelegate = new NestedSheetTextFieldCellDelegate(screenController, reflectivePath);
-        // cellDelegate = new NestedSheetTextFieldCellDelegate(
-        //   screenController,
-        //   new NestedListEditorSheetDelegate(reflectivePath));
       }
       else
       {
@@ -141,6 +142,23 @@ namespace Nighthollow.Editing
       result = (parent.GetType().GetMethod("Parse")!.Invoke(parent, new object[] {input}) as IValueData)!;
       // ReSharper disable once ConditionIsAlwaysTrueOrFalse
       return result != null;
+    }
+
+    static bool AnyStatCanParse(Type targetType, string input, out IValueData result)
+    {
+      foreach (var field in typeof(Stat).GetFields(BindingFlags.Public | BindingFlags.Static))
+      {
+        if (field.GetValue(typeof(Stat)) is IStat stat)
+        {
+          if (stat.TryParse(input, ModifierType.Set, out result) && result.GetType() == targetType)
+          {
+            return true;
+          }
+        }
+      }
+
+      result = null!;
+      return false;
     }
   }
 }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using System.Linq;
 using MessagePack;
 
 #nullable enable
@@ -55,5 +56,15 @@ namespace Nighthollow.Data
     [Key(8)] public bool CanStun { get; }
 
     public override string ToString() => Name;
+
+    public static SkillItemData DefaultItem(GameData gameData, int skillTypeId)
+    {
+      var value = gameData.SkillTypes[skillTypeId];
+      return new SkillItemData(
+        skillTypeId,
+        ImmutableList<AffixData>.Empty,
+        value.ImplicitModifiers.Select(m => m.Value != null ? m : m.WithValue(m.ValueLow)).ToImmutableList(),
+        value.Name);
+    }
   }
 }

@@ -28,11 +28,13 @@ namespace Nighthollow.Data
     public SkillItemData(
       int skillTypeId,
       ImmutableList<AffixData>? affixes = null,
-      ImmutableList<ModifierData>? implicitModifiers = null)
+      ImmutableList<ModifierData>? implicitModifiers = null,
+      string name = "")
     {
       SkillTypeId = skillTypeId;
       Affixes = affixes ?? ImmutableList<AffixData>.Empty;
       ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
+      Name = name;
     }
 
     // TODO: Handle skills which do not have a type ID because they're embedded within a creature type
@@ -41,6 +43,9 @@ namespace Nighthollow.Data
 
     [Key(1)] public ImmutableList<AffixData> Affixes { get; }
     [Key(2)] public ImmutableList<ModifierData> ImplicitModifiers { get; }
+    [Key(3)] public string Name { get; }
+
+    public override string ToString() => Name;
 
     public SkillData BuildSkill(GameData gameData, StatTable parentStatTable)
     {

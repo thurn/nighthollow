@@ -139,16 +139,9 @@ namespace Nighthollow.Editing
 
     public override void WriteForeignKey(int id, ReflectivePath reflectivePath)
     {
-      if (reflectivePath.Read() is CreatureItemData data)
+      if (reflectivePath.Read() is CreatureItemData _)
       {
-        var type = reflectivePath.Database.Snapshot().CreatureTypes[id];
-        reflectivePath.Write(
-          data
-            .WithCreatureTypeId(id)
-            .WithName(type.Name)
-            .WithImplicitModifiers(type.ImplicitModifiers
-              .Select(m => m.Value != null ? m : m.WithValue(m.ValueLow))
-              .ToImmutableList()));
+        reflectivePath.Write(CreatureTypeData.DefaultItem(id, reflectivePath.Database.Snapshot()));
       }
     }
   }

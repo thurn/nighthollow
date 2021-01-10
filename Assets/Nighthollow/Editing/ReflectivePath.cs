@@ -244,6 +244,11 @@ namespace Nighthollow.Editing
           return parent.RemoveAt(_index);
         }
 
+        if (_index >= parent.Count)
+        {
+          return parent;
+        }
+
         return parent.SetItem(_index,
           remainingSegments.IsEmpty
             ? (T) newValue

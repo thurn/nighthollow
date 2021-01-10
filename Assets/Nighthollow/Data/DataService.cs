@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using MessagePack;
 using MessagePack.Resolvers;
@@ -33,6 +34,7 @@ namespace Nighthollow.Data
     Database? _database;
     readonly List<IOnDatabaseReadyListener> _listeners = new List<IOnDatabaseReadyListener>();
     [SerializeField] bool _disablePersistence;
+    MessagePackSerializerOptions _serializerOptions = null!;
 
     void Start()
     {
@@ -49,7 +51,7 @@ namespace Nighthollow.Data
 
     public IEnumerator<YieldInstruction> Initialize(bool synchronous = false)
     {
-      var serializationOptions = MessagePackSerializerOptions.Standard
+      _serializerOptions = MessagePackSerializerOptions.Standard
         .WithResolver(CompositeResolver.Create(
           GeneratedResolver.Instance,
           StandardResolverAllowPrivate.Instance));
@@ -65,7 +67,7 @@ namespace Nighthollow.Data
         if (File.Exists(persistentFilePath) && !_disablePersistence)
         {
           using var file = File.OpenRead(persistentFilePath!);
-          gameData = tableId.Deserialize(gameData, file, serializationOptions);
+          gameData = tableId.Deserialize(gameData, file, _serializerOptions);
         }
         else
         {
@@ -83,13 +85,17 @@ namespace Nighthollow.Data
 
           if (asset && asset != null)
           {
-            gameData = tableId.Deserialize(gameData, asset.bytes, serializationOptions);
+            gameData = tableId.Deserialize(gameData, asset.bytes, _serializerOptions);
           }
         }
       }
 
-      _database = new Database(serializationOptions, gameData);
+      _database = new Database(_serializerOptions, gameData);
       InvokeListeners(_database);
+
+      // Uncomment these lines to perform a data migration.
+      // yield return new WaitForSeconds(1);
+      // Migrate(_database, TableId.CreatureTypes, c => new Value());
     }
 
     void Update()
@@ -122,6 +128,16 @@ namespace Nighthollow.Data
       }
 
       _listeners.Clear();
+    }
+
+    // ReSharper disable once UnusedMember.Local
+    void Migrate<TOld, TNew>(Database database, TableId<TOld> tableId, Func<TOld, TNew> transformation)
+      where TOld : class
+    {
+      var dictionary = tableId.GetIn(database.Snapshot());
+      var transformed = dictionary.ToImmutableDictionary(p => p.Key, p => transformation(p.Value));
+      using var editorStream = File.OpenWrite(EditorFilePath(tableId));
+      MessagePackSerializer.Serialize(editorStream, transformed, _serializerOptions);
     }
 
     sealed class DatabaseReadyActionListener : IOnDatabaseReadyListener

@@ -176,7 +176,7 @@ namespace Nighthollow.Editing
     {
       var id = (int) (_reflectivePath.Read() ?? 0);
       var table = GetTable(_reflectivePath, _tableType);
-      SetTextFieldValue(table.Contains(id) ? table[id].ToString() : "NOT FOUND");
+      SetTextFieldValue(table.Contains(id) ? table[id].ToString() : "None");
     }
 
     static IDictionary GetTable(ReflectivePath reflectivePath, Type tableType)

@@ -32,7 +32,11 @@ namespace Nighthollow.Data
       School school,
       ImmutableList<SkillItemData>? skills = null,
       ImmutableList<AffixData>? affixes = null,
-      ImmutableList<ModifierData>? implicitModifiers = null)
+      ImmutableList<ModifierData>? implicitModifiers = null,
+      int health = 0,
+      int manaCost = 0,
+      ImmutableDictionaryValue<School, int>? influenceCost = null,
+      ImmutableDictionaryValue<DamageType, IntRangeValue>? baseDamage = null)
     {
       CreatureTypeId = creatureTypeId;
       Name = name;
@@ -40,6 +44,10 @@ namespace Nighthollow.Data
       Skills = skills ?? ImmutableList<SkillItemData>.Empty;
       Affixes = affixes ?? ImmutableList<AffixData>.Empty;
       ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
+      Health = health;
+      ManaCost = manaCost;
+      InfluenceCost = influenceCost ?? ImmutableDictionaryValue<School, int>.Empty;
+      BaseDamage = baseDamage ?? ImmutableDictionaryValue<DamageType, IntRangeValue>.Empty;
     }
 
     [ForeignKey(typeof(CreatureTypeData))]
@@ -50,6 +58,10 @@ namespace Nighthollow.Data
     [Key(3)] public ImmutableList<SkillItemData> Skills { get; }
     [Key(4)] public ImmutableList<AffixData> Affixes { get; }
     [Key(5)] public ImmutableList<ModifierData> ImplicitModifiers { get; }
+    [Key(6)] public int Health { get; }
+    [Key(7)] public int ManaCost { get; }
+    [Key(8)] public ImmutableDictionaryValue<School, int> InfluenceCost { get; }
+    [Key(9)] public ImmutableDictionaryValue<DamageType, IntRangeValue> BaseDamage { get; }
 
     public override string ToString() => Name;
 
@@ -61,8 +73,12 @@ namespace Nighthollow.Data
     {
       var baseType = gameData.CreatureTypes[CreatureTypeId];
       var statTable = new StatTable(userData.Stats)
+        .InsertModifier(Stat.Health.Set(Health))
         .InsertModifier(Stat.CreatureSpeed.Set(baseType.Speed))
-        .InsertNullableModifier(Stat.IsManaCreature.SetIfTrue(baseType.IsManaCreature));
+        .InsertNullableModifier(Stat.IsManaCreature.SetIfTrue(baseType.IsManaCreature))
+        .InsertModifier(Stat.ManaCost.Set(ManaCost))
+        .InsertModifier(Stat.InfluenceCost.Set(InfluenceCost.Dictionary))
+        .InsertModifier(Stat.BaseDamage.Set(BaseDamage.Dictionary));
       var (stats, delegates) = AffixData.ProcessAffixes(statTable, Affixes);
 
       return new CreatureData(
