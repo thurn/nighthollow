@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Immutable;
-using MessagePack;
+using System;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Model
 {
-  [MessagePackObject]
-  public sealed partial class StaticCreatureListData
+  public sealed class ResourceItemDataOld : IItemDataOld
   {
-    public StaticCreatureListData(
-      string name,
-      ImmutableList<CreatureItemData> list)
+    public string Name { get; }
+    public string ImageAddress { get; }
+    public string Description { get; }
+
+    public ResourceItemDataOld(string name, string imageAddress, string description)
     {
       Name = name;
-      List = list;
+      ImageAddress = imageAddress;
+      Description = description;
     }
 
-    [Key(0)] public string Name { get; }
-    [Key(1)] public ImmutableList<CreatureItemData> List { get; }
+    public T Switch<T>(Func<CreatureItemData, T> onCreature, Func<ResourceItemDataOld, T> onResource) => onResource(this);
   }
 }

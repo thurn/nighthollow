@@ -45,9 +45,9 @@ namespace Nighthollow.Interface
 
     public readonly struct Args
     {
-      public readonly IReadOnlyList<IItemData> Items;
+      public readonly IReadOnlyList<IItemDataOld> Items;
 
-      public Args(IReadOnlyList<IItemData> items)
+      public Args(IReadOnlyList<IItemDataOld> items)
       {
         Items = items;
       }

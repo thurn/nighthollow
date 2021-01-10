@@ -28,12 +28,12 @@ namespace Nighthollow.Items
 {
   public static class TooltipUtil
   {
-    public static TooltipBuilder CreateTooltip(StatTable ownerStats, IItemData item) =>
+    public static TooltipBuilder CreateTooltip(StatTable ownerStats, IItemDataOld item) =>
       item.Switch(
         creature => CreateCreatureTooltip(ownerStats, creature),
         CreateResourceTooltip);
 
-    public static TooltipBuilder CreateResourceTooltip(ResourceItemData data)
+    public static TooltipBuilder CreateResourceTooltip(ResourceItemDataOld data)
     {
       var builder = new TooltipBuilder(data.Name);
       builder.AppendText(data.Description);

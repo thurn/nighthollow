@@ -4,9 +4,9 @@ import sys
 import os
 import re
 
+
 class_regex = re.compile(r'public sealed partial class (\w+)')
-property_regex = re.compile(r'\[Key\(\d+\)] public (.*?) (\w+) { get; }')
-property_regex2 = re.compile(r'\[(?:Key\(\d+\)|Field)] public (?:override )?(.*?) (\w+) { get; }')
+property_regex = re.compile(r'\[(?:Key\(\d+\)|Field)] public (?:override )?(.*?) (\w+) { get; }')
 
 
 def uncap(s):
@@ -27,7 +27,7 @@ def parse(class_file):
                 result.append({"class_name": class_name, "properties": properties})
             class_name = match.group(1)
             properties = []
-        if match := property_regex2.search(line):
+        if match := property_regex.search(line):
             properties.append({"type": match.group(1), "name": match.group(2)})
     if class_name:
         result.append({"class_name": class_name, "properties": properties})

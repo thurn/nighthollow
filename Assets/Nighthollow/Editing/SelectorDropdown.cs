@@ -13,8 +13,10 @@
 // limitations under the License.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Interface;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -151,6 +153,47 @@ namespace Nighthollow.Editing
           var value = Enum.Parse(type, options[selected]);
           reflectivePath.Write(value);
         });
+    }
+  }
+
+  public sealed class ForeignKeyDropdownEditorCell : SelectorDropdownEditorCell
+  {
+    readonly ReflectivePath _reflectivePath;
+    readonly Type _tableType;
+
+    public ForeignKeyDropdownEditorCell(
+      ScreenController screenController,
+      ReflectivePath reflectivePath,
+      Type type,
+      IEditor parent) : base(screenController, BuildContent(reflectivePath, type), parent)
+    {
+      _reflectivePath = reflectivePath;
+      _tableType = type;
+      _reflectivePath.OnEntityUpdated(OnUpdated);
+    }
+
+    void OnUpdated(object? obj)
+    {
+      var id = (int) (_reflectivePath.Read() ?? 0);
+      var table = GetTable(_reflectivePath, _tableType);
+      SetTextFieldValue(table.Contains(id) ? table[id].ToString() : "NOT FOUND");
+    }
+
+    static IDictionary GetTable(ReflectivePath reflectivePath, Type tableType)
+    {
+      var tableId = TableId.AllTableIds.First(tid => tid.GetUnderlyingType() == tableType);
+      return tableId.GetInUnchecked(reflectivePath.Database.Snapshot());
+    }
+
+    static EditorSheetDelegate.DropdownCell BuildContent(ReflectivePath reflectivePath, Type type)
+    {
+      var dictionary = GetTable(reflectivePath, type);
+      var values = (from object? key in dictionary.Keys select ((int) key, dictionary[key].ToString())).ToList();
+
+      return new EditorSheetDelegate.DropdownCell(
+        values.Select(v => v.Item2).ToList(),
+        null,
+        index => { EditorControllerRegistry.WriteForeignKey(values[index].Item1, reflectivePath); });
     }
   }
 

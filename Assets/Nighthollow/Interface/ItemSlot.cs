@@ -30,9 +30,9 @@ namespace Nighthollow.Interface
       Large
     }
 
-    IItemData? _item;
+    IItemDataOld? _item;
 
-    public IItemData? Item => _item;
+    public IItemDataOld? Item => _item;
     Image? _nullStateImage;
 
     public new sealed class UxmlFactory : UxmlFactory<ItemSlot, UxmlTraits>
@@ -69,7 +69,7 @@ namespace Nighthollow.Interface
       }
     }
 
-    public void SetItem(ScreenController controller, IItemData item, bool shouldAddTooltip = true)
+    public void SetItem(ScreenController controller, IItemDataOld item, bool shouldAddTooltip = true)
     {
       _item = item;
       Add(new ItemImage(controller, this, item, shouldAddTooltip));

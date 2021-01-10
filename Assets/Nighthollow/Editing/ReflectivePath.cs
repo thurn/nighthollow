@@ -63,6 +63,9 @@ namespace Nighthollow.Editing
 
     public Type GetUnderlyingType() => _path.IsEmpty ? _tableId.GetUnderlyingType() : _path.Last().GetUnderlyingType();
 
+    public PropertyInfo? AsPropertyInfo() =>
+      !_path.IsEmpty && _path.Last() is PropertySegment segment ? segment.Property : null;
+
     public (ITableId?, ReflectivePath?) FindParentTable()
     {
       var parent = Parent();
@@ -111,7 +114,7 @@ namespace Nighthollow.Editing
     {
       if (_path.Count >= 2 && _path.Last() is PropertySegment p)
       {
-        return CellPreviewFactory.RenderPropertyPreview(_database.Snapshot(), Parent()!.Read(), p.Property);
+        return EditorControllerRegistry.RenderPropertyPreview(_database.Snapshot(), Parent()!.Read(), p.Property);
       }
       else
       {

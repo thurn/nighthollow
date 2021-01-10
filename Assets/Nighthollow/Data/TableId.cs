@@ -78,7 +78,7 @@ namespace Nighthollow.Data
     public static readonly TableId<AffixTypeData> AffixTypes = new AffixTypesTableId(2, "AffixTypes");
     public static readonly TableId<SkillTypeData> SkillTypes = new SkillTypesTableId(3, "SkillTypes");
     public static readonly TableId<StatData> Stats = new StatDataTableId(4, "Stats");
-    public static readonly TableId<StaticCreatureListData> CreatureLists = new CreatureListsTableId(5, "CreatureLists");
+    public static readonly TableId<StaticItemListData> ItemLists = new ItemListsTableId(5, "ItemLists");
     public static readonly TableId<ModifierData> UserModifiers = new UserModifiersTableId(6, "UserModifiers");
     public static readonly TableId<CreatureItemData> Collection = new CollectionTableId(7, "Collection");
     public static readonly TableId<CreatureItemData> Deck = new DeckTableId(8, "Deck");
@@ -89,7 +89,7 @@ namespace Nighthollow.Data
       AffixTypes,
       SkillTypes,
       Stats,
-      CreatureLists,
+      ItemLists,
       UserModifiers,
       Collection,
       Deck
@@ -160,16 +160,16 @@ namespace Nighthollow.Data
         gameData.WithStatData(newValue);
     }
 
-    sealed class CreatureListsTableId : TableId<StaticCreatureListData>
+    sealed class ItemListsTableId : TableId<StaticItemListData>
     {
-      public CreatureListsTableId(int id, string tableName) : base(id, tableName)
+      public ItemListsTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
-      public override ImmutableDictionary<int, StaticCreatureListData> GetIn(GameData gameData) =>
+      public override ImmutableDictionary<int, StaticItemListData> GetIn(GameData gameData) =>
         gameData.CreatureLists;
 
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, StaticCreatureListData> newValue) =>
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, StaticItemListData> newValue) =>
         gameData.WithCreatureLists(newValue);
     }
 

@@ -13,19 +13,28 @@
 // limitations under the License.
 
 using System;
+using MessagePack;
 
 #nullable enable
 
-namespace Nighthollow.Model
+namespace Nighthollow.Data
 {
-  public interface IItemData
+  [MessagePackObject]
+  public sealed partial class ResourceItemData : IItemData
   {
-    string Name { get; }
+    public ResourceItemData(string name, string imageAddress, string description)
+    {
+      Name = name;
+      ImageAddress = imageAddress;
+      Description = description;
+    }
 
-    string ImageAddress { get; }
+    [Key(0)] public string Name { get; }
+    [Key(1)] public string ImageAddress { get; }
+    [Key(2)] public string Description { get; }
 
-    T Switch<T>(
+    public T Switch<T>(
       Func<CreatureItemData, T> onCreature,
-      Func<ResourceItemData, T> onResource);
+      Func<ResourceItemData, T> onResource) => onResource(this);
   }
 }

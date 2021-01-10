@@ -40,7 +40,7 @@ namespace Nighthollow.Items
     public static void AddItems(
       ScreenController controller,
       VisualElement parentElement,
-      IEnumerable<IItemData> items,
+      IEnumerable<IItemDataOld> items,
       Config config)
     {
       parentElement.Clear();

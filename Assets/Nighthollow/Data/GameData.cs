@@ -19,10 +19,6 @@ using System.Collections.Immutable;
 
 namespace Nighthollow.Data
 {
-  public sealed class FieldAttribute : Attribute
-  {
-  }
-
   public sealed partial class GameData
   {
     public GameData(
@@ -31,7 +27,7 @@ namespace Nighthollow.Data
       ImmutableDictionary<int, AffixTypeData>? affixTypes = null,
       ImmutableDictionary<int, SkillTypeData>? skillTypes = null,
       ImmutableDictionary<int, StatData>? statData = null,
-      ImmutableDictionary<int, StaticCreatureListData>? creatureLists = null,
+      ImmutableDictionary<int, StaticItemListData>? creatureLists = null,
       ImmutableDictionary<int, ModifierData>? userModifiers = null,
       ImmutableDictionary<int, CreatureItemData>? collection = null,
       ImmutableDictionary<int, CreatureItemData>? deck = null)
@@ -41,7 +37,7 @@ namespace Nighthollow.Data
       AffixTypes = affixTypes ?? ImmutableDictionary<int, AffixTypeData>.Empty;
       SkillTypes = skillTypes ?? ImmutableDictionary<int, SkillTypeData>.Empty;
       StatData = statData ?? ImmutableDictionary<int, StatData>.Empty;
-      CreatureLists = creatureLists ?? ImmutableDictionary<int, StaticCreatureListData>.Empty;
+      CreatureLists = creatureLists ?? ImmutableDictionary<int, StaticItemListData>.Empty;
       UserModifiers = userModifiers ?? ImmutableDictionary<int, ModifierData>.Empty;
       Collection = collection ?? ImmutableDictionary<int, CreatureItemData>.Empty;
       Deck = deck ?? ImmutableDictionary<int, CreatureItemData>.Empty;
@@ -52,7 +48,7 @@ namespace Nighthollow.Data
     [Field] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
     [Field] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
     [Field] public ImmutableDictionary<int, StatData> StatData { get; }
-    [Field] public ImmutableDictionary<int, StaticCreatureListData> CreatureLists { get; }
+    [Field] public ImmutableDictionary<int, StaticItemListData> CreatureLists { get; }
     [Field] public ImmutableDictionary<int, ModifierData> UserModifiers { get; }
     [Field] public ImmutableDictionary<int, CreatureItemData> Collection { get; }
     [Field] public ImmutableDictionary<int, CreatureItemData> Deck { get; }

@@ -26,8 +26,8 @@ namespace Nighthollow.Interface
   {
     const int ContainerSize = 128;
 
-    readonly IItemData _item;
-    public IItemData Item => _item;
+    readonly IItemDataOld _item;
+    public IItemDataOld Item => _item;
 
     readonly ScreenController _screenController;
 
@@ -38,7 +38,7 @@ namespace Nighthollow.Interface
     public bool EnableDragging { get; set; }
     public ItemSlot CurrentDragParent { get; set; }
 
-    public ItemImage(ScreenController screenController, ItemSlot itemSlot, IItemData item, bool addTooltip = true)
+    public ItemImage(ScreenController screenController, ItemSlot itemSlot, IItemDataOld item, bool addTooltip = true)
     {
       CurrentDragParent = itemSlot;
       _screenController = screenController;

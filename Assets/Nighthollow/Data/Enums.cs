@@ -105,4 +105,12 @@ namespace Nighthollow.Data
     Unknown = 0,
     Common = 1
   }
+
+  public enum StaticItemListName
+  {
+    Unknown = 0,
+    StartingDeck = 1,
+    TutorialEnemies = 2,
+    TutorialRewards = 3
+  }
 }

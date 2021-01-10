@@ -203,7 +203,7 @@ namespace Nighthollow.Data
         Collection,
         Deck);
 
-    public GameData WithCreatureLists(ImmutableDictionary<int, StaticCreatureListData> creatureLists) =>
+    public GameData WithCreatureLists(ImmutableDictionary<int, StaticItemListData> creatureLists) =>
       new GameData(
         TableMetadata,
         CreatureTypes,
@@ -375,7 +375,7 @@ namespace Nighthollow.Data
         SkillAnimations,
         IsManaCreature);
 
-    public CreatureTypeData WithImplicitModifiers(ImmutableList<ModifierData>? implicitModifiers) =>
+    public CreatureTypeData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
       new CreatureTypeData(
         Name,
         PrefabAddress,
@@ -433,6 +433,50 @@ namespace Nighthollow.Data
 
   }
 
+  public sealed partial class ResourceItemData
+  {
+    public ResourceItemData WithName(string name) =>
+      new ResourceItemData(
+        name,
+        ImageAddress,
+        Description);
+
+    public ResourceItemData WithImageAddress(string imageAddress) =>
+      new ResourceItemData(
+        Name,
+        imageAddress,
+        Description);
+
+    public ResourceItemData WithDescription(string description) =>
+      new ResourceItemData(
+        Name,
+        ImageAddress,
+        description);
+
+  }
+
+  public sealed partial class StaticItemListData
+  {
+    public StaticItemListData WithName(StaticItemListName name) =>
+      new StaticItemListData(
+        name,
+        Creatures,
+        Resources);
+
+    public StaticItemListData WithCreatures(ImmutableList<CreatureItemData> creatures) =>
+      new StaticItemListData(
+        Name,
+        creatures,
+        Resources);
+
+    public StaticItemListData WithResources(ImmutableList<ResourceItemData> resources) =>
+      new StaticItemListData(
+        Name,
+        Creatures,
+        resources);
+
+  }
+
   public sealed partial class SkillTypeData
   {
     public SkillTypeData WithName(string name) =>
@@ -471,7 +515,7 @@ namespace Nighthollow.Data
         CanCrit,
         CanStun);
 
-    public SkillTypeData WithImplicitModifiers(ImmutableList<ModifierData>? implicitModifiers) =>
+    public SkillTypeData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
       new SkillTypeData(
         Name,
         SkillAnimationType,
@@ -550,12 +594,20 @@ namespace Nighthollow.Data
     public SkillItemData WithSkillTypeId(int skillTypeId) =>
       new SkillItemData(
         skillTypeId,
-        Affixes);
+        Affixes,
+        ImplicitModifiers);
 
     public SkillItemData WithAffixes(ImmutableList<AffixData> affixes) =>
       new SkillItemData(
         SkillTypeId,
-        affixes);
+        affixes,
+        ImplicitModifiers);
+
+    public SkillItemData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
+      new SkillItemData(
+        SkillTypeId,
+        Affixes,
+        implicitModifiers);
 
   }
 
@@ -665,20 +717,6 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class StaticCreatureListData
-  {
-    public StaticCreatureListData WithName(string name) =>
-      new StaticCreatureListData(
-        name,
-        List);
-
-    public StaticCreatureListData WithList(ImmutableList<CreatureItemData> list) =>
-      new StaticCreatureListData(
-        Name,
-        list);
-
-  }
-
   public sealed partial class CreatureData
   {
     public CreatureData WithDelegate(IDelegate @delegate) =>
@@ -767,7 +805,8 @@ namespace Nighthollow.Data
         Name,
         School,
         Skills,
-        Affixes);
+        Affixes,
+        ImplicitModifiers);
 
     public CreatureItemData WithName(string name) =>
       new CreatureItemData(
@@ -775,7 +814,8 @@ namespace Nighthollow.Data
         name,
         School,
         Skills,
-        Affixes);
+        Affixes,
+        ImplicitModifiers);
 
     public CreatureItemData WithSchool(School school) =>
       new CreatureItemData(
@@ -783,7 +823,8 @@ namespace Nighthollow.Data
         Name,
         school,
         Skills,
-        Affixes);
+        Affixes,
+        ImplicitModifiers);
 
     public CreatureItemData WithSkills(ImmutableList<SkillItemData> skills) =>
       new CreatureItemData(
@@ -791,7 +832,8 @@ namespace Nighthollow.Data
         Name,
         School,
         skills,
-        Affixes);
+        Affixes,
+        ImplicitModifiers);
 
     public CreatureItemData WithAffixes(ImmutableList<AffixData> affixes) =>
       new CreatureItemData(
@@ -799,7 +841,17 @@ namespace Nighthollow.Data
         Name,
         School,
         Skills,
-        affixes);
+        affixes,
+        ImplicitModifiers);
+
+    public CreatureItemData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
+      new CreatureItemData(
+        CreatureTypeId,
+        Name,
+        School,
+        Skills,
+        Affixes,
+        implicitModifiers);
 
   }
 

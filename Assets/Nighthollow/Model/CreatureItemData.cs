@@ -25,7 +25,7 @@ using SimpleJSON;
 
 namespace Nighthollow.Model
 {
-  public sealed class CreatureItemData : IItemData
+  public sealed class CreatureItemData : IItemDataOld
   {
     public CreatureItemData(
       string name,
@@ -52,7 +52,7 @@ namespace Nighthollow.Model
 
     public string ImageAddress => Errors.CheckNotNull(BaseType.ImageAddress);
 
-    public T Switch<T>(Func<CreatureItemData, T> onCreature, Func<ResourceItemData, T> onResource) => onCreature(this);
+    public T Switch<T>(Func<CreatureItemData, T> onCreature, Func<ResourceItemDataOld, T> onResource) => onCreature(this);
 
     public static CreatureItemData Deserialize(GameDataService gameData, JSONNode node)
     {

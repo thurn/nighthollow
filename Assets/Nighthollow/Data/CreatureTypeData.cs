@@ -81,5 +81,7 @@ namespace Nighthollow.Data
     [Key(8)] public ImmutableList<SkillTypeData> ImplicitSkills { get; }
     [Key(9)] public ImmutableList<CreatureSkillAnimation> SkillAnimations { get; }
     [Key(10)] public bool IsManaCreature { get; }
+
+    public override string ToString() => Name;
   }
 }

@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System;
+using System.Linq;
+using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Stats2;
@@ -42,6 +44,13 @@ namespace Nighthollow.Editing
       ReflectivePath reflectivePath)
     {
       var type = TypeUtils.UnboxNullable(reflectivePath.GetUnderlyingType());
+
+      var foreignKey = reflectivePath.AsPropertyInfo()?.GetCustomAttribute<ForeignKey>();
+      if (foreignKey != null)
+      {
+        return new ForeignKeyDropdownEditorCell(
+          screenController, reflectivePath, foreignKey.TableType, parent);
+      }
 
       if (type.IsSubclassOf(typeof(Enum)))
       {

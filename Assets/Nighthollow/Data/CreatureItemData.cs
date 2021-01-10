@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
@@ -23,27 +24,38 @@ using Nighthollow.Stats2;
 namespace Nighthollow.Data
 {
   [MessagePackObject]
-  public sealed partial class CreatureItemData
+  public sealed partial class CreatureItemData : IItemData
   {
     public CreatureItemData(
       int creatureTypeId,
       string name,
       School school,
       ImmutableList<SkillItemData>? skills = null,
-      ImmutableList<AffixData>? affixes = null)
+      ImmutableList<AffixData>? affixes = null,
+      ImmutableList<ModifierData>? implicitModifiers = null)
     {
       CreatureTypeId = creatureTypeId;
       Name = name;
       School = school;
       Skills = skills ?? ImmutableList<SkillItemData>.Empty;
       Affixes = affixes ?? ImmutableList<AffixData>.Empty;
+      ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
     }
 
+    [ForeignKey(typeof(CreatureTypeData))]
     [Key(0)] public int CreatureTypeId { get; }
+
     [Key(1)] public string Name { get; }
     [Key(2)] public School School { get; }
     [Key(3)] public ImmutableList<SkillItemData> Skills { get; }
     [Key(4)] public ImmutableList<AffixData> Affixes { get; }
+    [Key(5)] public ImmutableList<ModifierData> ImplicitModifiers { get; }
+
+    public override string ToString() => Name;
+
+    public T Switch<T>(
+      Func<CreatureItemData, T> onCreature,
+      Func<ResourceItemData, T> onResource) => onCreature(this);
 
     public CreatureData BuildCreature(GameData gameData, UserData userData)
     {
