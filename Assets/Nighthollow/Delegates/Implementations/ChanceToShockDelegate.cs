@@ -17,7 +17,9 @@ using Nighthollow.Components;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
+using Nighthollow.Stats2;
 using UnityEngine;
+using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -25,6 +27,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChanceToShockDelegate : AbstractDelegate
   {
+    public override string Describe(IStatDescriptionProvider provider) =>
+      $"{provider.Get(Stat.ShockChance)} Chance to Shock";
+
     public override string DescribeOld(StatEntity entity) => $"{entity.GetStat(OldStat.ShockChance)} Chance to Shock";
 
     public override void OnApplyToTarget(SkillContext c, Creature target)

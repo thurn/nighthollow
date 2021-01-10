@@ -35,45 +35,6 @@ namespace Nighthollow.Data
     object Get();
   }
 
-  public static class ValueDataUtil
-  {
-    public static bool TryParse(string input, out IValueData value)
-    {
-      if (int.TryParse(input, out var i))
-      {
-        value = new IntValueData(i);
-        return true;
-      }
-
-      if (bool.TryParse(input, out var b))
-      {
-        value = new BoolValueData(b);
-        return true;
-      }
-
-      if (DurationValue.TryParse(input, out var d))
-      {
-        value = d;
-        return true;
-      }
-
-      if (PercentageValue.TryParse(input, out var p))
-      {
-        value = p;
-        return true;
-      }
-
-      if (IntRangeValue.TryParse(input, out var ir))
-      {
-        value = ir;
-        return true;
-      }
-
-      value = null!;
-      return false;
-    }
-  }
-
   [MessagePackObject]
   public readonly struct IntValueData : IValueData
   {
@@ -87,6 +48,31 @@ namespace Nighthollow.Data
     public object Get() => Int;
 
     public override string ToString() => Int.ToString();
+
+    public bool Equals(IntValueData other)
+    {
+      return Int == other.Int;
+    }
+
+    public override bool Equals(object? obj)
+    {
+      return obj is IntValueData other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      return Int;
+    }
+
+    public static bool operator ==(IntValueData left, IntValueData right)
+    {
+      return left.Equals(right);
+    }
+
+    public static bool operator !=(IntValueData left, IntValueData right)
+    {
+      return !left.Equals(right);
+    }
   }
 
   [MessagePackObject]
@@ -102,6 +88,31 @@ namespace Nighthollow.Data
     public object Get() => Bool;
 
     public override string ToString() => Bool.ToString();
+
+    public bool Equals(BoolValueData other)
+    {
+      return Bool == other.Bool;
+    }
+
+    public override bool Equals(object? obj)
+    {
+      return obj is BoolValueData other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      return Bool.GetHashCode();
+    }
+
+    public static bool operator ==(BoolValueData left, BoolValueData right)
+    {
+      return left.Equals(right);
+    }
+
+    public static bool operator !=(BoolValueData left, BoolValueData right)
+    {
+      return !left.Equals(right);
+    }
   }
 
   [MessagePackObject]
@@ -117,5 +128,30 @@ namespace Nighthollow.Data
     public object Get() => Dictionary;
 
     public override string ToString() => string.Join(",", Dictionary.Select(pair => $"{pair.Value} {pair.Key}"));
+
+    bool Equals(ImmutableDictionaryValue<TTag, TValue> other)
+    {
+      return Dictionary.Equals(other.Dictionary);
+    }
+
+    public override bool Equals(object? obj)
+    {
+      return ReferenceEquals(this, obj) || obj is ImmutableDictionaryValue<TTag, TValue> other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      return Dictionary.GetHashCode();
+    }
+
+    public static bool operator ==(ImmutableDictionaryValue<TTag, TValue>? left, ImmutableDictionaryValue<TTag, TValue>? right)
+    {
+      return Equals(left, right);
+    }
+
+    public static bool operator !=(ImmutableDictionaryValue<TTag, TValue>? left, ImmutableDictionaryValue<TTag, TValue>? right)
+    {
+      return !Equals(left, right);
+    }
   }
 }

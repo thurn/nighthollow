@@ -27,6 +27,8 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ApplyTargetedAffixesOnHitDelegate : AbstractDelegate
   {
+    public override string Describe(IStatDescriptionProvider provider) => "Curses Enemies on Hit With:";
+
     public override string DescribeOld(StatEntity entity) => "Curses Enemies on Hit With:";
 
     public override void OnApplyToTarget(SkillContext c, Creature target)

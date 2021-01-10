@@ -17,6 +17,8 @@ using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.Stats;
+using Nighthollow.Stats2;
+using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -24,6 +26,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ManaGenerationDelegate : AbstractDelegate
   {
+    public override string Describe(IStatDescriptionProvider provider) =>
+      $"+{provider.Get(Stat.AddedManaGain)} Mana Generated";
+
     public override string? DescribeOld(StatEntity entity) => null;
 
     public override void OnActivate(CreatureContext c)

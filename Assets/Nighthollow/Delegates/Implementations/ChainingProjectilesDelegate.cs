@@ -19,9 +19,10 @@ using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Generated;
 using Nighthollow.State;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 using Nighthollow.Utils;
 using UnityEngine;
+using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -29,6 +30,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ChainingProjectilesDelegate : AbstractDelegate
   {
+    public override string Describe(IStatDescriptionProvider provider) =>
+      $"Projectiles Chain {provider.Get(Stat.ProjectileChainCount)} Times on Hit";
+
     public override string DescribeOld(StatEntity entity) =>
       $"Projectiles Chain {entity.GetInt(OldStat.ProjectileChainCount)} Times on Hit";
 

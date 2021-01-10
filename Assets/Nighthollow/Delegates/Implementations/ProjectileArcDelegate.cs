@@ -15,9 +15,10 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 using Nighthollow.Utils;
 using UnityEngine;
+using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -25,6 +26,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class ProjectileArcDelegate : AbstractProjectileOffsetDelegate
   {
+    public override string Describe(IStatDescriptionProvider provider) =>
+      $"Fires an Arc of {provider.Get(Stat.ProjectileArcCount)} Projectiles";
+
     public override string DescribeOld(StatEntity entity) =>
       $"Fires an Arc of {entity.GetInt(OldStat.ProjectileArcCount)} Projectiles";
 

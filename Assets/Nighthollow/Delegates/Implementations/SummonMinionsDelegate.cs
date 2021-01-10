@@ -15,7 +15,6 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
 using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
@@ -27,6 +26,8 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class SummonMinionsDelegate : AbstractDelegate
   {
+    public override string Describe(IStatDescriptionProvider provider) => "Summons Minions";
+
     public override string DescribeOld(StatEntity entity) => $"Summons Minions";
 
     public override void OnUse(SkillContext c)

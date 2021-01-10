@@ -61,8 +61,19 @@ namespace Nighthollow.Editing
     }
 
     public string Get<TModifier, TValue>(AbstractStat<TModifier, TValue> stat)
-      where TModifier : IStatModifier where TValue : notnull =>
-      _values != null ? _values.Get(stat).ToString() : $"({_low!.Get(stat)} to {_high!.Get(stat)})";
+      where TModifier : IStatModifier where TValue : notnull
+    {
+      if (_values != null)
+      {
+        return _values.Get(stat).ToString();
+      }
+      else
+      {
+        var low = _low!.Get(stat);
+        var high = _high!.Get(stat);
+        return Equals(low, high) ? low.ToString() : $"({low} to {high})";
+      }
+    }
   }
 
   abstract class EditorCellPreviewer<T> : IEditorCellPreviewer

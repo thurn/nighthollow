@@ -15,9 +15,10 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Generated;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 using Nighthollow.Utils;
 using UnityEngine;
+using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -27,6 +28,9 @@ namespace Nighthollow.Delegates.Implementations
   {
     public override string DescribeOld(StatEntity entity) =>
       $"Fires {entity.GetInt(OldStat.ProjectileAdjacentsCount)} Projectiles in Adjacent Files";
+
+    public override string Describe(IStatDescriptionProvider provider) =>
+      $"Fires {provider.Get(Stat.ProjectileAdjacentsCount)} Projectiles in Adjacent Files";
 
     protected override int GetProjectileCount(DelegateContext c) => c.GetInt(OldStat.ProjectileAdjacentsCount);
 

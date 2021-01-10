@@ -21,6 +21,8 @@ using Nighthollow.Generated;
 using Nighthollow.Model;
 using Nighthollow.State;
 using Nighthollow.Stats;
+using Nighthollow.Stats2;
+using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -28,6 +30,9 @@ namespace Nighthollow.Delegates.Implementations
 {
   public sealed class AddedDamageOnRepeatedHitsDelegate : AbstractDelegate
   {
+    public override string Describe(IStatDescriptionProvider provider) =>
+      $"+{provider.Get(Stat.SameTargetAddedDamage)} Damage for Each Hit on the Same Target";
+
     public override string DescribeOld(StatEntity entity) =>
       $"+{entity.GetStat(OldStat.SameTargetAddedDamage)} Damage for Each Hit on the Same Target";
 

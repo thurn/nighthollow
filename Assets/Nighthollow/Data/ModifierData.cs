@@ -128,6 +128,6 @@ namespace Nighthollow.Data
     string? PopulateTemplate(string template) =>
       Value != null
         ? BuildStatModifier()?.Describe(template, null)
-        : ModifierForValue(ValueLow)?.Describe(template, ValueHigh);
+        : ModifierForValue(ValueLow)?.Describe(template, Equals(ValueLow, ValueHigh) ? null : ValueHigh);
   }
 }
