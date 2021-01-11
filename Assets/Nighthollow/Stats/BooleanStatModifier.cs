@@ -18,7 +18,7 @@ using Nighthollow.Data;
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   [MessagePackObject]
   public sealed class BooleanStatModifier : IStatModifier

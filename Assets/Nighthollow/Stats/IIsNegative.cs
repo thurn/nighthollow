@@ -16,7 +16,7 @@ using System;
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   public static class NumberUtil
   {

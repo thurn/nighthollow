@@ -21,7 +21,7 @@ using Nighthollow.Utils;
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   public sealed class TaggedValuesStat<TTag, TValue> :
     AbstractStat<TaggedNumericStatModifier<TTag, TValue>, ImmutableDictionary<TTag, TValue>>

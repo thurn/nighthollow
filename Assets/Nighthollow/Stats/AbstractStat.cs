@@ -17,7 +17,7 @@ using Nighthollow.Data;
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   public abstract class AbstractStat<TModifier, TValue> : IStat where TModifier : IStatModifier
   {

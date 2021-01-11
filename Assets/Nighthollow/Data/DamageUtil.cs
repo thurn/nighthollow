@@ -15,7 +15,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Data;
-using Nighthollow.Stats2;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 

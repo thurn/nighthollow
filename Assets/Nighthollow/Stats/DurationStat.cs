@@ -19,7 +19,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   [MessagePackObject]
   public readonly struct DurationValue : IValueData, IIsNegative

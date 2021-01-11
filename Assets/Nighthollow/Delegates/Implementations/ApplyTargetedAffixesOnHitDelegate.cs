@@ -19,8 +19,6 @@ using Nighthollow.Components;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 
-using Nighthollow.Stats2;
-
 #nullable enable
 
 namespace Nighthollow.Delegates.Implementations

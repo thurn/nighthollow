@@ -16,7 +16,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Stats2;
+using Nighthollow.Stats;
 
 #nullable enable
 
@@ -37,7 +37,6 @@ namespace Nighthollow.Data
       Name = name;
     }
 
-    // TODO: Handle skills which do not have a type ID because they're embedded within a creature type
     [ForeignKey(typeof(SkillTypeData))]
     [Key(0)] public int SkillTypeId { get; }
 
@@ -65,5 +64,12 @@ namespace Nighthollow.Data
         baseType,
         this);
     }
+
+    public static SkillData BasicMeleeAttack(GameData gameData, StatTable parentStatTable) =>
+      new SkillItemData(
+        SkillTypeData.BasicMeleeAttackId,
+        ImmutableList<AffixData>.Empty,
+        ImmutableList<ModifierData>.Empty,
+        "Basic Melee Attack").BuildSkill(gameData, parentStatTable);
   }
 }

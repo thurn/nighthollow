@@ -17,7 +17,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Stats2;
+using Nighthollow.Stats;
 
 #nullable enable
 
@@ -84,7 +84,9 @@ namespace Nighthollow.Data
       return new CreatureData(
         new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList()),
         stats,
-        Skills.Select(s => s.BuildSkill(gameData, stats)).ToImmutableList(),
+        Skills.Select(s => s.BuildSkill(gameData, stats))
+          .Append(SkillItemData.BasicMeleeAttack(gameData, stats))
+          .ToImmutableList(),
         baseType,
         this
       );

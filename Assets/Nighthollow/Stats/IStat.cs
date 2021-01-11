@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Data;
+
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
-  public enum ModifierType
+  public interface IStat
   {
-    Add,
-    Increase,
-    Set
+    IStatModifier BuildModifier(ModifierType type, IValueData value);
+
+    bool TryParse(string input, ModifierType type, out IValueData result);
   }
 }

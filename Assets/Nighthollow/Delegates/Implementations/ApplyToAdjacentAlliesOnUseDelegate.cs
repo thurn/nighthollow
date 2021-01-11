@@ -19,7 +19,6 @@ using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 
 using Nighthollow.Services;
-using Nighthollow.Stats2;
 using Nighthollow.Utils;
 
 #nullable enable

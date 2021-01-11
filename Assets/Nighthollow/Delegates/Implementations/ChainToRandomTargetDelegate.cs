@@ -20,7 +20,7 @@ using Nighthollow.Delegates.Effects;
 
 using Nighthollow.Services;
 using Nighthollow.State;
-using Nighthollow.Stats2;
+using Nighthollow.Stats;
 using UnityEngine;
 
 #nullable enable

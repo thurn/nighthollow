@@ -18,7 +18,6 @@ using System.Collections.Immutable;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Stats2;
 using UnityEngine;
 
 #nullable enable

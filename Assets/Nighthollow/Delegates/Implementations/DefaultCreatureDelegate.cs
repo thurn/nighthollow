@@ -18,8 +18,7 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Data;
-using Nighthollow.Stats2;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 

@@ -17,7 +17,6 @@ using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Data;
 using Nighthollow.Services;
-using Nighthollow.Stats2;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -27,7 +26,7 @@ namespace Nighthollow.Delegates.Implementations
   public sealed class SummonMinionsDelegate : AbstractDelegate
   {
     public override string Describe(IStatDescriptionProvider provider) => "Summons Minions";
-    
+
     public override void OnUse(SkillContext c)
     {
       // var rank = Root.Instance.CreatureService.GetOpenForwardRank(

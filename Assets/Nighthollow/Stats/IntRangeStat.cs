@@ -18,7 +18,7 @@ using Nighthollow.Data;
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   [MessagePackObject]
   public readonly struct IntRangeValue : IValueData, IIsNegative

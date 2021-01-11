@@ -17,7 +17,7 @@ using Nighthollow.Data;
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   public abstract class NumericStat<T> : AbstractStat<NumericStatModifier<T>, T> where T : struct
   {

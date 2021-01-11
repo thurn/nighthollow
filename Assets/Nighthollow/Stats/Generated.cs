@@ -16,7 +16,7 @@ using System;
 using Nighthollow.Data;
 
 // Generated Code - Do Not Modify!
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   public enum StatId
   {

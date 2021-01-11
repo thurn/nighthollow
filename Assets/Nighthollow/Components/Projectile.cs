@@ -18,9 +18,9 @@ using Nighthollow.Delegates.Effects;
 using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.State;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
-using Nighthollow.Stats2;
 
 #nullable enable
 

@@ -14,7 +14,7 @@
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   public abstract class StatEntity
   {

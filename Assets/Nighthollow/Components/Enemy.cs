@@ -19,7 +19,7 @@ using DataStructures.RandomSelector;
 using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Services;
-using Nighthollow.Stats2;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 

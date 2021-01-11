@@ -15,7 +15,7 @@
 using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Stats2;
+using Nighthollow.Stats;
 
 #nullable enable
 

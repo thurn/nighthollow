@@ -16,7 +16,7 @@ using System;
 using System.IO;
 using System.Text;
 using Nighthollow.Data;
-using Nighthollow.Stats2;
+using Nighthollow.Stats;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;

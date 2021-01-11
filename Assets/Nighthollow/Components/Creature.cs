@@ -17,8 +17,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Stats2;
 using Nighthollow.Services;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -118,8 +118,6 @@ namespace Nighthollow.Components
       }
 
       if (CanUseSkill())
-        // UseSkill() must be called from Update() in order to give time for the physics system to correctly update
-        // collider positions after activation (there is a Unity project setting which makes this automatic).
       {
         TryToUseSkill();
       }

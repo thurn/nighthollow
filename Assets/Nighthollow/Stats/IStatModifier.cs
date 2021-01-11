@@ -17,7 +17,7 @@ using Nighthollow.Data;
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   [Union(0, typeof(NumericStatModifier<int>))]
   [Union(1, typeof(NumericStatModifier<DurationValue>))]

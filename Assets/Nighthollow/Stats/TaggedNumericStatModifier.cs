@@ -21,7 +21,7 @@ using Nighthollow.Data;
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   [MessagePackObject]
   public sealed class TaggedNumericStatModifier<TTag, TValue> : IStatModifier where TTag : Enum where TValue : struct

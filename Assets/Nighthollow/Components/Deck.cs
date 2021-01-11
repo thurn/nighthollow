@@ -17,8 +17,8 @@ using System.Collections.Generic;
 using System.Linq;
 using DataStructures.RandomSelector;
 using Nighthollow.Data;
+using Nighthollow.Stats;
 using UnityEngine;
-using Nighthollow.Stats2;
 
 #nullable enable
 

@@ -19,9 +19,9 @@ using System.Linq;
 using Nighthollow.Interface;
 using Nighthollow.Data;
 using Nighthollow.Services;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
-using Nighthollow.Stats2;
 
 // ReSharper disable IteratorNeverReturns
 

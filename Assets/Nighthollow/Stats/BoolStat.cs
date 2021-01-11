@@ -20,7 +20,7 @@ using Nighthollow.Utils;
 
 #nullable enable
 
-namespace Nighthollow.Stats2
+namespace Nighthollow.Stats
 {
   public sealed class BoolStat : AbstractStat<BooleanStatModifier, bool>
   {

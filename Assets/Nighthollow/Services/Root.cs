@@ -16,7 +16,7 @@ using System;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Interface;
-using Nighthollow.Stats2;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
