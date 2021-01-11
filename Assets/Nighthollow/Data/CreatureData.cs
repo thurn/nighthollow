@@ -23,7 +23,7 @@ namespace Nighthollow.Data
   public sealed partial class CreatureData : StatEntity
   {
     public CreatureData(
-      IDelegate @delegate,
+      DelegateList @delegate,
       StatTable stats,
       ImmutableList<SkillData> skills,
       CreatureTypeData baseType,
@@ -36,7 +36,7 @@ namespace Nighthollow.Data
       ItemData = itemData;
     }
 
-    [Field] public IDelegate Delegate { get; }
+    [Field] public DelegateList Delegate { get; }
     [Field] public override StatTable Stats { get; }
     [Field] public ImmutableList<SkillData> Skills { get; }
     [Field] public CreatureTypeData BaseType { get; }

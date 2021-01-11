@@ -683,7 +683,7 @@ namespace Nighthollow.Data
 
   public sealed partial class SkillData
   {
-    public SkillData WithDelegate(IDelegate @delegate) =>
+    public SkillData WithDelegate(DelegateList @delegate) =>
       new SkillData(
         @delegate,
         Stats,
@@ -715,7 +715,7 @@ namespace Nighthollow.Data
 
   public sealed partial class CreatureData
   {
-    public CreatureData WithDelegate(IDelegate @delegate) =>
+    public CreatureData WithDelegate(DelegateList @delegate) =>
       new CreatureData(
         @delegate,
         Stats,

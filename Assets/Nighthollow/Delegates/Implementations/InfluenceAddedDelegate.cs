@@ -15,8 +15,8 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-using Nighthollow.Stats;
+
+using Nighthollow.Stats2;
 
 #nullable enable
 
@@ -26,15 +26,13 @@ namespace Nighthollow.Delegates.Implementations
   {
     public override string Describe(IStatDescriptionProvider provider) => "+1 Influence";
 
-    public override string DescribeOld(StatEntity entity) => $"+1 Influence";
-
     public override void OnActivate(CreatureContext c)
     {
-      c.Results.Add(
-        new ApplyModifierToOwnerEffect(c.Self,
-          OldStat.Influence.Modifier(
-            TaggedNumericOperation.Add(c.Self.Data.School, value: 1),
-            new WhileAliveLifetime(c.Self))));
+      // c.Results.Add(
+      //   new ApplyModifierToOwnerEffect(c.Self,
+      //     Stat.Influence.Modifier(
+      //       TaggedNumericOperation.Add(c.Self.Data.School, value: 1),
+      //       new WhileAliveLifetime(c.Self))));
     }
   }
 }

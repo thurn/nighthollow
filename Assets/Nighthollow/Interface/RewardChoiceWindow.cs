@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Nighthollow.Items;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -45,9 +45,9 @@ namespace Nighthollow.Interface
 
     public readonly struct Args
     {
-      public readonly IReadOnlyList<IItemDataOld> Items;
+      public readonly IReadOnlyList<IItemData> Items;
 
-      public Args(IReadOnlyList<IItemDataOld> items)
+      public Args(IReadOnlyList<IItemData> items)
       {
         Items = items;
       }
@@ -210,7 +210,7 @@ namespace Nighthollow.Interface
       {
         if (pickCount > 0 && slot.Item == null)
         {
-          slot.SetNullStateImage(Database.Instance.GameData.GetResource(1).ImageAddress);
+          // slot.SetNullStateImage(Database.Instance.GameData.GetResource(1).ImageAddress);
         }
         else
         {

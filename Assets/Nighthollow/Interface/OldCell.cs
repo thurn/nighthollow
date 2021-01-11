@@ -17,7 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Nighthollow.Editing;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 using UnityEngine;
 using UnityEngine.UIElements;
 

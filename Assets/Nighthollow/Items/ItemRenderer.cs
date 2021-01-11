@@ -14,7 +14,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Interface;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -40,7 +40,7 @@ namespace Nighthollow.Items
     public static void AddItems(
       ScreenController controller,
       VisualElement parentElement,
-      IEnumerable<IItemDataOld> items,
+      IEnumerable<IItemData> items,
       Config config)
     {
       parentElement.Clear();

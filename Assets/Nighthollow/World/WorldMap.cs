@@ -209,7 +209,7 @@ namespace Nighthollow.World
       _screen.HideDialog();
       yield return new WaitForSeconds(seconds: 0.5f);
 
-      Database.Instance.UserData.TutorialState = UserDataService.Tutorial.GameOne;
+      // Database.Instance.UserData.TutorialState = UserDataService.Tutorial.GameOne;
       SceneManager.LoadScene("Game");
     }
 #pragma warning disable 0649

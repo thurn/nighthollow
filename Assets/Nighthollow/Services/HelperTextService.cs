@@ -75,38 +75,38 @@ namespace Nighthollow.Services
 
     public void OnDrewOpeningHand()
     {
-      if (Database.Instance.UserData.TutorialState == UserDataService.Tutorial.GameOne)
-      {
-        ShowHelperText(
-          new HelperText(id: 1,
-            new Vector2(x: 250, y: 300),
-            ArrowDirection.Bottom,
-            "This is your opening hand of creature cards to play"));
-
-        ShowHelperText(
-          new HelperText(id: 2,
-            new Vector2(x: 1400, y: 400),
-            ArrowDirection.Left,
-            "To play a card, you must pay its Mana cost and have the required amount of Influence"));
-      }
+      // if (Database.Instance.UserData.TutorialState == UserDataService.Tutorial.GameOne)
+      // {
+      //   ShowHelperText(
+      //     new HelperText(id: 1,
+      //       new Vector2(x: 250, y: 300),
+      //       ArrowDirection.Bottom,
+      //       "This is your opening hand of creature cards to play"));
+      //
+      //   ShowHelperText(
+      //     new HelperText(id: 2,
+      //       new Vector2(x: 1400, y: 400),
+      //       ArrowDirection.Left,
+      //       "To play a card, you must pay its Mana cost and have the required amount of Influence"));
+      // }
     }
 
     public void OnGameStarted()
     {
-      if (Database.Instance.UserData.TutorialState == UserDataService.Tutorial.GameOne)
-      {
-        ShowHelperText(
-          new HelperText(id: 3,
-            new Vector2(x: 160, y: 50),
-            ArrowDirection.Left,
-            "Your current Mana and Influence are shown here"));
-
-        ShowHelperText(
-          new HelperText(id: 4,
-            new Vector2(x: 940, y: 710),
-            ArrowDirection.Bottom,
-            "You can play an Adept to add Influence and increase your Mana generation"));
-      }
+      // if (Database.Instance.UserData.TutorialState == UserDataService.Tutorial.GameOne)
+      // {
+      //   ShowHelperText(
+      //     new HelperText(id: 3,
+      //       new Vector2(x: 160, y: 50),
+      //       ArrowDirection.Left,
+      //       "Your current Mana and Influence are shown here"));
+      //
+      //   ShowHelperText(
+      //     new HelperText(id: 4,
+      //       new Vector2(x: 940, y: 710),
+      //       ArrowDirection.Bottom,
+      //       "You can play an Adept to add Influence and increase your Mana generation"));
+      // }
     }
 
     public void OnCreaturePlayed()

@@ -15,10 +15,7 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-using Nighthollow.Stats;
 using Nighthollow.Stats2;
-using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -29,15 +26,13 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"+{provider.Get(Stat.AddedManaGain)} Mana Generated";
 
-    public override string? DescribeOld(StatEntity entity) => null;
-
     public override void OnActivate(CreatureContext c)
     {
-      c.Results.Add(
-        new ApplyModifierToOwnerEffect(c.Self,
-          OldStat.ManaGain.Modifier(
-            NumericOperation.Add(c.GetStat(OldStat.AddedManaGain)),
-            new WhileAliveLifetime(c.Self))));
+      // c.Results.Add(
+      //   new ApplyModifierToOwnerEffect(c.Self,
+      //     Stat.ManaGain.Modifier(
+      //       NumericOperation.Add(c.Get(Stat.AddedManaGain)),
+      //       new WhileAliveLifetime(c.Self))));
     }
   }
 }

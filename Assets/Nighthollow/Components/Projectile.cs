@@ -14,12 +14,13 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-using Nighthollow.Model;
+
+using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Utils;
 using UnityEngine;
+using Nighthollow.Stats2;
 
 #nullable enable
 
@@ -46,7 +47,7 @@ namespace Nighthollow.Components
         transform.LookAt(_trackCreature.transform.position);
       }
 
-      transform.position += Errors.CheckPositive(_skillData.GetInt(OldStat.ProjectileSpeed)) / 1000f
+      transform.position += Errors.CheckPositive(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f
                             * Time.deltaTime * transform.forward;
 
       if (Mathf.Abs(transform.position.x) > 25 || Mathf.Abs(transform.position.y) > 25)

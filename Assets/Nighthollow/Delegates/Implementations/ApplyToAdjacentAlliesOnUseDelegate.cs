@@ -17,9 +17,9 @@ using System;
 using System.Linq;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
+
 using Nighthollow.Services;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -30,28 +30,26 @@ namespace Nighthollow.Delegates.Implementations
   {
     public override string Describe(IStatDescriptionProvider provider) => "Buffs Adjacent Allies With:";
 
-    public override string DescribeOld(StatEntity entity) => "Buffs Adjacent Allies With:";
-
     public override void OnUse(SkillContext c)
     {
-      foreach (var creature in
-        Root.Instance.CreatureService.GetAdjacentUserCreatures(
-          Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition))
-      foreach (var modifier in c.Skill.TargetedAffixes.SelectMany(affix => affix.Modifiers))
-      {
-        if (modifier.DelegateId != null)
-        {
-          throw new NotSupportedException("Not yet implemented");
-        }
-
-        if (modifier.StatModifier != null)
-        {
-          c.Results.Add(new ApplyModifierEffect(
-            creature.Data,
-            modifier.StatModifier
-              .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(OldStat.BuffDuration)))));
-        }
-      }
+      // foreach (var creature in
+      //   Root.Instance.CreatureService.GetAdjacentUserCreatures(
+      //     Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition))
+      // foreach (var modifier in c.Skill.TargetedAffixes.SelectMany(affix => affix.Modifiers))
+      // {
+      //   if (modifier.DelegateId != null)
+      //   {
+      //     throw new NotSupportedException("Not yet implemented");
+      //   }
+      //
+      //   if (modifier.StatModifier != null)
+      //   {
+      //     c.Results.Add(new ApplyModifierEffect(
+      //       creature.Data,
+      //       modifier.StatModifier
+      //         .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(OldStat.BuffDuration)))));
+      //   }
+      // }
     }
   }
 }

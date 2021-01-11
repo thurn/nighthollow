@@ -17,16 +17,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Generated;
-using Nighthollow.Model;
+
+using Nighthollow.Data;
+using Nighthollow.Stats2;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
-using CreatureData = Nighthollow.Model.CreatureData;
 using Random = UnityEngine.Random;
-using SkillData = Nighthollow.Model.SkillData;
-using SkillTypeData = Nighthollow.Model.SkillTypeData;
 
 #nullable enable
 
@@ -54,13 +52,14 @@ namespace Nighthollow.Components
     static readonly int Hit = Animator.StringToHash("Hit");
     static readonly int SkillSpeed = Animator.StringToHash("SkillSpeedMultiplier");
 
-    [Header("Config")] [SerializeField] bool _debugMode;
+    [Header("Config")]
     [SerializeField] Transform _projectileSource = null!;
     [SerializeField] AttachmentDisplay _attachmentDisplay = null!;
     [SerializeField] Transform _healthbarAnchor = null!;
     [SerializeField] float _animationSpeedMultiplier;
 
-    [Header("State")] [SerializeField] bool _initialized;
+    [Header("State")]
+    [SerializeField] bool _initialized;
     [SerializeField] int _damageTaken;
     [SerializeField] CreatureState _state;
     [SerializeField] RankValue? _rankPosition;
@@ -102,17 +101,6 @@ namespace Nighthollow.Components
       set => _animator.speed = value ? 0 : 1;
     }
 
-    void Start()
-    {
-      if (!_initialized && _debugMode)
-      {
-        Initialize(_data.Clone(Root.Instance.StatsForPlayer(Owner)));
-        _creatureService.AddUserCreatureAtPosition(this,
-          BoardPositions.ClosestRankForXPosition(transform.position.x),
-          BoardPositions.ClosestFileForYPosition(transform.position.y));
-      }
-    }
-
     void Update()
     {
       if (_state == CreatureState.Dying)
@@ -149,7 +137,7 @@ namespace Nighthollow.Components
         Root.Instance.Enemy.OnEnemyCreatureAtEndzone(this);
       }
 
-      var health = _data.GetInt(OldStat.Health);
+      var health = _data.GetInt(Stat.Health);
       if (health > 0)
       {
         _statusBars.HealthBar.Value = (health - _damageTaken) / (float) health;
@@ -160,14 +148,14 @@ namespace Nighthollow.Components
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
 
-      var speedMultiplier = _data.Stats.Get(OldStat.SkillSpeedMultiplier).AsMultiplier();
+      var speedMultiplier = _data.Stats.Get(Stat.SkillSpeedMultiplier).AsMultiplier();
       Errors.CheckState(speedMultiplier > 0.05f, "Skill speed must be > 5%");
       _animator.SetFloat(SkillSpeed, speedMultiplier);
 
       if (_state == CreatureState.Moving)
       {
         _animator.SetBool(Moving, value: true);
-        transform.Translate(Vector3.right * (Time.deltaTime * (_data.GetInt(OldStat.CreatureSpeed) / 1000f)));
+        transform.Translate(Vector3.right * (Time.deltaTime * (_data.GetInt(Stat.CreatureSpeed) / 1000f)));
       }
       else
       {
@@ -274,15 +262,16 @@ namespace Nighthollow.Components
 
     SkillAnimationNumber SelectAnimation(SkillData skill)
     {
-      var choices = Data.BaseType.SkillAnimations.Where(a => a.Type == skill.BaseType.SkillAnimationType).ToList();
+      var choices = Data.BaseType.SkillAnimations
+        .Where(a => a.SkillAnimationType == skill.BaseType.SkillAnimationType).ToList();
       Errors.CheckState(choices.Count > 0,
         $"Creature is unable to perform animation of type {skill.BaseType.SkillAnimationType}");
-      return choices[Random.Range(minInclusive: 0, choices.Count)].Number;
+      return choices[Random.Range(minInclusive: 0, choices.Count)].SkillAnimationNumber;
     }
 
     void ToDefaultState()
     {
-      SetState(_data.GetInt(OldStat.CreatureSpeed) > 0 ? CreatureState.Moving : CreatureState.Idle);
+      SetState(_data.GetInt(Stat.CreatureSpeed) > 0 ? CreatureState.Moving : CreatureState.Idle);
     }
 
     void Kill()
@@ -327,7 +316,7 @@ namespace Nighthollow.Components
     public void AddDamage(Creature appliedBy, int damage)
     {
       Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
-      var health = _data.GetInt(OldStat.Health);
+      var health = _data.GetInt(Stat.Health);
       _damageTaken = Mathf.Clamp(value: 0, _damageTaken + damage, health);
       if (_damageTaken >= health)
       {
@@ -339,7 +328,7 @@ namespace Nighthollow.Components
     public void Heal(int healing)
     {
       Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
-      var health = _data.GetInt(OldStat.Health);
+      var health = _data.GetInt(Stat.Health);
       _damageTaken = Mathf.Clamp(value: 0, _damageTaken - healing, health);
     }
 
@@ -396,21 +385,21 @@ namespace Nighthollow.Components
 
     public void MarkSkillUsed(SkillTypeData skill)
     {
-      _skillLastUsedTimes[skill.Id] = Time.time;
+      // _skillLastUsedTimes[skill.Id] = Time.time;
     }
 
     /// <summary>
     ///   Returns the timestamp at which the provided skill was last used by this creature, or 0 if it has never been used
     /// </summary>
-    public float? TimeLastUsedSeconds(SkillTypeData skill) =>
-      _skillLastUsedTimes.ContainsKey(skill.Id) ? (float?) _skillLastUsedTimes[skill.Id] : null;
+    public float? TimeLastUsedSeconds(SkillTypeData skill) => 0;
+      // _skillLastUsedTimes.ContainsKey(skill.Id) ? (float?) _skillLastUsedTimes[skill.Id] : null;
 
     IEnumerator<YieldInstruction> RunCoroutine()
     {
       while (true)
       {
         yield return new WaitForSeconds(seconds: 1);
-        Heal(_data.GetInt(OldStat.HealthRegenerationPerSecond));
+        Heal(_data.GetInt(Stat.HealthRegenerationPerSecond));
       }
 
       // ReSharper disable once IteratorNeverReturns

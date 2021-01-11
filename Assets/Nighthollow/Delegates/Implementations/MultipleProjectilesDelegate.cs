@@ -15,10 +15,9 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
+
 using Nighthollow.Stats2;
 using UnityEngine;
-using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -29,9 +28,6 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"Fires {provider.Get(Stat.ProjectileSequenceCount)} Projectiles in Sequence";
 
-    public override string DescribeOld(StatEntity entity) =>
-      $"Fires {entity.GetInt(OldStat.ProjectileSequenceCount)} Projectiles in Sequence";
-
     public override void OnFiredProjectile(SkillContext c, FireProjectileEffect effect)
     {
       if (effect.DelegateIndex <= c.DelegateIndex)
@@ -41,7 +37,7 @@ namespace Nighthollow.Delegates.Implementations
       }
 
       // 1 less projectile since we already fired one
-      for (var i = 1; i < c.GetInt(OldStat.ProjectileSequenceCount); ++i)
+      for (var i = 1; i < c.GetInt(Stat.ProjectileSequenceCount); ++i)
       {
         c.Results.Add(new FireProjectileEffect(
           c.Self,
@@ -49,7 +45,7 @@ namespace Nighthollow.Delegates.Implementations
           c.DelegateIndex,
           c.Self.ProjectileSource.position,
           Vector2.zero,
-          firingDelayMs: i * c.GetStat(OldStat.ProjectileSequenceDelay).AsMilliseconds()));
+          firingDelayMs: i * c.Get(Stat.ProjectileSequenceDelay).AsMilliseconds()));
       }
     }
   }

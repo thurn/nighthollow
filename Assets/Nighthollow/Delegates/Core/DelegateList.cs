@@ -14,12 +14,12 @@
 
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 using UnityEngine;
-using SkillData = Nighthollow.Model.SkillData;
 
 #nullable enable
 
@@ -89,23 +89,23 @@ namespace Nighthollow.Delegates.Core
     public bool RollForCrit(SkillContext context, Creature target) =>
       GetFirstImplemented(context, (d, c) => d.RollForCrit(c, target));
 
-    public TaggedValues<DamageType, int> RollForBaseDamage(SkillContext context, Creature target) =>
+    public ImmutableDictionary<DamageType, int> RollForBaseDamage(SkillContext context, Creature target) =>
       GetFirstImplemented(context, (d, c) => d.RollForBaseDamage(c, target));
 
-    public TaggedValues<DamageType, int> TransformDamage(
-      SkillContext context, Creature target, TaggedValues<DamageType, int> damage) =>
+    public ImmutableDictionary<DamageType, int> TransformDamage(
+      SkillContext context, Creature target, ImmutableDictionary<DamageType, int> damage) =>
       AggregateDelegates(context, damage, (d, c, value) => d.TransformDamage(c, target, value));
 
-    public TaggedValues<DamageType, int> ApplyDamageReduction(
-      SkillContext context, Creature target, TaggedValues<DamageType, int> damage) =>
+    public ImmutableDictionary<DamageType, int> ApplyDamageReduction(
+      SkillContext context, Creature target, ImmutableDictionary<DamageType, int> damage) =>
       GetFirstImplemented(context, (d, c) => d.ApplyDamageReduction(c, target, damage));
 
-    public TaggedValues<DamageType, int> ApplyDamageResistance(
-      SkillContext context, Creature target, TaggedValues<DamageType, int> damage) =>
+    public ImmutableDictionary<DamageType, int> ApplyDamageResistance(
+      SkillContext context, Creature target, ImmutableDictionary<DamageType, int> damage) =>
       GetFirstImplemented(context, (d, c) => d.ApplyDamageResistance(c, target, damage));
 
     public int ComputeFinalDamage(
-      SkillContext context, Creature target, TaggedValues<DamageType, int> damage, bool isCriticalHit) =>
+      SkillContext context, Creature target, ImmutableDictionary<DamageType, int> damage, bool isCriticalHit) =>
       GetFirstImplemented(context, (d, c) => d.ComputeFinalDamage(c, target, damage, isCriticalHit));
 
     public int ComputeHealthDrain(

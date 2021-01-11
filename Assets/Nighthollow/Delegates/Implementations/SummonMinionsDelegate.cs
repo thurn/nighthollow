@@ -15,9 +15,9 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Services;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -27,24 +27,22 @@ namespace Nighthollow.Delegates.Implementations
   public sealed class SummonMinionsDelegate : AbstractDelegate
   {
     public override string Describe(IStatDescriptionProvider provider) => "Summons Minions";
-
-    public override string DescribeOld(StatEntity entity) => $"Summons Minions";
-
+    
     public override void OnUse(SkillContext c)
     {
-      var rank = Root.Instance.CreatureService.GetOpenForwardRank(
-        Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition);
-
-      if (rank.HasValue)
-      {
-        var summons = Database.Instance.GameData.GetStaticCardList(StaticCardList.Summons);
-        Errors.CheckState(summons.Count == 1, "Expected only one summon creature");
-        c.Results.Add(new CreateCreatureEffect(
-          summons[index: 0],
-          rank.Value,
-          c.Self.FilePosition,
-          isMoving: true));
-      }
+      // var rank = Root.Instance.CreatureService.GetOpenForwardRank(
+      //   Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition);
+      //
+      // if (rank.HasValue)
+      // {
+      //   var summons = Database.Instance.GameData.GetStaticCardList(StaticCardList.Summons);
+      //   Errors.CheckState(summons.Count == 1, "Expected only one summon creature");
+      //   c.Results.Add(new CreateCreatureEffect(
+      //     summons[index: 0],
+      //     rank.Value,
+      //     c.Self.FilePosition,
+      //     isMoving: true));
+      // }
     }
   }
 }

@@ -15,18 +15,17 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using Nighthollow.Data;
-using Nighthollow.Generated;
+
 using Nighthollow.Interface;
 using Nighthollow.Items;
-using Nighthollow.Model;
+using Nighthollow.Data;
+using Nighthollow.Stats2;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using CreatureData = Nighthollow.Model.CreatureData;
-using Database = Nighthollow.Services.Database;
 
 #nullable enable
 
@@ -35,7 +34,7 @@ namespace Nighthollow.Components
   public sealed class Card : MonoBehaviour,
     IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
   {
-    [Header("Config")] [SerializeField] bool _debugMode;
+    [Header("Config")]
     [SerializeField] float _debugCardScale = 0.65f;
     [SerializeField] RectTransform _cardBack = null!;
     [SerializeField] RectTransform _cardFront = null!;
@@ -62,14 +61,6 @@ namespace Nighthollow.Components
 
     void Start()
     {
-      if (!_initialized && _debugMode)
-      {
-        _cardBack.gameObject.SetActive(value: true);
-        _cardFront.gameObject.SetActive(value: false);
-        Initialize(_data.Clone(_user.Data.Stats));
-        transform.localScale = Vector2.one * _debugCardScale;
-      }
-
       Errors.CheckNotNull(_cardBack);
       Errors.CheckNotNull(_cardFront);
       Errors.CheckNotNull(_cardImage);
@@ -78,18 +69,18 @@ namespace Nighthollow.Components
     void Update()
     {
       Errors.CheckNotNull(_data);
-      _cardImage.sprite = Database.Instance.Assets.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
+      // _cardImage.sprite = Database.Instance.Assets.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
 
-      var manaCost = _data.GetInt(OldStat.ManaCost);
-      var influenceCost = _data.Stats.Get(OldStat.InfluenceCost);
+      var manaCost = _data.GetInt(Stat.ManaCost);
+      var influenceCost = _data.Stats.Get(Stat.InfluenceCost);
       _canPlay = manaCost <= _user.Mana &&
-                 Influence.LessThanOrEqualTo(influenceCost, _user.Data.Stats.Get(OldStat.Influence));
+                 InfluenceUtil.LessThanOrEqualTo(influenceCost, _user.Data.Stats.Get(Stat.Influence));
 
       _outline.enabled = _canPlay;
       _cost.text = manaCost.ToString();
 
       var addIndex = 0;
-      foreach (var pair in influenceCost.Values)
+      foreach (var pair in influenceCost)
       {
         AddInfluence(pair.Key, pair.Value, ref addIndex);
       }
@@ -160,7 +151,8 @@ namespace Nighthollow.Components
     {
       if (_previewMode)
       {
-        var tooltip = TooltipUtil.CreateCreatureTooltip(Database.Instance.UserData.Stats, _data.Item);
+        // var tooltip = TooltipUtil.CreateCreatureTooltip(Database.Instance.UserData.Stats, _data.Item);
+        TooltipBuilder tooltip = null!;
         tooltip.XOffset = 64;
         Root.Instance.ScreenController.ShowTooltip(
           tooltip,
@@ -199,7 +191,7 @@ namespace Nighthollow.Components
     public void OnPlayed()
     {
       _user.Hand.RemoveFromHand(this);
-      _user.SpendMana(_data.GetInt(OldStat.ManaCost));
+      _user.SpendMana(_data.GetInt(Stat.ManaCost));
       Destroy(gameObject);
     }
 

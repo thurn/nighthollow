@@ -12,25 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+
+using System.Collections.Immutable;
+using System.Linq;
+using Nighthollow.Utils;
 
 #nullable enable
 
-namespace Nighthollow.Model
+namespace Nighthollow.Data
 {
-  public sealed class ResourceItemDataOld : IItemDataOld
+  public static class InfluenceUtil
   {
-    public string Name { get; }
-    public string ImageAddress { get; }
-    public string Description { get; }
-
-    public ResourceItemDataOld(string name, string imageAddress, string description)
+    public static bool LessThanOrEqualTo(ImmutableDictionary<School, int> a, ImmutableDictionary<School, int> b)
     {
-      Name = name;
-      ImageAddress = imageAddress;
-      Description = description;
+      return a.All(pair => pair.Value <= b.GetOrReturnDefault(pair.Key, 0));
     }
-
-    public T Switch<T>(Func<CreatureItemData, T> onCreature, Func<ResourceItemDataOld, T> onResource) => onResource(this);
   }
 }

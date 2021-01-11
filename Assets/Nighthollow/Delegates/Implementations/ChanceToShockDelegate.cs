@@ -15,11 +15,10 @@
 
 using Nighthollow.Components;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Generated;
-using Nighthollow.Stats;
+
+using Nighthollow.Stats2;
 using Nighthollow.Stats2;
 using UnityEngine;
-using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -30,21 +29,19 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"{provider.Get(Stat.ShockChance)} Chance to Shock";
 
-    public override string DescribeOld(StatEntity entity) => $"{entity.GetStat(OldStat.ShockChance)} Chance to Shock";
-
     public override void OnApplyToTarget(SkillContext c, Creature target)
     {
-      if (Random.value > c.GetStat(OldStat.ShockChance).AsMultiplier())
-      {
-        return;
-      }
-
-      var lifetime = new TimedLifetime(c.GetDurationMilliseconds(OldStat.ShockDuration));
-      target.Data.Stats.InsertModifier(OldStat.IsShocked, new BooleanOperation(setBoolean: true), lifetime);
-      target.Data.Stats.InsertModifier(
-        OldStat.ReceiveCritsChance,
-        NumericOperation.Add(c.GetStat(OldStat.ShockAddedReceiveCritsChance)),
-        lifetime);
+      // if (Random.value > c.Get(OldStat.ShockChance).AsMultiplier())
+      // {
+      //   return;
+      // }
+      //
+      // var lifetime = new TimedLifetime(c.GetDurationMilliseconds(OldStat.ShockDuration));
+      // target.Data.Stats.InsertModifier(OldStat.IsShocked, new BooleanOperation(setBoolean: true), lifetime);
+      // target.Data.Stats.InsertModifier(
+      //   OldStat.ReceiveCritsChance,
+      //   NumericOperation.Add(c.GetStat(OldStat.ShockAddedReceiveCritsChance)),
+      //   lifetime);
     }
   }
 }

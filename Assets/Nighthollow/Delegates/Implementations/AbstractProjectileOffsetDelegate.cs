@@ -16,7 +16,7 @@
 using System.Linq;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Utils;
 using UnityEngine;
 

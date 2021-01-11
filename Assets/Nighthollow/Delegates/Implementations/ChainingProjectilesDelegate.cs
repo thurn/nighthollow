@@ -17,12 +17,11 @@ using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
+
 using Nighthollow.State;
 using Nighthollow.Stats2;
 using Nighthollow.Utils;
 using UnityEngine;
-using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -32,9 +31,6 @@ namespace Nighthollow.Delegates.Implementations
   {
     public override string Describe(IStatDescriptionProvider provider) =>
       $"Projectiles Chain {provider.Get(Stat.ProjectileChainCount)} Times on Hit";
-
-    public override string DescribeOld(StatEntity entity) =>
-      $"Projectiles Chain {entity.GetInt(OldStat.ProjectileChainCount)} Times on Hit";
 
     public override bool ShouldSkipProjectileImpact(SkillContext c)
     {
@@ -50,11 +46,11 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
-      Errors.CheckPositive(c.GetInt(OldStat.ProjectileChainCount));
-      if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) < c.GetInt(OldStat.MaxProjectileTimesChained))
+      Errors.CheckPositive(c.GetInt(Stat.ProjectileChainCount));
+      if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) < c.GetInt(Stat.MaxProjectileTimesChained))
       {
         // TODO: This works, but it probably shouldn't...
-        var chainCount = c.GetInt(OldStat.ProjectileChainCount);
+        var chainCount = c.GetInt(Stat.ProjectileChainCount);
         var add = chainCount % 2 == 0 ? 1f : 0f;
         for (var i = 0; i < chainCount; ++i)
         {

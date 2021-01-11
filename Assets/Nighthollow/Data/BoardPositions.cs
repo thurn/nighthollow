@@ -14,13 +14,12 @@
 
 
 using System.Collections.Generic;
-using Nighthollow.Data;
 using Nighthollow.Utils;
 using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Model
+namespace Nighthollow.Data
 {
   public static class BoardPositions
   {

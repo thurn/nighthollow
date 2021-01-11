@@ -69,10 +69,10 @@ namespace Nighthollow.Delegates.Effects
     IEnumerator<YieldInstruction> FireAsync()
     {
       yield return new WaitForSeconds(FiringDelayMs / 1000f);
-      var projectile = Database.Instance.Assets.InstantiatePrefab<Projectile>(
-        Errors.CheckNotNull(SkillContext.Skill.BaseType.Address));
-      projectile.Values.OverwriteWithValues(Values);
-      projectile.Initialize(FiredBy, SkillContext.Skill, this);
+      // var projectile = Database.Instance.Assets.InstantiatePrefab<Projectile>(
+      //   Errors.CheckNotNull(SkillContext.Skill.BaseType.Address));
+      // projectile.Values.OverwriteWithValues(Values);
+      // projectile.Initialize(FiredBy, SkillContext.Skill, this);
     }
   }
 }

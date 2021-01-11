@@ -31,22 +31,21 @@ namespace Nighthollow.World
     public static readonly Vector2Int StartingHex = new Vector2Int(x: -12, y: 7);
     public static readonly Vector2Int TutorialAttackHex = new Vector2Int(x: -11, y: 7);
 
-    public void Initialize()
-    {
-      Database.OnReady(data =>
-      {
-        if (data.UserData.TutorialState == UserDataService.Tutorial.Starting)
-        {
-          _screenController.ShowDialog("ocerak", IntroText);
-          _worldMap.ShowIcon(TutorialAttackHex, _fightIcon);
-          data.UserData.TutorialState = UserDataService.Tutorial.InitialWorldScreen;
-        }
-      });
-    }
-#pragma warning disable 0649
     [SerializeField] WorldMap _worldMap = null!;
     [SerializeField] ScreenController _screenController = null!;
     [SerializeField] Tile _fightIcon = null!;
-#pragma warning restore 0649
+
+    public void Initialize()
+    {
+      // Database.OnReady(data =>
+      // {
+      //   if (data.UserData.TutorialState == UserDataService.Tutorial.Starting)
+      //   {
+      //     _screenController.ShowDialog("ocerak", IntroText);
+      //     _worldMap.ShowIcon(TutorialAttackHex, _fightIcon);
+      //     data.UserData.TutorialState = UserDataService.Tutorial.InitialWorldScreen;
+      //   }
+      // });
+    }
   }
 }

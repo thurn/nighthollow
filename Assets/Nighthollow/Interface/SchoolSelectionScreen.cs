@@ -20,7 +20,6 @@ using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using Database = Nighthollow.Services.Database;
 
 #nullable enable
 
@@ -93,7 +92,7 @@ namespace Nighthollow.Interface
 
       _confirmButton.RegisterCallback<ClickEvent>(e =>
       {
-        Database.Instance.UserData.TutorialState = UserDataService.Tutorial.Starting;
+        // Database.Instance.UserData.TutorialState = UserDataService.Tutorial.Starting;
         Runner.Instance.StartCoroutine(ShowDialog());
       });
 

@@ -18,9 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Data;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using UnityEngine;
-using CreatureData = Nighthollow.Model.CreatureData;
 
 #nullable enable
 
@@ -40,7 +39,8 @@ namespace Nighthollow.Services
 
     public Creature CreateUserCreature(CreatureData creatureData)
     {
-      var result = Database.Instance.Assets.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      // var result = Database.Instance.Assets.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      Creature result = null!;
       result.Initialize(creatureData);
       return result;
     }
@@ -50,7 +50,9 @@ namespace Nighthollow.Services
       FileValue file,
       float startingX)
     {
-      var result = Database.Instance.Assets.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      // var result = Database.Instance.Assets.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      Creature result = null!;
+
       result.Initialize(creatureData);
       result.ActivateCreature(rankValue: null, file, startingX);
       _movingCreatures.Add(result);

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -30,9 +30,9 @@ namespace Nighthollow.Interface
       Large
     }
 
-    IItemDataOld? _item;
+    IItemData? _item;
 
-    public IItemDataOld? Item => _item;
+    public IItemData? Item => _item;
     Image? _nullStateImage;
 
     public new sealed class UxmlFactory : UxmlFactory<ItemSlot, UxmlTraits>
@@ -57,7 +57,7 @@ namespace Nighthollow.Interface
         Add(_nullStateImage);
       }
 
-      _nullStateImage.sprite = Database.Instance.Assets.GetImage(address);
+      // _nullStateImage.sprite = Database.Instance.Assets.GetImage(address);
     }
 
     public void ClearNullStateImage()
@@ -69,7 +69,7 @@ namespace Nighthollow.Interface
       }
     }
 
-    public void SetItem(ScreenController controller, IItemDataOld item, bool shouldAddTooltip = true)
+    public void SetItem(ScreenController controller, IItemData item, bool shouldAddTooltip = true)
     {
       _item = item;
       Add(new ItemImage(controller, this, item, shouldAddTooltip));

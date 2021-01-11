@@ -59,21 +59,21 @@ namespace Nighthollow.Interface
 
     protected override void Render()
     {
-      ItemRenderer.AddItems(
-        Controller,
-        _collection,
-        Database.Instance.UserData.Collection,
-        new ItemRenderer.Config(count: 20));
-      ItemRenderer.AddItems(
-        Controller,
-        _mainDeck,
-        Database.Instance.UserData.Deck.Where(i => !i.BaseType.IsManaCreature).ToList(),
-        new ItemRenderer.Config(count: 9));
-      ItemRenderer.AddItems(
-        Controller,
-        _manaDeck,
-        Database.Instance.UserData.Deck.Where(i => i.BaseType.IsManaCreature).ToList(),
-        new ItemRenderer.Config(count: 6, ItemSlot.Size.Small));
+      // ItemRenderer.AddItems(
+      //   Controller,
+      //   _collection,
+      //   Database.Instance.UserData.Collection,
+      //   new ItemRenderer.Config(count: 20));
+      // ItemRenderer.AddItems(
+      //   Controller,
+      //   _mainDeck,
+      //   Database.Instance.UserData.Deck.Where(i => !i.BaseType.IsManaCreature).ToList(),
+      //   new ItemRenderer.Config(count: 9));
+      // ItemRenderer.AddItems(
+      //   Controller,
+      //   _manaDeck,
+      //   Database.Instance.UserData.Deck.Where(i => i.BaseType.IsManaCreature).ToList(),
+      //   new ItemRenderer.Config(count: 6, ItemSlot.Size.Small));
     }
   }
 }

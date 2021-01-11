@@ -15,7 +15,7 @@
 
 using DG.Tweening;
 using Nighthollow.Components;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Utils;
 using UnityEngine;
 

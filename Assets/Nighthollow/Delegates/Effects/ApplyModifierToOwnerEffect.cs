@@ -17,7 +17,7 @@ using System;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Services;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 
 #nullable enable
 

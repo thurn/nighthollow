@@ -18,12 +18,10 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-using Nighthollow.Model;
-using Nighthollow.Stats;
+using Nighthollow.Data;
+using Nighthollow.Stats2;
 using Nighthollow.Utils;
 using UnityEngine;
-using SkillData = Nighthollow.Model.SkillData;
 
 #nullable enable
 
@@ -32,8 +30,6 @@ namespace Nighthollow.Delegates.Implementations
   public sealed class DefaultCreatureDelegate : AbstractDelegate
   {
     public override string Describe(IStatDescriptionProvider provider) => "Default Creature Delegate";
-
-    public override string DescribeOld(StatEntity entity) => "Default Creature Delegate";
 
     public override void OnDeath(CreatureContext c)
     {
@@ -77,14 +73,14 @@ namespace Nighthollow.Delegates.Implementations
         return null;
       }
 
-      var maxCooldown = available.Max(s => s.GetDurationSeconds(OldStat.Cooldown));
-      return available.FirstOrDefault(s => s.GetDurationSeconds(OldStat.Cooldown) >= maxCooldown);
+      var maxCooldown = available.Max(s => s.GetDurationSeconds(Stat.Cooldown));
+      return available.FirstOrDefault(s => s.GetDurationSeconds(Stat.Cooldown) >= maxCooldown);
     }
 
     static bool CooldownAvailable(CreatureContext c, SkillData skill)
     {
       var lastUsed = c.Self.TimeLastUsedSeconds(skill.BaseType);
-      return !lastUsed.HasValue || skill.GetDurationSeconds(OldStat.Cooldown) <= Time.time - lastUsed.Value;
+      return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
     public override bool MeleeCouldHit(CreatureContext c) =>

@@ -15,8 +15,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Model;
-using Nighthollow.Stats;
+using Nighthollow.Data;
+using Nighthollow.Stats2;
 using Nighthollow.Utils;
 using SimpleJSON;
 
@@ -24,33 +24,33 @@ using SimpleJSON;
 
 namespace Nighthollow.Services
 {
-  public sealed class GameConfig
-  {
-    public GameConfig(GameDataService gameDataService, JSONNode? json = null)
-    {
-      if (json == null)
-      {
-        Enemies = gameDataService.GetStaticCardList(StaticCardList.TutorialEnemy).ToList();
-        EnemyStats = new StatTable(StatTable.Defaults);
-      }
-      else
-      {
-        Enemies = json["enemies"].FromJsonArray()
-          .Select(c => CreatureItemData.Deserialize(gameDataService, c)).ToList();
-        EnemyStats = StatTable.Deserialize(json["enemyStats"], StatTable.Defaults);
-      }
-    }
-
-    public IReadOnlyList<CreatureItemData> Enemies { get; }
-    public StatTable EnemyStats { get; }
-
-    public JSONNode Serialize()
-    {
-      return new JSONObject
-      {
-        ["enemies"] = Enemies.Select(c => c.Serialize()).AsJsonArray(),
-        ["enemyStats"] = EnemyStats.Serialize()
-      };
-    }
-  }
+  // public sealed class GameConfig
+  // {
+  //   public GameConfig(GameDataService gameDataService, JSONNode? json = null)
+  //   {
+  //     if (json == null)
+  //     {
+  //       Enemies = gameDataService.GetStaticCardList(StaticCardList.TutorialEnemy).ToList();
+  //       EnemyStats = new StatTable(StatTable.Defaults);
+  //     }
+  //     else
+  //     {
+  //       Enemies = json["enemies"].FromJsonArray()
+  //         .Select(c => CreatureItemData.Deserialize(gameDataService, c)).ToList();
+  //       EnemyStats = StatTable.Deserialize(json["enemyStats"], StatTable.Defaults);
+  //     }
+  //   }
+  //
+  //   public IReadOnlyList<CreatureItemData> Enemies { get; }
+  //   public StatTable EnemyStats { get; }
+  //
+  //   public JSONNode Serialize()
+  //   {
+  //     return new JSONObject
+  //     {
+  //       ["enemies"] = Enemies.Select(c => c.Serialize()).AsJsonArray(),
+  //       ["enemyStats"] = EnemyStats.Serialize()
+  //     };
+  //   }
+  // }
 }

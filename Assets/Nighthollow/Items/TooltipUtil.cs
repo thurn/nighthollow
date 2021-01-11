@@ -15,12 +15,9 @@
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
-using Nighthollow.Generated;
-using Nighthollow.Model;
-using Nighthollow.Stats;
+using Nighthollow.Data;
+using Nighthollow.Stats2;
 using Nighthollow.Utils;
-using AffixData = Nighthollow.Model.AffixData;
-using CreatureItemData = Nighthollow.Model.CreatureItemData;
 
 #nullable enable
 
@@ -28,12 +25,12 @@ namespace Nighthollow.Items
 {
   public static class TooltipUtil
   {
-    public static TooltipBuilder CreateTooltip(StatTable ownerStats, IItemDataOld item) =>
+    public static TooltipBuilder CreateTooltip(StatTable ownerStats, IItemData item) =>
       item.Switch(
         creature => CreateCreatureTooltip(ownerStats, creature),
         CreateResourceTooltip);
 
-    public static TooltipBuilder CreateResourceTooltip(ResourceItemDataOld data)
+    public static TooltipBuilder CreateResourceTooltip(ResourceItemData data)
     {
       var builder = new TooltipBuilder(data.Name);
       builder.AppendText(data.Description);
@@ -43,57 +40,58 @@ namespace Nighthollow.Items
     public static TooltipBuilder CreateCreatureTooltip(StatTable ownerStats, CreatureItemData data)
     {
       var builder = new TooltipBuilder(data.Name);
-      var built = CreatureUtil.Build(ownerStats, data);
-      builder.AppendText($"Health: {built.GetInt(OldStat.Health)}");
+      // var built = CreatureUtil.Build(ownerStats, data);
+      CreatureData built = null!;
+      builder.AppendText($"Health: {built.GetInt(Stat.Health)}");
 
-      var baseDamage = built.Stats.Get(OldStat.BaseDamage);
+      var baseDamage = built.Stats.Get(Stat.BaseDamage);
       foreach (var damageType in CollectionUtils.AllNonDefaultEnumValues<DamageType>(typeof(DamageType)))
       {
-        var range = baseDamage.Get(damageType, IntRangeValue.Zero);
+        var range = baseDamage.GetOrReturnDefault(damageType, IntRangeValue.Zero);
         if (range != IntRangeValue.Zero)
         {
           builder.AppendText($"Base Attack: {range} {damageType} Damage");
         }
       }
 
-      if (built.GetInt(OldStat.Accuracy) != ownerStats.Get(OldStat.Accuracy))
+      if (built.GetInt(Stat.Accuracy) != ownerStats.Get(Stat.Accuracy))
       {
-        builder.AppendText($"Accuracy: {built.GetInt(OldStat.Accuracy)}");
+        builder.AppendText($"Accuracy: {built.GetInt(Stat.Accuracy)}");
       }
 
-      if (built.GetInt(OldStat.Evasion) != ownerStats.Get(OldStat.Evasion))
+      if (built.GetInt(Stat.Evasion) != ownerStats.Get(Stat.Evasion))
       {
-        builder.AppendText($"Evasion: {built.GetInt(OldStat.Evasion)}");
+        builder.AppendText($"Evasion: {built.GetInt(Stat.Evasion)}");
       }
 
-      if (built.GetStat(OldStat.CritChance) != ownerStats.Get(OldStat.CritChance))
+      if (built.Get(Stat.CritChance) != ownerStats.Get(Stat.CritChance))
       {
-        builder.AppendText($"Critical Hit Chance: {built.GetStat(OldStat.CritChance)}");
+        builder.AppendText($"Critical Hit Chance: {built.Get(Stat.CritChance)}");
       }
 
-      if (built.GetStat(OldStat.CritMultiplier) != ownerStats.Get(OldStat.CritMultiplier))
+      if (built.Get(Stat.CritMultiplier) != ownerStats.Get(Stat.CritMultiplier))
       {
-        builder.AppendText($"Critical Hit Multiplier: {built.GetStat(OldStat.CritMultiplier)}");
-      }
-
-      builder.AppendDivider();
-
-      foreach (var affix in data.Affixes.Where(affix => affix.BaseType.Id == data.BaseType.ImplicitAffix?.Id))
-      {
-        RenderAffix(builder, built, affix);
-      }
-
-      foreach (var skill in data.Skills.Where(skill => skill.BaseType.Id != 1))
-      {
-        builder.AppendText($"Skill: {skill.BaseType.Name}");
+        builder.AppendText($"Critical Hit Multiplier: {built.Get(Stat.CritMultiplier)}");
       }
 
       builder.AppendDivider();
 
-      foreach (var affix in data.Affixes.Where(affix => affix.BaseType.Id != data.BaseType.ImplicitAffix?.Id))
-      {
-        RenderAffix(builder, built, affix);
-      }
+      // foreach (var affix in data.Affixes.Where(affix => affix.BaseType.Id == data.BaseType.ImplicitAffix?.Id))
+      // {
+      //   RenderAffix(builder, built, affix);
+      // }
+      //
+      // foreach (var skill in data.Skills.Where(skill => skill.BaseType.Id != 1))
+      // {
+      //   builder.AppendText($"Skill: {skill.BaseType.Name}");
+      // }
+      //
+      // builder.AppendDivider();
+      //
+      // foreach (var affix in data.Affixes.Where(affix => affix.BaseType.Id != data.BaseType.ImplicitAffix?.Id))
+      // {
+      //   RenderAffix(builder, built, affix);
+      // }
 
       return builder;
     }
@@ -106,13 +104,13 @@ namespace Nighthollow.Items
       {
         if (modifier.DelegateId.HasValue)
         {
-          builder.AppendNullable(DelegateMap.Get(modifier.DelegateId.Value).DescribeOld(built));
+          // builder.AppendNullable(DelegateMap.Get(modifier.DelegateId.Value).Describe(built));
         }
 
-        if (modifier.StatModifier != null)
-        {
-          builder.AppendNullable(modifier.StatModifier.Describe());
-        }
+        // if (modifier.StatModifier != null)
+        // {
+        //   builder.AppendNullable(modifier.StatModifier.Describe());
+        // }
       }
     }
   }

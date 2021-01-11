@@ -18,13 +18,13 @@ using Nighthollow.Stats2;
 
 namespace Nighthollow.Data
 {
-  public sealed partial class UserData
+  public sealed partial class UserData : StatEntity
   {
     public UserData(StatTable stats)
     {
       Stats = stats;
     }
 
-    public StatTable Stats { get; }
+    public override StatTable Stats { get; }
   }
 }

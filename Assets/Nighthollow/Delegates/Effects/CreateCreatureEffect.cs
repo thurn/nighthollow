@@ -14,9 +14,8 @@
 
 
 using Nighthollow.Data;
-using Nighthollow.Model;
+using Nighthollow.Data;
 using Nighthollow.Services;
-using CreatureItemData = Nighthollow.Model.CreatureItemData;
 
 #nullable enable
 
@@ -39,7 +38,9 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute()
     {
-      var data = CreatureUtil.Build(Root.Instance.StatsForPlayer(Data.BaseType.Owner), Data);
+      // TODO
+      var data = Data.BuildCreature(null!, null!);
+      // var data = CreatureUtil.Build(Root.Instance.StatsForPlayer(Data.BaseType.Owner), Data);
       if (IsMoving)
       {
         Root.Instance.CreatureService.CreateMovingCreature(data, FilePosition, RankPosition.ToXPosition());

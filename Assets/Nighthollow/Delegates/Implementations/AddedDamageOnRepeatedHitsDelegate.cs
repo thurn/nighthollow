@@ -13,16 +13,16 @@
 // limitations under the License.
 
 
+using System.Collections.Immutable;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
-using Nighthollow.Model;
+
+using Nighthollow.Data;
 using Nighthollow.State;
-using Nighthollow.Stats;
 using Nighthollow.Stats2;
-using StatEntity = Nighthollow.Stats.StatEntity;
+using Nighthollow.Stats2;
 
 #nullable enable
 
@@ -33,37 +33,36 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"+{provider.Get(Stat.SameTargetAddedDamage)} Damage for Each Hit on the Same Target";
 
-    public override string DescribeOld(StatEntity entity) =>
-      $"+{entity.GetStat(OldStat.SameTargetAddedDamage)} Damage for Each Hit on the Same Target";
-
     public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
-      var lastHit = c.Skill.Values.Get(Key.LastCreatureHit);
-      if (lastHit && lastHit == target)
-      {
-        c.Results.Add(new MutateStateEffect(c.Skill, new IncrementIntegerMutation(Key.TimesHit)));
-      }
-      else
-      {
-        c.Results.Add(new MutateStateEffect(c.Skill, SetValueMutation.New(Key.LastCreatureHit, target)));
-        c.Results.Add(new MutateStateEffect(c.Skill, SetValueMutation.New(Key.TimesHit, newValue: 1)));
-      }
+      // var lastHit = c.Skill.Values.Get(Key.LastCreatureHit);
+      // if (lastHit && lastHit == target)
+      // {
+      //   c.Results.Add(new MutateStateEffect(c.Skill, new IncrementIntegerMutation(Key.TimesHit)));
+      // }
+      // else
+      // {
+      //   c.Results.Add(new MutateStateEffect(c.Skill, SetValueMutation.New(Key.LastCreatureHit, target)));
+      //   c.Results.Add(new MutateStateEffect(c.Skill, SetValueMutation.New(Key.TimesHit, newValue: 1)));
+      // }
     }
 
-    public override TaggedValues<DamageType, int> TransformDamage(
-      SkillContext c, Creature target, TaggedValues<DamageType, int> damage)
+    public override ImmutableDictionary<DamageType, int> TransformDamage(
+      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage)
     {
-      var lastHit = c.Skill.Values.Get(Key.LastCreatureHit);
-      if (lastHit && lastHit == target)
-      {
-        return DamageUtil.Add(damage, DamageUtil.Multiply(
-          c.Skill.Values.Get(Key.TimesHit),
-          DamageUtil.RollForDamage(c.Skill.Stats.Get(OldStat.SameTargetAddedDamage))));
-      }
-      else
-      {
-        return damage;
-      }
+      return damage;
+
+      // var lastHit = c.Skill.Values.Get(Key.LastCreatureHit);
+      // if (lastHit && lastHit == target)
+      // {
+      //   return DamageUtil.Add(damage, DamageUtil.Multiply(
+      //     c.Skill.Values.Get(Key.TimesHit),
+      //     DamageUtil.RollForDamage(c.Skill.Stats.Get(OldStat.SameTargetAddedDamage))));
+      // }
+      // else
+      // {
+      //   return damage;
+      // }
     }
   }
 }

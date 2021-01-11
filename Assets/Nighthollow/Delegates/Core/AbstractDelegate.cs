@@ -14,12 +14,12 @@
 
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Stats;
+using Nighthollow.Stats2;
 using UnityEngine;
-using SkillData = Nighthollow.Model.SkillData;
 
 #nullable enable
 
@@ -28,8 +28,6 @@ namespace Nighthollow.Delegates.Core
   public abstract class AbstractDelegate : IDelegate
   {
     public virtual string? Describe(IStatDescriptionProvider provider) => "<Delegate>";
-
-    public abstract string? DescribeOld(StatEntity entity);
 
     public virtual void OnActivate(CreatureContext c)
     {
@@ -86,23 +84,23 @@ namespace Nighthollow.Delegates.Core
 
     public virtual bool RollForCrit(SkillContext c, Creature target) => c.MarkNotImplemented<bool>();
 
-    public virtual TaggedValues<DamageType, int> RollForBaseDamage(SkillContext c, Creature target) =>
-      c.MarkNotImplemented<TaggedValues<DamageType, int>>();
+    public virtual ImmutableDictionary<DamageType, int> RollForBaseDamage(SkillContext c, Creature target) =>
+      c.MarkNotImplemented<ImmutableDictionary<DamageType, int>>();
 
-    public virtual TaggedValues<DamageType, int> TransformDamage(
-      SkillContext c, Creature target, TaggedValues<DamageType, int> damage) =>
-      c.MarkNotImplemented<TaggedValues<DamageType, int>>();
+    public virtual ImmutableDictionary<DamageType, int> TransformDamage(
+      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage) =>
+      c.MarkNotImplemented<ImmutableDictionary<DamageType, int>>();
 
-    public virtual TaggedValues<DamageType, int> ApplyDamageReduction(
-      SkillContext c, Creature target, TaggedValues<DamageType, int> damage) =>
-      c.MarkNotImplemented<TaggedValues<DamageType, int>>();
+    public virtual ImmutableDictionary<DamageType, int> ApplyDamageReduction(
+      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage) =>
+      c.MarkNotImplemented<ImmutableDictionary<DamageType, int>>();
 
-    public virtual TaggedValues<DamageType, int> ApplyDamageResistance(
-      SkillContext c, Creature target, TaggedValues<DamageType, int> damage) =>
-      c.MarkNotImplemented<TaggedValues<DamageType, int>>();
+    public virtual ImmutableDictionary<DamageType, int> ApplyDamageResistance(
+      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage) =>
+      c.MarkNotImplemented<ImmutableDictionary<DamageType, int>>();
 
     public virtual int ComputeFinalDamage(
-      SkillContext c, Creature target, TaggedValues<DamageType, int> damage, bool isCriticalHit) =>
+      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage, bool isCriticalHit) =>
       c.MarkNotImplemented<int>();
 
     public virtual int ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount) =>

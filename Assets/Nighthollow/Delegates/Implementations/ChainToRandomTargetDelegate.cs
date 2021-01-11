@@ -17,12 +17,11 @@ using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Generated;
+
 using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Stats2;
 using UnityEngine;
-using StatEntity = Nighthollow.Stats.StatEntity;
 
 #nullable enable
 
@@ -32,9 +31,6 @@ namespace Nighthollow.Delegates.Implementations
   {
     public override string Describe(IStatDescriptionProvider provider) =>
       $"Projectiles Chain {provider.Get(Stat.MaxProjectileTimesChained)} Times to Random Targets";
-
-    public override string DescribeOld(StatEntity entity) =>
-      $"Projectiles Chain {entity.GetInt(OldStat.MaxProjectileTimesChained)} Times to Random Targets";
 
     public override bool ShouldSkipProjectileImpact(SkillContext c)
     {
@@ -50,7 +46,7 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
-      if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) < c.GetInt(OldStat.MaxProjectileTimesChained))
+      if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) < c.GetInt(Stat.MaxProjectileTimesChained))
       {
         var enemies = Root.Instance.CreatureService.EnemyCreatures()
           .Except(c.Projectile.Values.Get(Key.SkipProjectileImpacts))

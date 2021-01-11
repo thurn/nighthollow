@@ -14,8 +14,8 @@
 
 
 using Nighthollow.Components;
-using Nighthollow.Model;
-using Nighthollow.Stats;
+using Nighthollow.Data;
+using Nighthollow.Stats2;
 
 #nullable enable
 

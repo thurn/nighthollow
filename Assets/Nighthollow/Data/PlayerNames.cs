@@ -12,20 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using System.Linq;
 using Nighthollow.Data;
-using Nighthollow.Stats;
+using Nighthollow.Utils;
 
 #nullable enable
 
-namespace Nighthollow.Model
+namespace Nighthollow.Data
 {
-  public static class Influence
+  public static class PlayerNames
   {
-    public static bool LessThanOrEqualTo(TaggedValues<School, int> a, TaggedValues<School, int> b)
+    public static PlayerName GetOpponent(this PlayerName playerName)
     {
-      return a.Values.All(pair => pair.Value <= b.Get(pair.Key, notFound: 0));
+      switch (playerName)
+      {
+        case PlayerName.User: return PlayerName.Enemy;
+        case PlayerName.Enemy: return PlayerName.User;
+        default: throw Errors.UnknownEnumValue(playerName);
+      }
     }
   }
 }

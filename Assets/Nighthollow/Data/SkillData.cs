@@ -22,7 +22,7 @@ namespace Nighthollow.Data
   public sealed partial class SkillData : StatEntity
   {
     public SkillData(
-      IDelegate @delegate,
+      DelegateList @delegate,
       StatTable stats,
       SkillTypeData baseType,
       SkillItemData itemData)
@@ -33,9 +33,13 @@ namespace Nighthollow.Data
       ItemData = itemData;
     }
 
-    [Field] public IDelegate Delegate { get; }
+    [Field] public DelegateList Delegate { get; }
     [Field] public override StatTable Stats { get; }
     [Field] public SkillTypeData BaseType { get; }
     [Field] public SkillItemData ItemData { get; }
+
+    public bool IsMelee() => BaseType.SkillType == SkillType.Melee;
+
+    public bool IsProjectile() => BaseType.SkillType == SkillType.Projectile;
   }
 }
