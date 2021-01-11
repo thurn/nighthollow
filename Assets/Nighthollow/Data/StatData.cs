@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Linq;
 using MessagePack;
 using Nighthollow.Stats2;
 
@@ -110,6 +111,21 @@ namespace Nighthollow.Data
       }
 
       return null;
+    }
+
+    public static StatTable BuildDefaultStatTable(GameData gameData)
+    {
+      var result = new StatTable(null);
+      foreach (var stat in gameData.StatData)
+      {
+        if (stat.Value.DefaultValue != null)
+        {
+          result = result.InsertModifier(
+            Stat.GetStat((StatId) stat.Key).BuildModifier(ModifierType.Set, stat.Value.DefaultValue));
+        }
+      }
+
+      return result;
     }
   }
 }

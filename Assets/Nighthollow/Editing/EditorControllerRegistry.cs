@@ -56,7 +56,7 @@ namespace Nighthollow.Editing
         return "[]";
       }
 
-      var entity = modifiers.Aggregate(new ModifierDescriptionProvider(),
+      var entity = modifiers.Aggregate(new ModifierDescriptionProvider(gameData),
         (current, modifier) => current.Insert(modifier));
       return string.Join("\n", modifiers.Select(m => m.Describe(entity, gameData.StatData)));
     }
@@ -64,12 +64,15 @@ namespace Nighthollow.Editing
 
   public sealed class ModifierDescriptionProvider : IStatDescriptionProvider
   {
+    readonly GameData _gameData;
     readonly StatTable? _values;
     readonly StatTable? _low;
     readonly StatTable? _high;
 
-    public ModifierDescriptionProvider(StatTable? values = null, StatTable? low = null, StatTable? high = null)
+    public ModifierDescriptionProvider(
+      GameData gameData, StatTable? values = null, StatTable? low = null, StatTable? high = null)
     {
+      _gameData = gameData;
       _values = values;
       _low = low;
       _high = high;
@@ -77,17 +80,24 @@ namespace Nighthollow.Editing
 
     public ModifierDescriptionProvider Insert(ModifierData modifier)
     {
+      var defaults = StatData.BuildDefaultStatTable(_gameData);
       var valueModifier = modifier.BuildStatModifier();
       if (valueModifier != null)
       {
-        return new ModifierDescriptionProvider((_values ?? new StatTable()).InsertModifier(valueModifier), _low, _high);
+        return new ModifierDescriptionProvider(
+          _gameData,
+          (_values ?? new StatTable(defaults)).InsertModifier(valueModifier),
+          _low,
+          _high
+        );
       }
       else
       {
         return new ModifierDescriptionProvider(
+          _gameData,
           _values,
-          (_low ?? new StatTable()).InsertNullableModifier(modifier.ModifierForValue(modifier.ValueLow)),
-          (_high ?? new StatTable()).InsertNullableModifier(modifier.ModifierForValue(modifier.ValueHigh))
+          (_low ?? new StatTable(defaults)).InsertNullableModifier(modifier.ModifierForValue(modifier.ValueLow)),
+          (_high ?? new StatTable(defaults)).InsertNullableModifier(modifier.ModifierForValue(modifier.ValueHigh))
         );
       }
     }

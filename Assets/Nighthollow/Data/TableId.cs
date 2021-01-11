@@ -167,10 +167,10 @@ namespace Nighthollow.Data
       }
 
       public override ImmutableDictionary<int, StaticItemListData> GetIn(GameData gameData) =>
-        gameData.CreatureLists;
+        gameData.ItemLists;
 
       public override GameData Write(GameData gameData, ImmutableDictionary<int, StaticItemListData> newValue) =>
-        gameData.WithCreatureLists(newValue);
+        gameData.WithItemLists(newValue);
     }
 
     sealed class UserModifiersTableId : TableId<ModifierData>

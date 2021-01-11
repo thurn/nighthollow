@@ -14,8 +14,8 @@
 
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
-
 using Nighthollow.Interface;
 using Nighthollow.Data;
 using Nighthollow.Services;
@@ -51,50 +51,39 @@ namespace Nighthollow.Components
       private set => _mana = NumericUtils.Clamp(value, low: 0, high: 999);
     }
 
-    void Update()
+    public void DrawOpeningHand(Database database)
     {
-      if (_statusDisplay != null)
-      {
-        _statusDisplay.Mana = Mana;
-        _statusDisplay.Influence = Data.Stats.Get(Stat.Influence);
-      }
-    }
+      var gameData = database.Snapshot();
+      Data = gameData.GameState.BuildUserData(gameData);
 
-    public void DrawOpeningHand(UserData data)
-    {
-      Data = data;
-      // var builtDeck = _data.Deck.Select(c => CreatureUtil.Build(_data.Stats, c)).ToList();
-      // _deck.OnStartGame(builtDeck, _data.TutorialState != UserDataService.Tutorial.Completed);
+      ImmutableList<CreatureItemData> cards;
+      if (gameData.Deck.IsEmpty)
+      {
+        cards = gameData.ItemLists.Values.First(list => list.Name == StaticItemListName.StartingDeck).Creatures;
+        database.InsertRange(TableId.Deck, cards);
+      }
+      else
+      {
+        cards = gameData.Deck.Values.ToImmutableList();
+      }
+
+      var builtDeck = cards.Select(item => item.BuildCreature(gameData, Data.Stats));
+      _deck.OnStartGame(builtDeck, gameData.GameState.TutorialState != TutorialState.Completed);
 
       var openingHand = new List<CreatureData>();
-      for (var i = 0; i < Errors.CheckPositive(data.GetInt(Stat.StartingHandSize)); ++i)
+      for (var i = 0; i < Errors.CheckPositive(Data.GetInt(Stat.StartingHandSize)); ++i)
       {
         openingHand.Add(_deck.Draw());
       }
 
       _hand.OverrideHandPosition(value: true);
-      _hand.DrawCards(openingHand, OnDrewHand);
+      _hand.DrawCards(openingHand, () => OnDrewHand(gameData));
     }
 
-    void OnDrewHand()
-    {
-      _hand.SetCardsToPreviewMode(value: true);
-      ButtonUtil.DisplayMainButtons(Root.Instance.ScreenController,
-        new List<ButtonUtil.Button>
-        {
-          new ButtonUtil.Button("Start Game!", () =>
-          {
-            _hand.SetCardsToPreviewMode(value: false);
-            _hand.OverrideHandPosition(value: false, OnStartGame);
-          }, large: true)
-        });
-      Root.Instance.HelperTextService.OnDrewOpeningHand();
-    }
-
-    public void OnStartGame()
+    public void OnStartGame(GameData gameData)
     {
       gameObject.SetActive(value: true);
-      Root.Instance.Enemy.OnGameStarted();
+      Root.Instance.Enemy.OnGameStarted(gameData);
       Root.Instance.HelperTextService.OnGameStarted();
       StartCoroutine(GainMana());
       StartCoroutine(DrawCards());
@@ -104,6 +93,31 @@ namespace Nighthollow.Components
 
       Mana = Data.GetInt(Stat.StartingMana);
     }
+
+    void OnDrewHand(GameData gameData)
+    {
+      _hand.SetCardsToPreviewMode(value: true);
+      ButtonUtil.DisplayMainButtons(Root.Instance.ScreenController,
+        new List<ButtonUtil.Button>
+        {
+          new ButtonUtil.Button("Start Game!", () =>
+          {
+            _hand.SetCardsToPreviewMode(value: false);
+            _hand.OverrideHandPosition(value: false, () => OnStartGame(gameData));
+          }, large: true)
+        });
+      Root.Instance.HelperTextService.OnDrewOpeningHand();
+    }
+
+    void Update()
+    {
+      if (_statusDisplay != null)
+      {
+        _statusDisplay.Mana = Mana;
+        _statusDisplay.Influence = Data.Stats.Get(Stat.Influence);
+      }
+    }
+
 
     public void SpendMana(int amount)
     {

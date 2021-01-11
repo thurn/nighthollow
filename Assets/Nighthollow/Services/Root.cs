@@ -47,6 +47,7 @@ namespace Nighthollow.Services
     [SerializeField] DamageTextService _damageTextService = null!;
 
     [SerializeField] HelperTextService _helperTextService = null!;
+
     public Camera MainCamera => _mainCamera;
     public RectTransform MainCanvas => _mainCanvas;
     public Prefabs Prefabs => _prefabs;
@@ -92,7 +93,7 @@ namespace Nighthollow.Services
       return player switch
       {
         PlayerName.User => User.Data.Stats,
-        PlayerName.Enemy => Enemy.Stats,
+        PlayerName.Enemy => Enemy.Data.Stats,
         _ => throw Errors.UnknownEnumValue(player)
       };
     }

@@ -36,18 +36,18 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute()
     {
-      switch (Self.Owner)
-      {
-        case PlayerName.User:
-          Root.Instance.User.Data.Stats.InsertModifier(Modifier);
-          break;
-        case PlayerName.Enemy:
-          Root.Instance.Enemy.Stats.InsertModifier(Modifier);
-          break;
-        case PlayerName.Unknown:
-        default:
-          throw new ArgumentOutOfRangeException();
-      }
+      // switch (Self.Owner)
+      // {
+      //   case PlayerName.User:
+      //     Root.Instance.User.Data.Stats.InsertModifier(Modifier);
+      //     break;
+      //   case PlayerName.Enemy:
+      //     Root.Instance.Enemy.Data.InsertModifier(Modifier);
+      //     break;
+      //   case PlayerName.Unknown:
+      //   default:
+      //     throw new ArgumentOutOfRangeException();
+      // }
     }
   }
 }

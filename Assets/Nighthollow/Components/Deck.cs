@@ -16,9 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataStructures.RandomSelector;
-
 using Nighthollow.Data;
-using Nighthollow.Services;
 using UnityEngine;
 using Nighthollow.Stats2;
 
@@ -52,8 +50,7 @@ namespace Nighthollow.Components
     {
       if (_orderedDraws)
       {
-        // return _cards[_lastDraw++ % _cards.Count].Clone(Root.Instance.User.Data.Stats);
-        return null!;
+        return _cards[_lastDraw++ % _cards.Count];
       }
 
       var selector = new DynamicRandomSelector<int>(seed: -1, _cards.Count);
@@ -66,8 +63,7 @@ namespace Nighthollow.Components
 
       var index = selector.SelectRandomItem();
       DecrementWeight(index);
-      // return _cards[index].Clone(Root.Instance.User.Data.Stats);
-      return null!;
+      return _cards[index];
     }
 
     void DecrementWeight(int index)

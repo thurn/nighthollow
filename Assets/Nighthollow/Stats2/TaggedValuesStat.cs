@@ -47,7 +47,8 @@ namespace Nighthollow.Stats2
       IReadOnlyDictionary<ModifierType, IEnumerable<TaggedNumericStatModifier<TTag, TValue>>> groups)
     {
       var result = ImmutableDictionary<TTag, TValue>.Empty;
-      var overwrites = groups[ModifierType.Set].ToList();
+      var overwrites = groups
+        .GetOrReturnDefault(ModifierType.Set, Enumerable.Empty<TaggedNumericStatModifier<TTag, TValue>>()).ToList();
       if (overwrites.Any())
       {
         result = overwrites.Last().SetTo!;

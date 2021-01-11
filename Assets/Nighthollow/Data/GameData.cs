@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Immutable;
 
 #nullable enable
@@ -30,17 +29,19 @@ namespace Nighthollow.Data
       ImmutableDictionary<int, StaticItemListData>? creatureLists = null,
       ImmutableDictionary<int, ModifierData>? userModifiers = null,
       ImmutableDictionary<int, CreatureItemData>? collection = null,
-      ImmutableDictionary<int, CreatureItemData>? deck = null)
+      ImmutableDictionary<int, CreatureItemData>? deck = null,
+      GameState? userState = null)
     {
       TableMetadata = tableMetadata ?? ImmutableDictionary<int, TableMetadata>.Empty;
       CreatureTypes = creatureTypes ?? ImmutableDictionary<int, CreatureTypeData>.Empty;
       AffixTypes = affixTypes ?? ImmutableDictionary<int, AffixTypeData>.Empty;
       SkillTypes = skillTypes ?? ImmutableDictionary<int, SkillTypeData>.Empty;
       StatData = statData ?? ImmutableDictionary<int, StatData>.Empty;
-      CreatureLists = creatureLists ?? ImmutableDictionary<int, StaticItemListData>.Empty;
+      ItemLists = creatureLists ?? ImmutableDictionary<int, StaticItemListData>.Empty;
       UserModifiers = userModifiers ?? ImmutableDictionary<int, ModifierData>.Empty;
       Collection = collection ?? ImmutableDictionary<int, CreatureItemData>.Empty;
       Deck = deck ?? ImmutableDictionary<int, CreatureItemData>.Empty;
+      GameState = userState ?? new GameState();
     }
 
     [Field] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
@@ -48,9 +49,10 @@ namespace Nighthollow.Data
     [Field] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
     [Field] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
     [Field] public ImmutableDictionary<int, StatData> StatData { get; }
-    [Field] public ImmutableDictionary<int, StaticItemListData> CreatureLists { get; }
+    [Field] public ImmutableDictionary<int, StaticItemListData> ItemLists { get; }
     [Field] public ImmutableDictionary<int, ModifierData> UserModifiers { get; }
     [Field] public ImmutableDictionary<int, CreatureItemData> Collection { get; }
     [Field] public ImmutableDictionary<int, CreatureItemData> Deck { get; }
+    [Field] public GameState GameState { get; }
   }
 }

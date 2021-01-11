@@ -18,6 +18,7 @@ using System.Collections.Immutable;
 using System.IO;
 using MessagePack;
 using MessagePack.Resolvers;
+using Nighthollow.Utils;
 using UnityEngine;
 
 #nullable enable
@@ -90,8 +91,11 @@ namespace Nighthollow.Data
         }
       }
 
-      _database = new Database(_serializerOptions, gameData);
-      InvokeListeners(_database);
+      StartCoroutine(AssetFetcher.FetchAssetsAsync(gameData, assetService =>
+      {
+        _database = new Database(_serializerOptions, assetService, gameData);
+        InvokeListeners(_database);
+      }));
 
       // Uncomment these lines to perform a data migration.
       // yield return new WaitForSeconds(1);
@@ -110,6 +114,7 @@ namespace Nighthollow.Data
 
     public void OnReady(IOnDatabaseReadyListener listener)
     {
+      Errors.CheckNotNull(listener);
       if (_database != null)
       {
         listener.OnDatabaseReady(_database);

@@ -24,7 +24,7 @@ using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public sealed class Hand : MonoBehaviour
+  public sealed class Hand : MonoBehaviour, IOnDatabaseReadyListener
   {
     [Header("Config")] [SerializeField] bool _debugMode;
     [SerializeField] Transform _deckPosition = null!;
@@ -40,6 +40,7 @@ namespace Nighthollow.Components
     [SerializeField] Hand _handOverridePosition = null!;
     bool _previewMode;
     bool _shouldOverrideHandPosition;
+    AssetService _assetService = null!;
 
     public float FinalCardScale => _finalCardScale;
 
@@ -55,6 +56,11 @@ namespace Nighthollow.Components
 
         AnimateCardsToPosition();
       }
+    }
+
+    public void OnDatabaseReady(Database database)
+    {
+      _assetService = database.AssetService;
     }
 
     void Update()
@@ -90,7 +96,7 @@ namespace Nighthollow.Components
       foreach (var cardData in cards)
       {
         var card = Root.Instance.Prefabs.CreateCard();
-        card.Initialize(cardData);
+        card.Initialize(cardData, _assetService);
         card.transform.position = _deckPosition.position;
         card.transform.localScale = Vector2.one * _initialCardScale;
         AddToHand(card);

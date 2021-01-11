@@ -61,6 +61,7 @@ namespace Nighthollow.Data
       return new SkillData(
         new SkillDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList()),
         stats,
+        SkillTypeId,
         baseType,
         this);
     }

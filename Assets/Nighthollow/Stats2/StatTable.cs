@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using JetBrains.Annotations;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -23,26 +24,22 @@ namespace Nighthollow.Stats2
 {
   public sealed class StatTable
   {
-    public static readonly StatTable Defaults =
-      new StatTable(null, ImmutableDictionary<StatId, ImmutableList<IStatModifier>>.Empty);
-
     readonly StatTable? _parent;
     readonly ImmutableDictionary<StatId, ImmutableList<IStatModifier>> _modifiers;
 
-    public StatTable(StatTable? parent = null) : this(parent,
-      ImmutableDictionary<StatId, ImmutableList<IStatModifier>>.Empty)
-    {
-    }
-
-    StatTable(StatTable? parent, ImmutableDictionary<StatId, ImmutableList<IStatModifier>> modifiers)
+    public StatTable(
+      StatTable? parent,
+      ImmutableDictionary<StatId, ImmutableList<IStatModifier>>? modifiers = null)
     {
       _parent = parent;
-      _modifiers = modifiers;
+      _modifiers = modifiers ?? ImmutableDictionary<StatId, ImmutableList<IStatModifier>>.Empty;
     }
 
+    [MustUseReturnValue]
     public StatTable InsertModifier(IStatModifier modifier) =>
       new StatTable(_parent, _modifiers.AppendOrCreateList(modifier.StatId, modifier));
 
+    [MustUseReturnValue]
     public StatTable InsertNullableModifier(IStatModifier? modifier) =>
       modifier == null ? this : InsertModifier(modifier);
 

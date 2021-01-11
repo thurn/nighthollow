@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using Nighthollow.Data;
-using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;

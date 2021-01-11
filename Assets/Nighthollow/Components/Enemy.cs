@@ -13,12 +13,11 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using DataStructures.RandomSelector;
 using Nighthollow.Data;
-
 using Nighthollow.Interface;
-using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Stats2;
 using Nighthollow.Utils;
@@ -33,15 +32,14 @@ namespace Nighthollow.Components
     [SerializeField] int _spawnCount;
     [SerializeField] int _deathCount;
 
-    List<CreatureData> _enemies = null!;
-    StatTable _stats = null!;
-    public StatTable Stats => _stats;
+    ImmutableList<CreatureData> _enemies = null!;
 
-    public void OnGameStarted()
+    public EnemyData Data { get; private set; }
+
+    public void OnGameStarted(GameData gameData)
     {
-      // var config = Database.Instance.CurrentGameConfig;
-      // _stats = config.EnemyStats;
-      // _enemies = config.Enemies.Select(c => CreatureUtil.Build(_stats, c)).ToList();
+      Data = gameData.GameState.CurrentEnemy.BuildEnemyData(gameData);
+      _enemies = Data.Enemies.Select(item => item.BuildCreature(gameData, Data.Stats)).ToImmutableList();
 
       StartCoroutine(SpawnAsync());
     }
@@ -50,7 +48,7 @@ namespace Nighthollow.Components
     public void OnEnemyCreatureKilled()
     {
       _deathCount++;
-      if (_deathCount >= _stats.Get(Stat.EnemiesToSpawn))
+      if (_deathCount >= Data.Get(Stat.EnemiesToSpawn))
       {
         Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
           .Show(new GameOverMessage.Args("Victory!", "World"), animate: true);
@@ -67,16 +65,16 @@ namespace Nighthollow.Components
 
     IEnumerator<YieldInstruction> SpawnAsync()
     {
-      yield return new WaitForSeconds(_stats.Get(Stat.InitialEnemySpawnDelay).AsSeconds());
+      yield return new WaitForSeconds(Data.Get(Stat.InitialEnemySpawnDelay).AsSeconds());
 
-      while (_spawnCount < _stats.Get(Stat.EnemiesToSpawn))
+      while (_spawnCount < Data.Get(Stat.EnemiesToSpawn))
       {
         _spawnCount++;
         Root.Instance.CreatureService.CreateMovingCreature(
           RandomEnemy(),
           RandomFile(),
           Constants.EnemyCreatureStartingX);
-        yield return new WaitForSeconds(_stats.Get(Stat.EnemySpawnDelay).AsSeconds());
+        yield return new WaitForSeconds(Data.Get(Stat.EnemySpawnDelay).AsSeconds());
       }
 
       // ReSharper disable once IteratorNeverReturns
@@ -92,8 +90,7 @@ namespace Nighthollow.Components
 
       selector.Build();
 
-      // return selector.SelectRandomItem().Clone(_stats);
-      return null!;
+      return selector.SelectRandomItem();
     }
 
     FileValue RandomFile()

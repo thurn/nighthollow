@@ -28,6 +28,7 @@ namespace Nighthollow.Data
   public sealed class Database
   {
     readonly MessagePackSerializerOptions _serializationOptions;
+
     ImmutableDictionary<(ITableId, int), ImmutableList<IListener>> _updatedListeners;
     ImmutableDictionary<ITableId, ImmutableList<IListener>> _addedListeners;
     ImmutableDictionary<ITableId, ImmutableList<IListener>> _removedListeners;
@@ -35,15 +36,18 @@ namespace Nighthollow.Data
     GameData _gameData;
     bool _writePending;
 
-    public Database(MessagePackSerializerOptions serializationOptions, GameData gameData)
+    public Database(MessagePackSerializerOptions serializationOptions, AssetService assetService, GameData gameData)
     {
       _serializationOptions = serializationOptions;
+      AssetService = assetService;
       _gameData = gameData;
       _updatedListeners = ImmutableDictionary<(ITableId, int), ImmutableList<IListener>>.Empty;
       _addedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
       _removedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
       _mutations = ImmutableList<IMutation>.Empty;
     }
+
+    public AssetService AssetService { get; }
 
     /// <summary>
     /// Retrieves a snapshot of the database state. There are no guarantees about how up-to-date this value
@@ -96,6 +100,11 @@ namespace Nighthollow.Data
     public void Insert<T>(TableId<T> tableId, T value) where T : class
     {
       _mutations = _mutations.Add(new InsertMutation<T>(tableId, value));
+    }
+
+    public void InsertRange<T>(TableId<T> tableId, IEnumerable<T> values) where T : class
+    {
+      _mutations = _mutations.Add(new InsertRangeMutation<T>(tableId, values.ToImmutableList()));
     }
 
     /// <summary>
@@ -343,6 +352,34 @@ namespace Nighthollow.Data
         return _tableId.Write(
           gameData.WithTableMetadata(gameData.TableMetadata.SetItem(_tableId.Id, metadata.WithNextId(newId + 1))),
           _tableId.GetIn(gameData).SetItem(newId, _value));
+      }
+    }
+
+    sealed class InsertRangeMutation<T> : IMutation where T : class
+    {
+      readonly TableId<T> _tableId;
+      readonly ImmutableList<T> _values;
+
+      public InsertRangeMutation(TableId<T> tableId, ImmutableList<T> values)
+      {
+        _tableId = tableId;
+        _values = Errors.CheckNotNull(values);
+      }
+
+      public GameData Apply(GameData gameData, List<EntityEvent> events)
+      {
+        foreach (var value in _values)
+        {
+          var metadata = gameData.TableMetadata.GetOrReturnDefault(_tableId.Id, new TableMetadata());
+          var newId = metadata.NextId;
+          events.Add(new EntityEvent(EntityEventType.Added, _tableId, newId));
+          events.Add(new EntityEvent(EntityEventType.Updated, TableId.TableMetadata, _tableId.Id));
+          gameData = _tableId.Write(
+            gameData.WithTableMetadata(gameData.TableMetadata.SetItem(_tableId.Id, metadata.WithNextId(newId + 1))),
+            _tableId.GetIn(gameData).SetItem(newId, value));
+        }
+
+        return gameData;
       }
     }
 

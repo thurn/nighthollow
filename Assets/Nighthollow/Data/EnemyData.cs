@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
 using Nighthollow.Stats2;
@@ -21,35 +22,34 @@ using Nighthollow.Stats2;
 namespace Nighthollow.Data
 {
   [MessagePackObject]
-  public sealed partial class GameState
+  public sealed partial class CurrentEnemyState
   {
-    public GameState(TutorialState? tutorialState = null, CurrentEnemyState? currentEnemy = null)
+    public CurrentEnemyState(ImmutableList<CreatureItemData>? enemies = null)
     {
-      TutorialState = tutorialState ?? TutorialState.NewPlayer;
-      CurrentEnemy = currentEnemy ?? new CurrentEnemyState();
+      Enemies = enemies ?? ImmutableList<CreatureItemData>.Empty;
     }
 
-    [Key(0)] public TutorialState TutorialState { get; }
-    [Key(1)] public CurrentEnemyState CurrentEnemy { get; }
+    [Field] public ImmutableList<CreatureItemData> Enemies { get; }
 
-    public UserData BuildUserData(GameData gameData) =>
-      new UserData(this,
+    public EnemyData BuildEnemyData(GameData gameData) =>
+      new EnemyData(
+        Enemies.IsEmpty
+          ? gameData.ItemLists.Values.First(list => list.Name == StaticItemListName.TutorialEnemies).Creatures
+          : Enemies,
         gameData.UserModifiers.Values.Aggregate(
           new StatTable(StatData.BuildDefaultStatTable(gameData)),
           (current, modifier) => current.InsertNullableModifier(modifier.BuildStatModifier())));
   }
 
-  public sealed partial class UserData : StatEntity
+  public sealed partial class EnemyData : StatEntity
   {
-    public UserData(
-      GameState gameState,
-      StatTable stats)
+    public EnemyData(ImmutableList<CreatureItemData> enemies, StatTable stats)
     {
-      State = gameState;
+      Enemies = enemies;
       Stats = stats;
     }
 
-    [Field] public GameState State { get; }
+    [Field] public ImmutableList<CreatureItemData> Enemies { get; }
     [Field] public override StatTable Stats { get; }
   }
 }

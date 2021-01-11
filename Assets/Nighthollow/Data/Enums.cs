@@ -113,4 +113,11 @@ namespace Nighthollow.Data
     TutorialEnemies = 2,
     TutorialRewards = 3
   }
+
+  public enum TutorialState
+  {
+    Unknown,
+    NewPlayer,
+    Completed
+  }
 }

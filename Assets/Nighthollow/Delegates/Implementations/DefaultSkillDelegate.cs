@@ -37,7 +37,7 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnUse(SkillContext c)
     {
-      c.Self.MarkSkillUsed(c.Skill.BaseType);
+      c.Self.MarkSkillUsed(c.Skill.BaseTypeId);
       switch (c.Skill.BaseType.SkillType)
       {
         case SkillType.Projectile:

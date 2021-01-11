@@ -15,10 +15,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using Nighthollow.Data;
-
-using Nighthollow.Interface;
-using Nighthollow.Items;
-using Nighthollow.Data;
 using Nighthollow.Stats2;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -35,7 +31,6 @@ namespace Nighthollow.Components
     IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
   {
     [Header("Config")]
-    [SerializeField] float _debugCardScale = 0.65f;
     [SerializeField] RectTransform _cardBack = null!;
     [SerializeField] RectTransform _cardFront = null!;
     [SerializeField] Image _cardImage = null!;
@@ -45,19 +40,14 @@ namespace Nighthollow.Components
     [SerializeField] User _user = null!;
     [SerializeField] bool _canPlay;
     [SerializeField] bool _previewMode;
-    [SerializeField] bool _initialized;
     [SerializeField] bool _isDragging;
     [SerializeField] bool _overBoard;
     [SerializeField] int _initialDragSiblingIndex;
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
+    AssetService _assetService = null!;
 
     [Header("State")] CreatureData _data = null!;
-
-    public bool PreviewMode
-    {
-      set => _previewMode = value;
-    }
 
     void Start()
     {
@@ -66,10 +56,34 @@ namespace Nighthollow.Components
       Errors.CheckNotNull(_cardImage);
     }
 
+    public void Initialize(CreatureData cardData, AssetService assetService)
+    {
+      _assetService = assetService;
+      _cardFront.gameObject.SetActive(value: false);
+      _cardBack.gameObject.SetActive(value: true);
+      _user = Root.Instance.User;
+      _data = cardData;
+
+      DOTween.Sequence()
+        .Insert(atPosition: 0, _cardBack.transform.DOLocalRotate(new Vector3(x: 0, y: 90, z: 0), duration: 0.2f))
+        .InsertCallback(atPosition: 0.2f, () =>
+        {
+          _cardFront.gameObject.SetActive(value: true);
+          _cardFront.transform.localRotation = Quaternion.Euler(x: 0, y: 90, z: 0);
+          _cardBack.gameObject.SetActive(value: false);
+        })
+        .Insert(atPosition: 0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, duration: 0.3f));
+    }
+
+    public bool PreviewMode
+    {
+      set => _previewMode = value;
+    }
+
     void Update()
     {
       Errors.CheckNotNull(_data);
-      // _cardImage.sprite = Database.Instance.Assets.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
+      _cardImage.sprite = _assetService.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
 
       var manaCost = _data.GetInt(Stat.ManaCost);
       var influenceCost = _data.Stats.Get(Stat.InfluenceCost);
@@ -152,11 +166,10 @@ namespace Nighthollow.Components
       if (_previewMode)
       {
         // var tooltip = TooltipUtil.CreateCreatureTooltip(Database.Instance.UserData.Stats, _data.Item);
-        TooltipBuilder tooltip = null!;
-        tooltip.XOffset = 64;
-        Root.Instance.ScreenController.ShowTooltip(
-          tooltip,
-          InterfaceUtils.ScreenPointToInterfacePoint(transform.position));
+        // tooltip.XOffset = 64;
+        // Root.Instance.ScreenController.ShowTooltip(
+        //   tooltip,
+        //   InterfaceUtils.ScreenPointToInterfacePoint(transform.position));
       }
     }
 
@@ -164,28 +177,8 @@ namespace Nighthollow.Components
     {
       if (_previewMode)
       {
-        Root.Instance.ScreenController.HideTooltip();
+        // Root.Instance.ScreenController.HideTooltip();
       }
-    }
-
-    public void Initialize(CreatureData cardData)
-    {
-      _cardFront.gameObject.SetActive(value: false);
-      _cardBack.gameObject.SetActive(value: true);
-      _user = Root.Instance.User;
-      _data = cardData;
-
-      DOTween.Sequence()
-        .Insert(atPosition: 0, _cardBack.transform.DOLocalRotate(new Vector3(x: 0, y: 90, z: 0), duration: 0.2f))
-        .InsertCallback(atPosition: 0.2f, () =>
-        {
-          _cardFront.gameObject.SetActive(value: true);
-          _cardFront.transform.localRotation = Quaternion.Euler(x: 0, y: 90, z: 0);
-          _cardBack.gameObject.SetActive(value: false);
-        })
-        .Insert(atPosition: 0.2f, _cardFront.transform.DOLocalRotate(Vector3.zero, duration: 0.3f));
-
-      _initialized = true;
     }
 
     public void OnPlayed()

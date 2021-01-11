@@ -150,10 +150,11 @@ namespace Nighthollow.Data
         AffixTypes,
         SkillTypes,
         StatData,
-        CreatureLists,
+        ItemLists,
         UserModifiers,
         Collection,
-        Deck);
+        Deck,
+        GameState);
 
     public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
       new GameData(
@@ -162,10 +163,11 @@ namespace Nighthollow.Data
         AffixTypes,
         SkillTypes,
         StatData,
-        CreatureLists,
+        ItemLists,
         UserModifiers,
         Collection,
-        Deck);
+        Deck,
+        GameState);
 
     public GameData WithAffixTypes(ImmutableDictionary<int, AffixTypeData> affixTypes) =>
       new GameData(
@@ -174,10 +176,11 @@ namespace Nighthollow.Data
         affixTypes,
         SkillTypes,
         StatData,
-        CreatureLists,
+        ItemLists,
         UserModifiers,
         Collection,
-        Deck);
+        Deck,
+        GameState);
 
     public GameData WithSkillTypes(ImmutableDictionary<int, SkillTypeData> skillTypes) =>
       new GameData(
@@ -186,10 +189,11 @@ namespace Nighthollow.Data
         AffixTypes,
         skillTypes,
         StatData,
-        CreatureLists,
+        ItemLists,
         UserModifiers,
         Collection,
-        Deck);
+        Deck,
+        GameState);
 
     public GameData WithStatData(ImmutableDictionary<int, StatData> statData) =>
       new GameData(
@@ -198,22 +202,24 @@ namespace Nighthollow.Data
         AffixTypes,
         SkillTypes,
         statData,
-        CreatureLists,
+        ItemLists,
         UserModifiers,
         Collection,
-        Deck);
+        Deck,
+        GameState);
 
-    public GameData WithCreatureLists(ImmutableDictionary<int, StaticItemListData> creatureLists) =>
+    public GameData WithItemLists(ImmutableDictionary<int, StaticItemListData> itemLists) =>
       new GameData(
         TableMetadata,
         CreatureTypes,
         AffixTypes,
         SkillTypes,
         StatData,
-        creatureLists,
+        itemLists,
         UserModifiers,
         Collection,
-        Deck);
+        Deck,
+        GameState);
 
     public GameData WithUserModifiers(ImmutableDictionary<int, ModifierData> userModifiers) =>
       new GameData(
@@ -222,10 +228,11 @@ namespace Nighthollow.Data
         AffixTypes,
         SkillTypes,
         StatData,
-        CreatureLists,
+        ItemLists,
         userModifiers,
         Collection,
-        Deck);
+        Deck,
+        GameState);
 
     public GameData WithCollection(ImmutableDictionary<int, CreatureItemData> collection) =>
       new GameData(
@@ -234,10 +241,11 @@ namespace Nighthollow.Data
         AffixTypes,
         SkillTypes,
         StatData,
-        CreatureLists,
+        ItemLists,
         UserModifiers,
         collection,
-        Deck);
+        Deck,
+        GameState);
 
     public GameData WithDeck(ImmutableDictionary<int, CreatureItemData> deck) =>
       new GameData(
@@ -246,10 +254,24 @@ namespace Nighthollow.Data
         AffixTypes,
         SkillTypes,
         StatData,
-        CreatureLists,
+        ItemLists,
         UserModifiers,
         Collection,
-        deck);
+        deck,
+        GameState);
+
+    public GameData WithGameState(GameState gameState) =>
+      new GameData(
+        TableMetadata,
+        CreatureTypes,
+        AffixTypes,
+        SkillTypes,
+        StatData,
+        ItemLists,
+        UserModifiers,
+        Collection,
+        Deck,
+        gameState);
 
   }
 
@@ -687,6 +709,7 @@ namespace Nighthollow.Data
       new SkillData(
         @delegate,
         Stats,
+        BaseTypeId,
         BaseType,
         ItemData);
 
@@ -694,6 +717,15 @@ namespace Nighthollow.Data
       new SkillData(
         Delegate,
         stats,
+        BaseTypeId,
+        BaseType,
+        ItemData);
+
+    public SkillData WithBaseTypeId(int baseTypeId) =>
+      new SkillData(
+        Delegate,
+        Stats,
+        baseTypeId,
         BaseType,
         ItemData);
 
@@ -701,6 +733,7 @@ namespace Nighthollow.Data
       new SkillData(
         Delegate,
         Stats,
+        BaseTypeId,
         baseType,
         ItemData);
 
@@ -708,6 +741,7 @@ namespace Nighthollow.Data
       new SkillData(
         Delegate,
         Stats,
+        BaseTypeId,
         BaseType,
         itemData);
 
@@ -790,6 +824,28 @@ namespace Nighthollow.Data
         NextId,
         LastAccessedTime,
         columnMetadata);
+
+  }
+
+  public sealed partial class CurrentEnemyState
+  {
+    public CurrentEnemyState WithEnemies(ImmutableList<CreatureItemData> enemies) =>
+      new CurrentEnemyState(
+        enemies);
+
+  }
+
+  public sealed partial class EnemyData
+  {
+    public EnemyData WithEnemies(ImmutableList<CreatureItemData> enemies) =>
+      new EnemyData(
+        enemies,
+        Stats);
+
+    public EnemyData WithStats(StatTable stats) =>
+      new EnemyData(
+        Enemies,
+        stats);
 
   }
 
@@ -927,7 +983,25 @@ namespace Nighthollow.Data
 
   }
 
+  public sealed partial class GameState
+  {
+    public GameState WithTutorialState(TutorialState tutorialState) =>
+      new GameState(
+        tutorialState);
+
+  }
+
   public sealed partial class UserData
   {
+    public UserData WithState(GameState state) =>
+      new UserData(
+        state,
+        Stats);
+
+    public UserData WithStats(StatTable stats) =>
+      new UserData(
+        State,
+        stats);
+
   }
 }

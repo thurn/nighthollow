@@ -69,10 +69,10 @@ namespace Nighthollow.Data
       Func<CreatureItemData, T> onCreature,
       Func<ResourceItemData, T> onResource) => onCreature(this);
 
-    public CreatureData BuildCreature(GameData gameData, UserData userData)
+    public CreatureData BuildCreature(GameData gameData, StatTable parentStats)
     {
       var baseType = gameData.CreatureTypes[CreatureTypeId];
-      var statTable = new StatTable(userData.Stats)
+      var statTable = new StatTable(parentStats)
         .InsertModifier(Stat.Health.Set(Health))
         .InsertModifier(Stat.CreatureSpeed.Set(baseType.Speed))
         .InsertNullableModifier(Stat.IsManaCreature.SetIfTrue(baseType.IsManaCreature))

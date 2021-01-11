@@ -13,6 +13,7 @@
 // limitations under the License.
 
 
+using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Services;
 using UnityEngine;
@@ -21,13 +22,23 @@ using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public sealed class GameInitializer : MonoBehaviour
+  public sealed class GameInitializer : MonoBehaviour, IOnDatabaseReadyListener
   {
+    [SerializeField] ScreenController _screenController = null!;
+    [SerializeField] DataService _dataService = null!;
+
     void Start()
     {
-      var screenController = GetComponent<ScreenController>();
-      screenController.Initialize();
-      // Database.OnReady(data => { Root.Instance.User.DrawOpeningHand(data); });
+      _screenController.Initialize();
+      _dataService.OnReady(Root.Instance.CreatureService);
+      _dataService.OnReady(Root.Instance.HelperTextService);
+      _dataService.OnReady(Root.Instance.User.Hand);
+      _dataService.OnReady(this);
+    }
+
+    public void OnDatabaseReady(Database database)
+    {
+      Root.Instance.User.DrawOpeningHand(database);
     }
   }
 }

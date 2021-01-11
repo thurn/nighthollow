@@ -20,7 +20,8 @@ namespace Nighthollow.Stats2
   {
     public abstract StatTable Stats { get; }
 
-    public TValue Get<TModifier, TValue>(AbstractStat<TModifier, TValue> stat) where TModifier : IStatModifier =>
+    public TValue Get<TModifier, TValue>(AbstractStat<TModifier, TValue> stat)
+      where TModifier : IStatModifier where TValue : notnull =>
       Stats.Get(stat);
 
     public int GetInt(IntStat statId) => Stats.Get(statId);
@@ -30,18 +31,5 @@ namespace Nighthollow.Stats2
     public int GetDurationMilliseconds(DurationStat statId) => Stats.Get(statId).AsMilliseconds();
 
     public float GetDurationSeconds(DurationStat statId) => Stats.Get(statId).AsSeconds();
-  }
-
-  public sealed class StatContainer : StatEntity
-  {
-    public StatContainer(StatTable? stats = null)
-    {
-      Stats = stats ?? new StatTable();
-    }
-
-    public override StatTable Stats { get; }
-
-    public StatContainer Insert(IStatModifier? modifier) =>
-      new StatContainer(Stats.InsertNullableModifier(modifier));
   }
 }

@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
+using Nighthollow.Utils;
 
 #nullable enable
 
@@ -33,8 +34,12 @@ namespace Nighthollow.Stats2
 
     public override bool ComputeValue(
       IReadOnlyDictionary<ModifierType, IEnumerable<BooleanStatModifier>> groups) =>
-      groups[ModifierType.Set].Count(op => op.SetValue) > 0 &&
-      groups[ModifierType.Set].Count(op => op.SetValue == false) == 0;
+      groups
+        .GetOrReturnDefault(ModifierType.Set, Enumerable.Empty<BooleanStatModifier>())
+        .Count(op => op.SetValue) > 0 &&
+      groups
+        .GetOrReturnDefault(ModifierType.Set, Enumerable.Empty<BooleanStatModifier>())
+        .Count(op => op.SetValue == false) == 0;
 
     public override IStatModifier BuildModifier(ModifierType type, IValueData value) =>
       type switch

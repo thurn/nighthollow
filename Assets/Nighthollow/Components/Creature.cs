@@ -17,8 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
-
-using Nighthollow.Data;
 using Nighthollow.Stats2;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -54,12 +52,14 @@ namespace Nighthollow.Components
 
     [Header("Config")]
     [SerializeField] Transform _projectileSource = null!;
+
     [SerializeField] AttachmentDisplay _attachmentDisplay = null!;
     [SerializeField] Transform _healthbarAnchor = null!;
     [SerializeField] float _animationSpeedMultiplier;
 
     [Header("State")]
     [SerializeField] bool _initialized;
+
     [SerializeField] int _damageTaken;
     [SerializeField] CreatureState _state;
     [SerializeField] RankValue? _rankPosition;
@@ -276,10 +276,7 @@ namespace Nighthollow.Components
 
     void Kill()
     {
-      if (_coroutine != null)
-      {
-        StopCoroutine(_coroutine);
-      }
+      StopCoroutine(_coroutine);
 
       _statusBars.HealthBar.gameObject.SetActive(value: false);
       _animator.SetTrigger(Death);
@@ -383,16 +380,16 @@ namespace Nighthollow.Components
 
     bool CanUseSkill() => _state == CreatureState.Idle || _state == CreatureState.Moving;
 
-    public void MarkSkillUsed(SkillTypeData skill)
+    public void MarkSkillUsed(int skillId)
     {
-      // _skillLastUsedTimes[skill.Id] = Time.time;
+      _skillLastUsedTimes[skillId] = Time.time;
     }
 
     /// <summary>
     ///   Returns the timestamp at which the provided skill was last used by this creature, or 0 if it has never been used
     /// </summary>
-    public float? TimeLastUsedSeconds(SkillTypeData skill) => 0;
-      // _skillLastUsedTimes.ContainsKey(skill.Id) ? (float?) _skillLastUsedTimes[skill.Id] : null;
+    public float? TimeLastUsedSeconds(int skillId) =>
+      _skillLastUsedTimes.ContainsKey(skillId) ? (float?) _skillLastUsedTimes[skillId] : null;
 
     IEnumerator<YieldInstruction> RunCoroutine()
     {

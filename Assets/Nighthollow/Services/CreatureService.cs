@@ -18,19 +18,25 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Data;
-using Nighthollow.Data;
 using UnityEngine;
 
 #nullable enable
 
 namespace Nighthollow.Services
 {
-  public sealed class CreatureService : MonoBehaviour
+  public sealed class CreatureService : MonoBehaviour, IOnDatabaseReadyListener
   {
     readonly HashSet<Creature> _movingCreatures = new HashSet<Creature>();
 
     readonly Dictionary<(RankValue, FileValue), Creature> _userCreatures =
       new Dictionary<(RankValue, FileValue), Creature>();
+
+    AssetService _assetService = null!;
+
+    public void OnDatabaseReady(Database database)
+    {
+      _assetService = database.AssetService;
+    }
 
     public IEnumerable<Creature> EnemyCreatures()
     {
@@ -39,8 +45,7 @@ namespace Nighthollow.Services
 
     public Creature CreateUserCreature(CreatureData creatureData)
     {
-      // var result = Database.Instance.Assets.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
-      Creature result = null!;
+      var result = _assetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       result.Initialize(creatureData);
       return result;
     }
@@ -50,8 +55,7 @@ namespace Nighthollow.Services
       FileValue file,
       float startingX)
     {
-      // var result = Database.Instance.Assets.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
-      Creature result = null!;
+      var result = _assetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
 
       result.Initialize(creatureData);
       result.ActivateCreature(rankValue: null, file, startingX);
