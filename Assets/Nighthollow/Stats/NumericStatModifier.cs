@@ -67,13 +67,24 @@ namespace Nighthollow.Stats
       ModifierType type,
       T? add,
       PercentageValue? increase,
-      T? ovewrite)
+      T? ovewrite) : this(statId, type, add, increase, ovewrite, null)
+    {
+    }
+
+    NumericStatModifier(
+      StatId statId,
+      ModifierType type,
+      T? add,
+      PercentageValue? increase,
+      T? ovewrite,
+      ILifetime? lifetime)
     {
       StatId = statId;
       Type = type;
       AddTo = add;
       IncreaseBy = increase;
       SetTo = ovewrite;
+      Lifetime = lifetime;
     }
 
     [Key(0)] public StatId StatId { get; }
@@ -81,6 +92,10 @@ namespace Nighthollow.Stats
     [Key(2)] public T? AddTo { get; }
     [Key(3)] public PercentageValue? IncreaseBy { get; }
     [Key(4)] public T? SetTo { get; }
+    [IgnoreMember] public ILifetime? Lifetime { get; }
+
+    public IStatModifier WithLifetime(ILifetime lifetime) =>
+      new NumericStatModifier<T>(StatId, Type, AddTo, IncreaseBy, SetTo, lifetime);
 
     public string Describe(string template, IValueData? highValue) =>
       template.Replace("#",

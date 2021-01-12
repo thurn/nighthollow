@@ -49,7 +49,17 @@ namespace Nighthollow.Stats
       ModifierType type,
       ImmutableDictionary<TTag, TValue>? addTo,
       ImmutableDictionary<TTag, PercentageValue>? increaseBy,
-      ImmutableDictionary<TTag, TValue>? setTo)
+      ImmutableDictionary<TTag, TValue>? setTo) : this(statId, type, addTo, increaseBy, setTo, null)
+    {
+    }
+
+    TaggedNumericStatModifier(
+      StatId statId,
+      ModifierType type,
+      ImmutableDictionary<TTag, TValue>? addTo,
+      ImmutableDictionary<TTag, PercentageValue>? increaseBy,
+      ImmutableDictionary<TTag, TValue>? setTo,
+      ILifetime? lifetime)
     {
       StatId = statId;
       Type = type;
@@ -60,6 +70,7 @@ namespace Nighthollow.Stats
         .Union(addTo?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty)
         .Union(increaseBy?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty)
         .Union(setTo?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty);
+      Lifetime = lifetime;
     }
 
     [Key(0)] public StatId StatId { get; }
@@ -68,6 +79,10 @@ namespace Nighthollow.Stats
     [Key(3)] public ImmutableDictionary<TTag, PercentageValue>? IncreaseBy { get; }
     [Key(4)] public ImmutableDictionary<TTag, TValue>? SetTo { get; }
     [IgnoreMember] public ImmutableHashSet<TTag> AllTags { get; }
+    [IgnoreMember] public ILifetime? Lifetime { get; }
+
+    public IStatModifier WithLifetime(ILifetime lifetime) =>
+      new TaggedNumericStatModifier<TTag, TValue>(StatId, Type, AddTo, IncreaseBy, SetTo, lifetime);
 
     public NumericStatModifier<TValue>? AsNumericModifier(
       AbstractStat<NumericStatModifier<TValue>, TValue> stat, TTag tag)

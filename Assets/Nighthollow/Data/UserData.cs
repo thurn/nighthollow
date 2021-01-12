@@ -23,10 +23,15 @@ namespace Nighthollow.Data
   [MessagePackObject]
   public sealed partial class GameState
   {
-    public GameState(TutorialState? tutorialState = null, CurrentEnemyState? currentEnemy = null)
+    public GameState() : this(TutorialState.NewPlayer, new CurrentEnemyState())
     {
-      TutorialState = tutorialState ?? TutorialState.NewPlayer;
-      CurrentEnemy = currentEnemy ?? new CurrentEnemyState();
+    }
+
+    [SerializationConstructor]
+    public GameState(TutorialState tutorialState, CurrentEnemyState currentEnemy)
+    {
+      TutorialState = tutorialState;
+      CurrentEnemy = currentEnemy;
     }
 
     [Key(0)] public TutorialState TutorialState { get; }
@@ -51,5 +56,7 @@ namespace Nighthollow.Data
 
     [Field] public GameState State { get; }
     [Field] public override StatTable Stats { get; }
+
+    public UserData OnTick() => WithStats(Stats.OnTick());
   }
 }

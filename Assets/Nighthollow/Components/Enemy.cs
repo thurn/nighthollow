@@ -27,14 +27,14 @@ using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public sealed class Enemy : MonoBehaviour
+  public sealed class Enemy : MonoBehaviour, IStatOwner
   {
     [SerializeField] int _spawnCount;
     [SerializeField] int _deathCount;
 
     ImmutableList<CreatureData> _enemies = null!;
 
-    public EnemyData Data { get; private set; }
+    public EnemyData Data { get; private set; } = null!;
 
     public void OnGameStarted(GameData gameData)
     {
@@ -42,6 +42,16 @@ namespace Nighthollow.Components
       _enemies = Data.Enemies.Select(item => item.BuildCreature(gameData, Data.Stats)).ToImmutableList();
 
       StartCoroutine(SpawnAsync());
+    }
+
+    public void InsertModifier(IStatModifier modifier)
+    {
+      Data = Data.WithStats(Data.Stats.InsertModifier(modifier));
+    }
+
+    void Update()
+    {
+      Data = Data?.OnTick();
     }
 
     /// <summary>Called when an enemy is killed (not despawned).</summary>

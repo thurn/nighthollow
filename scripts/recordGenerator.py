@@ -65,7 +65,7 @@ for root, _, files in os.walk(sys.argv[1]):
 using = [
     "System.Collections.Immutable",
     "Nighthollow.Delegates.Core",
-    "Nighthollow.Stats2"
+    "Nighthollow.Stats"
 ]
 
 out_file = open(os.path.join(sys.argv[1], "Generated.cs"), 'w')

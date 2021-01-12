@@ -29,7 +29,7 @@ namespace Nighthollow.Data
       Enemies = enemies ?? ImmutableList<CreatureItemData>.Empty;
     }
 
-    [Field] public ImmutableList<CreatureItemData> Enemies { get; }
+    [Key(0)] public ImmutableList<CreatureItemData> Enemies { get; }
 
     public EnemyData BuildEnemyData(GameData gameData) =>
       new EnemyData(
@@ -51,5 +51,7 @@ namespace Nighthollow.Data
 
     [Field] public ImmutableList<CreatureItemData> Enemies { get; }
     [Field] public override StatTable Stats { get; }
+
+    public EnemyData OnTick() => WithStats(Stats.OnTick());
   }
 }

@@ -37,11 +37,20 @@ namespace Nighthollow.Stats
     public IStatModifier Add(ImmutableDictionary<TTag, TValue> value) =>
       TaggedNumericStatModifier<TTag, TValue>.Add(this, value);
 
+    public IStatModifier Add(TTag tag, TValue value) =>
+      Add(ImmutableDictionary<TTag, TValue>.Empty.Add(tag, value));
+
     public IStatModifier Increase(ImmutableDictionary<TTag, PercentageValue> value) =>
       TaggedNumericStatModifier<TTag, TValue>.Increase(this, value);
 
+    public IStatModifier Increase(TTag tag, PercentageValue value) =>
+      Increase(ImmutableDictionary<TTag, PercentageValue>.Empty.Add(tag, value));
+
     public IStatModifier Set(ImmutableDictionary<TTag, TValue> value) =>
       TaggedNumericStatModifier<TTag, TValue>.Set(this, value);
+
+    public IStatModifier Set(TTag tag, TValue value) =>
+      Set(ImmutableDictionary<TTag, TValue>.Empty.Add(tag, value));
 
     public override ImmutableDictionary<TTag, TValue> ComputeValue(
       IReadOnlyDictionary<ModifierType, IEnumerable<TaggedNumericStatModifier<TTag, TValue>>> groups)

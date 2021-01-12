@@ -51,6 +51,13 @@ namespace Nighthollow.Stats
           .GroupBy(operation => operation.Type)
           .ToDictionary(g => g.Key, g => g.Select(m => m)));
 
+    [MustUseReturnValue]
+    public StatTable OnTick() =>
+      new StatTable(_parent,
+        _modifiers.ToImmutableDictionary(
+          pair => pair.Key,
+          pair => pair.Value.RemoveAll(m => m.Lifetime?.IsValid() == false)));
+
     IEnumerable<IStatModifier> ModifiersForStat(StatId statId)
     {
       if (_modifiers.TryGetValue(statId, out var list))

@@ -38,7 +38,7 @@ namespace Nighthollow.Components
     Stunned
   }
 
-  public sealed class Creature : MonoBehaviour
+  public sealed class Creature : MonoBehaviour, IStatOwner
   {
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
@@ -103,6 +103,8 @@ namespace Nighthollow.Components
 
     void Update()
     {
+      _data = _data.OnTick();
+
       if (_state == CreatureState.Dying)
       {
         return;
@@ -215,6 +217,11 @@ namespace Nighthollow.Components
       Root.Instance.HelperTextService.OnCreaturePlayed();
 
       _coroutine = StartCoroutine(RunCoroutine());
+    }
+
+    public void InsertModifier(IStatModifier modifier)
+    {
+      _data = _data.WithStats(_data.Stats.InsertModifier(modifier));
     }
 
     void TryToUseSkill()

@@ -45,5 +45,7 @@ namespace Nighthollow.Data
     public bool IsMelee() => BaseType.SkillType == SkillType.Melee;
 
     public bool IsProjectile() => BaseType.SkillType == SkillType.Projectile;
+
+    public SkillData OnTick() => WithStats(Stats.OnTick());
   }
 }

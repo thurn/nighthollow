@@ -987,7 +987,13 @@ namespace Nighthollow.Data
   {
     public GameState WithTutorialState(TutorialState tutorialState) =>
       new GameState(
-        tutorialState);
+        tutorialState,
+        CurrentEnemy);
+
+    public GameState WithCurrentEnemy(CurrentEnemyState currentEnemy) =>
+      new GameState(
+        TutorialState,
+        currentEnemy);
 
   }
 

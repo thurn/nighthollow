@@ -35,6 +35,14 @@ namespace Nighthollow.Stats
     ModifierType Type { get; }
 
     /// <summary>
+    /// A modifier may optionally be constructed with a lifetime, which dictates when this modifier should be removed
+    /// from its containing StatTable.
+    /// </summary>
+    ILifetime? Lifetime { get; }
+
+    IStatModifier WithLifetime(ILifetime lifetime);
+
+    /// <summary>
     /// Produce a description of this modifier based on the provided template. Templates for numeric stats contain the
     /// character '#' which should be replaced with the modifier description. Templates for boolean stats contain two
     /// descriptions separated by the '/' character, which correspond to true / false respectively.

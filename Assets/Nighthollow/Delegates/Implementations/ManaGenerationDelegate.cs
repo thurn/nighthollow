@@ -28,11 +28,8 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnActivate(CreatureContext c)
     {
-      // c.Results.Add(
-      //   new ApplyModifierToOwnerEffect(c.Self,
-      //     Stat.ManaGain.Modifier(
-      //       NumericOperation.Add(c.Get(Stat.AddedManaGain)),
-      //       new WhileAliveLifetime(c.Self))));
+      c.Results.Add(new ApplyModifierToOwnerEffect(c.Self,
+        Stat.ManaGain.Add(c.Get(Stat.AddedManaGain)).WithLifetime(new WhileAliveLifetime(c.Self))));
     }
   }
 }

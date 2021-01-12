@@ -26,20 +26,28 @@ namespace Nighthollow.Stats
 #pragma warning disable 618 // Using Obsolete
     public static BooleanStatModifier Set(AbstractStat<BooleanStatModifier, bool> stat, bool value) =>
       new BooleanStatModifier(stat.StatId, value);
-#pragma warning restore 618
+#pragma warning restore 618 // Using Obsolete
 
     [SerializationConstructor]
     [Obsolete("This constructor is visible only for use by the serialization system.")]
-    public BooleanStatModifier(StatId statId, bool setValue)
+    public BooleanStatModifier(StatId statId, bool setValue) : this(statId, setValue, null)
+    {
+    }
+
+    BooleanStatModifier(StatId statId, bool setValue, ILifetime? lifetime)
     {
       StatId = statId;
       SetValue = setValue;
       Type = ModifierType.Set;
+      Lifetime = lifetime;
     }
 
     [Key(0)] public StatId StatId { get; }
     [Key(1)] public bool SetValue { get; }
     [IgnoreMember] public ModifierType Type { get; }
+    [IgnoreMember] public ILifetime? Lifetime { get; }
+
+    public IStatModifier WithLifetime(ILifetime lifetime) => new BooleanStatModifier(StatId, SetValue, Lifetime);
 
     public string Describe(string template, IValueData? highValue)
     {

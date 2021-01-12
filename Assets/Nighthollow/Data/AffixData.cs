@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
@@ -36,10 +37,10 @@ namespace Nighthollow.Data
 
     public static (StatTable, ImmutableList<DelegateId>) ProcessAffixes(
       StatTable stats,
-      ImmutableList<AffixData> affixes)
+      IEnumerable<ModifierData> modifiers)
     {
       var delegates = ImmutableList.CreateBuilder<DelegateId>();
-      foreach (var modifier in affixes.SelectMany(a => a.Modifiers).Where(modifier => !modifier.Targeted))
+      foreach (var modifier in modifiers.Where(modifier => !modifier.Targeted))
       {
         if (modifier.DelegateId.HasValue)
         {

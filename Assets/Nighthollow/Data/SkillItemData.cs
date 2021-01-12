@@ -55,7 +55,8 @@ namespace Nighthollow.Data
         .InsertNullableModifier(Stat.CanCrit.SetIfTrue(baseType.CanCrit))
         .InsertNullableModifier(Stat.CanStun.SetIfTrue(baseType.CanStun));
 
-      var (stats, delegates) = AffixData.ProcessAffixes(statTable, Affixes);
+      var (stats, delegates) = AffixData.ProcessAffixes(statTable,
+        Affixes.SelectMany(a => a.Modifiers).Concat(ImplicitModifiers));
 
       return new SkillData(
         new SkillDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList()),

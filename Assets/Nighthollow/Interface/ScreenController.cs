@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using Nighthollow.Data;
 using Nighthollow.Editing;
 using Nighthollow.Items;
 using Nighthollow.Utils;
@@ -58,7 +59,7 @@ namespace Nighthollow.Interface
     }
   }
 
-  public sealed class ScreenController : MonoBehaviour
+  public sealed class ScreenController : MonoBehaviour, IOnDatabaseReadyListener
   {
     public static ElementKey<HideableVisualElement> Background =
       new ElementKey<HideableVisualElement>("Background");
@@ -85,6 +86,8 @@ namespace Nighthollow.Interface
       new ElementKey<GameDataEditor>("GameDataEditor", createAtRuntime: true);
 
     [SerializeField] UIDocument _document = null!;
+    [SerializeField] DataService _dataService = null!;
+
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
     readonly List<IElementKey> _keys = new List<IElementKey>
@@ -107,6 +110,7 @@ namespace Nighthollow.Interface
 
     VisualElement _screen = null!;
     int? _currentlyWithinDragTarget;
+    Database? _database;
 
     public UIDocument Document => _document;
     public VisualElement Screen => _screen;
@@ -132,7 +136,32 @@ namespace Nighthollow.Interface
 
       _screen.RegisterCallback<MouseMoveEvent>(MouseMove);
       _screen.RegisterCallback<MouseUpEvent>(MouseUp);
+      _dataService.OnReady(this);
     }
+
+    public void OnDatabaseReady(Database database)
+    {
+      _database = database;
+    }
+
+    void Update()
+    {
+      if (Input.GetKeyDown(KeyCode.G) && CtrlDown() && _database != null)
+      {
+        var editor = Get(GameDataEditor);
+        if (editor.Visible)
+        {
+          editor.Hide();
+        }
+        else
+        {
+          editor.Show(new GameDataEditor.Args(_database), true);
+        }
+      }
+    }
+
+    static bool CtrlDown() => Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) ||
+                              Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
 
     public T Get<T>(ElementKey<T> key) where T : AbstractHideableElement, new() => (T) GetElement(key);
 

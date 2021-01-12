@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using System.Linq;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Stats;
 
@@ -41,5 +42,8 @@ namespace Nighthollow.Data
     [Field] public ImmutableList<SkillData> Skills { get; }
     [Field] public CreatureTypeData BaseType { get; }
     [Field] public CreatureItemData ItemData { get; }
+
+    public CreatureData OnTick() => WithStats(Stats.OnTick())
+      .WithSkills(Skills.Select(skill => skill.WithStats(skill.Stats.OnTick())).ToImmutableList());
   }
 }

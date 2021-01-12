@@ -89,5 +89,10 @@ namespace Nighthollow.Utils
     {
       return Enum.GetValues(type).Cast<T>().Where(v => !v.Equals(obj: default));
     }
+
+    public static IEnumerable<TSource> AppendIfNotNull<TSource>(
+      this IEnumerable<TSource> source,
+      TSource? element) where TSource : class =>
+      element == null ? source : source.Append(element);
   }
 }

@@ -18,6 +18,7 @@ using System.Linq;
 using MessagePack;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 
 #nullable enable
 
@@ -79,13 +80,16 @@ namespace Nighthollow.Data
         .InsertModifier(Stat.ManaCost.Set(ManaCost))
         .InsertModifier(Stat.InfluenceCost.Set(InfluenceCost.Dictionary))
         .InsertModifier(Stat.BaseDamage.Set(BaseDamage.Dictionary));
-      var (stats, delegates) = AffixData.ProcessAffixes(statTable, Affixes);
+      var (stats, delegates) = AffixData.ProcessAffixes(statTable,
+        Affixes.SelectMany(a => a.Modifiers).Concat(ImplicitModifiers));
 
       return new CreatureData(
         new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList()),
         stats,
         Skills.Select(s => s.BuildSkill(gameData, stats))
-          .Append(SkillItemData.BasicMeleeAttack(gameData, stats))
+          .AppendIfNotNull(baseType.SkillAnimations.Any(a => a.SkillAnimationType == SkillAnimationType.MeleeSkill)
+            ? SkillItemData.BasicMeleeAttack(gameData, stats)
+            : null)
           .ToImmutableList(),
         baseType,
         this

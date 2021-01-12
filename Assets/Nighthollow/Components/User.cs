@@ -29,7 +29,7 @@ using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public sealed class User : MonoBehaviour
+  public sealed class User : MonoBehaviour, IStatOwner
   {
     [SerializeField] Hand _hand = null!;
 
@@ -41,7 +41,7 @@ namespace Nighthollow.Components
     public Hand Hand => _hand;
     public Deck Deck => _deck;
 
-    public UserData Data { get; private set; }
+    public UserData Data { get; private set; } = null!;
 
     public bool GameOver { get; private set; }
 
@@ -109,6 +109,11 @@ namespace Nighthollow.Components
       Root.Instance.HelperTextService.OnDrewOpeningHand();
     }
 
+    public void InsertModifier(IStatModifier modifier)
+    {
+      Data = Data.WithStats(Data.Stats.InsertModifier(modifier));
+    }
+
     void Update()
     {
       if (_statusDisplay != null)
@@ -116,8 +121,9 @@ namespace Nighthollow.Components
         _statusDisplay.Mana = Mana;
         _statusDisplay.Influence = Data.Stats.Get(Stat.Influence);
       }
-    }
 
+      Data = Data?.OnTick();
+    }
 
     public void SpendMana(int amount)
     {

@@ -16,6 +16,11 @@
 
 namespace Nighthollow.Stats
 {
+  public interface IStatOwner
+  {
+    void InsertModifier(IStatModifier modifier);
+  }
+
   public abstract class StatEntity
   {
     public abstract StatTable Stats { get; }
