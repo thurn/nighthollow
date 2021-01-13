@@ -101,7 +101,7 @@ namespace Nighthollow.Data
         value.SkillAnimations
           .Select(a => a.SkillTypeId)
           .WhereNotNull()
-          .Select(id => SkillTypeData.DefaultItem(gameData, id))
+          .Select(id => SkillTypeData.DefaultItem(id, gameData))
           .ToImmutableList(),
         ImmutableList<AffixData>.Empty,
         value.ImplicitModifiers.Select(m => m.Value != null ? m : m.WithValue(m.ValueLow)).ToImmutableList(),

@@ -36,18 +36,15 @@ namespace Nighthollow.Data
     GameData _gameData;
     bool _writePending;
 
-    public Database(MessagePackSerializerOptions serializationOptions, AssetService assetService, GameData gameData)
+    public Database(MessagePackSerializerOptions serializationOptions, GameData gameData)
     {
       _serializationOptions = serializationOptions;
-      AssetService = assetService;
       _gameData = gameData;
       _updatedListeners = ImmutableDictionary<(ITableId, int), ImmutableList<IListener>>.Empty;
       _addedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
       _removedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
       _mutations = ImmutableList<IMutation>.Empty;
     }
-
-    public AssetService AssetService { get; }
 
     /// <summary>
     /// Retrieves a snapshot of the database state. There are no guarantees about how up-to-date this value

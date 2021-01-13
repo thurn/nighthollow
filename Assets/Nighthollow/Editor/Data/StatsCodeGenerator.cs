@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Text;
 using Nighthollow.Data;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 using UnityEditor;
 using UnityEngine;
@@ -53,9 +54,9 @@ namespace Nighthollow.Editor.Data
       Object.DestroyImmediate(root);
     }
 
-    static void Generate(Database database)
+    static void Generate(FetchResult fetchResult)
     {
-      var stats = database.Snapshot().StatData;
+      var stats = fetchResult.Database.Snapshot().StatData;
       var builder = CreateHeader("\nusing System;\nusing Nighthollow.Data;\n");
 
       builder.Append("  public enum StatId\n");

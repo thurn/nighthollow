@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Effects
     public string Address { get; }
     public Vector2 Position { get; }
 
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
       // var effect = Database.Instance.Assets.InstantiatePrefab<TimedEffect>(Address);
       // effect.transform.position = Position;

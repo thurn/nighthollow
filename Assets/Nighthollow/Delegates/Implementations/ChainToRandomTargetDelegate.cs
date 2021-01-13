@@ -34,11 +34,11 @@ namespace Nighthollow.Delegates.Implementations
 
     public override bool ShouldSkipProjectileImpact(SkillContext c)
     {
-      if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) > 0)
+      if (c.Projectile && c.Projectile!.KeyValueStore.Get(Key.TimesChained) > 0)
         // We skip impact for the projectile for creatures which have already been hit by a chaining projectile
       {
         return !c.Delegate.FindTargets(c)
-          .Except(c.Projectile.Values.Get(Key.SkipProjectileImpacts)).Any();
+          .Except(c.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts)).Any();
       }
 
       return false;
@@ -46,10 +46,10 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
-      if (c.Projectile && c.Projectile!.Values.Get(Key.TimesChained) < c.GetInt(Stat.MaxProjectileTimesChained))
+      if (c.Projectile && c.Projectile!.KeyValueStore.Get(Key.TimesChained) < c.GetInt(Stat.MaxProjectileTimesChained))
       {
         var enemies = Root.Instance.CreatureService.EnemyCreatures()
-          .Except(c.Projectile.Values.Get(Key.SkipProjectileImpacts))
+          .Except(c.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
           .ToList();
         if (enemies.Count > 0)
         {
@@ -60,7 +60,7 @@ namespace Nighthollow.Delegates.Implementations
             c.DelegateIndex,
             c.Projectile.transform.position,
             trackCreature: enemy,
-            values: c.Projectile.Values.Copy()
+            values: c.Projectile.KeyValueStore
               .Increment(Key.TimesChained)
               .Append(Key.SkipProjectileImpacts, target)));
         }

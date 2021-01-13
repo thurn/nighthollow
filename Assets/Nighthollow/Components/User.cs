@@ -51,23 +51,22 @@ namespace Nighthollow.Components
       private set => _mana = NumericUtils.Clamp(value, low: 0, high: 999);
     }
 
-    public void DrawOpeningHand(Database database)
+    public void DrawOpeningHand(GameServiceRegistry registry)
     {
-      var gameData = database.Snapshot();
+      var gameData = registry.Database.Snapshot();
       Data = gameData.GameState.BuildUserData(gameData);
 
       ImmutableList<CreatureItemData> cards;
       if (gameData.Deck.IsEmpty)
       {
         cards = gameData.ItemLists.Values.First(list => list.Name == StaticItemListName.StartingDeck).Creatures;
-        database.InsertRange(TableId.Deck, cards);
       }
       else
       {
         cards = gameData.Deck.Values.ToImmutableList();
       }
 
-      var builtDeck = cards.Select(item => item.BuildCreature(gameData, Data.Stats));
+      var builtDeck = cards.Select(item => item.BuildCreature(registry, Data.Stats));
       _deck.OnStartGame(builtDeck, gameData.GameState.TutorialState != TutorialState.Completed);
 
       var openingHand = new List<CreatureData>();
@@ -77,24 +76,10 @@ namespace Nighthollow.Components
       }
 
       _hand.OverrideHandPosition(value: true);
-      _hand.DrawCards(openingHand, () => OnDrewHand(gameData));
+      _hand.DrawCards(openingHand, () => OnDrewHand(registry));
     }
 
-    public void OnStartGame(GameData gameData)
-    {
-      gameObject.SetActive(value: true);
-      Root.Instance.Enemy.OnGameStarted(gameData);
-      Root.Instance.HelperTextService.OnGameStarted();
-      StartCoroutine(GainMana());
-      StartCoroutine(DrawCards());
-
-      _statusDisplay = Root.Instance.ScreenController.Get(ScreenController.UserStatus);
-      _statusDisplay.Show(animate: true);
-
-      Mana = Data.GetInt(Stat.StartingMana);
-    }
-
-    void OnDrewHand(GameData gameData)
+    void OnDrewHand(GameServiceRegistry registry)
     {
       _hand.SetCardsToPreviewMode(value: true);
       ButtonUtil.DisplayMainButtons(Root.Instance.ScreenController,
@@ -103,10 +88,24 @@ namespace Nighthollow.Components
           new ButtonUtil.Button("Start Game!", () =>
           {
             _hand.SetCardsToPreviewMode(value: false);
-            _hand.OverrideHandPosition(value: false, () => OnStartGame(gameData));
+            _hand.OverrideHandPosition(value: false, () => OnStartGame(registry));
           }, large: true)
         });
       Root.Instance.HelperTextService.OnDrewOpeningHand();
+    }
+
+    public void OnStartGame(GameServiceRegistry registry)
+    {
+      gameObject.SetActive(value: true);
+      Root.Instance.Enemy.OnGameStarted(registry);
+      Root.Instance.HelperTextService.OnGameStarted();
+      StartCoroutine(GainMana());
+      StartCoroutine(DrawCards());
+
+      _statusDisplay = Root.Instance.ScreenController.Get(ScreenController.UserStatus);
+      _statusDisplay.Show(animate: true);
+
+      Mana = Data.GetInt(Stat.StartingMana);
     }
 
     public void InsertModifier(IStatModifier modifier)

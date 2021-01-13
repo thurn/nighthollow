@@ -18,6 +18,7 @@ using System.Collections.Immutable;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 using UnityEngine;
 
@@ -27,7 +28,8 @@ namespace Nighthollow.Delegates.Core
 {
   public abstract class DelegateList : AbstractDelegateList, IDelegate
   {
-    protected DelegateList(IReadOnlyList<IDelegate> delegates) : base(delegates)
+    protected DelegateList(IReadOnlyList<IDelegate> delegates, GameServiceRegistry registry)
+      : base(delegates, registry)
     {
     }
 

@@ -17,6 +17,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
 using Nighthollow.Delegates.Core;
+using Nighthollow.Services;
+using Nighthollow.State;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 
@@ -70,8 +72,9 @@ namespace Nighthollow.Data
       Func<CreatureItemData, T> onCreature,
       Func<ResourceItemData, T> onResource) => onCreature(this);
 
-    public CreatureData BuildCreature(GameData gameData, StatTable parentStats)
+    public CreatureData BuildCreature(GameServiceRegistry services, StatTable parentStats)
     {
+      var gameData = services.Database.Snapshot();
       var baseType = gameData.CreatureTypes[CreatureTypeId];
       var statTable = new StatTable(parentStats)
         .InsertModifier(Stat.Health.Set(Health))
@@ -84,15 +87,16 @@ namespace Nighthollow.Data
         Affixes.SelectMany(a => a.Modifiers).Concat(ImplicitModifiers));
 
       return new CreatureData(
-        new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList()),
+        new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList(), services),
         stats,
-        Skills.Select(s => s.BuildSkill(gameData, stats))
+        Skills.Select(s => s.BuildSkill(services, gameData, stats))
           .AppendIfNotNull(baseType.SkillAnimations.Any(a => a.SkillAnimationType == SkillAnimationType.MeleeSkill)
-            ? SkillItemData.BasicMeleeAttack(gameData, stats)
+            ? SkillItemData.BasicMeleeAttack(services, gameData, stats)
             : null)
           .ToImmutableList(),
         baseType,
-        this
+        this,
+        new KeyValueStore()
       );
     }
   }

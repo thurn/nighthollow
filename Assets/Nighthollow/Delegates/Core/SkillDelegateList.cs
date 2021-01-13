@@ -14,7 +14,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Implementations;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -22,8 +24,8 @@ namespace Nighthollow.Delegates.Core
 {
   public sealed class SkillDelegateList : DelegateList
   {
-    public SkillDelegateList(IEnumerable<IDelegate> delegates) :
-      base(delegates.Append(new DefaultSkillDelegate()).ToList())
+    public SkillDelegateList(IEnumerable<IDelegate> delegates, GameServiceRegistry registry) :
+      base(delegates.Append(new DefaultSkillDelegate()).ToList(), registry)
     {
     }
 

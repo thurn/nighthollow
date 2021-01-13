@@ -24,18 +24,18 @@ using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class CreatureService : MonoBehaviour, IOnDatabaseReadyListener
+  public sealed class CreatureService : MonoBehaviour
   {
     readonly HashSet<Creature> _movingCreatures = new HashSet<Creature>();
 
     readonly Dictionary<(RankValue, FileValue), Creature> _userCreatures =
       new Dictionary<(RankValue, FileValue), Creature>();
 
-    AssetService _assetService = null!;
+    GameServiceRegistry? _registry;
 
-    public void OnDatabaseReady(Database database)
+    public void OnServicesReady(GameServiceRegistry registry)
     {
-      _assetService = database.AssetService;
+      _registry = registry;
     }
 
     public IEnumerable<Creature> EnemyCreatures()
@@ -45,7 +45,7 @@ namespace Nighthollow.Services
 
     public Creature CreateUserCreature(CreatureData creatureData)
     {
-      var result = _assetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       result.Initialize(creatureData);
       return result;
     }
@@ -55,7 +55,7 @@ namespace Nighthollow.Services
       FileValue file,
       float startingX)
     {
-      var result = _assetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
 
       result.Initialize(creatureData);
       result.ActivateCreature(rankValue: null, file, startingX);

@@ -13,62 +13,66 @@
 // limitations under the License.
 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
+using JetBrains.Annotations;
 
 #nullable enable
 
 namespace Nighthollow.State
 {
+  public interface IKeyValueStoreOwner
+  {
+    public void ExecuteMutatation(IMutation mutation);
+  }
+
   public sealed class KeyValueStore
   {
-    readonly Dictionary<int, object> _values;
+    readonly ImmutableDictionary<int, object> _values;
 
-    public KeyValueStore() : this(new Dictionary<int, object>())
+    public KeyValueStore() : this(ImmutableDictionary<int, object>.Empty)
     {
     }
 
-    KeyValueStore(Dictionary<int, object> values)
+    KeyValueStore(ImmutableDictionary<int, object> values)
     {
       _values = values;
     }
 
-    public T Get<T>(Key<T> key) => _values.ContainsKey(key.Id) ? (T) _values[key.Id] : key.DefaultValue;
-
-    public KeyValueStore Set<T>(Key<T> key, T value)
+    public bool TryGet<T>(Key<T> key, out T result) where T : notnull
     {
-      _values[key.Id] = value ?? throw new NullReferenceException($"Null value provided for Set() {key}");
-      return this;
-    }
-
-    public bool Has<T>(Key<T> key) => _values.ContainsKey(key.Id);
-
-    public KeyValueStore Mutate<T>(Mutation<T> mutation)
-    {
-      _values[mutation.Key.Id] = mutation.Apply(Get(mutation.Key)) ??
-                                 throw new NullReferenceException($"Null Apply() value returned for {mutation}");
-      return this;
-    }
-
-    public KeyValueStore Increment(Key<int> key) => Set(key, Get(key) + 1);
-
-    public KeyValueStore Append<T>(Key<IReadOnlyList<T>> key, T value) => Set(key, Get(key).Append(value).ToList());
-
-    public KeyValueStore Copy()
-    {
-      return new KeyValueStore(_values.ToDictionary(pair => pair.Key, pair => pair.Value));
-    }
-
-    public void OverwriteWithValues(KeyValueStore? other)
-    {
-      if (other != null)
+      if (_values.ContainsKey(key.Id))
       {
-        foreach (var pair in other._values)
-        {
-          _values[pair.Key] = pair.Value;
-        }
+        result = (T) _values[key.Id];
+        return true;
+      }
+      else
+      {
+        result = default!;
+        return false;
       }
     }
+
+    public T Get<T>(Key<T> key, T withDefault) where T : notnull =>
+      _values.ContainsKey(key.Id) ? (T) _values[key.Id] : withDefault;
+
+    public T Get<T>(KeyWithDefault<T> key) where T : notnull =>
+      _values.ContainsKey(key.Id) ? (T) _values[key.Id] : key.DefaultValue;
+
+    [MustUseReturnValue]
+    public KeyValueStore Mutate<T>(Mutation<T> mutation) where T : notnull =>
+      new KeyValueStore(_values.SetItem(mutation.Key.Id, mutation.Apply(Get(mutation.Key, mutation.NotFoundValue()))));
+
+    [MustUseReturnValue]
+    public KeyValueStore Set<T>(Key<T> key, T value) where T : notnull =>
+      new KeyValueStore(_values.SetItem(key.Id, value));
+
+    [MustUseReturnValue]
+    public KeyValueStore Increment(Key<int> key) => Mutate(new IncrementIntegerMutation(key));
+
+    [MustUseReturnValue]
+    public KeyValueStore Append<T>(Key<ImmutableList<T>> key, T value) where T : notnull =>
+      Mutate(new AppendToListMutation<T>(key, value));
+
+    public bool Has<T>(Key<T> key) where T : notnull => _values.ContainsKey(key.Id);
   }
 }

@@ -351,9 +351,9 @@ namespace Nighthollow.Editing
       _currentlySelected = null;
     }
 
-    public void FilterOptions(string input)
+    public void FilterOptions(string? input)
     {
-      RenderOptions(_currentlySelected.HasValue ? _optionLabels[_currentlySelected.Value].text : null, input);
+      RenderOptions(_currentlySelected.HasValue ? _optionLabels[_currentlySelected.Value].text : null, input ?? "");
     }
 
     static bool MatchesFilter(string text, string filter) =>

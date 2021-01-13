@@ -19,7 +19,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Stats
 {
-  public abstract class AbstractStat<TModifier, TValue> : IStat where TModifier : IStatModifier
+  public abstract class AbstractStat<TModifier, TValue> : IStat where TModifier : IStatModifier where TValue : notnull
   {
     protected AbstractStat(StatId statId)
     {
@@ -43,5 +43,7 @@ namespace Nighthollow.Stats
 
     protected virtual bool TryParseIncrease(string input, out IValueData result) =>
       PercentageValue.TryParseValue(input, out result);
+
+    public virtual string Describe(TValue value) => value.ToString();
   }
 }

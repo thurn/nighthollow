@@ -41,7 +41,7 @@ namespace Nighthollow.Delegates.Effects
     public Event EventName { get; }
     public Creature Creature { get; }
 
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
       switch (EventName)
       {

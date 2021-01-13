@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
 
 #nullable enable
 
@@ -19,10 +20,10 @@ namespace Nighthollow.State
 {
   public interface IMutation
   {
-    void ApplyTo(IHasKeyValueStore entity);
+    [MustUseReturnValue] KeyValueStore Mutate(KeyValueStore input);
   }
 
-  public abstract class Mutation<T> : IMutation
+  public abstract class Mutation<T> : IMutation where T : notnull
   {
     protected Mutation(Key<T> key)
     {
@@ -31,13 +32,10 @@ namespace Nighthollow.State
 
     public Key<T> Key { get; }
 
-    public void ApplyTo(IHasKeyValueStore store)
-    {
-      store.Values.Mutate(this);
-    }
-
     public abstract T NotFoundValue();
 
     public abstract T Apply(T currentValue);
+
+    public KeyValueStore Mutate(KeyValueStore input) => input.Mutate(this);
   }
 }

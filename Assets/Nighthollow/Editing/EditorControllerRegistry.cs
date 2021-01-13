@@ -107,13 +107,13 @@ namespace Nighthollow.Editing
     {
       if (_values != null)
       {
-        return _values.Get(stat).ToString();
+        return stat.Describe(_values.Get(stat));
       }
       else
       {
         var low = _low!.Get(stat);
         var high = _high!.Get(stat);
-        return Equals(low, high) ? low.ToString() : $"({low} to {high})";
+        return Equals(low, high) ? stat.Describe(low) : $"({stat.Describe(low)} to {stat.Describe(high)})";
       }
     }
   }
@@ -156,6 +156,24 @@ namespace Nighthollow.Editing
     }
   }
 
+  sealed class SkillItemController : EditorController<SkillItemData>
+  {
+    public SkillItemController() : base(new Dictionary<string, Func<GameData, SkillItemData, string>>
+    {
+      {nameof(CreatureItemData.ImplicitModifiers), (g, d) => RenderModifiers(g, d.ImplicitModifiers)}
+    })
+    {
+    }
+
+    public override void WriteForeignKey(int id, ReflectivePath reflectivePath)
+    {
+      if (reflectivePath.Read() is SkillItemData _)
+      {
+        reflectivePath.Write(SkillTypeData.DefaultItem(id, reflectivePath.Database.Snapshot()));
+      }
+    }
+  }
+
   public static class EditorControllerRegistry
   {
     static readonly IReadOnlyDictionary<Type, EditorController> Controllers =
@@ -163,7 +181,8 @@ namespace Nighthollow.Editing
       {
         {typeof(CreatureTypeData), new CreatureTypeController()},
         {typeof(SkillTypeData), new SkillTypeController()},
-        {typeof(CreatureItemData), new CreatureItemController()}
+        {typeof(CreatureItemData), new CreatureItemController()},
+        {typeof(SkillItemData), new SkillItemController()}
       };
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)

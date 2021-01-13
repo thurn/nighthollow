@@ -141,5 +141,8 @@ namespace Nighthollow.Stats
       builder[tagNames[tagString]] = (TType) result.Get();
       return true;
     }
+
+    public override string Describe(ImmutableDictionary<TTag, TValue> value) =>
+      string.Join(", ", value.Select(pair => $"{pair.Value} {pair.Key}"));
   }
 }

@@ -34,6 +34,8 @@ namespace Nighthollow.Services
 
     [SerializeField] Prefabs _prefabs = null!;
 
+    [SerializeField] DataService _dataService = null!;
+
     [SerializeField] ObjectPoolService _objectPoolService = null!;
 
     [SerializeField] CreatureService _creatureService = null!;
@@ -77,6 +79,7 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_mainCamera);
       Errors.CheckNotNull(_mainCanvas);
       Errors.CheckNotNull(_prefabs);
+      Errors.CheckNotNull(_dataService);
       Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_creatureService);
       Errors.CheckNotNull(_screenController);
@@ -86,6 +89,31 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_helperTextService);
 
       _instance = this;
+
+      _screenController.Initialize();
+      _dataService.OnReady(OnDataFetched);
+    }
+
+    void OnDataFetched(FetchResult fetchResult)
+    {
+      var registry = new GameServiceRegistry(
+        fetchResult.Database,
+        fetchResult.AssetService,
+        _screenController,
+        _objectPoolService,
+        _prefabs,
+        _mainCanvas,
+        _creatureService,
+        _user,
+        _enemy,
+        _damageTextService,
+        _helperTextService);
+      
+      _screenController.OnServicesReady(registry);
+      _creatureService.OnServicesReady(registry);
+      _helperTextService.OnServicesReady(registry);
+      _user.Hand.OnServicesReady(registry);
+      _user.DrawOpeningHand(registry);
     }
 
     public StatTable StatsForPlayer(PlayerName player)

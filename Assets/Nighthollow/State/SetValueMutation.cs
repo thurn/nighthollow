@@ -17,12 +17,7 @@
 
 namespace Nighthollow.State
 {
-  public static class SetValueMutation
-  {
-    public static SetValueMutation<T> New<T>(Key<T> key, T newValue) => new SetValueMutation<T>(key, newValue);
-  }
-
-  public sealed class SetValueMutation<T> : Mutation<T>
+  public sealed class SetValueMutation<T> : Mutation<T> where T : notnull
   {
     public SetValueMutation(Key<T> key, T newValue) : base(key)
     {

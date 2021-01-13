@@ -13,6 +13,8 @@
 // limitations under the License.
 
 
+using Nighthollow.Services;
+
 #nullable enable
 
 namespace Nighthollow.Delegates.Effects
@@ -20,7 +22,7 @@ namespace Nighthollow.Delegates.Effects
   public abstract class Effect
   {
     // https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
-    public abstract void Execute();
+    public abstract void Execute(GameServiceRegistry registry);
 
     public virtual void RaiseEvents()
     {

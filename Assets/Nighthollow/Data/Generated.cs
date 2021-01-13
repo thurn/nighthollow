@@ -3,6 +3,7 @@
 using System.Collections.Immutable;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Stats;
+using Nighthollow.State;
 
 #nullable enable
 
@@ -755,7 +756,8 @@ namespace Nighthollow.Data
         Stats,
         Skills,
         BaseType,
-        ItemData);
+        ItemData,
+        KeyValueStore);
 
     public CreatureData WithStats(StatTable stats) =>
       new CreatureData(
@@ -763,7 +765,8 @@ namespace Nighthollow.Data
         stats,
         Skills,
         BaseType,
-        ItemData);
+        ItemData,
+        KeyValueStore);
 
     public CreatureData WithSkills(ImmutableList<SkillData> skills) =>
       new CreatureData(
@@ -771,7 +774,8 @@ namespace Nighthollow.Data
         Stats,
         skills,
         BaseType,
-        ItemData);
+        ItemData,
+        KeyValueStore);
 
     public CreatureData WithBaseType(CreatureTypeData baseType) =>
       new CreatureData(
@@ -779,7 +783,8 @@ namespace Nighthollow.Data
         Stats,
         Skills,
         baseType,
-        ItemData);
+        ItemData,
+        KeyValueStore);
 
     public CreatureData WithItemData(CreatureItemData itemData) =>
       new CreatureData(
@@ -787,7 +792,17 @@ namespace Nighthollow.Data
         Stats,
         Skills,
         BaseType,
-        itemData);
+        itemData,
+        KeyValueStore);
+
+    public CreatureData WithKeyValueStore(KeyValueStore keyValueStore) =>
+      new CreatureData(
+        Delegate,
+        Stats,
+        Skills,
+        BaseType,
+        ItemData,
+        keyValueStore);
 
   }
 

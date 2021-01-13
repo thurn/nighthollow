@@ -15,7 +15,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Implementations;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -23,8 +25,8 @@ namespace Nighthollow.Delegates.Core
 {
   public sealed class CreatureDelegateList : DelegateList
   {
-    public CreatureDelegateList(IEnumerable<IDelegate> delegates) :
-      base(delegates.Append(new DefaultCreatureDelegate()).ToList())
+    public CreatureDelegateList(IEnumerable<IDelegate> delegates, GameServiceRegistry registry) :
+      base(delegates.Append(new DefaultCreatureDelegate()).ToList(), registry)
     {
     }
 

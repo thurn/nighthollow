@@ -17,6 +17,7 @@ using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Editing;
 using Nighthollow.Interface;
+using Nighthollow.Services;
 using UnityEngine;
 
 #nullable enable
@@ -34,7 +35,7 @@ namespace Nighthollow.Components
     [Key(0)] public ImmutableDictionary<int, CreatureTypeData> Creatures { get; }
   }
 
-  public sealed class RewardsScreenInitializer : MonoBehaviour, IOnDatabaseReadyListener
+  public sealed class RewardsScreenInitializer : MonoBehaviour
   {
     [SerializeField] ScreenController _screenController = null!;
     [SerializeField] DataService _dataService = null!;
@@ -42,7 +43,10 @@ namespace Nighthollow.Components
     void Start()
     {
       _screenController.Initialize();
-      _dataService.OnReady(this);
+      _dataService.OnReady(result =>
+      {
+        _screenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(result.Database));
+      });
 
       // Database.OnReady(data =>
       // {
@@ -55,9 +59,8 @@ namespace Nighthollow.Components
       // });
     }
 
-    public void OnDatabaseReady(Database database)
+    public void OnServicesReady(GameServiceRegistry registry)
     {
-      _screenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(database));
       // database.Insert(TableId.CreatureTypes, 0, TestCreatures()[0]);
       // database.Insert(TableId.CreatureTypes, 1, TestCreatures()[1]);
     }

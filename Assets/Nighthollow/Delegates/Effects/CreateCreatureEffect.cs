@@ -36,7 +36,7 @@ namespace Nighthollow.Delegates.Effects
     public FileValue FilePosition { get; }
     public bool IsMoving { get; }
 
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
       // TODO
       var data = Data.BuildCreature(null!, null!);

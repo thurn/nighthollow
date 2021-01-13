@@ -18,6 +18,7 @@ using DG.Tweening;
 using Nighthollow.Data;
 using Nighthollow.Editing;
 using Nighthollow.Items;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -59,7 +60,7 @@ namespace Nighthollow.Interface
     }
   }
 
-  public sealed class ScreenController : MonoBehaviour, IOnDatabaseReadyListener
+  public sealed class ScreenController : MonoBehaviour
   {
     public static ElementKey<HideableVisualElement> Background =
       new ElementKey<HideableVisualElement>("Background");
@@ -110,7 +111,7 @@ namespace Nighthollow.Interface
 
     VisualElement _screen = null!;
     int? _currentlyWithinDragTarget;
-    Database? _database;
+    ServiceRegistry? _registry;
 
     public UIDocument Document => _document;
     public VisualElement Screen => _screen;
@@ -136,17 +137,16 @@ namespace Nighthollow.Interface
 
       _screen.RegisterCallback<MouseMoveEvent>(MouseMove);
       _screen.RegisterCallback<MouseUpEvent>(MouseUp);
-      _dataService.OnReady(this);
     }
 
-    public void OnDatabaseReady(Database database)
+    public void OnServicesReady(GameServiceRegistry registry)
     {
-      _database = database;
+      _registry = registry;
     }
 
     void Update()
     {
-      if (Input.GetKeyDown(KeyCode.G) && CtrlDown() && _database != null)
+      if (Input.GetKeyDown(KeyCode.G) && CtrlDown() && _registry != null)
       {
         var editor = Get(GameDataEditor);
         if (editor.Visible)
@@ -155,7 +155,7 @@ namespace Nighthollow.Interface
         }
         else
         {
-          editor.Show(new GameDataEditor.Args(_database), true);
+          editor.Show(new GameDataEditor.Args(_registry.Database), true);
         }
       }
     }

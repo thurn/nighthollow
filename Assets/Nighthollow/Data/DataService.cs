@@ -25,15 +25,22 @@ using UnityEngine;
 
 namespace Nighthollow.Data
 {
-  public interface IOnDatabaseReadyListener
+  public sealed class FetchResult
   {
-    void OnDatabaseReady(Database database);
+    public FetchResult(Database database, AssetService assetService)
+    {
+      Database = database;
+      AssetService = assetService;
+    }
+
+    public Database Database { get; }
+    public AssetService AssetService { get; }
   }
 
   public sealed class DataService : MonoBehaviour
   {
-    Database? _database;
-    readonly List<IOnDatabaseReadyListener> _listeners = new List<IOnDatabaseReadyListener>();
+    FetchResult? _fetchResult;
+    readonly List<Action<FetchResult>> _listeners = new List<Action<FetchResult>>();
     [SerializeField] bool _disablePersistence;
     MessagePackSerializerOptions _serializerOptions = null!;
 
@@ -93,8 +100,8 @@ namespace Nighthollow.Data
 
       StartCoroutine(AssetFetcher.FetchAssetsAsync(gameData, assetService =>
       {
-        _database = new Database(_serializerOptions, assetService, gameData);
-        InvokeListeners(_database);
+        _fetchResult = new FetchResult(new Database(_serializerOptions, gameData), assetService);
+        InvokeListeners(_fetchResult);
       }));
 
       // Uncomment these lines to perform a data migration.
@@ -104,32 +111,27 @@ namespace Nighthollow.Data
 
     void Update()
     {
-      _database?.PerformWritesInternal(_disablePersistence);
+      _fetchResult?.Database.PerformWritesInternal(_disablePersistence);
     }
 
-    public void OnReady(Action<Database> action)
+    public void OnReady(Action<FetchResult> action)
     {
-      OnReady(new DatabaseReadyActionListener(action));
-    }
-
-    public void OnReady(IOnDatabaseReadyListener listener)
-    {
-      Errors.CheckNotNull(listener);
-      if (_database != null)
+      Errors.CheckNotNull(action);
+      if (_fetchResult != null)
       {
-        listener.OnDatabaseReady(_database);
+        action(_fetchResult);
       }
       else
       {
-        _listeners.Add(listener);
+        _listeners.Add(action);
       }
     }
 
-    void InvokeListeners(Database database)
+    void InvokeListeners(FetchResult fetchResult)
     {
       foreach (var listener in _listeners)
       {
-        listener.OnDatabaseReady(database);
+        listener(fetchResult);
       }
 
       _listeners.Clear();
@@ -143,21 +145,6 @@ namespace Nighthollow.Data
       var transformed = dictionary.ToImmutableDictionary(p => p.Key, p => transformation(p.Value));
       using var editorStream = File.OpenWrite(EditorFilePath(tableId));
       MessagePackSerializer.Serialize(editorStream, transformed, _serializerOptions);
-    }
-
-    sealed class DatabaseReadyActionListener : IOnDatabaseReadyListener
-    {
-      readonly Action<Database> _action;
-
-      public DatabaseReadyActionListener(Action<Database> action)
-      {
-        _action = action;
-      }
-
-      public void OnDatabaseReady(Database database)
-      {
-        _action(database);
-      }
     }
   }
 }

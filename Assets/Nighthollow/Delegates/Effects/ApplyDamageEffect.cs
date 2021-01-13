@@ -14,6 +14,7 @@
 
 
 using Nighthollow.Components;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -32,7 +33,7 @@ namespace Nighthollow.Delegates.Effects
     public Creature Target { get; }
     public int Amount { get; }
 
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
       Target.AddDamage(Self, Amount);
     }

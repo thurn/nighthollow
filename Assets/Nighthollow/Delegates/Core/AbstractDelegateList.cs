@@ -16,6 +16,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -25,11 +27,13 @@ namespace Nighthollow.Delegates.Core
   public abstract class AbstractDelegateList
   {
     readonly IReadOnlyList<IDelegate> _delegates;
+    readonly GameServiceRegistry _registry;
 
-    protected AbstractDelegateList(IReadOnlyList<IDelegate> delegates)
+    protected AbstractDelegateList(IReadOnlyList<IDelegate> delegates, GameServiceRegistry registry)
     {
       Errors.CheckArgument(delegates.Count > 0, "Expected > 0 delegates");
       _delegates = delegates;
+      _registry = registry;
     }
 
     protected abstract AbstractDelegateList? GetChild(DelegateContext context);
@@ -91,7 +95,7 @@ namespace Nighthollow.Delegates.Core
 
       foreach (var effect in context.Results.Values)
       {
-        effect.Execute();
+        effect.Execute(_registry);
       }
 
       foreach (var effect in context.Results.Values)

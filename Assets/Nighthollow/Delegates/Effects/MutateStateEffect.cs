@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Services;
 using Nighthollow.State;
 
 #nullable enable
@@ -20,18 +21,18 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class MutateStateEffect : Effect
   {
-    public MutateStateEffect(IHasKeyValueStore target, IMutation mutation)
+    public MutateStateEffect(IKeyValueStoreOwner target, IMutation mutation)
     {
       Target = target;
       Mutation = mutation;
     }
 
-    public IHasKeyValueStore Target { get; }
+    public IKeyValueStoreOwner Target { get; }
     public IMutation Mutation { get; }
 
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
-      Mutation.ApplyTo(Target);
+      Target.ExecuteMutatation(Mutation);
     }
   }
 }

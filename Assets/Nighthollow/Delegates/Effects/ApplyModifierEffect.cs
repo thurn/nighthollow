@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -29,7 +30,7 @@ namespace Nighthollow.Delegates.Effects
     public IStatOwner Target { get; }
     public IStatModifier Modifier { get; }
 
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
       Target.InsertModifier(Modifier);
     }

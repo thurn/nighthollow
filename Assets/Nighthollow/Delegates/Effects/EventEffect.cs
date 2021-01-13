@@ -15,6 +15,7 @@
 
 using System;
 using Nighthollow.Delegates.Core;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -40,7 +41,7 @@ namespace Nighthollow.Delegates.Effects
     public TContext Context { get; }
     public Action<IDelegate, TContext> Action { get; }
 
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
     }
 

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using Nighthollow.Components;
 
 #nullable enable
@@ -21,28 +21,38 @@ namespace Nighthollow.State
 {
   public static class Key
   {
-    public static readonly Key<int> TimesChained =
-      new Key<int>(id: 1, defaultValue: 0);
+    public static readonly KeyWithDefault<int> TimesChained =
+      new KeyWithDefault<int>(1, defaultValue: 0);
 
-    public static readonly Key<IReadOnlyList<Creature>> SkipProjectileImpacts =
-      new Key<IReadOnlyList<Creature>>(id: 2, new List<Creature>());
+    public static readonly KeyWithDefault<ImmutableList<Creature>> SkipProjectileImpacts =
+      new KeyWithDefault<ImmutableList<Creature>>(2, defaultValue: ImmutableList<Creature>.Empty);
 
-    public static readonly Key<Creature?> LastCreatureHit =
-      new Key<Creature?>(id: 3, defaultValue: null);
+    public static readonly Key<Creature> LastCreatureHit =
+      new Key<Creature>(3);
 
-    public static readonly Key<int> TimesHit =
-      new Key<int>(id: 4, defaultValue: 0);
+    public static readonly KeyWithDefault<int> SequentialHitCount =
+      new KeyWithDefault<int>(4, defaultValue: 0);
   }
 
-  public sealed class Key<T>
+  public class Key<T> where T : notnull
   {
-    public Key(int id, T defaultValue)
+    public Key(int id)
     {
       Id = id;
-      DefaultValue = defaultValue;
     }
 
     public int Id { get; }
+
+    public Mutation<T> Set(T newValue) => new SetValueMutation<T>(this, newValue);
+  }
+
+  public sealed class KeyWithDefault<T> : Key<T> where T : notnull
+  {
+    public KeyWithDefault(int id, T defaultValue) : base(id)
+    {
+      DefaultValue = defaultValue;
+    }
+
     public T DefaultValue { get; }
   }
 }

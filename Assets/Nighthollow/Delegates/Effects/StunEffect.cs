@@ -14,6 +14,7 @@
 
 
 using Nighthollow.Components;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -30,7 +31,7 @@ namespace Nighthollow.Delegates.Effects
     public Creature Target { get; }
     public float DurationSeconds { get; }
 
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
       Target.Stun(DurationSeconds);
     }

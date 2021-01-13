@@ -16,6 +16,7 @@
 using DG.Tweening;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -36,7 +37,7 @@ namespace Nighthollow.Delegates.Effects
     public float Distance { get; }
     public float DurationSeconds { get; }
 
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
       Target.transform.DOMove(
         (Vector2) Target.transform.position +

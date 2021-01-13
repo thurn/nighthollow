@@ -45,7 +45,7 @@ namespace Nighthollow.Components
     [SerializeField] int _initialDragSiblingIndex;
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
-    AssetService _assetService = null!;
+    GameServiceRegistry? _registry;
 
     [Header("State")] CreatureData _data = null!;
 
@@ -56,9 +56,9 @@ namespace Nighthollow.Components
       Errors.CheckNotNull(_cardImage);
     }
 
-    public void Initialize(CreatureData cardData, AssetService assetService)
+    public void Initialize(CreatureData cardData, GameServiceRegistry registry)
     {
-      _assetService = assetService;
+      _registry = registry;
       _cardFront.gameObject.SetActive(value: false);
       _cardBack.gameObject.SetActive(value: true);
       _user = Root.Instance.User;
@@ -83,7 +83,7 @@ namespace Nighthollow.Components
     void Update()
     {
       _data = _data.OnTick();
-      _cardImage.sprite = _assetService.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
+      _cardImage.sprite = _registry?.AssetService.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
 
       var manaCost = _data.GetInt(Stat.ManaCost);
       var influenceCost = _data.Stats.Get(Stat.InfluenceCost);

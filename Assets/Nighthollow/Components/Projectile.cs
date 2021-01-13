@@ -14,7 +14,6 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-
 using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.State;
@@ -26,7 +25,7 @@ using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public sealed class Projectile : MonoBehaviour, IHasKeyValueStore
+  public sealed class Projectile : MonoBehaviour, IKeyValueStoreOwner
   {
     [Header("Config")] [SerializeField] TimedEffect _flashEffect = null!;
     [SerializeField] TimedEffect _hitEffect = null!;
@@ -37,8 +36,13 @@ namespace Nighthollow.Components
     SkillData _skillData = null!;
 
     public SkillData Data => _skillData;
-
     public Collider2D Collider => _collider;
+    public KeyValueStore KeyValueStore { get; set; } = new KeyValueStore();
+
+    public void ExecuteMutatation(IMutation mutation)
+    {
+      KeyValueStore = mutation.Mutate(KeyValueStore);
+    }
 
     void Update()
     {
@@ -85,8 +89,6 @@ namespace Nighthollow.Components
         ps.GetComponent<Renderer>().sortingOrder = 500;
       }
     }
-
-    public KeyValueStore Values { get; } = new KeyValueStore();
 
     public void Initialize(
       Creature firedBy,

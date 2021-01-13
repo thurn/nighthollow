@@ -13,24 +13,23 @@
 // limitations under the License.
 
 
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
 
 #nullable enable
 
 namespace Nighthollow.State
 {
-  public sealed class AppendToListMutation<T> : Mutation<IReadOnlyList<T>>
+  public sealed class AppendToListMutation<T> : Mutation<ImmutableList<T>> where T : notnull
   {
-    public AppendToListMutation(Key<IReadOnlyList<T>> key, T value) : base(key)
+    readonly T _value;
+
+    public AppendToListMutation(Key<ImmutableList<T>> key, T value) : base(key)
     {
-      Value = value;
+      _value = value;
     }
 
-    T Value { get; }
+    public override ImmutableList<T> NotFoundValue() => ImmutableList.Create(_value);
 
-    public override IReadOnlyList<T> NotFoundValue() => new List<T> {Value};
-
-    public override IReadOnlyList<T> Apply(IReadOnlyList<T> currentValue) => currentValue.Append(Value).ToList();
+    public override ImmutableList<T> Apply(ImmutableList<T> currentValue) => currentValue.Add(_value);
   }
 }

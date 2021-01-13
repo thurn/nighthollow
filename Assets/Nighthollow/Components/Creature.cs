@@ -18,6 +18,7 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Services;
+using Nighthollow.State;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -38,7 +39,7 @@ namespace Nighthollow.Components
     Stunned
   }
 
-  public sealed class Creature : MonoBehaviour, IStatOwner
+  public sealed class Creature : MonoBehaviour, IStatOwner, IKeyValueStoreOwner
   {
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
@@ -222,6 +223,11 @@ namespace Nighthollow.Components
     public void InsertModifier(IStatModifier modifier)
     {
       _data = _data.WithStats(_data.Stats.InsertModifier(modifier));
+    }
+
+    public void ExecuteMutatation(IMutation mutation)
+    {
+      _data = _data.WithKeyValueStore(mutation.Mutate(_data.KeyValueStore));
     }
 
     void TryToUseSkill()

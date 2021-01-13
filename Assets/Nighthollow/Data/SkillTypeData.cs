@@ -59,7 +59,7 @@ namespace Nighthollow.Data
 
     public override string ToString() => Name;
 
-    public static SkillItemData DefaultItem(GameData gameData, int skillTypeId)
+    public static SkillItemData DefaultItem(int skillTypeId, GameData gameData)
     {
       var value = gameData.SkillTypes[skillTypeId];
       return new SkillItemData(

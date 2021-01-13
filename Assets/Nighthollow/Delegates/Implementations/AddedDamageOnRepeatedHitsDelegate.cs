@@ -18,10 +18,9 @@ using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-
-using Nighthollow.Data;
 using Nighthollow.State;
 using Nighthollow.Stats;
+using UnityEngine;
 
 #nullable enable
 
@@ -34,34 +33,30 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnHitTarget(SkillContext c, Creature target, int damage)
     {
-      // var lastHit = c.Skill.Values.Get(Key.LastCreatureHit);
-      // if (lastHit && lastHit == target)
-      // {
-      //   c.Results.Add(new MutateStateEffect(c.Skill, new IncrementIntegerMutation(Key.TimesHit)));
-      // }
-      // else
-      // {
-      //   c.Results.Add(new MutateStateEffect(c.Skill, SetValueMutation.New(Key.LastCreatureHit, target)));
-      //   c.Results.Add(new MutateStateEffect(c.Skill, SetValueMutation.New(Key.TimesHit, newValue: 1)));
-      // }
+      if (c.Self.Data.KeyValueStore.TryGet(Key.LastCreatureHit, out var lastHit) && lastHit == target)
+      {
+        c.Results.Add(new MutateStateEffect(c.Self, new IncrementIntegerMutation(Key.SequentialHitCount)));
+      }
+      else
+      {
+        c.Results.Add(new MutateStateEffect(c.Self, Key.LastCreatureHit.Set(target)));
+        c.Results.Add(new MutateStateEffect(c.Self, Key.SequentialHitCount.Set(1)));
+      }
     }
 
     public override ImmutableDictionary<DamageType, int> TransformDamage(
       SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage)
     {
-      return damage;
-
-      // var lastHit = c.Skill.Values.Get(Key.LastCreatureHit);
-      // if (lastHit && lastHit == target)
-      // {
-      //   return DamageUtil.Add(damage, DamageUtil.Multiply(
-      //     c.Skill.Values.Get(Key.TimesHit),
-      //     DamageUtil.RollForDamage(c.Skill.Stats.Get(OldStat.SameTargetAddedDamage))));
-      // }
-      // else
-      // {
-      //   return damage;
-      // }
+      if (c.Self.Data.KeyValueStore.TryGet(Key.LastCreatureHit, out var lastHit) && lastHit == target)
+      {
+        return DamageUtil.Add(damage, DamageUtil.Multiply(
+          c.Self.Data.KeyValueStore.Get(Key.SequentialHitCount),
+          DamageUtil.RollForDamage(c.Skill.Stats.Get(Stat.SameTargetAddedDamage))));
+      }
+      else
+      {
+        return damage;
+      }
     }
   }
 }

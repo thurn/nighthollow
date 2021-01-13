@@ -21,7 +21,7 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class EnemyRemovedEffect : Effect
   {
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
       Root.Instance.Enemy.OnEnemyCreatureKilled();
     }

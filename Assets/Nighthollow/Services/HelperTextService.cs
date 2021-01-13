@@ -24,7 +24,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Services
 {
-  public sealed class HelperTextService : MonoBehaviour, IOnDatabaseReadyListener
+  public sealed class HelperTextService : MonoBehaviour
   {
     public enum ArrowDirection
     {
@@ -58,9 +58,9 @@ namespace Nighthollow.Services
       }
     }
 
-    public void OnDatabaseReady(Database database)
+    public void OnServicesReady(GameServiceRegistry registry)
     {
-      _gameState = database.Snapshot().GameState;
+      _gameState = registry.Database.Snapshot().GameState;
     }
 
     void Update()

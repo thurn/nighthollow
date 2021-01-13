@@ -15,6 +15,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Delegates.Core;
+using Nighthollow.State;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -28,13 +29,15 @@ namespace Nighthollow.Data
       StatTable stats,
       ImmutableList<SkillData> skills,
       CreatureTypeData baseType,
-      CreatureItemData itemData)
+      CreatureItemData itemData,
+      KeyValueStore keyValueStore)
     {
       Delegate = @delegate;
       Stats = stats;
       Skills = skills;
       BaseType = baseType;
       ItemData = itemData;
+      KeyValueStore = keyValueStore;
     }
 
     [Field] public DelegateList Delegate { get; }
@@ -42,6 +45,7 @@ namespace Nighthollow.Data
     [Field] public ImmutableList<SkillData> Skills { get; }
     [Field] public CreatureTypeData BaseType { get; }
     [Field] public CreatureItemData ItemData { get; }
+    [Field] public KeyValueStore KeyValueStore { get; }
 
     public CreatureData OnTick() => WithStats(Stats.OnTick())
       .WithSkills(Skills.Select(skill => skill.WithStats(skill.Stats.OnTick())).ToImmutableList());

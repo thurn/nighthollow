@@ -36,10 +36,11 @@ namespace Nighthollow.Components
 
     public EnemyData Data { get; private set; } = null!;
 
-    public void OnGameStarted(GameData gameData)
+    public void OnGameStarted(GameServiceRegistry registry)
     {
+      var gameData = registry.Database.Snapshot();
       Data = gameData.GameState.CurrentEnemy.BuildEnemyData(gameData);
-      _enemies = Data.Enemies.Select(item => item.BuildCreature(gameData, Data.Stats)).ToImmutableList();
+      _enemies = Data.Enemies.Select(item => item.BuildCreature(registry, Data.Stats)).ToImmutableList();
 
       StartCoroutine(SpawnAsync());
     }

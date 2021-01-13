@@ -56,9 +56,9 @@ namespace Nighthollow.Delegates.Effects
     public int FiringDelayMs { get; }
     public KeyValueStore? Values { get; }
 
-    public override void Execute()
+    public override void Execute(GameServiceRegistry registry)
     {
-      FiredBy.StartCoroutine(FireAsync());
+      FiredBy.StartCoroutine(FireAsync(registry));
     }
 
     public override void RaiseEvents()
@@ -66,13 +66,16 @@ namespace Nighthollow.Delegates.Effects
       FiredBy.Data.Delegate.OnFiredProjectile(SkillContext.Clone(), this);
     }
 
-    IEnumerator<YieldInstruction> FireAsync()
+    IEnumerator<YieldInstruction> FireAsync(GameServiceRegistry registry)
     {
       yield return new WaitForSeconds(FiringDelayMs / 1000f);
-      // var projectile = Database.Instance.Assets.InstantiatePrefab<Projectile>(
-      //   Errors.CheckNotNull(SkillContext.Skill.BaseType.Address));
-      // projectile.Values.OverwriteWithValues(Values);
-      // projectile.Initialize(FiredBy, SkillContext.Skill, this);
+      var projectile = registry.AssetService.InstantiatePrefab<Projectile>(
+        Errors.CheckNotNull(SkillContext.Skill.BaseType.Address));
+      if (Values != null)
+      {
+        projectile.KeyValueStore = Values;
+      }
+      projectile.Initialize(FiredBy, SkillContext.Skill, this);
     }
   }
 }
