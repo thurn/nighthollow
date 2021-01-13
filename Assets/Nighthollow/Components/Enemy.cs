@@ -105,6 +105,7 @@ namespace Nighthollow.Components
 
     FileValue RandomFile()
     {
+      return FileValue.File3;
       var selector = new DynamicRandomSelector<FileValue>();
       foreach (var file in BoardPositions.AllFiles)
       {
