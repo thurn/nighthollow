@@ -108,7 +108,7 @@ namespace Nighthollow.Services
         _enemy,
         _damageTextService,
         _helperTextService);
-      
+
       _screenController.OnServicesReady(registry);
       _creatureService.OnServicesReady(registry);
       _helperTextService.OnServicesReady(registry);

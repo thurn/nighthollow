@@ -25,9 +25,10 @@ namespace Nighthollow.Delegates.Implementations
   public sealed class AdjacentFileProjectilesDelegate : AbstractProjectileOffsetDelegate
   {
     public override string Describe(IStatDescriptionProvider provider) =>
-      $"Fires {provider.Get(Stat.ProjectileAdjacentsCount)} Projectiles in Adjacent Files";
+      $"Fires {provider.Get(Stat.ProjectileAdjacentsCount)} Additional Projectiles in Adjacent Files";
 
-    protected override int GetProjectileCount(DelegateContext c) => c.GetInt(Stat.ProjectileAdjacentsCount);
+    // Adds +1 since the stat does not include the initial projectile
+    protected override int GetProjectileCount(DelegateContext c) => c.GetInt(Stat.ProjectileAdjacentsCount) + 1;
 
     protected override Vector2 GetOrigin(DelegateContext c, int projectileNumber) =>
       (Vector2) c.Self.ProjectileSource.position +

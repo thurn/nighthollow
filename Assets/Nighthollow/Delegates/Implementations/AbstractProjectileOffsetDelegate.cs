@@ -30,6 +30,7 @@ namespace Nighthollow.Delegates.Implementations
 
     protected abstract Vector2 GetDirection(DelegateContext c, int projectileNumber);
 
+    /// <summary>Count of projectiles to fire, *including* the initial projectile.</summary>
     protected abstract int GetProjectileCount(DelegateContext c);
 
     public override bool ProjectileCouldHit(CreatureContext c)
