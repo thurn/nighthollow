@@ -46,7 +46,7 @@ namespace Nighthollow.Services
     public Creature CreateUserCreature(CreatureData creatureData)
     {
       var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
-      result.Initialize(creatureData);
+      result.Initialize(_registry!, creatureData);
       return result;
     }
 
@@ -57,7 +57,7 @@ namespace Nighthollow.Services
     {
       var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
 
-      result.Initialize(creatureData);
+      result.Initialize(_registry!, creatureData);
       result.ActivateCreature(rankValue: null, file, startingX);
       _movingCreatures.Add(result);
 

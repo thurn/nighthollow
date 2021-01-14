@@ -38,9 +38,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      // TODO
-      var data = Data.BuildCreature(null!, null!);
-      // var data = CreatureUtil.Build(Root.Instance.StatsForPlayer(Data.BaseType.Owner), Data);
+      var data = Data.BuildCreature(registry);
       if (IsMoving)
       {
         Root.Instance.CreatureService.CreateMovingCreature(data, FilePosition, RankPosition.ToXPosition());

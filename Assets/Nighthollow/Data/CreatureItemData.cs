@@ -72,11 +72,11 @@ namespace Nighthollow.Data
       Func<CreatureItemData, T> onCreature,
       Func<ResourceItemData, T> onResource) => onCreature(this);
 
-    public CreatureData BuildCreature(GameServiceRegistry services, StatTable parentStats)
+    public CreatureData BuildCreature(GameServiceRegistry registry)
     {
-      var gameData = services.Database.Snapshot();
+      var gameData = registry.Database.Snapshot();
       var baseType = gameData.CreatureTypes[CreatureTypeId];
-      var statTable = new StatTable(parentStats)
+      var statTable = new StatTable(registry.StatsForPlayer(baseType.Owner))
         .InsertModifier(Stat.Health.Set(Health))
         .InsertModifier(Stat.CreatureSpeed.Set(baseType.Speed))
         .InsertNullableModifier(Stat.IsManaCreature.SetIfTrue(baseType.IsManaCreature))
@@ -87,11 +87,11 @@ namespace Nighthollow.Data
         Affixes.SelectMany(a => a.Modifiers).Concat(ImplicitModifiers));
 
       return new CreatureData(
-        new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList(), services),
+        new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList(), registry),
         stats,
-        Skills.Select(s => s.BuildSkill(services, gameData, stats))
+        Skills.Select(s => s.BuildSkill(registry, gameData, stats))
           .AppendIfNotNull(baseType.SkillAnimations.Any(a => a.SkillAnimationType == SkillAnimationType.MeleeSkill)
-            ? SkillItemData.BasicMeleeAttack(services, gameData, stats)
+            ? SkillItemData.BasicMeleeAttack(registry, gameData, stats)
             : null)
           .ToImmutableList(),
         baseType,

@@ -75,6 +75,7 @@ namespace Nighthollow.Components
     Coroutine _coroutine = null!;
     SkillData _currentSkill = null!;
     CreatureData _data = null!;
+    GameServiceRegistry _registry = null!;
 
     public CreatureData Data => _data;
 
@@ -97,9 +98,29 @@ namespace Nighthollow.Components
 
     public CreatureState State => _state;
 
+    public string Name => _data.BaseType.Name;
+
     public bool AnimationPaused
     {
       set => _animator.speed = value ? 0 : 1;
+    }
+
+    public void Initialize(GameServiceRegistry registry, CreatureData creatureData)
+    {
+      _creatureService = Root.Instance.CreatureService;
+      _registry = registry;
+      SetState(CreatureState.Placing);
+      _animator = GetComponent<Animator>();
+      _collider = GetComponent<Collider2D>();
+      _collider.enabled = false;
+      _sortingGroup = GetComponent<SortingGroup>();
+      _statusBars = Root.Instance.Prefabs.CreateStatusBars();
+      _statusBars.HealthBar.gameObject.SetActive(value: false);
+      gameObject.layer = Constants.LayerForCreatures(creatureData.BaseType.Owner);
+      _animator.speed = _animationSpeedMultiplier;
+
+      _data = creatureData;
+      _initialized = true;
     }
 
     void Update()
@@ -164,23 +185,6 @@ namespace Nighthollow.Components
       }
     }
 
-    public void Initialize(CreatureData creatureData)
-    {
-      _creatureService = Root.Instance.CreatureService;
-      SetState(CreatureState.Placing);
-      _animator = GetComponent<Animator>();
-      _collider = GetComponent<Collider2D>();
-      _collider.enabled = false;
-      _sortingGroup = GetComponent<SortingGroup>();
-      _statusBars = Root.Instance.Prefabs.CreateStatusBars();
-      _statusBars.HealthBar.gameObject.SetActive(value: false);
-      gameObject.layer = Constants.LayerForCreatures(creatureData.BaseType.Owner);
-      _animator.speed = _animationSpeedMultiplier;
-
-      _data = creatureData;
-      _initialized = true;
-    }
-
     public void EditorSetReferences(Transform projectileSource,
       Transform healthbarAnchor,
       AttachmentDisplay attachmentDisplay)
@@ -214,7 +218,7 @@ namespace Nighthollow.Components
 
       ToDefaultState();
 
-      _data.Delegate.OnActivate(new CreatureContext(this));
+      _data.Delegate.OnActivate(CreateContext());
       Root.Instance.HelperTextService.OnCreaturePlayed();
 
       _coroutine = StartCoroutine(RunCoroutine());
@@ -230,11 +234,15 @@ namespace Nighthollow.Components
       _data = _data.WithKeyValueStore(mutation.Mutate(_data.KeyValueStore));
     }
 
+    CreatureContext CreateContext() => new CreatureContext(this, _registry);
+
+    SkillContext CurrentSkillContext() => new SkillContext(this, _currentSkill, _registry);
+
     void TryToUseSkill()
     {
       Errors.CheckState(CanUseSkill(), "Cannot use skill");
 
-      var skill = _data.Delegate.SelectSkill(new CreatureContext(this));
+      var skill = _data.Delegate.SelectSkill(CreateContext());
       if (skill != null)
       {
         SetState(CreatureState.UsingSkill);
@@ -263,7 +271,7 @@ namespace Nighthollow.Components
             throw Errors.UnknownEnumValue(skillAnimation);
         }
 
-        _currentSkill.Delegate.OnStart(new SkillContext(this, _currentSkill));
+        _currentSkill.Delegate.OnStart(CurrentSkillContext());
       }
       else
       {
@@ -293,7 +301,7 @@ namespace Nighthollow.Components
       _animator.SetTrigger(Death);
       _collider.enabled = false;
 
-      Data.Delegate.OnDeath(new CreatureContext(this));
+      Data.Delegate.OnDeath(CreateContext());
 
       SetState(CreatureState.Dying);
       _creatureService.RemoveCreature(this);
@@ -313,11 +321,11 @@ namespace Nighthollow.Components
         return;
       }
 
-      _currentSkill.Delegate.OnUse(new SkillContext(this, _currentSkill));
+      _currentSkill.Delegate.OnUse(CurrentSkillContext());
 
       if (_currentSkill.IsMelee())
       {
-        _currentSkill.Delegate.OnImpact(new SkillContext(this, _currentSkill));
+        _currentSkill.Delegate.OnImpact(CurrentSkillContext());
       }
     }
 
@@ -328,7 +336,7 @@ namespace Nighthollow.Components
       _damageTaken = Mathf.Clamp(value: 0, _damageTaken + damage, health);
       if (_damageTaken >= health)
       {
-        appliedBy.Data.Delegate.OnKilledEnemy(new CreatureContext(appliedBy), this, damage);
+        appliedBy.Data.Delegate.OnKilledEnemy(new CreatureContext(appliedBy, _registry), this, damage);
         Kill();
       }
     }

@@ -605,28 +605,40 @@ namespace Nighthollow.Data
         skillTypeId,
         Affixes,
         ImplicitModifiers,
-        Name);
+        Name,
+        Summons);
 
     public SkillItemData WithAffixes(ImmutableList<AffixData> affixes) =>
       new SkillItemData(
         SkillTypeId,
         affixes,
         ImplicitModifiers,
-        Name);
+        Name,
+        Summons);
 
     public SkillItemData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
       new SkillItemData(
         SkillTypeId,
         Affixes,
         implicitModifiers,
-        Name);
+        Name,
+        Summons);
 
     public SkillItemData WithName(string name) =>
       new SkillItemData(
         SkillTypeId,
         Affixes,
         ImplicitModifiers,
-        name);
+        name,
+        Summons);
+
+    public SkillItemData WithSummons(ImmutableList<CreatureItemData> summons) =>
+      new SkillItemData(
+        SkillTypeId,
+        Affixes,
+        ImplicitModifiers,
+        Name,
+        summons);
 
   }
 

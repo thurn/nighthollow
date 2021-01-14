@@ -18,6 +18,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
+using Nighthollow.Utils;
 
 #nullable enable
 
@@ -154,6 +155,7 @@ namespace Nighthollow.Editing
       public object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue)
       {
         var method = parent.GetType().GetMethod("With" + _property.Name, BindingFlags.Instance | BindingFlags.Public)!;
+        Errors.CheckNotNull(method, $"The method With{_property.Name}() was not found.");
         if (remainingSegments.IsEmpty)
         {
           return method.Invoke(parent, new[] {newValue});

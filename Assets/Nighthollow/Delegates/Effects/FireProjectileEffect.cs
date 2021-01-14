@@ -63,7 +63,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void RaiseEvents()
     {
-      FiredBy.Data.Delegate.OnFiredProjectile(SkillContext.Clone(), this);
+      FiredBy.Data.Delegate.OnFiredProjectile(SkillContext, this);
     }
 
     IEnumerator<YieldInstruction> FireAsync(GameServiceRegistry registry)
@@ -75,7 +75,7 @@ namespace Nighthollow.Delegates.Effects
       {
         projectile.KeyValueStore = Values;
       }
-      projectile.Initialize(FiredBy, SkillContext.Skill, this);
+      projectile.Initialize(registry, FiredBy, SkillContext.Skill, this);
     }
   }
 }

@@ -16,7 +16,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 
@@ -47,9 +46,9 @@ namespace Nighthollow.Delegates.Core
     IEnumerable<TResult> IterateDelegates<TContext, TResult>(
       TContext delegateContext,
       Func<IDelegate, TContext, TResult> function)
-      where TContext : DelegateContext, IDelegateContext<TContext>
+      where TContext : DelegateContext
     {
-      var context = delegateContext.Clone();
+      var context = delegateContext;
 
       var i = 0;
       foreach (var @delegate in AllDelegates(context))
@@ -69,22 +68,20 @@ namespace Nighthollow.Delegates.Core
     protected TResult GetFirstImplemented<TContext, TResult>(
       TContext delegateContext,
       Func<IDelegate, TContext, TResult> function)
-      where TContext : DelegateContext, IDelegateContext<TContext> =>
+      where TContext : DelegateContext =>
       IterateDelegates(delegateContext, function).First();
 
     protected bool AnyReturnedTrue<TContext>(TContext delegateContext, Func<IDelegate, TContext, bool> function)
-      where TContext : DelegateContext, IDelegateContext<TContext>
+      where TContext : DelegateContext
     {
       return IterateDelegates(delegateContext, function).Any(v => v);
     }
 
     protected void ExecuteEvent<TContext>(
-      TContext delegateContext,
+      TContext context,
       Action<IDelegate, TContext> action)
-      where TContext : DelegateContext, IDelegateContext<TContext>
+      where TContext : DelegateContext
     {
-      var context = delegateContext.Clone();
-
       var i = 0;
       foreach (var @delegate in AllDelegates(context))
       {
@@ -93,24 +90,25 @@ namespace Nighthollow.Delegates.Core
         i++;
       }
 
-      foreach (var effect in context.Results.Values)
+      var results = context.Results.ClearAndReturnResults();
+
+      foreach (var effect in results)
       {
         effect.Execute(_registry);
       }
 
-      foreach (var effect in context.Results.Values)
+      foreach (var effect in results)
       {
         effect.RaiseEvents();
       }
     }
 
     protected TResult AggregateDelegates<TContext, TResult>(
-      TContext delegateContext,
+      TContext context,
       TResult initialValue,
       Func<IDelegate, TContext, TResult, TResult> function)
-      where TContext : DelegateContext, IDelegateContext<TContext>
+      where TContext : DelegateContext
     {
-      var context = delegateContext.Clone();
       var i = 0;
       var value = initialValue;
 

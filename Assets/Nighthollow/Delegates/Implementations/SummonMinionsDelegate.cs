@@ -15,9 +15,8 @@
 
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Data;
-using Nighthollow.Services;
 using Nighthollow.Utils;
+using UnityEngine;
 
 #nullable enable
 
@@ -29,19 +28,17 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnUse(SkillContext c)
     {
-      // var rank = Root.Instance.CreatureService.GetOpenForwardRank(
-      //   Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition);
-      //
-      // if (rank.HasValue)
-      // {
-      //   var summons = Database.Instance.GameData.GetStaticCardList(StaticCardList.Summons);
-      //   Errors.CheckState(summons.Count == 1, "Expected only one summon creature");
-      //   c.Results.Add(new CreateCreatureEffect(
-      //     summons[index: 0],
-      //     rank.Value,
-      //     c.Self.FilePosition,
-      //     isMoving: true));
-      // }
+      var rank = c.Registry.CreatureService.GetOpenForwardRank(
+        Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition);
+      if (rank.HasValue)
+      {
+        var summon = c.Skill.ItemData.Summons[Random.Range(0, c.Skill.ItemData.Summons.Count)];
+        c.Results.Add(new CreateCreatureEffect(
+          summon,
+          rank.Value,
+          c.Self.FilePosition,
+          isMoving: true));
+      }
     }
   }
 }

@@ -94,5 +94,8 @@ namespace Nighthollow.Utils
       this IEnumerable<TSource> source,
       TSource? element) where TSource : class =>
       element == null ? source : source.Append(element);
+
+    public static string Print<TKey, TValue>(this IDictionary<TKey, TValue> dictionary) =>
+      string.Join(", ", dictionary.Select(pair => $"{pair.Value} {pair.Key}"));
   }
 }

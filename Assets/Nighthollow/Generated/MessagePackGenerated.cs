@@ -1797,11 +1797,12 @@ namespace MessagePack.Formatters.Nighthollow.Data
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(4);
+            writer.WriteArrayHeader(5);
             writer.Write(value.SkillTypeId);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.AffixData>>().Serialize(ref writer, value.Affixes, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>>().Serialize(ref writer, value.ImplicitModifiers, options);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>>().Serialize(ref writer, value.Summons, options);
         }
 
         public global::Nighthollow.Data.SkillItemData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -1818,6 +1819,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var __Affixes__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.AffixData>);
             var __ImplicitModifiers__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>);
             var __Name__ = default(string);
+            var __Summons__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>);
 
             for (int i = 0; i < length; i++)
             {
@@ -1835,13 +1837,16 @@ namespace MessagePack.Formatters.Nighthollow.Data
                     case 3:
                         __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
                         break;
+                    case 4:
+                        __Summons__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>>().Deserialize(ref reader, options);
+                        break;
                     default:
                         reader.Skip();
                         break;
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.SkillItemData(__SkillTypeId__, __Affixes__, __ImplicitModifiers__, __Name__);
+            var ____result = new global::Nighthollow.Data.SkillItemData(__SkillTypeId__, __Affixes__, __ImplicitModifiers__, __Name__, __Summons__);
             reader.Depth--;
             return ____result;
         }

@@ -14,20 +14,21 @@
 
 
 using Nighthollow.Components;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
 
 namespace Nighthollow.Delegates.Core
 {
-  public sealed class CreatureContext : DelegateContext, IDelegateContext<CreatureContext>
+  public sealed class CreatureContext : DelegateContext
   {
-    public CreatureContext(Creature self) : base(new Results(), self)
+    public CreatureContext(Creature self, GameServiceRegistry registry) : base(new Results(), self, registry)
     {
     }
 
     public override StatTable Stats => Self.Data.Stats;
 
-    public CreatureContext Clone() => new CreatureContext(Self);
+    public override string ToString() => $"{Self.Name}";
   }
 }

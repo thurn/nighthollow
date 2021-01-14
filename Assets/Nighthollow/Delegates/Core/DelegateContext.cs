@@ -14,6 +14,7 @@
 
 
 using Nighthollow.Components;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -22,16 +23,18 @@ namespace Nighthollow.Delegates.Core
 {
   public abstract class DelegateContext : StatEntity
   {
-    protected DelegateContext(Results results, Creature self)
+    protected DelegateContext(Results results, Creature self, GameServiceRegistry registry)
     {
       Results = results;
       Self = self;
+      Registry = registry;
     }
 
-    public bool Implemented { get; set; }
-    public int DelegateIndex { get; set; }
     public Results Results { get; }
     public Creature Self { get; }
+    public GameServiceRegistry Registry { get; }
+    public bool Implemented { get; set; }
+    public int DelegateIndex { get; set; }
     public IDelegate Delegate => Self.Data.Delegate;
 
     public T MarkNotImplemented<T>()

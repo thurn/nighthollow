@@ -34,10 +34,41 @@ namespace Nighthollow.Components
     [SerializeField] Collider2D _collider = null!;
     [SerializeField] Creature _trackCreature = null!;
     SkillData _skillData = null!;
+    GameServiceRegistry _registry = null!;
 
     public SkillData Data => _skillData;
     public Collider2D Collider => _collider;
     public KeyValueStore KeyValueStore { get; set; } = new KeyValueStore();
+
+    public void Initialize(
+      GameServiceRegistry registry,
+      Creature firedBy,
+      SkillData skillData,
+      FireProjectileEffect effect)
+    {
+      _registry = registry;
+      _firedBy = firedBy;
+      transform.position = effect.FiringPoint;
+
+      if (effect.TrackCreature)
+      {
+        transform.LookAt(effect.TrackCreature!.transform.position);
+        _trackCreature = effect.TrackCreature;
+      }
+      else
+      {
+        transform.forward = effect.FiringDirectionOffset.GetValueOrDefault()
+                            + Constants.ForwardDirectionForPlayer(firedBy.Owner);
+      }
+
+      gameObject.layer = Constants.LayerForProjectiles(firedBy.Owner);
+
+      _collider = GetComponent<Collider2D>();
+
+      var flash = Root.Instance.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);
+      flash.transform.forward = transform.forward;
+      _skillData = skillData;
+    }
 
     public void ExecuteMutatation(IMutation mutation)
     {
@@ -62,7 +93,7 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      var context = new SkillContext(_firedBy, _skillData, this);
+      var context = new SkillContext(_firedBy, _skillData, _registry, this);
       if (_firedBy.Data.Delegate.ShouldSkipProjectileImpact(context))
       {
         if (!_trackCreature || _trackCreature.gameObject != other.gameObject)
@@ -88,34 +119,6 @@ namespace Nighthollow.Components
         main.startLifetime = 3.0f;
         ps.GetComponent<Renderer>().sortingOrder = 500;
       }
-    }
-
-    public void Initialize(
-      Creature firedBy,
-      SkillData skillData,
-      FireProjectileEffect effect)
-    {
-      _firedBy = firedBy;
-      transform.position = effect.FiringPoint;
-
-      if (effect.TrackCreature)
-      {
-        transform.LookAt(effect.TrackCreature!.transform.position);
-        _trackCreature = effect.TrackCreature;
-      }
-      else
-      {
-        transform.forward = effect.FiringDirectionOffset.GetValueOrDefault()
-                            + Constants.ForwardDirectionForPlayer(firedBy.Owner);
-      }
-
-      gameObject.layer = Constants.LayerForProjectiles(firedBy.Owner);
-
-      _collider = GetComponent<Collider2D>();
-
-      var flash = Root.Instance.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);
-      flash.transform.forward = transform.forward;
-      _skillData = skillData;
     }
 
     public void SetReferences(TimedEffect flashEffect, TimedEffect hitEffect)

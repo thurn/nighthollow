@@ -30,12 +30,14 @@ namespace Nighthollow.Data
       int skillTypeId,
       ImmutableList<AffixData>? affixes = null,
       ImmutableList<ModifierData>? implicitModifiers = null,
-      string name = "")
+      string name = "",
+      ImmutableList<CreatureItemData>? summons = null)
     {
       SkillTypeId = skillTypeId;
       Affixes = affixes ?? ImmutableList<AffixData>.Empty;
       ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
       Name = name;
+      Summons = summons ?? ImmutableList<CreatureItemData>.Empty;
     }
 
     [ForeignKey(typeof(SkillTypeData))]
@@ -44,6 +46,7 @@ namespace Nighthollow.Data
     [Key(1)] public ImmutableList<AffixData> Affixes { get; }
     [Key(2)] public ImmutableList<ModifierData> ImplicitModifiers { get; }
     [Key(3)] public string Name { get; }
+    [Key(4)] public ImmutableList<CreatureItemData> Summons { get; }
 
     public override string ToString() => Name;
 

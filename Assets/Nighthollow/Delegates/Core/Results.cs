@@ -14,6 +14,7 @@
 
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Nighthollow.Delegates.Effects;
 
 #nullable enable
@@ -24,7 +25,12 @@ namespace Nighthollow.Delegates.Core
   {
     readonly List<Effect> _results = new List<Effect>();
 
-    public IEnumerable<Effect> Values => _results;
+    public ImmutableList<Effect> ClearAndReturnResults()
+    {
+      var results = _results.ToImmutableList();
+      _results.Clear();
+      return results;
+    }
 
     public void Add(Effect effect)
     {

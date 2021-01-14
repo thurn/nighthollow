@@ -14,15 +14,17 @@
 
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
 
 namespace Nighthollow.Delegates.Core
 {
-  public sealed class SkillContext : DelegateContext, IDelegateContext<SkillContext>
+  public sealed class SkillContext : DelegateContext
   {
-    public SkillContext(Creature self, SkillData skill, Projectile? projectile = null) : base(new Results(), self)
+    public SkillContext(Creature self, SkillData skill, GameServiceRegistry registry, Projectile? projectile = null) :
+      base(new Results(), self, registry)
     {
       Skill = skill;
       Projectile = projectile;
@@ -33,6 +35,6 @@ namespace Nighthollow.Delegates.Core
 
     public override StatTable Stats => Skill.Stats;
 
-    public SkillContext Clone() => new SkillContext(Self, Skill, Projectile);
+    public override string ToString() => $"{Self.Name} [{Skill.BaseType.Name}]";
   }
 }

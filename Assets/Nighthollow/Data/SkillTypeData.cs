@@ -23,7 +23,7 @@ namespace Nighthollow.Data
   [MessagePackObject]
   public sealed partial class SkillTypeData
   {
-    public const int BasicMeleeAttackId = 23;
+    public const int BasicMeleeAttackId = 24;
 
     public SkillTypeData(
       string name,

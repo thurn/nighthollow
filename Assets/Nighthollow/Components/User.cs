@@ -66,7 +66,7 @@ namespace Nighthollow.Components
         cards = gameData.Deck.Values.ToImmutableList();
       }
 
-      var builtDeck = cards.Select(item => item.BuildCreature(registry, Data.Stats));
+      var builtDeck = cards.Select(item => item.BuildCreature(registry));
       _deck.OnStartGame(builtDeck, gameData.GameState.TutorialState != TutorialState.Completed);
 
       var openingHand = new List<CreatureData>();

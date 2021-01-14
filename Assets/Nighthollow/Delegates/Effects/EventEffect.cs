@@ -24,16 +24,16 @@ namespace Nighthollow.Delegates.Effects
   public static class Events
   {
     public static EventEffect<TContext> Effect<TContext>(TContext context, Action<IDelegate, TContext> action)
-      where TContext : DelegateContext, IDelegateContext<TContext> =>
+      where TContext : DelegateContext =>
       new EventEffect<TContext>(context.Delegate, context, action);
   }
 
-  public sealed class EventEffect<TContext> : Effect where TContext : DelegateContext, IDelegateContext<TContext>
+  public sealed class EventEffect<TContext> : Effect where TContext : DelegateContext
   {
     public EventEffect(IDelegate delegateInstance, TContext context, Action<IDelegate, TContext> action)
     {
       Delegate = delegateInstance;
-      Context = context.Clone();
+      Context = context;
       Action = action;
     }
 
