@@ -90,14 +90,12 @@ namespace Nighthollow.Services
 
       _instance = this;
 
-      Debug.Log($"Root::Start");
       _screenController.Initialize();
       _dataService.OnReady(OnDataFetched);
     }
 
     void OnDataFetched(FetchResult fetchResult)
     {
-      Debug.Log($"Root::OnDataFetched");
       var registry = new GameServiceRegistry(
         fetchResult.Database,
         fetchResult.AssetService,

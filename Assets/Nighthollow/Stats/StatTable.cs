@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using JetBrains.Annotations;
+using Nighthollow.Utils;
 
 #nullable enable
 
@@ -24,28 +25,19 @@ namespace Nighthollow.Stats
   public sealed class StatTable
   {
     readonly StatTable? _parent;
-    readonly IDictionary<StatId, List<IStatModifier>> _modifiers;
+    readonly ImmutableDictionary<StatId, ImmutableList<IStatModifier>> _modifiers;
 
     public StatTable(
       StatTable? parent,
-      IDictionary<StatId, List<IStatModifier>>? modifiers = null)
+      ImmutableDictionary<StatId, ImmutableList<IStatModifier>>? modifiers = null)
     {
       _parent = parent;
-      _modifiers = modifiers ?? ImmutableDictionary<StatId, List<IStatModifier>>.Empty;
+      _modifiers = modifiers ?? ImmutableDictionary<StatId, ImmutableList<IStatModifier>>.Empty;
     }
 
     [MustUseReturnValue]
-    public StatTable InsertModifier(IStatModifier modifier)
-    {
-      var modifiers = _modifiers.ToDictionary(p => p.Key, p => p.Value.ToList());
-      if (!modifiers.ContainsKey(modifier.StatId))
-      {
-        modifiers[modifier.StatId] = new List<IStatModifier>();
-      }
-
-      modifiers[modifier.StatId].Add(modifier);
-      return new StatTable(_parent, modifiers);
-    }
+    public StatTable InsertModifier(IStatModifier modifier) =>
+      new StatTable(_parent, _modifiers.AppendOrCreateList(modifier.StatId, modifier));
 
     [MustUseReturnValue]
     public StatTable InsertNullableModifier(IStatModifier? modifier) =>
@@ -60,13 +52,11 @@ namespace Nighthollow.Stats
           .ToDictionary(g => g.Key, g => g.Select(m => m)));
 
     [MustUseReturnValue]
-    public StatTable OnTick()
-    {
-      return new StatTable(_parent,
-        _modifiers.ToDictionary(
+    public StatTable OnTick() =>
+      new StatTable(_parent,
+        _modifiers.ToImmutableDictionary(
           pair => pair.Key,
-          pair => pair.Value.Where(m => m.Lifetime == null || m.Lifetime.IsValid()).ToList()));
-    }
+          pair => pair.Value.RemoveAll(m => m.Lifetime?.IsValid() == false)));
 
     IEnumerable<IStatModifier> ModifiersForStat(StatId statId)
     {
@@ -76,7 +66,7 @@ namespace Nighthollow.Stats
       }
       else
       {
-        return _parent == null ? new List<IStatModifier>() : _parent.ModifiersForStat(statId);
+        return _parent == null ? ImmutableList<IStatModifier>.Empty : _parent.ModifiersForStat(statId);
       }
     }
   }

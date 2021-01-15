@@ -50,7 +50,7 @@ namespace Nighthollow.Editor.Data
       var dataService = root.AddComponent<DataService>();
       dataService.Initialize(synchronous: true).MoveNext();
       dataService.OnReady(Generate);
-
+      
       Object.DestroyImmediate(root);
     }
 
