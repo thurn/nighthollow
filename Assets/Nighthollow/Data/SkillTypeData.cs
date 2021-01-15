@@ -34,7 +34,8 @@ namespace Nighthollow.Data
       int? projectileSpeed = null,
       bool usesAccuracy = false,
       bool canCrit = false,
-      bool canStun = false)
+      bool canStun = false,
+      ImmutableList<int>? statusEffectIds = null)
     {
       Name = name;
       SkillAnimationType = skillAnimationType;
@@ -45,6 +46,7 @@ namespace Nighthollow.Data
       UsesAccuracy = usesAccuracy;
       CanCrit = canCrit;
       CanStun = canStun;
+      StatusEffectIds = statusEffectIds ?? ImmutableList<int>.Empty;
     }
 
     [Key(0)] public string Name { get; }
@@ -56,6 +58,7 @@ namespace Nighthollow.Data
     [Key(6)] public bool UsesAccuracy { get; }
     [Key(7)] public bool CanCrit { get; }
     [Key(8)] public bool CanStun { get; }
+    [Key(9)] public ImmutableList<int> StatusEffectIds { get; }
 
     public override string ToString() => Name;
 

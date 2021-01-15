@@ -30,7 +30,8 @@ namespace Nighthollow.Data
       ImmutableDictionary<int, ModifierData>? userModifiers = null,
       ImmutableDictionary<int, CreatureItemData>? collection = null,
       ImmutableDictionary<int, CreatureItemData>? deck = null,
-      GameState? userState = null)
+      GameState? userState = null,
+      ImmutableDictionary<int, StatusEffectTypeData>? statusEffects = null)
     {
       TableMetadata = tableMetadata ?? ImmutableDictionary<int, TableMetadata>.Empty;
       CreatureTypes = creatureTypes ?? ImmutableDictionary<int, CreatureTypeData>.Empty;
@@ -42,6 +43,7 @@ namespace Nighthollow.Data
       Collection = collection ?? ImmutableDictionary<int, CreatureItemData>.Empty;
       Deck = deck ?? ImmutableDictionary<int, CreatureItemData>.Empty;
       GameState = userState ?? new GameState();
+      StatusEffects = statusEffects ?? ImmutableDictionary<int, StatusEffectTypeData>.Empty;
     }
 
     [Field] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
@@ -54,5 +56,6 @@ namespace Nighthollow.Data
     [Field] public ImmutableDictionary<int, CreatureItemData> Collection { get; }
     [Field] public ImmutableDictionary<int, CreatureItemData> Deck { get; }
     [Field] public GameState GameState { get; }
+    [Field] public ImmutableDictionary<int, StatusEffectTypeData> StatusEffects { get; }
   }
 }

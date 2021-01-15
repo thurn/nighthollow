@@ -59,13 +59,13 @@ namespace Nighthollow.Data
     [Key(3)] public IValueData? Value { get; }
 
     /// <summary>
-    /// Low value for the modifier. Setting this implies that we are representing a range of possible modifiers here,
+    /// Low value for the modifier. Setting this implies that we are representing a range of possible modifiers,
     /// not just a single instance of one.
     /// </summary>
     [Key(4)] public IValueData? ValueLow { get; }
 
     /// <summary>
-    /// High value for the modifier. Setting this implies that we are representing a range of possible modifiers here,
+    /// High value for the modifier. Setting this implies that we are representing a range of possible modifiers,
     /// not just a single instance of one.
     /// </summary>
     [Key(5)] public IValueData? ValueHigh { get; }

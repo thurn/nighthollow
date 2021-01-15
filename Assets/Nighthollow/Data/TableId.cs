@@ -73,15 +73,35 @@ namespace Nighthollow.Data
 
   public static class TableId
   {
-    public static readonly TableId<TableMetadata> TableMetadata = new TableMetadataTableId(0, "TableMetadata");
-    public static readonly TableId<CreatureTypeData> CreatureTypes = new CreatureTypesTableId(1, "CreatureTypes");
-    public static readonly TableId<AffixTypeData> AffixTypes = new AffixTypesTableId(2, "AffixTypes");
-    public static readonly TableId<SkillTypeData> SkillTypes = new SkillTypesTableId(3, "SkillTypes");
-    public static readonly TableId<StatData> Stats = new StatDataTableId(4, "Stats");
-    public static readonly TableId<StaticItemListData> ItemLists = new ItemListsTableId(5, "ItemLists");
-    public static readonly TableId<ModifierData> UserModifiers = new UserModifiersTableId(6, "UserModifiers");
-    public static readonly TableId<CreatureItemData> Collection = new CollectionTableId(7, "Collection");
-    public static readonly TableId<CreatureItemData> Deck = new DeckTableId(8, "Deck");
+    public static readonly TableId<TableMetadata> TableMetadata =
+      new TableMetadataTableId(0, "TableMetadata");
+
+    public static readonly TableId<CreatureTypeData> CreatureTypes =
+      new CreatureTypesTableId(1, "CreatureTypes");
+
+    public static readonly TableId<AffixTypeData> AffixTypes =
+      new AffixTypesTableId(2, "AffixTypes");
+
+    public static readonly TableId<SkillTypeData> SkillTypes =
+      new SkillTypesTableId(3, "SkillTypes");
+
+    public static readonly TableId<StatData> Stats =
+      new StatDataTableId(4, "Stats");
+
+    public static readonly TableId<StaticItemListData> ItemLists =
+      new ItemListsTableId(5, "ItemLists");
+
+    public static readonly TableId<ModifierData> UserModifiers =
+      new UserModifiersTableId(6, "UserModifiers");
+
+    public static readonly TableId<CreatureItemData> Collection =
+      new CollectionTableId(7, "Collection");
+
+    public static readonly TableId<CreatureItemData> Deck =
+      new DeckTableId(8, "Deck");
+
+    public static readonly TableId<StatusEffectTypeData> StatusEffectTypes =
+      new StatusEffectsTypesTableId(9, "StatusEffectTypes");
 
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
       TableMetadata,
@@ -92,7 +112,8 @@ namespace Nighthollow.Data
       ItemLists,
       UserModifiers,
       Collection,
-      Deck
+      Deck,
+      StatusEffectTypes
     );
 
     sealed class TableMetadataTableId : TableId<TableMetadata>
@@ -210,6 +231,19 @@ namespace Nighthollow.Data
 
       public override GameData Write(GameData gameData, ImmutableDictionary<int, CreatureItemData> newValue) =>
         gameData.WithDeck(newValue);
+    }
+
+    sealed class StatusEffectsTypesTableId : TableId<StatusEffectTypeData>
+    {
+      public StatusEffectsTypesTableId(int id, string tableName) : base(id, tableName)
+      {
+      }
+
+      public override ImmutableDictionary<int, StatusEffectTypeData> GetIn(GameData gameData) =>
+        gameData.StatusEffects;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, StatusEffectTypeData> newValue) =>
+        gameData.WithStatusEffects(newValue);
     }
   }
 }

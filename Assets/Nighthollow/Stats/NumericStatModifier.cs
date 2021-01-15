@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using MessagePack;
 using Nighthollow.Data;
 
@@ -46,10 +45,8 @@ namespace Nighthollow.Stats
     }
   }
 
-  [MessagePackObject]
   public sealed class NumericStatModifier<T> : IStatModifier where T : struct
   {
-#pragma warning disable 618 // Using Obsolete
     public static NumericStatModifier<T> Add(AbstractStat<NumericStatModifier<T>, T> stat, T value) =>
       new NumericStatModifier<T>(stat.StatId, ModifierType.Add, value, null, null);
 
@@ -59,17 +56,6 @@ namespace Nighthollow.Stats
 
     public static NumericStatModifier<T> Set(AbstractStat<NumericStatModifier<T>, T> stat, T value) =>
       new NumericStatModifier<T>(stat.StatId, ModifierType.Set, null, null, value);
-#pragma warning restore 618
-
-    [Obsolete("This constructor is visible only for use by the serialization system.")]
-    public NumericStatModifier(
-      StatId statId,
-      ModifierType type,
-      T? add,
-      PercentageValue? increase,
-      T? ovewrite) : this(statId, type, add, increase, ovewrite, null)
-    {
-    }
 
     NumericStatModifier(
       StatId statId,
@@ -77,7 +63,7 @@ namespace Nighthollow.Stats
       T? add,
       PercentageValue? increase,
       T? ovewrite,
-      ILifetime? lifetime)
+      ILifetime? lifetime = null)
     {
       StatId = statId;
       Type = type;

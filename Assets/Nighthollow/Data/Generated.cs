@@ -155,7 +155,8 @@ namespace Nighthollow.Data
         UserModifiers,
         Collection,
         Deck,
-        GameState);
+        GameState,
+        StatusEffects);
 
     public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
       new GameData(
@@ -168,7 +169,8 @@ namespace Nighthollow.Data
         UserModifiers,
         Collection,
         Deck,
-        GameState);
+        GameState,
+        StatusEffects);
 
     public GameData WithAffixTypes(ImmutableDictionary<int, AffixTypeData> affixTypes) =>
       new GameData(
@@ -181,7 +183,8 @@ namespace Nighthollow.Data
         UserModifiers,
         Collection,
         Deck,
-        GameState);
+        GameState,
+        StatusEffects);
 
     public GameData WithSkillTypes(ImmutableDictionary<int, SkillTypeData> skillTypes) =>
       new GameData(
@@ -194,7 +197,8 @@ namespace Nighthollow.Data
         UserModifiers,
         Collection,
         Deck,
-        GameState);
+        GameState,
+        StatusEffects);
 
     public GameData WithStatData(ImmutableDictionary<int, StatData> statData) =>
       new GameData(
@@ -207,7 +211,8 @@ namespace Nighthollow.Data
         UserModifiers,
         Collection,
         Deck,
-        GameState);
+        GameState,
+        StatusEffects);
 
     public GameData WithItemLists(ImmutableDictionary<int, StaticItemListData> itemLists) =>
       new GameData(
@@ -220,7 +225,8 @@ namespace Nighthollow.Data
         UserModifiers,
         Collection,
         Deck,
-        GameState);
+        GameState,
+        StatusEffects);
 
     public GameData WithUserModifiers(ImmutableDictionary<int, ModifierData> userModifiers) =>
       new GameData(
@@ -233,7 +239,8 @@ namespace Nighthollow.Data
         userModifiers,
         Collection,
         Deck,
-        GameState);
+        GameState,
+        StatusEffects);
 
     public GameData WithCollection(ImmutableDictionary<int, CreatureItemData> collection) =>
       new GameData(
@@ -246,7 +253,8 @@ namespace Nighthollow.Data
         UserModifiers,
         collection,
         Deck,
-        GameState);
+        GameState,
+        StatusEffects);
 
     public GameData WithDeck(ImmutableDictionary<int, CreatureItemData> deck) =>
       new GameData(
@@ -259,7 +267,8 @@ namespace Nighthollow.Data
         UserModifiers,
         Collection,
         deck,
-        GameState);
+        GameState,
+        StatusEffects);
 
     public GameData WithGameState(GameState gameState) =>
       new GameData(
@@ -272,7 +281,22 @@ namespace Nighthollow.Data
         UserModifiers,
         Collection,
         Deck,
-        gameState);
+        gameState,
+        StatusEffects);
+
+    public GameData WithStatusEffects(ImmutableDictionary<int, StatusEffectTypeData> statusEffects) =>
+      new GameData(
+        TableMetadata,
+        CreatureTypes,
+        AffixTypes,
+        SkillTypes,
+        StatData,
+        ItemLists,
+        UserModifiers,
+        Collection,
+        Deck,
+        GameState,
+        statusEffects);
 
   }
 
@@ -498,7 +522,8 @@ namespace Nighthollow.Data
         ProjectileSpeed,
         UsesAccuracy,
         CanCrit,
-        CanStun);
+        CanStun,
+        StatusEffectIds);
 
     public SkillTypeData WithSkillAnimationType(SkillAnimationType skillAnimationType) =>
       new SkillTypeData(
@@ -510,7 +535,8 @@ namespace Nighthollow.Data
         ProjectileSpeed,
         UsesAccuracy,
         CanCrit,
-        CanStun);
+        CanStun,
+        StatusEffectIds);
 
     public SkillTypeData WithSkillType(SkillType skillType) =>
       new SkillTypeData(
@@ -522,7 +548,8 @@ namespace Nighthollow.Data
         ProjectileSpeed,
         UsesAccuracy,
         CanCrit,
-        CanStun);
+        CanStun,
+        StatusEffectIds);
 
     public SkillTypeData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
       new SkillTypeData(
@@ -534,7 +561,8 @@ namespace Nighthollow.Data
         ProjectileSpeed,
         UsesAccuracy,
         CanCrit,
-        CanStun);
+        CanStun,
+        StatusEffectIds);
 
     public SkillTypeData WithAddress(string? address) =>
       new SkillTypeData(
@@ -546,7 +574,8 @@ namespace Nighthollow.Data
         ProjectileSpeed,
         UsesAccuracy,
         CanCrit,
-        CanStun);
+        CanStun,
+        StatusEffectIds);
 
     public SkillTypeData WithProjectileSpeed(int? projectileSpeed) =>
       new SkillTypeData(
@@ -558,7 +587,8 @@ namespace Nighthollow.Data
         projectileSpeed,
         UsesAccuracy,
         CanCrit,
-        CanStun);
+        CanStun,
+        StatusEffectIds);
 
     public SkillTypeData WithUsesAccuracy(bool usesAccuracy) =>
       new SkillTypeData(
@@ -570,7 +600,8 @@ namespace Nighthollow.Data
         ProjectileSpeed,
         usesAccuracy,
         CanCrit,
-        CanStun);
+        CanStun,
+        StatusEffectIds);
 
     public SkillTypeData WithCanCrit(bool canCrit) =>
       new SkillTypeData(
@@ -582,7 +613,8 @@ namespace Nighthollow.Data
         ProjectileSpeed,
         UsesAccuracy,
         canCrit,
-        CanStun);
+        CanStun,
+        StatusEffectIds);
 
     public SkillTypeData WithCanStun(bool canStun) =>
       new SkillTypeData(
@@ -594,7 +626,21 @@ namespace Nighthollow.Data
         ProjectileSpeed,
         UsesAccuracy,
         CanCrit,
-        canStun);
+        canStun,
+        StatusEffectIds);
+
+    public SkillTypeData WithStatusEffectIds(ImmutableList<int> statusEffectIds) =>
+      new SkillTypeData(
+        Name,
+        SkillAnimationType,
+        SkillType,
+        ImplicitModifiers,
+        Address,
+        ProjectileSpeed,
+        UsesAccuracy,
+        CanCrit,
+        CanStun,
+        statusEffectIds);
 
   }
 
@@ -851,6 +897,80 @@ namespace Nighthollow.Data
         NextId,
         LastAccessedTime,
         columnMetadata);
+
+  }
+
+  public sealed partial class StatusEffectTypeData
+  {
+    public StatusEffectTypeData WithName(string name) =>
+      new StatusEffectTypeData(
+        name,
+        IsFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        Duration,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithIsFirstClass(bool isFirstClass) =>
+      new StatusEffectTypeData(
+        Name,
+        isFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        Duration,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithMaxStacks(int maxStacks) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        maxStacks,
+        ImplicitModifiers,
+        Duration,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        MaxStacks,
+        implicitModifiers,
+        Duration,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithDuration(DurationValue? duration) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        duration,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithImageAddress(string? imageAddress) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        Duration,
+        imageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithEffectAddress(string? effectAddress) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        Duration,
+        ImageAddress,
+        effectAddress);
 
   }
 

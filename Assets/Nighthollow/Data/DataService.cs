@@ -93,10 +93,14 @@ namespace Nighthollow.Data
 
           if (asset && asset != null)
           {
+            Debug.Log($"Deserializing: {tableId.TableName}");
             gameData = tableId.Deserialize(gameData, asset.bytes, _serializerOptions);
+            Debug.Log($"Completed: {tableId.TableName}");
           }
         }
       }
+
+      Debug.Log($"DataService::Initialize All data loaded");
 
       StartCoroutine(AssetFetcher.FetchAssetsAsync(gameData, assetService =>
       {

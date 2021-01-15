@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using MessagePack;
 using Nighthollow.Data;
 
@@ -20,7 +19,6 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Stats
 {
-  [MessagePackObject]
   public sealed class BooleanStatModifier : IStatModifier
   {
 #pragma warning disable 618 // Using Obsolete
@@ -28,13 +26,7 @@ namespace Nighthollow.Stats
       new BooleanStatModifier(stat.StatId, value);
 #pragma warning restore 618 // Using Obsolete
 
-    [SerializationConstructor]
-    [Obsolete("This constructor is visible only for use by the serialization system.")]
-    public BooleanStatModifier(StatId statId, bool setValue) : this(statId, setValue, null)
-    {
-    }
-
-    BooleanStatModifier(StatId statId, bool setValue, ILifetime? lifetime)
+    BooleanStatModifier(StatId statId, bool setValue, ILifetime? lifetime = null)
     {
       StatId = statId;
       SetValue = setValue;

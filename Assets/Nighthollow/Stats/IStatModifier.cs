@@ -12,22 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using MessagePack;
 using Nighthollow.Data;
 
 #nullable enable
 
 namespace Nighthollow.Stats
 {
-  [Union(0, typeof(NumericStatModifier<int>))]
-  [Union(1, typeof(NumericStatModifier<DurationValue>))]
-  [Union(2, typeof(NumericStatModifier<PercentageValue>))]
-  [Union(3, typeof(NumericStatModifier<IntRangeValue>))]
-  [Union(4, typeof(BooleanStatModifier))]
-  [Union(5, typeof(TaggedNumericStatModifier<DamageType, int>))]
-  [Union(6, typeof(TaggedNumericStatModifier<DamageType, PercentageValue>))]
-  [Union(7, typeof(TaggedNumericStatModifier<DamageType, IntRangeValue>))]
-  [Union(8, typeof(TaggedNumericStatModifier<School, int>))]
   public interface IStatModifier
   {
     public StatId StatId { get; }
@@ -51,21 +41,5 @@ namespace Nighthollow.Stats
     /// the # character should be replaced with a hyphen-separated range of currentValue - highValue.
     /// </summary>
     public string Describe(string template, IValueData? highValue);
-  }
-
-  // Hack: MessagePack can't find types that are only ever used in a union declaration, so we need to have a concrete
-  // list of all types we expect to appear as well.
-  [MessagePackObject]
-  public sealed class SerializationHack
-  {
-    [Key(0)] public NumericStatModifier<int> Zero = null!;
-    [Key(1)] public NumericStatModifier<DurationValue> One = null!;
-    [Key(2)] public NumericStatModifier<PercentageValue> Two = null!;
-    [Key(3)] public NumericStatModifier<IntRangeValue> Three = null!;
-    [Key(4)] public BooleanStatModifier Four = null!;
-    [Key(5)] public TaggedNumericStatModifier<DamageType, int> Five = null!;
-    [Key(6)] public TaggedNumericStatModifier<DamageType, PercentageValue> Six = null!;
-    [Key(7)] public TaggedNumericStatModifier<DamageType, IntRangeValue> Seven = null!;
-    [Key(8)] public TaggedNumericStatModifier<School, int> Eight = null!;
   }
 }

@@ -23,10 +23,8 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Stats
 {
-  [MessagePackObject]
   public sealed class TaggedNumericStatModifier<TTag, TValue> : IStatModifier where TTag : Enum where TValue : struct
   {
-#pragma warning disable 618 // Using Obsolete
     public static TaggedNumericStatModifier<TTag, TValue> Add(
       AbstractStat<TaggedNumericStatModifier<TTag, TValue>, ImmutableDictionary<TTag, TValue>> stat,
       ImmutableDictionary<TTag, TValue> value) =>
@@ -41,17 +39,6 @@ namespace Nighthollow.Stats
       AbstractStat<TaggedNumericStatModifier<TTag, TValue>, ImmutableDictionary<TTag, TValue>> stat,
       ImmutableDictionary<TTag, TValue> value) =>
       new TaggedNumericStatModifier<TTag, TValue>(stat.StatId, ModifierType.Set, null, null, value);
-#pragma warning restore 618
-
-    [Obsolete("This constructor is visible only for use by the serialization system.")]
-    public TaggedNumericStatModifier(
-      StatId statId,
-      ModifierType type,
-      ImmutableDictionary<TTag, TValue>? addTo,
-      ImmutableDictionary<TTag, PercentageValue>? increaseBy,
-      ImmutableDictionary<TTag, TValue>? setTo) : this(statId, type, addTo, increaseBy, setTo, null)
-    {
-    }
 
     TaggedNumericStatModifier(
       StatId statId,
@@ -59,7 +46,7 @@ namespace Nighthollow.Stats
       ImmutableDictionary<TTag, TValue>? addTo,
       ImmutableDictionary<TTag, PercentageValue>? increaseBy,
       ImmutableDictionary<TTag, TValue>? setTo,
-      ILifetime? lifetime)
+      ILifetime? lifetime = null)
     {
       StatId = statId;
       Type = type;
