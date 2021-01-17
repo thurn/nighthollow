@@ -36,9 +36,9 @@ def parse(class_file):
 
 def property_arg(prop, p):
     if prop["name"] == p["name"]:
-        return f'        {uncap(p["name"])}'
+        return f'          {uncap(p["name"])}'
     else:
-        return f'        {p["name"]}'
+        return f'          {p["name"]}'
 
 
 def generate(out, data):
@@ -47,7 +47,9 @@ def generate(out, data):
     out.write('  {\n')
     for prop in data["properties"]:
         out.write(f'    public {class_name} With{prop["name"]}({prop["type"]} {uncap(prop["name"])}) =>\n')
-        out.write(f'      new {class_name}(\n')
+        out.write(f'      Equals({uncap(prop["name"])}, {prop["name"]})\n')
+        out.write(f'        ? this\n')
+        out.write(f'        : new {class_name}(\n')
         out.write(",\n".join([property_arg(prop, p) for p in data["properties"]]))
         out.write(');\n\n')
     out.write('  }\n')

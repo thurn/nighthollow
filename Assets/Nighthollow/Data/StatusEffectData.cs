@@ -26,7 +26,7 @@ namespace Nighthollow.Data
     public StatusEffectTypeData(
       string name,
       bool isFirstClass = false,
-      int? maxStacks = null,
+      int maxStacks = 1,
       ImmutableList<ModifierData>? implicitModifiers = null,
       DurationValue? duration = null,
       DurationValue? durationHigh = null,
@@ -35,7 +35,7 @@ namespace Nighthollow.Data
     {
       Name = name;
       IsFirstClass = isFirstClass;
-      MaxStacks = maxStacks ?? 1;
+      MaxStacks = maxStacks;
       ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
       Duration = duration;
       DurationHigh = durationHigh;

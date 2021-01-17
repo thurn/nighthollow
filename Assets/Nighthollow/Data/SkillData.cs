@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Immutable;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Stats;
 
@@ -41,6 +40,7 @@ namespace Nighthollow.Data
     [Field] public int BaseTypeId { get; }
     [Field] public SkillTypeData BaseType { get; }
     [Field] public SkillItemData ItemData { get; }
+
     public bool IsMelee() => BaseType.SkillType == SkillType.Melee;
 
     public bool IsProjectile() => BaseType.SkillType == SkillType.Projectile;

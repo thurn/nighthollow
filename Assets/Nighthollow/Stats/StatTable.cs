@@ -26,18 +26,23 @@ namespace Nighthollow.Stats
   {
     readonly StatTable? _parent;
     readonly ImmutableDictionary<StatId, ImmutableList<IStatModifier>> _modifiers;
+    readonly ImmutableDictionary<StatId, ImmutableList<IStatModifier>> _dynamicModifiers;
 
     public StatTable(
       StatTable? parent,
-      ImmutableDictionary<StatId, ImmutableList<IStatModifier>>? modifiers = null)
+      ImmutableDictionary<StatId, ImmutableList<IStatModifier>>? modifiers = null,
+      ImmutableDictionary<StatId, ImmutableList<IStatModifier>>? dynamicModifiers = null)
     {
       _parent = parent;
       _modifiers = modifiers ?? ImmutableDictionary<StatId, ImmutableList<IStatModifier>>.Empty;
+      _dynamicModifiers = dynamicModifiers ?? ImmutableDictionary<StatId, ImmutableList<IStatModifier>>.Empty;
     }
 
     [MustUseReturnValue]
     public StatTable InsertModifier(IStatModifier modifier) =>
-      new StatTable(_parent, _modifiers.AppendOrCreateList(modifier.StatId, modifier));
+      modifier.Lifetime == null
+        ? new StatTable(_parent, _modifiers.AppendOrCreateList(modifier.StatId, modifier), _dynamicModifiers)
+        : new StatTable(_parent, _modifiers, _dynamicModifiers.AppendOrCreateList(modifier.StatId, modifier));
 
     [MustUseReturnValue]
     public StatTable InsertNullableModifier(IStatModifier? modifier) =>
@@ -52,22 +57,20 @@ namespace Nighthollow.Stats
           .ToDictionary(g => g.Key, g => g.Select(m => m)));
 
     [MustUseReturnValue]
-    public StatTable OnTick() =>
-      new StatTable(_parent,
-        _modifiers.ToImmutableDictionary(
+    public StatTable OnTick() => _dynamicModifiers.IsEmpty
+      ? this
+      : new StatTable(_parent,
+        _modifiers,
+        _dynamicModifiers.ToImmutableDictionary(
           pair => pair.Key,
           pair => pair.Value.RemoveAll(m => m.Lifetime?.IsValid() == false)));
 
     IEnumerable<IStatModifier> ModifiersForStat(StatId statId)
     {
-      if (_modifiers.TryGetValue(statId, out var list))
-      {
-        return _parent == null ? list : _parent.ModifiersForStat(statId).Concat(list);
-      }
-      else
-      {
-        return _parent == null ? ImmutableList<IStatModifier>.Empty : _parent.ModifiersForStat(statId);
-      }
+      return _modifiers
+        .GetValueOrDefault(statId, ImmutableList<IStatModifier>.Empty)
+        .Concat(_dynamicModifiers.GetValueOrDefault(statId, ImmutableList<IStatModifier>.Empty))
+        .Concat(_parent == null ? Enumerable.Empty<IStatModifier>() : _parent.ModifiersForStat(statId));
     }
   }
 }
