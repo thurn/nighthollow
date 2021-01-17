@@ -35,6 +35,7 @@ namespace Nighthollow.Data
       bool usesAccuracy = false,
       bool canCrit = false,
       bool canStun = false,
+      ImmutableList<int>? summonCreatures = null,
       ImmutableList<int>? statusEffectIds = null)
     {
       Name = name;
@@ -46,7 +47,8 @@ namespace Nighthollow.Data
       UsesAccuracy = usesAccuracy;
       CanCrit = canCrit;
       CanStun = canStun;
-      StatusEffectIds = statusEffectIds ?? ImmutableList<int>.Empty;
+      SummonCreatures = summonCreatures ?? ImmutableList<int>.Empty;
+      StatusEffects = statusEffectIds ?? ImmutableList<int>.Empty;
     }
 
     [Key(0)] public string Name { get; }
@@ -58,7 +60,10 @@ namespace Nighthollow.Data
     [Key(6)] public bool UsesAccuracy { get; }
     [Key(7)] public bool CanCrit { get; }
     [Key(8)] public bool CanStun { get; }
-    [Key(9)] public ImmutableList<int> StatusEffectIds { get; }
+    [Key(9)] public ImmutableList<int> SummonCreatures { get; }
+
+    [ForeignKeyList(typeof(StatusEffectTypeData))]
+    [Key(10)] public ImmutableList<int> StatusEffects { get; }
 
     public override string ToString() => Name;
 

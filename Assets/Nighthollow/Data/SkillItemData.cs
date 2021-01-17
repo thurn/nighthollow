@@ -31,13 +31,15 @@ namespace Nighthollow.Data
       ImmutableList<AffixData>? affixes = null,
       ImmutableList<ModifierData>? implicitModifiers = null,
       string name = "",
-      ImmutableList<CreatureItemData>? summons = null)
+      ImmutableList<CreatureItemData>? summons = null,
+      ImmutableList<StatusEffectItemData>? statusEffects = null)
     {
       SkillTypeId = skillTypeId;
       Affixes = affixes ?? ImmutableList<AffixData>.Empty;
       ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
       Name = name;
       Summons = summons ?? ImmutableList<CreatureItemData>.Empty;
+      StatusEffects = statusEffects ?? ImmutableList<StatusEffectItemData>.Empty;
     }
 
     [ForeignKey(typeof(SkillTypeData))]
@@ -47,10 +49,11 @@ namespace Nighthollow.Data
     [Key(2)] public ImmutableList<ModifierData> ImplicitModifiers { get; }
     [Key(3)] public string Name { get; }
     [Key(4)] public ImmutableList<CreatureItemData> Summons { get; }
+    [Key(5)] public ImmutableList<StatusEffectItemData> StatusEffects { get; }
 
     public override string ToString() => Name;
 
-    public SkillData BuildSkill(GameServiceRegistry services, GameData gameData, StatTable parentStatTable)
+    public SkillData BuildSkill(GameServiceRegistry registry, GameData gameData, StatTable parentStatTable)
     {
       var baseType = gameData.SkillTypes[SkillTypeId];
       var statTable = new StatTable(parentStatTable)
@@ -63,7 +66,7 @@ namespace Nighthollow.Data
         Affixes.SelectMany(a => a.Modifiers).Concat(ImplicitModifiers));
 
       return new SkillData(
-        new SkillDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList(), services),
+        new SkillDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList(), registry),
         stats,
         SkillTypeId,
         baseType,

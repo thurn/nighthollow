@@ -25,7 +25,7 @@ namespace Nighthollow.Editing
     readonly IEditor _parent;
     readonly (int, int)? _key;
 
-    public ButtonEditorCell(EditorSheetDelegate.ButtonCell content, IEditor parent)
+    public ButtonEditorCell(EditorSheetDelegate.ButtonCellContent content, IEditor parent)
     {
       _onClick = content.OnClick;
       _parent = parent;

@@ -37,7 +37,7 @@ namespace Nighthollow.Editing
 
     public SelectorDropdownEditorCell(
       ScreenController screenController,
-      EditorSheetDelegate.DropdownCell content,
+      EditorSheetDelegate.DropdownCellContent content,
       IEditor parent)
     {
       _screenController = screenController;
@@ -129,7 +129,7 @@ namespace Nighthollow.Editing
       reflectivePath.OnEntityUpdated(_ => { SetTextFieldValue(reflectivePath.Read()?.ToString()); });
     }
 
-    static EditorSheetDelegate.DropdownCell BuildContent(ReflectivePath reflectivePath, Type type)
+    static EditorSheetDelegate.DropdownCellContent BuildContent(ReflectivePath reflectivePath, Type type)
     {
       var values = Enum.GetValues(type)!;
       var options = new List<string>();
@@ -146,7 +146,7 @@ namespace Nighthollow.Editing
 
       var current = reflectivePath.Read()?.ToString();
       var currentlySelected = options.FindIndex(o => o.Equals(current));
-      return new EditorSheetDelegate.DropdownCell(options,
+      return new EditorSheetDelegate.DropdownCellContent(options,
         currentlySelected == -1 ? (int?) null : currentlySelected,
         selected =>
         {
@@ -185,12 +185,12 @@ namespace Nighthollow.Editing
       return tableId.GetInUnchecked(reflectivePath.Database.Snapshot());
     }
 
-    static EditorSheetDelegate.DropdownCell BuildContent(ReflectivePath reflectivePath, Type type)
+    static EditorSheetDelegate.DropdownCellContent BuildContent(ReflectivePath reflectivePath, Type type)
     {
       var dictionary = GetTable(reflectivePath, type);
       var values = (from object? key in dictionary.Keys select ((int) key, dictionary[key].ToString())).ToList();
 
-      return new EditorSheetDelegate.DropdownCell(
+      return new EditorSheetDelegate.DropdownCellContent(
         values.Select(v => v.Item2).ToList(),
         null,
         index => { EditorControllerRegistry.WriteForeignKey(values[index].Item1, reflectivePath); });

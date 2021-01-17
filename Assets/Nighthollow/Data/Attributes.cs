@@ -28,6 +28,16 @@ namespace Nighthollow.Data
     public Type TableType { get; }
   }
 
+  public sealed class ForeignKeyList : Attribute
+  {
+    public ForeignKeyList(Type tableType)
+    {
+      TableType = tableType;
+    }
+
+    public Type TableType { get; }
+  }
+
   public sealed class FieldAttribute : Attribute
   {
   }

@@ -47,9 +47,9 @@ namespace Nighthollow.Editing
     {
       var result = new List<List<ICellContent>>
       {
-        CollectionUtils.Single(new LabelCell("x")).Concat(
+        CollectionUtils.Single(new LabelCellContent("x")).Concat(
             _contentType.GetProperties()
-              .Select(p => new LabelCell(TypeUtils.NameWithSpaces(p.Name))))
+              .Select(p => new LabelCellContent(TypeUtils.NameWithSpaces(p.Name))))
           .ToList<ICellContent>()
       };
       if (_reflectivePath.Read() is IList value)
@@ -58,17 +58,17 @@ namespace Nighthollow.Editing
         {
           var entityIndex = index;
           result.Add(
-            CollectionUtils.Single<ICellContent>(new ButtonCell("x", () => Delete(entityIndex)))
+            CollectionUtils.Single<ICellContent>(new ButtonCellContent("x", () => Delete(entityIndex)))
               .Concat(
                 _contentType.GetProperties()
                   .Select(property =>
-                    new ReflectivePathCell(_reflectivePath.ListIndex(_contentType, index).Property(property))))
+                    new ReflectivePathCellContent(_reflectivePath.ListIndex(_contentType, index).Property(property))))
               .ToList());
         }
       }
 
       result.Add(CollectionUtils
-        .Single(new ButtonCell(
+        .Single(new ButtonCellContent(
           $"Add {TypeUtils.NameWithSpaces(_contentType.Name)}",
           () => { Insert(TypeUtils.InstantiateWithDefaults(_contentType)); },
           (AddButtonKey, 0)))

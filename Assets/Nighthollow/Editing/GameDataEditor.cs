@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Interface;
 using UnityEngine;
@@ -67,10 +68,21 @@ namespace Nighthollow.Editing
         _selectionStack.Add(_sheet.CurrentlySelected);
       }
 
+      EditorSheetDelegate sheetDelegate;
+      var foreignKeyList = reflectivePath.AsPropertyInfo()?.GetCustomAttribute<ForeignKeyList>();
+      if (foreignKeyList != null)
+      {
+        sheetDelegate = new ForeignKeyListEditorSheetDelegate(reflectivePath, foreignKeyList.TableType);
+      }
+      else
+      {
+        sheetDelegate = new NestedListEditorSheetDelegate(reflectivePath);
+      }
+
       ClearCurrentSheet();
       _sheet = new EditorSheet(
         Controller,
-        new NestedListEditorSheetDelegate(reflectivePath),
+        sheetDelegate,
         initiallySelected,
         () => { PreviousSheet(reflectivePath); });
       Add(_sheet);
@@ -112,7 +124,7 @@ namespace Nighthollow.Editing
         metadata => metadata.WithLastAccessedTime(DateTime.UtcNow.Ticks));
 
       var path = new ReflectivePath(_database, tableId);
-      var tableSelector = new EditorSheetDelegate.DropdownCell(
+      var tableSelector = new EditorSheetDelegate.DropdownCellContent(
         _tables.Select(tid => TypeUtils.NameWithSpaces(tid.TableName)).ToList(),
         _tables.FindIndex(t => t.Id == tableId.Id),
         RenderTableIndex,

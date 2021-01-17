@@ -29,9 +29,9 @@ namespace Nighthollow.Editing
 
     readonly ReflectivePath _reflectivePath;
     readonly Type _underlyingType;
-    readonly DropdownCell _tableSelector;
+    readonly DropdownCellContent _tableSelector;
 
-    public TableEditorSheetDelegate(ReflectivePath path, DropdownCell tableSelector)
+    public TableEditorSheetDelegate(ReflectivePath path, DropdownCellContent tableSelector)
     {
       _reflectivePath = path;
       _underlyingType = _reflectivePath.GetUnderlyingType();
@@ -56,17 +56,17 @@ namespace Nighthollow.Editing
     {
       var properties = _underlyingType.GetProperties();
       var imageProperty = properties.FirstOrDefault(p => p.Name.Equals("ImageAddress"));
-      var staticHeadings = new List<ICellContent> {new LabelCell("x")};
+      var staticHeadings = new List<ICellContent> {new LabelCellContent("x")};
       if (imageProperty != null)
       {
-        staticHeadings.Add(new LabelCell("Image"));
+        staticHeadings.Add(new LabelCellContent("Image"));
       }
 
       var result = new List<List<ICellContent>>
       {
         new List<ICellContent> {_tableSelector},
         staticHeadings
-          .Concat(properties.Select(p => new LabelCell(TypeUtils.NameWithSpaces(p.Name))))
+          .Concat(properties.Select(p => new LabelCellContent(TypeUtils.NameWithSpaces(p.Name))))
           .ToList()
       };
 
@@ -74,20 +74,20 @@ namespace Nighthollow.Editing
       {
         var staticColumns = new List<ICellContent>
         {
-          new ButtonCell("x", () => DatabaseDelete(entityId)),
+          new ButtonCellContent("x", () => DatabaseDelete(entityId)),
         };
         if (imageProperty != null)
         {
-          staticColumns.Add(new ImageCell(_reflectivePath.EntityId(entityId).Property(imageProperty)));
+          staticColumns.Add(new ImageCellContent(_reflectivePath.EntityId(entityId).Property(imageProperty)));
         }
 
         result.Add(staticColumns.Concat(properties
-            .Select(property => new ReflectivePathCell(_reflectivePath.EntityId(entityId).Property(property))))
+            .Select(property => new ReflectivePathCellContent(_reflectivePath.EntityId(entityId).Property(property))))
           .ToList());
       }
 
       result.Add(CollectionUtils
-        .Single(new ButtonCell(
+        .Single(new ButtonCellContent(
           $"Add {TypeUtils.NameWithSpaces(_underlyingType.Name)}",
           () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(_underlyingType)); },
           (AddButtonKey, 0)))

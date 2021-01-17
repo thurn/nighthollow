@@ -32,10 +32,12 @@ namespace Nighthollow.Editing
       EditorSheetDelegate.ICellContent cellContent) =>
       cellContent.Switch(
         reflectivePath => CreateTextFieldEditorCell(screenController, parent, reflectivePath),
-        CreateLabelEditorCell,
-        button => CreateButtonCell(button, parent),
-        dropdown => CreateDropdownCell(screenController, dropdown, parent),
-        CreateImageCell);
+        text => new LabelEditorCell(text),
+        button => new ButtonEditorCell(button, parent),
+        dropdown => new SelectorDropdownEditorCell(screenController, dropdown, parent),
+        cell => new ImageEditorCell(cell.ImagePath),
+        foreignKey => new ForeignKeyDropdownEditorCell(
+          screenController, foreignKey.ReflectivePath, foreignKey.ForeignType, parent));
 
     static EditorCell CreateTextFieldEditorCell(
       ScreenController screenController,
@@ -116,19 +118,6 @@ namespace Nighthollow.Editing
       output = input;
       return true;
     }
-
-    static EditorCell CreateLabelEditorCell(string? text) => new LabelEditorCell(text);
-
-    static EditorCell CreateButtonCell(EditorSheetDelegate.ButtonCell content, IEditor parent) =>
-      new ButtonEditorCell(content, parent);
-
-    static EditorCell CreateDropdownCell(
-      ScreenController screenController,
-      EditorSheetDelegate.DropdownCell content,
-      IEditor parent) =>
-      new SelectorDropdownEditorCell(screenController, content, parent);
-
-    static EditorCell CreateImageCell(EditorSheetDelegate.ImageCell cell) => new ImageEditorCell(cell.ImagePath);
 
     static bool TryParseValueData(ReflectivePath path, string input, out IValueData result)
     {

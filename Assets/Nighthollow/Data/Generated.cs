@@ -142,6 +142,142 @@ namespace Nighthollow.Data
 
   }
 
+  public sealed partial class StatusEffectTypeData
+  {
+    public StatusEffectTypeData WithName(string name) =>
+      new StatusEffectTypeData(
+        name,
+        IsFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        Duration,
+        DurationHigh,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithIsFirstClass(bool isFirstClass) =>
+      new StatusEffectTypeData(
+        Name,
+        isFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        Duration,
+        DurationHigh,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithMaxStacks(int maxStacks) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        maxStacks,
+        ImplicitModifiers,
+        Duration,
+        DurationHigh,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        MaxStacks,
+        implicitModifiers,
+        Duration,
+        DurationHigh,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithDuration(DurationValue? duration) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        duration,
+        DurationHigh,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithDurationHigh(DurationValue? durationHigh) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        Duration,
+        durationHigh,
+        ImageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithImageAddress(string? imageAddress) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        Duration,
+        DurationHigh,
+        imageAddress,
+        EffectAddress);
+
+    public StatusEffectTypeData WithEffectAddress(string? effectAddress) =>
+      new StatusEffectTypeData(
+        Name,
+        IsFirstClass,
+        MaxStacks,
+        ImplicitModifiers,
+        Duration,
+        DurationHigh,
+        ImageAddress,
+        effectAddress);
+
+  }
+
+  public sealed partial class StatusEffectItemData
+  {
+    public StatusEffectItemData WithStatusEffectTypeId(int statusEffectTypeId) =>
+      new StatusEffectItemData(
+        statusEffectTypeId,
+        ImplicitModifiers,
+        Duration);
+
+    public StatusEffectItemData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
+      new StatusEffectItemData(
+        StatusEffectTypeId,
+        implicitModifiers,
+        Duration);
+
+    public StatusEffectItemData WithDuration(DurationValue? duration) =>
+      new StatusEffectItemData(
+        StatusEffectTypeId,
+        ImplicitModifiers,
+        duration);
+
+  }
+
+  public sealed partial class StatusEffectData
+  {
+    public StatusEffectData WithStats(StatTable stats) =>
+      new StatusEffectData(
+        stats,
+        BaseType,
+        ItemData);
+
+    public StatusEffectData WithBaseType(StatusEffectTypeData baseType) =>
+      new StatusEffectData(
+        Stats,
+        baseType,
+        ItemData);
+
+    public StatusEffectData WithItemData(StatusEffectItemData itemData) =>
+      new StatusEffectData(
+        Stats,
+        BaseType,
+        itemData);
+
+  }
+
   public sealed partial class GameData
   {
     public GameData WithTableMetadata(ImmutableDictionary<int, TableMetadata> tableMetadata) =>
@@ -523,7 +659,8 @@ namespace Nighthollow.Data
         UsesAccuracy,
         CanCrit,
         CanStun,
-        StatusEffectIds);
+        SummonCreatures,
+        StatusEffects);
 
     public SkillTypeData WithSkillAnimationType(SkillAnimationType skillAnimationType) =>
       new SkillTypeData(
@@ -536,7 +673,8 @@ namespace Nighthollow.Data
         UsesAccuracy,
         CanCrit,
         CanStun,
-        StatusEffectIds);
+        SummonCreatures,
+        StatusEffects);
 
     public SkillTypeData WithSkillType(SkillType skillType) =>
       new SkillTypeData(
@@ -549,7 +687,8 @@ namespace Nighthollow.Data
         UsesAccuracy,
         CanCrit,
         CanStun,
-        StatusEffectIds);
+        SummonCreatures,
+        StatusEffects);
 
     public SkillTypeData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
       new SkillTypeData(
@@ -562,7 +701,8 @@ namespace Nighthollow.Data
         UsesAccuracy,
         CanCrit,
         CanStun,
-        StatusEffectIds);
+        SummonCreatures,
+        StatusEffects);
 
     public SkillTypeData WithAddress(string? address) =>
       new SkillTypeData(
@@ -575,7 +715,8 @@ namespace Nighthollow.Data
         UsesAccuracy,
         CanCrit,
         CanStun,
-        StatusEffectIds);
+        SummonCreatures,
+        StatusEffects);
 
     public SkillTypeData WithProjectileSpeed(int? projectileSpeed) =>
       new SkillTypeData(
@@ -588,7 +729,8 @@ namespace Nighthollow.Data
         UsesAccuracy,
         CanCrit,
         CanStun,
-        StatusEffectIds);
+        SummonCreatures,
+        StatusEffects);
 
     public SkillTypeData WithUsesAccuracy(bool usesAccuracy) =>
       new SkillTypeData(
@@ -601,7 +743,8 @@ namespace Nighthollow.Data
         usesAccuracy,
         CanCrit,
         CanStun,
-        StatusEffectIds);
+        SummonCreatures,
+        StatusEffects);
 
     public SkillTypeData WithCanCrit(bool canCrit) =>
       new SkillTypeData(
@@ -614,7 +757,8 @@ namespace Nighthollow.Data
         UsesAccuracy,
         canCrit,
         CanStun,
-        StatusEffectIds);
+        SummonCreatures,
+        StatusEffects);
 
     public SkillTypeData WithCanStun(bool canStun) =>
       new SkillTypeData(
@@ -627,9 +771,10 @@ namespace Nighthollow.Data
         UsesAccuracy,
         CanCrit,
         canStun,
-        StatusEffectIds);
+        SummonCreatures,
+        StatusEffects);
 
-    public SkillTypeData WithStatusEffectIds(ImmutableList<int> statusEffectIds) =>
+    public SkillTypeData WithSummonCreatures(ImmutableList<int> summonCreatures) =>
       new SkillTypeData(
         Name,
         SkillAnimationType,
@@ -640,7 +785,22 @@ namespace Nighthollow.Data
         UsesAccuracy,
         CanCrit,
         CanStun,
-        statusEffectIds);
+        summonCreatures,
+        StatusEffects);
+
+    public SkillTypeData WithStatusEffects(ImmutableList<int> statusEffects) =>
+      new SkillTypeData(
+        Name,
+        SkillAnimationType,
+        SkillType,
+        ImplicitModifiers,
+        Address,
+        ProjectileSpeed,
+        UsesAccuracy,
+        CanCrit,
+        CanStun,
+        SummonCreatures,
+        statusEffects);
 
   }
 
@@ -652,7 +812,8 @@ namespace Nighthollow.Data
         Affixes,
         ImplicitModifiers,
         Name,
-        Summons);
+        Summons,
+        StatusEffects);
 
     public SkillItemData WithAffixes(ImmutableList<AffixData> affixes) =>
       new SkillItemData(
@@ -660,7 +821,8 @@ namespace Nighthollow.Data
         affixes,
         ImplicitModifiers,
         Name,
-        Summons);
+        Summons,
+        StatusEffects);
 
     public SkillItemData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
       new SkillItemData(
@@ -668,7 +830,8 @@ namespace Nighthollow.Data
         Affixes,
         implicitModifiers,
         Name,
-        Summons);
+        Summons,
+        StatusEffects);
 
     public SkillItemData WithName(string name) =>
       new SkillItemData(
@@ -676,7 +839,8 @@ namespace Nighthollow.Data
         Affixes,
         ImplicitModifiers,
         name,
-        Summons);
+        Summons,
+        StatusEffects);
 
     public SkillItemData WithSummons(ImmutableList<CreatureItemData> summons) =>
       new SkillItemData(
@@ -684,7 +848,17 @@ namespace Nighthollow.Data
         Affixes,
         ImplicitModifiers,
         Name,
-        summons);
+        summons,
+        StatusEffects);
+
+    public SkillItemData WithStatusEffects(ImmutableList<StatusEffectItemData> statusEffects) =>
+      new SkillItemData(
+        SkillTypeId,
+        Affixes,
+        ImplicitModifiers,
+        Name,
+        Summons,
+        statusEffects);
 
   }
 
@@ -897,80 +1071,6 @@ namespace Nighthollow.Data
         NextId,
         LastAccessedTime,
         columnMetadata);
-
-  }
-
-  public sealed partial class StatusEffectTypeData
-  {
-    public StatusEffectTypeData WithName(string name) =>
-      new StatusEffectTypeData(
-        name,
-        IsFirstClass,
-        MaxStacks,
-        ImplicitModifiers,
-        Duration,
-        ImageAddress,
-        EffectAddress);
-
-    public StatusEffectTypeData WithIsFirstClass(bool isFirstClass) =>
-      new StatusEffectTypeData(
-        Name,
-        isFirstClass,
-        MaxStacks,
-        ImplicitModifiers,
-        Duration,
-        ImageAddress,
-        EffectAddress);
-
-    public StatusEffectTypeData WithMaxStacks(int maxStacks) =>
-      new StatusEffectTypeData(
-        Name,
-        IsFirstClass,
-        maxStacks,
-        ImplicitModifiers,
-        Duration,
-        ImageAddress,
-        EffectAddress);
-
-    public StatusEffectTypeData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
-      new StatusEffectTypeData(
-        Name,
-        IsFirstClass,
-        MaxStacks,
-        implicitModifiers,
-        Duration,
-        ImageAddress,
-        EffectAddress);
-
-    public StatusEffectTypeData WithDuration(DurationValue? duration) =>
-      new StatusEffectTypeData(
-        Name,
-        IsFirstClass,
-        MaxStacks,
-        ImplicitModifiers,
-        duration,
-        ImageAddress,
-        EffectAddress);
-
-    public StatusEffectTypeData WithImageAddress(string? imageAddress) =>
-      new StatusEffectTypeData(
-        Name,
-        IsFirstClass,
-        MaxStacks,
-        ImplicitModifiers,
-        Duration,
-        imageAddress,
-        EffectAddress);
-
-    public StatusEffectTypeData WithEffectAddress(string? effectAddress) =>
-      new StatusEffectTypeData(
-        Name,
-        IsFirstClass,
-        MaxStacks,
-        ImplicitModifiers,
-        Duration,
-        ImageAddress,
-        effectAddress);
 
   }
 

@@ -60,6 +60,17 @@ namespace Nighthollow.Editing
         (current, modifier) => current.Insert(modifier));
       return string.Join("\n", modifiers.Select(m => m.Describe(entity, gameData.StatData)));
     }
+
+    protected static string RenderForeignKeyList(GameData gameData, ImmutableList<int> list, ITableId tableId)
+    {
+      string Print(int i)
+      {
+        var table = tableId.GetInUnchecked(gameData);
+        return table.Contains(i) ? table[i].ToString() : "None";
+      }
+
+      return list.Count == 0 ? "[]" : string.Join("\n", list.Select(Print));
+    }
   }
 
   public sealed class ModifierDescriptionProvider : IStatDescriptionProvider
@@ -132,7 +143,11 @@ namespace Nighthollow.Editing
   {
     public SkillTypeController() : base(new Dictionary<string, Func<GameData, SkillTypeData, string>>
     {
-      {nameof(SkillTypeData.ImplicitModifiers), (g, d) => RenderModifiers(g, d.ImplicitModifiers)}
+      {nameof(SkillTypeData.ImplicitModifiers), (g, d) => RenderModifiers(g, d.ImplicitModifiers)},
+      {
+        nameof(SkillTypeData.StatusEffects), (g, d) =>
+          RenderForeignKeyList(g, d.StatusEffects, TableId.StatusEffectTypes)
+      }
     })
     {
     }
@@ -174,6 +189,26 @@ namespace Nighthollow.Editing
     }
   }
 
+  sealed class StatusEffectTypeController : EditorController<StatusEffectTypeData>
+  {
+    public StatusEffectTypeController() : base(new Dictionary<string, Func<GameData, StatusEffectTypeData, string>>
+    {
+      {nameof(StatusEffectTypeData.ImplicitModifiers), (g, d) => RenderModifiers(g, d.ImplicitModifiers)}
+    })
+    {
+    }
+  }
+
+  sealed class StatusEffectItemController : EditorController<StatusEffectItemData>
+  {
+    public StatusEffectItemController() : base(new Dictionary<string, Func<GameData, StatusEffectItemData, string>>
+    {
+      {nameof(StatusEffectItemData.ImplicitModifiers), (g, d) => RenderModifiers(g, d.ImplicitModifiers)}
+    })
+    {
+    }
+  }
+
   public static class EditorControllerRegistry
   {
     static readonly IReadOnlyDictionary<Type, EditorController> Controllers =
@@ -182,7 +217,9 @@ namespace Nighthollow.Editing
         {typeof(CreatureTypeData), new CreatureTypeController()},
         {typeof(SkillTypeData), new SkillTypeController()},
         {typeof(CreatureItemData), new CreatureItemController()},
-        {typeof(SkillItemData), new SkillItemController()}
+        {typeof(SkillItemData), new SkillItemController()},
+        {typeof(StatusEffectTypeData), new StatusEffectTypeController()},
+        {typeof(StatusEffectItemData), new StatusEffectItemController()}
       };
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)
