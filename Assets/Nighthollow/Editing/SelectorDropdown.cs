@@ -225,7 +225,15 @@ namespace Nighthollow.Editing
 
       AddToClassList("dropdown");
       style.left = worldAnchor.x;
-      style.top = worldAnchor.y + worldAnchor.height;
+      if (worldAnchor.y < Screen.height * 0.666f)
+      {
+        style.top = worldAnchor.y + worldAnchor.height;
+      }
+      else
+      {
+        style.bottom = Screen.height - worldAnchor.y;
+      }
+
       style.position = new StyleEnum<Position>(Position.Absolute);
       controller.Screen.Add(this);
 

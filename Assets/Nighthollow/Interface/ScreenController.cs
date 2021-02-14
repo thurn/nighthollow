@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
-using Nighthollow.Data;
 using Nighthollow.Editing;
 using Nighthollow.Items;
 using Nighthollow.Services;
@@ -87,7 +86,6 @@ namespace Nighthollow.Interface
       new ElementKey<GameDataEditor>("GameDataEditor", createAtRuntime: true);
 
     [SerializeField] UIDocument _document = null!;
-    [SerializeField] DataService _dataService = null!;
 
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
