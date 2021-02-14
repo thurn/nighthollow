@@ -32,6 +32,7 @@ namespace Nighthollow.Editing
 
     public virtual void WriteForeignKey(int id, ReflectivePath reflectivePath)
     {
+      throw new InvalidOperationException($"No implementation provided for WriteForeignKey {id}");
     }
   }
 
@@ -168,6 +169,10 @@ namespace Nighthollow.Editing
       {
         reflectivePath.Write(CreatureTypeData.DefaultItem(id, reflectivePath.Database.Snapshot()));
       }
+      else
+      {
+        base.WriteForeignKey(id, reflectivePath);
+      }
     }
   }
 
@@ -175,16 +180,24 @@ namespace Nighthollow.Editing
   {
     public SkillItemController() : base(new Dictionary<string, Func<GameData, SkillItemData, string>>
     {
-      {nameof(CreatureItemData.ImplicitModifiers), (g, d) => RenderModifiers(g, d.ImplicitModifiers)}
+      {nameof(SkillItemData.ImplicitModifiers), (g, d) => RenderModifiers(g, d.ImplicitModifiers)},
+      {nameof(SkillItemData.StatusEffects), (g, d) => RenderStatusEffects(g, d.StatusEffects)}
     })
     {
     }
+
+    static string RenderStatusEffects(GameData gameData, ImmutableList<StatusEffectItemData> statusEffects) =>
+      string.Join(",", statusEffects.Select(effect => gameData.StatusEffects[effect.StatusEffectTypeId].Name));
 
     public override void WriteForeignKey(int id, ReflectivePath reflectivePath)
     {
       if (reflectivePath.Read() is SkillItemData _)
       {
         reflectivePath.Write(SkillTypeData.DefaultItem(id, reflectivePath.Database.Snapshot()));
+      }
+      else
+      {
+        base.WriteForeignKey(id, reflectivePath);
       }
     }
   }
@@ -206,6 +219,18 @@ namespace Nighthollow.Editing
       {nameof(StatusEffectItemData.ImplicitModifiers), (g, d) => RenderModifiers(g, d.ImplicitModifiers)}
     })
     {
+    }
+
+    public override void WriteForeignKey(int id, ReflectivePath reflectivePath)
+    {
+      if (reflectivePath.Read() is StatusEffectItemData _)
+      {
+        reflectivePath.Write(StatusEffectTypeData.DefaultItem(id, reflectivePath.Database.Snapshot()));
+      }
+      else
+      {
+        base.WriteForeignKey(id, reflectivePath);
+      }
     }
   }
 
@@ -230,6 +255,12 @@ namespace Nighthollow.Editing
       }
 
       var value = property.GetValue(parentValue);
+
+      if (value == null)
+      {
+        return "<Null>";
+      }
+
       return Controllers.ContainsKey(parentValue.GetType())
         ? Controllers[parentValue.GetType()].Preview(gameData, parentValue, property.Name, value)
         : RenderDefault(value);

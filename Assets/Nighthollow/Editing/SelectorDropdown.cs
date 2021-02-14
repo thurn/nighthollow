@@ -193,7 +193,10 @@ namespace Nighthollow.Editing
       return new EditorSheetDelegate.DropdownCellContent(
         values.Select(v => v.Item2).ToList(),
         null,
-        index => { EditorControllerRegistry.WriteForeignKey(values[index].Item1, reflectivePath); });
+        index =>
+        {
+          EditorControllerRegistry.WriteForeignKey(values[index].Item1, reflectivePath);
+        });
     }
   }
 

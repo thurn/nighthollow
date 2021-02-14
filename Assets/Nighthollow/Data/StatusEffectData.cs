@@ -77,6 +77,15 @@ namespace Nighthollow.Data
     [Key(7)] public string? EffectAddress { get; }
 
     public override string ToString() => Name;
+
+    public static StatusEffectItemData DefaultItem(int statusEffectTypeId, GameData gameData)
+    {
+      var value = gameData.StatusEffects[statusEffectTypeId];
+      return new StatusEffectItemData(
+        statusEffectTypeId,
+        value.ImplicitModifiers.Select(m => m.Value != null ? m : m.WithValue(m.ValueLow)).ToImmutableList(),
+        value.Duration);
+    }
   }
 
   [MessagePackObject]
@@ -84,15 +93,17 @@ namespace Nighthollow.Data
   {
     public StatusEffectItemData(
       int statusEffectTypeId,
-      ImmutableList<ModifierData> implicitModifiers,
-      DurationValue? duration)
+      ImmutableList<ModifierData>? implicitModifiers = null,
+      DurationValue? duration = null)
     {
       StatusEffectTypeId = statusEffectTypeId;
-      ImplicitModifiers = implicitModifiers;
+      ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
       Duration = duration;
     }
 
+    [ForeignKey(typeof(StatusEffectTypeData))]
     [Key(0)] public int StatusEffectTypeId { get; }
+
     [Key(1)] public ImmutableList<ModifierData> ImplicitModifiers { get; }
     [Key(2)] public DurationValue? Duration { get; }
 

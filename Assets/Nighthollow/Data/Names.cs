@@ -12,28 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Immutable;
-using MessagePack;
-
 #nullable enable
 
 namespace Nighthollow.Data
 {
-  [MessagePackObject]
-  public sealed partial class StaticItemListData
+  public static class Names
   {
-    public StaticItemListData(
-      string name,
-      ImmutableList<CreatureItemData>? creatures = null,
-      ImmutableList<ResourceItemData>? resources = null)
-    {
-      Name = name;
-      Creatures = creatures ?? ImmutableList<CreatureItemData>.Empty;
-      Resources = resources ?? ImmutableList<ResourceItemData>.Empty;
-    }
-
-    [Key(0)] public string Name { get; }
-    [Key(1)] public ImmutableList<CreatureItemData> Creatures { get; }
-    [Key(2)] public ImmutableList<ResourceItemData> Resources { get; }
+    public const string StartingDeck = "StartingDeck";
+    public const string TutorialEnemies = "TutorialEnemies";
   }
 }

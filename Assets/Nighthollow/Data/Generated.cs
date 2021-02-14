@@ -185,12 +185,12 @@ namespace Nighthollow.Data
           ImageAddress,
           EffectAddress);
 
-    public StatusEffectTypeData WithIsFirstClass(bool isFirstClass) =>
-      Equals(isFirstClass, IsNamed)
+    public StatusEffectTypeData WithIsNamed(bool isNamed) =>
+      Equals(isNamed, IsNamed)
         ? this
         : new StatusEffectTypeData(
           Name,
-          isFirstClass,
+          isNamed,
           MaxStacks,
           ImplicitModifiers,
           Duration,
@@ -305,34 +305,6 @@ namespace Nighthollow.Data
           duration);
 
   }
-  //
-  // public sealed partial class StatusEffectData
-  // {
-  //   public StatusEffectData WithStats(StatTable stats) =>
-  //     Equals(stats, Stats)
-  //       ? this
-  //       : new StatusEffectData(
-  //         stats,
-  //         BaseType,
-  //         ItemData);
-  //
-  //   public StatusEffectData WithBaseType(StatusEffectTypeData baseType) =>
-  //     Equals(baseType, BaseType)
-  //       ? this
-  //       : new StatusEffectData(
-  //         Stats,
-  //         baseType,
-  //         ItemData);
-  //
-  //   public StatusEffectData WithItemData(StatusEffectItemData itemData) =>
-  //     Equals(itemData, ItemData)
-  //       ? this
-  //       : new StatusEffectData(
-  //         Stats,
-  //         BaseType,
-  //         itemData);
-  //
-  // }
 
   public sealed partial class GameData
   {
@@ -738,7 +710,7 @@ namespace Nighthollow.Data
 
   public sealed partial class StaticItemListData
   {
-    public StaticItemListData WithName(StaticItemListName name) =>
+    public StaticItemListData WithName(string name) =>
       Equals(name, Name)
         ? this
         : new StaticItemListData(

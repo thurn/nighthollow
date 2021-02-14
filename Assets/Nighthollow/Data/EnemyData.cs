@@ -34,7 +34,7 @@ namespace Nighthollow.Data
     public EnemyData BuildEnemyData(GameData gameData) =>
       new EnemyData(
         Enemies.IsEmpty
-          ? gameData.ItemLists.Values.First(list => list.Name == StaticItemListName.TutorialEnemies).Creatures
+          ? gameData.ItemLists.Values.First(list => list.Name == Names.TutorialEnemies).Creatures
           : Enemies,
         gameData.UserModifiers.Values.Aggregate(
           new StatTable(StatData.BuildDefaultStatTable(gameData)),

@@ -42,6 +42,9 @@ namespace Nighthollow.Stats
       _statusEffects = statusEffects ?? ImmutableDictionary<int, ImmutableList<StatusEffectData>>.Empty;
     }
 
+    public ImmutableList<(StatusEffectTypeData, int)> StatusEffects =>
+      _statusEffects.Values.Where(v => !v.IsEmpty).Select(v => (v.First().BaseType, v.Count)).ToImmutableList();
+
     [MustUseReturnValue]
     public StatTable InsertStatusEffect(StatusEffectData statusEffect)
     {

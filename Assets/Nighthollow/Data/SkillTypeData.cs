@@ -74,7 +74,9 @@ namespace Nighthollow.Data
         skillTypeId,
         ImmutableList<AffixData>.Empty,
         value.ImplicitModifiers.Select(m => m.Value != null ? m : m.WithValue(m.ValueLow)).ToImmutableList(),
-        value.Name);
+        value.Name,
+        ImmutableList<CreatureItemData>.Empty,
+        value.StatusEffects.Select(sid => StatusEffectTypeData.DefaultItem(sid, gameData)).ToImmutableList());
     }
   }
 }

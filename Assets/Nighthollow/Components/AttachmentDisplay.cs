@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using UnityEngine;
 
@@ -23,29 +25,40 @@ namespace Nighthollow.Components
   public sealed class AttachmentDisplay : MonoBehaviour
   {
     [Header("State")] [SerializeField] List<Transform> _attachments = null!;
+    ImmutableList<(StatusEffectTypeData, int)>? _currentStatusEffects;
 
-    public void AddAttachment(Attachment attachment)
+    public void SetStatusEffects(
+      GameServiceRegistry registry,
+      ImmutableList<(StatusEffectTypeData, int)> statusEffects)
     {
-      attachment.transform.SetParent(transform);
+      if (!statusEffects.Equals(_currentStatusEffects))
+      {
+        ClearAttachments();
+
+        foreach (var effect in statusEffects)
+        {
+          if (effect.Item1.ImageAddress is { } address)
+          {
+            var newInstance = Root.Instance.Prefabs.CreateAttachment();
+            newInstance.Initialize(registry.AssetService.GetImage(address));
+            AddAttachment(newInstance.transform);
+          }
+        }
+
+        _currentStatusEffects = statusEffects;
+      }
+    }
+
+    void AddAttachment(Transform attachment)
+    {
+      attachment.SetParent(transform);
       foreach (var child in attachment.GetComponentsInChildren<SpriteRenderer>())
       {
         child.sortingOrder = 0;
       }
 
-      _attachments.Add(attachment.transform);
+      _attachments.Add(attachment);
       UpdatePositions();
-    }
-
-    public void SetAttachments(IEnumerable<Sprite> attachments)
-    {
-      ClearAttachments();
-
-      foreach (var attachment in attachments)
-      {
-        var newInstance = Root.Instance.Prefabs.CreateAttachment();
-        newInstance.Initialize(attachment);
-        AddAttachment(newInstance);
-      }
     }
 
     public void ClearAttachments()

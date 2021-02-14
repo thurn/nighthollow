@@ -126,6 +126,7 @@ namespace Nighthollow.Components
 
       if (_state == CreatureState.Dying)
       {
+        _attachmentDisplay.ClearAttachments();
         return;
       }
 
@@ -180,6 +181,8 @@ namespace Nighthollow.Components
       {
         _animator.SetBool(Moving, value: false);
       }
+
+      _attachmentDisplay.SetStatusEffects(_registry, _data.Stats.StatusEffects);
     }
 
     public void EditorSetReferences(Transform projectileSource,
@@ -380,13 +383,7 @@ namespace Nighthollow.Components
     {
       _animator.SetTrigger(Hit);
       SetState(CreatureState.Stunned);
-      var attachment = Root.Instance.Prefabs.CreateAttachment();
-      attachment.Initialize(Root.Instance.Prefabs.StunIcon());
-      _attachmentDisplay.AddAttachment(attachment);
-
       yield return new WaitForSeconds(durationSeconds);
-
-      _attachmentDisplay.ClearAttachments();
       ToDefaultState();
     }
 
