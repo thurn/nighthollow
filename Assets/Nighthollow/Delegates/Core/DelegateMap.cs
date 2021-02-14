@@ -34,7 +34,7 @@ namespace Nighthollow.Delegates.Core
     KnockbackOnHitDelegate = 9,
     SummonMinionsDelegate = 10,
     AddedDamageOnRepeatedHitsDelegate = 11,
-    ApplyTargetedAffixesOnHitDelegate = 12,
+    ApplyStatusEffectsOnHitDelegate = 12,
     ChainToRandomTargetDelegate = 13,
     ChanceToShockDelegate = 14,
     ApplyToAdjacentAlliesOnUseDelegate = 15
@@ -55,7 +55,7 @@ namespace Nighthollow.Delegates.Core
       {DelegateId.KnockbackOnHitDelegate, new KnockbackOnHitDelegate()},
       {DelegateId.SummonMinionsDelegate, new SummonMinionsDelegate()},
       {DelegateId.AddedDamageOnRepeatedHitsDelegate, new AddedDamageOnRepeatedHitsDelegate()},
-      {DelegateId.ApplyTargetedAffixesOnHitDelegate, new ApplyTargetedAffixesOnHitDelegate()},
+      {DelegateId.ApplyStatusEffectsOnHitDelegate, new ApplyStatusEffectsOnHitDelegate()},
       {DelegateId.ChainToRandomTargetDelegate, new ChainToRandomTargetDelegate()},
       {DelegateId.ChanceToShockDelegate, new ChanceToShockDelegate()},
       {DelegateId.ApplyToAdjacentAlliesOnUseDelegate, new ApplyToAdjacentAlliesOnUseDelegate()}

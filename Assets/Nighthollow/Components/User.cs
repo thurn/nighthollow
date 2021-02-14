@@ -56,15 +56,10 @@ namespace Nighthollow.Components
       var gameData = registry.Database.Snapshot();
       Data = gameData.GameState.BuildUserData(gameData);
 
-      ImmutableList<CreatureItemData> cards;
-      if (gameData.Deck.IsEmpty)
-      {
-        cards = gameData.ItemLists.Values.First(list => list.Name == StaticItemListName.StartingDeck).Creatures;
-      }
-      else
-      {
-        cards = gameData.Deck.Values.ToImmutableList();
-      }
+      var cards =
+        gameData.Deck.IsEmpty ?
+          gameData.ItemLists.Values.First(list => list.Name == StaticItemListName.StartingDeck).Creatures :
+          gameData.Deck.Values.ToImmutableList();
 
       var builtDeck = cards.Select(item => item.BuildCreature(registry));
       _deck.OnStartGame(builtDeck, gameData.GameState.TutorialState != TutorialState.Completed);
@@ -111,6 +106,11 @@ namespace Nighthollow.Components
     public void InsertModifier(IStatModifier modifier)
     {
       Data = Data.WithStats(Data.Stats.InsertModifier(modifier));
+    }
+
+    public void InsertStatusEffect(StatusEffectData statusEffectData)
+    {
+      Data = Data.WithStats(Data.Stats.InsertStatusEffect(statusEffectData));
     }
 
     void Update()

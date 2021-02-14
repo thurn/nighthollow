@@ -13,8 +13,10 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using System.Linq;
 using MessagePack;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 
 #nullable enable
 
@@ -25,7 +27,7 @@ namespace Nighthollow.Data
   {
     public StatusEffectTypeData(
       string name,
-      bool isFirstClass = false,
+      bool isNamed = false,
       int maxStacks = 1,
       ImmutableList<ModifierData>? implicitModifiers = null,
       DurationValue? duration = null,
@@ -34,7 +36,7 @@ namespace Nighthollow.Data
       string? effectAddress = null)
     {
       Name = name;
-      IsFirstClass = isFirstClass;
+      IsNamed = isNamed;
       MaxStacks = maxStacks;
       ImplicitModifiers = implicitModifiers ?? ImmutableList<ModifierData>.Empty;
       Duration = duration;
@@ -50,7 +52,7 @@ namespace Nighthollow.Data
     /// True if this effect should be communicated in the UI using its name. Typically this is false for status effects
     /// which are directly tied to a single skill, where the skill name itself is what's shown in the UI.
     /// </summary>
-    [Key(1)] public bool IsFirstClass { get; }
+    [Key(1)] public bool IsNamed { get; }
 
     /// <summary>How many times this effect can be applied to the same target.</summary>
     [Key(2)] public int MaxStacks { get; }
@@ -93,19 +95,28 @@ namespace Nighthollow.Data
     [Key(0)] public int StatusEffectTypeId { get; }
     [Key(1)] public ImmutableList<ModifierData> ImplicitModifiers { get; }
     [Key(2)] public DurationValue? Duration { get; }
+
+    public StatusEffectData BuildStatusEffect(GameData gameData) =>
+      new StatusEffectData(StatusEffectTypeId, gameData.StatusEffects[StatusEffectTypeId], this);
   }
 
-  public sealed partial class StatusEffectData : StatEntity
+  public sealed class StatusEffectData
   {
-    public StatusEffectData(StatTable stats, StatusEffectTypeData baseType, StatusEffectItemData itemData)
+    public StatusEffectData(int typeId, StatusEffectTypeData baseType, StatusEffectItemData itemData)
     {
-      Stats = stats;
+      StatusEffectTypeId = typeId;
       BaseType = baseType;
-      ItemData = itemData;
+      Lifetime = itemData.Duration.HasValue ? new TimedLifetime(itemData.Duration.Value) : null;
+      Modifiers = itemData.ImplicitModifiers
+        .Select(m => m.BuildStatModifier())
+        .WhereNotNull()
+        .Select(m => Lifetime == null ? m : m.WithLifetime(Lifetime))
+        .ToImmutableList();
     }
 
-    [Field] public override StatTable Stats { get; }
-    [Field] public StatusEffectTypeData BaseType { get; }
-    [Field] public StatusEffectItemData ItemData { get; }
+    public int StatusEffectTypeId { get; }
+    public StatusEffectTypeData BaseType { get; }
+    public ILifetime? Lifetime { get; }
+    public ImmutableList<IStatModifier> Modifiers { get; }
   }
 }

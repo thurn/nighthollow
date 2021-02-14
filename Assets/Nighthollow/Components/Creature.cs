@@ -59,8 +59,6 @@ namespace Nighthollow.Components
     [SerializeField] float _animationSpeedMultiplier;
 
     [Header("State")]
-    [SerializeField] bool _initialized;
-
     [SerializeField] int _damageTaken;
     [SerializeField] CreatureState _state;
     [SerializeField] RankValue? _rankPosition;
@@ -120,7 +118,6 @@ namespace Nighthollow.Components
       _animator.speed = _animationSpeedMultiplier;
 
       _data = creatureData;
-      _initialized = true;
     }
 
     void Update()
@@ -227,6 +224,11 @@ namespace Nighthollow.Components
     public void InsertModifier(IStatModifier modifier)
     {
       _data = _data.WithStats(_data.Stats.InsertModifier(modifier));
+    }
+
+    public void InsertStatusEffect(StatusEffectData statusEffectData)
+    {
+      _data = _data.WithStats(_data.Stats.InsertStatusEffect(statusEffectData));
     }
 
     public void ExecuteMutatation(IMutation mutation)

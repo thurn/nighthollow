@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using JetBrains.Annotations;
+using Nighthollow.Data;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -27,22 +28,57 @@ namespace Nighthollow.Stats
     readonly StatTable? _parent;
     readonly ImmutableDictionary<StatId, ImmutableList<IStatModifier>> _modifiers;
     readonly ImmutableDictionary<StatId, ImmutableList<IStatModifier>> _dynamicModifiers;
+    readonly ImmutableDictionary<int, ImmutableList<StatusEffectData>> _statusEffects;
 
     public StatTable(
       StatTable? parent,
       ImmutableDictionary<StatId, ImmutableList<IStatModifier>>? modifiers = null,
-      ImmutableDictionary<StatId, ImmutableList<IStatModifier>>? dynamicModifiers = null)
+      ImmutableDictionary<StatId, ImmutableList<IStatModifier>>? dynamicModifiers = null,
+      ImmutableDictionary<int, ImmutableList<StatusEffectData>>? statusEffects = null)
     {
       _parent = parent;
       _modifiers = modifiers ?? ImmutableDictionary<StatId, ImmutableList<IStatModifier>>.Empty;
       _dynamicModifiers = dynamicModifiers ?? ImmutableDictionary<StatId, ImmutableList<IStatModifier>>.Empty;
+      _statusEffects = statusEffects ?? ImmutableDictionary<int, ImmutableList<StatusEffectData>>.Empty;
     }
 
     [MustUseReturnValue]
-    public StatTable InsertModifier(IStatModifier modifier) =>
-      modifier.Lifetime == null
-        ? new StatTable(_parent, _modifiers.AppendOrCreateList(modifier.StatId, modifier), _dynamicModifiers)
-        : new StatTable(_parent, _modifiers, _dynamicModifiers.AppendOrCreateList(modifier.StatId, modifier));
+    public StatTable InsertStatusEffect(StatusEffectData statusEffect)
+    {
+      if (_statusEffects[statusEffect.StatusEffectTypeId].Count >= statusEffect.BaseType.MaxStacks)
+      {
+        // Limit has been exceeded for this status effect, so it is ignored.
+        return this;
+      }
+
+      return statusEffect.Lifetime == null
+        ? new StatTable(
+          _parent,
+          InsertModifierList(_modifiers, statusEffect.Modifiers),
+          _dynamicModifiers,
+          _statusEffects.AppendOrCreateList(statusEffect.StatusEffectTypeId, statusEffect))
+        : new StatTable(
+          _parent,
+          _modifiers,
+          InsertModifierList(_dynamicModifiers, statusEffect.Modifiers),
+          _statusEffects.AppendOrCreateList(statusEffect.StatusEffectTypeId, statusEffect));
+    }
+
+    [MustUseReturnValue]
+    public StatTable InsertModifier(IStatModifier modifier)
+    {
+      return modifier.Lifetime == null
+        ? new StatTable(
+          _parent,
+          _modifiers.AppendOrCreateList(modifier.StatId, modifier),
+          _dynamicModifiers,
+          _statusEffects)
+        : new StatTable(
+          _parent,
+          _modifiers,
+          _dynamicModifiers.AppendOrCreateList(modifier.StatId, modifier),
+          _statusEffects);
+    }
 
     [MustUseReturnValue]
     public StatTable InsertNullableModifier(IStatModifier? modifier) =>
@@ -57,13 +93,17 @@ namespace Nighthollow.Stats
           .ToDictionary(g => g.Key, g => g.Select(m => m)));
 
     [MustUseReturnValue]
-    public StatTable OnTick() => _dynamicModifiers.IsEmpty
-      ? this
-      : new StatTable(_parent,
-        _modifiers,
-        _dynamicModifiers.ToImmutableDictionary(
-          pair => pair.Key,
-          pair => pair.Value.RemoveAll(m => m.Lifetime?.IsValid() == false)));
+    public StatTable OnTick() =>
+      _dynamicModifiers.IsEmpty
+        ? this
+        : new StatTable(_parent,
+          _modifiers,
+          _dynamicModifiers.ToImmutableDictionary(
+            pair => pair.Key,
+            pair => pair.Value.RemoveAll(m => m.Lifetime?.IsValid() == false)),
+          _statusEffects.ToImmutableDictionary(
+            pair => pair.Key,
+            pair => pair.Value.RemoveAll(m => m.Lifetime?.IsValid() == false)));
 
     IEnumerable<IStatModifier> ModifiersForStat(StatId statId)
     {
@@ -71,6 +111,24 @@ namespace Nighthollow.Stats
         .GetValueOrDefault(statId, ImmutableList<IStatModifier>.Empty)
         .Concat(_dynamicModifiers.GetValueOrDefault(statId, ImmutableList<IStatModifier>.Empty))
         .Concat(_parent == null ? Enumerable.Empty<IStatModifier>() : _parent.ModifiersForStat(statId));
+    }
+
+    ImmutableDictionary<StatId, ImmutableList<IStatModifier>> InsertModifierList(
+      ImmutableDictionary<StatId, ImmutableList<IStatModifier>> modifiers,
+      ImmutableList<IStatModifier> input)
+    {
+      var builder = modifiers.ToBuilder();
+      foreach (var modifier in input)
+      {
+        if (!builder.ContainsKey(modifier.StatId))
+        {
+          builder[modifier.StatId] = ImmutableList<IStatModifier>.Empty;
+        }
+
+        builder[modifier.StatId] = builder[modifier.StatId].Add(modifier);
+      }
+
+      return builder.ToImmutable();
     }
   }
 }

@@ -2222,7 +2222,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(8);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
-            writer.Write(value.IsFirstClass);
+            writer.Write(value.IsNamed);
             writer.Write(value.MaxStacks);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>>().Serialize(ref writer, value.ImplicitModifiers, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue?>().Serialize(ref writer, value.Duration, options);

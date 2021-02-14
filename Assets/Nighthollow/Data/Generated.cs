@@ -177,7 +177,7 @@ namespace Nighthollow.Data
         ? this
         : new StatusEffectTypeData(
           name,
-          IsFirstClass,
+          IsNamed,
           MaxStacks,
           ImplicitModifiers,
           Duration,
@@ -186,7 +186,7 @@ namespace Nighthollow.Data
           EffectAddress);
 
     public StatusEffectTypeData WithIsFirstClass(bool isFirstClass) =>
-      Equals(isFirstClass, IsFirstClass)
+      Equals(isFirstClass, IsNamed)
         ? this
         : new StatusEffectTypeData(
           Name,
@@ -203,7 +203,7 @@ namespace Nighthollow.Data
         ? this
         : new StatusEffectTypeData(
           Name,
-          IsFirstClass,
+          IsNamed,
           maxStacks,
           ImplicitModifiers,
           Duration,
@@ -216,7 +216,7 @@ namespace Nighthollow.Data
         ? this
         : new StatusEffectTypeData(
           Name,
-          IsFirstClass,
+          IsNamed,
           MaxStacks,
           implicitModifiers,
           Duration,
@@ -229,7 +229,7 @@ namespace Nighthollow.Data
         ? this
         : new StatusEffectTypeData(
           Name,
-          IsFirstClass,
+          IsNamed,
           MaxStacks,
           ImplicitModifiers,
           duration,
@@ -242,7 +242,7 @@ namespace Nighthollow.Data
         ? this
         : new StatusEffectTypeData(
           Name,
-          IsFirstClass,
+          IsNamed,
           MaxStacks,
           ImplicitModifiers,
           Duration,
@@ -255,7 +255,7 @@ namespace Nighthollow.Data
         ? this
         : new StatusEffectTypeData(
           Name,
-          IsFirstClass,
+          IsNamed,
           MaxStacks,
           ImplicitModifiers,
           Duration,
@@ -268,7 +268,7 @@ namespace Nighthollow.Data
         ? this
         : new StatusEffectTypeData(
           Name,
-          IsFirstClass,
+          IsNamed,
           MaxStacks,
           ImplicitModifiers,
           Duration,
@@ -305,34 +305,34 @@ namespace Nighthollow.Data
           duration);
 
   }
-
-  public sealed partial class StatusEffectData
-  {
-    public StatusEffectData WithStats(StatTable stats) =>
-      Equals(stats, Stats)
-        ? this
-        : new StatusEffectData(
-          stats,
-          BaseType,
-          ItemData);
-
-    public StatusEffectData WithBaseType(StatusEffectTypeData baseType) =>
-      Equals(baseType, BaseType)
-        ? this
-        : new StatusEffectData(
-          Stats,
-          baseType,
-          ItemData);
-
-    public StatusEffectData WithItemData(StatusEffectItemData itemData) =>
-      Equals(itemData, ItemData)
-        ? this
-        : new StatusEffectData(
-          Stats,
-          BaseType,
-          itemData);
-
-  }
+  //
+  // public sealed partial class StatusEffectData
+  // {
+  //   public StatusEffectData WithStats(StatTable stats) =>
+  //     Equals(stats, Stats)
+  //       ? this
+  //       : new StatusEffectData(
+  //         stats,
+  //         BaseType,
+  //         ItemData);
+  //
+  //   public StatusEffectData WithBaseType(StatusEffectTypeData baseType) =>
+  //     Equals(baseType, BaseType)
+  //       ? this
+  //       : new StatusEffectData(
+  //         Stats,
+  //         baseType,
+  //         ItemData);
+  //
+  //   public StatusEffectData WithItemData(StatusEffectItemData itemData) =>
+  //     Equals(itemData, ItemData)
+  //       ? this
+  //       : new StatusEffectData(
+  //         Stats,
+  //         BaseType,
+  //         itemData);
+  //
+  // }
 
   public sealed partial class GameData
   {

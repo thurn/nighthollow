@@ -50,6 +50,11 @@ namespace Nighthollow.Components
       Data = Data.WithStats(Data.Stats.InsertModifier(modifier));
     }
 
+    public void InsertStatusEffect(StatusEffectData statusEffectData)
+    {
+      Data = Data.WithStats(Data.Stats.InsertStatusEffect(statusEffectData));
+    }
+
     void Update()
     {
       Data = Data?.OnTick();

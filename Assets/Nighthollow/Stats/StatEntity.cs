@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Data;
+
 #nullable enable
 
 namespace Nighthollow.Stats
@@ -19,6 +21,8 @@ namespace Nighthollow.Stats
   public interface IStatOwner
   {
     void InsertModifier(IStatModifier modifier);
+
+    void InsertStatusEffect(StatusEffectData statusEffectData);
   }
 
   public abstract class StatEntity
