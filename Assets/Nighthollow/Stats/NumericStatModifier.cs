@@ -12,39 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using MessagePack;
 using Nighthollow.Data;
 
 #nullable enable
 
 namespace Nighthollow.Stats
 {
-  public static class NumericStatModifier
-  {
-    public static string NumericModifierString(
-      object? addTo,
-      PercentageValue? increaseBy,
-      string? setTo,
-      string? highValue)
-    {
-      var highLeft = highValue == null ? "" : "(";
-      var highRight = highValue == null ? "" : $" to {highValue.Replace("-", "")})";
-      if (addTo != null)
-      {
-        var add = addTo.ToString().Replace("-", "");
-        return NumberUtil.IsNegative(addTo) ? $"{highLeft}{add}{highRight} Less" : $"+{highLeft}{add}{highRight}";
-      }
-      else if (increaseBy.HasValue)
-      {
-        return increaseBy.Value.IsNegative()
-          ? $"{highLeft}{increaseBy}{highRight} Reduced"
-          : $"{highLeft}{increaseBy}{highRight} Increased";
-      }
-
-      return $"{highLeft}{setTo}{highRight}";
-    }
-  }
-
   public sealed class NumericStatModifier<T> : IStatModifier where T : struct
   {
     public static NumericStatModifier<T> Add(AbstractStat<NumericStatModifier<T>, T> stat, T value) =>
@@ -73,22 +46,22 @@ namespace Nighthollow.Stats
       Lifetime = lifetime;
     }
 
-    [Key(0)] public StatId StatId { get; }
-    [Key(1)] public ModifierType Type { get; }
-    [Key(2)] public T? AddTo { get; }
-    [Key(3)] public PercentageValue? IncreaseBy { get; }
-    [Key(4)] public T? SetTo { get; }
-    [IgnoreMember] public ILifetime? Lifetime { get; }
+    public StatId StatId { get; }
+    public ModifierType Type { get; }
+    public T? AddTo { get; }
+    public PercentageValue? IncreaseBy { get; }
+    public T? SetTo { get; }
+    public ILifetime? Lifetime { get; }
 
     public IStatModifier WithLifetime(ILifetime lifetime) =>
       new NumericStatModifier<T>(StatId, Type, AddTo, IncreaseBy, SetTo, lifetime);
 
     public string Describe(string template, IValueData? highValue) =>
       template.Replace("#",
-        NumericStatModifier.NumericModifierString(
+        ModifierDescriptions.NumericModifierString(
           AddTo,
           IncreaseBy,
-          SetTo?.ToString(),
-          highValue?.ToString()));
+          SetTo,
+          highValue));
   }
 }

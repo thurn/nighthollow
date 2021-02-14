@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using MessagePack;
 using Nighthollow.Data;
 
 #nullable enable
@@ -21,10 +20,8 @@ namespace Nighthollow.Stats
 {
   public sealed class BooleanStatModifier : IStatModifier
   {
-#pragma warning disable 618 // Using Obsolete
     public static BooleanStatModifier Set(AbstractStat<BooleanStatModifier, bool> stat, bool value) =>
       new BooleanStatModifier(stat.StatId, value);
-#pragma warning restore 618 // Using Obsolete
 
     BooleanStatModifier(StatId statId, bool setValue, ILifetime? lifetime = null)
     {
@@ -34,10 +31,10 @@ namespace Nighthollow.Stats
       Lifetime = lifetime;
     }
 
-    [Key(0)] public StatId StatId { get; }
-    [Key(1)] public bool SetValue { get; }
-    [IgnoreMember] public ModifierType Type { get; }
-    [IgnoreMember] public ILifetime? Lifetime { get; }
+    public StatId StatId { get; }
+    public bool SetValue { get; }
+    public ModifierType Type { get; }
+    public ILifetime? Lifetime { get; }
 
     public IStatModifier WithLifetime(ILifetime lifetime) => new BooleanStatModifier(StatId, SetValue, Lifetime);
 

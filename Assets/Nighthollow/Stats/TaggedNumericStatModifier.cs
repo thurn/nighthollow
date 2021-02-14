@@ -16,7 +16,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using MessagePack;
 using Nighthollow.Data;
 
 #nullable enable
@@ -60,13 +59,13 @@ namespace Nighthollow.Stats
       Lifetime = lifetime;
     }
 
-    [Key(0)] public StatId StatId { get; }
-    [Key(1)] public ModifierType Type { get; }
-    [Key(2)] public ImmutableDictionary<TTag, TValue>? AddTo { get; }
-    [Key(3)] public ImmutableDictionary<TTag, PercentageValue>? IncreaseBy { get; }
-    [Key(4)] public ImmutableDictionary<TTag, TValue>? SetTo { get; }
-    [IgnoreMember] public ImmutableHashSet<TTag> AllTags { get; }
-    [IgnoreMember] public ILifetime? Lifetime { get; }
+    public StatId StatId { get; }
+    public ModifierType Type { get; }
+    public ImmutableDictionary<TTag, TValue>? AddTo { get; }
+    public ImmutableDictionary<TTag, PercentageValue>? IncreaseBy { get; }
+    public ImmutableDictionary<TTag, TValue>? SetTo { get; }
+    public ImmutableHashSet<TTag> AllTags { get; }
+    public ILifetime? Lifetime { get; }
 
     public IStatModifier WithLifetime(ILifetime lifetime) =>
       new TaggedNumericStatModifier<TTag, TValue>(StatId, Type, AddTo, IncreaseBy, SetTo, lifetime);
@@ -94,8 +93,8 @@ namespace Nighthollow.Stats
       var result = new List<string>();
       foreach (var tag in AllTags)
       {
-        var modifierString = NumericStatModifier.NumericModifierString(
-          AddTo?[tag], IncreaseBy?[tag], SetTo?[tag].ToString(), high?[tag].ToString());
+        var modifierString = ModifierDescriptions.NumericModifierString(
+          AddTo?[tag], IncreaseBy?[tag], SetTo?[tag], high?[tag]);
         result.Add(template.Replace("#", $"{modifierString} {tag}"));
       }
 
