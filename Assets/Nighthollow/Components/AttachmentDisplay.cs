@@ -14,6 +14,8 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Data;
+using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Services;
 using UnityEngine;
@@ -31,10 +33,9 @@ namespace Nighthollow.Components
       GameServiceRegistry registry,
       ImmutableList<(StatusEffectTypeData, int)> statusEffects)
     {
-      if (!statusEffects.Equals(_currentStatusEffects))
+      if (_currentStatusEffects == null || !statusEffects.SequenceEqual(_currentStatusEffects))
       {
         ClearAttachments();
-
         foreach (var effect in statusEffects)
         {
           if (effect.Item1.ImageAddress is { } address)

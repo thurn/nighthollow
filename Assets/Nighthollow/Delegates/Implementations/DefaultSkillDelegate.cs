@@ -63,11 +63,6 @@ namespace Nighthollow.Delegates.Implementations
 
     public override void OnImpact(SkillContext context)
     {
-      // if (context.GetBool(Stat.Untargeted))
-      // {
-      //   return;
-      // }
-
       var targets = context.Delegate.FindTargets(context);
       foreach (var target in targets)
       {

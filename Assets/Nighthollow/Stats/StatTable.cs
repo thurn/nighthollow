@@ -48,7 +48,8 @@ namespace Nighthollow.Stats
     [MustUseReturnValue]
     public StatTable InsertStatusEffect(StatusEffectData statusEffect)
     {
-      if (_statusEffects[statusEffect.StatusEffectTypeId].Count >= statusEffect.BaseType.MaxStacks)
+      if (_statusEffects.TryGetValue(statusEffect.StatusEffectTypeId, out var effects) &&
+          effects.Count >= statusEffect.BaseType.MaxStacks)
       {
         // Limit has been exceeded for this status effect, so it is ignored.
         return this;

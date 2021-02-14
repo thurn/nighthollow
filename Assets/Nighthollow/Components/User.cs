@@ -58,7 +58,7 @@ namespace Nighthollow.Components
 
       var cards =
         gameData.Deck.IsEmpty ?
-          gameData.ItemLists.Values.First(list => list.Name == Names.StartingDeck).Creatures :
+          gameData.ItemLists.Values.First(list => list.Name.Equals("TestStatusEffects")).Creatures :
           gameData.Deck.Values.ToImmutableList();
 
       var builtDeck = cards.Select(item => item.BuildCreature(registry));

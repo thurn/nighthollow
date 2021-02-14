@@ -70,6 +70,14 @@ namespace Nighthollow.Data
         }
       }
 
+      foreach (var statusEffect in gameData.StatusEffects.Values)
+      {
+        if (statusEffect.ImageAddress != null)
+        {
+          Load<Sprite>(requests, statusEffect.ImageAddress);
+        }
+      }
+
       yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
       Debug.Log("Got Asset Responses...");
 
