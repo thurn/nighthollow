@@ -12,14 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Reflection;
 using UnityEditor;
 
 #nullable enable
 
 namespace Nighthollow.Editor
 {
+  [InitializeOnLoad]
   public static class BuildHelper
   {
+
+    static BuildHelper()
+    {
+      EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+    }
+
+    static void OnPlayModeStateChanged(PlayModeStateChange state)
+    {
+      ClearEditorConsole();
+      if (state == PlayModeStateChange.ExitingPlayMode)
+      {
+        AssetDatabase.Refresh();
+      }
+    }
+
+    static void ClearEditorConsole()
+    {
+      var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+      var type = assembly.GetType("UnityEditor.LogEntries");
+      var method = type.GetMethod("Clear");
+      method!.Invoke(new object(), null);
+    }
+
     [MenuItem("Tools/Run Build Helper &#^b")]
     public static void Run()
     {
