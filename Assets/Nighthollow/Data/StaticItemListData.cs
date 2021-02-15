@@ -35,5 +35,7 @@ namespace Nighthollow.Data
     [Key(0)] public string Name { get; }
     [Key(1)] public ImmutableList<CreatureItemData> Creatures { get; }
     [Key(2)] public ImmutableList<ResourceItemData> Resources { get; }
+
+    public override string ToString() => Name;
   }
 }

@@ -54,15 +54,16 @@ namespace Nighthollow.Components
     public void DrawOpeningHand(GameServiceRegistry registry)
     {
       var gameData = registry.Database.Snapshot();
-      Data = gameData.GameState.BuildUserData(gameData);
+      Data = UserData.BuildUserData(gameData);
 
       var cards =
-        gameData.Deck.IsEmpty ?
-          gameData.ItemLists.Values.First(list => list.Name.Equals("TestStatusEffects")).Creatures :
-          gameData.Deck.Values.ToImmutableList();
+        gameData.BattleData.UserDeckOverride.HasValue
+          ? gameData.ItemLists[gameData.BattleData.UserDeckOverride.Value].Creatures
+          : gameData.Deck.Values.ToImmutableList();
+      Errors.CheckState(cards.Count > 0, "No cards in deck");
 
       var builtDeck = cards.Select(item => item.BuildCreature(registry));
-      _deck.OnStartGame(builtDeck, gameData.GameState.TutorialState != TutorialState.Completed);
+      _deck.OnStartGame(builtDeck, orderedDraws: gameData.BattleData.UserDeckOverride.HasValue);
 
       var openingHand = new List<CreatureData>();
       for (var i = 0; i < Errors.CheckPositive(Data.GetInt(Stat.StartingHandSize)); ++i)

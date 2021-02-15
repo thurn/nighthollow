@@ -37,7 +37,7 @@ namespace Nighthollow.Data
     [Key(6)] public ImmutableDictionary<int, ModifierData> UserModifiers { get; } = null!;
     [Key(7)] public ImmutableDictionary<int, CreatureItemData> Collection { get; } = null!;
     [Key(8)] public ImmutableDictionary<int, CreatureItemData> Deck { get; } = null!;
-    [Key(9)] public GameState GameState { get; } = null!;
+    [Key(9)] public BattleData BattleData { get; } = null!;
     [Key(10)] public ImmutableDictionary<int, StatusEffectTypeData> StatusEffects { get; } = null!;
 
     // From IValueData

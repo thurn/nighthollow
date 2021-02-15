@@ -107,7 +107,8 @@ namespace Nighthollow.Editing
       }
       else
       {
-        throw new InvalidOperationException($"No editor registered for type {type}");
+        cellDelegate = new NestedSheetTextFieldCellDelegate(screenController, reflectivePath);
+        // throw new InvalidOperationException($"No editor registered for type {type}");
       }
 
       return new TextFieldEditorCell(reflectivePath, parent, cellDelegate);

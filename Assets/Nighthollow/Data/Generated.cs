@@ -64,6 +64,46 @@ namespace Nighthollow.Data
 
   }
 
+  public sealed partial class BattleData
+  {
+    public BattleData WithEnemies(ImmutableList<CreatureItemData> enemies) =>
+      Equals(enemies, Enemies)
+        ? this
+        : new BattleData(
+          enemies,
+          EnemyModifiers,
+          UserDeckOverride,
+          EnemyListOverride);
+
+    public BattleData WithEnemyModifiers(ImmutableList<ModifierData> enemyModifiers) =>
+      Equals(enemyModifiers, EnemyModifiers)
+        ? this
+        : new BattleData(
+          Enemies,
+          enemyModifiers,
+          UserDeckOverride,
+          EnemyListOverride);
+
+    public BattleData WithUserDeckOverride(int? userDeckOverride) =>
+      Equals(userDeckOverride, UserDeckOverride)
+        ? this
+        : new BattleData(
+          Enemies,
+          EnemyModifiers,
+          userDeckOverride,
+          EnemyListOverride);
+
+    public BattleData WithEnemyListOverride(int? enemyListOverride) =>
+      Equals(enemyListOverride, EnemyListOverride)
+        ? this
+        : new BattleData(
+          Enemies,
+          EnemyModifiers,
+          UserDeckOverride,
+          enemyListOverride);
+
+  }
+
   public sealed partial class StatData
   {
     public StatData WithName(string name) =>
@@ -308,10 +348,27 @@ namespace Nighthollow.Data
 
   public sealed partial class GameData
   {
+    public GameData WithBattleData(BattleData battleData) =>
+      Equals(battleData, BattleData)
+        ? this
+        : new GameData(
+          battleData,
+          TableMetadata,
+          CreatureTypes,
+          AffixTypes,
+          SkillTypes,
+          StatData,
+          ItemLists,
+          UserModifiers,
+          Collection,
+          Deck,
+          StatusEffects);
+
     public GameData WithTableMetadata(ImmutableDictionary<int, TableMetadata> tableMetadata) =>
       Equals(tableMetadata, TableMetadata)
         ? this
         : new GameData(
+          BattleData,
           tableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -321,13 +378,13 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          GameState,
           StatusEffects);
 
     public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
       Equals(creatureTypes, CreatureTypes)
         ? this
         : new GameData(
+          BattleData,
           TableMetadata,
           creatureTypes,
           AffixTypes,
@@ -337,13 +394,13 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          GameState,
           StatusEffects);
 
     public GameData WithAffixTypes(ImmutableDictionary<int, AffixTypeData> affixTypes) =>
       Equals(affixTypes, AffixTypes)
         ? this
         : new GameData(
+          BattleData,
           TableMetadata,
           CreatureTypes,
           affixTypes,
@@ -353,13 +410,13 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          GameState,
           StatusEffects);
 
     public GameData WithSkillTypes(ImmutableDictionary<int, SkillTypeData> skillTypes) =>
       Equals(skillTypes, SkillTypes)
         ? this
         : new GameData(
+          BattleData,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -369,13 +426,13 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          GameState,
           StatusEffects);
 
     public GameData WithStatData(ImmutableDictionary<int, StatData> statData) =>
       Equals(statData, StatData)
         ? this
         : new GameData(
+          BattleData,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -385,13 +442,13 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          GameState,
           StatusEffects);
 
     public GameData WithItemLists(ImmutableDictionary<int, StaticItemListData> itemLists) =>
       Equals(itemLists, ItemLists)
         ? this
         : new GameData(
+          BattleData,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -401,13 +458,13 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          GameState,
           StatusEffects);
 
     public GameData WithUserModifiers(ImmutableDictionary<int, ModifierData> userModifiers) =>
       Equals(userModifiers, UserModifiers)
         ? this
         : new GameData(
+          BattleData,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -417,13 +474,13 @@ namespace Nighthollow.Data
           userModifiers,
           Collection,
           Deck,
-          GameState,
           StatusEffects);
 
     public GameData WithCollection(ImmutableDictionary<int, CreatureItemData> collection) =>
       Equals(collection, Collection)
         ? this
         : new GameData(
+          BattleData,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -433,13 +490,13 @@ namespace Nighthollow.Data
           UserModifiers,
           collection,
           Deck,
-          GameState,
           StatusEffects);
 
     public GameData WithDeck(ImmutableDictionary<int, CreatureItemData> deck) =>
       Equals(deck, Deck)
         ? this
         : new GameData(
+          BattleData,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -449,29 +506,13 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           deck,
-          GameState,
-          StatusEffects);
-
-    public GameData WithGameState(GameState gameState) =>
-      Equals(gameState, GameState)
-        ? this
-        : new GameData(
-          TableMetadata,
-          CreatureTypes,
-          AffixTypes,
-          SkillTypes,
-          StatData,
-          ItemLists,
-          UserModifiers,
-          Collection,
-          Deck,
-          gameState,
           StatusEffects);
 
     public GameData WithStatusEffects(ImmutableDictionary<int, StatusEffectTypeData> statusEffects) =>
       Equals(statusEffects, StatusEffects)
         ? this
         : new GameData(
+          BattleData,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -481,7 +522,6 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          GameState,
           statusEffects);
 
   }
@@ -1216,16 +1256,6 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class CurrentEnemyState
-  {
-    public CurrentEnemyState WithEnemies(ImmutableList<CreatureItemData> enemies) =>
-      Equals(enemies, Enemies)
-        ? this
-        : new CurrentEnemyState(
-          enemies);
-
-  }
-
   public sealed partial class EnemyData
   {
     public EnemyData WithEnemies(ImmutableList<CreatureItemData> enemies) =>
@@ -1398,38 +1428,12 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class GameState
-  {
-    public GameState WithTutorialState(TutorialState tutorialState) =>
-      Equals(tutorialState, TutorialState)
-        ? this
-        : new GameState(
-          tutorialState,
-          CurrentEnemy);
-
-    public GameState WithCurrentEnemy(CurrentEnemyState currentEnemy) =>
-      Equals(currentEnemy, CurrentEnemy)
-        ? this
-        : new GameState(
-          TutorialState,
-          currentEnemy);
-
-  }
-
   public sealed partial class UserData
   {
-    public UserData WithState(GameState state) =>
-      Equals(state, State)
-        ? this
-        : new UserData(
-          state,
-          Stats);
-
     public UserData WithStats(StatTable stats) =>
       Equals(stats, Stats)
         ? this
         : new UserData(
-          State,
           stats);
 
   }

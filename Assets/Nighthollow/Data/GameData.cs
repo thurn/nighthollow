@@ -21,6 +21,7 @@ namespace Nighthollow.Data
   public sealed partial class GameData
   {
     public GameData(
+      BattleData? battleData = null,
       ImmutableDictionary<int, TableMetadata>? tableMetadata = null,
       ImmutableDictionary<int, CreatureTypeData>? creatureTypes = null,
       ImmutableDictionary<int, AffixTypeData>? affixTypes = null,
@@ -30,9 +31,9 @@ namespace Nighthollow.Data
       ImmutableDictionary<int, ModifierData>? userModifiers = null,
       ImmutableDictionary<int, CreatureItemData>? collection = null,
       ImmutableDictionary<int, CreatureItemData>? deck = null,
-      GameState? userState = null,
       ImmutableDictionary<int, StatusEffectTypeData>? statusEffects = null)
     {
+      BattleData = battleData ?? new BattleData();
       TableMetadata = tableMetadata ?? ImmutableDictionary<int, TableMetadata>.Empty;
       CreatureTypes = creatureTypes ?? ImmutableDictionary<int, CreatureTypeData>.Empty;
       AffixTypes = affixTypes ?? ImmutableDictionary<int, AffixTypeData>.Empty;
@@ -42,10 +43,10 @@ namespace Nighthollow.Data
       UserModifiers = userModifiers ?? ImmutableDictionary<int, ModifierData>.Empty;
       Collection = collection ?? ImmutableDictionary<int, CreatureItemData>.Empty;
       Deck = deck ?? ImmutableDictionary<int, CreatureItemData>.Empty;
-      GameState = userState ?? new GameState();
       StatusEffects = statusEffects ?? ImmutableDictionary<int, StatusEffectTypeData>.Empty;
     }
 
+    [Field] public BattleData BattleData { get; }
     [Field] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
     [Field] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
     [Field] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
@@ -55,7 +56,6 @@ namespace Nighthollow.Data
     [Field] public ImmutableDictionary<int, ModifierData> UserModifiers { get; }
     [Field] public ImmutableDictionary<int, CreatureItemData> Collection { get; }
     [Field] public ImmutableDictionary<int, CreatureItemData> Deck { get; }
-    [Field] public GameState GameState { get; }
     [Field] public ImmutableDictionary<int, StatusEffectTypeData> StatusEffects { get; }
   }
 }

@@ -13,50 +13,26 @@
 // limitations under the License.
 
 using System.Linq;
-using MessagePack;
 using Nighthollow.Stats;
 
 #nullable enable
 
 namespace Nighthollow.Data
 {
-  [MessagePackObject]
-  public sealed partial class GameState
-  {
-    public GameState() : this(TutorialState.NewPlayer, new CurrentEnemyState())
-    {
-    }
-
-    [SerializationConstructor]
-    public GameState(TutorialState tutorialState, CurrentEnemyState currentEnemy)
-    {
-      TutorialState = tutorialState;
-      CurrentEnemy = currentEnemy;
-    }
-
-    [Key(0)] public TutorialState TutorialState { get; }
-    [Key(1)] public CurrentEnemyState CurrentEnemy { get; }
-
-    public UserData BuildUserData(GameData gameData) =>
-      new UserData(this,
-        gameData.UserModifiers.Values.Aggregate(
-          new StatTable(StatData.BuildDefaultStatTable(gameData)),
-          (current, modifier) => current.InsertNullableModifier(modifier.BuildStatModifier())));
-  }
-
   public sealed partial class UserData : StatEntity
   {
-    public UserData(
-      GameState gameState,
-      StatTable stats)
+    public UserData(StatTable stats)
     {
-      State = gameState;
       Stats = stats;
     }
 
-    [Field] public GameState State { get; }
     [Field] public override StatTable Stats { get; }
 
     public UserData OnTick() => WithStats(Stats.OnTick());
+
+    public static UserData BuildUserData(GameData gameData) =>
+      new UserData(gameData.UserModifiers.Values.Aggregate(
+        new StatTable(StatData.BuildDefaultStatTable(gameData)),
+        (current, modifier) => current.InsertNullableModifier(modifier.BuildStatModifier())));
   }
 }

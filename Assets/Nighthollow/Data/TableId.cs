@@ -71,6 +71,23 @@ namespace Nighthollow.Data
     public IDictionary GetInUnchecked(GameData gameData) => GetIn(gameData);
   }
 
+  public abstract class SingletonTableId<T> : TableId<T> where T : class
+  {
+    protected SingletonTableId(int id, string tableName) : base(id, tableName)
+    {
+    }
+
+    protected abstract T GetSingleton(GameData gameData);
+
+    protected abstract GameData WriteSingleton(GameData gameData, T newValue);
+
+    public sealed override ImmutableDictionary<int, T> GetIn(GameData gameData) =>
+      ImmutableDictionary<int, T>.Empty.SetItem(1, GetSingleton(gameData));
+
+    public sealed override GameData Write(GameData gameData, ImmutableDictionary<int, T> newValue) =>
+      WriteSingleton(gameData, newValue[1]);
+  }
+
   public static class TableId
   {
     public static readonly TableId<TableMetadata> TableMetadata =
@@ -103,6 +120,9 @@ namespace Nighthollow.Data
     public static readonly TableId<StatusEffectTypeData> StatusEffectTypes =
       new StatusEffectsTypesTableId(9, "StatusEffectTypes");
 
+    public static readonly TableId<BattleData> BattleData =
+      new BattleDataTableId(10, "BattleData");
+
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
       TableMetadata,
       CreatureTypes,
@@ -113,7 +133,8 @@ namespace Nighthollow.Data
       UserModifiers,
       Collection,
       Deck,
-      StatusEffectTypes
+      StatusEffectTypes,
+      BattleData
     );
 
     sealed class TableMetadataTableId : TableId<TableMetadata>
@@ -244,6 +265,19 @@ namespace Nighthollow.Data
 
       public override GameData Write(GameData gameData, ImmutableDictionary<int, StatusEffectTypeData> newValue) =>
         gameData.WithStatusEffects(newValue);
+    }
+
+    sealed class BattleDataTableId : SingletonTableId<BattleData>
+    {
+      public BattleDataTableId(int id, string tableName) : base(id, tableName)
+      {
+      }
+
+      protected override BattleData GetSingleton(GameData gameData) =>
+        gameData.BattleData;
+
+      protected override GameData WriteSingleton(GameData gameData, BattleData newValue) =>
+        gameData.WithBattleData(newValue);
     }
   }
 }

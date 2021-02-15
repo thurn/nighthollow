@@ -13,34 +13,12 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
-using System.Linq;
-using MessagePack;
 using Nighthollow.Stats;
 
 #nullable enable
 
 namespace Nighthollow.Data
 {
-  [MessagePackObject]
-  public sealed partial class CurrentEnemyState
-  {
-    public CurrentEnemyState(ImmutableList<CreatureItemData>? enemies = null)
-    {
-      Enemies = enemies ?? ImmutableList<CreatureItemData>.Empty;
-    }
-
-    [Key(0)] public ImmutableList<CreatureItemData> Enemies { get; }
-
-    public EnemyData BuildEnemyData(GameData gameData) =>
-      new EnemyData(
-        Enemies.IsEmpty
-          ? gameData.ItemLists.Values.First(list => list.Name == Names.TutorialEnemies).Creatures
-          : Enemies,
-        gameData.UserModifiers.Values.Aggregate(
-          new StatTable(StatData.BuildDefaultStatTable(gameData)),
-          (current, modifier) => current.InsertNullableModifier(modifier.BuildStatModifier())));
-  }
-
   public sealed partial class EnemyData : StatEntity
   {
     public EnemyData(ImmutableList<CreatureItemData> enemies, StatTable stats)
