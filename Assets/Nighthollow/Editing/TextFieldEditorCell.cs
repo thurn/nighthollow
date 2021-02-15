@@ -95,6 +95,8 @@ namespace Nighthollow.Editing
       _cellDelegate.OnParentKeyDown(evt);
     }
 
+    public override string? Preview() => _field?.value;
+
     public void FocusRoot()
     {
       _parent.FocusRoot();

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -49,22 +48,7 @@ namespace Nighthollow.Editing
     public virtual void OnParentKeyDown(KeyDownEvent keyDownEvent)
     {
     }
-  }
 
-  public abstract class TextFieldEditorCellDelegate
-  {
-    public virtual void Initialize(TextField field, IEditor parent)
-    {
-    }
-
-    public abstract void OnActivate(TextField field, Rect worldBound);
-
-    public virtual void OnParentKeyDown(KeyDownEvent evt)
-    {
-    }
-
-    public virtual void OnDeactivate(TextField field)
-    {
-    }
+    public virtual string? Preview() => null;
   }
 }

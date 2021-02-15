@@ -116,6 +116,8 @@ namespace Nighthollow.Editing
     {
       _dropdown?.OnParentKeyDown(evt);
     }
+
+    public override string? Preview() => _currentlySelected.HasValue ? _options[_currentlySelected.Value] : null;
   }
 
   public sealed class EnumDropdownEditorCell : SelectorDropdownEditorCell
@@ -193,10 +195,7 @@ namespace Nighthollow.Editing
       return new EditorSheetDelegate.DropdownCellContent(
         values.Select(v => v.Item2).ToList(),
         null,
-        index =>
-        {
-          EditorControllerRegistry.WriteForeignKey(values[index].Item1, reflectivePath);
-        });
+        index => { EditorControllerRegistry.WriteForeignKey(values[index].Item1, reflectivePath); });
     }
   }
 

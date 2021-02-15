@@ -160,3 +160,13 @@
     background-color: rgb(242, 242, 242);
   }
 }
+
+.position-helper {
+  background-color: rgb(225, 245, 254);
+  padding: 4px;
+  @include fonts.black-text;
+  font-size: font-sizes.$body1;
+  -unity-font-style: bold;
+  -unity-text-align: middle-center;
+  position: absolute;
+}

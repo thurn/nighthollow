@@ -41,15 +41,15 @@ namespace Nighthollow.Editing
     const int ContentPadding = 32;
 
     readonly ScreenController _screenController;
-
     readonly EditorSheetDelegate _sheetDelegate;
-
     readonly Action? _onEscape;
     readonly ScrollView _scrollView;
     readonly VisualElement _content;
     readonly Vector2Int? _initiallySelected;
 
     Dictionary<Vector2Int, EditorCell> _cells;
+    Label? _leftPositionHelper;
+    Label? _topPositionHelper;
 
     public Vector2Int? CurrentlySelected;
     Vector2Int? CurrentlyActive { get; set; }
@@ -241,6 +241,7 @@ namespace Nighthollow.Editing
         _cells[position.Value].Select();
         CurrentlySelected = position;
         Scroll(position.Value);
+        RenderPositionHelpers(position.Value);
       }
     }
 
@@ -263,6 +264,8 @@ namespace Nighthollow.Editing
       }
     }
 
+    bool IsFullScreen(Vector2Int position) => _cells[position].GetClasses().Contains("full-width-cell");
+
     void Scroll(Vector2Int position)
     {
       _scrollView.ScrollTo(InterfaceUtils.FirstLeaf(_cells[position]));
@@ -270,12 +273,64 @@ namespace Nighthollow.Editing
       // Fix unity refusing to scroll all the way to the edge, triggering me endlessly.
       if (position.y == 0)
       {
-        _scrollView.scrollOffset -= new Vector2(0, 50);
+        _scrollView.scrollOffset =
+          IsFullScreen(position) ? new Vector2(0, 0) : new Vector2(_scrollView.scrollOffset.x, 0);
       }
 
       if (position.x == 0)
       {
-        _scrollView.scrollOffset -= new Vector2(50, 0);
+        _scrollView.scrollOffset = new Vector2(0, _scrollView.scrollOffset.y);
+      }
+    }
+
+    void RenderPositionHelpers(Vector2Int position)
+    {
+      var leftIndex = new Vector2Int(0, position.y);
+      string? left = null;
+      while (_cells.ContainsKey(leftIndex))
+      {
+        if (_cells[leftIndex].Preview() is { } preview)
+        {
+          left = preview;
+          break;
+        }
+
+        leftIndex = new Vector2Int(leftIndex.x + 1, leftIndex.y);
+      }
+
+      var topIndex = new Vector2Int(position.x, 0);
+      string? top = null;
+      while (_cells.ContainsKey(topIndex))
+      {
+        if (!IsFullScreen(topIndex) && _cells[topIndex].Preview() is { } preview)
+        {
+          top = preview;
+          break;
+        }
+
+        topIndex = new Vector2Int(topIndex.x, topIndex.y + 1);
+      }
+
+      var currentPosition = _cells[position].worldBound;
+      _leftPositionHelper?.RemoveFromHierarchy();
+      if (!IsFullScreen(position) && _scrollView.scrollOffset.x > 0 && left != null)
+      {
+        _leftPositionHelper = new Label(left);
+        _leftPositionHelper.style.left = 32;
+        _leftPositionHelper.style.top = currentPosition.y - 16;
+        _leftPositionHelper.AddToClassList("position-helper");
+        Add(_leftPositionHelper);
+      }
+
+      _topPositionHelper?.RemoveFromHierarchy();
+      if (!IsFullScreen(position) && _scrollView.scrollOffset.y > 0 && top != null)
+      {
+        _topPositionHelper = new Label(top);
+        _topPositionHelper.style.left = currentPosition.x - 16;
+        _topPositionHelper.style.top = 0;
+        _topPositionHelper.style.width = currentPosition.width;
+        _topPositionHelper.AddToClassList("position-helper");
+        Add(_topPositionHelper);
       }
     }
   }
