@@ -20,6 +20,7 @@ using Nighthollow.Items;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -159,6 +160,11 @@ namespace Nighthollow.Interface
         {
           editor.Show(new GameDataEditor.Args(_registry.Database), true);
         }
+      }
+
+      if (Input.GetKeyDown(KeyCode.R) && CtrlDown())
+      {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
       }
     }
 
