@@ -1198,24 +1198,6 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class ColumnMetadata
-  {
-    public ColumnMetadata WithColumnNumber(int columnNumber) =>
-      Equals(columnNumber, ColumnNumber)
-        ? this
-        : new ColumnMetadata(
-          columnNumber,
-          Width);
-
-    public ColumnMetadata WithWidth(int? width) =>
-      Equals(width, Width)
-        ? this
-        : new ColumnMetadata(
-          ColumnNumber,
-          width);
-
-  }
-
   public sealed partial class TableMetadata
   {
     public TableMetadata WithNextId(int nextId) =>
@@ -1223,24 +1205,14 @@ namespace Nighthollow.Data
         ? this
         : new TableMetadata(
           nextId,
-          LastAccessedTime,
-          ColumnMetadata);
+          LastAccessedTime);
 
     public TableMetadata WithLastAccessedTime(long lastAccessedTime) =>
       Equals(lastAccessedTime, LastAccessedTime)
         ? this
         : new TableMetadata(
           NextId,
-          lastAccessedTime,
-          ColumnMetadata);
-
-    public TableMetadata WithColumnMetadata(ImmutableList<ColumnMetadata> columnMetadata) =>
-      Equals(columnMetadata, ColumnMetadata)
-        ? this
-        : new TableMetadata(
-          NextId,
-          LastAccessedTime,
-          columnMetadata);
+          lastAccessedTime);
 
   }
 

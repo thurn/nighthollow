@@ -99,14 +99,10 @@ namespace Nighthollow.Editing
         columnWidths.Add(ImageEditorCell.ImageSize);
       }
 
-      var widthMap = _reflectivePath.GetTableMetadata().ColumnMetadata.ToDictionary(m => m.ColumnNumber, m => m);
-      for (var i = 0; i < _underlyingType.GetProperties().Length; ++i)
-      {
-        columnWidths.Add(
-          widthMap.ContainsKey(i)
-            ? widthMap[i].Width.GetValueOrDefault(EditorSheet.DefaultCellWidth)
-            : EditorSheet.DefaultCellWidth);
-      }
+      columnWidths.AddRange(
+        _underlyingType
+          .GetProperties()
+          .Select(property => EditorControllerRegistry.GetColumnWidth(_underlyingType, property)));
 
       return new TableContent(result, columnWidths);
     }

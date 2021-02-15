@@ -34,6 +34,11 @@ namespace Nighthollow.Editing
     {
       throw new InvalidOperationException($"No implementation provided for WriteForeignKey {id}");
     }
+
+    public virtual int GetColumnWidth(string propertyName)
+    {
+      return EditorSheet.DefaultCellWidth;
+    }
   }
 
   abstract class EditorController<T> : EditorController
@@ -138,6 +143,18 @@ namespace Nighthollow.Editing
     })
     {
     }
+
+    public override int GetColumnWidth(string propertyName) => propertyName switch
+    {
+      nameof(CreatureTypeData.PrefabAddress) => 400,
+      nameof(CreatureTypeData.Owner) => 200,
+      nameof(CreatureTypeData.Health) => 200,
+      nameof(CreatureTypeData.ImageAddress) => 400,
+      nameof(CreatureTypeData.BaseManaCost) => 100,
+      nameof(CreatureTypeData.Speed) => 100,
+      nameof(CreatureTypeData.ImplicitModifiers) => 500,
+      _ => base.GetColumnWidth(propertyName)
+    };
   }
 
   sealed class SkillTypeController : EditorController<SkillTypeData>
@@ -152,6 +169,12 @@ namespace Nighthollow.Editing
     })
     {
     }
+
+    public override int GetColumnWidth(string propertyName) => propertyName switch
+    {
+      nameof(SkillTypeData.ImplicitModifiers) => 500,
+      _ => base.GetColumnWidth(propertyName)
+    };
   }
 
   sealed class CreatureItemController : EditorController<CreatureItemData>
@@ -174,6 +197,12 @@ namespace Nighthollow.Editing
         base.WriteForeignKey(id, reflectivePath);
       }
     }
+
+    public override int GetColumnWidth(string propertyName) => propertyName switch
+    {
+      nameof(CreatureItemData.ImplicitModifiers) => 500,
+      _ => base.GetColumnWidth(propertyName)
+    };
   }
 
   sealed class SkillItemController : EditorController<SkillItemData>
@@ -200,6 +229,12 @@ namespace Nighthollow.Editing
         base.WriteForeignKey(id, reflectivePath);
       }
     }
+
+    public override int GetColumnWidth(string propertyName) => propertyName switch
+    {
+      nameof(SkillItemData.ImplicitModifiers) => 500,
+      _ => base.GetColumnWidth(propertyName)
+    };
   }
 
   sealed class StatusEffectTypeController : EditorController<StatusEffectTypeData>
@@ -210,6 +245,12 @@ namespace Nighthollow.Editing
     })
     {
     }
+
+    public override int GetColumnWidth(string propertyName) => propertyName switch
+    {
+      nameof(StatusEffectTypeData.ImplicitModifiers) => 500,
+      _ => base.GetColumnWidth(propertyName)
+    };
   }
 
   sealed class StatusEffectItemController : EditorController<StatusEffectItemData>
@@ -232,6 +273,12 @@ namespace Nighthollow.Editing
         base.WriteForeignKey(id, reflectivePath);
       }
     }
+
+    public override int GetColumnWidth(string propertyName) => propertyName switch
+    {
+      nameof(StatusEffectItemData.ImplicitModifiers) => 500,
+      _ => base.GetColumnWidth(propertyName)
+    };
   }
 
   public static class EditorControllerRegistry
@@ -290,5 +337,10 @@ namespace Nighthollow.Editing
         _ => value?.ToString() ?? "None"
       };
     }
+
+    public static int GetColumnWidth(Type type, PropertyInfo propertyInfo) =>
+      Controllers.ContainsKey(type)
+        ? Controllers[type].GetColumnWidth(propertyInfo.Name)
+        : EditorSheet.DefaultCellWidth;
   }
 }
