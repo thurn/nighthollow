@@ -33,14 +33,7 @@ namespace Nighthollow.Delegates.Core
     public Results Results { get; }
     public Creature Self { get; }
     public GameServiceRegistry Registry { get; }
-    public bool Implemented { get; set; }
     public int DelegateIndex { get; set; }
     public IDelegate Delegate => Self.Data.Delegate;
-
-    public T MarkNotImplemented<T>()
-    {
-      Implemented = false;
-      return default!;
-    }
   }
 }

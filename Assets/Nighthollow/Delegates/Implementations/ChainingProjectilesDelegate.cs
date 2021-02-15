@@ -31,13 +31,14 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"Projectiles Chain {provider.Get(Stat.ProjectileChainCount)} Times on Hit";
 
-    public override bool ShouldSkipProjectileImpact(SkillContext c)
+    public override bool? ShouldSkipProjectileImpact(SkillContext c)
     {
       if (c.Projectile && c.Projectile!.KeyValueStore.Get(Key.TimesChained) > 0)
         // We skip impact for the projectile for creatures which have already been hit by a chaining projectile
       {
-        return !c.Delegate.FindTargets(c)
-          .Except(c.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts)).Any();
+        return !(
+          (c.Delegate.FindTargets(c) ?? Enumerable.Empty<Creature>())
+          .Except(c.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts)).Any());
       }
 
       return false;

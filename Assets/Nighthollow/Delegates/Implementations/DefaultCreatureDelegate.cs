@@ -40,7 +40,7 @@ namespace Nighthollow.Delegates.Implementations
 
     public override SkillData? SelectSkill(CreatureContext c)
     {
-      if (c.Delegate.MeleeCouldHit(c))
+      if (c.Delegate.MeleeCouldHit(c) == true)
       {
         var skill = SelectMatching(c, s => s.IsMelee());
         if (skill != null)
@@ -49,7 +49,7 @@ namespace Nighthollow.Delegates.Implementations
         }
       }
 
-      if (c.Self.HasProjectileSkill() && c.Delegate.ProjectileCouldHit(c))
+      if (c.Self.HasProjectileSkill() && c.Delegate.ProjectileCouldHit(c) == true)
       {
         var skill = SelectMatching(c, s => s.IsProjectile());
         if (skill != null)
@@ -82,10 +82,10 @@ namespace Nighthollow.Delegates.Implementations
       return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
-    public override bool MeleeCouldHit(CreatureContext c) =>
+    public override bool? MeleeCouldHit(CreatureContext c) =>
       c.Self.Collider && HasOverlap(c.Self.Owner, c.Self.Collider);
 
-    public override bool ProjectileCouldHit(CreatureContext c)
+    public override bool? ProjectileCouldHit(CreatureContext c)
     {
       var hit = Physics2D.Raycast(
         c.Self.ProjectileSource.position,

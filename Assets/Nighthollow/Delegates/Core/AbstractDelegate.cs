@@ -26,7 +26,7 @@ namespace Nighthollow.Delegates.Core
 {
   public abstract class AbstractDelegate : IDelegate
   {
-    public virtual string? Describe(IStatDescriptionProvider provider) => "<Delegate>";
+    public virtual string Describe(IStatDescriptionProvider provider) => "<Delegate>";
 
     public virtual void OnActivate(CreatureContext c)
     {
@@ -64,47 +64,40 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
-    public virtual bool MeleeCouldHit(CreatureContext c) => c.MarkNotImplemented<bool>();
+    public virtual bool? MeleeCouldHit(CreatureContext c) => null;
 
-    public virtual bool ProjectileCouldHit(CreatureContext c) => c.MarkNotImplemented<bool>();
+    public virtual bool? ProjectileCouldHit(CreatureContext c) => null;
 
-    public virtual bool ShouldSkipProjectileImpact(SkillContext c) => c.MarkNotImplemented<bool>();
+    public virtual bool? ShouldSkipProjectileImpact(SkillContext c) => null;
 
-    public virtual SkillData? SelectSkill(CreatureContext c) => c.MarkNotImplemented<SkillData>();
+    public virtual SkillData? SelectSkill(CreatureContext c) => null;
 
-    public virtual Collider2D GetCollider(SkillContext c) => c.MarkNotImplemented<Collider2D>();
+    public virtual Collider2D? GetCollider(SkillContext c) => null;
 
-    public virtual IEnumerable<Creature> FindTargets(SkillContext c) => c.MarkNotImplemented<IEnumerable<Creature>>();
+    public virtual IEnumerable<Creature>? FindTargets(SkillContext c) => null;
 
-    public virtual IEnumerable<Creature> FilterTargets(SkillContext c, IEnumerable<Creature> hits) =>
-      c.MarkNotImplemented<IEnumerable<Creature>>();
+    public virtual IEnumerable<Creature>? FilterTargets(SkillContext c, IEnumerable<Creature> hits) => null;
 
-    public virtual bool RollForHit(SkillContext c, Creature target) => c.MarkNotImplemented<bool>();
+    public virtual bool? RollForHit(SkillContext c, Creature target) => null;
 
-    public virtual bool RollForCrit(SkillContext c, Creature target) => c.MarkNotImplemented<bool>();
+    public virtual bool? RollForCrit(SkillContext c, Creature target) => null;
 
-    public virtual ImmutableDictionary<DamageType, int> RollForBaseDamage(SkillContext c, Creature target) =>
-      c.MarkNotImplemented<ImmutableDictionary<DamageType, int>>();
+    public virtual ImmutableDictionary<DamageType, int>? RollForBaseDamage(SkillContext c, Creature target) => null;
 
-    public virtual ImmutableDictionary<DamageType, int> TransformDamage(
-      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage) =>
-      c.MarkNotImplemented<ImmutableDictionary<DamageType, int>>();
+    public virtual ImmutableDictionary<DamageType, int>? TransformDamage(
+      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage) => null;
 
-    public virtual ImmutableDictionary<DamageType, int> ApplyDamageReduction(
-      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage) =>
-      c.MarkNotImplemented<ImmutableDictionary<DamageType, int>>();
+    public virtual ImmutableDictionary<DamageType, int>? ApplyDamageReduction(
+      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage) => null;
 
-    public virtual ImmutableDictionary<DamageType, int> ApplyDamageResistance(
-      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage) =>
-      c.MarkNotImplemented<ImmutableDictionary<DamageType, int>>();
+    public virtual ImmutableDictionary<DamageType, int>? ApplyDamageResistance(
+      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage) => null;
 
-    public virtual int ComputeFinalDamage(
-      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage, bool isCriticalHit) =>
-      c.MarkNotImplemented<int>();
+    public virtual int? ComputeFinalDamage(
+      SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage, bool isCriticalHit) => null;
 
-    public virtual int ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount) =>
-      c.MarkNotImplemented<int>();
+    public virtual int? ComputeHealthDrain(SkillContext c, Creature creature, int damageAmount) => null;
 
-    public virtual bool RollForStun(SkillContext c, Creature target, int damageAmount) => c.MarkNotImplemented<bool>();
+    public virtual bool? RollForStun(SkillContext c, Creature target, int damageAmount) => null;
   }
 }

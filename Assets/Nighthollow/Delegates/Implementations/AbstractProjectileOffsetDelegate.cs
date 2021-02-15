@@ -33,7 +33,7 @@ namespace Nighthollow.Delegates.Implementations
     /// <summary>Count of projectiles to fire, *including* the initial projectile.</summary>
     protected abstract int GetProjectileCount(DelegateContext c);
 
-    public override bool ProjectileCouldHit(CreatureContext c)
+    public override bool? ProjectileCouldHit(CreatureContext c)
     {
       return CollectionUtils.AlternatingIntegers()
         .Take(GetProjectileCount(c) - 1)

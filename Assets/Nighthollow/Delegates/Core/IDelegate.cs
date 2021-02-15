@@ -88,19 +88,19 @@ namespace Nighthollow.Delegates.Core
     ///   Should check if the creature could currently hit with a melee skill. Will return true if any delegate returns
     ///   a true value.
     /// </summary>
-    bool MeleeCouldHit(CreatureContext c);
+    bool? MeleeCouldHit(CreatureContext c);
 
     /// <summary>
     ///   Called to check if a projectile fired by this creature would currently hit a target. Will return true if
     ///   any delegate returns a true value.
     /// </summary>
-    bool ProjectileCouldHit(CreatureContext c);
+    bool? ProjectileCouldHit(CreatureContext c);
 
     /// <summary>
     ///   Should check if the current projectile should *not* trigger an impact in its current position. Will return
     ///   true if any delegate returns a true value.
     /// </summary>
-    bool ShouldSkipProjectileImpact(SkillContext c);
+    bool? ShouldSkipProjectileImpact(SkillContext c);
 
     /// <summary>
     ///   Called when a creature wants to decide which skill to use. Should return null if there is no appropriate skill
@@ -111,49 +111,49 @@ namespace Nighthollow.Delegates.Core
     /// <summary>
     ///   Returns the collider to use for hit-testing this skill's impact.
     /// </summary>
-    Collider2D GetCollider(SkillContext c);
+    Collider2D? GetCollider(SkillContext c);
 
     /// <summary>
     ///   Returns the creatures to target for this skill. Normally this is invoked by the default skill delegate's
     ///   <see cref="OnImpact" /> implementation. Default implementation uses @<see cref="GetCollider" /> to find all
     ///   creatures in the impact area and then adds targets returned by <see cref="FilterTargets" />.
     /// </summary>
-    IEnumerable<Creature> FindTargets(SkillContext c);
+    IEnumerable<Creature>? FindTargets(SkillContext c);
 
     /// <summary>
     ///   Given a list of creatures hit by a skill, returns a list of the creatures which should have the skill effect
     ///   applied by <see cref="OnApplyToTarget" />.
     /// </summary>
-    IEnumerable<Creature> FilterTargets(SkillContext c, IEnumerable<Creature> hits);
+    IEnumerable<Creature>? FilterTargets(SkillContext c, IEnumerable<Creature> hits);
 
     /// <summary>
     ///   Should return true if a hit from this creature should hit.
     /// </summary>
-    bool RollForHit(SkillContext c, Creature target);
+    bool? RollForHit(SkillContext c, Creature target);
 
     /// <summary>
     ///   Should return true if a hit from this creature should critically hit.
     /// </summary>
-    bool RollForCrit(SkillContext c, Creature target);
+    bool? RollForCrit(SkillContext c, Creature target);
 
     /// <summary>
     ///   Should compute the base damage for this skill, randomly selecting from within its base damage ranges.
     /// </summary>
-    ImmutableDictionary<DamageType, int> RollForBaseDamage(SkillContext c, Creature target);
+    ImmutableDictionary<DamageType, int>? RollForBaseDamage(SkillContext c, Creature target);
 
     /// <summary>
     ///   Given the base damage returned from <see cref="RollForBaseDamage" />, delegates can transform the damage value
     ///   before it is passed to <see cref="ComputeFinalDamage" />. Each delegate's implementation of this method will be
     ///   invoked in sequence with the return value of the previous delegate.
     /// </summary>
-    ImmutableDictionary<DamageType, int> TransformDamage(
+    ImmutableDictionary<DamageType, int>? TransformDamage(
       SkillContext c, Creature target, ImmutableDictionary<DamageType, int> damage);
 
     /// <summary>
     ///   Should apply damage reduction for this skill, reducing the damage value based on the target's reduction.
     ///   Typically called by <see cref="ComputeFinalDamage" />.
     /// </summary>
-    ImmutableDictionary<DamageType, int> ApplyDamageReduction(
+    ImmutableDictionary<DamageType, int>? ApplyDamageReduction(
       SkillContext c,
       Creature target,
       ImmutableDictionary<DamageType, int> damage);
@@ -162,7 +162,7 @@ namespace Nighthollow.Delegates.Core
     ///   Should apply damage resistance for this skill, reducing the damage value based on the target's resistance.
     ///   Typically called by <see cref="ComputeFinalDamage" />.
     /// </summary>
-    ImmutableDictionary<DamageType, int> ApplyDamageResistance(
+    ImmutableDictionary<DamageType, int>? ApplyDamageResistance(
       SkillContext c,
       Creature target,
       ImmutableDictionary<DamageType, int> damage);
@@ -171,7 +171,7 @@ namespace Nighthollow.Delegates.Core
     ///   Should compute the final damage value for this skill based on the value adjusted by damage resistance and
     ///   reduction. Should apply the critical hit multiplier if <paramref name="isCriticalHit" /> is true.
     /// </summary>
-    public int ComputeFinalDamage(SkillContext c,
+    public int? ComputeFinalDamage(SkillContext c,
       Creature target,
       ImmutableDictionary<DamageType, int> damage,
       bool isCriticalHit);
@@ -180,13 +180,13 @@ namespace Nighthollow.Delegates.Core
     ///   Computes health drain for a hit on <paramref name="target" /> dealing total damage
     ///   <paramref name="damageAmount" />.
     /// </summary>
-    int ComputeHealthDrain(SkillContext c, Creature target, int damageAmount);
+    int? ComputeHealthDrain(SkillContext c, Creature target, int damageAmount);
 
     /// <summary>
     ///   Should return true if a hit from this creature for <paramref name="damageAmount" /> damage should stun
     ///   <paramref name="target" />.
     /// </summary>
-    bool RollForStun(SkillContext c, Creature target, int damageAmount);
+    bool? RollForStun(SkillContext c, Creature target, int damageAmount);
 
     #endregion
   }

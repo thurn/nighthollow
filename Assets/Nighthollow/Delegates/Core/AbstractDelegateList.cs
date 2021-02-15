@@ -45,44 +45,34 @@ namespace Nighthollow.Delegates.Core
 
     IEnumerable<TResult> IterateDelegates<TContext, TResult>(
       TContext delegateContext,
-      Func<IDelegate, TContext, TResult> function,
-      bool errorIfNoneFound = false)
+      Func<IDelegate, TContext, TResult> function)
       where TContext : DelegateContext
     {
       var context = delegateContext;
-      var found = false;
 
       var i = 0;
       foreach (var @delegate in AllDelegates(context))
       {
-        context.Implemented = true;
         context.DelegateIndex = i;
         var result = function(@delegate, context);
-        if (context.Implemented)
+        if (result != null)
         {
-          found = true;
           yield return result;
         }
 
         i++;
       }
-
-      if (!found && errorIfNoneFound)
-      {
-        throw new InvalidOperationException($"No implementation found for {function}");
-      }
     }
 
-    protected TResult GetFirstImplemented<TContext, TResult>(
+    protected TResult FirstOrDefault<TContext, TResult>(
       TContext delegateContext,
       Func<IDelegate, TContext, TResult> function)
-      where TContext : DelegateContext =>
-      IterateDelegates(delegateContext, function, errorIfNoneFound: true).First();
+      where TContext : DelegateContext => IterateDelegates(delegateContext, function).FirstOrDefault();
 
-    protected bool AnyReturnedTrue<TContext>(TContext delegateContext, Func<IDelegate, TContext, bool> function)
+    protected bool AnyReturnedTrue<TContext>(TContext delegateContext, Func<IDelegate, TContext, bool?> function)
       where TContext : DelegateContext
     {
-      return IterateDelegates(delegateContext, function).Any(v => v);
+      return IterateDelegates(delegateContext, function).Any(v => v == true);
     }
 
     protected void ExecuteEvent<TContext>(
@@ -114,18 +104,17 @@ namespace Nighthollow.Delegates.Core
     protected TResult AggregateDelegates<TContext, TResult>(
       TContext context,
       TResult initialValue,
-      Func<IDelegate, TContext, TResult, TResult> function)
-      where TContext : DelegateContext
+      Func<IDelegate, TContext, TResult, TResult?> function)
+      where TContext : DelegateContext where TResult : class
     {
       var i = 0;
       var value = initialValue;
 
       foreach (var @delegate in AllDelegates(context))
       {
-        context.Implemented = true;
         context.DelegateIndex = i;
         var result = function(@delegate, context, value);
-        if (context.Implemented)
+        if (result != null)
         {
           value = result;
         }

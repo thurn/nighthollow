@@ -19,7 +19,6 @@ using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Services;
-using Nighthollow.Stats;
 using UnityEngine;
 
 #nullable enable
@@ -33,9 +32,7 @@ namespace Nighthollow.Delegates.Core
     {
     }
 
-    public string? Describe(IStatDescriptionProvider provider) => "<Delegate List>";
-
-    public string DescribeOld(StatEntity entity) => "Delegate List";
+    public string Describe(IStatDescriptionProvider provider) => "<Delegate List>";
 
     public void OnActivate(CreatureContext context) =>
       ExecuteEvent(context, (d, c) => d.OnActivate(c));
@@ -64,57 +61,57 @@ namespace Nighthollow.Delegates.Core
     public void OnApplyToTarget(SkillContext context, Creature target) =>
       ExecuteEvent(context, (d, c) => d.OnApplyToTarget(c, target));
 
-    public bool MeleeCouldHit(CreatureContext context) =>
-      GetFirstImplemented(context, (d, c) => d.MeleeCouldHit(c));
+    public bool? MeleeCouldHit(CreatureContext context) =>
+      FirstOrDefault(context, (d, c) => d.MeleeCouldHit(c));
 
-    public bool ProjectileCouldHit(CreatureContext context) =>
+    public bool? ProjectileCouldHit(CreatureContext context) =>
       AnyReturnedTrue(context, (d, c) => d.ProjectileCouldHit(c));
 
-    public bool ShouldSkipProjectileImpact(SkillContext context) =>
+    public bool? ShouldSkipProjectileImpact(SkillContext context) =>
       AnyReturnedTrue(context, (d, c) => d.ShouldSkipProjectileImpact(c));
 
     public SkillData? SelectSkill(CreatureContext context) =>
-      GetFirstImplemented(context, (d, c) => d.SelectSkill(c));
+      FirstOrDefault(context, (d, c) => d.SelectSkill(c));
 
-    public Collider2D GetCollider(SkillContext context) =>
-      GetFirstImplemented(context, (d, c) => d.GetCollider(c));
+    public Collider2D? GetCollider(SkillContext context) =>
+      FirstOrDefault(context, (d, c) => d.GetCollider(c));
 
-    public IEnumerable<Creature> FindTargets(SkillContext context) =>
-      GetFirstImplemented(context, (d, c) => d.FindTargets(c));
+    public IEnumerable<Creature>? FindTargets(SkillContext context) =>
+      FirstOrDefault(context, (d, c) => d.FindTargets(c));
 
-    public IEnumerable<Creature> FilterTargets(SkillContext context, IEnumerable<Creature> hits) =>
-      GetFirstImplemented(context, (d, c) => d.FilterTargets(c, hits));
+    public IEnumerable<Creature>? FilterTargets(SkillContext context, IEnumerable<Creature> hits) =>
+      FirstOrDefault(context, (d, c) => d.FilterTargets(c, hits));
 
-    public bool RollForHit(SkillContext context, Creature target) =>
-      GetFirstImplemented(context, (d, c) => d.RollForHit(c, target));
+    public bool? RollForHit(SkillContext context, Creature target) =>
+      FirstOrDefault(context, (d, c) => d.RollForHit(c, target));
 
-    public bool RollForCrit(SkillContext context, Creature target) =>
-      GetFirstImplemented(context, (d, c) => d.RollForCrit(c, target));
+    public bool? RollForCrit(SkillContext context, Creature target) =>
+      FirstOrDefault(context, (d, c) => d.RollForCrit(c, target));
 
-    public ImmutableDictionary<DamageType, int> RollForBaseDamage(SkillContext context, Creature target) =>
-      GetFirstImplemented(context, (d, c) => d.RollForBaseDamage(c, target));
+    public ImmutableDictionary<DamageType, int>? RollForBaseDamage(SkillContext context, Creature target) =>
+      FirstOrDefault(context, (d, c) => d.RollForBaseDamage(c, target));
 
     public ImmutableDictionary<DamageType, int> TransformDamage(
       SkillContext context, Creature target, ImmutableDictionary<DamageType, int> damage) =>
       AggregateDelegates(context, damage, (d, c, value) => d.TransformDamage(c, target, value));
 
-    public ImmutableDictionary<DamageType, int> ApplyDamageReduction(
+    public ImmutableDictionary<DamageType, int>? ApplyDamageReduction(
       SkillContext context, Creature target, ImmutableDictionary<DamageType, int> damage) =>
-      GetFirstImplemented(context, (d, c) => d.ApplyDamageReduction(c, target, damage));
+      FirstOrDefault(context, (d, c) => d.ApplyDamageReduction(c, target, damage));
 
-    public ImmutableDictionary<DamageType, int> ApplyDamageResistance(
+    public ImmutableDictionary<DamageType, int>? ApplyDamageResistance(
       SkillContext context, Creature target, ImmutableDictionary<DamageType, int> damage) =>
-      GetFirstImplemented(context, (d, c) => d.ApplyDamageResistance(c, target, damage));
+      FirstOrDefault(context, (d, c) => d.ApplyDamageResistance(c, target, damage));
 
-    public int ComputeFinalDamage(
+    public int? ComputeFinalDamage(
       SkillContext context, Creature target, ImmutableDictionary<DamageType, int> damage, bool isCriticalHit) =>
-      GetFirstImplemented(context, (d, c) => d.ComputeFinalDamage(c, target, damage, isCriticalHit));
+      FirstOrDefault(context, (d, c) => d.ComputeFinalDamage(c, target, damage, isCriticalHit));
 
-    public int ComputeHealthDrain(
+    public int? ComputeHealthDrain(
       SkillContext context, Creature creature, int damageAmount) =>
-      GetFirstImplemented(context, (d, c) => d.ComputeHealthDrain(c, creature, damageAmount));
+      FirstOrDefault(context, (d, c) => d.ComputeHealthDrain(c, creature, damageAmount));
 
-    public bool RollForStun(SkillContext context, Creature target, int damageAmount) =>
-      GetFirstImplemented(context, (d, c) => d.RollForStun(c, target, damageAmount));
+    public bool? RollForStun(SkillContext context, Creature target, int damageAmount) =>
+      FirstOrDefault(context, (d, c) => d.RollForStun(c, target, damageAmount));
   }
 }

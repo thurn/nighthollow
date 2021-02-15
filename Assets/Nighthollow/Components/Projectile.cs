@@ -94,7 +94,7 @@ namespace Nighthollow.Components
     void OnTriggerEnter2D(Collider2D other)
     {
       var context = new SkillContext(_firedBy, _skillData, _registry, this);
-      if (_firedBy.Data.Delegate.ShouldSkipProjectileImpact(context))
+      if (_firedBy.Data.Delegate.ShouldSkipProjectileImpact(context) == true)
       {
         if (!_trackCreature || _trackCreature.gameObject != other.gameObject)
           // Tracking projectiles cannot skip their target
