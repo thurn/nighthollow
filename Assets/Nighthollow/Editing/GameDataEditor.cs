@@ -30,7 +30,7 @@ namespace Nighthollow.Editing
     List<ITableId> _tables = new List<ITableId>();
     Database _database = null!;
     EditorSheet? _sheet;
-    List<Vector2Int?> _selectionStack = new List<Vector2Int?>();
+    readonly List<Vector2Int?> _selectionStack = new List<Vector2Int?>();
 
     public sealed class Args
     {

@@ -111,13 +111,17 @@ namespace Nighthollow.Interface
     int? _currentlyWithinDragTarget;
     ServiceRegistry? _registry;
 
-    public UIDocument Document => _document;
     public VisualElement Screen => _screen;
     public bool IsCurrentlyDragging => _currentlyDragging != null;
 
     public void Initialize()
     {
-      _screen = InterfaceUtils.FindByName<VisualElement>(_document.rootVisualElement, "Screen");
+      Initialize(_document.rootVisualElement);
+    }
+
+    public void Initialize(VisualElement rootVisualElement)
+    {
+      _screen = InterfaceUtils.FindByName<VisualElement>(rootVisualElement, "Screen");
 
       foreach (var key in _keys)
       {

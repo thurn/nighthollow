@@ -48,17 +48,21 @@ namespace Nighthollow.Data
 
   public static class AssetFetcher
   {
-    public static IEnumerator<WaitUntil> FetchAssetsAsync(GameData gameData, Action<AssetService> onComplete)
+    public static IEnumerator<WaitUntil> FetchAssets(
+      GameData gameData,
+      bool synchronous,
+      Action<AssetService> onComplete)
     {
       Debug.Log("Fetching Assets...");
       var requests = new Dictionary<string, ResourceRequest>();
+      var result = ImmutableDictionary.CreateBuilder<string, Object>();
 
       foreach (var creature in gameData.CreatureTypes.Values)
       {
-        Load<GameObject>(requests, creature.PrefabAddress);
+        Load<GameObject>(requests, result, synchronous, creature.PrefabAddress);
         if (creature.ImageAddress != null)
         {
-          Load<Sprite>(requests, creature.ImageAddress);
+          Load<Sprite>(requests, result, synchronous, creature.ImageAddress);
         }
       }
 
@@ -66,7 +70,7 @@ namespace Nighthollow.Data
       {
         if (skill.Address != null)
         {
-          Load<GameObject>(requests, skill.Address);
+          Load<GameObject>(requests, result, synchronous, skill.Address);
         }
       }
 
@@ -74,34 +78,51 @@ namespace Nighthollow.Data
       {
         if (statusEffect.ImageAddress != null)
         {
-          Load<Sprite>(requests, statusEffect.ImageAddress);
+          Load<Sprite>(requests, result, synchronous, statusEffect.ImageAddress);
         }
       }
 
-      yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
-      Debug.Log("Got Asset Responses...");
-
-      var result = ImmutableDictionary.CreateBuilder<string, Object>();
-      foreach (var request in requests)
+      if (synchronous)
       {
-        if (request.Value.asset)
-        {
-          result[request.Key] = request.Value.asset;
-        }
-        else
-        {
-          Debug.LogError($"Null asset for {request.Key}");
-        }
+        onComplete(new AssetService(result.ToImmutable()));
       }
+      else
+      {
+        yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
+        Debug.Log("Got Asset Responses...");
 
-      onComplete(new AssetService(result.ToImmutable()));
+        foreach (var request in requests)
+        {
+          if (request.Value.asset)
+          {
+            result[request.Key] = request.Value.asset;
+          }
+          else
+          {
+            Debug.LogError($"Null asset for {request.Key}");
+          }
+        }
+
+        onComplete(new AssetService(result.ToImmutable()));
+      }
     }
 
-    static void Load<T>(IDictionary<string, ResourceRequest> requests, string key) where T : Object
+    static void Load<T>(
+      IDictionary<string, ResourceRequest> requests,
+      ImmutableDictionary<string, Object>.Builder result,
+      bool synchronous,
+      string key) where T : Object
     {
       if (!string.IsNullOrWhiteSpace(key))
       {
-        requests[key] = Resources.LoadAsync<T>(key);
+        if (synchronous)
+        {
+          result[key] = Resources.Load<T>(key);
+        }
+        else
+        {
+          requests[key] = Resources.LoadAsync<T>(key);
+        }
       }
     }
   }

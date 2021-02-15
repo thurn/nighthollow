@@ -98,7 +98,7 @@ namespace Nighthollow.Data
         }
       }
 
-      StartCoroutine(AssetFetcher.FetchAssetsAsync(gameData, assetService =>
+      StartCoroutine(AssetFetcher.FetchAssets(gameData, synchronous, assetService =>
       {
         _fetchResult = new FetchResult(new Database(_serializerOptions, gameData), assetService);
         InvokeListeners(_fetchResult);

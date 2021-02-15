@@ -15,6 +15,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -73,7 +74,20 @@ namespace Nighthollow.Interface
 
     public static void After(float seconds, Action action)
     {
-      DOTween.Sequence().InsertCallback(seconds, () => action()).Play();
+      if (Application.isPlaying)
+      {
+        DOTween.Sequence().InsertCallback(seconds, () => action()).Play();
+      }
+      else
+      {
+        InvokeAfterInEditor(seconds, action);
+      }
+    }
+
+    static async void InvokeAfterInEditor(float seconds, Action action)
+    {
+      await Task.Delay((int) (1000f * seconds));
+      action();
     }
 
     public static void FocusTextField(TextField field)

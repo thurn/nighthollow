@@ -42,7 +42,7 @@ namespace Nighthollow.Editor.Data
 // See the License for the specific language governing permissions and
 // limitations under the License.";
 
-    [MenuItem("Tools/Run Code Generation &#^g")]
+    [MenuItem("Tools/Run Code Generation &#^c")]
     public static void RunCodeGeneration()
     {
       Debug.Log($"Running generation:");
@@ -50,7 +50,6 @@ namespace Nighthollow.Editor.Data
       var dataService = root.AddComponent<DataService>();
       dataService.Initialize(synchronous: true).MoveNext();
       dataService.OnReady(Generate);
-      
       Object.DestroyImmediate(root);
     }
 
