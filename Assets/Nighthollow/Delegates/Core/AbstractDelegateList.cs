@@ -45,10 +45,12 @@ namespace Nighthollow.Delegates.Core
 
     IEnumerable<TResult> IterateDelegates<TContext, TResult>(
       TContext delegateContext,
-      Func<IDelegate, TContext, TResult> function)
+      Func<IDelegate, TContext, TResult> function,
+      bool errorIfNoneFound = false)
       where TContext : DelegateContext
     {
       var context = delegateContext;
+      var found = false;
 
       var i = 0;
       foreach (var @delegate in AllDelegates(context))
@@ -58,10 +60,16 @@ namespace Nighthollow.Delegates.Core
         var result = function(@delegate, context);
         if (context.Implemented)
         {
+          found = true;
           yield return result;
         }
 
         i++;
+      }
+
+      if (!found && errorIfNoneFound)
+      {
+        throw new InvalidOperationException($"No implementation found for {function}");
       }
     }
 
@@ -69,7 +77,7 @@ namespace Nighthollow.Delegates.Core
       TContext delegateContext,
       Func<IDelegate, TContext, TResult> function)
       where TContext : DelegateContext =>
-      IterateDelegates(delegateContext, function).First();
+      IterateDelegates(delegateContext, function, errorIfNoneFound: true).First();
 
     protected bool AnyReturnedTrue<TContext>(TContext delegateContext, Func<IDelegate, TContext, bool> function)
       where TContext : DelegateContext

@@ -197,8 +197,15 @@ namespace Nighthollow.Editing
       {
         T UpdateFn(T? oldValue)
         {
-          var segment = remainingSegments.First();
-          return (T) segment.Write(remainingSegments.Skip(1).ToImmutableList(), oldValue!, newValue);
+          if (remainingSegments.IsEmpty)
+          {
+            return (T) newValue;
+          }
+          else
+          {
+            var segment = remainingSegments.First();
+            return (T) segment.Write(remainingSegments.Skip(1).ToImmutableList(), oldValue!, newValue);
+          }
         }
 
         ((Database) parent).Update((TableId<T>) _tableId, _entityId, UpdateFn);

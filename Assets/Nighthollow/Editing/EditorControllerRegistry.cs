@@ -313,17 +313,17 @@ namespace Nighthollow.Editing
         : RenderDefault(value);
     }
 
-    public static void WriteForeignKey(int id, ReflectivePath reflectivePath)
+    public static void WriteForeignKey(int foreignId, ReflectivePath reflectivePath)
     {
       var parent = reflectivePath.Parent();
       var type = parent?.GetUnderlyingType();
       if (parent != null && type != null && Controllers.ContainsKey(type))
       {
-        Controllers[type].WriteForeignKey(id, parent);
+        Controllers[type].WriteForeignKey(foreignId, parent);
       }
       else
       {
-        reflectivePath.Write(id);
+        reflectivePath.Write(foreignId);
       }
     }
 

@@ -94,6 +94,9 @@ namespace Nighthollow.Data
         _removedListeners[tableId].Add(new EntityRemovedListener(action)));
     }
 
+    /// <summary>
+    /// Inserts a new entity into the provided table, assigning a new ID to it.
+    /// </summary>
     public void Insert<T>(TableId<T> tableId, T value) where T : class
     {
       _mutations = _mutations.Add(new InsertMutation<T>(tableId, value));

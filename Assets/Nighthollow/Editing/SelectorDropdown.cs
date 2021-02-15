@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -192,10 +193,30 @@ namespace Nighthollow.Editing
       var dictionary = GetTable(reflectivePath, type);
       var values = (from object? key in dictionary.Keys select ((int) key, dictionary[key].ToString())).ToList();
 
-      return new EditorSheetDelegate.DropdownCellContent(
-        values.Select(v => v.Item2).ToList(),
-        null,
-        index => { EditorControllerRegistry.WriteForeignKey(values[index].Item1, reflectivePath); });
+      if (reflectivePath.GetUnderlyingType() == typeof(int?))
+      {
+        return new EditorSheetDelegate.DropdownCellContent(
+          CollectionUtils.Single("None").Concat(values.Select(v => v.Item2)).ToList(),
+          null,
+          index =>
+          {
+            if (index == 0)
+            {
+              reflectivePath.Write(null);
+            }
+            else
+            {
+              EditorControllerRegistry.WriteForeignKey(values[index - 1].Item1, reflectivePath);
+            }
+          });
+      }
+      else
+      {
+        return new EditorSheetDelegate.DropdownCellContent(
+          values.Select(v => v.Item2).ToList(),
+          null,
+          index => { EditorControllerRegistry.WriteForeignKey(values[index].Item1, reflectivePath); });
+      }
     }
   }
 

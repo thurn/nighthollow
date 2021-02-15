@@ -95,17 +95,25 @@ namespace Nighthollow.Data
     {
       var value = gameData.CreatureTypes[typeId];
       return new CreatureItemData(
-        typeId,
-        value.Name,
-        School.Flame,
-        value.SkillAnimations
+        creatureTypeId: typeId,
+        name: value.Name,
+        school: School.Flame,
+        skills: value.SkillAnimations
           .Select(a => a.SkillTypeId)
           .WhereNotNull()
           .Select(id => SkillTypeData.DefaultItem(id, gameData))
           .ToImmutableList(),
-        ImmutableList<AffixData>.Empty,
-        value.ImplicitModifiers.Select(m => m.Value != null ? m : m.WithValue(m.ValueLow)).ToImmutableList(),
-        value.Health.Low);
+        affixes: ImmutableList<AffixData>.Empty,
+        implicitModifiers: value.ImplicitModifiers
+          .Select(m => m.Value != null ? m : m.WithValue(m.ValueLow))
+          .ToImmutableList(),
+        health: value.Health.Low,
+        manaCost: 25,
+        influenceCost: null,
+        baseDamage: new ImmutableDictionaryValue<DamageType, IntRangeValue>(
+          ImmutableDictionary<DamageType, IntRangeValue>.Empty.SetItem(
+            DamageType.Physical,
+            new IntRangeValue(10, 20))));
     }
   }
 }
