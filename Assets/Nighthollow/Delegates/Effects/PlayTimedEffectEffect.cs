@@ -34,8 +34,8 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      // var effect = Database.Instance.Assets.InstantiatePrefab<TimedEffect>(Address);
-      // effect.transform.position = Position;
+      var effect = registry.AssetService.InstantiatePrefab<TimedEffect>(Address);
+      effect.transform.position = Position;
     }
   }
 }
