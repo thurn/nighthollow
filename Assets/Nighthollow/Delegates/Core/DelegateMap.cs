@@ -37,7 +37,7 @@ namespace Nighthollow.Delegates.Core
     ApplyStatusEffectsOnHitDelegate = 12,
     ChainToRandomTargetDelegate = 13,
     ChanceToShockDelegate = 14,
-    ApplyToAdjacentAlliesOnUseDelegate = 15
+    ApplyStatusEffectsToAdjacentAlliesDelegate = 15
   }
 
   public static class DelegateMap
@@ -58,7 +58,7 @@ namespace Nighthollow.Delegates.Core
       {DelegateId.ApplyStatusEffectsOnHitDelegate, new ApplyStatusEffectsOnHitDelegate()},
       {DelegateId.ChainToRandomTargetDelegate, new ChainToRandomTargetDelegate()},
       {DelegateId.ChanceToShockDelegate, new ChanceToShockDelegate()},
-      {DelegateId.ApplyToAdjacentAlliesOnUseDelegate, new ApplyToAdjacentAlliesOnUseDelegate()}
+      {DelegateId.ApplyStatusEffectsToAdjacentAlliesDelegate, new ApplyStatusEffectsToAdjacentAlliesDelegate()}
     };
 
     public static IDelegate Get(DelegateId id) => Delegates[id];

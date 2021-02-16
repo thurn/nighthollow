@@ -18,27 +18,19 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Stats
 {
-  public sealed class BooleanStatModifier : IStatModifier
+  public sealed class BooleanStatModifier : AbstractStatModifier
   {
     public static BooleanStatModifier Set(AbstractStat<BooleanStatModifier, bool> stat, bool value) =>
       new BooleanStatModifier(stat.StatId, value);
 
-    BooleanStatModifier(StatId statId, bool setValue, ILifetime? lifetime = null)
+    BooleanStatModifier(StatId statId, bool setValue) : base(statId, ModifierType.Set)
     {
-      StatId = statId;
       SetValue = setValue;
-      Type = ModifierType.Set;
-      Lifetime = lifetime;
     }
 
-    public StatId StatId { get; }
     public bool SetValue { get; }
-    public ModifierType Type { get; }
-    public ILifetime? Lifetime { get; }
 
-    public IStatModifier WithLifetime(ILifetime lifetime) => new BooleanStatModifier(StatId, SetValue, Lifetime);
-
-    public string Describe(string template, IValueData? highValue)
+    public override string Describe(string template, IValueData? highValue)
     {
       var split = template.Split('/');
       return SetValue ? split[0].Trim() : split[1].Trim();

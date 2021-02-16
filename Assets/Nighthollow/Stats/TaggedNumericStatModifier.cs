@@ -22,7 +22,8 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Stats
 {
-  public sealed class TaggedNumericStatModifier<TTag, TValue> : IStatModifier where TTag : Enum where TValue : struct
+  public sealed class TaggedNumericStatModifier<TTag, TValue> : AbstractStatModifier
+    where TTag : Enum where TValue : struct
   {
     public static TaggedNumericStatModifier<TTag, TValue> Add(
       AbstractStat<TaggedNumericStatModifier<TTag, TValue>, ImmutableDictionary<TTag, TValue>> stat,
@@ -44,11 +45,8 @@ namespace Nighthollow.Stats
       ModifierType type,
       ImmutableDictionary<TTag, TValue>? addTo,
       ImmutableDictionary<TTag, PercentageValue>? increaseBy,
-      ImmutableDictionary<TTag, TValue>? setTo,
-      ILifetime? lifetime = null)
+      ImmutableDictionary<TTag, TValue>? setTo) : base(statId, type)
     {
-      StatId = statId;
-      Type = type;
       AddTo = addTo;
       IncreaseBy = increaseBy;
       SetTo = setTo;
@@ -56,19 +54,12 @@ namespace Nighthollow.Stats
         .Union(addTo?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty)
         .Union(increaseBy?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty)
         .Union(setTo?.Keys.ToImmutableHashSet() ?? ImmutableHashSet<TTag>.Empty);
-      Lifetime = lifetime;
     }
 
-    public StatId StatId { get; }
-    public ModifierType Type { get; }
     public ImmutableDictionary<TTag, TValue>? AddTo { get; }
     public ImmutableDictionary<TTag, PercentageValue>? IncreaseBy { get; }
     public ImmutableDictionary<TTag, TValue>? SetTo { get; }
     public ImmutableHashSet<TTag> AllTags { get; }
-    public ILifetime? Lifetime { get; }
-
-    public IStatModifier WithLifetime(ILifetime lifetime) =>
-      new TaggedNumericStatModifier<TTag, TValue>(StatId, Type, AddTo, IncreaseBy, SetTo, lifetime);
 
     public NumericStatModifier<TValue>? AsNumericModifier(
       AbstractStat<NumericStatModifier<TValue>, TValue> stat, TTag tag)
@@ -87,7 +78,7 @@ namespace Nighthollow.Stats
       };
     }
 
-    public string Describe(string template, IValueData? highValue)
+    public override string Describe(string template, IValueData? highValue)
     {
       var high = highValue?.Get() as IDictionary;
       var result = new List<string>();

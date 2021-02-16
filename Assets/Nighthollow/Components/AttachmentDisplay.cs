@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Data;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Services;
@@ -26,7 +25,7 @@ namespace Nighthollow.Components
 {
   public sealed class AttachmentDisplay : MonoBehaviour
   {
-    [Header("State")] [SerializeField] List<Transform> _attachments = null!;
+    readonly List<Transform> _attachments = new List<Transform>();
     ImmutableList<(StatusEffectTypeData, int)>? _currentStatusEffects;
 
     public void SetStatusEffects(

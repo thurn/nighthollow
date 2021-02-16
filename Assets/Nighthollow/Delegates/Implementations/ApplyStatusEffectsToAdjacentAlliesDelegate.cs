@@ -12,43 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using System;
-using System.Linq;
 using Nighthollow.Delegates.Core;
 using Nighthollow.Delegates.Effects;
-
-using Nighthollow.Services;
 using Nighthollow.Utils;
 
 #nullable enable
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class ApplyToAdjacentAlliesOnUseDelegate : AbstractDelegate
+  public sealed class ApplyStatusEffectsToAdjacentAlliesDelegate : AbstractDelegate
   {
     public override string Describe(IStatDescriptionProvider provider) => "Buffs Adjacent Allies With:";
 
     public override void OnUse(SkillContext c)
     {
-      // foreach (var creature in
-      //   Root.Instance.CreatureService.GetAdjacentUserCreatures(
-      //     Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition))
-      // foreach (var modifier in c.Skill.TargetedAffixes.SelectMany(affix => affix.Modifiers))
-      // {
-      //   if (modifier.DelegateId != null)
-      //   {
-      //     throw new NotSupportedException("Not yet implemented");
-      //   }
-      //
-      //   if (modifier.StatModifier != null)
-      //   {
-      //     c.Results.Add(new ApplyModifierEffect(
-      //       creature.Data,
-      //       modifier.StatModifier
-      //         .WithLifetime(new TimedLifetime(c.GetDurationMilliseconds(OldStat.BuffDuration)))));
-      //   }
-      // }
+      foreach (var target in
+        c.Registry.CreatureService.GetAdjacentUserCreatures(
+          Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition))
+      {
+        foreach (var statusEffect in c.Skill.ItemData.StatusEffects)
+        {
+          c.Results.Add(new ApplyStatusEffectEffect(target, statusEffect));
+        }
+      }
     }
   }
 }

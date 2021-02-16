@@ -18,7 +18,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Stats
 {
-  public sealed class NumericStatModifier<T> : IStatModifier where T : struct
+  public sealed class NumericStatModifier<T> : AbstractStatModifier where T : struct
   {
     public static NumericStatModifier<T> Add(AbstractStat<NumericStatModifier<T>, T> stat, T value) =>
       new NumericStatModifier<T>(stat.StatId, ModifierType.Add, value, null, null);
@@ -35,28 +35,18 @@ namespace Nighthollow.Stats
       ModifierType type,
       T? add,
       PercentageValue? increase,
-      T? ovewrite,
-      ILifetime? lifetime = null)
+      T? ovewrite) : base(statId, type)
     {
-      StatId = statId;
-      Type = type;
       AddTo = add;
       IncreaseBy = increase;
       SetTo = ovewrite;
-      Lifetime = lifetime;
     }
 
-    public StatId StatId { get; }
-    public ModifierType Type { get; }
     public T? AddTo { get; }
     public PercentageValue? IncreaseBy { get; }
     public T? SetTo { get; }
-    public ILifetime? Lifetime { get; }
 
-    public IStatModifier WithLifetime(ILifetime lifetime) =>
-      new NumericStatModifier<T>(StatId, Type, AddTo, IncreaseBy, SetTo, lifetime);
-
-    public string Describe(string template, IValueData? highValue) =>
+    public override string Describe(string template, IValueData? highValue) =>
       template.Replace("#",
         ModifierDescriptions.NumericModifierString(
           AddTo,

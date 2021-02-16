@@ -121,7 +121,7 @@ namespace Nighthollow.Data
       Modifiers = itemData.ImplicitModifiers
         .Select(m => m.BuildStatModifier())
         .WhereNotNull()
-        .Select(m => Lifetime == null ? m : m.WithLifetime(Lifetime))
+        .Select(m => Lifetime == null ? m : m.WithLifetime(Lifetime).WithStatusEffectTypeId(StatusEffectTypeId))
         .ToImmutableList();
     }
 

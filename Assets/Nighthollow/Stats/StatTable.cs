@@ -23,6 +23,13 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Stats
 {
+  // Wrap modifiers in container object which implements IStatModifier
+  // Parent class for all modifiers which handles tag & lifetimes wrapping
+  // Use this wrapper pattern for lifetime too
+  // Tag them with their associated status effect ID if any
+  // On max stacks reached, for each modifier in the effect, remove the oldest modifier from the list
+  // Remove the first status effect from the effect list
+
   public sealed class StatTable
   {
     readonly StatTable? _parent;
@@ -48,24 +55,35 @@ namespace Nighthollow.Stats
     [MustUseReturnValue]
     public StatTable InsertStatusEffect(StatusEffectData statusEffect)
     {
-      if (_statusEffects.TryGetValue(statusEffect.StatusEffectTypeId, out var effects) &&
-          effects.Count >= statusEffect.BaseType.MaxStacks)
+      int? removeFirstMatchingId = null;
+      // If the "Max Stacks" value would be exceeded for this status effect, we remove the oldest instance of the effect
+      // before inserting a new instance.
+      var removeOldest = _statusEffects.TryGetValue(statusEffect.StatusEffectTypeId, out var effects) &&
+                         effects.Count >= statusEffect.BaseType.MaxStacks;
+
+      var statusEffects = _statusEffects;
+      if (removeOldest && statusEffects.ContainsKey(statusEffect.StatusEffectTypeId))
       {
-        // Limit has been exceeded for this status effect, so it is ignored.
-        return this;
+        var list = statusEffects[statusEffect.StatusEffectTypeId];
+        removeFirstMatchingId = statusEffect.StatusEffectTypeId;
+        statusEffects = list.IsEmpty
+          ? statusEffects
+          : statusEffects.SetItem(statusEffect.StatusEffectTypeId, list.RemoveAt(0));
       }
+
+      statusEffects = statusEffects.AppendOrCreateList(statusEffect.StatusEffectTypeId, statusEffect);
 
       return statusEffect.Lifetime == null
         ? new StatTable(
           _parent,
-          InsertModifierList(_modifiers, statusEffect.Modifiers),
+          UpdateModifierList(_modifiers, statusEffect.Modifiers, removeFirstMatchingId),
           _dynamicModifiers,
-          _statusEffects.AppendOrCreateList(statusEffect.StatusEffectTypeId, statusEffect))
+          statusEffects)
         : new StatTable(
           _parent,
           _modifiers,
-          InsertModifierList(_dynamicModifiers, statusEffect.Modifiers),
-          _statusEffects.AppendOrCreateList(statusEffect.StatusEffectTypeId, statusEffect));
+          UpdateModifierList(_dynamicModifiers, statusEffect.Modifiers, removeFirstMatchingId),
+          statusEffects);
     }
 
     [MustUseReturnValue]
@@ -92,8 +110,8 @@ namespace Nighthollow.Stats
       where TModifier : IStatModifier where TValue : notnull =>
       stat.ComputeValue(
         ModifiersForStat(stat.StatId)
-          .Select(operation => (TModifier) operation)
-          .GroupBy(operation => operation.Type)
+          .Select(modifier => (TModifier) modifier.Unwrap())
+          .GroupBy(modifier => modifier.Type)
           .ToDictionary(g => g.Key, g => g.Select(m => m)));
 
     [MustUseReturnValue]
@@ -117,9 +135,10 @@ namespace Nighthollow.Stats
         .Concat(_parent == null ? Enumerable.Empty<IStatModifier>() : _parent.ModifiersForStat(statId));
     }
 
-    ImmutableDictionary<StatId, ImmutableList<IStatModifier>> InsertModifierList(
+    ImmutableDictionary<StatId, ImmutableList<IStatModifier>> UpdateModifierList(
       ImmutableDictionary<StatId, ImmutableList<IStatModifier>> modifiers,
-      ImmutableList<IStatModifier> input)
+      ImmutableList<IStatModifier> input,
+      int? removeStatusEffectId)
     {
       var builder = modifiers.ToBuilder();
       foreach (var modifier in input)
@@ -127,6 +146,15 @@ namespace Nighthollow.Stats
         if (!builder.ContainsKey(modifier.StatId))
         {
           builder[modifier.StatId] = ImmutableList<IStatModifier>.Empty;
+        }
+
+        if (removeStatusEffectId != null)
+        {
+          var index = builder[modifier.StatId].FindIndex(m => m.StatusEffectTypeId == removeStatusEffectId.Value);
+          if (index != -1)
+          {
+            builder[modifier.StatId] = builder[modifier.StatId].RemoveAt(index);
+          }
         }
 
         builder[modifier.StatId] = builder[modifier.StatId].Add(modifier);
