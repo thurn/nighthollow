@@ -792,7 +792,9 @@ namespace Nighthollow.Data
           CanCrit,
           CanStun,
           SummonCreatures,
-          StatusEffects);
+          StatusEffects,
+          Cooldown,
+          CooldownHigh);
 
     public SkillTypeData WithSkillAnimationType(SkillAnimationType skillAnimationType) =>
       Equals(skillAnimationType, SkillAnimationType)
@@ -808,7 +810,9 @@ namespace Nighthollow.Data
           CanCrit,
           CanStun,
           SummonCreatures,
-          StatusEffects);
+          StatusEffects,
+          Cooldown,
+          CooldownHigh);
 
     public SkillTypeData WithSkillType(SkillType skillType) =>
       Equals(skillType, SkillType)
@@ -824,7 +828,9 @@ namespace Nighthollow.Data
           CanCrit,
           CanStun,
           SummonCreatures,
-          StatusEffects);
+          StatusEffects,
+          Cooldown,
+          CooldownHigh);
 
     public SkillTypeData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
       Equals(implicitModifiers, ImplicitModifiers)
@@ -840,7 +846,9 @@ namespace Nighthollow.Data
           CanCrit,
           CanStun,
           SummonCreatures,
-          StatusEffects);
+          StatusEffects,
+          Cooldown,
+          CooldownHigh);
 
     public SkillTypeData WithAddress(string? address) =>
       Equals(address, Address)
@@ -856,7 +864,9 @@ namespace Nighthollow.Data
           CanCrit,
           CanStun,
           SummonCreatures,
-          StatusEffects);
+          StatusEffects,
+          Cooldown,
+          CooldownHigh);
 
     public SkillTypeData WithProjectileSpeed(int? projectileSpeed) =>
       Equals(projectileSpeed, ProjectileSpeed)
@@ -872,7 +882,9 @@ namespace Nighthollow.Data
           CanCrit,
           CanStun,
           SummonCreatures,
-          StatusEffects);
+          StatusEffects,
+          Cooldown,
+          CooldownHigh);
 
     public SkillTypeData WithUsesAccuracy(bool usesAccuracy) =>
       Equals(usesAccuracy, UsesAccuracy)
@@ -888,7 +900,9 @@ namespace Nighthollow.Data
           CanCrit,
           CanStun,
           SummonCreatures,
-          StatusEffects);
+          StatusEffects,
+          Cooldown,
+          CooldownHigh);
 
     public SkillTypeData WithCanCrit(bool canCrit) =>
       Equals(canCrit, CanCrit)
@@ -904,7 +918,9 @@ namespace Nighthollow.Data
           canCrit,
           CanStun,
           SummonCreatures,
-          StatusEffects);
+          StatusEffects,
+          Cooldown,
+          CooldownHigh);
 
     public SkillTypeData WithCanStun(bool canStun) =>
       Equals(canStun, CanStun)
@@ -920,7 +936,9 @@ namespace Nighthollow.Data
           CanCrit,
           canStun,
           SummonCreatures,
-          StatusEffects);
+          StatusEffects,
+          Cooldown,
+          CooldownHigh);
 
     public SkillTypeData WithSummonCreatures(ImmutableList<int> summonCreatures) =>
       Equals(summonCreatures, SummonCreatures)
@@ -936,7 +954,9 @@ namespace Nighthollow.Data
           CanCrit,
           CanStun,
           summonCreatures,
-          StatusEffects);
+          StatusEffects,
+          Cooldown,
+          CooldownHigh);
 
     public SkillTypeData WithStatusEffects(ImmutableList<int> statusEffects) =>
       Equals(statusEffects, StatusEffects)
@@ -952,7 +972,45 @@ namespace Nighthollow.Data
           CanCrit,
           CanStun,
           SummonCreatures,
-          statusEffects);
+          statusEffects,
+          Cooldown,
+          CooldownHigh);
+
+    public SkillTypeData WithCooldown(DurationValue? cooldown) =>
+      Equals(cooldown, Cooldown)
+        ? this
+        : new SkillTypeData(
+          Name,
+          SkillAnimationType,
+          SkillType,
+          ImplicitModifiers,
+          Address,
+          ProjectileSpeed,
+          UsesAccuracy,
+          CanCrit,
+          CanStun,
+          SummonCreatures,
+          StatusEffects,
+          cooldown,
+          CooldownHigh);
+
+    public SkillTypeData WithCooldownHigh(DurationValue? cooldownHigh) =>
+      Equals(cooldownHigh, CooldownHigh)
+        ? this
+        : new SkillTypeData(
+          Name,
+          SkillAnimationType,
+          SkillType,
+          ImplicitModifiers,
+          Address,
+          ProjectileSpeed,
+          UsesAccuracy,
+          CanCrit,
+          CanStun,
+          SummonCreatures,
+          StatusEffects,
+          Cooldown,
+          cooldownHigh);
 
   }
 
@@ -967,7 +1025,8 @@ namespace Nighthollow.Data
           ImplicitModifiers,
           Name,
           Summons,
-          StatusEffects);
+          StatusEffects,
+          Cooldown);
 
     public SkillItemData WithAffixes(ImmutableList<AffixData> affixes) =>
       Equals(affixes, Affixes)
@@ -978,7 +1037,8 @@ namespace Nighthollow.Data
           ImplicitModifiers,
           Name,
           Summons,
-          StatusEffects);
+          StatusEffects,
+          Cooldown);
 
     public SkillItemData WithImplicitModifiers(ImmutableList<ModifierData> implicitModifiers) =>
       Equals(implicitModifiers, ImplicitModifiers)
@@ -989,7 +1049,8 @@ namespace Nighthollow.Data
           implicitModifiers,
           Name,
           Summons,
-          StatusEffects);
+          StatusEffects,
+          Cooldown);
 
     public SkillItemData WithName(string name) =>
       Equals(name, Name)
@@ -1000,7 +1061,8 @@ namespace Nighthollow.Data
           ImplicitModifiers,
           name,
           Summons,
-          StatusEffects);
+          StatusEffects,
+          Cooldown);
 
     public SkillItemData WithSummons(ImmutableList<CreatureItemData> summons) =>
       Equals(summons, Summons)
@@ -1011,7 +1073,8 @@ namespace Nighthollow.Data
           ImplicitModifiers,
           Name,
           summons,
-          StatusEffects);
+          StatusEffects,
+          Cooldown);
 
     public SkillItemData WithStatusEffects(ImmutableList<StatusEffectItemData> statusEffects) =>
       Equals(statusEffects, StatusEffects)
@@ -1022,7 +1085,20 @@ namespace Nighthollow.Data
           ImplicitModifiers,
           Name,
           Summons,
-          statusEffects);
+          statusEffects,
+          Cooldown);
+
+    public SkillItemData WithCooldown(DurationValue? cooldown) =>
+      Equals(cooldown, Cooldown)
+        ? this
+        : new SkillItemData(
+          SkillTypeId,
+          Affixes,
+          ImplicitModifiers,
+          Name,
+          Summons,
+          StatusEffects,
+          cooldown);
 
   }
 

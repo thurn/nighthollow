@@ -63,7 +63,7 @@ namespace Nighthollow.Data
     /// <summary>How long the effect persists for -- if this is null the effect persists indefinitely</summary>
     [Key(4)] public DurationValue? Duration { get; }
 
-    /// <summary>Optionally an upper bound for the duration, if this effect has a range of possible duration.</summary>
+    /// <summary>Optionally an upper bound for the duration, if this effect has a range of possible durations.</summary>
     [Key(5)] public DurationValue? DurationHigh { get; }
 
     /// <summary>

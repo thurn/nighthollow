@@ -1735,13 +1735,14 @@ namespace MessagePack.Formatters.Nighthollow.Data
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(6);
+            writer.WriteArrayHeader(7);
             writer.Write(value.SkillTypeId);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.AffixData>>().Serialize(ref writer, value.Affixes, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>>().Serialize(ref writer, value.ImplicitModifiers, options);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>>().Serialize(ref writer, value.Summons, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.StatusEffectItemData>>().Serialize(ref writer, value.StatusEffects, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue?>().Serialize(ref writer, value.Cooldown, options);
         }
 
         public global::Nighthollow.Data.SkillItemData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -1760,6 +1761,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var __Name__ = default(string);
             var __Summons__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>);
             var __StatusEffects__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.StatusEffectItemData>);
+            var __Cooldown__ = default(global::Nighthollow.Stats.DurationValue?);
 
             for (int i = 0; i < length; i++)
             {
@@ -1783,13 +1785,16 @@ namespace MessagePack.Formatters.Nighthollow.Data
                     case 5:
                         __StatusEffects__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.StatusEffectItemData>>().Deserialize(ref reader, options);
                         break;
+                    case 6:
+                        __Cooldown__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue?>().Deserialize(ref reader, options);
+                        break;
                     default:
                         reader.Skip();
                         break;
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.SkillItemData(__SkillTypeId__, __Affixes__, __ImplicitModifiers__, __Name__, __Summons__, __StatusEffects__);
+            var ____result = new global::Nighthollow.Data.SkillItemData(__SkillTypeId__, __Affixes__, __ImplicitModifiers__, __Name__, __Summons__, __StatusEffects__, __Cooldown__);
             reader.Depth--;
             return ____result;
         }
@@ -1807,7 +1812,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(11);
+            writer.WriteArrayHeader(13);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.SkillAnimationType>().Serialize(ref writer, value.SkillAnimationType, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.SkillType>().Serialize(ref writer, value.SkillType, options);
@@ -1819,6 +1824,8 @@ namespace MessagePack.Formatters.Nighthollow.Data
             writer.Write(value.CanStun);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<int>>().Serialize(ref writer, value.SummonCreatures, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<int>>().Serialize(ref writer, value.StatusEffects, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue?>().Serialize(ref writer, value.Cooldown, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue?>().Serialize(ref writer, value.CooldownHigh, options);
         }
 
         public global::Nighthollow.Data.SkillTypeData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -1842,6 +1849,8 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var __CanStun__ = default(bool);
             var __SummonCreatures__ = default(global::System.Collections.Immutable.ImmutableList<int>);
             var __StatusEffects__ = default(global::System.Collections.Immutable.ImmutableList<int>);
+            var __Cooldown__ = default(global::Nighthollow.Stats.DurationValue?);
+            var __CooldownHigh__ = default(global::Nighthollow.Stats.DurationValue?);
 
             for (int i = 0; i < length; i++)
             {
@@ -1880,13 +1889,19 @@ namespace MessagePack.Formatters.Nighthollow.Data
                     case 10:
                         __StatusEffects__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<int>>().Deserialize(ref reader, options);
                         break;
+                    case 11:
+                        __Cooldown__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue?>().Deserialize(ref reader, options);
+                        break;
+                    case 12:
+                        __CooldownHigh__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue?>().Deserialize(ref reader, options);
+                        break;
                     default:
                         reader.Skip();
                         break;
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.SkillTypeData(__Name__, __SkillAnimationType__, __SkillType__, __ImplicitModifiers__, __Address__, __ProjectileSpeed__, __UsesAccuracy__, __CanCrit__, __CanStun__, __SummonCreatures__, __StatusEffects__);
+            var ____result = new global::Nighthollow.Data.SkillTypeData(__Name__, __SkillAnimationType__, __SkillType__, __ImplicitModifiers__, __Address__, __ProjectileSpeed__, __UsesAccuracy__, __CanCrit__, __CanStun__, __SummonCreatures__, __StatusEffects__, __Cooldown__, __CooldownHigh__);
             reader.Depth--;
             return ____result;
         }

@@ -32,7 +32,8 @@ namespace Nighthollow.Data
       ImmutableList<ModifierData>? implicitModifiers = null,
       string name = "",
       ImmutableList<CreatureItemData>? summons = null,
-      ImmutableList<StatusEffectItemData>? statusEffects = null)
+      ImmutableList<StatusEffectItemData>? statusEffects = null,
+      DurationValue? cooldown = null)
     {
       SkillTypeId = skillTypeId;
       Affixes = affixes ?? ImmutableList<AffixData>.Empty;
@@ -40,6 +41,7 @@ namespace Nighthollow.Data
       Name = name;
       Summons = summons ?? ImmutableList<CreatureItemData>.Empty;
       StatusEffects = statusEffects ?? ImmutableList<StatusEffectItemData>.Empty;
+      Cooldown = cooldown;
     }
 
     [ForeignKey(typeof(SkillTypeData))]
@@ -50,6 +52,7 @@ namespace Nighthollow.Data
     [Key(3)] public string Name { get; }
     [Key(4)] public ImmutableList<CreatureItemData> Summons { get; }
     [Key(5)] public ImmutableList<StatusEffectItemData> StatusEffects { get; }
+    [Key(6)] public DurationValue? Cooldown { get; }
 
     public override string ToString() => Name;
 
@@ -60,7 +63,8 @@ namespace Nighthollow.Data
         .InsertNullableModifier(Stat.ProjectileSpeed.Set(baseType.ProjectileSpeed))
         .InsertNullableModifier(Stat.UsesAccuracy.SetIfTrue(baseType.UsesAccuracy))
         .InsertNullableModifier(Stat.CanCrit.SetIfTrue(baseType.CanCrit))
-        .InsertNullableModifier(Stat.CanStun.SetIfTrue(baseType.CanStun));
+        .InsertNullableModifier(Stat.CanStun.SetIfTrue(baseType.CanStun))
+        .InsertNullableModifier(Stat.Cooldown.Set(Cooldown));
 
       var (stats, delegates) = AffixData.ProcessAffixes(statTable,
         Affixes.SelectMany(a => a.Modifiers).Concat(ImplicitModifiers));

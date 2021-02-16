@@ -15,6 +15,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
+using Nighthollow.Stats;
 
 #nullable enable
 
@@ -36,7 +37,9 @@ namespace Nighthollow.Data
       bool canCrit = false,
       bool canStun = false,
       ImmutableList<int>? summonCreatures = null,
-      ImmutableList<int>? statusEffectIds = null)
+      ImmutableList<int>? statusEffectIds = null,
+      DurationValue? cooldown = null,
+      DurationValue? cooldownHigh = null)
     {
       Name = name;
       SkillAnimationType = skillAnimationType;
@@ -49,6 +52,8 @@ namespace Nighthollow.Data
       CanStun = canStun;
       SummonCreatures = summonCreatures ?? ImmutableList<int>.Empty;
       StatusEffects = statusEffectIds ?? ImmutableList<int>.Empty;
+      Cooldown = cooldown;
+      CooldownHigh = cooldownHigh;
     }
 
     [Key(0)] public string Name { get; }
@@ -65,18 +70,30 @@ namespace Nighthollow.Data
     [ForeignKeyList(typeof(StatusEffectTypeData))]
     [Key(10)] public ImmutableList<int> StatusEffects { get; }
 
+    /// <summary>
+    /// How long the user must wait before the skill can be used again (null means it can be used immediately after
+    /// completing the animation)
+    /// </summary>
+    [Key(11)] public DurationValue? Cooldown { get; }
+
+    /// <summary>Optionally an upper bound for the cooldown, if this skill has a range of possible cooldowns.</summary>
+    [Key(12)] public DurationValue? CooldownHigh { get; }
+
     public override string ToString() => Name;
 
     public static SkillItemData DefaultItem(int skillTypeId, GameData gameData)
     {
       var value = gameData.SkillTypes[skillTypeId];
       return new SkillItemData(
-        skillTypeId,
-        ImmutableList<AffixData>.Empty,
-        value.ImplicitModifiers.Select(m => m.Value != null ? m : m.WithValue(m.ValueLow)).ToImmutableList(),
-        value.Name,
-        ImmutableList<CreatureItemData>.Empty,
-        value.StatusEffects.Select(sid => StatusEffectTypeData.DefaultItem(sid, gameData)).ToImmutableList());
+        skillTypeId: skillTypeId,
+        affixes: ImmutableList<AffixData>.Empty,
+        implicitModifiers: value.ImplicitModifiers
+          .Select(m => m.Value != null ? m : m.WithValue(m.ValueLow)).ToImmutableList(),
+        name: value.Name,
+        summons: ImmutableList<CreatureItemData>.Empty,
+        statusEffects: value.StatusEffects
+          .Select(sid => StatusEffectTypeData.DefaultItem(sid, gameData)).ToImmutableList(),
+        cooldown: value.Cooldown);
     }
   }
 }
