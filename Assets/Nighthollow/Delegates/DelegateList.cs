@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using Nighthollow.Delegates.Effects;
 
 #nullable enable
 
@@ -27,19 +29,19 @@ namespace Nighthollow.Delegates
       _delegates = delegates;
     }
 
-    public ImmutableList<Effect> Invoke<THandler>(DelegateContext c, EventData<THandler> eventData)
+    public IEnumerable<Effect> Invoke<THandler>(DelegateContext c, EventData<THandler> eventData)
       where THandler : IHandler
     {
-      var result = ImmutableList.CreateBuilder<Effect>();
       foreach (var handler in _delegates)
       {
         if (handler is THandler h)
         {
-          result.AddRange(eventData.Invoke(c, h));
+          foreach (var effect in eventData.Invoke(c, h))
+          {
+            yield return effect;
+          }
         }
       }
-
-      return result.ToImmutable();
     }
 
     public TResult QueryFirst<THandler, TResult>(
@@ -84,7 +86,7 @@ namespace Nighthollow.Delegates
       {
         if (handler is THandler h)
         {
-          result = queryData.Inovke(c, h, result);
+          result = queryData.Invoke(c, h, result);
         }
       }
 

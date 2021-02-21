@@ -15,7 +15,7 @@
 
 using Nighthollow.Components;
 using Nighthollow.Data;
-using Nighthollow.Delegates2.Effects;
+using Nighthollow.Delegates.Effects;
 using Nighthollow.Utils;
 using UnityEngine;
 

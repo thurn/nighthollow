@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Immutable;
+using System.Collections.Generic;
+using Nighthollow.Delegates.Effects;
 
 #nullable enable
 
@@ -20,7 +21,7 @@ namespace Nighthollow.Delegates
 {
   public abstract class EventData<THandler>
   {
-    public abstract ImmutableList<Effect> Invoke(DelegateContext c, THandler handler);
+    public abstract IEnumerable<Effect> Invoke(DelegateContext c, THandler handler);
   }
 
   public abstract class QueryData<THandler, TResult>
@@ -30,6 +31,6 @@ namespace Nighthollow.Delegates
 
   public abstract class IteratedQueryData<THandler, TResult>
   {
-    public abstract TResult Inovke(DelegateContext c, THandler handler, TResult current);
+    public abstract TResult Invoke(DelegateContext c, THandler handler, TResult current);
   }
 }

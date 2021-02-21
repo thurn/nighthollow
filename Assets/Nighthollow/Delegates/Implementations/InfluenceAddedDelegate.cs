@@ -12,16 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
 
 #nullable enable
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class InfluenceAddedDelegate : AbstractDelegate, IOnActivated
+  public sealed class InfluenceAddedDelegate : AbstractDelegate, IOnCreatureActivated
   {
-    public ImmutableList<Effect> OnActivated(DelegateContext c, IOnActivated.Data d)
+    public IEnumerable<Effect> OnCreatureActivated(DelegateContext c, IOnCreatureActivated.Data d)
     {
       return ImmutableList<Effect>.Empty;
     }

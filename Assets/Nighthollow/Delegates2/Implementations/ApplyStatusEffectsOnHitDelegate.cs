@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using Nighthollow.Components;
+using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates2.Core;
-using Nighthollow.Delegates2.Effects;
 
 #nullable enable
 

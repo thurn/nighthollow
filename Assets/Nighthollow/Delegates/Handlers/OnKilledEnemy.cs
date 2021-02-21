@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using Nighthollow.Data;
+using Nighthollow.Delegates.Effects;
 
 #nullable enable
 
@@ -29,7 +30,7 @@ namespace Nighthollow.Delegates.Handlers
         EnemyId = enemyId;
       }
 
-      public override ImmutableList<Effect> Invoke(DelegateContext c, IOnKilledEnemy handler) =>
+      public override IEnumerable<Effect> Invoke(DelegateContext c, IOnKilledEnemy handler) =>
         handler.OnKilledEnemy(c, this);
 
       public CreatureState Self { get; }
@@ -37,6 +38,6 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>Called when a creature kills an enemy creature.</summary>
-    ImmutableList<Effect> OnKilledEnemy(DelegateContext c, Data d);
+    IEnumerable<Effect> OnKilledEnemy(DelegateContext c, Data d);
   }
 }

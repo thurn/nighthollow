@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using Nighthollow.Components;
 using Nighthollow.Data;
-using Nighthollow.Delegates2.Effects;
+using Nighthollow.Delegates.Effects;
 using Nighthollow.Services;
 using UnityEngine;
 

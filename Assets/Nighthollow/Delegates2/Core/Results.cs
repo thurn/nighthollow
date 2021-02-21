@@ -15,7 +15,8 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Nighthollow.Delegates2.Effects;
+using Nighthollow.Delegates;
+using Nighthollow.Delegates.Effects;
 
 #nullable enable
 
