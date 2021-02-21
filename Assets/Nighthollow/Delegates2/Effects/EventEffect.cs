@@ -21,7 +21,7 @@ using Nighthollow.Services;
 
 namespace Nighthollow.Delegates2.Effects
 {
-  public static class Events
+  public static class EffectEvents
   {
     public static EventEffect<TContext> Effect<TContext>(TContext context, Action<IDelegate, TContext> action)
       where TContext : DelegateContext =>

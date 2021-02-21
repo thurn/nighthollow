@@ -1314,6 +1314,60 @@ namespace Nighthollow.Data
 
   }
 
+  public sealed partial class CreatureState
+  {
+    public CreatureState WithData(CreatureData data) =>
+      Equals(data, Data)
+        ? this
+        : new CreatureState(
+          data,
+          Animation,
+          RankPosition,
+          FilePosition,
+          CurrentSkill);
+
+    public CreatureState WithAnimation(CreatureAnimation animation) =>
+      Equals(animation, Animation)
+        ? this
+        : new CreatureState(
+          Data,
+          animation,
+          RankPosition,
+          FilePosition,
+          CurrentSkill);
+
+    public CreatureState WithRankPosition(RankValue? rankPosition) =>
+      Equals(rankPosition, RankPosition)
+        ? this
+        : new CreatureState(
+          Data,
+          Animation,
+          rankPosition,
+          FilePosition,
+          CurrentSkill);
+
+    public CreatureState WithFilePosition(FileValue? filePosition) =>
+      Equals(filePosition, FilePosition)
+        ? this
+        : new CreatureState(
+          Data,
+          Animation,
+          RankPosition,
+          filePosition,
+          CurrentSkill);
+
+    public CreatureState WithCurrentSkill(SkillData? currentSkill) =>
+      Equals(currentSkill, CurrentSkill)
+        ? this
+        : new CreatureState(
+          Data,
+          Animation,
+          RankPosition,
+          FilePosition,
+          currentSkill);
+
+  }
+
   public sealed partial class TableMetadata
   {
     public TableMetadata WithNextId(int nextId) =>

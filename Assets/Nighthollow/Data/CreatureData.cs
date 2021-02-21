@@ -22,6 +22,16 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
+  public enum CreatureAnimation
+  {
+    Placing,
+    Idle,
+    Moving,
+    UsingSkill,
+    Dying,
+    Stunned
+  }
+
   public sealed partial class CreatureData : StatEntity
   {
     public CreatureData(
@@ -49,5 +59,29 @@ namespace Nighthollow.Data
 
     public CreatureData OnTick() => WithStats(Stats.OnTick())
       .WithSkills(Skills.Select(skill => skill.WithStats(skill.Stats.OnTick())).ToImmutableList());
+  }
+
+  public sealed partial class CreatureState : StatEntity
+  {
+    public CreatureState(
+      CreatureData data,
+      CreatureAnimation animation,
+      RankValue? rankPosition,
+      FileValue? filePosition,
+      SkillData? currentSkill)
+    {
+      Data = data;
+      Animation = animation;
+      RankPosition = rankPosition;
+      FilePosition = filePosition;
+      CurrentSkill = currentSkill;
+    }
+
+    [Field] public CreatureData Data { get; }
+    [Field] public override StatTable Stats => Data.Stats;
+    [Field] public CreatureAnimation Animation { get; }
+    [Field] public RankValue? RankPosition { get; }
+    [Field] public FileValue? FilePosition { get; }
+    [Field] public SkillData? CurrentSkill { get; }
   }
 }

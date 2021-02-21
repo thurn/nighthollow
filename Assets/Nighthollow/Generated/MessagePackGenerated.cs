@@ -171,7 +171,7 @@ namespace MessagePack.Resolvers
                 case 37: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeFormatter();
                 case 38: return new MessagePack.Formatters.Nighthollow.Data.StatTagTypeFormatter();
                 case 39: return new MessagePack.Formatters.Nighthollow.Data.StatTypeFormatter();
-                case 40: return new MessagePack.Formatters.Nighthollow.Delegates.Core.DelegateIdFormatter();
+                case 40: return new MessagePack.Formatters.Nighthollow.Delegates2.Core.DelegateIdFormatter();
                 case 41: return new MessagePack.Formatters.Nighthollow.Stats.ModifierTypeFormatter();
                 case 42: return new MessagePack.Formatters.Nighthollow.Stats.StatIdFormatter();
                 case 43: return new MessagePack.Formatters.Nighthollow.Data.IItemDataFormatter();
@@ -360,7 +360,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
 #pragma warning disable SA1403 // File may only contain a single namespace
 #pragma warning disable SA1649 // File name should match first type name
 
-namespace MessagePack.Formatters.Nighthollow.Delegates.Core
+namespace MessagePack.Formatters.Nighthollow.Delegates2.Core
 {
     using System;
     using System.Buffers;
