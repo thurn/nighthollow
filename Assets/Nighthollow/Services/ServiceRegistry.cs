@@ -46,7 +46,7 @@ namespace Nighthollow.Services
     public Prefabs Prefabs { get; }
   }
 
-  public class GameServiceRegistry : ServiceRegistry
+  public sealed class GameServiceRegistry : ServiceRegistry
   {
     public GameServiceRegistry(
       Database database,

@@ -14,7 +14,7 @@
 
 using System.Collections.Immutable;
 using System.Linq;
-using Nighthollow.Delegates.Core;
+using Nighthollow.Delegates2.Core;
 using Nighthollow.State;
 using Nighthollow.Stats;
 

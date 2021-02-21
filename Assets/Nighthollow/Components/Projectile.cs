@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Delegates.Core;
-using Nighthollow.Delegates.Effects;
 using Nighthollow.Data;
+using Nighthollow.Delegates2.Core;
+using Nighthollow.Delegates2.Effects;
 using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Stats;

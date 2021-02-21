@@ -1,7 +1,7 @@
 // Generated Code - Do not Edit!
 
 using System.Collections.Immutable;
-using Nighthollow.Delegates.Core;
+using Nighthollow.Delegates2.Core;
 using Nighthollow.Stats;
 using Nighthollow.State;
 
