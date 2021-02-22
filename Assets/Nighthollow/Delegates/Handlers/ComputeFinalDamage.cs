@@ -19,7 +19,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IComputeFinalDamage
+  public interface IComputeFinalDamage : IHandler
   {
     public sealed class Data : QueryData<IComputeFinalDamage, int>
     {

@@ -18,24 +18,26 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IProjectileSkillCouldHit
+  public interface IProjectileSkillCouldHit : IHandler
   {
     public sealed class Data : QueryData<IProjectileSkillCouldHit, bool>
     {
-      public Data(CreatureState self)
+      public Data(CreatureState self, SkillData skill)
       {
         Self = self;
+        Skill = skill;
       }
 
       public override bool Invoke(DelegateContext c, IProjectileSkillCouldHit handler) =>
         handler.ProjectileSkillCouldHit(c, this);
 
       public CreatureState Self { get; }
+      public SkillData Skill { get; }
     }
 
     /// <summary>
-    ///   Called to check if a projectile fired by this creature would currently hit a target. Will be true if
-    ///   any delegate returns a true value.
+    /// Called to check if a projectile fired by this creature would currently hit a target. Will be true if
+    /// any delegate returns a true value.
     /// </summary>
     bool ProjectileSkillCouldHit(DelegateContext c, Data d);
   }

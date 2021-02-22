@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Stats;
+
 #nullable enable
 
 namespace Nighthollow.Delegates
 {
   public abstract class AbstractDelegate
   {
-
+    public virtual string Describe(IStatDescriptionProvider provider) => "<Delegate>";
   }
 }

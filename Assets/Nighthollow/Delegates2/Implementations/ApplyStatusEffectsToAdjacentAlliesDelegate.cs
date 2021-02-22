@@ -14,6 +14,7 @@
 
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates2.Core;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 
 #nullable enable

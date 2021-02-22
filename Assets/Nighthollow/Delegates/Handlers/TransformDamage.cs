@@ -19,7 +19,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface ITransformDamage
+  public interface ITransformDamage : IHandler
   {
     public sealed class Data : IteratedQueryData<ITransformDamage, ImmutableDictionary<DamageType, int>>
     {
@@ -43,7 +43,7 @@ namespace Nighthollow.Delegates.Handlers
 
     /// <summary>
     /// Given the base damage returned from <see cref="IRollForBaseDamage" />, delegates can transform the damage value
-    /// before it is passed to <see cref="ComputeFinalDamage" />. Each delegate's implementation of this method will be
+    /// before it is passed to <see cref="IComputeFinalDamage" />. Each delegate's implementation of this method will be
     /// invoked in sequence with the return value of the previous delegate.
     /// </summary>
     ImmutableDictionary<DamageType, int> TransformDamage(

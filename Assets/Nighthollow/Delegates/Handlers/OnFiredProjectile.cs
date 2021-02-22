@@ -24,9 +24,10 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : EventData<IOnFiredProjectile>
     {
-      public Data(CreatureState self, FireProjectileEffect effect)
+      public Data(CreatureState self, SkillData skill, FireProjectileEffect effect)
       {
         Self = self;
+        Skill = skill;
         Effect = effect;
       }
 
@@ -34,6 +35,7 @@ namespace Nighthollow.Delegates.Handlers
         handler.OnFiredProjectile(c, this);
 
       public CreatureState Self { get; }
+      public SkillData Skill { get; }
       public FireProjectileEffect Effect { get; }
     }
 

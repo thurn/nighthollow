@@ -19,7 +19,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IRollForBaseDamage
+  public interface IRollForBaseDamage : IHandler
   {
     public sealed class Data : QueryData<IRollForBaseDamage, ImmutableDictionary<DamageType, int>>
     {

@@ -14,6 +14,7 @@
 
 using System.Collections.Immutable;
 using System.Linq;
+using Nighthollow.Components;
 using Nighthollow.Delegates2.Core;
 using Nighthollow.State;
 using Nighthollow.Stats;
@@ -64,24 +65,31 @@ namespace Nighthollow.Data
   public sealed partial class CreatureState : StatEntity
   {
     public CreatureState(
+      Creature creature,
       CreatureData data,
       CreatureAnimation animation,
       RankValue? rankPosition,
       FileValue? filePosition,
-      SkillData? currentSkill)
+      SkillData? currentSkill,
+      PlayerName owner)
     {
+      Creature = creature;
       Data = data;
       Animation = animation;
       RankPosition = rankPosition;
       FilePosition = filePosition;
       CurrentSkill = currentSkill;
+      Creature = creature;
+      Owner = owner;
     }
 
+    [Field] public Creature Creature { get; }
     [Field] public CreatureData Data { get; }
     [Field] public override StatTable Stats => Data.Stats;
     [Field] public CreatureAnimation Animation { get; }
     [Field] public RankValue? RankPosition { get; }
     [Field] public FileValue? FilePosition { get; }
     [Field] public SkillData? CurrentSkill { get; }
+    [Field] public PlayerName Owner { get; }
   }
 }

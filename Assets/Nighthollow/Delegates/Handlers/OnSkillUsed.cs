@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
-using Nighthollow.Delegates.Effects;
 
 #nullable enable
 
@@ -38,9 +37,9 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>
-    ///   Called when a skill's initial animation reaches its impact frame. The default implementation handles firing a
-    ///   projectile for projectile skills. For non-projectile skills, this will be called immediately before the
-    ///   <see cref="IOnSkillImpact" /> event.
+    /// Called when a skill's initial animation reaches its impact frame. The default implementation handles firing a
+    /// projectile for projectile skills. For non-projectile skills, this will be called immediately before the
+    /// <see cref="IOnSkillImpact" /> event.
     /// </summary>
     IEnumerable<Effect> OnSkillUsed(DelegateContext c, Data d);
   }

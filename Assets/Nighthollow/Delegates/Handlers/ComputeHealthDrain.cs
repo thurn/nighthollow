@@ -18,7 +18,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IComputeHealthDrain
+  public interface IComputeHealthDrain : IHandler
   {
     public sealed class Data : QueryData<IComputeHealthDrain, int>
     {

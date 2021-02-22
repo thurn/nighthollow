@@ -13,23 +13,28 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
 
 #nullable enable
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class InfluenceAddedDelegate : AbstractDelegate, IOnCreatureActivated
+  public sealed class ApplyStatusEffectsToAdjacentAlliesDelegate : AbstractDelegate, IOnSkillUsed
   {
-    public override string Describe(IStatDescriptionProvider provider) => "+1 Influence";
+    public override string Describe(IStatDescriptionProvider provider) => "Buffs Adjacent Allies With:";
 
-    public IEnumerable<Effect> OnCreatureActivated(DelegateContext c, IOnCreatureActivated.Data d)
+    public IEnumerable<Effect> OnSkillUsed(DelegateContext c, IOnSkillUsed.Data d)
     {
-      yield return new ApplyModifierToOwnerEffect(
-        d.Self.Creature,
-        Stat.Influence.Add(d.Self.Data.ItemData.School, 1).WithLifetime(new WhileAliveLifetime(d.Self.Creature)));
+      var adjacent = c.Registry.CreatureService.GetAdjacentUserCreatures(
+        Errors.CheckNotNull(d.Self.RankPosition), Errors.CheckNotNull(d.Self.FilePosition));
+      return (
+        from target in adjacent
+        from statusEffect in d.Skill.ItemData.StatusEffects
+        select new ApplyStatusEffectEffect(target, statusEffect));
     }
   }
 }

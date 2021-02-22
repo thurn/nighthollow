@@ -18,7 +18,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IRollForStun
+  public interface IRollForStun : IHandler
   {
     public sealed class Data : QueryData<IRollForStun, bool>
     {
@@ -40,7 +40,7 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>
-    /// Should roll a random number to determine if a hit from this creature for DamageMount damage should stun the
+    /// Should roll a random number to determine if a hit from this creature for DamageAmount damage should stun the
     /// target
     /// </summary>
     bool RollForStun(DelegateContext c, Data d);

@@ -20,7 +20,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IFindTargets
+  public interface IFindTargets : IHandler
   {
     public sealed class Data : QueryData<IFindTargets, IEnumerable<Creature>>
     {
@@ -40,7 +40,7 @@ namespace Nighthollow.Delegates.Handlers
     /// <summary>
     ///   Returns the creatures to target for this skill. Normally this is invoked by the default skill delegate's
     ///   <see cref="IOnSkillImpact" /> implementation. Default implementation uses @<see cref="IGetCollider" /> to find all
-    ///   creatures in the impact area and then adds targets returned by <see cref="FilterTargets" />.
+    ///   creatures in the impact area and then adds targets returned by <see cref="IFilterTargets" />.
     /// </summary>
     IEnumerable<Creature> FindTargets(DelegateContext c, Data d);
   }

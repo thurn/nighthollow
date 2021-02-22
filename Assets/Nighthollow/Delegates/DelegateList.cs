@@ -14,7 +14,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Nighthollow.Delegates.Effects;
+using System.Linq;
 
 #nullable enable
 
@@ -23,74 +23,66 @@ namespace Nighthollow.Delegates
   public sealed class DelegateList
   {
     readonly ImmutableList<AbstractDelegate> _delegates;
+    readonly DelegateList? _parent;
 
-    public DelegateList(ImmutableList<AbstractDelegate> delegates)
+    public DelegateList(ImmutableList<AbstractDelegate> delegates, DelegateList? parent)
     {
       _delegates = delegates;
+      _parent = parent;
     }
 
     public IEnumerable<Effect> Invoke<THandler>(DelegateContext c, EventData<THandler> eventData)
-      where THandler : IHandler
-    {
-      foreach (var handler in _delegates)
-      {
-        if (handler is THandler h)
-        {
-          foreach (var effect in eventData.Invoke(c, h))
-          {
-            yield return effect;
-          }
-        }
-      }
-    }
+      where THandler : IHandler =>
+      AllHandlers<THandler>().SelectMany(handler => eventData.Invoke(c, handler));
 
-    public TResult QueryFirst<THandler, TResult>(
+    public TResult First<THandler, TResult>(
       DelegateContext c,
       QueryData<THandler, TResult> queryData,
       TResult notFound) where THandler : IHandler
     {
-      foreach (var handler in _delegates)
+      foreach (var handler in AllHandlers<THandler>())
       {
-        if (handler is THandler h)
-        {
-          return queryData.Invoke(c, h);
-        }
+        return queryData.Invoke(c, handler);
       }
 
       return notFound;
     }
 
-    public bool Any<THandler>(DelegateContext c, QueryData<THandler, bool> queryData) where THandler : IHandler
+    public TResult? FirstNonNull<THandler, TResult>(
+      DelegateContext c,
+      QueryData<THandler, TResult> queryData) where THandler : IHandler where TResult : class
     {
-      foreach (var handler in _delegates)
-      {
-        if (handler is THandler h)
-        {
-          if (queryData.Invoke(c, h))
-          {
-            return true;
-          }
-        }
-      }
-
-      return false;
+      return AllHandlers<THandler>()
+        .Select(handler => queryData.Invoke(c, handler))
+        .FirstOrDefault(result => result != null);
     }
+
+    public bool Any<THandler>(DelegateContext c, QueryData<THandler, bool> queryData) where THandler : IHandler =>
+      AllHandlers<THandler>().Any(handler => queryData.Invoke(c, handler));
 
     public TResult Iterate<THandler, TResult>(
       DelegateContext c,
       IteratedQueryData<THandler, TResult> queryData,
-      TResult initialValue) where THandler : IHandler
+      TResult initialValue) where THandler : IHandler =>
+      AllHandlers<THandler>().Aggregate(initialValue, (current, handler) => queryData.Invoke(c, handler, current));
+
+    IEnumerable<THandler> AllHandlers<THandler>() where THandler : IHandler
     {
-      var result = initialValue;
       foreach (var handler in _delegates)
       {
         if (handler is THandler h)
         {
-          result = queryData.Invoke(c, h, result);
+          yield return h;
         }
       }
 
-      return result;
+      if (_parent != null)
+      {
+        foreach (var handler in _parent.AllHandlers<THandler>())
+        {
+          yield return handler;
+        }
+      }
     }
   }
 }

@@ -12,25 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Components;
+
+using System.Collections.Generic;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Delegates2.Core;
+using Nighthollow.Delegates.Handlers;
 using Nighthollow.Stats;
 
 #nullable enable
 
-namespace Nighthollow.Delegates2.Implementations
+namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class ApplyStatusEffectsOnHitDelegate : AbstractDelegate
+  public sealed class KnockbackOnHitDelegate : AbstractDelegate, IOnHitTarget
   {
-    public override string Describe(IStatDescriptionProvider provider) => "Curses Enemies on Hit With:";
+    public override string Describe(IStatDescriptionProvider provider) =>
+      $"Knocks Back Targets for {provider.Get(Stat.KnockbackDuration)} on Hit";
 
-    public override void OnApplyToTarget(SkillContext c, Creature target)
+    public IEnumerable<Effect> OnHitTarget(DelegateContext c, IOnHitTarget.Data d)
     {
-      foreach (var statusEffect in c.Skill.ItemData.StatusEffects)
-      {
-        c.Results.Add(new ApplyStatusEffectEffect(target, statusEffect));
-      }
+      var duration = d.Skill.GetDurationSeconds(Stat.KnockbackDuration);
+      yield return new KnockbackEffect(
+        d.Target.Creature,
+        d.Skill.Get(Stat.KnockbackDistanceMultiplier).AsMultiplier() * duration,
+        duration);
     }
   }
 }

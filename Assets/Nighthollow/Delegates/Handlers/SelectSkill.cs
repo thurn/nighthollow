@@ -18,7 +18,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface ISelectSkill
+  public interface ISelectSkill : IHandler
   {
     public sealed class Data : QueryData<ISelectSkill, SkillData?>
     {

@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
-using Nighthollow.Delegates.Effects;
 
 #nullable enable
 

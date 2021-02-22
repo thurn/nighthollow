@@ -19,7 +19,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IApplyDamageReduction
+  public interface IApplyDamageReduction : IHandler
   {
     public sealed class Data : QueryData<IApplyDamageReduction, ImmutableDictionary<DamageType, int>>
     {
@@ -42,7 +42,7 @@ namespace Nighthollow.Delegates.Handlers
 
     /// <summary>
     /// Should apply damage reduction for this skill, reducing the damage value based on the target's reduction.
-    /// Typically called by <see cref="ComputeFinalDamage" />.
+    /// Typically called by <see cref="IComputeFinalDamage" />.
     /// </summary>
     ImmutableDictionary<DamageType, int> ApplyDamageReduction(DelegateContext c, Data d);
   }

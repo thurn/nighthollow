@@ -12,33 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+using System.Collections.Generic;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Delegates2.Core;
+using Nighthollow.Delegates.Handlers;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Delegates2.Implementations
+namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class SummonMinionsDelegate : AbstractDelegate
+  public sealed class SummonMinionsDelegate : AbstractDelegate, IOnSkillUsed
   {
     public override string Describe(IStatDescriptionProvider provider) => "Summons Minions";
 
-    public override void OnUse(SkillContext c)
+    public IEnumerable<Effect> OnSkillUsed(DelegateContext c, IOnSkillUsed.Data d)
     {
+      var filePosition = Errors.CheckNotNull(d.Self.FilePosition);
       var rank = c.Registry.CreatureService.GetOpenForwardRank(
-        Errors.CheckNotNull(c.Self.RankPosition), c.Self.FilePosition);
+        Errors.CheckNotNull(d.Self.RankPosition), filePosition);
       if (rank.HasValue)
       {
-        var summon = c.Skill.ItemData.Summons[Random.Range(0, c.Skill.ItemData.Summons.Count)];
-        c.Results.Add(new CreateCreatureEffect(
+        var summon = d.Skill.ItemData.Summons[Random.Range(0, d.Skill.ItemData.Summons.Count)];
+        yield return new CreateCreatureEffect(
           summon,
           rank.Value,
-          c.Self.FilePosition,
-          isMoving: true));
+          filePosition,
+          isMoving: true);
       }
     }
   }

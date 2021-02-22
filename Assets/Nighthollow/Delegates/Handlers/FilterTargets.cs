@@ -20,7 +20,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IFilterTargets
+  public interface IFilterTargets : IHandler
   {
     public sealed class Data : QueryData<IFilterTargets, IEnumerable<Creature>>
     {

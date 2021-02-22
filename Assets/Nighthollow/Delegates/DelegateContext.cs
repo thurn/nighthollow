@@ -12,11 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Services;
+
 #nullable enable
 
 namespace Nighthollow.Delegates
 {
   public sealed class DelegateContext
   {
+    public DelegateContext(GameServiceRegistry registry, int delegateIndex)
+    {
+      Registry = registry;
+      DelegateIndex = delegateIndex;
+    }
+
+    public GameServiceRegistry Registry { get; }
+    public int DelegateIndex { get; }
   }
 }

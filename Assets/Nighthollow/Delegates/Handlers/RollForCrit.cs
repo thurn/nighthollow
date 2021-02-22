@@ -18,7 +18,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IRollForCrit
+  public interface IRollForCrit : IHandler
   {
     public sealed class Data : QueryData<IRollForCrit, bool>
     {

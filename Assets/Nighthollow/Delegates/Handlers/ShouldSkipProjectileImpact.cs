@@ -12,20 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Components;
 using Nighthollow.Data;
 
 #nullable enable
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IShouldSkipProjectileImpact
+  public interface IShouldSkipProjectileImpact : IHandler
   {
     public sealed class Data : QueryData<IShouldSkipProjectileImpact, bool>
     {
-      public Data(CreatureState self, SkillData skill)
+      public Data(CreatureState self, SkillData skill, Projectile? projectile)
       {
         Self = self;
         Skill = skill;
+        Projectile = projectile;
       }
 
       public override bool Invoke(DelegateContext c, IShouldSkipProjectileImpact handler) =>
@@ -33,6 +35,7 @@ namespace Nighthollow.Delegates.Handlers
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
+      public Projectile? Projectile { get; }
     }
 
     /// <summary>

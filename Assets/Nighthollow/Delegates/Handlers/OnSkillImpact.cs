@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
-using Nighthollow.Delegates.Effects;
 
 #nullable enable
 
@@ -38,7 +37,7 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>
-    ///   Called to apply the effect of a skill on a melee hit or projectile impact.
+    /// Called to apply the effect of a skill on a melee hit or projectile impact.
     /// </summary>
     IEnumerable<Effect> OnSkillImpact(DelegateContext c, Data d);
   }

@@ -12,25 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Components;
-using Nighthollow.Delegates.Effects;
-using Nighthollow.Delegates2.Core;
-using Nighthollow.Stats;
-
 #nullable enable
 
-namespace Nighthollow.Delegates2.Implementations
+namespace Nighthollow.Stats
 {
-  public sealed class ApplyStatusEffectsOnHitDelegate : AbstractDelegate
+  public interface IStatDescriptionProvider
   {
-    public override string Describe(IStatDescriptionProvider provider) => "Curses Enemies on Hit With:";
-
-    public override void OnApplyToTarget(SkillContext c, Creature target)
-    {
-      foreach (var statusEffect in c.Skill.ItemData.StatusEffects)
-      {
-        c.Results.Add(new ApplyStatusEffectEffect(target, statusEffect));
-      }
-    }
+    string Get<TModifier, TValue>(AbstractStat<TModifier, TValue> stat)
+      where TModifier : IStatModifier where TValue : notnull;
   }
 }

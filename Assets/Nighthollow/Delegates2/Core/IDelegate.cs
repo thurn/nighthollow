@@ -24,12 +24,6 @@ using UnityEngine;
 
 namespace Nighthollow.Delegates2.Core
 {
-  public interface IStatDescriptionProvider
-  {
-    string Get<TModifier, TValue>(AbstractStat<TModifier, TValue> stat)
-      where TModifier : IStatModifier where TValue : notnull;
-  }
-
   public interface IDelegate
   {
     string? Describe(IStatDescriptionProvider provider);

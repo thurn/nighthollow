@@ -19,7 +19,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IApplyDamageResistance
+  public interface IApplyDamageResistance : IHandler
   {
     public sealed class Data : QueryData<IApplyDamageResistance, ImmutableDictionary<DamageType, int>>
     {
@@ -42,7 +42,7 @@ namespace Nighthollow.Delegates.Handlers
 
     /// <summary>
     /// Should apply damage resistance for this skill, reducing the damage value based on the target's resistance.
-    /// Typically called by <see cref="ComputeFinalDamage" />.
+    /// Typically called by <see cref="IComputeFinalDamage" />.
     /// </summary>
     ImmutableDictionary<DamageType, int> ApplyDamageResistance(DelegateContext c, Data d);
   }

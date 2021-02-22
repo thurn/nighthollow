@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using Nighthollow.Components;
 using Nighthollow.Data;
-using Nighthollow.Delegates.Effects;
 
 #nullable enable
 
@@ -24,19 +24,23 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : EventData<IOnHitTarget>
     {
-      public Data(CreatureState self, CreatureState target, int damage)
+      public Data(CreatureState self, SkillData skill, CreatureState target, int damage, Projectile? projectile)
       {
         Self = self;
+        Skill = skill;
         Target = target;
         Damage = damage;
+        Projectile = projectile;
       }
 
       public override IEnumerable<Effect> Invoke(DelegateContext c, IOnHitTarget handler) =>
         handler.OnHitTarget(c, this);
 
       public CreatureState Self { get; }
+      public SkillData Skill { get; }
       public CreatureState Target { get; }
       public int Damage { get; }
+      public Projectile? Projectile { get; }
     }
 
     /// <summary>Called after one of the creature's skills has hit a target.</summary>

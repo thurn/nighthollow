@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IGetCollider
+  public interface IGetCollider : IHandler
   {
     public sealed class Data : QueryData<IGetCollider, Collider2D>
     {

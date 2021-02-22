@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
-using Nighthollow.Delegates.Effects;
 
 #nullable enable
 
@@ -24,10 +23,11 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : EventData<IOnApplySkillToTarget>
     {
-      public Data(CreatureState self, SkillData skill)
+      public Data(CreatureState self, SkillData skill, CreatureState target)
       {
         Self = self;
         Skill = skill;
+        Target = target;
       }
 
       public override IEnumerable<Effect> Invoke(DelegateContext c, IOnApplySkillToTarget handler) =>
@@ -35,6 +35,7 @@ namespace Nighthollow.Delegates.Handlers
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
+      public CreatureState Target { get; }
     }
 
     /// <summary>
@@ -42,7 +43,7 @@ namespace Nighthollow.Delegates.Handlers
     /// </summary>
     ///
     /// Normally this is invoked by the default skill delegate's <see cref="IOnSkillImpact" /> implementation for each target
-    /// returned from <see cref="FindTargets" /> for a skill. The default implementation implements the standard
+    /// returned from <see cref="IFindTargets" /> for a skill. The default implementation implements the standard
     /// algorithm for applying the skill's BaseDamage, including things like checking for hit, checking for critical
     /// hit, applying damage, applying health drain, and applying stun.
     IEnumerable<Effect> OnApplySkillToTarget(DelegateContext c, Data d);

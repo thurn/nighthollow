@@ -36,7 +36,6 @@ namespace Nighthollow.Delegates2.Core
     AddedDamageOnRepeatedHitsDelegate = 11,
     ApplyStatusEffectsOnHitDelegate = 12,
     ChainToRandomTargetDelegate = 13,
-    ChanceToShockDelegate = 14,
     ApplyStatusEffectsToAdjacentAlliesDelegate = 15
   }
 
@@ -57,7 +56,6 @@ namespace Nighthollow.Delegates2.Core
       {DelegateId.AddedDamageOnRepeatedHitsDelegate, new AddedDamageOnRepeatedHitsDelegate()},
       {DelegateId.ApplyStatusEffectsOnHitDelegate, new ApplyStatusEffectsOnHitDelegate()},
       {DelegateId.ChainToRandomTargetDelegate, new ChainToRandomTargetDelegate()},
-      {DelegateId.ChanceToShockDelegate, new ChanceToShockDelegate()},
       {DelegateId.ApplyStatusEffectsToAdjacentAlliesDelegate, new ApplyStatusEffectsToAdjacentAlliesDelegate()}
     };
 

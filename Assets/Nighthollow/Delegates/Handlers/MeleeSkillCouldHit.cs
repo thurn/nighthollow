@@ -18,7 +18,7 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Delegates.Handlers
 {
-  public interface IMeleeSkillCouldHit
+  public interface IMeleeSkillCouldHit : IHandler
   {
     public sealed class Data : QueryData<IMeleeSkillCouldHit, bool>
     {
@@ -34,8 +34,8 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>
-    ///   Should check if the creature could currently hit with a melee skill. Will be true if any delegate returns
-    ///   a true value.
+    /// Should check if the creature could currently hit with a melee skill. Will be true if any delegate returns
+    /// a true value.
     /// </summary>
     bool MeleeSkillCouldHit(DelegateContext c, Data d);
   }

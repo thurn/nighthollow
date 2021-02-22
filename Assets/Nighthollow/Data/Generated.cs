@@ -1,6 +1,7 @@
 // Generated Code - Do not Edit!
 
 using System.Collections.Immutable;
+using Nighthollow.Components;
 using Nighthollow.Delegates2.Core;
 using Nighthollow.Stats;
 using Nighthollow.State;
@@ -1316,55 +1317,89 @@ namespace Nighthollow.Data
 
   public sealed partial class CreatureState
   {
+    public CreatureState WithCreature(Creature creature) =>
+      Equals(creature, Creature)
+        ? this
+        : new CreatureState(
+          creature,
+          Data,
+          Animation,
+          RankPosition,
+          FilePosition,
+          CurrentSkill,
+          Owner);
+
     public CreatureState WithData(CreatureData data) =>
       Equals(data, Data)
         ? this
         : new CreatureState(
+          Creature,
           data,
           Animation,
           RankPosition,
           FilePosition,
-          CurrentSkill);
+          CurrentSkill,
+          Owner);
 
     public CreatureState WithAnimation(CreatureAnimation animation) =>
       Equals(animation, Animation)
         ? this
         : new CreatureState(
+          Creature,
           Data,
           animation,
           RankPosition,
           FilePosition,
-          CurrentSkill);
+          CurrentSkill,
+          Owner);
 
     public CreatureState WithRankPosition(RankValue? rankPosition) =>
       Equals(rankPosition, RankPosition)
         ? this
         : new CreatureState(
+          Creature,
           Data,
           Animation,
           rankPosition,
           FilePosition,
-          CurrentSkill);
+          CurrentSkill,
+          Owner);
 
     public CreatureState WithFilePosition(FileValue? filePosition) =>
       Equals(filePosition, FilePosition)
         ? this
         : new CreatureState(
+          Creature,
           Data,
           Animation,
           RankPosition,
           filePosition,
-          CurrentSkill);
+          CurrentSkill,
+          Owner);
 
     public CreatureState WithCurrentSkill(SkillData? currentSkill) =>
       Equals(currentSkill, CurrentSkill)
         ? this
         : new CreatureState(
+          Creature,
           Data,
           Animation,
           RankPosition,
           FilePosition,
-          currentSkill);
+          currentSkill,
+          Owner);
+
+    public CreatureState WithOwner(PlayerName owner) =>
+      Equals(owner, Owner)
+        ? this
+        : new CreatureState(
+          Creature,
+          Data,
+          Animation,
+          RankPosition,
+          FilePosition,
+          CurrentSkill,
+          owner);
 
   }
 
