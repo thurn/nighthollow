@@ -15,7 +15,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
-using Nighthollow.Delegates2.Core;
+using Nighthollow.Delegates;
 using Nighthollow.Services;
 using Nighthollow.Stats;
 
@@ -56,7 +56,11 @@ namespace Nighthollow.Data
 
     public override string ToString() => Name;
 
-    public SkillData BuildSkill(GameServiceRegistry registry, GameData gameData, StatTable parentStatTable)
+    public SkillData BuildSkill(
+      GameServiceRegistry registry,
+      GameData gameData,
+      StatTable parentStatTable,
+      DelegateList parentDelegateList)
     {
       var baseType = gameData.SkillTypes[SkillTypeId];
       var statTable = new StatTable(parentStatTable)
@@ -70,7 +74,9 @@ namespace Nighthollow.Data
         Affixes.SelectMany(a => a.Modifiers).Concat(ImplicitModifiers));
 
       return new SkillData(
-        new SkillDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList(), registry),
+        new DelegateList(delegates.Append(DelegateId.DefaultSkillDelegate)
+          .Select(DelegateMap.Get)
+          .ToImmutableList(), parentDelegateList),
         stats,
         SkillTypeId,
         baseType,
@@ -78,11 +84,11 @@ namespace Nighthollow.Data
     }
 
     public static SkillData BasicMeleeAttack(
-      GameServiceRegistry services, GameData gameData, StatTable parentStatTable) =>
+      GameServiceRegistry services, GameData gameData, StatTable parentStatTable, DelegateList parentDelegateList) =>
       new SkillItemData(
         SkillTypeData.BasicMeleeAttackId,
         ImmutableList<AffixData>.Empty,
         ImmutableList<ModifierData>.Empty,
-        "Basic Melee Attack").BuildSkill(services, gameData, parentStatTable);
+        "Basic Melee Attack").BuildSkill(services, gameData, parentStatTable, parentDelegateList);
   }
 }

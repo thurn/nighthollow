@@ -37,7 +37,7 @@ namespace Nighthollow.Delegates.Implementations
         // We skip impact for the projectile for creatures which have already been hit by a chaining projectile
       {
         /* TODO: NewDelegate */
-        var targets = d.Skill.NewDelegate.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill));
+        var targets = d.Skill.NewDelegate.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
         return !(
           (targets ?? Enumerable.Empty<Creature>())
           .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
@@ -50,8 +50,8 @@ namespace Nighthollow.Delegates.Implementations
     public IEnumerable<Effect> OnHitTarget(DelegateContext c, IOnHitTarget.Data d)
     {
       Errors.CheckPositive(d.Skill.GetInt(Stat.ProjectileChainCount));
-      if (d.Skill.Projectile &&
-          d.Skill.Projectile!.KeyValueStore.Get(Key.TimesChained) < d.Skill.GetInt(Stat.MaxProjectileTimesChained))
+      if (d.Projectile &&
+          d.Projectile!.KeyValueStore.Get(Key.TimesChained) < d.Skill.GetInt(Stat.MaxProjectileTimesChained))
       {
         // TODO: This works, but it probably shouldn't...
         var chainCount = d.Skill.GetInt(Stat.ProjectileChainCount);
@@ -60,14 +60,14 @@ namespace Nighthollow.Delegates.Implementations
         {
           var direction = Quaternion.AngleAxis(
             Mathf.Lerp(a: 0f, b: 360f, (i + add) / (chainCount + add)),
-            Vector3.forward) * d.Skill.Projectile.transform.forward;
+            Vector3.forward) * d.Projectile.transform.forward;
           yield return new FireProjectileEffect(
-            d.Self.Creature,
-            null! /* TODO: SkillContext */,
+            d.Self,
+            d.Skill,
             c.DelegateIndex,
-            d.Skill.Projectile.transform.position,
+            d.Projectile.transform.position,
             direction,
-            values: d.Skill.Projectile.KeyValueStore
+            values: d.Projectile.KeyValueStore
               .Increment(Key.TimesChained)
               .Append(Key.SkipProjectileImpacts, d.Target.Creature));
         }

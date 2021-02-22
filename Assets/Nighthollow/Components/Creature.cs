@@ -16,13 +16,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
-using Nighthollow.Delegates2.Core;
+using Nighthollow.Delegates;
+using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
+using DelegateContext = Nighthollow.Delegates.DelegateContext;
 using Random = UnityEngine.Random;
 
 #nullable enable
@@ -62,7 +64,7 @@ namespace Nighthollow.Components
 
     readonly Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
     Coroutine _coroutine = null!;
-    SkillData _currentSkill = null!;
+    SkillData? _currentSkill;
     CreatureData _data = null!;
     GameServiceRegistry _registry = null!;
 
@@ -83,7 +85,7 @@ namespace Nighthollow.Components
 
     public Collider2D Collider => _collider;
 
-    public SkillData CurrentSkill => _currentSkill;
+    public SkillData? CurrentSkill => _currentSkill;
 
     public CreatureAnimation State => _state;
 
@@ -186,6 +188,17 @@ namespace Nighthollow.Components
       _attachmentDisplay.SetStatusEffects(_registry, _data.Stats.StatusEffects);
     }
 
+    void Invoke<THandler>(EventData<THandler> data) where THandler : IHandler
+    {
+      var effects = _currentSkill != null
+        ? _currentSkill.NewDelegate.Invoke(CreateContext(), data)
+        : _data.NewDelegate.Invoke(CreateContext(), data);
+      foreach (var effect in effects)
+      {
+        effect.Execute(_registry);
+      }
+    }
+
     public void EditorSetReferences(Transform projectileSource,
       Transform healthbarAnchor,
       AttachmentDisplay attachmentDisplay)
@@ -219,7 +232,7 @@ namespace Nighthollow.Components
 
       ToDefaultState();
 
-      _data.Delegate.OnActivate(CreateContext());
+      Invoke(new IOnCreatureActivated.Data(AsCreatureState()));
       Root.Instance.HelperTextService.OnCreaturePlayed();
 
       _coroutine = StartCoroutine(RunCoroutine());
@@ -240,15 +253,13 @@ namespace Nighthollow.Components
       _data = _data.WithKeyValueStore(mutation.Mutate(_data.KeyValueStore));
     }
 
-    CreatureContext CreateContext() => new CreatureContext(this, _registry);
-
-    SkillContext CurrentSkillContext() => new SkillContext(this, _currentSkill, _registry);
+    DelegateContext CreateContext() => new DelegateContext(_registry);
 
     void TryToUseSkill()
     {
       Errors.CheckState(CanUseSkill(), "Cannot use skill");
 
-      var skill = _data.Delegate.SelectSkill(CreateContext());
+      var skill = _data.NewDelegate.FirstNonNull(CreateContext(), new ISelectSkill.Data(AsCreatureState()));
       if (skill != null)
       {
         SetState(CreatureAnimation.UsingSkill);
@@ -277,7 +288,7 @@ namespace Nighthollow.Components
             throw Errors.UnknownEnumValue(skillAnimation);
         }
 
-        _currentSkill.Delegate.OnStart(CurrentSkillContext());
+        Invoke(new IOnSkillStarted.Data(AsCreatureState(), _currentSkill));
       }
       else
       {
@@ -307,7 +318,7 @@ namespace Nighthollow.Components
       _animator.SetTrigger(Death);
       _collider.enabled = false;
 
-      Data.Delegate.OnDeath(CreateContext());
+      Invoke(new IOnCreatureDeath.Data(AsCreatureState()));
 
       SetState(CreatureAnimation.Dying);
       _creatureService.RemoveCreature(this);
@@ -319,19 +330,21 @@ namespace Nighthollow.Components
       Destroy(_statusBars.gameObject);
     }
 
+    public void OnImpact(IOnSkillImpact.Data data) => Invoke(data);
+
     // Called by skill animations on their 'start impact' frame
     public void AttackStart()
     {
-      if (!IsAlive())
+      if (!IsAlive() || _currentSkill == null)
       {
         return;
       }
 
-      _currentSkill.Delegate.OnUse(CurrentSkillContext());
+      Invoke(new IOnSkillUsed.Data(AsCreatureState(), _currentSkill));
 
       if (_currentSkill.IsMelee())
       {
-        _currentSkill.Delegate.OnImpact(CurrentSkillContext());
+        Invoke(new IOnSkillImpact.Data(AsCreatureState(), _currentSkill, projectile: null));
       }
     }
 
@@ -342,7 +355,7 @@ namespace Nighthollow.Components
       _damageTaken = Mathf.Clamp(value: 0, _damageTaken + damage, health);
       if (_damageTaken >= health)
       {
-        appliedBy.Data.Delegate.OnKilledEnemy(new CreatureContext(appliedBy, _registry), this, damage);
+        appliedBy.Invoke(new IOnKilledEnemy.Data(appliedBy.AsCreatureState()));
         Kill();
       }
     }

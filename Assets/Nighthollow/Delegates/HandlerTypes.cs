@@ -13,15 +13,21 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
 
 #nullable enable
 
 namespace Nighthollow.Delegates
 {
-  public abstract class EventData<THandler>
+  public interface IEventData
+  {
+    IEnumerable<Effect> Raise(DelegateContext c, DelegateList delegateList);
+  }
+
+  public abstract class EventData<THandler> : IEventData where THandler : IHandler
   {
     public abstract IEnumerable<Effect> Invoke(DelegateContext c, THandler handler);
+
+    public IEnumerable<Effect> Raise(DelegateContext c, DelegateList delegateList) => delegateList.Invoke(c, this);
   }
 
   public abstract class QueryData<THandler, TResult>

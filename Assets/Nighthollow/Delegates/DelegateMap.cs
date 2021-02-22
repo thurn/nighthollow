@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using System.Collections.Generic;
-using Nighthollow.Delegates2.Implementations;
+using Nighthollow.Delegates.Implementations;
 
 #nullable enable
 
-namespace Nighthollow.Delegates2.Core
+namespace Nighthollow.Delegates
 {
   public enum DelegateId
   {
@@ -41,7 +40,7 @@ namespace Nighthollow.Delegates2.Core
 
   public static class DelegateMap
   {
-    static readonly Dictionary<DelegateId, IDelegate> Delegates = new Dictionary<DelegateId, IDelegate>
+    static readonly Dictionary<DelegateId, AbstractDelegate> Delegates = new Dictionary<DelegateId, AbstractDelegate>
     {
       {DelegateId.DefaultCreatureDelegate, new DefaultCreatureDelegate()},
       {DelegateId.DefaultSkillDelegate, new DefaultSkillDelegate()},
@@ -59,6 +58,6 @@ namespace Nighthollow.Delegates2.Core
       {DelegateId.ApplyStatusEffectsToAdjacentAlliesDelegate, new ApplyStatusEffectsToAdjacentAlliesDelegate()}
     };
 
-    public static IDelegate Get(DelegateId id) => Delegates[id];
+    public static AbstractDelegate Get(DelegateId id) => Delegates[id];
   }
 }

@@ -13,6 +13,8 @@
 // limitations under the License.
 
 
+using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Services;
 
 #nullable enable
@@ -24,8 +26,6 @@ namespace Nighthollow.Delegates
     // https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
     public abstract void Execute(GameServiceRegistry registry);
 
-    public virtual void RaiseEvents()
-    {
-    }
+    public virtual IEnumerable<IEventData> Events() => Enumerable.Empty<IEventData>();
   }
 }

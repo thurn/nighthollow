@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using Nighthollow.Services;
 
 #nullable enable
@@ -31,9 +32,9 @@ namespace Nighthollow.Delegates.Effects
     {
     }
 
-    public override void RaiseEvents()
+    public override IEnumerable<IEventData> Events()
     {
-      // TODO: Raise this
+      yield return EventData;
     }
   }
 }

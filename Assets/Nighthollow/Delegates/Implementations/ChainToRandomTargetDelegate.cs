@@ -36,8 +36,7 @@ namespace Nighthollow.Delegates.Implementations
       if (d.Projectile && d.Projectile!.KeyValueStore.Get(Key.TimesChained) > 0)
       {
         // We skip impact for the projectile for creatures which have already been hit by a chaining projectile
-        /* TODO: NewDelegate */
-        var targets = d.Skill.NewDelegate.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill));
+        var targets = d.Skill.NewDelegate.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
         return !(targets ?? Enumerable.Empty<Creature>())
           .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
           .Any();
@@ -48,22 +47,22 @@ namespace Nighthollow.Delegates.Implementations
 
     public IEnumerable<Effect> OnHitTarget(DelegateContext c, IOnHitTarget.Data d)
     {
-      if (d.Skill.Projectile &&
-          d.Skill.Projectile!.KeyValueStore.Get(Key.TimesChained) < d.Skill.GetInt(Stat.MaxProjectileTimesChained))
+      if (d.Projectile &&
+          d.Projectile!.KeyValueStore.Get(Key.TimesChained) < d.Skill.GetInt(Stat.MaxProjectileTimesChained))
       {
         var enemies = Root.Instance.CreatureService.EnemyCreatures()
-          .Except(d.Skill.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
+          .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
           .ToList();
         if (enemies.Count > 0)
         {
           var enemy = enemies[Random.Range(minInclusive: 0, enemies.Count)];
           yield return new FireProjectileEffect(
-            d.Self.Creature,
-            null! /* TODO: SkillContext */,
+            d.Self,
+            d.Skill,
             c.DelegateIndex,
-            d.Skill.Projectile.transform.position,
+            d.Projectile.transform.position,
             trackCreature: enemy,
-            values: d.Skill.Projectile.KeyValueStore
+            values: d.Projectile.KeyValueStore
               .Increment(Key.TimesChained)
               .Append(Key.SkipProjectileImpacts, d.Target.Creature));
         }

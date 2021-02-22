@@ -15,7 +15,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Components;
-using Nighthollow.Delegates2.Core;
+using Nighthollow.Delegates;
 using Nighthollow.State;
 using Nighthollow.Stats;
 
@@ -36,14 +36,14 @@ namespace Nighthollow.Data
   public sealed partial class CreatureData : StatEntity
   {
     public CreatureData(
-      DelegateList @delegate,
+      DelegateList delegateList,
       StatTable stats,
       ImmutableList<SkillData> skills,
       CreatureTypeData baseType,
       CreatureItemData itemData,
       KeyValueStore keyValueStore)
     {
-      Delegate = @delegate;
+      NewDelegate = delegateList;
       Stats = stats;
       Skills = skills;
       BaseType = baseType;
@@ -51,8 +51,7 @@ namespace Nighthollow.Data
       KeyValueStore = keyValueStore;
     }
 
-    [Field] public DelegateList Delegate { get; }
-    [Field] public Delegates.DelegateList NewDelegate { get; }
+    [Field] public DelegateList NewDelegate { get; }
     [Field] public override StatTable Stats { get; }
     [Field] public ImmutableList<SkillData> Skills { get; }
     [Field] public CreatureTypeData BaseType { get; }

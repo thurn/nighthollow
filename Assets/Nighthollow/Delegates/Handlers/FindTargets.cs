@@ -24,10 +24,11 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : QueryData<IFindTargets, IEnumerable<Creature>>
     {
-      public Data(CreatureState self, SkillData skill)
+      public Data(CreatureState self, SkillData skill, Projectile? projectile)
       {
         Self = self;
         Skill = skill;
+        Projectile = projectile;
       }
 
       public override IEnumerable<Creature> Invoke(DelegateContext c, IFindTargets handler) =>
@@ -35,6 +36,7 @@ namespace Nighthollow.Delegates.Handlers
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
+      public Projectile? Projectile { get; }
     }
 
     /// <summary>

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Components;
-using Nighthollow.Delegates2.Core;
+using Nighthollow.Delegates;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -23,26 +23,24 @@ namespace Nighthollow.Data
   public sealed partial class SkillData : StatEntity
   {
     public SkillData(
-      DelegateList @delegate,
+      DelegateList delegateList,
       StatTable stats,
       int baseTypeId,
       SkillTypeData baseType,
       SkillItemData itemData)
     {
-      Delegate = @delegate;
+      NewDelegate = delegateList;
       Stats = stats;
       BaseTypeId = baseTypeId;
       BaseType = baseType;
       ItemData = itemData;
     }
 
-    [Field] public DelegateList Delegate { get; }
-    [Field] public Delegates.DelegateList NewDelegate { get; }
+    [Field] public DelegateList NewDelegate { get; }
     [Field] public override StatTable Stats { get; }
     [Field] public int BaseTypeId { get; }
     [Field] public SkillTypeData BaseType { get; }
     [Field] public SkillItemData ItemData { get; }
-    [Field] public Projectile? Projectile { get; }
 
     public bool IsMelee() => BaseType.SkillType == SkillType.Melee;
 

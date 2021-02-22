@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Delegates2.Implementations;
 using Nighthollow.Services;
 
 #nullable enable
@@ -25,10 +23,11 @@ namespace Nighthollow.Delegates2.Core
   public sealed class CreatureDelegateList : DelegateList
   {
     public CreatureDelegateList(IEnumerable<IDelegate> delegates, GameServiceRegistry registry) :
-      base(delegates.Append(new DefaultCreatureDelegate()).ToList(), registry)
+      base(delegates /*.Append(new DefaultCreatureDelegate())*/.ToList(), registry)
     {
     }
 
-    protected override AbstractDelegateList? GetChild(DelegateContext context) => context.Self.CurrentSkill?.Delegate;
+    protected override AbstractDelegateList? GetChild(DelegateContext context) =>
+      null; //context.Self.CurrentSkill?.Delegate;
   }
 }

@@ -13,8 +13,9 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Delegates;
 using Nighthollow.Delegates.Effects;
-using Nighthollow.Delegates2.Core;
+using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Stats;
@@ -93,8 +94,10 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      var context = new SkillContext(_firedBy, _skillData, _registry, this);
-      if (_firedBy.Data.Delegate.ShouldSkipProjectileImpact(context) == true)
+      if (_firedBy.CurrentSkill!.NewDelegate.First(
+        new DelegateContext(_registry),
+        new IShouldSkipProjectileImpact.Data(_firedBy.AsCreatureState(), _skillData, this),
+        notFound: false))
       {
         if (!_trackCreature || _trackCreature.gameObject != other.gameObject)
           // Tracking projectiles cannot skip their target
@@ -105,7 +108,7 @@ namespace Nighthollow.Components
 
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;
-      _firedBy.Data.Delegate.OnImpact(context);
+      _firedBy.OnImpact(new IOnSkillImpact.Data(_firedBy.AsCreatureState(), _skillData, this));
       gameObject.SetActive(value: false);
     }
 

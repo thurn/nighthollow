@@ -97,7 +97,7 @@ namespace Nighthollow.Delegates2.Core
 
       foreach (var effect in results)
       {
-        effect.RaiseEvents();
+        // effect.RaiseEvents();
       }
     }
 

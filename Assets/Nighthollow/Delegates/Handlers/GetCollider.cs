@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Components;
 using Nighthollow.Data;
 using UnityEngine;
 
@@ -23,10 +24,11 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : QueryData<IGetCollider, Collider2D>
     {
-      public Data(CreatureState self, SkillData skill)
+      public Data(CreatureState self, SkillData skill, Projectile? projectile)
       {
         Self = self;
         Skill = skill;
+        Projectile = projectile;
       }
 
       public override Collider2D Invoke(DelegateContext c, IGetCollider handler) =>
@@ -34,6 +36,7 @@ namespace Nighthollow.Delegates.Handlers
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
+      public Projectile? Projectile { get; }
     }
 
     /// <summary>Returns the collider to use for hit-testing this skill's impact.</summary>

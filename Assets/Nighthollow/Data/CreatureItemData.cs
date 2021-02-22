@@ -16,7 +16,7 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
-using Nighthollow.Delegates2.Core;
+using Nighthollow.Delegates;
 using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Stats;
@@ -85,13 +85,17 @@ namespace Nighthollow.Data
         .InsertModifier(Stat.BaseDamage.Set(BaseDamage.Dictionary));
       var (stats, delegates) = AffixData.ProcessAffixes(statTable,
         Affixes.SelectMany(a => a.Modifiers).Concat(ImplicitModifiers));
+      var delegateList = new DelegateList(delegates
+        .Append(DelegateId.DefaultCreatureDelegate)
+        .Select(DelegateMap.Get)
+        .ToImmutableList(), parent: null);
 
       return new CreatureData(
-        new CreatureDelegateList(delegates.Select(DelegateMap.Get).ToImmutableList(), registry),
+        delegateList: delegateList,
         stats,
-        Skills.Select(s => s.BuildSkill(registry, gameData, stats))
+        Skills.Select(s => s.BuildSkill(registry, gameData, stats, delegateList))
           .AppendIfNotNull(baseType.SkillAnimations.Any(a => a.SkillAnimationType == SkillAnimationType.MeleeSkill)
-            ? SkillItemData.BasicMeleeAttack(registry, gameData, stats)
+            ? SkillItemData.BasicMeleeAttack(registry, gameData, stats, delegateList)
             : null)
           .ToImmutableList(),
         baseType,

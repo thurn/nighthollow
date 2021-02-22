@@ -14,6 +14,7 @@
 
 using System.Collections.Immutable;
 using MessagePack;
+using Nighthollow.Delegates;
 using Nighthollow.Delegates2.Core;
 using Nighthollow.Stats;
 

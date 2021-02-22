@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using Nighthollow.Components;
 using Nighthollow.Data;
 
 #nullable enable
@@ -36,6 +37,7 @@ namespace Nighthollow.Delegates.Handlers
       public CreatureState Self { get; }
       public SkillData Skill { get; }
       public CreatureState Target { get; }
+      public Projectile? Projectile { get; }
     }
 
     /// <summary>

@@ -15,7 +15,8 @@
 
 using System.Collections.Generic;
 using Nighthollow.Components;
-using Nighthollow.Delegates2.Core;
+using Nighthollow.Data;
+using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Utils;
@@ -28,9 +29,9 @@ namespace Nighthollow.Delegates.Effects
   public sealed class FireProjectileEffect : Effect
   {
     public FireProjectileEffect(
-      Creature firedBy,
-      SkillContext skillContext,
-      int index,
+      CreatureState firedBy,
+      SkillData skill,
+      int delegateIndex,
       Vector2 firingPoint,
       Vector2? firingDirectionOffset = null,
       Creature? trackCreature = null,
@@ -38,8 +39,8 @@ namespace Nighthollow.Delegates.Effects
       KeyValueStore? values = null)
     {
       FiredBy = firedBy;
-      SkillContext = skillContext;
-      DelegateIndex = index;
+      Skill = skill;
+      DelegateIndex = delegateIndex;
       FiringPoint = firingPoint;
       FiringDirectionOffset = firingDirectionOffset;
       TrackCreature = trackCreature;
@@ -47,8 +48,8 @@ namespace Nighthollow.Delegates.Effects
       Values = values;
     }
 
-    public Creature FiredBy { get; }
-    public SkillContext SkillContext { get; }
+    public CreatureState FiredBy { get; }
+    public SkillData Skill { get; }
     public int DelegateIndex { get; }
     public Vector2 FiringPoint { get; }
     public Vector2? FiringDirectionOffset { get; }
@@ -58,24 +59,25 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      FiredBy.StartCoroutine(FireAsync(registry));
+      FiredBy.Creature.StartCoroutine(FireAsync(registry));
     }
 
-    public override void RaiseEvents()
+    public override IEnumerable<IEventData> Events()
     {
-      FiredBy.Data.Delegate.OnFiredProjectile(SkillContext, this);
+      yield return new IOnFiredProjectile.Data(FiredBy, Skill, this);
     }
 
     IEnumerator<YieldInstruction> FireAsync(GameServiceRegistry registry)
     {
       yield return new WaitForSeconds(FiringDelayMs / 1000f);
       var projectile = registry.AssetService.InstantiatePrefab<Projectile>(
-        Errors.CheckNotNull(SkillContext.Skill.BaseType.Address));
+        Errors.CheckNotNull(Skill.BaseType.Address));
       if (Values != null)
       {
         projectile.KeyValueStore = Values;
       }
-      projectile.Initialize(registry, FiredBy, SkillContext.Skill, this);
+
+      projectile.Initialize(registry, FiredBy.Creature, Skill, this);
     }
   }
 }

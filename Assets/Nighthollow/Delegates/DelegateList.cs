@@ -50,7 +50,7 @@ namespace Nighthollow.Delegates
 
     public TResult? FirstNonNull<THandler, TResult>(
       DelegateContext c,
-      QueryData<THandler, TResult> queryData) where THandler : IHandler where TResult : class
+      QueryData<THandler, TResult?> queryData) where THandler : IHandler where TResult : class
     {
       return AllHandlers<THandler>()
         .Select(handler => queryData.Invoke(c, handler))

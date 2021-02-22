@@ -34,6 +34,6 @@ namespace Nighthollow.Delegates2.Core
     public Creature Self { get; }
     public GameServiceRegistry Registry { get; }
     public int DelegateIndex { get; set; }
-    public IDelegate Delegate => Self.Data.Delegate;
+    public IDelegate Delegate => null!; //Self.Data.Delegate;
   }
 }

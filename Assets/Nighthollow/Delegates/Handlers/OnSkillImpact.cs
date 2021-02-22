@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using Nighthollow.Components;
 using Nighthollow.Data;
 
 #nullable enable
@@ -23,10 +24,11 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : EventData<IOnSkillImpact>
     {
-      public Data(CreatureState self, SkillData skill)
+      public Data(CreatureState self, SkillData skill, Projectile? projectile)
       {
         Self = self;
         Skill = skill;
+        Projectile = projectile;
       }
 
       public override IEnumerable<Effect> Invoke(DelegateContext c, IOnSkillImpact handler) =>
@@ -34,6 +36,7 @@ namespace Nighthollow.Delegates.Handlers
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
+      public Projectile? Projectile { get; }
     }
 
     /// <summary>

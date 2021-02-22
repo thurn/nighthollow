@@ -43,8 +43,8 @@ namespace Nighthollow.Delegates.Implementations
       {
         case SkillType.Projectile:
           yield return new FireProjectileEffect(
-            d.Self.Creature,
-            null! /* TODO SkillContext */,
+            d.Self,
+            d.Skill,
             c.DelegateIndex,
             d.Self.Creature.ProjectileSource.position,
             Vector2.zero);
@@ -65,7 +65,7 @@ namespace Nighthollow.Delegates.Implementations
 
     public IEnumerable<Effect> OnSkillImpact(DelegateContext c, IOnSkillImpact.Data d)
     {
-      var targets = d.Skill.NewDelegate.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill));
+      var targets = d.Skill.NewDelegate.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
 
       foreach (var target in targets ?? Enumerable.Empty<Creature>())
       {
@@ -105,7 +105,8 @@ namespace Nighthollow.Delegates.Implementations
         new IComputeFinalDamage.Data(d.Self, d.Skill, d.Target, damage, isCriticalHit),
         notFound: 0);
 
-      yield return new EventEffect<IOnHitTarget>(new IOnHitTarget.Data(d.Self, d.Skill, d.Target, totalDamage));
+      yield return new EventEffect<IOnHitTarget>(
+        new IOnHitTarget.Data(d.Self, d.Skill, d.Target, d.Projectile, totalDamage));
 
       if (totalDamage == 0)
       {
@@ -140,7 +141,7 @@ namespace Nighthollow.Delegates.Implementations
         useTriggers = true
       };
 
-      var sourceCollider = d.Skill.NewDelegate.FirstNonNull(c, new IGetCollider.Data(d.Self, d.Skill));
+      var sourceCollider = d.Skill.NewDelegate.FirstNonNull(c, new IGetCollider.Data(d.Self, d.Skill, d.Projectile));
       if (!sourceCollider || sourceCollider == null)
       {
         return Enumerable.Empty<Creature>();
@@ -163,7 +164,7 @@ namespace Nighthollow.Delegates.Implementations
       : d.Hits;
 
     public Collider2D GetCollider(DelegateContext c, IGetCollider.Data d) =>
-      d.Skill.Projectile ? d.Skill.Projectile!.Collider : d.Self.Creature.Collider;
+      d.Projectile ? d.Projectile!.Collider : d.Self.Creature.Collider;
 
     public ImmutableDictionary<DamageType, int> RollForBaseDamage(DelegateContext c, IRollForBaseDamage.Data d) =>
       DamageUtil.RollForDamage(d.Skill.Get(Stat.BaseDamage));
