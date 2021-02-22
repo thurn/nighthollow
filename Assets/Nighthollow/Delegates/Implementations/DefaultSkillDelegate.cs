@@ -65,7 +65,7 @@ namespace Nighthollow.Delegates.Implementations
 
     public IEnumerable<Effect> OnSkillImpact(DelegateContext c, IOnSkillImpact.Data d)
     {
-      var targets = d.Skill.NewDelegate.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
+      var targets = d.Skill.DelegateList.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
 
       foreach (var target in targets ?? Enumerable.Empty<Creature>())
       {
@@ -79,7 +79,7 @@ namespace Nighthollow.Delegates.Implementations
     public IEnumerable<Effect> OnApplySkillToTarget(DelegateContext c, IOnApplySkillToTarget.Data d)
     {
       if (d.Skill.GetBool(Stat.UsesAccuracy) &&
-          !d.Skill.NewDelegate.First(c, new IRollForHit.Data(d.Self, d.Skill, d.Target), notFound: false))
+          !d.Skill.DelegateList.First(c, new IRollForHit.Data(d.Self, d.Skill, d.Target), notFound: false))
       {
         yield return d.Self.Owner == PlayerName.User
           ? new SkillEventEffect(SkillEventEffect.Event.Missed, d.Self.Creature)
@@ -89,19 +89,19 @@ namespace Nighthollow.Delegates.Implementations
 
       var isCriticalHit = false;
       if (d.Skill.GetBool(Stat.CanCrit) &&
-          d.Skill.NewDelegate.First(c, new IRollForCrit.Data(d.Self, d.Skill, d.Target), notFound: false))
+          d.Skill.DelegateList.First(c, new IRollForCrit.Data(d.Self, d.Skill, d.Target), notFound: false))
       {
         yield return new SkillEventEffect(SkillEventEffect.Event.Crit, d.Self.Creature);
         isCriticalHit = true;
       }
 
-      var baseDamage = d.Skill.NewDelegate.First(c,
+      var baseDamage = d.Skill.DelegateList.First(c,
         new IRollForBaseDamage.Data(d.Self, d.Skill, d.Target),
         notFound: ImmutableDictionary<DamageType, int>.Empty);
-      var damage = d.Skill.NewDelegate.Iterate(c,
+      var damage = d.Skill.DelegateList.Iterate(c,
         new ITransformDamage.Data(d.Self, d.Skill, d.Target),
         initialValue: baseDamage);
-      var totalDamage = d.Skill.NewDelegate.First(c,
+      var totalDamage = d.Skill.DelegateList.First(c,
         new IComputeFinalDamage.Data(d.Self, d.Skill, d.Target, damage, isCriticalHit),
         notFound: 0);
 
@@ -116,7 +116,7 @@ namespace Nighthollow.Delegates.Implementations
       yield return new ApplyDamageEffect(d.Self.Creature, d.Target.Creature, totalDamage);
       yield return new DamageTextEffect(d.Target.Creature, totalDamage);
 
-      var healthDrain = d.Skill.NewDelegate.First(c,
+      var healthDrain = d.Skill.DelegateList.First(c,
         new IComputeHealthDrain.Data(d.Self, d.Skill, d.Target, totalDamage),
         notFound: 0);
       if (healthDrain > 0)
@@ -125,7 +125,7 @@ namespace Nighthollow.Delegates.Implementations
       }
 
       if (d.Skill.GetBool(Stat.CanStun) &&
-          d.Skill.NewDelegate.First(c, new IRollForStun.Data(d.Self, d.Skill, d.Target, totalDamage), notFound: false))
+          d.Skill.DelegateList.First(c, new IRollForStun.Data(d.Self, d.Skill, d.Target, totalDamage), notFound: false))
       {
         yield return new StunEffect(d.Target.Creature, d.Skill.GetDurationSeconds(Stat.StunDurationOnEnemies));
         yield return new SkillEventEffect(SkillEventEffect.Event.Stun, d.Target.Creature);
@@ -141,20 +141,20 @@ namespace Nighthollow.Delegates.Implementations
         useTriggers = true
       };
 
-      var sourceCollider = d.Skill.NewDelegate.FirstNonNull(c, new IGetCollider.Data(d.Self, d.Skill, d.Projectile));
-      if (!sourceCollider || sourceCollider == null)
+      var sourceCollider = d.Skill.DelegateList.FirstNonNull(c, new IGetCollider.Data(d.Self, d.Skill, d.Projectile));
+      if (!sourceCollider)
       {
         return Enumerable.Empty<Creature>();
       }
 
       var colliders = new List<Collider2D>();
-      sourceCollider.OverlapCollider(filter, colliders);
+      sourceCollider!.OverlapCollider(filter, colliders);
 
       var creatures = colliders
         // Filter out trigger colliders
         .Where(collider => collider.GetComponent<Creature>())
         .Select(ComponentUtils.GetComponent<Creature>);
-      return d.Skill.NewDelegate.First(c,
+      return d.Skill.DelegateList.First(c,
         new IFilterTargets.Data(d.Self, d.Skill, creatures),
         notFound: Enumerable.Empty<Creature>());
     }
@@ -205,13 +205,13 @@ namespace Nighthollow.Delegates.Implementations
     {
       var damage = d.Skill.GetBool(Stat.IgnoresDamageReduction)
         ? d.Damage
-        : d.Skill.NewDelegate.First(c,
+        : d.Skill.DelegateList.First(c,
           new IApplyDamageReduction.Data(d.Self, d.Skill, d.Target, d.Damage),
           notFound: d.Damage);
 
       damage = d.Skill.GetBool(Stat.IgnoresDamageResistance)
         ? damage
-        : d.Skill.NewDelegate.First(c,
+        : d.Skill.DelegateList.First(c,
           new IApplyDamageResistance.Data(d.Self, d.Skill, d.Target, damage),
           notFound: damage);
 

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Components;
 using Nighthollow.Delegates;
 using Nighthollow.Stats;
 
@@ -29,14 +28,14 @@ namespace Nighthollow.Data
       SkillTypeData baseType,
       SkillItemData itemData)
     {
-      NewDelegate = delegateList;
+      DelegateList = delegateList;
       Stats = stats;
       BaseTypeId = baseTypeId;
       BaseType = baseType;
       ItemData = itemData;
     }
 
-    [Field] public DelegateList NewDelegate { get; }
+    [Field] public DelegateList DelegateList { get; }
     [Field] public override StatTable Stats { get; }
     [Field] public int BaseTypeId { get; }
     [Field] public SkillTypeData BaseType { get; }

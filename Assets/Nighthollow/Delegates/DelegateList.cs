@@ -33,16 +33,16 @@ namespace Nighthollow.Delegates
 
     public IEnumerable<Effect> Invoke<THandler>(DelegateContext c, EventData<THandler> eventData)
       where THandler : IHandler =>
-      AllHandlers<THandler>().SelectMany(handler => eventData.Invoke(c, handler));
+      AllHandlers<THandler>().SelectMany(pair => eventData.Invoke(c.WithIndex(pair.Item1), pair.Item2));
 
     public TResult First<THandler, TResult>(
       DelegateContext c,
       QueryData<THandler, TResult> queryData,
       TResult notFound) where THandler : IHandler
     {
-      foreach (var handler in AllHandlers<THandler>())
+      foreach (var (index, handler) in AllHandlers<THandler>())
       {
-        return queryData.Invoke(c, handler);
+        return queryData.Invoke(c.WithIndex(index), handler);
       }
 
       return notFound;
@@ -53,34 +53,36 @@ namespace Nighthollow.Delegates
       QueryData<THandler, TResult?> queryData) where THandler : IHandler where TResult : class
     {
       return AllHandlers<THandler>()
-        .Select(handler => queryData.Invoke(c, handler))
+        .Select(pair => queryData.Invoke(c.WithIndex(pair.Item1), pair.Item2))
         .FirstOrDefault(result => result != null);
     }
 
     public bool Any<THandler>(DelegateContext c, QueryData<THandler, bool> queryData) where THandler : IHandler =>
-      AllHandlers<THandler>().Any(handler => queryData.Invoke(c, handler));
+      AllHandlers<THandler>().Any(pair => queryData.Invoke(c.WithIndex(pair.Item1), pair.Item2));
 
     public TResult Iterate<THandler, TResult>(
       DelegateContext c,
       IteratedQueryData<THandler, TResult> queryData,
       TResult initialValue) where THandler : IHandler =>
-      AllHandlers<THandler>().Aggregate(initialValue, (current, handler) => queryData.Invoke(c, handler, current));
+      AllHandlers<THandler>().Aggregate(initialValue, (current, pair) =>
+        queryData.Invoke(c.WithIndex(pair.Item1), pair.Item2, current));
 
-    IEnumerable<THandler> AllHandlers<THandler>() where THandler : IHandler
+    IEnumerable<(int, THandler)> AllHandlers<THandler>() where THandler : IHandler
     {
+      var index = 1;
       foreach (var handler in _delegates)
       {
         if (handler is THandler h)
         {
-          yield return h;
+          yield return (index++, h);
         }
       }
 
       if (_parent != null)
       {
-        foreach (var handler in _parent.AllHandlers<THandler>())
+        foreach (var (_, handler) in _parent.AllHandlers<THandler>())
         {
-          yield return handler;
+          yield return (index++, handler);
         }
       }
     }

@@ -36,7 +36,7 @@ namespace Nighthollow.Delegates.Implementations
       if (d.Projectile && d.Projectile!.KeyValueStore.Get(Key.TimesChained) > 0)
       {
         // We skip impact for the projectile for creatures which have already been hit by a chaining projectile
-        var targets = d.Skill.NewDelegate.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
+        var targets = d.Skill.DelegateList.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
         return !(targets ?? Enumerable.Empty<Creature>())
           .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
           .Any();

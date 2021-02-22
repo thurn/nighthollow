@@ -22,7 +22,7 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IGetCollider : IHandler
   {
-    public sealed class Data : QueryData<IGetCollider, Collider2D>
+    public sealed class Data : QueryData<IGetCollider, Collider2D?>
     {
       public Data(CreatureState self, SkillData skill, Projectile? projectile)
       {
@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Handlers
         Projectile = projectile;
       }
 
-      public override Collider2D Invoke(DelegateContext c, IGetCollider handler) =>
+      public override Collider2D? Invoke(DelegateContext c, IGetCollider handler) =>
         handler.GetCollider(c, this);
 
       public CreatureState Self { get; }
@@ -40,6 +40,6 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>Returns the collider to use for hit-testing this skill's impact.</summary>
-    Collider2D GetCollider(DelegateContext c, Data d);
+    Collider2D? GetCollider(DelegateContext c, Data d);
   }
 }

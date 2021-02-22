@@ -15,7 +15,6 @@
 using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Delegates;
-using Nighthollow.Delegates2.Core;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -84,12 +83,7 @@ namespace Nighthollow.Data
     {
       if (DelegateId.HasValue)
       {
-        var description = DelegateMap.Get(DelegateId.Value).Describe(descriptionProvider);
-        if (description != null)
-        {
-          // Delegate descriptions take priority
-          return description;
-        }
+        return DelegateMap.Get(DelegateId.Value).Describe(descriptionProvider);
       }
 
       if (StatId != null)

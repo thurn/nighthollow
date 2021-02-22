@@ -188,14 +188,30 @@ namespace Nighthollow.Components
       _attachmentDisplay.SetStatusEffects(_registry, _data.Stats.StatusEffects);
     }
 
-    void Invoke<THandler>(EventData<THandler> data) where THandler : IHandler
+    void Invoke(IEventData data)
     {
-      var effects = _currentSkill != null
-        ? _currentSkill.NewDelegate.Invoke(CreateContext(), data)
-        : _data.NewDelegate.Invoke(CreateContext(), data);
-      foreach (var effect in effects)
+      var delegateList = _currentSkill != null ? _currentSkill.DelegateList : _data.DelegateList;
+      var context = CreateContext();
+      var eventQueue = new Queue<IEventData>();
+      eventQueue.Enqueue(data);
+
+      while (true)
       {
-        effect.Execute(_registry);
+        var effects = eventQueue.Dequeue().Raise(context, delegateList);
+
+        foreach (var effect in effects)
+        {
+          effect.Execute(_registry);
+          foreach (var eventData in effect.Events())
+          {
+            eventQueue.Enqueue(eventData);
+          }
+        }
+
+        if (eventQueue.Count == 0)
+        {
+          break;
+        }
       }
     }
 
@@ -259,7 +275,7 @@ namespace Nighthollow.Components
     {
       Errors.CheckState(CanUseSkill(), "Cannot use skill");
 
-      var skill = _data.NewDelegate.FirstNonNull(CreateContext(), new ISelectSkill.Data(AsCreatureState()));
+      var skill = _data.DelegateList.FirstNonNull(CreateContext(), new ISelectSkill.Data(AsCreatureState()));
       if (skill != null)
       {
         SetState(CreatureAnimation.UsingSkill);

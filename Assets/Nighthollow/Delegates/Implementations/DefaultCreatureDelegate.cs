@@ -66,14 +66,14 @@ namespace Nighthollow.Delegates.Implementations
     {
       return self.Data.Skills
         .Where(s => s.IsMelee())
-        .Any(skill => skill.NewDelegate.Any(c, new IMeleeSkillCouldHit.Data(self, skill)));
+        .Any(skill => skill.DelegateList.Any(c, new IMeleeSkillCouldHit.Data(self, skill)));
     }
 
     static bool AnyProjectileSkillCouldHit(DelegateContext c, CreatureState self)
     {
       return self.Data.Skills
         .Where(s => s.IsProjectile())
-        .Any(skill => skill.NewDelegate.Any(c, new IProjectileSkillCouldHit.Data(self, skill)));
+        .Any(skill => skill.DelegateList.Any(c, new IProjectileSkillCouldHit.Data(self, skill)));
     }
 
     static SkillData? SelectMatching(CreatureState self, Func<SkillData, bool> predicate)

@@ -18,6 +18,5 @@ namespace Nighthollow.Delegates
 {
   public interface IHandler
   {
-
   }
 }

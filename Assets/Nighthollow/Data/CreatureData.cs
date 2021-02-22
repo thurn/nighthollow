@@ -43,7 +43,7 @@ namespace Nighthollow.Data
       CreatureItemData itemData,
       KeyValueStore keyValueStore)
     {
-      NewDelegate = delegateList;
+      DelegateList = delegateList;
       Stats = stats;
       Skills = skills;
       BaseType = baseType;
@@ -51,7 +51,7 @@ namespace Nighthollow.Data
       KeyValueStore = keyValueStore;
     }
 
-    [Field] public DelegateList NewDelegate { get; }
+    [Field] public DelegateList DelegateList { get; }
     [Field] public override StatTable Stats { get; }
     [Field] public ImmutableList<SkillData> Skills { get; }
     [Field] public CreatureTypeData BaseType { get; }

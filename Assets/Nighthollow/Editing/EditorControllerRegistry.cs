@@ -19,7 +19,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
-using Nighthollow.Delegates2.Core;
 using Nighthollow.Stats;
 
 #nullable enable

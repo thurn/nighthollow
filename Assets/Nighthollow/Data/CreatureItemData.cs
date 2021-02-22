@@ -91,7 +91,7 @@ namespace Nighthollow.Data
         .ToImmutableList(), parent: null);
 
       return new CreatureData(
-        delegateList: delegateList,
+        delegateList,
         stats,
         Skills.Select(s => s.BuildSkill(registry, gameData, stats, delegateList))
           .AppendIfNotNull(baseType.SkillAnimations.Any(a => a.SkillAnimationType == SkillAnimationType.MeleeSkill)

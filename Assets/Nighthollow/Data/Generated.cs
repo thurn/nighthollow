@@ -1194,7 +1194,7 @@ namespace Nighthollow.Data
   public sealed partial class SkillData
   {
     public SkillData WithNewDelegate(DelegateList newDelegate) =>
-      Equals(newDelegate, NewDelegate)
+      Equals(newDelegate, DelegateList)
         ? this
         : new SkillData(
           newDelegate,
@@ -1207,7 +1207,7 @@ namespace Nighthollow.Data
       Equals(stats, Stats)
         ? this
         : new SkillData(
-          NewDelegate,
+          DelegateList,
           stats,
           BaseTypeId,
           BaseType,
@@ -1217,7 +1217,7 @@ namespace Nighthollow.Data
       Equals(baseTypeId, BaseTypeId)
         ? this
         : new SkillData(
-          NewDelegate,
+          DelegateList,
           Stats,
           baseTypeId,
           BaseType,
@@ -1227,7 +1227,7 @@ namespace Nighthollow.Data
       Equals(baseType, BaseType)
         ? this
         : new SkillData(
-          NewDelegate,
+          DelegateList,
           Stats,
           BaseTypeId,
           baseType,
@@ -1237,7 +1237,7 @@ namespace Nighthollow.Data
       Equals(itemData, ItemData)
         ? this
         : new SkillData(
-          NewDelegate,
+          DelegateList,
           Stats,
           BaseTypeId,
           BaseType,
@@ -1248,7 +1248,7 @@ namespace Nighthollow.Data
   public sealed partial class CreatureData
   {
     public CreatureData WithNewDelegate(DelegateList newDelegate) =>
-      Equals(newDelegate, NewDelegate)
+      Equals(newDelegate, DelegateList)
         ? this
         : new CreatureData(
           newDelegate,
@@ -1262,7 +1262,7 @@ namespace Nighthollow.Data
       Equals(stats, Stats)
         ? this
         : new CreatureData(
-          NewDelegate,
+          DelegateList,
           stats,
           Skills,
           BaseType,
@@ -1273,7 +1273,7 @@ namespace Nighthollow.Data
       Equals(skills, Skills)
         ? this
         : new CreatureData(
-          NewDelegate,
+          DelegateList,
           Stats,
           skills,
           BaseType,
@@ -1284,7 +1284,7 @@ namespace Nighthollow.Data
       Equals(baseType, BaseType)
         ? this
         : new CreatureData(
-          NewDelegate,
+          DelegateList,
           Stats,
           Skills,
           baseType,
@@ -1295,7 +1295,7 @@ namespace Nighthollow.Data
       Equals(itemData, ItemData)
         ? this
         : new CreatureData(
-          NewDelegate,
+          DelegateList,
           Stats,
           Skills,
           BaseType,
@@ -1306,7 +1306,7 @@ namespace Nighthollow.Data
       Equals(keyValueStore, KeyValueStore)
         ? this
         : new CreatureData(
-          NewDelegate,
+          DelegateList,
           Stats,
           Skills,
           BaseType,
