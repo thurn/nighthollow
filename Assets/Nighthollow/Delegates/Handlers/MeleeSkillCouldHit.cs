@@ -22,15 +22,17 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : QueryData<IMeleeSkillCouldHit, bool>
     {
-      public Data(CreatureState self)
+      public Data(CreatureState self, SkillData skill)
       {
         Self = self;
+        Skill = skill;
       }
 
       public override bool Invoke(DelegateContext c, IMeleeSkillCouldHit handler) =>
         handler.MeleeSkillCouldHit(c, this);
 
       public CreatureState Self { get; }
+      public SkillData Skill { get; }
     }
 
     /// <summary>

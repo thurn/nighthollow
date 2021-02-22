@@ -67,7 +67,7 @@ namespace Nighthollow.Delegates2.Implementations
 
       foreach (var target in targets ?? Enumerable.Empty<Creature>())
       {
-        context.Results.Add(EffectEvents.Effect(context, (d, c) => d.OnApplyToTarget(c, target)));
+        // context.Results.Add(EffectEvents.Effect(context, (d, c) => d.OnApplyToTarget(c, target)));
       }
     }
 
@@ -92,7 +92,7 @@ namespace Nighthollow.Delegates2.Implementations
       var damage = c.Delegate.TransformDamage(c, target, baseDamage);
       var totalDamage = c.Delegate.ComputeFinalDamage(c, target, damage ?? baseDamage, isCriticalHit) ?? 0;
 
-      c.Results.Add(EffectEvents.Effect(c, (d, sc) => d.OnHitTarget(sc, target, totalDamage)));
+      // c.Results.Add(EffectEvents.Effect(c, (d, sc) => d.OnHitTarget(sc, target, totalDamage)));
 
       if (totalDamage == 0)
       {

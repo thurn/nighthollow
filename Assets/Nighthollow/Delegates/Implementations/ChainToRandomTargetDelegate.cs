@@ -48,11 +48,11 @@ namespace Nighthollow.Delegates.Implementations
 
     public IEnumerable<Effect> OnHitTarget(DelegateContext c, IOnHitTarget.Data d)
     {
-      if (d.Projectile &&
-          d.Projectile!.KeyValueStore.Get(Key.TimesChained) < d.Skill.GetInt(Stat.MaxProjectileTimesChained))
+      if (d.Skill.Projectile &&
+          d.Skill.Projectile!.KeyValueStore.Get(Key.TimesChained) < d.Skill.GetInt(Stat.MaxProjectileTimesChained))
       {
         var enemies = Root.Instance.CreatureService.EnemyCreatures()
-          .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
+          .Except(d.Skill.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
           .ToList();
         if (enemies.Count > 0)
         {
@@ -61,9 +61,9 @@ namespace Nighthollow.Delegates.Implementations
             d.Self.Creature,
             null! /* TODO: SkillContext */,
             c.DelegateIndex,
-            d.Projectile.transform.position,
+            d.Skill.Projectile.transform.position,
             trackCreature: enemy,
-            values: d.Projectile.KeyValueStore
+            values: d.Skill.Projectile.KeyValueStore
               .Increment(Key.TimesChained)
               .Append(Key.SkipProjectileImpacts, d.Target.Creature));
         }

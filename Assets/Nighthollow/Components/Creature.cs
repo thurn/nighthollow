@@ -50,6 +50,7 @@ namespace Nighthollow.Components
 
     [Header("State")]
     [SerializeField] int _damageTaken;
+
     [SerializeField] CreatureAnimation _state;
     [SerializeField] RankValue? _rankPosition;
     [SerializeField] FileValue? _filePosition;
@@ -92,6 +93,16 @@ namespace Nighthollow.Components
     {
       set => _animator.speed = value ? 0 : 1;
     }
+
+    public CreatureState AsCreatureState() =>
+      new CreatureState(
+        this,
+        _data,
+        _state,
+        _rankPosition,
+        _filePosition,
+        _currentSkill,
+        Owner);
 
     public void Initialize(GameServiceRegistry registry, CreatureData creatureData)
     {

@@ -52,6 +52,7 @@ namespace Nighthollow.Data
     }
 
     [Field] public DelegateList Delegate { get; }
+    [Field] public Delegates.DelegateList NewDelegate { get; }
     [Field] public override StatTable Stats { get; }
     [Field] public ImmutableList<SkillData> Skills { get; }
     [Field] public CreatureTypeData BaseType { get; }

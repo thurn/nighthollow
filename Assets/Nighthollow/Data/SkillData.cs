@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Components;
 using Nighthollow.Delegates2.Core;
 using Nighthollow.Stats;
 
@@ -41,6 +42,7 @@ namespace Nighthollow.Data
     [Field] public int BaseTypeId { get; }
     [Field] public SkillTypeData BaseType { get; }
     [Field] public SkillItemData ItemData { get; }
+    [Field] public Projectile? Projectile { get; }
 
     public bool IsMelee() => BaseType.SkillType == SkillType.Melee;
 

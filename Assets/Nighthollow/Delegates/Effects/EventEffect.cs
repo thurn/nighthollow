@@ -12,34 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using System;
-using Nighthollow.Delegates2.Core;
 using Nighthollow.Services;
 
 #nullable enable
 
 namespace Nighthollow.Delegates.Effects
 {
-  public static class EffectEvents
+  public sealed class EventEffect<THandler> : Effect where THandler : IHandler
   {
-    public static EventEffect<TContext> Effect<TContext>(TContext context, Action<IDelegate, TContext> action)
-      where TContext : Delegates2.Core.DelegateContext =>
-      new EventEffect<TContext>(context.Delegate, context, action);
-  }
-
-  public sealed class EventEffect<TContext> : Effect where TContext : Delegates2.Core.DelegateContext
-  {
-    public EventEffect(IDelegate delegateInstance, TContext context, Action<IDelegate, TContext> action)
+    public EventEffect(EventData<THandler> eventData)
     {
-      Delegate = delegateInstance;
-      Context = context;
-      Action = action;
+      EventData = eventData;
     }
 
-    public IDelegate Delegate { get; }
-    public TContext Context { get; }
-    public Action<IDelegate, TContext> Action { get; }
+    public EventData<THandler> EventData { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
@@ -47,7 +33,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void RaiseEvents()
     {
-      Action(Delegate, Context);
+      // TODO: Raise this
     }
   }
 }
