@@ -31,9 +31,9 @@ namespace Nighthollow.Components
     [Header("Config")] [SerializeField] TimedEffect _flashEffect = null!;
     [SerializeField] TimedEffect _hitEffect = null!;
 
-    [Header("State")] [SerializeField] Creature2 _firedBy = null!;
+    [Header("State")] [SerializeField] Creature _firedBy = null!;
     [SerializeField] Collider2D _collider = null!;
-    [SerializeField] Creature2 _trackCreature = null!;
+    [SerializeField] Creature _trackCreature = null!;
     SkillData _skillData = null!;
     GameServiceRegistry _registry = null!;
 
@@ -43,7 +43,7 @@ namespace Nighthollow.Components
 
     public void Initialize(
       GameServiceRegistry registry,
-      Creature2 firedBy,
+      Creature firedBy,
       SkillData skillData,
       FireProjectileEffect effect)
     {

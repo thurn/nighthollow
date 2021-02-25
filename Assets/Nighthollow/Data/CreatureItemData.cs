@@ -88,7 +88,7 @@ namespace Nighthollow.Data
       var delegateList = new DelegateList(delegates
         .Append(DelegateId.DefaultCreatureDelegate)
         .Select(DelegateMap.Get)
-        .ToImmutableList(), parent: GlobalDelegate.List);
+        .ToImmutableList(), parent: null);
 
       return new CreatureData(
         delegateList,

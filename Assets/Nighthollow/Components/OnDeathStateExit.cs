@@ -23,7 +23,7 @@ namespace Nighthollow.Components
   {
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-      ComponentUtils.GetComponent<Creature2>(animator).OnDeathAnimationCompleted();
+      ComponentUtils.GetComponent<Creature>(animator).OnDeathAnimationCompleted();
     }
   }
 }

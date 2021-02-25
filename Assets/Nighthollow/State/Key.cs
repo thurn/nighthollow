@@ -24,11 +24,11 @@ namespace Nighthollow.State
     public static readonly KeyWithDefault<int> TimesChained =
       new KeyWithDefault<int>(1, defaultValue: 0);
 
-    public static readonly KeyWithDefault<ImmutableList<Creature2>> SkipProjectileImpacts =
-      new KeyWithDefault<ImmutableList<Creature2>>(2, defaultValue: ImmutableList<Creature2>.Empty);
+    public static readonly KeyWithDefault<ImmutableList<Creature>> SkipProjectileImpacts =
+      new KeyWithDefault<ImmutableList<Creature>>(2, defaultValue: ImmutableList<Creature>.Empty);
 
-    public static readonly Key<Creature2> LastCreatureHit =
-      new Key<Creature2>(3);
+    public static readonly Key<Creature> LastCreatureHit =
+      new Key<Creature>(3);
 
     public static readonly KeyWithDefault<int> SequentialHitCount =
       new KeyWithDefault<int>(4, defaultValue: 0);

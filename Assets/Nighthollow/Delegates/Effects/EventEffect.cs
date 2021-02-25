@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using Nighthollow.Services;
-using Nighthollow.Utils;
 
 #nullable enable
 
@@ -33,6 +32,9 @@ namespace Nighthollow.Delegates.Effects
     {
     }
 
-    public override IEnumerable<Effect> RaiseTriggeredEvents(GameContext c) => EventData.Raise(null!, null!);
+    public override IEnumerable<IEventData> Events()
+    {
+      yield return EventData;
+    }
   }
 }

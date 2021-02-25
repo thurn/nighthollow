@@ -15,6 +15,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
+using Nighthollow.Delegates;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -30,10 +31,10 @@ namespace Nighthollow.Data
   /// - Otherwise, it contains a snapshot of the final configuration & state for the most-recently-completed battle
   /// </summary>
   [MessagePackObject]
-  public sealed partial class BattleConfig
+  public sealed partial class BattleData
   {
     [SerializationConstructor]
-    public BattleConfig(
+    public BattleData(
       ImmutableList<CreatureItemData>? enemies = null,
       ImmutableList<ModifierData>? enemyModifiers = null,
       int? userDeckOverride = null,

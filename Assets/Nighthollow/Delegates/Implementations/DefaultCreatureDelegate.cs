@@ -24,7 +24,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Delegates
+namespace Nighthollow.Delegates.Implementations
 {
   public sealed class DefaultCreatureDelegate : AbstractDelegate,
     IOnCreatureDeath, ISelectSkill, IMeleeSkillCouldHit, IProjectileSkillCouldHit

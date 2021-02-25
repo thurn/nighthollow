@@ -24,7 +24,7 @@ namespace Nighthollow.Components
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
       base.OnStateExit(animator, stateInfo, layerIndex);
-      ComponentUtils.GetComponent<Creature2>(animator).OnActionAnimationCompleted();
+      ComponentUtils.GetComponent<Creature>(animator).OnActionAnimationCompleted();
     }
   }
 }

@@ -22,7 +22,6 @@ namespace Nighthollow.Delegates
   public enum DelegateId
   {
     Unknown = 0,
-    GlobalDelegate = 14,
     DefaultCreatureDelegate = 1,
     DefaultSkillDelegate = 2,
     MultipleProjectilesDelegate = 3,
@@ -43,7 +42,6 @@ namespace Nighthollow.Delegates
   {
     static readonly Dictionary<DelegateId, AbstractDelegate> Delegates = new Dictionary<DelegateId, AbstractDelegate>
     {
-      {DelegateId.GlobalDelegate, new GlobalDelegate()},
       {DelegateId.DefaultCreatureDelegate, new DefaultCreatureDelegate()},
       {DelegateId.DefaultSkillDelegate, new DefaultSkillDelegate()},
       {DelegateId.MultipleProjectilesDelegate, new MultipleProjectilesDelegate()},

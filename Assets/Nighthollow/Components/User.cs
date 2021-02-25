@@ -57,13 +57,13 @@ namespace Nighthollow.Components
       Data = UserData.BuildUserData(gameData);
 
       var cards =
-        gameData.BattleConfig.UserDeckOverride.HasValue
-          ? gameData.ItemLists[gameData.BattleConfig.UserDeckOverride.Value].Creatures
+        gameData.BattleData.UserDeckOverride.HasValue
+          ? gameData.ItemLists[gameData.BattleData.UserDeckOverride.Value].Creatures
           : gameData.Deck.Values.ToImmutableList();
       Errors.CheckState(cards.Count > 0, "No cards in deck");
 
       var builtDeck = cards.Select(item => item.BuildCreature(registry));
-      _deck.OnStartGame(builtDeck, orderedDraws: gameData.BattleConfig.UserDeckOverride.HasValue);
+      _deck.OnStartGame(builtDeck, orderedDraws: gameData.BattleData.UserDeckOverride.HasValue);
 
       var openingHand = new List<CreatureData>();
       for (var i = 0; i < Errors.CheckPositive(Data.GetInt(Stat.StartingHandSize)); ++i)

@@ -120,7 +120,7 @@ namespace Nighthollow.Data
     public static readonly TableId<StatusEffectTypeData> StatusEffectTypes =
       new StatusEffectsTypesTableId(9, "StatusEffectTypes");
 
-    public static readonly TableId<BattleConfig> BattleData =
+    public static readonly TableId<BattleData> BattleData =
       new BattleDataTableId(10, "BattleData");
 
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
@@ -267,17 +267,17 @@ namespace Nighthollow.Data
         gameData.WithStatusEffects(newValue);
     }
 
-    sealed class BattleDataTableId : SingletonTableId<BattleConfig>
+    sealed class BattleDataTableId : SingletonTableId<BattleData>
     {
       public BattleDataTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
-      protected override BattleConfig GetSingleton(GameData gameData) =>
-        gameData.BattleConfig;
+      protected override BattleData GetSingleton(GameData gameData) =>
+        gameData.BattleData;
 
-      protected override GameData WriteSingleton(GameData gameData, BattleConfig newValue) =>
-        gameData.WithBattleConfig(newValue);
+      protected override GameData WriteSingleton(GameData gameData, BattleData newValue) =>
+        gameData.WithBattleData(newValue);
     }
   }
 }

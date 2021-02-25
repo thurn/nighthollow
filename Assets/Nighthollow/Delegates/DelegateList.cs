@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Nighthollow.Services;
 
 #nullable enable
 
@@ -32,41 +31,41 @@ namespace Nighthollow.Delegates
       _parent = parent;
     }
 
-    public IEnumerable<Effect> Invoke<THandler>(GameContext c, EventData<THandler> eventData)
+    public IEnumerable<Effect> Invoke<THandler>(DelegateContext c, EventData<THandler> eventData)
       where THandler : IHandler =>
-      AllHandlers<THandler>().SelectMany(pair => eventData.Invoke(c, pair.Item1, pair.Item2));
+      AllHandlers<THandler>().SelectMany(pair => eventData.Invoke(c.WithIndex(pair.Item1), pair.Item2));
 
     public TResult First<THandler, TResult>(
-      GameContext c,
+      DelegateContext c,
       QueryData<THandler, TResult> queryData,
       TResult notFound) where THandler : IHandler
     {
       foreach (var (index, handler) in AllHandlers<THandler>())
       {
-        return queryData.Invoke(c, index, handler);
+        return queryData.Invoke(c.WithIndex(index), handler);
       }
 
       return notFound;
     }
 
     public TResult? FirstNonNull<THandler, TResult>(
-      GameContext c,
+      DelegateContext c,
       QueryData<THandler, TResult?> queryData) where THandler : IHandler where TResult : class
     {
       return AllHandlers<THandler>()
-        .Select(pair => queryData.Invoke(c, pair.Item1, pair.Item2))
+        .Select(pair => queryData.Invoke(c.WithIndex(pair.Item1), pair.Item2))
         .FirstOrDefault(result => result != null);
     }
 
-    public bool Any<THandler>(GameContext c, QueryData<THandler, bool> queryData) where THandler : IHandler =>
-      AllHandlers<THandler>().Any(pair => queryData.Invoke(c, pair.Item1, pair.Item2));
+    public bool Any<THandler>(DelegateContext c, QueryData<THandler, bool> queryData) where THandler : IHandler =>
+      AllHandlers<THandler>().Any(pair => queryData.Invoke(c.WithIndex(pair.Item1), pair.Item2));
 
     public TResult Iterate<THandler, TResult>(
-      GameContext c,
+      DelegateContext c,
       IteratedQueryData<THandler, TResult> queryData,
       TResult initialValue) where THandler : IHandler =>
       AllHandlers<THandler>().Aggregate(initialValue, (current, pair) =>
-        queryData.Invoke(c, pair.Item1, pair.Item2, current));
+        queryData.Invoke(c.WithIndex(pair.Item1), pair.Item2, current));
 
     IEnumerable<(int, THandler)> AllHandlers<THandler>() where THandler : IHandler
     {

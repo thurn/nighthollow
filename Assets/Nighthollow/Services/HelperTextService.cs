@@ -40,7 +40,7 @@ namespace Nighthollow.Services
     [SerializeField] ArrowDirection _debugArrowDirection;
     readonly HashSet<int> _shown = new HashSet<int>();
     bool _active;
-    BattleConfig _battleConfig = null!;
+    BattleData _battleData = null!;
 
     readonly struct HelperText
     {
@@ -60,7 +60,7 @@ namespace Nighthollow.Services
 
     public void OnServicesReady(GameServiceRegistry registry)
     {
-      _battleConfig = registry.Database.Snapshot().BattleConfig;
+      _battleData = registry.Database.Snapshot().BattleData;
     }
 
     void Update()

@@ -99,7 +99,7 @@ namespace MessagePack.Resolvers
                 { typeof(global::Nighthollow.Components.GameDataHolder), 45 },
                 { typeof(global::Nighthollow.Data.AffixData), 46 },
                 { typeof(global::Nighthollow.Data.AffixTypeData), 47 },
-                { typeof(global::Nighthollow.Data.BattleConfig), 48 },
+                { typeof(global::Nighthollow.Data.BattleData), 48 },
                 { typeof(global::Nighthollow.Data.BoolValueData), 49 },
                 { typeof(global::Nighthollow.Data.CreatureItemData), 50 },
                 { typeof(global::Nighthollow.Data.CreatureSkillAnimation), 51 },
@@ -179,7 +179,7 @@ namespace MessagePack.Resolvers
                 case 45: return new MessagePack.Formatters.Nighthollow.Components.GameDataHolderFormatter();
                 case 46: return new MessagePack.Formatters.Nighthollow.Data.AffixDataFormatter();
                 case 47: return new MessagePack.Formatters.Nighthollow.Data.AffixTypeDataFormatter();
-                case 48: return new MessagePack.Formatters.Nighthollow.Data.BattleConfigFormatter();
+                case 48: return new MessagePack.Formatters.Nighthollow.Data.BattleDataFormatter();
                 case 49: return new MessagePack.Formatters.Nighthollow.Data.BoolValueDataFormatter();
                 case 50: return new MessagePack.Formatters.Nighthollow.Data.CreatureItemDataFormatter();
                 case 51: return new MessagePack.Formatters.Nighthollow.Data.CreatureSkillAnimationFormatter();
@@ -923,10 +923,10 @@ namespace MessagePack.Formatters.Nighthollow.Data
         }
     }
 
-    public sealed class BattleConfigFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.BattleConfig>
+    public sealed class BattleDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.BattleData>
     {
 
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.BattleConfig value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.BattleData value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -942,7 +942,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.EnemyListOverride, options);
         }
 
-        public global::Nighthollow.Data.BattleConfig Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Data.BattleData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -979,7 +979,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.BattleConfig(__Enemies__, __EnemyModifiers__, __UserDeckOverride__, __EnemyListOverride__);
+            var ____result = new global::Nighthollow.Data.BattleData(__Enemies__, __EnemyModifiers__, __UserDeckOverride__, __EnemyListOverride__);
             reader.Depth--;
             return ____result;
         }
@@ -1513,7 +1513,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.ModifierData>>().Serialize(ref writer, value.UserModifiers, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>>().Serialize(ref writer, value.Collection, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>>().Serialize(ref writer, value.Deck, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.BattleConfig>().Serialize(ref writer, value.BattleConfig, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.BattleData>().Serialize(ref writer, value.BattleData, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatusEffectTypeData>>().Serialize(ref writer, value.StatusEffects, options);
             writer.WriteNil();
             writer.WriteNil();
@@ -1635,7 +1635,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var __UserModifiers__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.ModifierData>);
             var __Collection__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>);
             var __Deck__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>);
-            var __BattleConfig__ = default(global::Nighthollow.Data.BattleConfig);
+            var __BattleData__ = default(global::Nighthollow.Data.BattleData);
             var __StatusEffects__ = default(global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatusEffectTypeData>);
             var __A__ = default(global::Nighthollow.Data.IntValueData);
             var __B__ = default(global::Nighthollow.Stats.DurationValue);
@@ -1679,7 +1679,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                         __Deck__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.CreatureItemData>>().Deserialize(ref reader, options);
                         break;
                     case 9:
-                        __BattleConfig__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.BattleConfig>().Deserialize(ref reader, options);
+                        __BattleData__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Data.BattleData>().Deserialize(ref reader, options);
                         break;
                     case 10:
                         __StatusEffects__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableDictionary<int, global::Nighthollow.Data.StatusEffectTypeData>>().Deserialize(ref reader, options);

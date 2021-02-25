@@ -39,7 +39,7 @@ namespace Nighthollow.Components
     public void OnGameStarted(GameServiceRegistry registry)
     {
       var gameData = registry.Database.Snapshot();
-      Data = gameData.BattleConfig.BuildEnemyData(gameData);
+      Data = gameData.BattleData.BuildEnemyData(gameData);
       Errors.CheckState(Data.Enemies.Count > 0, "No enemies found");
       _enemies = Data.Enemies.Select(item => item.BuildCreature(registry)).ToImmutableList();
 
@@ -70,6 +70,14 @@ namespace Nighthollow.Components
         Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
           .Show(new GameOverMessage.Args("Victory!", "World"), animate: true);
       }
+    }
+
+    public void OnEnemyCreatureAtEndzone(Creature creature)
+    {
+      Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
+        .Show(new GameOverMessage.Args("Game Over", "World"));
+      Root.Instance.ScreenController.Get(ScreenController.BlackoutWindow).Show(argument: 0.5f);
+      Time.timeScale = 0f;
     }
 
     IEnumerator<YieldInstruction> SpawnAsync()

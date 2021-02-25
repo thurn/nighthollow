@@ -33,7 +33,7 @@ namespace Nighthollow.Delegates.Effects
       int delegateIndex,
       Vector2 firingPoint,
       Vector2? firingDirectionOffset = null,
-      Creature2? trackCreature = null,
+      Creature? trackCreature = null,
       int firingDelayMs = 0,
       KeyValueStore? values = null)
     {
@@ -52,7 +52,7 @@ namespace Nighthollow.Delegates.Effects
     public int DelegateIndex { get; }
     public Vector2 FiringPoint { get; }
     public Vector2? FiringDirectionOffset { get; }
-    public Creature2? TrackCreature { get; }
+    public Creature? TrackCreature { get; }
     public int FiringDelayMs { get; }
     public KeyValueStore? Values { get; }
 
@@ -61,8 +61,10 @@ namespace Nighthollow.Delegates.Effects
       FiredBy.Creature.StartCoroutine(FireAsync(registry));
     }
 
-    public override IEnumerable<Effect> RaiseTriggeredEvents(GameContext c) =>
-      new IOnFiredProjectile.Data(FiredBy, Skill, this).Raise(null!, null!);
+    public override IEnumerable<IEventData> Events()
+    {
+      yield return new IOnFiredProjectile.Data(FiredBy, Skill, this);
+    }
 
     IEnumerator<YieldInstruction> FireAsync(GameServiceRegistry registry)
     {

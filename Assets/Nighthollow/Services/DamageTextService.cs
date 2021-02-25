@@ -34,7 +34,7 @@ namespace Nighthollow.Services
 
     [SerializeField] float _averageDamage;
 
-    public void ShowDamageText(Creature2 target, int amount)
+    public void ShowDamageText(Creature target, int amount)
     {
       if (target.Owner != PlayerName.Enemy)
       {

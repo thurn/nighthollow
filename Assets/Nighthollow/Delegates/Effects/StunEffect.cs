@@ -22,13 +22,13 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class StunEffect : Effect
   {
-    public StunEffect(Creature2 target, float durationSeconds)
+    public StunEffect(Creature target, float durationSeconds)
     {
       Target = target;
       DurationSeconds = durationSeconds;
     }
 
-    public Creature2 Target { get; }
+    public Creature Target { get; }
     public float DurationSeconds { get; }
 
     public override void Execute(GameServiceRegistry registry)

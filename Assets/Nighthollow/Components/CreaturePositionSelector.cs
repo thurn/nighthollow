@@ -26,7 +26,7 @@ namespace Nighthollow.Components
   public sealed class CreaturePositionSelector : MonoBehaviour
   {
     [Header("State")] [SerializeField] Card? _card;
-    [SerializeField] Creature2 _creature = null!;
+    [SerializeField] Creature _creature = null!;
     [SerializeField] RankValue _rank;
     [SerializeField] FileValue _file;
     [SerializeField] CreatureService _creatureService = null!;
@@ -83,7 +83,7 @@ namespace Nighthollow.Components
       }
     }
 
-    public void Initialize(Creature2 creature, Card? card = null)
+    public void Initialize(Creature creature, Card? card = null)
     {
       _card = card;
       _creature = creature;
