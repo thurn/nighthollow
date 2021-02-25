@@ -14,6 +14,7 @@
 
 using System.Collections.Immutable;
 using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -31,7 +32,7 @@ namespace Nighthollow.Delegates.Handlers
       }
 
       public override ImmutableDictionary<DamageType, int> Invoke(
-        DelegateContext c,
+        GameContext c,
         int delegateIndex,
         ITransformDamage handler,
         ImmutableDictionary<DamageType, int> current) =>
@@ -48,7 +49,7 @@ namespace Nighthollow.Delegates.Handlers
     /// invoked in sequence with the return value of the previous delegate.
     /// </summary>
     ImmutableDictionary<DamageType, int> TransformDamage(
-      DelegateContext context,
+      GameContext context,
       int delegateIndex,
       Data data,
       ImmutableDictionary<DamageType, int> current);

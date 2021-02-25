@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -27,7 +28,7 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) => "Curses Enemies on Hit With:";
 
     public IEnumerable<Effect> OnApplySkillToTarget(
-      DelegateContext c, int delegateIndex, IOnApplySkillToTarget.Data d) =>
+      GameContext c, int delegateIndex, IOnApplySkillToTarget.Data d) =>
       d.Skill.ItemData.StatusEffects
         .Select(statusEffect => new ApplyStatusEffectEffect(d.Target.Creature, statusEffect));
   }

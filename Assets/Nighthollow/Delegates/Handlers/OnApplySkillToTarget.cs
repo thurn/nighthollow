@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -32,7 +33,7 @@ namespace Nighthollow.Delegates.Handlers
         Projectile = projectile;
       }
 
-      public override IEnumerable<Effect> Invoke(DelegateContext c, int delegateIndex, IOnApplySkillToTarget handler) =>
+      public override IEnumerable<Effect> Invoke(GameContext c, int delegateIndex, IOnApplySkillToTarget handler) =>
         handler.OnApplySkillToTarget(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -49,6 +50,6 @@ namespace Nighthollow.Delegates.Handlers
     /// returned from <see cref="IFindTargets" /> for a skill. The default implementation implements the standard
     /// algorithm for applying the skill's BaseDamage, including things like checking for hit, checking for critical
     /// hit, applying damage, applying health drain, and applying stun.
-    IEnumerable<Effect> OnApplySkillToTarget(DelegateContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnApplySkillToTarget(GameContext context, int delegateIndex, Data data);
   }
 }

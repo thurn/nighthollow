@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -31,7 +32,7 @@ namespace Nighthollow.Delegates.Handlers
         Effect = effect;
       }
 
-      public override IEnumerable<Effect> Invoke(DelegateContext c, int delegateIndex, IOnFiredProjectile handler) =>
+      public override IEnumerable<Effect> Invoke(GameContext c, int delegateIndex, IOnFiredProjectile handler) =>
         handler.OnFiredProjectile(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -40,6 +41,6 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>Called when the creature fires a projectile.</summary>
-    IEnumerable<Effect> OnFiredProjectile(DelegateContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnFiredProjectile(GameContext context, int delegateIndex, Data data);
   }
 }

@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -29,13 +30,13 @@ namespace Nighthollow.Delegates.Handlers
       }
 
       public override IEnumerable<Effect> Invoke(
-        DelegateContext c, int delegateIndex, IOnEnemyCreatureAtEndzone handler) =>
+        GameContext c, int delegateIndex, IOnEnemyCreatureAtEndzone handler) =>
         handler.OnEnemyCreatureAtEndzone(c, delegateIndex, this);
 
       public CreatureState Self { get; }
     }
 
     /// <summary>Called when an enemy creature passes all defenders and reaches the end of the board.</summary>
-    IEnumerable<Effect> OnEnemyCreatureAtEndzone(DelegateContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnEnemyCreatureAtEndzone(GameContext context, int delegateIndex, Data data);
   }
 }

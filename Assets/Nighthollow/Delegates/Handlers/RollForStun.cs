@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -30,7 +31,7 @@ namespace Nighthollow.Delegates.Handlers
         DamageAmount = damageAmount;
       }
 
-      public override bool Invoke(DelegateContext c, int delegateIndex, IRollForStun handler) =>
+      public override bool Invoke(GameContext c, int delegateIndex, IRollForStun handler) =>
         handler.RollForStun(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -43,6 +44,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Should roll a random number to determine if a hit from this creature for DamageAmount damage should stun the
     /// target
     /// </summary>
-    bool RollForStun(DelegateContext context, int delegateIndex, Data data);
+    bool RollForStun(GameContext context, int delegateIndex, Data data);
   }
 }

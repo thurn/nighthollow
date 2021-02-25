@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -30,7 +31,7 @@ namespace Nighthollow.Delegates.Handlers
         TotalDamage = totalDamage;
       }
 
-      public override int Invoke(DelegateContext c, int delegateIndex, IComputeHealthDrain handler) =>
+      public override int Invoke(GameContext c, int delegateIndex, IComputeHealthDrain handler) =>
         handler.ComputeHealthDrain(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -40,6 +41,6 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>Computes health drain to apply for a hit on a target</summary>
-    int ComputeHealthDrain(DelegateContext context, int delegateIndex, Data data);
+    int ComputeHealthDrain(GameContext context, int delegateIndex, Data data);
   }
 }

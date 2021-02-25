@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -20,23 +21,23 @@ namespace Nighthollow.Delegates
 {
   public interface IEventData
   {
-    IEnumerable<Effect> Raise(DelegateContext c, DelegateList delegateList);
+    IEnumerable<Effect> Raise(GameContext c, DelegateList delegateList);
   }
 
   public abstract class EventData<THandler> : IEventData where THandler : IHandler
   {
-    public abstract IEnumerable<Effect> Invoke(DelegateContext c, int delegateIndex, THandler handler);
+    public abstract IEnumerable<Effect> Invoke(GameContext c, int delegateIndex, THandler handler);
 
-    public IEnumerable<Effect> Raise(DelegateContext c, DelegateList delegateList) => delegateList.Invoke(c, this);
+    public IEnumerable<Effect> Raise(GameContext c, DelegateList delegateList) => delegateList.Invoke(c, this);
   }
 
   public abstract class QueryData<THandler, TResult>
   {
-    public abstract TResult Invoke(DelegateContext c, int delegateIndex, THandler handler);
+    public abstract TResult Invoke(GameContext c, int delegateIndex, THandler handler);
   }
 
   public abstract class IteratedQueryData<THandler, TResult>
   {
-    public abstract TResult Invoke(DelegateContext c, int delegateIndex, THandler handler, TResult current);
+    public abstract TResult Invoke(GameContext c, int delegateIndex, THandler handler, TResult current);
   }
 }

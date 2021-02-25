@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"Projectiles Chain {provider.Get(Stat.MaxProjectileTimesChained)} Times to Random Targets";
 
-    public bool ShouldSkipProjectileImpact(DelegateContext c, int delegateIndex, IShouldSkipProjectileImpact.Data d)
+    public bool ShouldSkipProjectileImpact(GameContext c, int delegateIndex, IShouldSkipProjectileImpact.Data d)
     {
       if (d.Projectile && d.Projectile!.KeyValueStore.Get(Key.TimesChained) > 0)
       {
@@ -45,7 +45,7 @@ namespace Nighthollow.Delegates.Implementations
       return false;
     }
 
-    public IEnumerable<Effect> OnHitTarget(DelegateContext c, int delegateIndex, IOnHitTarget.Data d)
+    public IEnumerable<Effect> OnHitTarget(GameContext c, int delegateIndex, IOnHitTarget.Data d)
     {
       if (d.Projectile &&
           d.Projectile!.KeyValueStore.Get(Key.TimesChained) < d.Skill.GetInt(Stat.MaxProjectileTimesChained))

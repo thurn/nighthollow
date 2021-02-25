@@ -14,6 +14,7 @@
 
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Services;
 using UnityEngine;
 
 #nullable enable
@@ -31,7 +32,7 @@ namespace Nighthollow.Delegates.Handlers
         Projectile = projectile;
       }
 
-      public override Collider2D? Invoke(DelegateContext c, int delegateIndex, IGetCollider handler) =>
+      public override Collider2D? Invoke(GameContext c, int delegateIndex, IGetCollider handler) =>
         handler.GetCollider(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -40,6 +41,6 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>Returns the collider to use for hit-testing this skill's impact.</summary>
-    Collider2D? GetCollider(DelegateContext context, int delegateIndex, Data data);
+    Collider2D? GetCollider(GameContext context, int delegateIndex, Data data);
   }
 }

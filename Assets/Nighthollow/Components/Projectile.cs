@@ -95,7 +95,7 @@ namespace Nighthollow.Components
     void OnTriggerEnter2D(Collider2D other)
     {
       if (_firedBy.CurrentSkill!.DelegateList.First(
-        new DelegateContext(_registry),
+        new GameContext(_registry),
         new IShouldSkipProjectileImpact.Data(_firedBy.AsCreatureState(), _skillData, this),
         notFound: false))
       {

@@ -18,6 +18,7 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -31,7 +32,7 @@ namespace Nighthollow.Delegates
   {
     public override string Describe(IStatDescriptionProvider provider) => "Default Creature Delegate";
 
-    public IEnumerable<Effect> OnCreatureDeath(DelegateContext c, int delegateIndex, IOnCreatureDeath.Data d)
+    public IEnumerable<Effect> OnCreatureDeath(GameContext c, int delegateIndex, IOnCreatureDeath.Data d)
     {
       if (d.Self.Owner == PlayerName.Enemy)
       {
@@ -39,7 +40,7 @@ namespace Nighthollow.Delegates
       }
     }
 
-    public SkillData? SelectSkill(DelegateContext c, int delegateIndex, ISelectSkill.Data d)
+    public SkillData? SelectSkill(GameContext c, int delegateIndex, ISelectSkill.Data d)
     {
       if (AnyMeleeSkillCouldHit(c, d.Self))
       {
@@ -62,14 +63,14 @@ namespace Nighthollow.Delegates
       return SelectMatching(d.Self, s => !s.IsMelee() && !s.IsProjectile());
     }
 
-    static bool AnyMeleeSkillCouldHit(DelegateContext c, CreatureState self)
+    static bool AnyMeleeSkillCouldHit(GameContext c, CreatureState self)
     {
       return self.Data.Skills
         .Where(s => s.IsMelee())
         .Any(skill => skill.DelegateList.Any(c, new IMeleeSkillCouldHit.Data(self, skill)));
     }
 
-    static bool AnyProjectileSkillCouldHit(DelegateContext c, CreatureState self)
+    static bool AnyProjectileSkillCouldHit(GameContext c, CreatureState self)
     {
       return self.Data.Skills
         .Where(s => s.IsProjectile())
@@ -97,10 +98,10 @@ namespace Nighthollow.Delegates
       return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
-    public bool MeleeSkillCouldHit(DelegateContext c, int delegateIndex, IMeleeSkillCouldHit.Data d) =>
+    public bool MeleeSkillCouldHit(GameContext c, int delegateIndex, IMeleeSkillCouldHit.Data d) =>
       d.Self.Creature.Collider && HasOverlap(d.Self.Owner, d.Self.Creature.Collider);
 
-    public bool ProjectileSkillCouldHit(DelegateContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
+    public bool ProjectileSkillCouldHit(GameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
     {
       var hit = Physics2D.Raycast(
         d.Self.Creature.ProjectileSource.position,

@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
-
 #nullable enable
 
-namespace Nighthollow.Delegates
+namespace Nighthollow.Services
 {
-  public sealed class DelegateContext
+  public sealed class GameContext
   {
-    public DelegateContext(GameServiceRegistry registry)
+    readonly GameServiceRegistry _registry;
+
+    public GameContext(GameServiceRegistry registry)
     {
-      Registry = registry;
+      _registry = registry;
     }
 
-    public GameServiceRegistry Registry { get; }
+    public CreatureService CreatureService => _registry.CreatureService;
   }
 }

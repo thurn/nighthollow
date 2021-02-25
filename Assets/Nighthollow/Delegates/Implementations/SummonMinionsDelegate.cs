@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -27,10 +28,10 @@ namespace Nighthollow.Delegates.Implementations
   {
     public override string Describe(IStatDescriptionProvider provider) => "Summons Minions";
 
-    public IEnumerable<Effect> OnSkillUsed(DelegateContext c, int delegateIndex, IOnSkillUsed.Data d)
+    public IEnumerable<Effect> OnSkillUsed(GameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {
       var filePosition = Errors.CheckNotNull(d.Self.FilePosition);
-      var rank = c.Registry.CreatureService.GetOpenForwardRank(
+      var rank = c.CreatureService.GetOpenForwardRank(
         Errors.CheckNotNull(d.Self.RankPosition), filePosition);
       if (rank.HasValue)
       {

@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -28,13 +29,13 @@ namespace Nighthollow.Delegates.Handlers
         Self = self;
       }
 
-      public override IEnumerable<Effect> Invoke(DelegateContext c, int delegateIndex, IOnCreatureDeath handler) =>
+      public override IEnumerable<Effect> Invoke(GameContext c, int delegateIndex, IOnCreatureDeath handler) =>
         handler.OnCreatureDeath(c, delegateIndex, this);
 
       public CreatureState Self { get; }
     }
 
     /// <summary>Called when a creature dies.</summary>
-    IEnumerable<Effect> OnCreatureDeath(DelegateContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnCreatureDeath(GameContext context, int delegateIndex, Data data);
   }
 }

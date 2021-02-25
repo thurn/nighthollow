@@ -14,6 +14,7 @@
 
 using System.Collections.Immutable;
 using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -32,7 +33,7 @@ namespace Nighthollow.Delegates.Handlers
       }
 
       public override ImmutableDictionary<DamageType, int> Invoke(
-        DelegateContext c, int delegateIndex, IApplyDamageResistance handler) =>
+        GameContext c, int delegateIndex, IApplyDamageResistance handler) =>
         handler.ApplyDamageResistance(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -45,6 +46,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Should apply damage resistance for this skill, reducing the damage value based on the target's resistance.
     /// Typically called by <see cref="IComputeFinalDamage" />.
     /// </summary>
-    ImmutableDictionary<DamageType, int> ApplyDamageResistance(DelegateContext context, int delegateIndex, Data data);
+    ImmutableDictionary<DamageType, int> ApplyDamageResistance(GameContext context, int delegateIndex, Data data);
   }
 }

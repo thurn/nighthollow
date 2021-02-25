@@ -16,6 +16,7 @@
 using System.Collections.Generic;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -27,7 +28,7 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"+{provider.Get(Stat.AddedManaGain)} Mana Generated";
 
-    public IEnumerable<Effect> OnCreatureActivated(DelegateContext c, int delegateIndex, IOnCreatureActivated.Data d)
+    public IEnumerable<Effect> OnCreatureActivated(GameContext c, int delegateIndex, IOnCreatureActivated.Data d)
     {
       yield return new ApplyModifierToOwnerEffect(d.Self.Creature,
         Stat.ManaGain.Add(d.Self.Get(Stat.AddedManaGain)).WithLifetime(new WhileAliveLifetime(d.Self.Creature)));

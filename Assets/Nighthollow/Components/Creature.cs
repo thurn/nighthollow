@@ -24,7 +24,6 @@ using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
-using DelegateContext = Nighthollow.Delegates.DelegateContext;
 using Random = UnityEngine.Random;
 
 #nullable enable
@@ -269,7 +268,7 @@ namespace Nighthollow.Components
       _data = _data.WithKeyValueStore(mutation.Mutate(_data.KeyValueStore));
     }
 
-    DelegateContext CreateContext() => new DelegateContext(_registry);
+    GameContext CreateContext() => new GameContext(_registry);
 
     void TryToUseSkill()
     {

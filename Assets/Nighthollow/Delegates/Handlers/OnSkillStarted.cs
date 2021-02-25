@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -29,7 +30,7 @@ namespace Nighthollow.Delegates.Handlers
         Skill = skill;
       }
 
-      public override IEnumerable<Effect> Invoke(DelegateContext c, int delegateIndex, IOnSkillStarted handler) =>
+      public override IEnumerable<Effect> Invoke(GameContext c, int delegateIndex, IOnSkillStarted handler) =>
         handler.OnSkillStarted(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -37,6 +38,6 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>Called when a skill's animation begins.</summary>
-    IEnumerable<Effect> OnSkillStarted(DelegateContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnSkillStarted(GameContext context, int delegateIndex, Data data);
   }
 }

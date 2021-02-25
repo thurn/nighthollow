@@ -17,6 +17,7 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -34,7 +35,7 @@ namespace Nighthollow.Delegates.Implementations
     /// <summary>Count of projectiles to fire, *including* the initial projectile.</summary>
     protected abstract int GetProjectileCount(CreatureState creature, SkillData skill);
 
-    public bool ProjectileSkillCouldHit(DelegateContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
+    public bool ProjectileSkillCouldHit(GameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
     {
       return CollectionUtils.AlternatingIntegers()
         .Take(GetProjectileCount(d.Self, d.Skill) - 1)
@@ -47,7 +48,7 @@ namespace Nighthollow.Delegates.Implementations
         .Any(hit => hit.collider);
     }
 
-    public IEnumerable<Effect> OnFiredProjectile(DelegateContext c, int delegateIndex, IOnFiredProjectile.Data d)
+    public IEnumerable<Effect> OnFiredProjectile(GameContext c, int delegateIndex, IOnFiredProjectile.Data d)
     {
       // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
       if (d.Effect.DelegateIndex <= delegateIndex)

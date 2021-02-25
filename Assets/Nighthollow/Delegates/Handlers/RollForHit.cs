@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -29,7 +30,7 @@ namespace Nighthollow.Delegates.Handlers
         Target = target;
       }
 
-      public override bool Invoke(DelegateContext c, int delegateIndex, IRollForHit handler) =>
+      public override bool Invoke(GameContext c, int delegateIndex, IRollForHit handler) =>
         handler.RollForHit(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -40,6 +41,6 @@ namespace Nighthollow.Delegates.Handlers
     /// <summary>
     /// Should roll a random number to determine if the current skill will be treated as a hit.
     /// </summary>
-    bool RollForHit(DelegateContext context, int delegateIndex, Data data);
+    bool RollForHit(GameContext context, int delegateIndex, Data data);
   }
 }

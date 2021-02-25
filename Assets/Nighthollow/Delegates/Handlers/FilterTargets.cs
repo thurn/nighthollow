@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -31,7 +32,7 @@ namespace Nighthollow.Delegates.Handlers
         Hits = hits;
       }
 
-      public override IEnumerable<Creature> Invoke(DelegateContext c, int delegateIndex, IFilterTargets handler) =>
+      public override IEnumerable<Creature> Invoke(GameContext c, int delegateIndex, IFilterTargets handler) =>
         handler.FilterTargets(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -43,6 +44,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Given a list of creatures hit by a skill, returns a list of the creatures which should have the skill effect
     /// applied by <see cref="IOnApplySkillToTarget" />.
     /// </summary>
-    IEnumerable<Creature> FilterTargets(DelegateContext context, int delegateIndex, Data data);
+    IEnumerable<Creature> FilterTargets(GameContext context, int delegateIndex, Data data);
   }
 }
