@@ -27,7 +27,7 @@ using Random = UnityEngine.Random;
 
 #nullable enable
 
-namespace Nighthollow.Delegates.Implementations
+namespace Nighthollow.Delegates
 {
   public sealed class DefaultSkillDelegate : AbstractDelegate,
     IOnSkillUsed, IOnSkillImpact, IOnApplySkillToTarget, IFindTargets, IFilterTargets, IGetCollider, IRollForBaseDamage,

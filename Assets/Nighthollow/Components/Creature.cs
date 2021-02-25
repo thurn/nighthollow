@@ -157,7 +157,7 @@ namespace Nighthollow.Components
       else if (Owner == PlayerName.Enemy &&
                transform.position.x < Constants.EnemyCreatureEndzoneX)
       {
-        Root.Instance.Enemy.OnEnemyCreatureAtEndzone(this);
+        Invoke(new IOnEnemyCreatureAtEndzone.Data(AsCreatureState()));
       }
 
       var health = _data.GetInt(Stat.Health);
