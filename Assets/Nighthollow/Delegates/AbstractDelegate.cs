@@ -20,6 +20,6 @@ namespace Nighthollow.Delegates
 {
   public abstract class AbstractDelegate
   {
-    public virtual string Describe(IStatDescriptionProvider provider) => "<Delegate>";
+    public abstract string Describe(IStatDescriptionProvider provider);
   }
 }

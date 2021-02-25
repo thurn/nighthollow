@@ -103,7 +103,7 @@ namespace Nighthollow.Editor
         }
       }
 
-      var creature = prefab.AddComponent<Creature>();
+      var creature = prefab.AddComponent<Creature2>();
       if (attachmentDisplay)
       {
         creature.EditorSetReferences(projectileSource.transform, healthbarPosition.transform, attachmentDisplay!);

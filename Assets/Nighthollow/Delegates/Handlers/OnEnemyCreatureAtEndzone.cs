@@ -12,28 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using Nighthollow.Services;
+using Nighthollow.Data;
 
 #nullable enable
 
-namespace Nighthollow.Delegates
+namespace Nighthollow.Delegates.Handlers
 {
-  public abstract class Effect
+  public interface IOnEnemyCreatureAtEndzone : IHandler
   {
-    // https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
-    public abstract void Execute(GameServiceRegistry registry);
-
-    public void Execute(GameContext c)
+    public sealed class Data : EventData<IOnEnemyCreatureAtEndzone>
     {
+      public Data(CreatureState self)
+      {
+        Self = self;
+      }
+
+      public override IEnumerable<Effect> Invoke(DelegateContext c, IOnEnemyCreatureAtEndzone handler) =>
+        handler.OnEnemyCreatureAtEndzone(c, this);
+
+      public CreatureState Self { get; }
     }
 
-    public virtual IEnumerable<Effect> RaiseTriggeredEvents(GameContext c)
-    {
-      yield break;
-    }
+    /// <summary>Called when an enemy creature passes all defenders and reaches the end of the board.</summary>
+    IEnumerable<Effect> OnEnemyCreatureAtEndzone(DelegateContext c, Data d);
   }
 }

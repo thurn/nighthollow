@@ -21,7 +21,7 @@ namespace Nighthollow.Data
   public sealed partial class GameData
   {
     public GameData(
-      BattleData? battleData = null,
+      BattleConfig? battleData = null,
       ImmutableDictionary<int, TableMetadata>? tableMetadata = null,
       ImmutableDictionary<int, CreatureTypeData>? creatureTypes = null,
       ImmutableDictionary<int, AffixTypeData>? affixTypes = null,
@@ -33,7 +33,7 @@ namespace Nighthollow.Data
       ImmutableDictionary<int, CreatureItemData>? deck = null,
       ImmutableDictionary<int, StatusEffectTypeData>? statusEffects = null)
     {
-      BattleData = battleData ?? new BattleData();
+      BattleConfig = battleData ?? new BattleConfig();
       TableMetadata = tableMetadata ?? ImmutableDictionary<int, TableMetadata>.Empty;
       CreatureTypes = creatureTypes ?? ImmutableDictionary<int, CreatureTypeData>.Empty;
       AffixTypes = affixTypes ?? ImmutableDictionary<int, AffixTypeData>.Empty;
@@ -46,7 +46,7 @@ namespace Nighthollow.Data
       StatusEffects = statusEffects ?? ImmutableDictionary<int, StatusEffectTypeData>.Empty;
     }
 
-    [Field] public BattleData BattleData { get; }
+    [Field] public BattleConfig BattleConfig { get; }
     [Field] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
     [Field] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
     [Field] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }

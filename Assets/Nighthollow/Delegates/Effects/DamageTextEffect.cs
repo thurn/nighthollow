@@ -22,13 +22,13 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class DamageTextEffect : Effect
   {
-    public DamageTextEffect(Creature target, int damageAmount)
+    public DamageTextEffect(Creature2 target, int damageAmount)
     {
       Target = target;
       DamageAmount = damageAmount;
     }
 
-    public Creature Target { get; }
+    public Creature2 Target { get; }
     public int DamageAmount { get; }
 
     public override void Execute(GameServiceRegistry registry)

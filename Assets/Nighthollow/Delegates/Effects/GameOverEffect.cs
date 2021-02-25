@@ -12,28 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
+using Nighthollow.Interface;
 using Nighthollow.Services;
+using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Delegates
+namespace Nighthollow.Delegates.Effects
 {
-  public abstract class Effect
+  public sealed class GameOverEffect : Effect
   {
-    // https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
-    public abstract void Execute(GameServiceRegistry registry);
-
-    public void Execute(GameContext c)
+    public override void Execute(GameServiceRegistry registry)
     {
-    }
-
-    public virtual IEnumerable<Effect> RaiseTriggeredEvents(GameContext c)
-    {
-      yield break;
+      Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
+        .Show(new GameOverMessage.Args("Game Over", "World"));
+      Root.Instance.ScreenController.Get(ScreenController.BlackoutWindow).Show(argument: 0.5f);
+      Time.timeScale = 0f;
     }
   }
 }

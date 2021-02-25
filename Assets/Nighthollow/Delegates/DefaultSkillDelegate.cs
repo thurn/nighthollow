@@ -27,7 +27,7 @@ using Random = UnityEngine.Random;
 
 #nullable enable
 
-namespace Nighthollow.Delegates.Implementations
+namespace Nighthollow.Delegates
 {
   public sealed class DefaultSkillDelegate : AbstractDelegate,
     IOnSkillUsed, IOnSkillImpact, IOnApplySkillToTarget, IFindTargets, IFilterTargets, IGetCollider, IRollForBaseDamage,
@@ -67,7 +67,7 @@ namespace Nighthollow.Delegates.Implementations
     {
       var targets = d.Skill.DelegateList.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
 
-      foreach (var target in targets ?? Enumerable.Empty<Creature>())
+      foreach (var target in targets ?? Enumerable.Empty<Creature2>())
       {
         yield return new EventEffect<IOnApplySkillToTarget>(new IOnApplySkillToTarget.Data(
           d.Self,
@@ -132,7 +132,7 @@ namespace Nighthollow.Delegates.Implementations
       }
     }
 
-    public IEnumerable<Creature> FindTargets(DelegateContext c, IFindTargets.Data d)
+    public IEnumerable<Creature2> FindTargets(DelegateContext c, IFindTargets.Data d)
     {
       var filter = new ContactFilter2D
       {
@@ -144,7 +144,7 @@ namespace Nighthollow.Delegates.Implementations
       var sourceCollider = d.Skill.DelegateList.FirstNonNull(c, new IGetCollider.Data(d.Self, d.Skill, d.Projectile));
       if (!sourceCollider)
       {
-        return Enumerable.Empty<Creature>();
+        return Enumerable.Empty<Creature2>();
       }
 
       var colliders = new List<Collider2D>();
@@ -152,14 +152,14 @@ namespace Nighthollow.Delegates.Implementations
 
       var creatures = colliders
         // Filter out trigger colliders
-        .Where(collider => collider.GetComponent<Creature>())
-        .Select(ComponentUtils.GetComponent<Creature>);
+        .Where(collider => collider.GetComponent<Creature2>())
+        .Select(ComponentUtils.GetComponent<Creature2>);
       return d.Skill.DelegateList.First(c,
         new IFilterTargets.Data(d.Self, d.Skill, creatures),
-        notFound: Enumerable.Empty<Creature>());
+        notFound: Enumerable.Empty<Creature2>());
     }
 
-    public IEnumerable<Creature> FilterTargets(DelegateContext c, IFilterTargets.Data d) => d.Skill.IsMelee()
+    public IEnumerable<Creature2> FilterTargets(DelegateContext c, IFilterTargets.Data d) => d.Skill.IsMelee()
       ? d.Hits.Take(Errors.CheckPositive(d.Skill.GetInt(Stat.MaxMeleeAreaTargets)))
       : d.Hits;
 

@@ -1,8 +1,8 @@
 // Generated Code - Do not Edit!
 
 using System.Collections.Immutable;
-using Nighthollow.Components;
 using Nighthollow.Delegates;
+using Nighthollow.Components;
 using Nighthollow.Stats;
 using Nighthollow.State;
 
@@ -62,46 +62,6 @@ namespace Nighthollow.Data
           ManaCost,
           Modifiers,
           influenceType);
-
-  }
-
-  public sealed partial class BattleData
-  {
-    public BattleData WithEnemies(ImmutableList<CreatureItemData> enemies) =>
-      Equals(enemies, Enemies)
-        ? this
-        : new BattleData(
-          enemies,
-          EnemyModifiers,
-          UserDeckOverride,
-          EnemyListOverride);
-
-    public BattleData WithEnemyModifiers(ImmutableList<ModifierData> enemyModifiers) =>
-      Equals(enemyModifiers, EnemyModifiers)
-        ? this
-        : new BattleData(
-          Enemies,
-          enemyModifiers,
-          UserDeckOverride,
-          EnemyListOverride);
-
-    public BattleData WithUserDeckOverride(int? userDeckOverride) =>
-      Equals(userDeckOverride, UserDeckOverride)
-        ? this
-        : new BattleData(
-          Enemies,
-          EnemyModifiers,
-          userDeckOverride,
-          EnemyListOverride);
-
-    public BattleData WithEnemyListOverride(int? enemyListOverride) =>
-      Equals(enemyListOverride, EnemyListOverride)
-        ? this
-        : new BattleData(
-          Enemies,
-          EnemyModifiers,
-          UserDeckOverride,
-          enemyListOverride);
 
   }
 
@@ -349,11 +309,11 @@ namespace Nighthollow.Data
 
   public sealed partial class GameData
   {
-    public GameData WithBattleData(BattleData battleData) =>
-      Equals(battleData, BattleData)
+    public GameData WithBattleConfig(BattleConfig battleConfig) =>
+      Equals(battleConfig, BattleConfig)
         ? this
         : new GameData(
-          battleData,
+          battleConfig,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -369,7 +329,7 @@ namespace Nighthollow.Data
       Equals(tableMetadata, TableMetadata)
         ? this
         : new GameData(
-          BattleData,
+          BattleConfig,
           tableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -385,7 +345,7 @@ namespace Nighthollow.Data
       Equals(creatureTypes, CreatureTypes)
         ? this
         : new GameData(
-          BattleData,
+          BattleConfig,
           TableMetadata,
           creatureTypes,
           AffixTypes,
@@ -401,7 +361,7 @@ namespace Nighthollow.Data
       Equals(affixTypes, AffixTypes)
         ? this
         : new GameData(
-          BattleData,
+          BattleConfig,
           TableMetadata,
           CreatureTypes,
           affixTypes,
@@ -417,7 +377,7 @@ namespace Nighthollow.Data
       Equals(skillTypes, SkillTypes)
         ? this
         : new GameData(
-          BattleData,
+          BattleConfig,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -433,7 +393,7 @@ namespace Nighthollow.Data
       Equals(statData, StatData)
         ? this
         : new GameData(
-          BattleData,
+          BattleConfig,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -449,7 +409,7 @@ namespace Nighthollow.Data
       Equals(itemLists, ItemLists)
         ? this
         : new GameData(
-          BattleData,
+          BattleConfig,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -465,7 +425,7 @@ namespace Nighthollow.Data
       Equals(userModifiers, UserModifiers)
         ? this
         : new GameData(
-          BattleData,
+          BattleConfig,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -481,7 +441,7 @@ namespace Nighthollow.Data
       Equals(collection, Collection)
         ? this
         : new GameData(
-          BattleData,
+          BattleConfig,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -497,7 +457,7 @@ namespace Nighthollow.Data
       Equals(deck, Deck)
         ? this
         : new GameData(
-          BattleData,
+          BattleConfig,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -513,7 +473,7 @@ namespace Nighthollow.Data
       Equals(statusEffects, StatusEffects)
         ? this
         : new GameData(
-          BattleData,
+          BattleConfig,
           TableMetadata,
           CreatureTypes,
           AffixTypes,
@@ -525,6 +485,10 @@ namespace Nighthollow.Data
           Deck,
           statusEffects);
 
+  }
+
+  public sealed partial class BattleState
+  {
   }
 
   public sealed partial class CreatureSkillAnimation
@@ -1015,6 +979,160 @@ namespace Nighthollow.Data
 
   }
 
+  public sealed partial class CreatureState
+  {
+    public CreatureState WithCreature(Creature2 creature) =>
+      Equals(creature, Creature)
+        ? this
+        : new CreatureState(
+          creature,
+          Data,
+          Animation,
+          Owner,
+          RankPosition,
+          FilePosition,
+          CurrentSkill,
+          DamageTaken,
+          SkillLastUsedTimes,
+          StartingX);
+
+    public CreatureState WithData(CreatureData data) =>
+      Equals(data, Data)
+        ? this
+        : new CreatureState(
+          Creature,
+          data,
+          Animation,
+          Owner,
+          RankPosition,
+          FilePosition,
+          CurrentSkill,
+          DamageTaken,
+          SkillLastUsedTimes,
+          StartingX);
+
+    public CreatureState WithAnimation(CreatureAnimation animation) =>
+      Equals(animation, Animation)
+        ? this
+        : new CreatureState(
+          Creature,
+          Data,
+          animation,
+          Owner,
+          RankPosition,
+          FilePosition,
+          CurrentSkill,
+          DamageTaken,
+          SkillLastUsedTimes,
+          StartingX);
+
+    public CreatureState WithOwner(PlayerName owner) =>
+      Equals(owner, Owner)
+        ? this
+        : new CreatureState(
+          Creature,
+          Data,
+          Animation,
+          owner,
+          RankPosition,
+          FilePosition,
+          CurrentSkill,
+          DamageTaken,
+          SkillLastUsedTimes,
+          StartingX);
+
+    public CreatureState WithRankPosition(RankValue? rankPosition) =>
+      Equals(rankPosition, RankPosition)
+        ? this
+        : new CreatureState(
+          Creature,
+          Data,
+          Animation,
+          Owner,
+          rankPosition,
+          FilePosition,
+          CurrentSkill,
+          DamageTaken,
+          SkillLastUsedTimes,
+          StartingX);
+
+    public CreatureState WithFilePosition(FileValue? filePosition) =>
+      Equals(filePosition, FilePosition)
+        ? this
+        : new CreatureState(
+          Creature,
+          Data,
+          Animation,
+          Owner,
+          RankPosition,
+          filePosition,
+          CurrentSkill,
+          DamageTaken,
+          SkillLastUsedTimes,
+          StartingX);
+
+    public CreatureState WithCurrentSkill(SkillData? currentSkill) =>
+      Equals(currentSkill, CurrentSkill)
+        ? this
+        : new CreatureState(
+          Creature,
+          Data,
+          Animation,
+          Owner,
+          RankPosition,
+          FilePosition,
+          currentSkill,
+          DamageTaken,
+          SkillLastUsedTimes,
+          StartingX);
+
+    public CreatureState WithDamageTaken(int damageTaken) =>
+      Equals(damageTaken, DamageTaken)
+        ? this
+        : new CreatureState(
+          Creature,
+          Data,
+          Animation,
+          Owner,
+          RankPosition,
+          FilePosition,
+          CurrentSkill,
+          damageTaken,
+          SkillLastUsedTimes,
+          StartingX);
+
+    public CreatureState WithSkillLastUsedTimes(ImmutableDictionary<int, float> skillLastUsedTimes) =>
+      Equals(skillLastUsedTimes, SkillLastUsedTimes)
+        ? this
+        : new CreatureState(
+          Creature,
+          Data,
+          Animation,
+          Owner,
+          RankPosition,
+          FilePosition,
+          CurrentSkill,
+          DamageTaken,
+          skillLastUsedTimes,
+          StartingX);
+
+    public CreatureState WithStartingX(float? startingX) =>
+      Equals(startingX, StartingX)
+        ? this
+        : new CreatureState(
+          Creature,
+          Data,
+          Animation,
+          Owner,
+          RankPosition,
+          FilePosition,
+          CurrentSkill,
+          DamageTaken,
+          SkillLastUsedTimes,
+          startingX);
+
+  }
+
   public sealed partial class SkillItemData
   {
     public SkillItemData WithSkillTypeId(int skillTypeId) =>
@@ -1193,11 +1311,11 @@ namespace Nighthollow.Data
 
   public sealed partial class SkillData
   {
-    public SkillData WithNewDelegate(DelegateList newDelegate) =>
-      Equals(newDelegate, DelegateList)
+    public SkillData WithDelegateList(DelegateList delegateList) =>
+      Equals(delegateList, DelegateList)
         ? this
         : new SkillData(
-          newDelegate,
+          delegateList,
           Stats,
           BaseTypeId,
           BaseType,
@@ -1247,11 +1365,11 @@ namespace Nighthollow.Data
 
   public sealed partial class CreatureData
   {
-    public CreatureData WithNewDelegate(DelegateList newDelegate) =>
-      Equals(newDelegate, DelegateList)
+    public CreatureData WithDelegateList(DelegateList delegateList) =>
+      Equals(delegateList, DelegateList)
         ? this
         : new CreatureData(
-          newDelegate,
+          delegateList,
           Stats,
           Skills,
           BaseType,
@@ -1312,94 +1430,6 @@ namespace Nighthollow.Data
           BaseType,
           ItemData,
           keyValueStore);
-
-  }
-
-  public sealed partial class CreatureState
-  {
-    public CreatureState WithCreature(Creature creature) =>
-      Equals(creature, Creature)
-        ? this
-        : new CreatureState(
-          creature,
-          Data,
-          Animation,
-          RankPosition,
-          FilePosition,
-          CurrentSkill,
-          Owner);
-
-    public CreatureState WithData(CreatureData data) =>
-      Equals(data, Data)
-        ? this
-        : new CreatureState(
-          Creature,
-          data,
-          Animation,
-          RankPosition,
-          FilePosition,
-          CurrentSkill,
-          Owner);
-
-    public CreatureState WithAnimation(CreatureAnimation animation) =>
-      Equals(animation, Animation)
-        ? this
-        : new CreatureState(
-          Creature,
-          Data,
-          animation,
-          RankPosition,
-          FilePosition,
-          CurrentSkill,
-          Owner);
-
-    public CreatureState WithRankPosition(RankValue? rankPosition) =>
-      Equals(rankPosition, RankPosition)
-        ? this
-        : new CreatureState(
-          Creature,
-          Data,
-          Animation,
-          rankPosition,
-          FilePosition,
-          CurrentSkill,
-          Owner);
-
-    public CreatureState WithFilePosition(FileValue? filePosition) =>
-      Equals(filePosition, FilePosition)
-        ? this
-        : new CreatureState(
-          Creature,
-          Data,
-          Animation,
-          RankPosition,
-          filePosition,
-          CurrentSkill,
-          Owner);
-
-    public CreatureState WithCurrentSkill(SkillData? currentSkill) =>
-      Equals(currentSkill, CurrentSkill)
-        ? this
-        : new CreatureState(
-          Creature,
-          Data,
-          Animation,
-          RankPosition,
-          FilePosition,
-          currentSkill,
-          Owner);
-
-    public CreatureState WithOwner(PlayerName owner) =>
-      Equals(owner, Owner)
-        ? this
-        : new CreatureState(
-          Creature,
-          Data,
-          Animation,
-          RankPosition,
-          FilePosition,
-          CurrentSkill,
-          owner);
 
   }
 
@@ -1600,6 +1630,46 @@ namespace Nighthollow.Data
         ? this
         : new UserData(
           stats);
+
+  }
+
+  public sealed partial class BattleConfig
+  {
+    public BattleConfig WithEnemies(ImmutableList<CreatureItemData> enemies) =>
+      Equals(enemies, Enemies)
+        ? this
+        : new BattleConfig(
+          enemies,
+          EnemyModifiers,
+          UserDeckOverride,
+          EnemyListOverride);
+
+    public BattleConfig WithEnemyModifiers(ImmutableList<ModifierData> enemyModifiers) =>
+      Equals(enemyModifiers, EnemyModifiers)
+        ? this
+        : new BattleConfig(
+          Enemies,
+          enemyModifiers,
+          UserDeckOverride,
+          EnemyListOverride);
+
+    public BattleConfig WithUserDeckOverride(int? userDeckOverride) =>
+      Equals(userDeckOverride, UserDeckOverride)
+        ? this
+        : new BattleConfig(
+          Enemies,
+          EnemyModifiers,
+          userDeckOverride,
+          EnemyListOverride);
+
+    public BattleConfig WithEnemyListOverride(int? enemyListOverride) =>
+      Equals(enemyListOverride, EnemyListOverride)
+        ? this
+        : new BattleConfig(
+          Enemies,
+          EnemyModifiers,
+          UserDeckOverride,
+          enemyListOverride);
 
   }
 }

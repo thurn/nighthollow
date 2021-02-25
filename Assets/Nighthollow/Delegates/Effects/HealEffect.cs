@@ -22,13 +22,13 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class HealEffect : Effect
   {
-    public HealEffect(Creature target, int amount)
+    public HealEffect(Creature2 target, int amount)
     {
       Target = target;
       Amount = amount;
     }
 
-    public Creature Target { get; }
+    public Creature2 Target { get; }
     public int Amount { get; }
 
     public override void Execute(GameServiceRegistry registry)

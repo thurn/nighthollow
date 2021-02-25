@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Collections.Immutable;
+using Nighthollow.Delegates.Effects;
+using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
+using Nighthollow.Stats;
 
 #nullable enable
 
 namespace Nighthollow.Delegates
 {
-  public abstract class Effect
+  public sealed class GlobalDelegate : AbstractDelegate, IOnEnemyCreatureAtEndzone
   {
-    // https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
-    public abstract void Execute(GameServiceRegistry registry);
+    public static readonly DelegateList List = new DelegateList(
+      ImmutableList.Create(DelegateMap.Get(DelegateId.GlobalDelegate)), parent: null);
 
-    public void Execute(GameContext c)
-    {
-    }
+    public override string Describe(IStatDescriptionProvider provider) => "Global Delegate";
 
-    public virtual IEnumerable<Effect> RaiseTriggeredEvents(GameContext c)
+    public IEnumerable<Effect> OnEnemyCreatureAtEndzone(GameContext c, IOnEnemyCreatureAtEndzone.Data d)
     {
-      yield break;
+      yield return new GameOverEffect();
     }
   }
 }

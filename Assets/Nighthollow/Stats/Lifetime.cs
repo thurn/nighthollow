@@ -28,11 +28,11 @@ namespace Nighthollow.Stats
 
   public sealed class WhileAliveLifetime : ILifetime
   {
-    readonly WeakReference<Creature> _scopeCreature;
+    readonly WeakReference<Creature2> _scopeCreature;
 
-    public WhileAliveLifetime(Creature scopeCreature)
+    public WhileAliveLifetime(Creature2 scopeCreature)
     {
-      _scopeCreature = new WeakReference<Creature>(Errors.CheckNotNull(scopeCreature));
+      _scopeCreature = new WeakReference<Creature2>(Errors.CheckNotNull(scopeCreature));
     }
 
     public bool IsValid()

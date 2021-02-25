@@ -25,13 +25,13 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class ApplyModifierToOwnerEffect : Effect
   {
-    public ApplyModifierToOwnerEffect(Creature self, IStatModifier modifier)
+    public ApplyModifierToOwnerEffect(Creature2 self, IStatModifier modifier)
     {
       Self = self;
       Modifier = modifier;
     }
 
-    public Creature Self { get; }
+    public Creature2 Self { get; }
     public IStatModifier Modifier { get; }
 
     public override void Execute(GameServiceRegistry registry)

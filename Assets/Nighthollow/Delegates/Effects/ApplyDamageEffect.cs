@@ -21,15 +21,15 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class ApplyDamageEffect : Effect
   {
-    public ApplyDamageEffect(Creature self, Creature target, int amount)
+    public ApplyDamageEffect(Creature2 self, Creature2 target, int amount)
     {
       Self = self;
       Target = target;
       Amount = amount;
     }
 
-    public Creature Self { get; }
-    public Creature Target { get; }
+    public Creature2 Self { get; }
+    public Creature2 Target { get; }
     public int Amount { get; }
 
     public override void Execute(GameServiceRegistry registry)

@@ -26,14 +26,14 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class KnockbackEffect : Effect
   {
-    public KnockbackEffect(Creature target, float distance, float durationSeconds)
+    public KnockbackEffect(Creature2 target, float distance, float durationSeconds)
     {
       Target = target;
       Distance = distance;
       DurationSeconds = durationSeconds;
     }
 
-    public Creature Target { get; }
+    public Creature2 Target { get; }
     public float Distance { get; }
     public float DurationSeconds { get; }
 

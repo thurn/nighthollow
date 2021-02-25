@@ -39,7 +39,7 @@ namespace Nighthollow.Delegates.Implementations
         /* TODO: NewDelegate */
         var targets = d.Skill.DelegateList.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
         return !(
-          (targets ?? Enumerable.Empty<Creature>())
+          (targets ?? Enumerable.Empty<Creature2>())
           .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
           .Any());
       }

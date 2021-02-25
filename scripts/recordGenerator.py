@@ -66,7 +66,8 @@ for root, _, files in os.walk(sys.argv[1]):
 
 using = [
     "System.Collections.Immutable",
-    "Nighthollow.Delegates.Core",
+    "Nighthollow.Delegates",
+    "Nighthollow.Components",
     "Nighthollow.Stats",
     "Nighthollow.State"
 ]

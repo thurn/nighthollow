@@ -22,27 +22,27 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IFilterTargets : IHandler
   {
-    public sealed class Data : QueryData<IFilterTargets, IEnumerable<Creature>>
+    public sealed class Data : QueryData<IFilterTargets, IEnumerable<Creature2>>
     {
-      public Data(CreatureState self, SkillData skill, IEnumerable<Creature> hits)
+      public Data(CreatureState self, SkillData skill, IEnumerable<Creature2> hits)
       {
         Self = self;
         Skill = skill;
         Hits = hits;
       }
 
-      public override IEnumerable<Creature> Invoke(DelegateContext c, IFilterTargets handler) =>
+      public override IEnumerable<Creature2> Invoke(DelegateContext c, IFilterTargets handler) =>
         handler.FilterTargets(c, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
-      public IEnumerable<Creature> Hits { get; }
+      public IEnumerable<Creature2> Hits { get; }
     }
 
     /// <summary>
     /// Given a list of creatures hit by a skill, returns a list of the creatures which should have the skill effect
     /// applied by <see cref="IOnApplySkillToTarget" />.
     /// </summary>
-    IEnumerable<Creature> FilterTargets(DelegateContext c, Data d);
+    IEnumerable<Creature2> FilterTargets(DelegateContext c, Data d);
   }
 }

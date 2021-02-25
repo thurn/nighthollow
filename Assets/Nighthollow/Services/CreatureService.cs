@@ -26,10 +26,10 @@ namespace Nighthollow.Services
 {
   public sealed class CreatureService : MonoBehaviour
   {
-    readonly HashSet<Creature> _movingCreatures = new HashSet<Creature>();
+    readonly HashSet<Creature2> _movingCreatures = new HashSet<Creature2>();
 
-    readonly Dictionary<(RankValue, FileValue), Creature> _userCreatures =
-      new Dictionary<(RankValue, FileValue), Creature>();
+    readonly Dictionary<(RankValue, FileValue), Creature2> _userCreatures =
+      new Dictionary<(RankValue, FileValue), Creature2>();
 
     GameServiceRegistry? _registry;
 
@@ -38,24 +38,24 @@ namespace Nighthollow.Services
       _registry = registry;
     }
 
-    public IEnumerable<Creature> EnemyCreatures()
+    public IEnumerable<Creature2> EnemyCreatures()
     {
       return _movingCreatures.Where(c => c.Owner == PlayerName.Enemy);
     }
 
-    public Creature CreateUserCreature(CreatureData creatureData)
+    public Creature2 CreateUserCreature(CreatureData creatureData)
     {
-      var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      var result = _registry!.AssetService.InstantiatePrefab<Creature2>(creatureData.BaseType.PrefabAddress);
       result.Initialize(_registry!, creatureData);
       return result;
     }
 
-    public Creature CreateMovingCreature(
+    public Creature2 CreateMovingCreature(
       CreatureData creatureData,
       FileValue file,
       float startingX)
     {
-      var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      var result = _registry!.AssetService.InstantiatePrefab<Creature2>(creatureData.BaseType.PrefabAddress);
 
       result.Initialize(_registry!, creatureData);
       result.ActivateCreature(rankValue: null, file, startingX);
@@ -64,13 +64,13 @@ namespace Nighthollow.Services
       return result;
     }
 
-    public void AddUserCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
+    public void AddUserCreatureAtPosition(Creature2 creature, RankValue rank, FileValue file)
     {
       creature.ActivateCreature(rank, file);
       _userCreatures[(rank, file)] = creature;
     }
 
-    public void RemoveCreature(Creature creature)
+    public void RemoveCreature(Creature2 creature)
     {
       if (creature.IsMoving)
       {
@@ -108,7 +108,7 @@ namespace Nighthollow.Services
     ///   Returns all User creatures in the 9 squares around the given (rank, file) position (including the creature at
     ///   that position, if any).
     /// </summary>
-    public IEnumerable<Creature> GetAdjacentUserCreatures(RankValue inputRank, FileValue inputFile) =>
+    public IEnumerable<Creature2> GetAdjacentUserCreatures(RankValue inputRank, FileValue inputFile) =>
       from rank in BoardPositions.AdjacentRanks(inputRank)
       from file in BoardPositions.AdjacentFiles(inputFile)
       where _userCreatures.ContainsKey((rank, file))

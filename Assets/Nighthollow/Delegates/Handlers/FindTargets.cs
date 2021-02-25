@@ -22,7 +22,7 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IFindTargets : IHandler
   {
-    public sealed class Data : QueryData<IFindTargets, IEnumerable<Creature>?>
+    public sealed class Data : QueryData<IFindTargets, IEnumerable<Creature2>?>
     {
       public Data(CreatureState self, SkillData skill, Projectile? projectile)
       {
@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Handlers
         Projectile = projectile;
       }
 
-      public override IEnumerable<Creature>? Invoke(DelegateContext c, IFindTargets handler) =>
+      public override IEnumerable<Creature2>? Invoke(DelegateContext c, IFindTargets handler) =>
         handler.FindTargets(c, this);
 
       public CreatureState Self { get; }
@@ -44,6 +44,6 @@ namespace Nighthollow.Delegates.Handlers
     ///   <see cref="IOnSkillImpact" /> implementation. Default implementation uses @<see cref="IGetCollider" /> to find all
     ///   creatures in the impact area and then adds targets returned by <see cref="IFilterTargets" />.
     /// </summary>
-    IEnumerable<Creature>? FindTargets(DelegateContext c, Data d);
+    IEnumerable<Creature2>? FindTargets(DelegateContext c, Data d);
   }
 }

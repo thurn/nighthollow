@@ -32,14 +32,14 @@ namespace Nighthollow.Delegates.Effects
       Stun
     }
 
-    public SkillEventEffect(Event eventName, Creature creature)
+    public SkillEventEffect(Event eventName, Creature2 creature)
     {
       EventName = eventName;
       Creature = creature;
     }
 
     public Event EventName { get; }
-    public Creature Creature { get; }
+    public Creature2 Creature { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
@@ -62,7 +62,7 @@ namespace Nighthollow.Delegates.Effects
       }
     }
 
-    public static Vector3 RandomEffectPoint(Creature creature)
+    public static Vector3 RandomEffectPoint(Creature2 creature)
     {
       var bounds = creature.Collider.bounds;
       return bounds.center + new Vector3(

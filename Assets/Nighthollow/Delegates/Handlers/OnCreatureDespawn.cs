@@ -12,23 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
+using System.Collections.Generic;
+using Nighthollow.Data;
 
 #nullable enable
 
-namespace Nighthollow.Delegates
+namespace Nighthollow.Delegates.Handlers
 {
-  public sealed class DelegateContext
+  public interface IOnCreatureDespawn : IHandler
   {
-    public DelegateContext(GameServiceRegistry registry, int delegateIndex = 1)
+    public sealed class Data : EventData<IOnCreatureDespawn>
     {
-      Registry = registry;
-      DelegateIndex = delegateIndex;
+      public Data(CreatureState self)
+      {
+        Self = self;
+      }
+
+      public override IEnumerable<Effect> Invoke(DelegateContext c, IOnCreatureDespawn handler) =>
+        handler.OnCreatureDespawn(c, this);
+
+      public CreatureState Self { get; }
     }
 
-    public DelegateContext WithIndex(int index) => new DelegateContext(Registry, index);
-
-    public GameServiceRegistry Registry { get; }
-    public int DelegateIndex { get; }
+    /// <summary>Called when a creature has gone offscreen and should be despawned.</summary>
+    IEnumerable<Effect> OnCreatureDespawn(DelegateContext c, Data d);
   }
 }

@@ -29,7 +29,7 @@ namespace Nighthollow.Components
     ImmutableList<(StatusEffectTypeData, int)>? _currentStatusEffects;
 
     public void SetStatusEffects(
-      GameServiceRegistry registry,
+      GameContext c,
       ImmutableList<(StatusEffectTypeData, int)> statusEffects)
     {
       if (_currentStatusEffects == null || !statusEffects.SequenceEqual(_currentStatusEffects))
@@ -40,7 +40,7 @@ namespace Nighthollow.Components
           if (effect.Item1.ImageAddress is { } address)
           {
             var newInstance = Root.Instance.Prefabs.CreateAttachment();
-            newInstance.Initialize(registry.AssetService.GetImage(address));
+            newInstance.Initialize(c.AssetService.GetImage(address));
             AddAttachment(newInstance.transform);
           }
         }
