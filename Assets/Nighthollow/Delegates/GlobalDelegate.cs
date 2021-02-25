@@ -25,7 +25,8 @@ namespace Nighthollow.Delegates
   {
     public override string Describe(IStatDescriptionProvider provider) => "Global Delegate";
 
-    public IEnumerable<Effect> OnEnemyCreatureAtEndzone(DelegateContext c, IOnEnemyCreatureAtEndzone.Data d)
+    public IEnumerable<Effect> OnEnemyCreatureAtEndzone(
+      DelegateContext c, int delegateIndex, IOnEnemyCreatureAtEndzone.Data d)
     {
       yield return new GameOverEffect();
     }

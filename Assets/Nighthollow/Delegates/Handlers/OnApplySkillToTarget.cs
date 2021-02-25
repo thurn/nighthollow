@@ -24,15 +24,16 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : EventData<IOnApplySkillToTarget>
     {
-      public Data(CreatureState self, SkillData skill, CreatureState target)
+      public Data(CreatureState self, SkillData skill, CreatureState target, Projectile? projectile)
       {
         Self = self;
         Skill = skill;
         Target = target;
+        Projectile = projectile;
       }
 
-      public override IEnumerable<Effect> Invoke(DelegateContext c, IOnApplySkillToTarget handler) =>
-        handler.OnApplySkillToTarget(c, this);
+      public override IEnumerable<Effect> Invoke(DelegateContext c, int delegateIndex, IOnApplySkillToTarget handler) =>
+        handler.OnApplySkillToTarget(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
@@ -48,6 +49,6 @@ namespace Nighthollow.Delegates.Handlers
     /// returned from <see cref="IFindTargets" /> for a skill. The default implementation implements the standard
     /// algorithm for applying the skill's BaseDamage, including things like checking for hit, checking for critical
     /// hit, applying damage, applying health drain, and applying stun.
-    IEnumerable<Effect> OnApplySkillToTarget(DelegateContext c, Data d);
+    IEnumerable<Effect> OnApplySkillToTarget(DelegateContext context, int delegateIndex, Data data);
   }
 }

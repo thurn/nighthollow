@@ -28,13 +28,14 @@ namespace Nighthollow.Delegates.Handlers
         Self = self;
       }
 
-      public override IEnumerable<Effect> Invoke(DelegateContext c, IOnEnemyCreatureAtEndzone handler) =>
-        handler.OnEnemyCreatureAtEndzone(c, this);
+      public override IEnumerable<Effect> Invoke(
+        DelegateContext c, int delegateIndex, IOnEnemyCreatureAtEndzone handler) =>
+        handler.OnEnemyCreatureAtEndzone(c, delegateIndex, this);
 
       public CreatureState Self { get; }
     }
 
     /// <summary>Called when an enemy creature passes all defenders and reaches the end of the board.</summary>
-    IEnumerable<Effect> OnEnemyCreatureAtEndzone(DelegateContext c, Data d);
+    IEnumerable<Effect> OnEnemyCreatureAtEndzone(DelegateContext context, int delegateIndex, Data data);
   }
 }

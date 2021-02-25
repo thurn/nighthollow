@@ -29,7 +29,7 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"+{provider.Get(Stat.SameTargetAddedDamage)} Damage for Each Hit on the Same Target";
 
-    public IEnumerable<Effect> OnHitTarget(DelegateContext c, IOnHitTarget.Data d)
+    public IEnumerable<Effect> OnHitTarget(DelegateContext c, int delegateIndex, IOnHitTarget.Data d)
     {
       if (d.Self.Data.KeyValueStore.TryGet(Key.LastCreatureHit, out var lastHit) && lastHit == d.Target.Creature)
       {
@@ -43,7 +43,7 @@ namespace Nighthollow.Delegates.Implementations
     }
 
     public ImmutableDictionary<DamageType, int> TransformDamage(
-      DelegateContext c, ITransformDamage.Data d, ImmutableDictionary<DamageType, int> current)
+      DelegateContext c, int delegateIndex, ITransformDamage.Data d, ImmutableDictionary<DamageType, int> current)
     {
       if (d.Self.Data.KeyValueStore.TryGet(Key.LastCreatureHit, out var lastHit) && lastHit == d.Target.Creature)
       {

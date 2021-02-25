@@ -27,7 +27,7 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"Knocks Back Targets for {provider.Get(Stat.KnockbackDuration)} on Hit";
 
-    public IEnumerable<Effect> OnHitTarget(DelegateContext c, IOnHitTarget.Data d)
+    public IEnumerable<Effect> OnHitTarget(DelegateContext c, int delegateIndex, IOnHitTarget.Data d)
     {
       var duration = d.Skill.GetDurationSeconds(Stat.KnockbackDuration);
       yield return new KnockbackEffect(

@@ -28,9 +28,9 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"Fires {provider.Get(Stat.ProjectileSequenceCount)} Projectiles in Sequence";
 
-    public IEnumerable<Effect> OnFiredProjectile(DelegateContext c, IOnFiredProjectile.Data d)
+    public IEnumerable<Effect> OnFiredProjectile(DelegateContext c, int delegateIndex, IOnFiredProjectile.Data d)
     {
-      if (d.Effect.DelegateIndex <= c.DelegateIndex)
+      if (d.Effect.DelegateIndex <= delegateIndex)
         // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
       {
         yield break;
@@ -42,7 +42,7 @@ namespace Nighthollow.Delegates.Implementations
         yield return new FireProjectileEffect(
           d.Self,
           d.Skill,
-          c.DelegateIndex,
+          delegateIndex,
           d.Self.Creature.ProjectileSource.position,
           Vector2.zero,
           firingDelayMs: i * d.Skill.Get(Stat.ProjectileSequenceDelay).AsMilliseconds());

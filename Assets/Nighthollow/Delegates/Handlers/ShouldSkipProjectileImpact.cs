@@ -30,8 +30,8 @@ namespace Nighthollow.Delegates.Handlers
         Projectile = projectile;
       }
 
-      public override bool Invoke(DelegateContext c, IShouldSkipProjectileImpact handler) =>
-        handler.ShouldSkipProjectileImpact(c, this);
+      public override bool Invoke(DelegateContext c, int delegateIndex, IShouldSkipProjectileImpact handler) =>
+        handler.ShouldSkipProjectileImpact(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
@@ -42,6 +42,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Should check if the current projectile should *not* trigger an impact in its current position. Will be
     /// true if any delegate returns a true value.
     /// </summary>
-    bool ShouldSkipProjectileImpact(DelegateContext c, Data d);
+    bool ShouldSkipProjectileImpact(DelegateContext context, int delegateIndex, Data data);
   }
 }

@@ -33,8 +33,8 @@ namespace Nighthollow.Delegates.Handlers
         Damage = damage;
       }
 
-      public override IEnumerable<Effect> Invoke(DelegateContext c, IOnHitTarget handler) =>
-        handler.OnHitTarget(c, this);
+      public override IEnumerable<Effect> Invoke(DelegateContext c, int delegateIndex, IOnHitTarget handler) =>
+        handler.OnHitTarget(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
@@ -44,6 +44,6 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>Called after one of the creature's skills has hit a target.</summary>
-    IEnumerable<Effect> OnHitTarget(DelegateContext c, Data d);
+    IEnumerable<Effect> OnHitTarget(DelegateContext context, int delegateIndex, Data data);
   }
 }

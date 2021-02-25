@@ -29,14 +29,14 @@ namespace Nighthollow.Delegates.Handlers
         Skill = skill;
       }
 
-      public override IEnumerable<Effect> Invoke(DelegateContext c, IOnSkillStarted handler) =>
-        handler.OnSkillStarted(c, this);
+      public override IEnumerable<Effect> Invoke(DelegateContext c, int delegateIndex, IOnSkillStarted handler) =>
+        handler.OnSkillStarted(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
     }
 
     /// <summary>Called when a skill's animation begins.</summary>
-    IEnumerable<Effect> OnSkillStarted(DelegateContext c, Data d);
+    IEnumerable<Effect> OnSkillStarted(DelegateContext context, int delegateIndex, Data data);
   }
 }

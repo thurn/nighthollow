@@ -28,8 +28,8 @@ namespace Nighthollow.Delegates.Handlers
         Skill = skill;
       }
 
-      public override bool Invoke(DelegateContext c, IProjectileSkillCouldHit handler) =>
-        handler.ProjectileSkillCouldHit(c, this);
+      public override bool Invoke(DelegateContext c, int delegateIndex, IProjectileSkillCouldHit handler) =>
+        handler.ProjectileSkillCouldHit(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
@@ -39,6 +39,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Called to check if a projectile fired by this creature would currently hit a target. Will be true if
     /// any delegate returns a true value.
     /// </summary>
-    bool ProjectileSkillCouldHit(DelegateContext c, Data d);
+    bool ProjectileSkillCouldHit(DelegateContext context, int delegateIndex, Data data);
   }
 }

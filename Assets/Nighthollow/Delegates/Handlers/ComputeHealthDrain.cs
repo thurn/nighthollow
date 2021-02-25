@@ -30,8 +30,8 @@ namespace Nighthollow.Delegates.Handlers
         TotalDamage = totalDamage;
       }
 
-      public override int Invoke(DelegateContext c, IComputeHealthDrain handler) =>
-        handler.ComputeHealthDrain(c, this);
+      public override int Invoke(DelegateContext c, int delegateIndex, IComputeHealthDrain handler) =>
+        handler.ComputeHealthDrain(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
@@ -40,6 +40,6 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>Computes health drain to apply for a hit on a target</summary>
-    int ComputeHealthDrain(DelegateContext c, Data d);
+    int ComputeHealthDrain(DelegateContext context, int delegateIndex, Data data);
   }
 }

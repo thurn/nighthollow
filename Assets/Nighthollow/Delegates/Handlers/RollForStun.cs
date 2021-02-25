@@ -30,8 +30,8 @@ namespace Nighthollow.Delegates.Handlers
         DamageAmount = damageAmount;
       }
 
-      public override bool Invoke(DelegateContext c, IRollForStun handler) =>
-        handler.RollForStun(c, this);
+      public override bool Invoke(DelegateContext c, int delegateIndex, IRollForStun handler) =>
+        handler.RollForStun(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
@@ -43,6 +43,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Should roll a random number to determine if a hit from this creature for DamageAmount damage should stun the
     /// target
     /// </summary>
-    bool RollForStun(DelegateContext c, Data d);
+    bool RollForStun(DelegateContext context, int delegateIndex, Data data);
   }
 }

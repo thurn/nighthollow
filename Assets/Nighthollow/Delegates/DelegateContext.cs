@@ -20,15 +20,11 @@ namespace Nighthollow.Delegates
 {
   public sealed class DelegateContext
   {
-    public DelegateContext(GameServiceRegistry registry, int delegateIndex = 1)
+    public DelegateContext(GameServiceRegistry registry)
     {
       Registry = registry;
-      DelegateIndex = delegateIndex;
     }
 
-    public DelegateContext WithIndex(int index) => new DelegateContext(Registry, index);
-
     public GameServiceRegistry Registry { get; }
-    public int DelegateIndex { get; }
   }
 }

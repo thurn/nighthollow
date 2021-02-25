@@ -27,7 +27,7 @@ namespace Nighthollow.Delegates.Implementations
   {
     public override string Describe(IStatDescriptionProvider provider) => "Buffs Adjacent Allies With:";
 
-    public IEnumerable<Effect> OnSkillUsed(DelegateContext c, IOnSkillUsed.Data d)
+    public IEnumerable<Effect> OnSkillUsed(DelegateContext c, int delegateIndex, IOnSkillUsed.Data d)
     {
       var adjacent = c.Registry.CreatureService.GetAdjacentUserCreatures(
         Errors.CheckNotNull(d.Self.RankPosition), Errors.CheckNotNull(d.Self.FilePosition));

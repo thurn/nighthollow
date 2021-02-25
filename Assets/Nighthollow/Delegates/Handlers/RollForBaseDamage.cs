@@ -30,8 +30,9 @@ namespace Nighthollow.Delegates.Handlers
         Target = target;
       }
 
-      public override ImmutableDictionary<DamageType, int> Invoke(DelegateContext c, IRollForBaseDamage handler) =>
-        handler.RollForBaseDamage(c, this);
+      public override ImmutableDictionary<DamageType, int> Invoke(
+        DelegateContext c, int delegateIndex, IRollForBaseDamage handler) =>
+        handler.RollForBaseDamage(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
@@ -41,6 +42,6 @@ namespace Nighthollow.Delegates.Handlers
     /// <summary>
     /// Should compute the base damage for this skill, randomly selecting from within its base damage range.
     /// </summary>
-    ImmutableDictionary<DamageType, int> RollForBaseDamage(DelegateContext c, Data d);
+    ImmutableDictionary<DamageType, int> RollForBaseDamage(DelegateContext context, int delegateIndex, Data data);
   }
 }

@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates
   {
     public override string Describe(IStatDescriptionProvider provider) => "Default Creature Delegate";
 
-    public IEnumerable<Effect> OnCreatureDeath(DelegateContext c, IOnCreatureDeath.Data d)
+    public IEnumerable<Effect> OnCreatureDeath(DelegateContext c, int delegateIndex, IOnCreatureDeath.Data d)
     {
       if (d.Self.Owner == PlayerName.Enemy)
       {
@@ -39,7 +39,7 @@ namespace Nighthollow.Delegates
       }
     }
 
-    public SkillData? SelectSkill(DelegateContext c, ISelectSkill.Data d)
+    public SkillData? SelectSkill(DelegateContext c, int delegateIndex, ISelectSkill.Data d)
     {
       if (AnyMeleeSkillCouldHit(c, d.Self))
       {
@@ -97,10 +97,10 @@ namespace Nighthollow.Delegates
       return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
-    public bool MeleeSkillCouldHit(DelegateContext c, IMeleeSkillCouldHit.Data d) =>
+    public bool MeleeSkillCouldHit(DelegateContext c, int delegateIndex, IMeleeSkillCouldHit.Data d) =>
       d.Self.Creature.Collider && HasOverlap(d.Self.Owner, d.Self.Creature.Collider);
 
-    public bool ProjectileSkillCouldHit(DelegateContext c, IProjectileSkillCouldHit.Data d)
+    public bool ProjectileSkillCouldHit(DelegateContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
     {
       var hit = Physics2D.Raycast(
         d.Self.Creature.ProjectileSource.position,

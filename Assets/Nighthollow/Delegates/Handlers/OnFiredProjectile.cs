@@ -31,8 +31,8 @@ namespace Nighthollow.Delegates.Handlers
         Effect = effect;
       }
 
-      public override IEnumerable<Effect> Invoke(DelegateContext c, IOnFiredProjectile handler) =>
-        handler.OnFiredProjectile(c, this);
+      public override IEnumerable<Effect> Invoke(DelegateContext c, int delegateIndex, IOnFiredProjectile handler) =>
+        handler.OnFiredProjectile(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
@@ -40,6 +40,6 @@ namespace Nighthollow.Delegates.Handlers
     }
 
     /// <summary>Called when the creature fires a projectile.</summary>
-    IEnumerable<Effect> OnFiredProjectile(DelegateContext c, Data d);
+    IEnumerable<Effect> OnFiredProjectile(DelegateContext context, int delegateIndex, Data data);
   }
 }

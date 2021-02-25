@@ -28,8 +28,8 @@ namespace Nighthollow.Delegates.Handlers
         Skill = skill;
       }
 
-      public override bool Invoke(DelegateContext c, IMeleeSkillCouldHit handler) =>
-        handler.MeleeSkillCouldHit(c, this);
+      public override bool Invoke(DelegateContext c, int delegateIndex, IMeleeSkillCouldHit handler) =>
+        handler.MeleeSkillCouldHit(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
@@ -39,6 +39,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Should check if the creature could currently hit with a melee skill. Will be true if any delegate returns
     /// a true value.
     /// </summary>
-    bool MeleeSkillCouldHit(DelegateContext c, Data d);
+    bool MeleeSkillCouldHit(DelegateContext context, int delegateIndex, Data data);
   }
 }
