@@ -30,7 +30,6 @@ namespace Nighthollow.Editor
 
     static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
-      ClearEditorConsole();
       if (state == PlayModeStateChange.ExitingPlayMode)
       {
         AssetDatabase.Refresh();

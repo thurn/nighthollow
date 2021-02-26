@@ -45,7 +45,7 @@ namespace Nighthollow.Delegates.Implementations
         if (targets is { } t)
         {
           return t
-            .Select(creature => creature.CreatureId!.Value)
+            .Select(creature => creature.CreatureId)
             .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
             .Any();
         }

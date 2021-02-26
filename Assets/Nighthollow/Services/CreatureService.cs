@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.State;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -31,10 +33,12 @@ namespace Nighthollow.Services
 
     readonly Dictionary<CreatureId, Creature> _creatures = new Dictionary<CreatureId, Creature>();
 
-    readonly HashSet<Creature> _movingCreatures = new HashSet<Creature>();
+    readonly Dictionary<CreatureId, CreatureData> _creatureData = new Dictionary<CreatureId, CreatureData>();
 
-    readonly Dictionary<(RankValue, FileValue), Creature> _userCreatures =
-      new Dictionary<(RankValue, FileValue), Creature>();
+    readonly HashSet<CreatureId> _movingCreatures = new HashSet<CreatureId>();
+
+    readonly Dictionary<(RankValue, FileValue), CreatureId> _userCreatures =
+      new Dictionary<(RankValue, FileValue), CreatureId>();
 
     GameServiceRegistry? _registry;
 
@@ -44,6 +48,12 @@ namespace Nighthollow.Services
       return _creatures[id];
     }
 
+    public CreatureData GetCreatureData(CreatureId id)
+    {
+      Errors.CheckState(_creatures.ContainsKey(id), $"Creature with ID {id.Value} not found");
+      return _creatureData[id];
+    }
+
     public void OnServicesReady(GameServiceRegistry registry)
     {
       _registry = registry;
@@ -51,13 +61,18 @@ namespace Nighthollow.Services
 
     public IEnumerable<CreatureId> EnemyCreatures()
     {
-      return _movingCreatures.Where(c => c.Owner == PlayerName.Enemy).Select(c => c.CreatureId!.Value);
+      // TODO: return opponent creatures instead
+      return _movingCreatures.Where(c => _creatures[c].Owner == PlayerName.Enemy);
     }
 
     public Creature CreateUserCreature(CreatureData creatureData)
     {
       var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
-      result.Initialize(_registry!, creatureData);
+      var creatureId = new CreatureId(_nextCreatureId++);
+      _creatures[creatureId] = result;
+      _creatureData[creatureId] = creatureData;
+
+      result.Initialize(_registry!, creatureId, creatureData.BaseType.Owner);
       return result;
     }
 
@@ -69,11 +84,12 @@ namespace Nighthollow.Services
       var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       var creatureId = new CreatureId(_nextCreatureId++);
       _creatures[creatureId] = result;
-      _movingCreatures.Add(result);
+      _creatureData[creatureId] = creatureData;
+      _movingCreatures.Add(creatureId);
 
-      result.Initialize(_registry!, creatureData);
+      result.Initialize(_registry!, creatureId, creatureData.BaseType.Owner);
       result.ActivateCreature(
-        creatureId: creatureId,
+        creatureData,
         rankValue: null,
         fileValue: file,
         startingX: startingX);
@@ -83,30 +99,53 @@ namespace Nighthollow.Services
 
     public void AddUserCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
     {
-      var creatureId = new CreatureId(_nextCreatureId++);
-      _userCreatures[(rank, file)] = creature;
-      _creatures[creatureId] = creature;
-
-      creature.ActivateCreature(creatureId, rank, file);
+      _userCreatures[(rank, file)] = creature.CreatureId;
+      creature.ActivateCreature(_creatureData[creature.CreatureId], rank, file);
     }
 
-    public void RemoveCreature(Creature creature)
+    public void OnDeath(Creature creature)
     {
-      if (creature.CreatureId == null || !_creatures.ContainsKey(creature.CreatureId.Value))
+      if (!_creatures.ContainsKey(creature.CreatureId))
       {
         return;
       }
 
-      _creatures.Remove(creature.CreatureId.Value);
-
       if (creature.IsMoving)
       {
-        _movingCreatures.Remove(creature);
+        _movingCreatures.Remove(creature.CreatureId);
       }
       else if (creature.RankPosition.HasValue)
       {
         _userCreatures.Remove((creature.RankPosition.Value, creature.FilePosition));
       }
+    }
+
+    public void OnDestroyed(Creature creature)
+    {
+      if (!_creatures.ContainsKey(creature.CreatureId))
+      {
+        return;
+      }
+
+      _creatures.Remove(creature.CreatureId);
+    }
+
+    public void InsertModifier(CreatureId creatureId, IStatModifier modifier)
+    {
+      var data = _creatureData[creatureId];
+      _creatureData[creatureId] = data.WithStats(data.Stats.InsertModifier(modifier));
+    }
+
+    public void InsertStatusEffect(CreatureId creatureId, StatusEffectData statusEffectData)
+    {
+      var data = _creatureData[creatureId];
+      _creatureData[creatureId] = data.WithStats(data.Stats.InsertStatusEffect(statusEffectData));
+    }
+
+    public void ExecuteMutatation(CreatureId creatureId, IMutation mutation)
+    {
+      var data = _creatureData[creatureId];
+      _creatureData[creatureId] = data.WithKeyValueStore(mutation.Mutate(data.KeyValueStore));
     }
 
     /// <summary>
@@ -139,7 +178,7 @@ namespace Nighthollow.Services
       from rank in BoardPositions.AdjacentRanks(inputRank)
       from file in BoardPositions.AdjacentFiles(inputFile)
       where _userCreatures.ContainsKey((rank, file))
-      select _userCreatures[(rank, file)].CreatureId.Value;
+      select _userCreatures[(rank, file)];
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
     public (RankValue, FileValue) GetClosestAvailablePosition(Vector2 position)
@@ -174,6 +213,15 @@ namespace Nighthollow.Services
       }
 
       return (closestRank.Value, closestFile.Value);
+    }
+
+    void Update()
+    {
+      foreach (var pair in _creatures)
+      {
+        _creatureData[pair.Key] = _creatureData[pair.Key].OnTick();
+        pair.Value.OnUpdate(_creatureData[pair.Key]);
+      }
     }
   }
 
