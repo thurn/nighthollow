@@ -36,6 +36,7 @@ namespace Nighthollow.Delegates
     {
       if (d.Self.Owner == PlayerName.Enemy)
       {
+        // TODO: should be a triggered event
         yield return new EnemyRemovedEffect();
       }
     }
@@ -44,7 +45,7 @@ namespace Nighthollow.Delegates
     {
       if (AnyMeleeSkillCouldHit(c, d.Self))
       {
-        var skill = SelectMatching(d.Self, s => s.IsMelee());
+        var skill = SelectMatching(c, d.Self, s => s.IsMelee());
         if (skill != null)
         {
           return skill;
@@ -53,14 +54,14 @@ namespace Nighthollow.Delegates
 
       if (AnyProjectileSkillCouldHit(c, d.Self))
       {
-        var skill = SelectMatching(d.Self, s => s.IsProjectile());
+        var skill = SelectMatching(c, d.Self, s => s.IsProjectile());
         if (skill != null)
         {
           return skill;
         }
       }
 
-      return SelectMatching(d.Self, s => !s.IsMelee() && !s.IsProjectile());
+      return SelectMatching(c, d.Self, s => !s.IsMelee() && !s.IsProjectile());
     }
 
     static bool AnyMeleeSkillCouldHit(GameContext c, CreatureState self)
@@ -77,11 +78,11 @@ namespace Nighthollow.Delegates
         .Any(skill => skill.DelegateList.Any(c, new IProjectileSkillCouldHit.Data(self, skill)));
     }
 
-    static SkillData? SelectMatching(CreatureState self, Func<SkillData, bool> predicate)
+    static SkillData? SelectMatching(GameContext c, CreatureState self, Func<SkillData, bool> predicate)
     {
       var available = self.Data.Skills
         .Where(predicate)
-        .Where(s => CooldownAvailable(self, s))
+        .Where(s => CooldownAvailable(c, self, s))
         .ToList();
       if (available.Count == 0)
       {
@@ -92,26 +93,23 @@ namespace Nighthollow.Delegates
       return available.FirstOrDefault(s => s.GetDurationSeconds(Stat.Cooldown) >= maxCooldown);
     }
 
-    static bool CooldownAvailable(CreatureState self, SkillData skill)
+    static bool CooldownAvailable(GameContext c, CreatureState self, SkillData skill)
     {
-      var lastUsed = self.Creature.TimeLastUsedSeconds(skill.BaseTypeId);
+      var lastUsed = self.SkillLastUsedTimeSeconds(c, skill.BaseTypeId);
       return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
     public bool MeleeSkillCouldHit(GameContext c, int delegateIndex, IMeleeSkillCouldHit.Data d) =>
-      d.Self.Creature.Collider && HasOverlap(d.Self.Owner, d.Self.Creature.Collider);
+      d.Self.HasOverlapWithOpponentCreature(c);
 
     public bool ProjectileSkillCouldHit(GameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
     {
       var hit = Physics2D.Raycast(
-        d.Self.Creature.ProjectileSource.position,
+        d.Self.GetProjectileSourcePosition(c),
         Constants.ForwardDirectionForPlayer(d.Self.Owner),
         Mathf.Infinity,
         Constants.LayerMaskForCreatures(d.Self.Owner.GetOpponent()));
       return hit.collider;
     }
-
-    static bool HasOverlap(PlayerName owner, Collider2D collider2D) =>
-      collider2D.IsTouchingLayers(Constants.LayerMaskForCreatures(owner.GetOpponent()));
   }
 }

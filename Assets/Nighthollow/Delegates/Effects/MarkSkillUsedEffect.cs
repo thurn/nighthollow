@@ -13,26 +13,25 @@
 // limitations under the License.
 
 using Nighthollow.Services;
-using Nighthollow.Stats;
 
 #nullable enable
 
 namespace Nighthollow.Delegates.Effects
 {
-  public sealed class ApplyModifierEffect : Effect
+  public sealed class MarkSkillUsedEffect : Effect
   {
-    public ApplyModifierEffect(IStatOwner target, IStatModifier modifier)
+    public MarkSkillUsedEffect(CreatureId creatureId, int skillId)
     {
-      Target = target;
-      Modifier = modifier;
+      CreatureId = creatureId;
+      SkillId = skillId;
     }
 
-    public IStatOwner Target { get; }
-    public IStatModifier Modifier { get; }
+    public CreatureId CreatureId { get; }
+    public int SkillId { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
-      Target.InsertModifier(Modifier);
+      registry.CreatureService.GetCreature(CreatureId).MarkSkillUsed(SkillId);
     }
   }
 }

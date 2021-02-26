@@ -14,6 +14,7 @@
 
 using System.Collections.Immutable;
 using Nighthollow.Components;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -24,11 +25,10 @@ namespace Nighthollow.State
     public static readonly KeyWithDefault<int> TimesChained =
       new KeyWithDefault<int>(1, defaultValue: 0);
 
-    public static readonly KeyWithDefault<ImmutableList<Creature>> SkipProjectileImpacts =
-      new KeyWithDefault<ImmutableList<Creature>>(2, defaultValue: ImmutableList<Creature>.Empty);
+    public static readonly KeyWithDefault<ImmutableList<CreatureId>> SkipProjectileImpacts =
+      new KeyWithDefault<ImmutableList<CreatureId>>(2, defaultValue: ImmutableList<CreatureId>.Empty);
 
-    public static readonly Key<Creature> LastCreatureHit =
-      new Key<Creature>(3);
+    public static readonly Key<CreatureId> LastCreatureHit = new Key<CreatureId>(3);
 
     public static readonly KeyWithDefault<int> SequentialHitCount =
       new KeyWithDefault<int>(4, defaultValue: 0);

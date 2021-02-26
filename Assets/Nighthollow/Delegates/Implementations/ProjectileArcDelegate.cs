@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -26,13 +27,13 @@ namespace Nighthollow.Delegates.Implementations
     public override string Describe(IStatDescriptionProvider provider) =>
       $"Fires an Arc of {provider.Get(Stat.ProjectileArcCount)} Projectiles";
 
-    protected override int GetProjectileCount(CreatureState creature, SkillData skill) =>
+    protected override int GetProjectileCount(GameContext c, CreatureState creature, SkillData skill) =>
       skill.GetInt(Stat.ProjectileArcCount);
 
-    protected override Vector2 GetOrigin(CreatureState self, SkillData skill, int projectileNumber) =>
-      self.Creature.ProjectileSource.position;
+    protected override Vector2 GetOrigin(GameContext c, CreatureState self, SkillData skill, int projectileNumber) =>
+      self.GetProjectileSourcePosition(c);
 
-    protected override Vector2 GetDirection(CreatureState self, SkillData skill, int projectileNumber) =>
+    protected override Vector2 GetDirection(GameContext c, CreatureState self, SkillData skill, int projectileNumber) =>
       Constants.ForwardDirectionForPlayer(self.Owner) +
       projectileNumber * new Vector2(x: 0, skill.GetInt(Stat.ProjectileArcRotationOffset) / 1000f);
   }

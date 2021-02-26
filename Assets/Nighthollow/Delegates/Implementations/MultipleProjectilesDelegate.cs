@@ -44,7 +44,7 @@ namespace Nighthollow.Delegates.Implementations
           d.Self,
           d.Skill,
           delegateIndex,
-          d.Self.Creature.ProjectileSource.position,
+          d.Self.GetProjectileSourcePosition(c),
           Vector2.zero,
           firingDelayMs: i * d.Skill.Get(Stat.ProjectileSequenceDelay).AsMilliseconds());
       }

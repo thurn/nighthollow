@@ -22,18 +22,18 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class StunEffect : Effect
   {
-    public StunEffect(Creature target, float durationSeconds)
+    public StunEffect(CreatureId target, float durationSeconds)
     {
       Target = target;
       DurationSeconds = durationSeconds;
     }
 
-    public Creature Target { get; }
+    public CreatureId Target { get; }
     public float DurationSeconds { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
-      Target.Stun(DurationSeconds);
+      registry.CreatureService.GetCreature(Target).Stun(DurationSeconds);
     }
   }
 }

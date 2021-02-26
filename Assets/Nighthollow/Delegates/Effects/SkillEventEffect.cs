@@ -32,30 +32,31 @@ namespace Nighthollow.Delegates.Effects
       Stun
     }
 
-    public SkillEventEffect(Event eventName, Creature creature)
+    public SkillEventEffect(Event eventName, CreatureId creature)
     {
       EventName = eventName;
-      Creature = creature;
+      CreatureId = creature;
     }
 
     public Event EventName { get; }
-    public Creature Creature { get; }
+    public CreatureId CreatureId { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
+      var creature = registry.CreatureService.GetCreature(CreatureId);
       switch (EventName)
       {
         case Event.Missed:
-          Root.Instance.Prefabs.CreateMiss(RandomEffectPoint(Creature));
+          Root.Instance.Prefabs.CreateMiss(RandomEffectPoint(creature));
           break;
         case Event.Evade:
-          Root.Instance.Prefabs.CreateEvade(RandomEffectPoint(Creature));
+          Root.Instance.Prefabs.CreateEvade(RandomEffectPoint(creature));
           break;
         case Event.Crit:
-          Root.Instance.Prefabs.CreateCrit(RandomEffectPoint(Creature));
+          Root.Instance.Prefabs.CreateCrit(RandomEffectPoint(creature));
           break;
         case Event.Stun:
-          Root.Instance.Prefabs.CreateStun(RandomEffectPoint(Creature));
+          Root.Instance.Prefabs.CreateStun(RandomEffectPoint(creature));
           break;
         default:
           throw Errors.UnknownEnumValue(EventName);

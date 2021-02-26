@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Components;
 using Nighthollow.Services;
 
 #nullable enable
@@ -21,20 +20,20 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class ApplyDamageEffect : Effect
   {
-    public ApplyDamageEffect(Creature self, Creature target, int amount)
+    public ApplyDamageEffect(CreatureId self, CreatureId target, int amount)
     {
       Self = self;
       Target = target;
       Amount = amount;
     }
 
-    public Creature Self { get; }
-    public Creature Target { get; }
+    public CreatureId Self { get; }
+    public CreatureId Target { get; }
     public int Amount { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
-      Target.AddDamage(Self, Amount);
+      registry.CreatureService.GetCreature(Target).AddDamage(registry.CreatureService.GetCreature(Self), Amount);
     }
   }
 }

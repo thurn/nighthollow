@@ -51,10 +51,10 @@ namespace Nighthollow.Components
       _firedBy = firedBy;
       transform.position = effect.FiringPoint;
 
-      if (effect.TrackCreature)
+      if (effect.TrackCreature.HasValue)
       {
-        transform.LookAt(effect.TrackCreature!.transform.position);
-        _trackCreature = effect.TrackCreature;
+        _trackCreature = _registry.CreatureService.GetCreature(effect.TrackCreature.Value);
+        transform.LookAt(_trackCreature.transform.position);
       }
       else
       {

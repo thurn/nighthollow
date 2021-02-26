@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Nighthollow.Components;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
@@ -33,16 +32,7 @@ namespace Nighthollow.Delegates.Implementations
 
     public bool ShouldSkipProjectileImpact(GameContext c, int delegateIndex, IShouldSkipProjectileImpact.Data d)
     {
-      if (d.Projectile && d.Projectile!.KeyValueStore.Get(Key.TimesChained) > 0)
-      {
-        // We skip impact for the projectile for creatures which have already been hit by a chaining projectile
-        var targets = d.Skill.DelegateList.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
-        return !(targets ?? Enumerable.Empty<Creature>())
-          .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
-          .Any();
-      }
-
-      return false;
+      return ChainingProjectilesDelegate.ShouldSkipChaininingImpacts(c, d);
     }
 
     public IEnumerable<Effect> OnHitTarget(GameContext c, int delegateIndex, IOnHitTarget.Data d)
@@ -64,7 +54,7 @@ namespace Nighthollow.Delegates.Implementations
             trackCreature: enemy,
             values: d.Projectile.KeyValueStore
               .Increment(Key.TimesChained)
-              .Append(Key.SkipProjectileImpacts, d.Target.Creature));
+              .Append(Key.SkipProjectileImpacts, d.Target.CreatureId));
         }
       }
     }

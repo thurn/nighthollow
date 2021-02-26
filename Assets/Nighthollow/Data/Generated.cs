@@ -1,8 +1,8 @@
 // Generated Code - Do not Edit!
 
 using System.Collections.Immutable;
-using Nighthollow.Components;
 using Nighthollow.Delegates;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.State;
 
@@ -1193,11 +1193,11 @@ namespace Nighthollow.Data
 
   public sealed partial class SkillData
   {
-    public SkillData WithNewDelegate(DelegateList newDelegate) =>
-      Equals(newDelegate, DelegateList)
+    public SkillData WithDelegateList(DelegateList delegateList) =>
+      Equals(delegateList, DelegateList)
         ? this
         : new SkillData(
-          newDelegate,
+          delegateList,
           Stats,
           BaseTypeId,
           BaseType,
@@ -1247,11 +1247,11 @@ namespace Nighthollow.Data
 
   public sealed partial class CreatureData
   {
-    public CreatureData WithNewDelegate(DelegateList newDelegate) =>
-      Equals(newDelegate, DelegateList)
+    public CreatureData WithDelegateList(DelegateList delegateList) =>
+      Equals(delegateList, DelegateList)
         ? this
         : new CreatureData(
-          newDelegate,
+          delegateList,
           Stats,
           Skills,
           BaseType,
@@ -1317,11 +1317,11 @@ namespace Nighthollow.Data
 
   public sealed partial class CreatureState
   {
-    public CreatureState WithCreature(Creature creature) =>
-      Equals(creature, Creature)
+    public CreatureState WithCreatureId(CreatureId creatureId) =>
+      Equals(creatureId, CreatureId)
         ? this
         : new CreatureState(
-          creature,
+          creatureId,
           Data,
           Animation,
           RankPosition,
@@ -1333,7 +1333,7 @@ namespace Nighthollow.Data
       Equals(data, Data)
         ? this
         : new CreatureState(
-          Creature,
+          CreatureId,
           data,
           Animation,
           RankPosition,
@@ -1345,7 +1345,7 @@ namespace Nighthollow.Data
       Equals(animation, Animation)
         ? this
         : new CreatureState(
-          Creature,
+          CreatureId,
           Data,
           animation,
           RankPosition,
@@ -1357,7 +1357,7 @@ namespace Nighthollow.Data
       Equals(rankPosition, RankPosition)
         ? this
         : new CreatureState(
-          Creature,
+          CreatureId,
           Data,
           Animation,
           rankPosition,
@@ -1369,7 +1369,7 @@ namespace Nighthollow.Data
       Equals(filePosition, FilePosition)
         ? this
         : new CreatureState(
-          Creature,
+          CreatureId,
           Data,
           Animation,
           RankPosition,
@@ -1381,7 +1381,7 @@ namespace Nighthollow.Data
       Equals(currentSkill, CurrentSkill)
         ? this
         : new CreatureState(
-          Creature,
+          CreatureId,
           Data,
           Animation,
           RankPosition,
@@ -1393,7 +1393,7 @@ namespace Nighthollow.Data
       Equals(owner, Owner)
         ? this
         : new CreatureState(
-          Creature,
+          CreatureId,
           Data,
           Animation,
           RankPosition,

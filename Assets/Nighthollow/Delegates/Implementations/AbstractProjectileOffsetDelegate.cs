@@ -28,21 +28,22 @@ namespace Nighthollow.Delegates.Implementations
   public abstract class AbstractProjectileOffsetDelegate : AbstractDelegate, IProjectileSkillCouldHit,
     IOnFiredProjectile
   {
-    protected abstract Vector2 GetOrigin(CreatureState creature, SkillData skill, int projectileNumber);
+    protected abstract Vector2 GetOrigin(GameContext c, CreatureState creature, SkillData skill, int projectileNumber);
 
-    protected abstract Vector2 GetDirection(CreatureState creature, SkillData skill, int projectileNumber);
+    protected abstract Vector2 GetDirection(
+      GameContext c, CreatureState creature, SkillData skill, int projectileNumber);
 
     /// <summary>Count of projectiles to fire, *including* the initial projectile.</summary>
-    protected abstract int GetProjectileCount(CreatureState creature, SkillData skill);
+    protected abstract int GetProjectileCount(GameContext c, CreatureState creature, SkillData skill);
 
     public bool ProjectileSkillCouldHit(GameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
     {
       return CollectionUtils.AlternatingIntegers()
-        .Take(GetProjectileCount(d.Self, d.Skill) - 1)
+        .Take(GetProjectileCount(c, d.Self, d.Skill) - 1)
         .Select(i =>
           Physics2D.Raycast(
-            GetOrigin(d.Self, d.Skill, i),
-            GetDirection(d.Self, d.Skill, i),
+            GetOrigin(c, d.Self, d.Skill, i),
+            GetDirection(c, d.Self, d.Skill, i),
             Mathf.Infinity,
             Constants.LayerMaskForCreatures(d.Self.Owner.GetOpponent())))
         .Any(hit => hit.collider);
@@ -57,16 +58,17 @@ namespace Nighthollow.Delegates.Implementations
       }
 
       return CollectionUtils.AlternatingIntegers()
-        .Take(GetProjectileCount(d.Self, d.Skill) - 1)
-        .Select(i => Result(delegateIndex, d.Self, d.Skill, i));
+        .Take(GetProjectileCount(c, d.Self, d.Skill) - 1)
+        .Select(i => Result(c, delegateIndex, d.Self, d.Skill, i));
     }
 
-    FireProjectileEffect Result(int delegateIndex, CreatureState self, SkillData skill, int offsetCount) =>
+    FireProjectileEffect Result(
+      GameContext c, int delegateIndex, CreatureState self, SkillData skill, int offsetCount) =>
       new FireProjectileEffect(
         self,
         skill,
         delegateIndex,
-        GetOrigin(self, skill, offsetCount),
-        GetDirection(self, skill, offsetCount));
+        GetOrigin(c, self, skill, offsetCount),
+        GetDirection(c, self, skill, offsetCount));
   }
 }

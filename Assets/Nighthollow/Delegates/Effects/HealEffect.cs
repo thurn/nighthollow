@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using Nighthollow.Components;
 using Nighthollow.Services;
 
 #nullable enable
@@ -22,18 +20,18 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class HealEffect : Effect
   {
-    public HealEffect(Creature target, int amount)
+    public HealEffect(CreatureId target, int amount)
     {
       Target = target;
       Amount = amount;
     }
 
-    public Creature Target { get; }
+    public CreatureId Target { get; }
     public int Amount { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
-      Target.Heal(Amount);
+      registry.CreatureService.GetCreature(Target).Heal(Amount);
     }
   }
 }

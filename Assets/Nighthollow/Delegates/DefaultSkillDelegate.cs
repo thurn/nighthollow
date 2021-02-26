@@ -39,7 +39,7 @@ namespace Nighthollow.Delegates
 
     public IEnumerable<Effect> OnSkillUsed(GameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {
-      d.Self.Creature.MarkSkillUsed(d.Skill.BaseTypeId);
+      yield return new MarkSkillUsedEffect(d.Self.CreatureId, d.Skill.BaseTypeId);
       switch (d.Skill.BaseType.SkillType)
       {
         case SkillType.Projectile:
@@ -47,19 +47,19 @@ namespace Nighthollow.Delegates
             d.Self,
             d.Skill,
             delegateIndex,
-            d.Self.Creature.ProjectileSource.position,
+            d.Self.GetProjectileSourcePosition(c),
             Vector2.zero);
           break;
         case SkillType.Melee when d.Skill.BaseType.Address != null:
           yield return
-            new PlayTimedEffectEffect(d.Skill.BaseType.Address, d.Self.Creature.Collider.bounds.center);
+            new PlayTimedEffectEffect(d.Skill.BaseType.Address, d.Self.GetColliderCenter(c));
           break;
         case SkillType.Area when d.Skill.BaseType.Address != null:
           yield return
             new PlayTimedEffectEffect(d.Skill.BaseType.Address,
               new Vector2(
-                d.Self.RankPosition?.ToCenterXPosition() ?? d.Self.Creature.transform.position.x,
-                d.Self.FilePosition?.ToCenterYPosition() ?? d.Self.Creature.transform.position.y));
+                d.Self.RankPosition?.ToCenterXPosition() ?? d.Self.GetCurrentPosition(c).x,
+                d.Self.FilePosition?.ToCenterYPosition() ?? d.Self.GetCurrentPosition(c).y));
           break;
       }
     }
@@ -84,8 +84,8 @@ namespace Nighthollow.Delegates
           !d.Skill.DelegateList.First(c, new IRollForHit.Data(d.Self, d.Skill, d.Target), notFound: false))
       {
         yield return d.Self.Owner == PlayerName.User
-          ? new SkillEventEffect(SkillEventEffect.Event.Missed, d.Self.Creature)
-          : new SkillEventEffect(SkillEventEffect.Event.Evade, d.Target.Creature);
+          ? new SkillEventEffect(SkillEventEffect.Event.Missed, d.Self.CreatureId)
+          : new SkillEventEffect(SkillEventEffect.Event.Evade, d.Target.CreatureId);
         yield break;
       }
 
@@ -93,7 +93,7 @@ namespace Nighthollow.Delegates
       if (d.Skill.GetBool(Stat.CanCrit) &&
           d.Skill.DelegateList.First(c, new IRollForCrit.Data(d.Self, d.Skill, d.Target), notFound: false))
       {
-        yield return new SkillEventEffect(SkillEventEffect.Event.Crit, d.Self.Creature);
+        yield return new SkillEventEffect(SkillEventEffect.Event.Crit, d.Self.CreatureId);
         isCriticalHit = true;
       }
 
@@ -115,22 +115,22 @@ namespace Nighthollow.Delegates
         yield break;
       }
 
-      yield return new ApplyDamageEffect(d.Self.Creature, d.Target.Creature, totalDamage);
-      yield return new DamageTextEffect(d.Target.Creature, totalDamage);
+      yield return new ApplyDamageEffect(d.Self.CreatureId, d.Target.CreatureId, totalDamage);
+      yield return new DamageTextEffect(d.Target.CreatureId, totalDamage);
 
       var healthDrain = d.Skill.DelegateList.First(c,
         new IComputeHealthDrain.Data(d.Self, d.Skill, d.Target, totalDamage),
         notFound: 0);
       if (healthDrain > 0)
       {
-        yield return new HealEffect(d.Self.Creature, healthDrain);
+        yield return new HealEffect(d.Self.CreatureId, healthDrain);
       }
 
       if (d.Skill.GetBool(Stat.CanStun) &&
           d.Skill.DelegateList.First(c, new IRollForStun.Data(d.Self, d.Skill, d.Target, totalDamage), notFound: false))
       {
-        yield return new StunEffect(d.Target.Creature, d.Skill.GetDurationSeconds(Stat.StunDurationOnEnemies));
-        yield return new SkillEventEffect(SkillEventEffect.Event.Stun, d.Target.Creature);
+        yield return new StunEffect(d.Target.CreatureId, d.Skill.GetDurationSeconds(Stat.StunDurationOnEnemies));
+        yield return new SkillEventEffect(SkillEventEffect.Event.Stun, d.Target.CreatureId);
       }
     }
 
@@ -167,7 +167,7 @@ namespace Nighthollow.Delegates
         : d.Hits;
 
     public Collider2D GetCollider(GameContext c, int delegateIndex, IGetCollider.Data d) =>
-      d.Projectile ? d.Projectile!.Collider : d.Self.Creature.Collider;
+      d.Projectile ? d.Projectile!.Collider : d.Self.GetCollider(c);
 
     public ImmutableDictionary<DamageType, int> RollForBaseDamage(
       GameContext c, int delegateIndex, IRollForBaseDamage.Data d) =>

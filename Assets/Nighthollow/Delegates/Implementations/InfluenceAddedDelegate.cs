@@ -29,8 +29,9 @@ namespace Nighthollow.Delegates.Implementations
     public IEnumerable<Effect> OnCreatureActivated(GameContext c, int delegateIndex, IOnCreatureActivated.Data d)
     {
       yield return new ApplyModifierToOwnerEffect(
-        d.Self.Creature,
-        Stat.Influence.Add(d.Self.Data.ItemData.School, 1).WithLifetime(new WhileAliveLifetime(d.Self.Creature)));
+        d.Self.CreatureId,
+        Stat.Influence.Add(d.Self.Data.ItemData.School, 1)
+          .WithLifetime(new WhileAliveLifetime(c.CreatureService.GetCreature(d.Self.CreatureId))));
     }
   }
 }

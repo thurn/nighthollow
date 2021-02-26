@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Implementations
     {
       var duration = d.Skill.GetDurationSeconds(Stat.KnockbackDuration);
       yield return new KnockbackEffect(
-        d.Target.Creature,
+        d.Target.CreatureId,
         d.Skill.Get(Stat.KnockbackDistanceMultiplier).AsMultiplier() * duration,
         duration);
     }

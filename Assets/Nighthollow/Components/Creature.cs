@@ -64,10 +64,14 @@ namespace Nighthollow.Components
     readonly Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
     Coroutine _coroutine = null!;
     SkillData? _currentSkill;
+    CreatureId? _creatureId;
     CreatureData _data = null!;
     GameServiceRegistry _registry = null!;
+    bool _removeFromCreatureService;
 
     public CreatureData Data => _data;
+
+    public CreatureId? CreatureId => _creatureId;
 
     public PlayerName Owner => _data.BaseType.Owner;
 
@@ -97,7 +101,7 @@ namespace Nighthollow.Components
 
     public CreatureState AsCreatureState() =>
       new CreatureState(
-        this,
+        Errors.CheckNotNull(CreatureId),
         _data,
         _state,
         _rankPosition,
@@ -130,6 +134,12 @@ namespace Nighthollow.Components
       {
         _attachmentDisplay.ClearAttachments();
         return;
+      }
+
+      if (_removeFromCreatureService)
+      {
+        _creatureService.RemoveCreature(this);
+        _removeFromCreatureService = false;
       }
 
       // Ensure lower Y creatures are always rendered on top of higher Y creatures
@@ -223,10 +233,13 @@ namespace Nighthollow.Components
       _attachmentDisplay = attachmentDisplay;
     }
 
-    public void ActivateCreature(RankValue? rankValue,
+    public void ActivateCreature(
+      CreatureId creatureId,
+      RankValue? rankValue,
       FileValue fileValue,
       float? startingX = 0f)
     {
+      _creatureId = creatureId;
       _filePosition = fileValue;
 
       if (rankValue.HasValue)
@@ -327,20 +340,23 @@ namespace Nighthollow.Components
 
     void Kill()
     {
+      Invoke(new IOnCreatureDeath.Data(AsCreatureState()));
+
       StopCoroutine(_coroutine);
 
       _statusBars.HealthBar.gameObject.SetActive(value: false);
       _animator.SetTrigger(Death);
       _collider.enabled = false;
 
-      Invoke(new IOnCreatureDeath.Data(AsCreatureState()));
-
       SetState(CreatureAnimation.Dying);
-      _creatureService.RemoveCreature(this);
+
+      // Defer removing from CreatureService until the next Update() call so that subsequent effects can still find us
+      _removeFromCreatureService = true;
     }
 
     public void DestroyCreature()
     {
+      _creatureService.RemoveCreature(this);
       Destroy(gameObject);
       Destroy(_statusBars.gameObject);
     }

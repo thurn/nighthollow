@@ -14,10 +14,12 @@
 
 using System.Collections.Immutable;
 using System.Linq;
-using Nighthollow.Components;
 using Nighthollow.Delegates;
+using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Stats;
+using Nighthollow.Utils;
+using UnityEngine;
 
 #nullable enable
 
@@ -65,7 +67,7 @@ namespace Nighthollow.Data
   public sealed partial class CreatureState : StatEntity
   {
     public CreatureState(
-      Creature creature,
+      CreatureId creatureId,
       CreatureData data,
       CreatureAnimation animation,
       RankValue? rankPosition,
@@ -73,17 +75,16 @@ namespace Nighthollow.Data
       SkillData? currentSkill,
       PlayerName owner)
     {
-      Creature = creature;
+      CreatureId = creatureId;
       Data = data;
       Animation = animation;
       RankPosition = rankPosition;
       FilePosition = filePosition;
       CurrentSkill = currentSkill;
-      Creature = creature;
       Owner = owner;
     }
 
-    [Field] public Creature Creature { get; }
+    [Field] public CreatureId CreatureId { get; }
     [Field] public CreatureData Data { get; }
     [Field] public override StatTable Stats => Data.Stats;
     [Field] public CreatureAnimation Animation { get; }
@@ -91,5 +92,26 @@ namespace Nighthollow.Data
     [Field] public FileValue? FilePosition { get; }
     [Field] public SkillData? CurrentSkill { get; }
     [Field] public PlayerName Owner { get; }
+
+    public Vector2 GetProjectileSourcePosition(GameContext c) =>
+      c.CreatureService.GetCreature(CreatureId).ProjectileSource.position;
+
+    /// <summary>
+    ///   Returns the timestamp at which the provided skill was last used by this creature, or 0 if it has never been used
+    /// </summary>
+    public float? SkillLastUsedTimeSeconds(GameContext c, int skillId) =>
+      c.CreatureService.GetCreature(CreatureId).TimeLastUsedSeconds(skillId);
+
+    public bool HasOverlapWithOpponentCreature(GameContext c) =>
+      c.CreatureService.GetCreature(CreatureId).Collider.IsTouchingLayers(
+        Constants.LayerMaskForCreatures(Owner.GetOpponent()));
+
+    public Collider2D GetCollider(GameContext c) => c.CreatureService.GetCreature(CreatureId).Collider;
+
+    public Vector2 GetColliderCenter(GameContext c) =>
+      c.CreatureService.GetCreature(CreatureId).Collider.bounds.center;
+
+    public Vector2 GetCurrentPosition(GameContext c) =>
+      c.CreatureService.GetCreature(CreatureId).transform.position;
   }
 }

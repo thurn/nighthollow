@@ -26,23 +26,24 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class KnockbackEffect : Effect
   {
-    public KnockbackEffect(Creature target, float distance, float durationSeconds)
+    public KnockbackEffect(CreatureId target, float distance, float durationSeconds)
     {
       Target = target;
       Distance = distance;
       DurationSeconds = durationSeconds;
     }
 
-    public Creature Target { get; }
+    public CreatureId Target { get; }
     public float Distance { get; }
     public float DurationSeconds { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
-      Target.transform.DOMove(
-        (Vector2) Target.transform.position +
+      var target = registry.CreatureService.GetCreature(Target);
+      target.transform.DOMove(
+        (Vector2) target.transform.position +
         Distance *
-        Constants.ForwardDirectionForPlayer(Target.Owner.GetOpponent()),
+        Constants.ForwardDirectionForPlayer(target.Owner.GetOpponent()),
         DurationSeconds);
     }
   }

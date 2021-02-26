@@ -32,21 +32,22 @@ namespace Nighthollow.Delegates.Implementations
 
     public IEnumerable<Effect> OnHitTarget(GameContext c, int delegateIndex, IOnHitTarget.Data d)
     {
-      if (d.Self.Data.KeyValueStore.TryGet(Key.LastCreatureHit, out var lastHit) && lastHit == d.Target.Creature)
+      if (d.Self.Data.KeyValueStore.TryGet(Key.LastCreatureHit, out var lastHit) && lastHit == d.Target.CreatureId)
       {
-        yield return new MutateStateEffect(d.Self.Creature, new IncrementIntegerMutation(Key.SequentialHitCount));
+        yield return new MutateCreatureStateEffect(d.Self.CreatureId,
+          new IncrementIntegerMutation(Key.SequentialHitCount));
       }
       else
       {
-        yield return new MutateStateEffect(d.Self.Creature, Key.LastCreatureHit.Set(d.Target.Creature));
-        yield return new MutateStateEffect(d.Self.Creature, Key.SequentialHitCount.Set(1));
+        yield return new MutateCreatureStateEffect(d.Self.CreatureId, Key.LastCreatureHit.Set(d.Target.CreatureId));
+        yield return new MutateCreatureStateEffect(d.Self.CreatureId, Key.SequentialHitCount.Set(1));
       }
     }
 
     public ImmutableDictionary<DamageType, int> TransformDamage(
       GameContext c, int delegateIndex, ITransformDamage.Data d, ImmutableDictionary<DamageType, int> current)
     {
-      if (d.Self.Data.KeyValueStore.TryGet(Key.LastCreatureHit, out var lastHit) && lastHit == d.Target.Creature)
+      if (d.Self.Data.KeyValueStore.TryGet(Key.LastCreatureHit, out var lastHit) && lastHit == d.Target.CreatureId)
       {
         return DamageUtil.Add(current, DamageUtil.Multiply(
           d.Self.Data.KeyValueStore.Get(Key.SequentialHitCount),

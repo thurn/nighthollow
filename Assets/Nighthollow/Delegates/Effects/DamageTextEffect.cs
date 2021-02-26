@@ -13,7 +13,6 @@
 // limitations under the License.
 
 
-using Nighthollow.Components;
 using Nighthollow.Services;
 
 #nullable enable
@@ -22,18 +21,18 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class DamageTextEffect : Effect
   {
-    public DamageTextEffect(Creature target, int damageAmount)
+    public DamageTextEffect(CreatureId target, int damageAmount)
     {
       Target = target;
       DamageAmount = damageAmount;
     }
 
-    public Creature Target { get; }
+    public CreatureId Target { get; }
     public int DamageAmount { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
-      Root.Instance.DamageTextService.ShowDamageText(Target, DamageAmount);
+      Root.Instance.DamageTextService.ShowDamageText(registry.CreatureService.GetCreature(Target), DamageAmount);
     }
   }
 }

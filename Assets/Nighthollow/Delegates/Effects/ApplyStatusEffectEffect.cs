@@ -22,18 +22,19 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class ApplyStatusEffectEffect : Effect
   {
-    public ApplyStatusEffectEffect(IStatOwner target, StatusEffectItemData statusEffect)
+    public ApplyStatusEffectEffect(CreatureId target, StatusEffectItemData statusEffect)
     {
       Target = target;
       StatusEffect = statusEffect;
     }
 
-    public IStatOwner Target { get; }
+    public CreatureId Target { get; }
     public StatusEffectItemData StatusEffect { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
-      Target.InsertStatusEffect(StatusEffect.BuildStatusEffect(registry.Database.Snapshot()));
+      registry.CreatureService.GetCreature(Target)
+        .InsertStatusEffect(StatusEffect.BuildStatusEffect(registry.Database.Snapshot()));
     }
   }
 }

@@ -19,20 +19,20 @@ using Nighthollow.State;
 
 namespace Nighthollow.Delegates.Effects
 {
-  public sealed class MutateStateEffect : Effect
+  public sealed class MutateCreatureStateEffect : Effect
   {
-    public MutateStateEffect(IKeyValueStoreOwner target, IMutation mutation)
+    public MutateCreatureStateEffect(CreatureId target, IMutation mutation)
     {
       Target = target;
       Mutation = mutation;
     }
 
-    public IKeyValueStoreOwner Target { get; }
+    public CreatureId Target { get; }
     public IMutation Mutation { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
-      Target.ExecuteMutatation(Mutation);
+      registry.CreatureService.GetCreature(Target).ExecuteMutatation(Mutation);
     }
   }
 }

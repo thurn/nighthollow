@@ -14,7 +14,6 @@
 
 
 using System;
-using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Stats;
@@ -25,18 +24,18 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class ApplyModifierToOwnerEffect : Effect
   {
-    public ApplyModifierToOwnerEffect(Creature self, IStatModifier modifier)
+    public ApplyModifierToOwnerEffect(CreatureId self, IStatModifier modifier)
     {
       Self = self;
       Modifier = modifier;
     }
 
-    public Creature Self { get; }
+    public CreatureId Self { get; }
     public IStatModifier Modifier { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
-      switch (Self.Owner)
+      switch (registry.CreatureService.GetCreature(Self).Owner)
       {
         case PlayerName.User:
           Root.Instance.User.InsertModifier(Modifier);

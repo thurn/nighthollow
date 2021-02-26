@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Utils;
 using UnityEngine;
 
 #nullable enable
@@ -26,6 +27,10 @@ namespace Nighthollow.Services
 {
   public sealed class CreatureService : MonoBehaviour
   {
+    int _nextCreatureId = 1;
+
+    readonly Dictionary<CreatureId, Creature> _creatures = new Dictionary<CreatureId, Creature>();
+
     readonly HashSet<Creature> _movingCreatures = new HashSet<Creature>();
 
     readonly Dictionary<(RankValue, FileValue), Creature> _userCreatures =
@@ -33,14 +38,20 @@ namespace Nighthollow.Services
 
     GameServiceRegistry? _registry;
 
+    public Creature GetCreature(CreatureId id)
+    {
+      Errors.CheckState(_creatures.ContainsKey(id), $"Creature with ID {id.Value} not found");
+      return _creatures[id];
+    }
+
     public void OnServicesReady(GameServiceRegistry registry)
     {
       _registry = registry;
     }
 
-    public IEnumerable<Creature> EnemyCreatures()
+    public IEnumerable<CreatureId> EnemyCreatures()
     {
-      return _movingCreatures.Where(c => c.Owner == PlayerName.Enemy);
+      return _movingCreatures.Where(c => c.Owner == PlayerName.Enemy).Select(c => c.CreatureId!.Value);
     }
 
     public Creature CreateUserCreature(CreatureData creatureData)
@@ -56,22 +67,38 @@ namespace Nighthollow.Services
       float startingX)
     {
       var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      var creatureId = new CreatureId(_nextCreatureId++);
+      _creatures[creatureId] = result;
+      _movingCreatures.Add(result);
 
       result.Initialize(_registry!, creatureData);
-      result.ActivateCreature(rankValue: null, file, startingX);
-      _movingCreatures.Add(result);
+      result.ActivateCreature(
+        creatureId: creatureId,
+        rankValue: null,
+        fileValue: file,
+        startingX: startingX);
 
       return result;
     }
 
     public void AddUserCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
     {
-      creature.ActivateCreature(rank, file);
+      var creatureId = new CreatureId(_nextCreatureId++);
       _userCreatures[(rank, file)] = creature;
+      _creatures[creatureId] = creature;
+
+      creature.ActivateCreature(creatureId, rank, file);
     }
 
     public void RemoveCreature(Creature creature)
     {
+      if (creature.CreatureId == null || !_creatures.ContainsKey(creature.CreatureId.Value))
+      {
+        return;
+      }
+
+      _creatures.Remove(creature.CreatureId.Value);
+
       if (creature.IsMoving)
       {
         _movingCreatures.Remove(creature);
@@ -108,11 +135,11 @@ namespace Nighthollow.Services
     ///   Returns all User creatures in the 9 squares around the given (rank, file) position (including the creature at
     ///   that position, if any).
     /// </summary>
-    public IEnumerable<Creature> GetAdjacentUserCreatures(RankValue inputRank, FileValue inputFile) =>
+    public IEnumerable<CreatureId> GetAdjacentUserCreatures(RankValue inputRank, FileValue inputFile) =>
       from rank in BoardPositions.AdjacentRanks(inputRank)
       from file in BoardPositions.AdjacentFiles(inputFile)
       where _userCreatures.ContainsKey((rank, file))
-      select _userCreatures[(rank, file)];
+      select _userCreatures[(rank, file)].CreatureId.Value;
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
     public (RankValue, FileValue) GetClosestAvailablePosition(Vector2 position)
@@ -148,5 +175,42 @@ namespace Nighthollow.Services
 
       return (closestRank.Value, closestFile.Value);
     }
+  }
+
+  public readonly struct CreatureId
+  {
+    public readonly int Value;
+
+    public CreatureId(int value)
+    {
+      Value = value;
+    }
+
+    public bool Equals(CreatureId other)
+    {
+      return Value == other.Value;
+    }
+
+    public override bool Equals(object? obj)
+    {
+      return obj is CreatureId other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      return Value;
+    }
+
+    public static bool operator ==(CreatureId left, CreatureId right)
+    {
+      return left.Equals(right);
+    }
+
+    public static bool operator !=(CreatureId left, CreatureId right)
+    {
+      return !left.Equals(right);
+    }
+
+    public override string ToString() => Value.ToString();
   }
 }

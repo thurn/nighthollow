@@ -30,6 +30,6 @@ namespace Nighthollow.Delegates.Implementations
     public IEnumerable<Effect> OnApplySkillToTarget(
       GameContext c, int delegateIndex, IOnApplySkillToTarget.Data d) =>
       d.Skill.ItemData.StatusEffects
-        .Select(statusEffect => new ApplyStatusEffectEffect(d.Target.Creature, statusEffect));
+        .Select(statusEffect => new ApplyStatusEffectEffect(d.Target.CreatureId, statusEffect));
   }
 }
