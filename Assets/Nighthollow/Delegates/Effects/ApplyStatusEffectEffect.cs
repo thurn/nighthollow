@@ -14,7 +14,6 @@
 
 using Nighthollow.Data;
 using Nighthollow.Services;
-using Nighthollow.Stats;
 
 #nullable enable
 
@@ -33,8 +32,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.GetCreature(Target)
-        .InsertStatusEffect(StatusEffect.BuildStatusEffect(registry.Database.Snapshot()));
+      registry.CreatureService.InsertStatusEffect(Target, StatusEffect.BuildStatusEffect(registry.Database.Snapshot()));
     }
   }
 }

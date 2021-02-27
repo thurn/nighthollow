@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Delegates;
 using Nighthollow.Interface;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
@@ -67,16 +69,17 @@ namespace Nighthollow.Services
         objectPoolService,
         prefabs)
     {
+      Context = new GameContext(creatureService);
       MainCanvas = mainCanvas;
-      CreatureService = creatureService;
       User = user;
       Enemy = enemy;
       DamageTextService = damageTextService;
       HelperTextService = helperTextService;
     }
 
+    public GameContext Context { get; }
+    public CreatureService CreatureService => Context.CreatureService;
     public RectTransform MainCanvas { get; }
-    public CreatureService CreatureService { get; }
     public User User { get; }
     public Enemy Enemy { get; }
     public DamageTextService DamageTextService { get; }
@@ -90,6 +93,31 @@ namespace Nighthollow.Services
         PlayerName.Enemy => Enemy.Data.Stats,
         _ => throw Errors.UnknownEnumValue(player)
       };
+    }
+
+    public void Invoke(IHasDelegateList locator, IEventData arg)
+    {
+      var eventQueue = new Queue<IEventData>();
+      eventQueue.Enqueue(arg);
+
+      while (true)
+      {
+        var effects = eventQueue.Dequeue().Raise(Context, locator);
+
+        foreach (var effect in effects)
+        {
+          effect.Execute(this);
+          foreach (var eventData in effect.Events(Context))
+          {
+            eventQueue.Enqueue(eventData);
+          }
+        }
+
+        if (eventQueue.Count == 0)
+        {
+          break;
+        }
+      }
     }
   }
 }

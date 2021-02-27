@@ -15,21 +15,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
-using Nighthollow.Delegates;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
-using Nighthollow.State;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Random = UnityEngine.Random;
 
 #nullable enable
 
 namespace Nighthollow.Components
 {
-  public sealed class Creature : MonoBehaviour, IStatOwner, IKeyValueStoreOwner
+  public sealed class Creature : MonoBehaviour
   {
     static readonly int Skill1 = Animator.StringToHash("Skill1");
     static readonly int Skill2 = Animator.StringToHash("Skill2");
@@ -45,7 +42,7 @@ namespace Nighthollow.Components
     [SerializeField] AttachmentDisplay _attachmentDisplay = null!;
     [SerializeField] Transform _healthbarAnchor = null!;
     [SerializeField] float _animationSpeedMultiplier;
-    [SerializeField] CreatureAnimation _state;
+    [SerializeField] CreatureAnimation _animationState;
     [SerializeField] Animator _animator = null!;
     [SerializeField] Collider2D _collider = null!;
     [SerializeField] StatusBarsHolder _statusBars = null!;
@@ -67,7 +64,7 @@ namespace Nighthollow.Components
       _creatureId = creatureId;
       _creatureService = Root.Instance.CreatureService;
       _registry = registry;
-      SetState(CreatureAnimation.Placing);
+      _animationState = CreatureAnimation.Placing;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
       _collider.enabled = false;
@@ -80,7 +77,7 @@ namespace Nighthollow.Components
 
     public void OnUpdate(CreatureState state)
     {
-      if (_state == CreatureAnimation.Dying)
+      if (_animationState == CreatureAnimation.Dying)
       {
         _attachmentDisplay.ClearAttachments();
         return;
@@ -90,7 +87,7 @@ namespace Nighthollow.Components
       _sortingGroup.sortingOrder =
         100 - Mathf.RoundToInt(transform.position.y * 10) - Mathf.RoundToInt(transform.position.x);
 
-      if (_state == CreatureAnimation.Placing)
+      if (_animationState == CreatureAnimation.Placing)
       {
         return;
       }
@@ -110,7 +107,7 @@ namespace Nighthollow.Components
       else if (state.Owner == PlayerName.Enemy &&
                transform.position.x < Constants.EnemyCreatureEndzoneX)
       {
-        Invoke(state, new IOnEnemyCreatureAtEndzone.Data(state));
+        _registry.Invoke(state, new IOnEnemyCreatureAtEndzone.Data(state));
       }
 
       var health = state.GetInt(Stat.Health);
@@ -128,7 +125,7 @@ namespace Nighthollow.Components
       Errors.CheckState(speedMultiplier > 0.05f, "Skill speed must be > 5%");
       _animator.SetFloat(SkillSpeed, speedMultiplier);
 
-      if (_state == CreatureAnimation.Moving)
+      if (_animationState == CreatureAnimation.Moving)
       {
         _animator.SetBool(Moving, value: true);
         transform.Translate(Vector3.right * (Time.deltaTime * (state.GetInt(Stat.CreatureSpeed) / 1000f)));
@@ -139,33 +136,6 @@ namespace Nighthollow.Components
       }
 
       _attachmentDisplay.SetStatusEffects(_registry, state.Data.Stats.StatusEffects);
-    }
-
-    void Invoke(CreatureState state, IEventData arg)
-    {
-      var delegateList = state.CurrentSkill != null ? state.CurrentSkill.DelegateList : state.Data.DelegateList;
-      var context = CreateContext();
-      var eventQueue = new Queue<IEventData>();
-      eventQueue.Enqueue(arg);
-
-      while (true)
-      {
-        var effects = eventQueue.Dequeue().Raise(context, delegateList);
-
-        foreach (var effect in effects)
-        {
-          effect.Execute(_registry);
-          foreach (var eventData in effect.Events(context))
-          {
-            eventQueue.Enqueue(eventData);
-          }
-        }
-
-        if (eventQueue.Count == 0)
-        {
-          break;
-        }
-      }
     }
 
     public void EditorSetReferences(Transform projectileSource,
@@ -199,37 +169,20 @@ namespace Nighthollow.Components
 
       ToDefaultState(state);
 
-      Invoke(state, new IOnCreatureActivated.Data(state));
+      _registry.Invoke(state, new IOnCreatureActivated.Data(state));
       Root.Instance.HelperTextService.OnCreaturePlayed();
 
       _coroutine = StartCoroutine(RunCoroutine());
     }
 
-    public void InsertModifier(IStatModifier modifier)
-    {
-      _creatureService.InsertModifier(CreatureId, modifier);
-    }
-
-    public void InsertStatusEffect(StatusEffectData statusEffectData)
-    {
-      _creatureService.InsertStatusEffect(CreatureId, statusEffectData);
-    }
-
-    public void ExecuteMutatation(IMutation mutation)
-    {
-      _creatureService.ExecuteMutatation(CreatureId, mutation);
-    }
-
-    GameContext CreateContext() => new GameContext(_registry);
-
     void TryToUseSkill(CreatureState state)
     {
       Errors.CheckState(CanUseSkill(), "Cannot use skill");
 
-      var skill = state.Data.DelegateList.FirstNonNull(CreateContext(), new ISelectSkill.Data(state));
+      var skill = state.Data.DelegateList.FirstNonNull(_registry.Context, new ISelectSkill.Data(state));
       if (skill != null)
       {
-        SetState(CreatureAnimation.UsingSkill);
+        _animationState = CreatureAnimation.UsingSkill;
         state = _creatureService.SetCurrentSkill(CreatureId, skill);
 
         var skillAnimation = SelectAnimation(state, skill);
@@ -255,7 +208,7 @@ namespace Nighthollow.Components
             throw Errors.UnknownEnumValue(skillAnimation);
         }
 
-        Invoke(state, new IOnSkillStarted.Data(state, skill));
+        _registry.Invoke(state, new IOnSkillStarted.Data(state, skill));
       }
       else
       {
@@ -274,12 +227,12 @@ namespace Nighthollow.Components
 
     void ToDefaultState(CreatureState state)
     {
-      SetState(state.GetInt(Stat.CreatureSpeed) > 0 ? CreatureAnimation.Moving : CreatureAnimation.Idle);
+      _animationState = state.GetInt(Stat.CreatureSpeed) > 0 ? CreatureAnimation.Moving : CreatureAnimation.Idle;
     }
 
     void Kill(CreatureState state)
     {
-      Invoke(state, new IOnCreatureDeath.Data(state));
+      _registry.Invoke(state, new IOnCreatureDeath.Data(state));
 
       StopCoroutine(_coroutine);
 
@@ -287,7 +240,7 @@ namespace Nighthollow.Components
       _animator.SetTrigger(Death);
       _collider.enabled = false;
 
-      SetState(CreatureAnimation.Dying);
+      _animationState = CreatureAnimation.Dying;
 
       _creatureService.OnDeath(this);
     }
@@ -304,8 +257,6 @@ namespace Nighthollow.Components
       Destroy(_statusBars.gameObject);
     }
 
-    public void OnImpact(IOnSkillImpact.Data arg) => Invoke(_creatureService.GetCreatureState(CreatureId), arg);
-
     // Called by skill animations on their 'start impact' frame
     public void AttackStart()
     {
@@ -315,11 +266,11 @@ namespace Nighthollow.Components
         return;
       }
 
-      Invoke(state, new IOnSkillUsed.Data(state, state.CurrentSkill));
+      _registry.Invoke(state, new IOnSkillUsed.Data(state, state.CurrentSkill));
 
       if (state.CurrentSkill.IsMelee())
       {
-        Invoke(state, new IOnSkillImpact.Data(state, state.CurrentSkill, projectile: null));
+        _registry.Invoke(state, new IOnSkillImpact.Data(state, state.CurrentSkill, projectile: null));
       }
     }
 
@@ -331,7 +282,7 @@ namespace Nighthollow.Components
       state = _creatureService.SetDamageTaken(_creatureId, Mathf.Clamp(value: 0, state.DamageTaken + damage, health));
       if (state.DamageTaken >= health)
       {
-        _creatureService.GetCreature(appliedBy.CreatureId).Invoke(state, new IOnKilledEnemy.Data(appliedBy));
+        _registry.Invoke(_creatureService.GetCreatureState(appliedBy.CreatureId), new IOnKilledEnemy.Data(appliedBy));
         Kill(state);
       }
     }
@@ -374,16 +325,16 @@ namespace Nighthollow.Components
     IEnumerator<YieldInstruction> StunAsync(float durationSeconds)
     {
       _animator.SetTrigger(Hit);
-      SetState(CreatureAnimation.Stunned);
+      _animationState = CreatureAnimation.Stunned;
       yield return new WaitForSeconds(durationSeconds);
       ToDefaultState(_creatureService.GetCreatureState(CreatureId));
     }
 
-    public bool IsAlive() => _state != CreatureAnimation.Placing && _state != CreatureAnimation.Dying;
+    public bool IsAlive() => _animationState != CreatureAnimation.Placing && _animationState != CreatureAnimation.Dying;
 
-    bool IsStunned() => _state == CreatureAnimation.Stunned;
+    bool IsStunned() => _animationState == CreatureAnimation.Stunned;
 
-    bool CanUseSkill() => _state == CreatureAnimation.Idle || _state == CreatureAnimation.Moving;
+    bool CanUseSkill() => _animationState == CreatureAnimation.Idle || _animationState == CreatureAnimation.Moving;
 
     IEnumerator<YieldInstruction> RunCoroutine()
     {
@@ -394,11 +345,6 @@ namespace Nighthollow.Components
       }
 
       // ReSharper disable once IteratorNeverReturns
-    }
-
-    void SetState(CreatureAnimation @new)
-    {
-      _state = @new;
     }
   }
 }

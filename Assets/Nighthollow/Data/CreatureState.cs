@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using Nighthollow.Delegates;
 using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
@@ -22,7 +23,7 @@ using UnityEngine;
 
 namespace Nighthollow.Data
 {
-  public sealed partial class CreatureState : StatEntity
+  public sealed partial class CreatureState : StatEntity, IHasDelegateList
   {
     public CreatureState(
       CreatureId creatureId,
@@ -74,5 +75,7 @@ namespace Nighthollow.Data
 
     public Vector2 GetCurrentPosition(GameContext c) =>
       c.CreatureService.GetCreature(CreatureId).transform.position;
+
+    public DelegateList DelegateList => CurrentSkill != null ? CurrentSkill.DelegateList : Data.DelegateList;
   }
 }

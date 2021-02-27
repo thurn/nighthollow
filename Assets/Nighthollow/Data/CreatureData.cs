@@ -15,11 +15,8 @@
 using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Delegates;
-using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Stats;
-using Nighthollow.Utils;
-using UnityEngine;
 
 #nullable enable
 
@@ -35,7 +32,7 @@ namespace Nighthollow.Data
     Stunned
   }
 
-  public sealed partial class CreatureData : StatEntity
+  public sealed partial class CreatureData : StatEntity, IHasDelegateList
   {
     public CreatureData(
       DelegateList delegateList,

@@ -95,7 +95,7 @@ namespace Nighthollow.Components
     {
       var firedBy = _registry.CreatureService.GetCreatureState(_firedById);
       if (firedBy.CurrentSkill!.DelegateList.First(
-        new GameContext(_registry),
+        _registry.Context,
         new IShouldSkipProjectileImpact.Data(firedBy, _skillData, this),
         notFound: false))
       {
@@ -108,7 +108,7 @@ namespace Nighthollow.Components
 
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;
-      _registry.CreatureService.GetCreature(_firedById).OnImpact(new IOnSkillImpact.Data(firedBy, _skillData, this));
+      _registry.Invoke(firedBy, new IOnSkillImpact.Data(firedBy, _skillData, this));
       gameObject.SetActive(value: false);
     }
 

@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.GetCreature(Target).ExecuteMutatation(Mutation);
+      registry.CreatureService.ExecuteMutatation(Target, Mutation);
     }
   }
 }
