@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using Nighthollow.Data;
-using Nighthollow.Delegates;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
@@ -59,10 +58,10 @@ namespace Nighthollow.Components
       else
       {
         transform.forward = effect.FiringDirectionOffset.GetValueOrDefault()
-                            + Constants.ForwardDirectionForPlayer(firedBy.Owner);
+                            + Constants.ForwardDirectionForPlayer(firedBy.AsCreatureState().Owner);
       }
 
-      gameObject.layer = Constants.LayerForProjectiles(firedBy.Owner);
+      gameObject.layer = Constants.LayerForProjectiles(firedBy.AsCreatureState().Owner);
 
       _collider = GetComponent<Collider2D>();
 
@@ -94,7 +93,7 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      if (_firedBy.CurrentSkill!.DelegateList.First(
+      if (_firedBy.AsCreatureState().CurrentSkill!.DelegateList.First(
         new GameContext(_registry),
         new IShouldSkipProjectileImpact.Data(_firedBy.AsCreatureState(), _skillData, this),
         notFound: false))

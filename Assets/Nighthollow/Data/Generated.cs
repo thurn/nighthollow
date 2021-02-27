@@ -1015,6 +1015,76 @@ namespace Nighthollow.Data
 
   }
 
+  public sealed partial class CreatureState
+  {
+    public CreatureState WithCreatureId(CreatureId creatureId) =>
+      Equals(creatureId, CreatureId)
+        ? this
+        : new CreatureState(
+          creatureId,
+          Data,
+          Owner,
+          RankPosition,
+          FilePosition,
+          CurrentSkill);
+
+    public CreatureState WithData(CreatureData data) =>
+      Equals(data, Data)
+        ? this
+        : new CreatureState(
+          CreatureId,
+          data,
+          Owner,
+          RankPosition,
+          FilePosition,
+          CurrentSkill);
+
+    public CreatureState WithOwner(PlayerName owner) =>
+      Equals(owner, Owner)
+        ? this
+        : new CreatureState(
+          CreatureId,
+          Data,
+          owner,
+          RankPosition,
+          FilePosition,
+          CurrentSkill);
+
+    public CreatureState WithRankPosition(RankValue? rankPosition) =>
+      Equals(rankPosition, RankPosition)
+        ? this
+        : new CreatureState(
+          CreatureId,
+          Data,
+          Owner,
+          rankPosition,
+          FilePosition,
+          CurrentSkill);
+
+    public CreatureState WithFilePosition(FileValue? filePosition) =>
+      Equals(filePosition, FilePosition)
+        ? this
+        : new CreatureState(
+          CreatureId,
+          Data,
+          Owner,
+          RankPosition,
+          filePosition,
+          CurrentSkill);
+
+    public CreatureState WithCurrentSkill(SkillData? currentSkill) =>
+      Equals(currentSkill, CurrentSkill)
+        ? this
+        : new CreatureState(
+          CreatureId,
+          Data,
+          Owner,
+          RankPosition,
+          FilePosition,
+          currentSkill);
+
+  }
+
   public sealed partial class SkillItemData
   {
     public SkillItemData WithSkillTypeId(int skillTypeId) =>
@@ -1312,76 +1382,6 @@ namespace Nighthollow.Data
           BaseType,
           ItemData,
           keyValueStore);
-
-  }
-
-  public sealed partial class CreatureState
-  {
-    public CreatureState WithCreatureId(CreatureId creatureId) =>
-      Equals(creatureId, CreatureId)
-        ? this
-        : new CreatureState(
-          creatureId,
-          Data,
-          RankPosition,
-          FilePosition,
-          CurrentSkill,
-          Owner);
-
-    public CreatureState WithData(CreatureData data) =>
-      Equals(data, Data)
-        ? this
-        : new CreatureState(
-          CreatureId,
-          data,
-          RankPosition,
-          FilePosition,
-          CurrentSkill,
-          Owner);
-
-    public CreatureState WithRankPosition(RankValue? rankPosition) =>
-      Equals(rankPosition, RankPosition)
-        ? this
-        : new CreatureState(
-          CreatureId,
-          Data,
-          rankPosition,
-          FilePosition,
-          CurrentSkill,
-          Owner);
-
-    public CreatureState WithFilePosition(FileValue? filePosition) =>
-      Equals(filePosition, FilePosition)
-        ? this
-        : new CreatureState(
-          CreatureId,
-          Data,
-          RankPosition,
-          filePosition,
-          CurrentSkill,
-          Owner);
-
-    public CreatureState WithCurrentSkill(SkillData? currentSkill) =>
-      Equals(currentSkill, CurrentSkill)
-        ? this
-        : new CreatureState(
-          CreatureId,
-          Data,
-          RankPosition,
-          FilePosition,
-          currentSkill,
-          Owner);
-
-    public CreatureState WithOwner(PlayerName owner) =>
-      Equals(owner, Owner)
-        ? this
-        : new CreatureState(
-          CreatureId,
-          Data,
-          RankPosition,
-          FilePosition,
-          CurrentSkill,
-          owner);
 
   }
 

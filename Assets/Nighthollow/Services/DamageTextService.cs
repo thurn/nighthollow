@@ -36,7 +36,7 @@ namespace Nighthollow.Services
 
     public void ShowDamageText(Creature target, int amount)
     {
-      if (target.Owner != PlayerName.Enemy)
+      if (target.AsCreatureState().Owner != PlayerName.Enemy)
       {
         return;
       }

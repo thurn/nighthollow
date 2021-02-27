@@ -26,10 +26,10 @@ namespace Nighthollow.Data
     public CreatureState(
       CreatureId creatureId,
       CreatureData data,
-      RankValue? rankPosition,
-      FileValue? filePosition,
-      SkillData? currentSkill,
-      PlayerName owner)
+      PlayerName owner,
+      RankValue? rankPosition = null,
+      FileValue? filePosition = null,
+      SkillData? currentSkill = null)
     {
       CreatureId = creatureId;
       Data = data;
@@ -42,10 +42,10 @@ namespace Nighthollow.Data
     [Field] public CreatureId CreatureId { get; }
     [Field] public CreatureData Data { get; }
     [Field] public override StatTable Stats => Data.Stats;
+    [Field] public PlayerName Owner { get; }
     [Field] public RankValue? RankPosition { get; }
     [Field] public FileValue? FilePosition { get; }
     [Field] public SkillData? CurrentSkill { get; }
-    [Field] public PlayerName Owner { get; }
 
     public Vector2 GetProjectileSourcePosition(GameContext c) =>
       c.CreatureService.GetCreature(CreatureId).ProjectileSource.position;
