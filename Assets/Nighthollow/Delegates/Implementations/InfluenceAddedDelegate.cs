@@ -22,9 +22,9 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class InfluenceAddedDelegate : AbstractDelegate, IOnCreatureActivated
+  public sealed class InfluenceAddedDelegate : IDelegate, IOnCreatureActivated
   {
-    public override string Describe(IStatDescriptionProvider provider) => "+1 Influence";
+    public string Describe(IStatDescriptionProvider provider) => "+1 Influence";
 
     public IEnumerable<Effect> OnCreatureActivated(GameContext c, int delegateIndex, IOnCreatureActivated.Data d)
     {

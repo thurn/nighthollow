@@ -23,9 +23,9 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class ApplyStatusEffectsOnHitDelegate : AbstractDelegate, IOnApplySkillToTarget
+  public sealed class ApplyStatusEffectsOnHitDelegate : IDelegate, IOnApplySkillToTarget
   {
-    public override string Describe(IStatDescriptionProvider provider) => "Curses Enemies on Hit With:";
+    public string Describe(IStatDescriptionProvider provider) => "Curses Enemies on Hit With:";
 
     public IEnumerable<Effect> OnApplySkillToTarget(
       GameContext c, int delegateIndex, IOnApplySkillToTarget.Data d) =>

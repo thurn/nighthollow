@@ -26,10 +26,10 @@ namespace Nighthollow.Delegates
     public static readonly DelegateList Root = new DelegateList(
       ImmutableList.Create(DelegateMap.Get(DelegateId.GlobalDelegate)), parent: null);
 
-    readonly ImmutableList<AbstractDelegate> _delegates;
+    readonly ImmutableList<IDelegate> _delegates;
     readonly DelegateList? _parent;
 
-    public DelegateList(ImmutableList<AbstractDelegate> delegates, DelegateList? parent)
+    public DelegateList(ImmutableList<IDelegate> delegates, DelegateList? parent)
     {
       _delegates = delegates;
       _parent = parent;

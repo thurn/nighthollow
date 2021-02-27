@@ -30,12 +30,12 @@ using Random = UnityEngine.Random;
 
 namespace Nighthollow.Delegates
 {
-  public sealed class DefaultSkillDelegate : AbstractDelegate,
+  public sealed class DefaultSkillDelegate : IDelegate,
     IOnSkillUsed, IOnSkillImpact, IOnApplySkillToTarget, IFindTargets, IFilterTargets, IGetCollider, IRollForBaseDamage,
     IApplyDamageReduction, IApplyDamageResistance, IComputeFinalDamage, IRollForHit, IRollForCrit, IComputeHealthDrain,
     IRollForStun
   {
-    public override string Describe(IStatDescriptionProvider provider) => "Default Skill Delegate";
+    public string Describe(IStatDescriptionProvider provider) => "Default Skill Delegate";
 
     public IEnumerable<Effect> OnSkillUsed(GameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {

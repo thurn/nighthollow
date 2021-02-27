@@ -78,17 +78,11 @@ namespace Nighthollow.Components
 
     public bool IsMoving => !_rankPosition.HasValue;
 
-    public int DamageTaken => _damageTaken;
-
     public Transform ProjectileSource => _projectileSource;
 
     public Collider2D Collider => _collider;
 
     public SkillData? CurrentSkill => _currentSkill;
-
-    public CreatureAnimation State => _state;
-
-    public string Name => "Timothy";
 
     public bool AnimationPaused
     {
@@ -99,7 +93,6 @@ namespace Nighthollow.Components
       new CreatureState(
         _creatureId,
         _creatureService.GetCreatureData(_creatureId),
-        _state,
         _rankPosition,
         _filePosition,
         _currentSkill,

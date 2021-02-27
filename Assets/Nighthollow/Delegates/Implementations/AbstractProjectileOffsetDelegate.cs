@@ -18,6 +18,7 @@ using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
+using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -25,9 +26,11 @@ using UnityEngine;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public abstract class AbstractProjectileOffsetDelegate : AbstractDelegate, IProjectileSkillCouldHit,
+  public abstract class AbstractProjectileOffsetDelegate : IDelegate, IProjectileSkillCouldHit,
     IOnFiredProjectile
   {
+    public abstract string Describe(IStatDescriptionProvider provider);
+
     protected abstract Vector2 GetOrigin(GameContext c, CreatureState creature, SkillData skill, int projectileNumber);
 
     protected abstract Vector2 GetDirection(

@@ -18,8 +18,8 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates
 {
-  public abstract class AbstractDelegate
+  public interface IDelegate
   {
-    public virtual string Describe(IStatDescriptionProvider provider) => "<Delegate>";
+    string Describe(IStatDescriptionProvider provider);
   }
 }

@@ -26,9 +26,9 @@ using UnityEngine;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class ChainingProjectilesDelegate : AbstractDelegate, IShouldSkipProjectileImpact, IOnHitTarget
+  public sealed class ChainingProjectilesDelegate : IDelegate, IShouldSkipProjectileImpact, IOnHitTarget
   {
-    public override string Describe(IStatDescriptionProvider provider) =>
+    public string Describe(IStatDescriptionProvider provider) =>
       $"Projectiles Chain {provider.Get(Stat.ProjectileChainCount)} Times on Hit";
 
     public bool ShouldSkipProjectileImpact(GameContext c, int delegateIndex, IShouldSkipProjectileImpact.Data d)

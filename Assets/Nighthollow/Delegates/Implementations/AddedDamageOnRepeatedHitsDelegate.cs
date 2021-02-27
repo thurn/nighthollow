@@ -25,9 +25,9 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class AddedDamageOnRepeatedHitsDelegate : AbstractDelegate, IOnHitTarget, ITransformDamage
+  public sealed class AddedDamageOnRepeatedHitsDelegate : IDelegate, IOnHitTarget, ITransformDamage
   {
-    public override string Describe(IStatDescriptionProvider provider) =>
+    public string Describe(IStatDescriptionProvider provider) =>
       $"+{provider.Get(Stat.SameTargetAddedDamage)} Damage for Each Hit on the Same Target";
 
     public IEnumerable<Effect> OnHitTarget(GameContext c, int delegateIndex, IOnHitTarget.Data d)

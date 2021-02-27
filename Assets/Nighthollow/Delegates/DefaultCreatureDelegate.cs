@@ -27,10 +27,10 @@ using UnityEngine;
 
 namespace Nighthollow.Delegates
 {
-  public sealed class DefaultCreatureDelegate : AbstractDelegate,
+  public sealed class DefaultCreatureDelegate : IDelegate,
     IOnCreatureDeath, ISelectSkill, IMeleeSkillCouldHit, IProjectileSkillCouldHit
   {
-    public override string Describe(IStatDescriptionProvider provider) => "Default Creature Delegate";
+    public string Describe(IStatDescriptionProvider provider) => "Default Creature Delegate";
 
     public IEnumerable<Effect> OnCreatureDeath(GameContext c, int delegateIndex, IOnCreatureDeath.Data d)
     {

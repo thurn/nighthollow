@@ -22,9 +22,9 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates
 {
-  public sealed class GlobalDelegate : AbstractDelegate, IOnEnemyCreatureAtEndzone
+  public sealed class GlobalDelegate : IDelegate, IOnEnemyCreatureAtEndzone
   {
-    public override string Describe(IStatDescriptionProvider provider) => "Global Delegate";
+    public string Describe(IStatDescriptionProvider provider) => "Global Delegate";
 
     public IEnumerable<Effect> OnEnemyCreatureAtEndzone(
       GameContext c, int delegateIndex, IOnEnemyCreatureAtEndzone.Data d)

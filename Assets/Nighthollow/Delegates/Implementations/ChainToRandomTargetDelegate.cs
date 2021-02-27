@@ -25,9 +25,9 @@ using UnityEngine;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class ChainToRandomTargetDelegate : AbstractDelegate, IShouldSkipProjectileImpact, IOnHitTarget
+  public sealed class ChainToRandomTargetDelegate : IDelegate, IShouldSkipProjectileImpact, IOnHitTarget
   {
-    public override string Describe(IStatDescriptionProvider provider) =>
+    public string Describe(IStatDescriptionProvider provider) =>
       $"Projectiles Chain {provider.Get(Stat.MaxProjectileTimesChained)} Times to Random Targets";
 
     public bool ShouldSkipProjectileImpact(GameContext c, int delegateIndex, IShouldSkipProjectileImpact.Data d)

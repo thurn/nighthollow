@@ -23,9 +23,9 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class ManaGenerationDelegate : AbstractDelegate, IOnCreatureActivated
+  public sealed class ManaGenerationDelegate : IDelegate, IOnCreatureActivated
   {
-    public override string Describe(IStatDescriptionProvider provider) =>
+    public string Describe(IStatDescriptionProvider provider) =>
       $"+{provider.Get(Stat.AddedManaGain)} Mana Generated";
 
     public IEnumerable<Effect> OnCreatureActivated(GameContext c, int delegateIndex, IOnCreatureActivated.Data d)

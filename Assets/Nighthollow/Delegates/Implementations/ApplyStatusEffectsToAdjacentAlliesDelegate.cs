@@ -24,9 +24,9 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class ApplyStatusEffectsToAdjacentAlliesDelegate : AbstractDelegate, IOnSkillUsed
+  public sealed class ApplyStatusEffectsToAdjacentAlliesDelegate : IDelegate, IOnSkillUsed
   {
-    public override string Describe(IStatDescriptionProvider provider) => "Buffs Adjacent Allies With:";
+    public string Describe(IStatDescriptionProvider provider) => "Buffs Adjacent Allies With:";
 
     public IEnumerable<Effect> OnSkillUsed(GameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {

@@ -41,7 +41,7 @@ namespace Nighthollow.Delegates
 
   public static class DelegateMap
   {
-    static readonly Dictionary<DelegateId, AbstractDelegate> Delegates = new Dictionary<DelegateId, AbstractDelegate>
+    static readonly Dictionary<DelegateId, IDelegate> Delegates = new Dictionary<DelegateId, IDelegate>
     {
       {DelegateId.GlobalDelegate, new GlobalDelegate()},
       {DelegateId.DefaultCreatureDelegate, new DefaultCreatureDelegate()},
@@ -60,6 +60,6 @@ namespace Nighthollow.Delegates
       {DelegateId.ApplyStatusEffectsToAdjacentAlliesDelegate, new ApplyStatusEffectsToAdjacentAlliesDelegate()}
     };
 
-    public static AbstractDelegate Get(DelegateId id) => Delegates[id];
+    public static IDelegate Get(DelegateId id) => Delegates[id];
   }
 }

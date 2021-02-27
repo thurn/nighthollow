@@ -24,9 +24,9 @@ using UnityEngine;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class SummonMinionsDelegate : AbstractDelegate, IOnSkillUsed
+  public sealed class SummonMinionsDelegate : IDelegate, IOnSkillUsed
   {
-    public override string Describe(IStatDescriptionProvider provider) => "Summons Minions";
+    public string Describe(IStatDescriptionProvider provider) => "Summons Minions";
 
     public IEnumerable<Effect> OnSkillUsed(GameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {

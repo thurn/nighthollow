@@ -1323,7 +1323,6 @@ namespace Nighthollow.Data
         : new CreatureState(
           creatureId,
           Data,
-          Animation,
           RankPosition,
           FilePosition,
           CurrentSkill,
@@ -1335,19 +1334,6 @@ namespace Nighthollow.Data
         : new CreatureState(
           CreatureId,
           data,
-          Animation,
-          RankPosition,
-          FilePosition,
-          CurrentSkill,
-          Owner);
-
-    public CreatureState WithAnimation(CreatureAnimation animation) =>
-      Equals(animation, Animation)
-        ? this
-        : new CreatureState(
-          CreatureId,
-          Data,
-          animation,
           RankPosition,
           FilePosition,
           CurrentSkill,
@@ -1359,7 +1345,6 @@ namespace Nighthollow.Data
         : new CreatureState(
           CreatureId,
           Data,
-          Animation,
           rankPosition,
           FilePosition,
           CurrentSkill,
@@ -1371,7 +1356,6 @@ namespace Nighthollow.Data
         : new CreatureState(
           CreatureId,
           Data,
-          Animation,
           RankPosition,
           filePosition,
           CurrentSkill,
@@ -1383,7 +1367,6 @@ namespace Nighthollow.Data
         : new CreatureState(
           CreatureId,
           Data,
-          Animation,
           RankPosition,
           FilePosition,
           currentSkill,
@@ -1395,7 +1378,6 @@ namespace Nighthollow.Data
         : new CreatureState(
           CreatureId,
           Data,
-          Animation,
           RankPosition,
           FilePosition,
           CurrentSkill,

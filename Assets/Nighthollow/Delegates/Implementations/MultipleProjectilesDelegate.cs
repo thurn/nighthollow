@@ -24,9 +24,9 @@ using UnityEngine;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class MultipleProjectilesDelegate : AbstractDelegate, IOnFiredProjectile
+  public sealed class MultipleProjectilesDelegate : IDelegate, IOnFiredProjectile
   {
-    public override string Describe(IStatDescriptionProvider provider) =>
+    public string Describe(IStatDescriptionProvider provider) =>
       $"Fires {provider.Get(Stat.ProjectileSequenceCount)} Projectiles in Sequence";
 
     public IEnumerable<Effect> OnFiredProjectile(GameContext c, int delegateIndex, IOnFiredProjectile.Data d)

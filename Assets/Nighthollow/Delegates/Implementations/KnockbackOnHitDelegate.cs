@@ -23,9 +23,9 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates.Implementations
 {
-  public sealed class KnockbackOnHitDelegate : AbstractDelegate, IOnHitTarget
+  public sealed class KnockbackOnHitDelegate : IDelegate, IOnHitTarget
   {
-    public override string Describe(IStatDescriptionProvider provider) =>
+    public string Describe(IStatDescriptionProvider provider) =>
       $"Knocks Back Targets for {provider.Get(Stat.KnockbackDuration)} on Hit";
 
     public IEnumerable<Effect> OnHitTarget(GameContext c, int delegateIndex, IOnHitTarget.Data d)
