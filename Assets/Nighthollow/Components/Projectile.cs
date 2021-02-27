@@ -27,12 +27,12 @@ namespace Nighthollow.Components
 {
   public sealed class Projectile : MonoBehaviour, IKeyValueStoreOwner
   {
-    [Header("Config")] [SerializeField] TimedEffect _flashEffect = null!;
+    [SerializeField] TimedEffect _flashEffect = null!;
     [SerializeField] TimedEffect _hitEffect = null!;
-
-    [Header("State")] [SerializeField] Creature _firedBy = null!;
     [SerializeField] Collider2D _collider = null!;
     [SerializeField] Creature _trackCreature = null!;
+
+    CreatureId _firedById;
     SkillData _skillData = null!;
     GameServiceRegistry _registry = null!;
 
@@ -42,12 +42,12 @@ namespace Nighthollow.Components
 
     public void Initialize(
       GameServiceRegistry registry,
-      Creature firedBy,
+      CreatureState firedBy,
       SkillData skillData,
       FireProjectileEffect effect)
     {
       _registry = registry;
-      _firedBy = firedBy;
+      _firedById = firedBy.CreatureId;
       transform.position = effect.FiringPoint;
 
       if (effect.TrackCreature.HasValue)
@@ -58,10 +58,10 @@ namespace Nighthollow.Components
       else
       {
         transform.forward = effect.FiringDirectionOffset.GetValueOrDefault()
-                            + Constants.ForwardDirectionForPlayer(firedBy.AsCreatureState().Owner);
+                            + Constants.ForwardDirectionForPlayer(firedBy.Owner);
       }
 
-      gameObject.layer = Constants.LayerForProjectiles(firedBy.AsCreatureState().Owner);
+      gameObject.layer = Constants.LayerForProjectiles(firedBy.Owner);
 
       _collider = GetComponent<Collider2D>();
 
@@ -93,9 +93,10 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      if (_firedBy.AsCreatureState().CurrentSkill!.DelegateList.First(
+      var firedBy = _registry.CreatureService.GetCreatureState(_firedById);
+      if (firedBy.CurrentSkill!.DelegateList.First(
         new GameContext(_registry),
-        new IShouldSkipProjectileImpact.Data(_firedBy.AsCreatureState(), _skillData, this),
+        new IShouldSkipProjectileImpact.Data(firedBy, _skillData, this),
         notFound: false))
       {
         if (!_trackCreature || _trackCreature.gameObject != other.gameObject)
@@ -107,7 +108,7 @@ namespace Nighthollow.Components
 
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;
-      _firedBy.OnImpact(new IOnSkillImpact.Data(_firedBy.AsCreatureState(), _skillData, this));
+      _registry.CreatureService.GetCreature(_firedById).OnImpact(new IOnSkillImpact.Data(firedBy, _skillData, this));
       gameObject.SetActive(value: false);
     }
 

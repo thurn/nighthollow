@@ -68,7 +68,7 @@ namespace Nighthollow.Delegates.Implementations
     FireProjectileEffect Result(
       GameContext c, int delegateIndex, CreatureState self, SkillData skill, int offsetCount) =>
       new FireProjectileEffect(
-        self,
+        self.CreatureId,
         skill,
         delegateIndex,
         GetOrigin(c, self, skill, offsetCount),

@@ -60,7 +60,7 @@ namespace Nighthollow.Components
             .Append(transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), z: 0), duration: 0.3f))
             .AppendCallback(() =>
             {
-              _creature.AnimationPaused = false;
+              _creature.SetAnimationPaused(false);
               _creatureService.AddUserCreatureAtPosition(_creature, rank, file);
             });
         }
@@ -87,7 +87,7 @@ namespace Nighthollow.Components
     {
       _card = card;
       _creature = creature;
-      _creature.AnimationPaused = true;
+      _creature.SetAnimationPaused(true);
       _creatureService = Root.Instance.CreatureService;
       _cursor = Root.Instance.Prefabs.CreateCursor().gameObject;
 

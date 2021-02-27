@@ -47,7 +47,7 @@ namespace Nighthollow.Delegates.Implementations
         {
           var enemy = enemies[Random.Range(minInclusive: 0, enemies.Count)];
           yield return new FireProjectileEffect(
-            d.Self,
+            d.Self.CreatureId,
             d.Skill,
             delegateIndex,
             d.Projectile.transform.position,

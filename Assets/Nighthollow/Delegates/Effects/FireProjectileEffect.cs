@@ -28,7 +28,7 @@ namespace Nighthollow.Delegates.Effects
   public sealed class FireProjectileEffect : Effect
   {
     public FireProjectileEffect(
-      CreatureState firedBy,
+      CreatureId firedBy,
       SkillData skill,
       int delegateIndex,
       Vector2 firingPoint,
@@ -47,7 +47,7 @@ namespace Nighthollow.Delegates.Effects
       Values = values;
     }
 
-    public CreatureState FiredBy { get; }
+    public CreatureId FiredBy { get; }
     public SkillData Skill { get; }
     public int DelegateIndex { get; }
     public Vector2 FiringPoint { get; }
@@ -58,12 +58,12 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.GetCreature(FiredBy.CreatureId).StartCoroutine(FireAsync(registry));
+      registry.CreatureService.GetCreature(FiredBy).StartCoroutine(FireAsync(registry));
     }
 
-    public override IEnumerable<IEventData> Events()
+    public override IEnumerable<IEventData> Events(GameContext c)
     {
-      yield return new IOnFiredProjectile.Data(FiredBy, Skill, this);
+      yield return new IOnFiredProjectile.Data(c.CreatureService.GetCreatureState(FiredBy), Skill, this);
     }
 
     IEnumerator<YieldInstruction> FireAsync(GameServiceRegistry registry)
@@ -76,7 +76,7 @@ namespace Nighthollow.Delegates.Effects
         projectile.KeyValueStore = Values;
       }
 
-      projectile.Initialize(registry, registry.CreatureService.GetCreature(FiredBy.CreatureId), Skill, this);
+      projectile.Initialize(registry, registry.CreatureService.GetCreatureState(FiredBy), Skill, this);
     }
   }
 }

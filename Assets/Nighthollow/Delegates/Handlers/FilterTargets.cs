@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Services;
 
@@ -23,27 +22,27 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IFilterTargets : IHandler
   {
-    public sealed class Data : QueryData<IFilterTargets, IEnumerable<Creature>>
+    public sealed class Data : QueryData<IFilterTargets, IEnumerable<CreatureId>>
     {
-      public Data(CreatureState self, SkillData skill, IEnumerable<Creature> hits)
+      public Data(CreatureState self, SkillData skill, IEnumerable<CreatureId> hits)
       {
         Self = self;
         Skill = skill;
         Hits = hits;
       }
 
-      public override IEnumerable<Creature> Invoke(GameContext c, int delegateIndex, IFilterTargets handler) =>
+      public override IEnumerable<CreatureId> Invoke(GameContext c, int delegateIndex, IFilterTargets handler) =>
         handler.FilterTargets(c, delegateIndex, this);
 
       public CreatureState Self { get; }
       public SkillData Skill { get; }
-      public IEnumerable<Creature> Hits { get; }
+      public IEnumerable<CreatureId> Hits { get; }
     }
 
     /// <summary>
     /// Given a list of creatures hit by a skill, returns a list of the creatures which should have the skill effect
     /// applied by <see cref="IOnApplySkillToTarget" />.
     /// </summary>
-    IEnumerable<Creature> FilterTargets(GameContext context, int delegateIndex, Data data);
+    IEnumerable<CreatureId> FilterTargets(GameContext context, int delegateIndex, Data data);
   }
 }

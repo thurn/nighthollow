@@ -45,7 +45,6 @@ namespace Nighthollow.Delegates.Implementations
         if (targets is { } t)
         {
           return t
-            .Select(creature => creature.CreatureId)
             .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
             .Any();
         }
@@ -73,7 +72,7 @@ namespace Nighthollow.Delegates.Implementations
             Mathf.Lerp(a: 0f, b: 360f, (i + add) / (chainCount + add)),
             Vector3.forward) * d.Projectile.transform.forward;
           yield return new FireProjectileEffect(
-            d.Self,
+            d.Self.CreatureId,
             d.Skill,
             delegateIndex,
             d.Projectile.transform.position,

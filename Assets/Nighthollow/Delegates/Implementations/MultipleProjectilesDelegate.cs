@@ -41,7 +41,7 @@ namespace Nighthollow.Delegates.Implementations
       for (var i = 1; i < d.Skill.GetInt(Stat.ProjectileSequenceCount); ++i)
       {
         yield return new FireProjectileEffect(
-          d.Self,
+          d.Self.CreatureId,
           d.Skill,
           delegateIndex,
           d.Self.GetProjectileSourcePosition(c),
