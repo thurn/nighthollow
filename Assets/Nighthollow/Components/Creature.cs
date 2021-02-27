@@ -49,8 +49,6 @@ namespace Nighthollow.Components
     [SerializeField] float _animationSpeedMultiplier;
 
     [Header("State")]
-    [SerializeField] int _damageTaken;
-
     [SerializeField] CreatureAnimation _state;
     [SerializeField] Animator _animator = null!;
     [SerializeField] Collider2D _collider = null!;
@@ -58,7 +56,6 @@ namespace Nighthollow.Components
     [SerializeField] CreatureService _creatureService = null!;
     [SerializeField] SortingGroup _sortingGroup = null!;
 
-    readonly Dictionary<int, float> _skillLastUsedTimes = new Dictionary<int, float>();
     Coroutine _coroutine = null!;
     CreatureId _creatureId;
     GameServiceRegistry _registry = null!;
@@ -130,10 +127,10 @@ namespace Nighthollow.Components
       var health = state.GetInt(Stat.Health);
       if (health > 0)
       {
-        _statusBars.HealthBar.Value = (health - _damageTaken) / (float) health;
+        _statusBars.HealthBar.Value = (health - state.DamageTaken) / (float) health;
       }
 
-      _statusBars.HealthBar.gameObject.SetActive(_damageTaken > 0);
+      _statusBars.HealthBar.gameObject.SetActive(state.DamageTaken > 0);
 
       var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
@@ -337,8 +334,8 @@ namespace Nighthollow.Components
       var state = _creatureService.GetCreatureState(CreatureId);
       Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
       var health = state.GetInt(Stat.Health);
-      _damageTaken = Mathf.Clamp(value: 0, _damageTaken + damage, health);
-      if (_damageTaken >= health)
+      state = _creatureService.SetDamageTaken(_creatureId, Mathf.Clamp(value: 0, state.DamageTaken + damage, health));
+      if (state.DamageTaken >= health)
       {
         appliedBy.Invoke(state, new IOnKilledEnemy.Data(appliedBy.AsCreatureState()));
         Kill(state);
@@ -347,10 +344,10 @@ namespace Nighthollow.Components
 
     public void Heal(int healing)
     {
-      var data = _creatureService.GetCreatureState(CreatureId);
+      var state = _creatureService.GetCreatureState(CreatureId);
       Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
-      var health = data.GetInt(Stat.Health);
-      _damageTaken = Mathf.Clamp(value: 0, _damageTaken - healing, health);
+      var health = state.GetInt(Stat.Health);
+      _creatureService.SetDamageTaken(_creatureId, Mathf.Clamp(value: 0, state.DamageTaken - healing, health));
     }
 
     public void OnActionAnimationCompleted()
@@ -393,17 +390,6 @@ namespace Nighthollow.Components
     public bool IsStunned() => _state == CreatureAnimation.Stunned;
 
     bool CanUseSkill() => _state == CreatureAnimation.Idle || _state == CreatureAnimation.Moving;
-
-    public void MarkSkillUsed(int skillId)
-    {
-      _skillLastUsedTimes[skillId] = Time.time;
-    }
-
-    /// <summary>
-    ///   Returns the timestamp at which the provided skill was last used by this creature, or 0 if it has never been used
-    /// </summary>
-    public float? TimeLastUsedSeconds(int skillId) =>
-      _skillLastUsedTimes.ContainsKey(skillId) ? (float?) _skillLastUsedTimes[skillId] : null;
 
     IEnumerator<YieldInstruction> RunCoroutine()
     {

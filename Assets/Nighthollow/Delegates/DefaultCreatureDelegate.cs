@@ -95,7 +95,7 @@ namespace Nighthollow.Delegates
 
     static bool CooldownAvailable(GameContext c, CreatureState self, SkillData skill)
     {
-      var lastUsed = self.SkillLastUsedTimeSeconds(c, skill.BaseTypeId);
+      var lastUsed = self.SkillLastUsedTimeSeconds(skill.BaseTypeId);
       return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 

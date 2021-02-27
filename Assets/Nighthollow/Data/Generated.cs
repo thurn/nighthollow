@@ -1026,7 +1026,9 @@ namespace Nighthollow.Data
           Owner,
           RankPosition,
           FilePosition,
-          CurrentSkill);
+          DamageTaken,
+          CurrentSkill,
+          SkillLastUsedTimes);
 
     public CreatureState WithData(CreatureData data) =>
       Equals(data, Data)
@@ -1037,7 +1039,9 @@ namespace Nighthollow.Data
           Owner,
           RankPosition,
           FilePosition,
-          CurrentSkill);
+          DamageTaken,
+          CurrentSkill,
+          SkillLastUsedTimes);
 
     public CreatureState WithOwner(PlayerName owner) =>
       Equals(owner, Owner)
@@ -1048,7 +1052,9 @@ namespace Nighthollow.Data
           owner,
           RankPosition,
           FilePosition,
-          CurrentSkill);
+          DamageTaken,
+          CurrentSkill,
+          SkillLastUsedTimes);
 
     public CreatureState WithRankPosition(RankValue? rankPosition) =>
       Equals(rankPosition, RankPosition)
@@ -1059,7 +1065,9 @@ namespace Nighthollow.Data
           Owner,
           rankPosition,
           FilePosition,
-          CurrentSkill);
+          DamageTaken,
+          CurrentSkill,
+          SkillLastUsedTimes);
 
     public CreatureState WithFilePosition(FileValue? filePosition) =>
       Equals(filePosition, FilePosition)
@@ -1070,7 +1078,22 @@ namespace Nighthollow.Data
           Owner,
           RankPosition,
           filePosition,
-          CurrentSkill);
+          DamageTaken,
+          CurrentSkill,
+          SkillLastUsedTimes);
+
+    public CreatureState WithDamageTaken(int damageTaken) =>
+      Equals(damageTaken, DamageTaken)
+        ? this
+        : new CreatureState(
+          CreatureId,
+          Data,
+          Owner,
+          RankPosition,
+          FilePosition,
+          damageTaken,
+          CurrentSkill,
+          SkillLastUsedTimes);
 
     public CreatureState WithCurrentSkill(SkillData? currentSkill) =>
       Equals(currentSkill, CurrentSkill)
@@ -1081,7 +1104,22 @@ namespace Nighthollow.Data
           Owner,
           RankPosition,
           FilePosition,
-          currentSkill);
+          DamageTaken,
+          currentSkill,
+          SkillLastUsedTimes);
+
+    public CreatureState WithSkillLastUsedTimes(ImmutableDictionary<int, float> skillLastUsedTimes) =>
+      Equals(skillLastUsedTimes, SkillLastUsedTimes)
+        ? this
+        : new CreatureState(
+          CreatureId,
+          Data,
+          Owner,
+          RankPosition,
+          FilePosition,
+          DamageTaken,
+          CurrentSkill,
+          skillLastUsedTimes);
 
   }
 

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
@@ -29,14 +30,18 @@ namespace Nighthollow.Data
       PlayerName owner,
       RankValue? rankPosition = null,
       FileValue? filePosition = null,
-      SkillData? currentSkill = null)
+      int damageTaken = 0,
+      SkillData? currentSkill = null,
+      ImmutableDictionary<int, float>? skillLastUsedTimes = null)
     {
       CreatureId = creatureId;
       Data = data;
+      Owner = owner;
       RankPosition = rankPosition;
       FilePosition = filePosition;
+      DamageTaken = damageTaken;
       CurrentSkill = currentSkill;
-      Owner = owner;
+      SkillLastUsedTimes = skillLastUsedTimes ?? ImmutableDictionary<int, float>.Empty;
     }
 
     [Field] public CreatureId CreatureId { get; }
@@ -45,7 +50,9 @@ namespace Nighthollow.Data
     [Field] public PlayerName Owner { get; }
     [Field] public RankValue? RankPosition { get; }
     [Field] public FileValue? FilePosition { get; }
+    [Field] public int DamageTaken { get; }
     [Field] public SkillData? CurrentSkill { get; }
+    [Field] public ImmutableDictionary<int, float> SkillLastUsedTimes { get; }
 
     public Vector2 GetProjectileSourcePosition(GameContext c) =>
       c.CreatureService.GetCreature(CreatureId).ProjectileSource.position;
@@ -53,8 +60,8 @@ namespace Nighthollow.Data
     /// <summary>
     ///   Returns the timestamp at which the provided skill was last used by this creature, or 0 if it has never been used
     /// </summary>
-    public float? SkillLastUsedTimeSeconds(GameContext c, int skillId) =>
-      c.CreatureService.GetCreature(CreatureId).TimeLastUsedSeconds(skillId);
+    public float? SkillLastUsedTimeSeconds(int skillId) =>
+      SkillLastUsedTimes.ContainsKey(skillId) ? (float?) SkillLastUsedTimes[skillId] : null;
 
     public bool HasOverlapWithOpponentCreature(GameContext c) =>
       c.CreatureService.GetCreature(CreatureId).Collider.IsTouchingLayers(

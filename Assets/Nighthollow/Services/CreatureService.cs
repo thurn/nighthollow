@@ -144,6 +144,13 @@ namespace Nighthollow.Services
       return state;
     }
 
+    public CreatureState SetDamageTaken(CreatureId creatureId, int damageTaken)
+    {
+      var state = _creatureState[creatureId].WithDamageTaken(damageTaken);
+      _creatureState[creatureId] = state;
+      return state;
+    }
+
     public void InsertModifier(CreatureId creatureId, IStatModifier modifier)
     {
       var state = _creatureState[creatureId];
@@ -162,6 +169,12 @@ namespace Nighthollow.Services
       var state = _creatureState[creatureId];
       _creatureState[creatureId] =
         state.WithData(state.Data.WithKeyValueStore(mutation.Mutate(state.Data.KeyValueStore)));
+    }
+
+    public void MarkSkillUsed(CreatureId creatureId, int skillId)
+    {
+      var state = _creatureState[creatureId];
+      _creatureState[creatureId] = state.WithSkillLastUsedTimes(state.SkillLastUsedTimes.SetItem(skillId, Time.time));
     }
 
     /// <summary>
