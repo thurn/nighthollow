@@ -30,7 +30,7 @@ namespace Nighthollow.Delegates.Handlers
         Target = target;
       }
 
-      public override bool Invoke(GameContext c, int delegateIndex, IRollForCrit handler) =>
+      public override bool Invoke(IGameContext c, int delegateIndex, IRollForCrit handler) =>
         handler.RollForCrit(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -41,6 +41,6 @@ namespace Nighthollow.Delegates.Handlers
     /// <summary>
     /// Should roll a random number to determine if the current skill will be treated as a critical hit.
     /// </summary>
-    bool RollForCrit(GameContext context, int delegateIndex, Data data);
+    bool RollForCrit(IGameContext context, int delegateIndex, Data data);
   }
 }

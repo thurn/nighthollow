@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates
   {
     public string Describe(IStatDescriptionProvider provider) => "Default Creature Delegate";
 
-    public IEnumerable<Effect> OnCreatureDeath(GameContext c, int delegateIndex, IOnCreatureDeath.Data d)
+    public IEnumerable<Effect> OnCreatureDeath(IGameContext c, int delegateIndex, IOnCreatureDeath.Data d)
     {
       if (d.Self.Owner == PlayerName.Enemy)
       {
@@ -41,7 +41,7 @@ namespace Nighthollow.Delegates
       }
     }
 
-    public SkillData? SelectSkill(GameContext c, int delegateIndex, ISelectSkill.Data d)
+    public SkillData? SelectSkill(IGameContext c, int delegateIndex, ISelectSkill.Data d)
     {
       if (AnyMeleeSkillCouldHit(c, d.Self))
       {
@@ -64,21 +64,21 @@ namespace Nighthollow.Delegates
       return SelectMatching(c, d.Self, s => !s.IsMelee() && !s.IsProjectile());
     }
 
-    static bool AnyMeleeSkillCouldHit(GameContext c, CreatureState self)
+    static bool AnyMeleeSkillCouldHit(IGameContext c, CreatureState self)
     {
       return self.Data.Skills
         .Where(s => s.IsMelee())
         .Any(skill => skill.DelegateList.Any(c, new IMeleeSkillCouldHit.Data(self, skill)));
     }
 
-    static bool AnyProjectileSkillCouldHit(GameContext c, CreatureState self)
+    static bool AnyProjectileSkillCouldHit(IGameContext c, CreatureState self)
     {
       return self.Data.Skills
         .Where(s => s.IsProjectile())
         .Any(skill => skill.DelegateList.Any(c, new IProjectileSkillCouldHit.Data(self, skill)));
     }
 
-    static SkillData? SelectMatching(GameContext c, CreatureState self, Func<SkillData, bool> predicate)
+    static SkillData? SelectMatching(IGameContext c, CreatureState self, Func<SkillData, bool> predicate)
     {
       var available = self.Data.Skills
         .Where(predicate)
@@ -93,17 +93,17 @@ namespace Nighthollow.Delegates
       return available.FirstOrDefault(s => s.GetDurationSeconds(Stat.Cooldown) >= maxCooldown);
     }
 
-    static bool CooldownAvailable(GameContext c, CreatureState self, SkillData skill)
+    static bool CooldownAvailable(IGameContext c, CreatureState self, SkillData skill)
     {
       var lastUsed = self.SkillLastUsedTimeSeconds(skill.BaseTypeId);
       return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
-    public bool MeleeSkillCouldHit(GameContext c, int delegateIndex, IMeleeSkillCouldHit.Data d) =>
+    public bool MeleeSkillCouldHit(IGameContext c, int delegateIndex, IMeleeSkillCouldHit.Data d) =>
       c.CreatureService.GetCollider(d.Self.CreatureId).IsTouchingLayers(
         Constants.LayerMaskForCreatures(d.Self.Owner.GetOpponent()));
 
-    public bool ProjectileSkillCouldHit(GameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
+    public bool ProjectileSkillCouldHit(IGameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
     {
       var hit = Physics2D.Raycast(
         c.CreatureService.GetProjectileSourcePosition(d.Self.CreatureId),

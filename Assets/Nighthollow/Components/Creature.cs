@@ -98,7 +98,7 @@ namespace Nighthollow.Components
       if (transform.position.x > Constants.CreatureDespawnRightX ||
           transform.position.x < Constants.CreatureDespawnLeftX)
       {
-        _registry.CreatureService.DespawnCreature(CreatureId);
+        _registry.CreatureService = _registry.CreatureService.DespawnCreature(CreatureId);
       }
       else if (state.Owner == PlayerName.Enemy &&
                transform.position.x < Constants.EnemyCreatureEndzoneX)
@@ -177,9 +177,10 @@ namespace Nighthollow.Components
       if (skill != null)
       {
         _animationState = CreatureAnimation.UsingSkill;
-        state = _registry.CreatureService.Mutate(CreatureId, s => s.WithCurrentSkill(skill));
+        _registry.CreatureService =
+          _registry.CreatureService.Mutate(CreatureId, s => s.WithCurrentSkill(skill), out var newState);
 
-        var skillAnimation = SelectAnimation(state, skill);
+        var skillAnimation = SelectAnimation(newState, skill);
         switch (skillAnimation)
         {
           case SkillAnimationNumber.Skill1:
@@ -202,7 +203,7 @@ namespace Nighthollow.Components
             throw Errors.UnknownEnumValue(skillAnimation);
         }
 
-        _registry.Invoke(CreatureId, new IOnSkillStarted.Data(state, skill));
+        _registry.Invoke(CreatureId, new IOnSkillStarted.Data(newState, skill));
       }
       else
       {
@@ -276,7 +277,7 @@ namespace Nighthollow.Components
 
     public void OnDeathAnimationCompleted()
     {
-      _registry.CreatureService.DespawnCreature(CreatureId);
+      _registry.CreatureService = _registry.CreatureService.DespawnCreature(CreatureId);
     }
 
     public void Stun(float durationSeconds)
@@ -308,7 +309,7 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(seconds: 1);
-        _registry.CreatureService.Heal(CreatureId,
+        _registry.CreatureService = _registry.CreatureService.Heal(CreatureId,
           _registry.CreatureService[CreatureId].GetInt(Stat.HealthRegenerationPerSecond));
       }
 

@@ -28,14 +28,14 @@ namespace Nighthollow.Delegates.Implementations
       $"Fires {provider.Get(Stat.ProjectileAdjacentsCount)} Additional Projectiles in Adjacent Files";
 
     // Adds + 1 since the stat does not include the initial projectile
-    protected override int GetProjectileCount(GameContext c, CreatureState creature, SkillData skill) =>
+    protected override int GetProjectileCount(IGameContext c, CreatureState creature, SkillData skill) =>
       skill.GetInt(Stat.ProjectileAdjacentsCount) + 1;
 
-    protected override Vector2 GetOrigin(GameContext c, CreatureState self, SkillData skill, int projectileNumber) =>
+    protected override Vector2 GetOrigin(IGameContext c, CreatureState self, SkillData skill, int projectileNumber) =>
       c.CreatureService.GetProjectileSourcePosition(self.CreatureId) +
       projectileNumber * new Vector2(x: 0, self.Data.GetInt(Stat.ProjectileAdjacentsOffset) / 1000f);
 
-    protected override Vector2 GetDirection(GameContext c, CreatureState self, SkillData skill, int projectileNumber) =>
+    protected override Vector2 GetDirection(IGameContext c, CreatureState self, SkillData skill, int projectileNumber) =>
       Constants.ForwardDirectionForPlayer(self.Owner);
   }
 }

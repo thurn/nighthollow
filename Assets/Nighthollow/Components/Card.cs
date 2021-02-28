@@ -32,6 +32,7 @@ namespace Nighthollow.Components
   {
     [Header("Config")]
     [SerializeField] RectTransform _cardBack = null!;
+
     [SerializeField] RectTransform _cardFront = null!;
     [SerializeField] Image _cardImage = null!;
     [SerializeField] TextMeshProUGUI _cost = null!;
@@ -130,10 +131,11 @@ namespace Nighthollow.Components
           if (!_overBoard)
           {
             gameObject.SetActive(value: false);
-            _registry.CreatureService.CreateUserCreature(_registry, _data, (id, positionSelector) =>
-            {
-              positionSelector.Initialize(_registry, id, this);
-            });
+            _registry.CreatureService.CreateUserCreature(
+              _registry,
+              _data,
+              out var _,
+              (id, positionSelector) => { positionSelector.Initialize(_registry, id, this); });
             _overBoard = true;
           }
         }

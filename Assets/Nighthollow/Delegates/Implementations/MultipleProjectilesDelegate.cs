@@ -29,7 +29,7 @@ namespace Nighthollow.Delegates.Implementations
     public string Describe(IStatDescriptionProvider provider) =>
       $"Fires {provider.Get(Stat.ProjectileSequenceCount)} Projectiles in Sequence";
 
-    public IEnumerable<Effect> OnFiredProjectile(GameContext c, int delegateIndex, IOnFiredProjectile.Data d)
+    public IEnumerable<Effect> OnFiredProjectile(IGameContext c, int delegateIndex, IOnFiredProjectile.Data d)
     {
       if (d.Effect.DelegateIndex <= delegateIndex)
         // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.

@@ -30,7 +30,7 @@ namespace Nighthollow.Delegates.Handlers
         Skill = skill;
       }
 
-      public override IEnumerable<Effect> Invoke(GameContext c, int delegateIndex, IOnSkillUsed handler) =>
+      public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnSkillUsed handler) =>
         handler.OnSkillUsed(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -42,6 +42,6 @@ namespace Nighthollow.Delegates.Handlers
     /// projectile for projectile skills. For non-projectile skills, this will be called immediately before the
     /// <see cref="IOnSkillImpact" /> event.
     /// </summary>
-    IEnumerable<Effect> OnSkillUsed(GameContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnSkillUsed(IGameContext context, int delegateIndex, Data data);
   }
 }

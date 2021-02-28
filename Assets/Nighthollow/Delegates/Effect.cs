@@ -26,6 +26,6 @@ namespace Nighthollow.Delegates
     // https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
     public abstract void Execute(GameServiceRegistry registry);
 
-    public virtual IEnumerable<IEventData> Events(GameContext c) => Enumerable.Empty<IEventData>();
+    public virtual IEnumerable<IEventData> Events(IGameContext c) => Enumerable.Empty<IEventData>();
   }
 }

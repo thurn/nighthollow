@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Effects
     {
     }
 
-    public override IEnumerable<IEventData> Events(GameContext c)
+    public override IEnumerable<IEventData> Events(IGameContext c)
     {
       yield return EventData;
     }

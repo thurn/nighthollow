@@ -28,7 +28,7 @@ namespace Nighthollow.Delegates.Handlers
         Self = self;
       }
 
-      public override SkillData? Invoke(GameContext c, int delegateIndex, ISelectSkill handler) =>
+      public override SkillData? Invoke(IGameContext c, int delegateIndex, ISelectSkill handler) =>
         handler.SelectSkill(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -38,6 +38,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Called when a creature wants to decide which skill to use. The first delegate to return a non-null value is
     /// used.
     /// </summary>
-    SkillData? SelectSkill(GameContext context, int delegateIndex, Data data);
+    SkillData? SelectSkill(IGameContext context, int delegateIndex, Data data);
   }
 }

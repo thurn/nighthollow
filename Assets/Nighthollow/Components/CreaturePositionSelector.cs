@@ -79,7 +79,7 @@ namespace Nighthollow.Components
             .AppendCallback(() =>
             {
               _registry.CreatureService.SetAnimationPaused(_creatureId, false);
-              _registry.CreatureService.AddUserCreatureAtPosition(_creatureId, rank, file);
+              _registry.CreatureService = _registry.CreatureService.AddUserCreatureAtPosition(_creatureId, rank, file);
             });
         }
         else
@@ -107,7 +107,7 @@ namespace Nighthollow.Components
       _card!.transform.position = Input.mousePosition;
 
       Destroy(_cursor);
-      _registry.CreatureService.DespawnCreature(_creatureId);
+      _registry.CreatureService = _registry.CreatureService.DespawnCreature(_creatureId);
     }
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>

@@ -50,6 +50,8 @@ namespace Nighthollow.Services
 
   public sealed class GameServiceRegistry : ServiceRegistry
   {
+    InternalGameContext _gameContext;
+
     public GameServiceRegistry(
       Database database,
       AssetService assetService,
@@ -68,8 +70,7 @@ namespace Nighthollow.Services
         objectPoolService,
         prefabs)
     {
-      CreatureService = new CreatureService();
-      Context = new GameContext(CreatureService);
+      _gameContext = new InternalGameContext();
       MainCanvas = mainCanvas;
       User = user;
       Enemy = enemy;
@@ -77,22 +78,29 @@ namespace Nighthollow.Services
       HelperTextService = helperTextService;
     }
 
-    public GameContext Context { get; }
-    public CreatureService CreatureService { get; }
     public RectTransform MainCanvas { get; }
     public User User { get; }
     public Enemy Enemy { get; }
     public DamageTextService DamageTextService { get; }
     public HelperTextService HelperTextService { get; }
 
-    public StatTable StatsForPlayer(PlayerName player)
+    public IGameContext Context => _gameContext;
+
+    public CreatureService CreatureService
     {
-      return player switch
+      get => _gameContext.InternalCreatureService;
+      set
       {
-        PlayerName.User => User.Data.Stats,
-        PlayerName.Enemy => Enemy.Data.Stats,
-        _ => throw Errors.UnknownEnumValue(player)
-      };
+        if (!ReferenceEquals(value, CreatureService))
+        {
+          _gameContext = new InternalGameContext(value);
+        }
+      }
+    }
+
+    public void OnUpdate()
+    {
+      _gameContext.OnUpdate(this);
     }
 
     public void Invoke(IDelegateLocator locator, IEventData arg)
@@ -117,6 +125,32 @@ namespace Nighthollow.Services
         {
           break;
         }
+      }
+    }
+
+    public StatTable StatsForPlayer(PlayerName player)
+    {
+      return player switch
+      {
+        PlayerName.User => User.Data.Stats,
+        PlayerName.Enemy => Enemy.Data.Stats,
+        _ => throw Errors.UnknownEnumValue(player)
+      };
+    }
+
+    sealed class InternalGameContext : IGameContext
+    {
+      public InternalGameContext(CreatureService? creatureService = null)
+      {
+        InternalCreatureService = creatureService ?? new CreatureService();
+      }
+
+      public CreatureService InternalCreatureService { get; }
+      public ICreatureService CreatureService => InternalCreatureService;
+
+      public void OnUpdate(GameServiceRegistry registry)
+      {
+        registry.CreatureService = InternalCreatureService.OnUpdate(this);
       }
     }
   }

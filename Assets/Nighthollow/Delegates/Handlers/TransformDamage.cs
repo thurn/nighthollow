@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Handlers
       }
 
       public override ImmutableDictionary<DamageType, int> Invoke(
-        GameContext c,
+        IGameContext c,
         int delegateIndex,
         ITransformDamage handler,
         ImmutableDictionary<DamageType, int> current) =>
@@ -49,7 +49,7 @@ namespace Nighthollow.Delegates.Handlers
     /// invoked in sequence with the return value of the previous delegate.
     /// </summary>
     ImmutableDictionary<DamageType, int> TransformDamage(
-      GameContext context,
+      IGameContext context,
       int delegateIndex,
       Data data,
       ImmutableDictionary<DamageType, int> current);

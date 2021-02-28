@@ -29,13 +29,13 @@ namespace Nighthollow.Delegates.Handlers
         Self = self;
       }
 
-      public override IEnumerable<Effect> Invoke(GameContext c, int delegateIndex, IOnKilledEnemy handler) =>
+      public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnKilledEnemy handler) =>
         handler.OnKilledEnemy(c, delegateIndex, this);
 
       public CreatureState Self { get; }
     }
 
     /// <summary>Called when a creature kills an enemy creature.</summary>
-    IEnumerable<Effect> OnKilledEnemy(GameContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnKilledEnemy(IGameContext context, int delegateIndex, Data data);
   }
 }

@@ -87,12 +87,13 @@ namespace Nighthollow.Components
     IEnumerator<YieldInstruction> SpawnAsync()
     {
       yield return new WaitForSeconds(Data.Get(Stat.InitialEnemySpawnDelay).AsSeconds());
+      var registry = Errors.CheckNotNull(_registry);
 
       while (_spawnCount < Data.Get(Stat.EnemiesToSpawn))
       {
         _spawnCount++;
-        _registry!.CreatureService.CreateMovingCreature(
-          _registry,
+        registry.CreatureService.CreateMovingCreature(
+          registry,
           RandomEnemy(),
           RandomFile(),
           Constants.EnemyCreatureStartingX);

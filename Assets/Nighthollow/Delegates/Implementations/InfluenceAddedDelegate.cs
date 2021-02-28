@@ -26,7 +26,7 @@ namespace Nighthollow.Delegates.Implementations
   {
     public string Describe(IStatDescriptionProvider provider) => "+1 Influence";
 
-    public IEnumerable<Effect> OnCreatureActivated(GameContext c, int delegateIndex, IOnCreatureActivated.Data d)
+    public IEnumerable<Effect> OnCreatureActivated(IGameContext c, int delegateIndex, IOnCreatureActivated.Data d)
     {
       yield return new ApplyModifierToOwnerEffect(
         d.Self.CreatureId,

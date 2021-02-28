@@ -93,7 +93,7 @@ namespace Nighthollow.Services
 
     void Update()
     {
-      _registry?.Context.OnUpdate();
+      _registry?.OnUpdate();
     }
 
     void OnDataFetched(FetchResult fetchResult)

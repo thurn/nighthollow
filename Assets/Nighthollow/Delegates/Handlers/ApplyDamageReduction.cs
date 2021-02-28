@@ -33,7 +33,7 @@ namespace Nighthollow.Delegates.Handlers
       }
 
       public override ImmutableDictionary<DamageType, int> Invoke(
-        GameContext c, int delegateIndex, IApplyDamageReduction handler) =>
+        IGameContext c, int delegateIndex, IApplyDamageReduction handler) =>
         handler.ApplyDamageReduction(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -46,6 +46,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Should apply damage reduction for this skill, reducing the damage value based on the target's reduction.
     /// Typically called by <see cref="IComputeFinalDamage" />.
     /// </summary>
-    ImmutableDictionary<DamageType, int> ApplyDamageReduction(GameContext context, int delegateIndex, Data data);
+    ImmutableDictionary<DamageType, int> ApplyDamageReduction(IGameContext context, int delegateIndex, Data data);
   }
 }

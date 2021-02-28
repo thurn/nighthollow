@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Handlers
         Projectile = projectile;
       }
 
-      public override IEnumerable<CreatureId>? Invoke(GameContext c, int delegateIndex, IFindTargets handler) =>
+      public override IEnumerable<CreatureId>? Invoke(IGameContext c, int delegateIndex, IFindTargets handler) =>
         handler.FindTargets(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -45,6 +45,6 @@ namespace Nighthollow.Delegates.Handlers
     ///   <see cref="IOnSkillImpact" /> implementation. Default implementation uses @<see cref="IGetCollider" /> to find all
     ///   creatures in the impact area and then adds targets returned by <see cref="IFilterTargets" />.
     /// </summary>
-    IEnumerable<CreatureId>? FindTargets(GameContext context, int delegateIndex, Data data);
+    IEnumerable<CreatureId>? FindTargets(IGameContext context, int delegateIndex, Data data);
   }
 }

@@ -62,7 +62,7 @@ namespace Nighthollow.Delegates.Effects
       DOTween.Sequence().InsertCallback(FiringDelayMs / 1000f, () => FireAsync(registry));
     }
 
-    public override IEnumerable<IEventData> Events(GameContext c)
+    public override IEnumerable<IEventData> Events(IGameContext c)
     {
       yield return new IOnFiredProjectile.Data(c.CreatureService[FiredBy], Skill, this);
     }

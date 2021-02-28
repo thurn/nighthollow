@@ -22,7 +22,7 @@ namespace Nighthollow.Stats
 {
   public interface ILifetime
   {
-    bool IsValid(GameContext c);
+    bool IsValid(IGameContext c);
   }
 
   public readonly struct WhileAliveLifetime : ILifetime
@@ -34,7 +34,7 @@ namespace Nighthollow.Stats
       _creatureId = creatureId;
     }
 
-    public bool IsValid(GameContext c) => c.CreatureService[_creatureId].IsAlive;
+    public bool IsValid(IGameContext c) => c.CreatureService[_creatureId].IsAlive;
   }
 
   public sealed class TimedLifetime : ILifetime
@@ -46,6 +46,6 @@ namespace Nighthollow.Stats
       _endTimeSeconds = Time.time + Errors.CheckPositive(duration.AsSeconds());
     }
 
-    public bool IsValid(GameContext c) => Time.time < _endTimeSeconds;
+    public bool IsValid(IGameContext c) => Time.time < _endTimeSeconds;
   }
 }

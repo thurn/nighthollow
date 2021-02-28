@@ -37,7 +37,7 @@ namespace Nighthollow.Delegates
   {
     public string Describe(IStatDescriptionProvider provider) => "Default Skill Delegate";
 
-    public IEnumerable<Effect> OnSkillUsed(GameContext c, int delegateIndex, IOnSkillUsed.Data d)
+    public IEnumerable<Effect> OnSkillUsed(IGameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {
       yield return new MarkSkillUsedEffect(d.Self.CreatureId, d.Skill.BaseTypeId);
       switch (d.Skill.BaseType.SkillType)
@@ -66,7 +66,7 @@ namespace Nighthollow.Delegates
       }
     }
 
-    public IEnumerable<Effect> OnSkillImpact(GameContext c, int delegateIndex, IOnSkillImpact.Data d)
+    public IEnumerable<Effect> OnSkillImpact(IGameContext c, int delegateIndex, IOnSkillImpact.Data d)
     {
       var targets = d.Skill.DelegateList.FirstNonNull(c, new IFindTargets.Data(d.Self, d.Skill, d.Projectile));
 
@@ -80,7 +80,7 @@ namespace Nighthollow.Delegates
       }
     }
 
-    public IEnumerable<Effect> OnApplySkillToTarget(GameContext c, int delegateIndex, IOnApplySkillToTarget.Data d)
+    public IEnumerable<Effect> OnApplySkillToTarget(IGameContext c, int delegateIndex, IOnApplySkillToTarget.Data d)
     {
       if (d.Skill.GetBool(Stat.UsesAccuracy) &&
           !d.Skill.DelegateList.First(c, new IRollForHit.Data(d.Self, d.Skill, d.Target), notFound: false))
@@ -136,7 +136,7 @@ namespace Nighthollow.Delegates
       }
     }
 
-    public IEnumerable<CreatureId> FindTargets(GameContext c, int delegateIndex, IFindTargets.Data d)
+    public IEnumerable<CreatureId> FindTargets(IGameContext c, int delegateIndex, IFindTargets.Data d)
     {
       var filter = new ContactFilter2D
       {
@@ -163,20 +163,20 @@ namespace Nighthollow.Delegates
         notFound: Enumerable.Empty<CreatureId>());
     }
 
-    public IEnumerable<CreatureId> FilterTargets(GameContext c, int delegateIndex, IFilterTargets.Data d) =>
+    public IEnumerable<CreatureId> FilterTargets(IGameContext c, int delegateIndex, IFilterTargets.Data d) =>
       d.Skill.IsMelee()
         ? d.Hits.Take(Errors.CheckPositive(d.Skill.GetInt(Stat.MaxMeleeAreaTargets)))
         : d.Hits;
 
-    public Collider2D GetCollider(GameContext c, int delegateIndex, IGetCollider.Data d) =>
+    public Collider2D GetCollider(IGameContext c, int delegateIndex, IGetCollider.Data d) =>
       d.Projectile ? d.Projectile!.Collider : c.CreatureService.GetCollider(d.Self.CreatureId);
 
     public ImmutableDictionary<DamageType, int> RollForBaseDamage(
-      GameContext c, int delegateIndex, IRollForBaseDamage.Data d) =>
+      IGameContext c, int delegateIndex, IRollForBaseDamage.Data d) =>
       DamageUtil.RollForDamage(d.Skill.Get(Stat.BaseDamage));
 
     public ImmutableDictionary<DamageType, int> ApplyDamageReduction(
-      GameContext c, int delegateIndex, IApplyDamageReduction.Data d)
+      IGameContext c, int delegateIndex, IApplyDamageReduction.Data d)
     {
       return d.Damage.ToImmutableDictionary(
         pair => pair.Key,
@@ -193,7 +193,7 @@ namespace Nighthollow.Delegates
         damage - reduction);
 
     public ImmutableDictionary<DamageType, int> ApplyDamageResistance(
-      GameContext c, int delegateIndex, IApplyDamageResistance.Data d)
+      IGameContext c, int delegateIndex, IApplyDamageResistance.Data d)
     {
       return d.Damage.ToImmutableDictionary(
         pair => pair.Key,
@@ -209,7 +209,7 @@ namespace Nighthollow.Delegates
         damageValue * (1f - skill.Get(Stat.MaximumDamageResistance).AsMultiplier()),
         Mathf.Clamp01(1f - resistance / (resistance + 2.0f * damageValue)) * damageValue));
 
-    public int ComputeFinalDamage(GameContext c, int delegateIndex, IComputeFinalDamage.Data d)
+    public int ComputeFinalDamage(IGameContext c, int delegateIndex, IComputeFinalDamage.Data d)
     {
       var damage = d.Skill.GetBool(Stat.IgnoresDamageReduction)
         ? d.Damage
@@ -239,7 +239,7 @@ namespace Nighthollow.Delegates
       return total;
     }
 
-    public bool RollForHit(GameContext c, int delegateIndex, IRollForHit.Data d)
+    public bool RollForHit(IGameContext c, int delegateIndex, IRollForHit.Data d)
     {
       var accuracy = d.Skill.GetInt(Stat.Accuracy);
       var hitChance = Mathf.Clamp(
@@ -249,15 +249,15 @@ namespace Nighthollow.Delegates
       return Random.value <= hitChance;
     }
 
-    public bool RollForCrit(GameContext c, int delegateIndex, IRollForCrit.Data d) =>
+    public bool RollForCrit(IGameContext c, int delegateIndex, IRollForCrit.Data d) =>
       Random.value <= d.Skill.Get(Stat.CritChance).AsMultiplier() +
       d.Target.Stats.Get(Stat.ReceiveCritsChance).AsMultiplier();
 
-    public int ComputeHealthDrain(GameContext c, int delegateIndex, IComputeHealthDrain.Data d) => d.Skill.IsMelee()
+    public int ComputeHealthDrain(IGameContext c, int delegateIndex, IComputeHealthDrain.Data d) => d.Skill.IsMelee()
       ? d.Skill.Get(Stat.MeleeHealthDrainPercent).CalculateFraction(d.TotalDamage)
       : 0;
 
-    public bool RollForStun(GameContext c, int delegateIndex, IRollForStun.Data d)
+    public bool RollForStun(IGameContext c, int delegateIndex, IRollForStun.Data d)
     {
       var stunChance = d.Skill.Get(Stat.AddedStunChance).AsMultiplier() +
                        d.DamageAmount / (float) d.Target.GetInt(Stat.Health);

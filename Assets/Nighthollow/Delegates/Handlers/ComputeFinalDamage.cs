@@ -38,7 +38,7 @@ namespace Nighthollow.Delegates.Handlers
         IsCriticalHit = isCriticalHit;
       }
 
-      public override int Invoke(GameContext c, int delegateIndex, IComputeFinalDamage handler) =>
+      public override int Invoke(IGameContext c, int delegateIndex, IComputeFinalDamage handler) =>
         handler.ComputeFinalDamage(c, delegateIndex, this);
 
       public CreatureState Self { get; }
@@ -52,6 +52,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Should compute the final damage value for this skill based on the value adjusted by damage resistance and
     /// reduction. Should apply the critical hit multiplier if IsCriticalHit is true.
     /// </summary>
-    int ComputeFinalDamage(GameContext context, int delegateIndex, Data data);
+    int ComputeFinalDamage(IGameContext context, int delegateIndex, Data data);
   }
 }

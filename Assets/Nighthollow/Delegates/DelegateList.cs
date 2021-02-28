@@ -35,12 +35,12 @@ namespace Nighthollow.Delegates
       _parent = parent;
     }
 
-    public IEnumerable<Effect> Invoke<THandler>(GameContext c, EventData<THandler> eventData)
+    public IEnumerable<Effect> Invoke<THandler>(IGameContext c, EventData<THandler> eventData)
       where THandler : IHandler =>
       AllHandlers<THandler>().SelectMany(pair => eventData.Invoke(c, pair.Item1, pair.Item2));
 
     public TResult First<THandler, TResult>(
-      GameContext c,
+      IGameContext c,
       QueryData<THandler, TResult> queryData,
       TResult notFound) where THandler : IHandler
     {
@@ -53,7 +53,7 @@ namespace Nighthollow.Delegates
     }
 
     public TResult? FirstNonNull<THandler, TResult>(
-      GameContext c,
+      IGameContext c,
       QueryData<THandler, TResult?> queryData) where THandler : IHandler where TResult : class
     {
       return AllHandlers<THandler>()
@@ -61,11 +61,11 @@ namespace Nighthollow.Delegates
         .FirstOrDefault(result => result != null);
     }
 
-    public bool Any<THandler>(GameContext c, QueryData<THandler, bool> queryData) where THandler : IHandler =>
+    public bool Any<THandler>(IGameContext c, QueryData<THandler, bool> queryData) where THandler : IHandler =>
       AllHandlers<THandler>().Any(pair => queryData.Invoke(c, pair.Item1, pair.Item2));
 
     public TResult Iterate<THandler, TResult>(
-      GameContext c,
+      IGameContext c,
       IteratedQueryData<THandler, TResult> queryData,
       TResult initialValue) where THandler : IHandler =>
       AllHandlers<THandler>().Aggregate(initialValue, (current, pair) =>

@@ -31,12 +31,10 @@ namespace Nighthollow.Delegates.Implementations
     public string Describe(IStatDescriptionProvider provider) =>
       $"Projectiles Chain {provider.Get(Stat.ProjectileChainCount)} Times on Hit";
 
-    public bool ShouldSkipProjectileImpact(GameContext c, int delegateIndex, IShouldSkipProjectileImpact.Data d)
-    {
-      return ShouldSkipChaininingImpacts(c, d);
-    }
+    public bool ShouldSkipProjectileImpact(IGameContext c, int delegateIndex, IShouldSkipProjectileImpact.Data d) =>
+      ShouldSkipChaininingImpacts(c, d);
 
-    public static bool ShouldSkipChaininingImpacts(GameContext c, IShouldSkipProjectileImpact.Data d)
+    public static bool ShouldSkipChaininingImpacts(IGameContext c, IShouldSkipProjectileImpact.Data d)
     {
       if (d.Projectile && d.Projectile!.KeyValueStore.Get(Key.TimesChained) > 0)
         // We skip impact for the projectile for creatures which have already been hit by a chaining projectile
@@ -57,7 +55,7 @@ namespace Nighthollow.Delegates.Implementations
       return false;
     }
 
-    public IEnumerable<Effect> OnHitTarget(GameContext c, int delegateIndex, IOnHitTarget.Data d)
+    public IEnumerable<Effect> OnHitTarget(IGameContext c, int delegateIndex, IOnHitTarget.Data d)
     {
       Errors.CheckPositive(d.Skill.GetInt(Stat.ProjectileChainCount));
       if (d.Projectile &&

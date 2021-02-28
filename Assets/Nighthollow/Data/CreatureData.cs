@@ -58,7 +58,7 @@ namespace Nighthollow.Data
     [Field] public CreatureItemData ItemData { get; }
     [Field] public KeyValueStore KeyValueStore { get; }
 
-    public CreatureData OnTick(GameContext c) => WithStats(Stats.OnTick(c))
+    public CreatureData OnTick(IGameContext c) => WithStats(Stats.OnTick(c))
       .WithSkills(Skills.Select(skill => skill.WithStats(skill.Stats.OnTick(c))).ToImmutableList());
   }
 }

@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.Mutate(CreatureId,
+      registry.CreatureService = registry.CreatureService.Mutate(CreatureId,
         s => s.WithSkillLastUsedTimes(s.SkillLastUsedTimes.SetItem(SkillId, Time.time)));
     }
   }

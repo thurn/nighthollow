@@ -116,7 +116,7 @@ namespace Nighthollow.Stats
           .ToDictionary(g => g.Key, g => g.Select(m => m)));
 
     [MustUseReturnValue]
-    public StatTable OnTick(GameContext c) =>
+    public StatTable OnTick(IGameContext c) =>
       _dynamicModifiers.IsEmpty
         ? this
         : new StatTable(_parent,

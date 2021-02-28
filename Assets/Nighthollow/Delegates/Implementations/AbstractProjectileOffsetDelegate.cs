@@ -31,15 +31,15 @@ namespace Nighthollow.Delegates.Implementations
   {
     public abstract string Describe(IStatDescriptionProvider provider);
 
-    protected abstract Vector2 GetOrigin(GameContext c, CreatureState creature, SkillData skill, int projectileNumber);
+    protected abstract Vector2 GetOrigin(IGameContext c, CreatureState creature, SkillData skill, int projectileNumber);
 
     protected abstract Vector2 GetDirection(
-      GameContext c, CreatureState creature, SkillData skill, int projectileNumber);
+      IGameContext c, CreatureState creature, SkillData skill, int projectileNumber);
 
     /// <summary>Count of projectiles to fire, *including* the initial projectile.</summary>
-    protected abstract int GetProjectileCount(GameContext c, CreatureState creature, SkillData skill);
+    protected abstract int GetProjectileCount(IGameContext c, CreatureState creature, SkillData skill);
 
-    public bool ProjectileSkillCouldHit(GameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
+    public bool ProjectileSkillCouldHit(IGameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
     {
       return CollectionUtils.AlternatingIntegers()
         .Take(GetProjectileCount(c, d.Self, d.Skill) - 1)
@@ -52,7 +52,7 @@ namespace Nighthollow.Delegates.Implementations
         .Any(hit => hit.collider);
     }
 
-    public IEnumerable<Effect> OnFiredProjectile(GameContext c, int delegateIndex, IOnFiredProjectile.Data d)
+    public IEnumerable<Effect> OnFiredProjectile(IGameContext c, int delegateIndex, IOnFiredProjectile.Data d)
     {
       // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
       if (d.Effect.DelegateIndex <= delegateIndex)
@@ -66,7 +66,7 @@ namespace Nighthollow.Delegates.Implementations
     }
 
     FireProjectileEffect Result(
-      GameContext c, int delegateIndex, CreatureState self, SkillData skill, int offsetCount) =>
+      IGameContext c, int delegateIndex, CreatureState self, SkillData skill, int offsetCount) =>
       new FireProjectileEffect(
         self.CreatureId,
         skill,

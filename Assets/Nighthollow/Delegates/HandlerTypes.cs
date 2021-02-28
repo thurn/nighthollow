@@ -21,29 +21,29 @@ namespace Nighthollow.Delegates
 {
   public interface IDelegateLocator
   {
-    public DelegateList GetDelegateList(GameContext c);
+    public DelegateList GetDelegateList(IGameContext c);
   }
 
   public interface IEventData
   {
-    IEnumerable<Effect> Raise(GameContext c, IDelegateLocator delegateLocator);
+    IEnumerable<Effect> Raise(IGameContext c, IDelegateLocator delegateLocator);
   }
 
   public abstract class EventData<THandler> : IEventData where THandler : IHandler
   {
-    public abstract IEnumerable<Effect> Invoke(GameContext c, int delegateIndex, THandler handler);
+    public abstract IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, THandler handler);
 
-    public IEnumerable<Effect> Raise(GameContext c, IDelegateLocator delegateLocator) =>
+    public IEnumerable<Effect> Raise(IGameContext c, IDelegateLocator delegateLocator) =>
       delegateLocator.GetDelegateList(c).Invoke(c, this);
   }
 
   public abstract class QueryData<THandler, TResult>
   {
-    public abstract TResult Invoke(GameContext c, int delegateIndex, THandler handler);
+    public abstract TResult Invoke(IGameContext c, int delegateIndex, THandler handler);
   }
 
   public abstract class IteratedQueryData<THandler, TResult>
   {
-    public abstract TResult Invoke(GameContext c, int delegateIndex, THandler handler, TResult current);
+    public abstract TResult Invoke(IGameContext c, int delegateIndex, THandler handler, TResult current);
   }
 }

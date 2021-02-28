@@ -31,6 +31,6 @@ namespace Nighthollow.Data
     [Field] public ImmutableList<CreatureItemData> Enemies { get; }
     [Field] public override StatTable Stats { get; }
 
-    public EnemyData OnTick(GameContext c) => WithStats(Stats.OnTick(c));
+    public EnemyData OnTick(IGameContext c) => WithStats(Stats.OnTick(c));
   }
 }
