@@ -32,12 +32,11 @@ namespace Nighthollow.Components
   public sealed class User : MonoBehaviour, IStatOwner
   {
     [SerializeField] Hand _hand = null!;
-
     [SerializeField] Deck _deck = null!;
-
     [SerializeField] int _mana;
-
     UserStatus? _statusDisplay;
+    GameServiceRegistry? _registry;
+
     public Hand Hand => _hand;
     public Deck Deck => _deck;
 
@@ -53,6 +52,7 @@ namespace Nighthollow.Components
 
     public void DrawOpeningHand(GameServiceRegistry registry)
     {
+      _registry = registry;
       var gameData = registry.Database.Snapshot();
       Data = UserData.BuildUserData(gameData);
 
@@ -122,7 +122,10 @@ namespace Nighthollow.Components
         _statusDisplay.Influence = Data.Stats.Get(Stat.Influence);
       }
 
-      Data = Data?.OnTick();
+      if (_registry != null)
+      {
+        Data = Data.OnTick(_registry.Context);
+      }
     }
 
     public void SpendMana(int amount)

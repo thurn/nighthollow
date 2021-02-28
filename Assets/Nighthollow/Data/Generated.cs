@@ -1028,6 +1028,7 @@ namespace Nighthollow.Data
           FilePosition,
           DamageTaken,
           CurrentSkill,
+          IsAlive,
           SkillLastUsedTimes);
 
     public CreatureState WithData(CreatureData data) =>
@@ -1041,6 +1042,7 @@ namespace Nighthollow.Data
           FilePosition,
           DamageTaken,
           CurrentSkill,
+          IsAlive,
           SkillLastUsedTimes);
 
     public CreatureState WithOwner(PlayerName owner) =>
@@ -1054,6 +1056,7 @@ namespace Nighthollow.Data
           FilePosition,
           DamageTaken,
           CurrentSkill,
+          IsAlive,
           SkillLastUsedTimes);
 
     public CreatureState WithRankPosition(RankValue? rankPosition) =>
@@ -1067,6 +1070,7 @@ namespace Nighthollow.Data
           FilePosition,
           DamageTaken,
           CurrentSkill,
+          IsAlive,
           SkillLastUsedTimes);
 
     public CreatureState WithFilePosition(FileValue? filePosition) =>
@@ -1080,6 +1084,7 @@ namespace Nighthollow.Data
           filePosition,
           DamageTaken,
           CurrentSkill,
+          IsAlive,
           SkillLastUsedTimes);
 
     public CreatureState WithDamageTaken(int damageTaken) =>
@@ -1093,6 +1098,7 @@ namespace Nighthollow.Data
           FilePosition,
           damageTaken,
           CurrentSkill,
+          IsAlive,
           SkillLastUsedTimes);
 
     public CreatureState WithCurrentSkill(SkillData? currentSkill) =>
@@ -1106,6 +1112,21 @@ namespace Nighthollow.Data
           FilePosition,
           DamageTaken,
           currentSkill,
+          IsAlive,
+          SkillLastUsedTimes);
+
+    public CreatureState WithIsAlive(bool isAlive) =>
+      Equals(isAlive, IsAlive)
+        ? this
+        : new CreatureState(
+          CreatureId,
+          Data,
+          Owner,
+          RankPosition,
+          FilePosition,
+          DamageTaken,
+          CurrentSkill,
+          isAlive,
           SkillLastUsedTimes);
 
     public CreatureState WithSkillLastUsedTimes(ImmutableDictionary<int, float> skillLastUsedTimes) =>
@@ -1119,6 +1140,7 @@ namespace Nighthollow.Data
           FilePosition,
           DamageTaken,
           CurrentSkill,
+          IsAlive,
           skillLastUsedTimes);
 
   }

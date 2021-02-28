@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using Nighthollow.Components;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -23,23 +22,19 @@ namespace Nighthollow.Stats
 {
   public interface ILifetime
   {
-    bool IsValid();
+    bool IsValid(GameContext c);
   }
 
-  public sealed class WhileAliveLifetime : ILifetime
+  public readonly struct WhileAliveLifetime : ILifetime
   {
-    readonly WeakReference<Creature> _scopeCreature;
+    readonly CreatureId _creatureId;
 
-    public WhileAliveLifetime(Creature scopeCreature)
+    public WhileAliveLifetime(CreatureId creatureId)
     {
-      _scopeCreature = new WeakReference<Creature>(Errors.CheckNotNull(scopeCreature));
+      _creatureId = creatureId;
     }
 
-    public bool IsValid()
-    {
-      _scopeCreature.TryGetTarget(out var creature);
-      return creature && creature.IsAlive();
-    }
+    public bool IsValid(GameContext c) => c.CreatureService.GetCreatureState(_creatureId).IsAlive;
   }
 
   public sealed class TimedLifetime : ILifetime
@@ -51,6 +46,6 @@ namespace Nighthollow.Stats
       _endTimeSeconds = Time.time + Errors.CheckPositive(duration.AsSeconds());
     }
 
-    public bool IsValid() => Time.time < _endTimeSeconds;
+    public bool IsValid(GameContext c) => Time.time < _endTimeSeconds;
   }
 }

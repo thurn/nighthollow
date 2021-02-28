@@ -31,13 +31,14 @@ namespace Nighthollow.Components
   {
     [SerializeField] int _spawnCount;
     [SerializeField] int _deathCount;
-
     ImmutableList<CreatureData> _enemies = null!;
+    GameServiceRegistry? _registry;
 
     public EnemyData Data { get; private set; } = null!;
 
     public void OnGameStarted(GameServiceRegistry registry)
     {
+      _registry = registry;
       var gameData = registry.Database.Snapshot();
       Data = gameData.BattleData.BuildEnemyData(gameData);
       Errors.CheckState(Data.Enemies.Count > 0, "No enemies found");
@@ -58,7 +59,10 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      Data = Data?.OnTick();
+      if (_registry != null)
+      {
+        Data = Data.OnTick(_registry.Context);
+      }
     }
 
     /// <summary>Called when an enemy is killed (not despawned).</summary>
@@ -113,15 +117,15 @@ namespace Nighthollow.Components
     FileValue RandomFile()
     {
       return FileValue.File3;
-      var selector = new DynamicRandomSelector<FileValue>();
-      foreach (var file in BoardPositions.AllFiles)
-      {
-        selector.Add(file, weight: 1.0f);
-      }
-
-      selector.Build();
-
-      return selector.SelectRandomItem();
+      // var selector = new DynamicRandomSelector<FileValue>();
+      // foreach (var file in BoardPositions.AllFiles)
+      // {
+      //   selector.Add(file, weight: 1.0f);
+      // }
+      //
+      // selector.Build();
+      //
+      // return selector.SelectRandomItem();
     }
   }
 }

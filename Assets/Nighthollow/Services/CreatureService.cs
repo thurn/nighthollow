@@ -125,6 +125,8 @@ namespace Nighthollow.Services
       {
         _movingCreatures.Remove(creature.CreatureId);
       }
+
+      _creatureState[creature.CreatureId] = state.WithIsAlive(false);
     }
 
     public void OnDestroyed(Creature creature)
@@ -249,7 +251,7 @@ namespace Nighthollow.Services
       foreach (var pair in _creatures)
       {
         var state = _creatureState[pair.Key];
-        _creatureState[pair.Key] = state.WithData(state.Data.OnTick());
+        _creatureState[pair.Key] = state.WithData(state.Data.OnTick(_registry!.Context));
         pair.Value.OnUpdate(_creatureState[pair.Key]);
       }
     }

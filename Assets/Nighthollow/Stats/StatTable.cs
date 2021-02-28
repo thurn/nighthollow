@@ -17,6 +17,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using JetBrains.Annotations;
 using Nighthollow.Data;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -115,17 +116,17 @@ namespace Nighthollow.Stats
           .ToDictionary(g => g.Key, g => g.Select(m => m)));
 
     [MustUseReturnValue]
-    public StatTable OnTick() =>
+    public StatTable OnTick(GameContext c) =>
       _dynamicModifiers.IsEmpty
         ? this
         : new StatTable(_parent,
           _modifiers,
           _dynamicModifiers.ToImmutableDictionary(
             pair => pair.Key,
-            pair => pair.Value.RemoveAll(m => m.Lifetime?.IsValid() == false)),
+            pair => pair.Value.RemoveAll(m => m.Lifetime?.IsValid(c) == false)),
           _statusEffects.ToImmutableDictionary(
             pair => pair.Key,
-            pair => pair.Value.RemoveAll(m => m.Lifetime?.IsValid() == false)));
+            pair => pair.Value.RemoveAll(m => m.Lifetime?.IsValid(c) == false)));
 
     IEnumerable<IStatModifier> ModifiersForStat(StatId statId)
     {

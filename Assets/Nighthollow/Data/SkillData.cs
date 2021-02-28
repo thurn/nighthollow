@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Delegates;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -45,7 +46,7 @@ namespace Nighthollow.Data
 
     public bool IsProjectile() => BaseType.SkillType == SkillType.Projectile;
 
-    public SkillData OnTick() => WithStats(Stats.OnTick());
+    public SkillData OnTick(GameContext c) => WithStats(Stats.OnTick(c));
 
     public override string ToString() => ItemData.Name;
   }

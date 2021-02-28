@@ -177,8 +177,6 @@ namespace Nighthollow.Components
 
     void TryToUseSkill(CreatureState state)
     {
-      Errors.CheckState(CanUseSkill(), "Cannot use skill");
-
       var skill = state.Data.DelegateList.FirstNonNull(_registry.Context, new ISelectSkill.Data(state));
       if (skill != null)
       {

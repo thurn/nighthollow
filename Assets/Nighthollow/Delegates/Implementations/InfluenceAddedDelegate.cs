@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Implementations
       yield return new ApplyModifierToOwnerEffect(
         d.Self.CreatureId,
         Stat.Influence.Add(d.Self.Data.ItemData.School, 1)
-          .WithLifetime(new WhileAliveLifetime(c.CreatureService.GetCreature(d.Self.CreatureId))));
+          .WithLifetime(new WhileAliveLifetime(d.Self.CreatureId)));
     }
   }
 }

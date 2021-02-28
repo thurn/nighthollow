@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -30,6 +31,6 @@ namespace Nighthollow.Data
     [Field] public ImmutableList<CreatureItemData> Enemies { get; }
     [Field] public override StatTable Stats { get; }
 
-    public EnemyData OnTick() => WithStats(Stats.OnTick());
+    public EnemyData OnTick(GameContext c) => WithStats(Stats.OnTick(c));
   }
 }

@@ -33,6 +33,7 @@ namespace Nighthollow.Data
       FileValue? filePosition = null,
       int damageTaken = 0,
       SkillData? currentSkill = null,
+      bool isAlive = true,
       ImmutableDictionary<int, float>? skillLastUsedTimes = null)
     {
       CreatureId = creatureId;
@@ -42,6 +43,7 @@ namespace Nighthollow.Data
       FilePosition = filePosition;
       DamageTaken = damageTaken;
       CurrentSkill = currentSkill;
+      IsAlive = isAlive;
       SkillLastUsedTimes = skillLastUsedTimes ?? ImmutableDictionary<int, float>.Empty;
     }
 
@@ -53,6 +55,7 @@ namespace Nighthollow.Data
     [Field] public FileValue? FilePosition { get; }
     [Field] public int DamageTaken { get; }
     [Field] public SkillData? CurrentSkill { get; }
+    [Field] public bool IsAlive { get; }
     [Field] public ImmutableDictionary<int, float> SkillLastUsedTimes { get; }
 
     public Vector2 GetProjectileSourcePosition(GameContext c) =>

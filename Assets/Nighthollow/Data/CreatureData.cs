@@ -15,6 +15,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Delegates;
+using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Stats;
 
@@ -57,7 +58,7 @@ namespace Nighthollow.Data
     [Field] public CreatureItemData ItemData { get; }
     [Field] public KeyValueStore KeyValueStore { get; }
 
-    public CreatureData OnTick() => WithStats(Stats.OnTick())
-      .WithSkills(Skills.Select(skill => skill.WithStats(skill.Stats.OnTick())).ToImmutableList());
+    public CreatureData OnTick(GameContext c) => WithStats(Stats.OnTick(c))
+      .WithSkills(Skills.Select(skill => skill.WithStats(skill.Stats.OnTick(c))).ToImmutableList());
   }
 }

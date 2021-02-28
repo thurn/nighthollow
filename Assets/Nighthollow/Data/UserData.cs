@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Linq;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -28,7 +29,7 @@ namespace Nighthollow.Data
 
     [Field] public override StatTable Stats { get; }
 
-    public UserData OnTick() => WithStats(Stats.OnTick());
+    public UserData OnTick(GameContext c) => WithStats(Stats.OnTick(c));
 
     public static UserData BuildUserData(GameData gameData) =>
       new UserData(gameData.UserModifiers.Values.Aggregate(
