@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
@@ -40,7 +41,7 @@ namespace Nighthollow.Delegates.Implementations
       if (d.Projectile &&
           d.Projectile!.KeyValueStore.Get(Key.TimesChained) < d.Skill.GetInt(Stat.MaxProjectileTimesChained))
       {
-        var enemies = Root.Instance.CreatureService.EnemyCreatures()
+        var enemies = c.CreatureService.MovingCreatures.Where(cid => c.CreatureService[cid].Owner == PlayerName.Enemy)
           .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
           .ToList();
         if (enemies.Count > 0)

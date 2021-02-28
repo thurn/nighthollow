@@ -63,7 +63,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override IEnumerable<IEventData> Events(GameContext c)
     {
-      yield return new IOnFiredProjectile.Data(c.CreatureService.GetCreatureState(FiredBy), Skill, this);
+      yield return new IOnFiredProjectile.Data(c.CreatureService[FiredBy], Skill, this);
     }
 
     IEnumerator<YieldInstruction> FireAsync(GameServiceRegistry registry)

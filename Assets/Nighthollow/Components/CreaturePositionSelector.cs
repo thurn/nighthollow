@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Nighthollow.Data;
@@ -39,7 +40,7 @@ namespace Nighthollow.Components
       if (!_card || mousePosition.y >= Constants.IndicatorBottomY &&
         mousePosition.x <= Constants.IndicatorRightX)
       {
-        var (rank, file) = _creatureService.GetClosestAvailablePosition(mousePosition);
+        var (rank, file) = GetClosestAvailablePosition(_creatureService, mousePosition);
 
         if (Input.GetMouseButtonUp(button: 0))
         {
@@ -106,6 +107,41 @@ namespace Nighthollow.Components
 
       Destroy(_cursor);
       _creature.DestroyCreature();
+    }
+
+    /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
+    public static (RankValue, FileValue) GetClosestAvailablePosition(ICreatureService service, Vector2 position)
+    {
+      RankValue? closestRank = null;
+      FileValue? closestFile = null;
+      var closestDistance = float.MaxValue;
+
+      foreach (var rank in BoardPositions.AllRanks)
+      foreach (var file in BoardPositions.AllFiles)
+      {
+        if (rank == RankValue.Unknown ||
+            file == FileValue.Unknown ||
+            service.PlacedCreatures.ContainsKey((rank, file)))
+        {
+          continue;
+        }
+
+        var distance = Vector2.Distance(position,
+          new Vector2(rank.ToXPosition(), file.ToYPosition()));
+        if (distance < closestDistance)
+        {
+          closestDistance = distance;
+          closestRank = rank;
+          closestFile = file;
+        }
+      }
+
+      if (closestRank == null || closestFile == null)
+      {
+        throw new InvalidOperationException("Board is full!");
+      }
+
+      return (closestRank.Value, closestFile.Value);
     }
   }
 }

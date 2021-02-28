@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
@@ -31,8 +32,7 @@ namespace Nighthollow.Delegates.Implementations
     public IEnumerable<Effect> OnSkillUsed(GameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {
       var filePosition = Errors.CheckNotNull(d.Self.FilePosition);
-      var rank = c.CreatureService.GetOpenForwardRank(
-        Errors.CheckNotNull(d.Self.RankPosition), filePosition);
+      var rank = GetOpenForwardRank(c.CreatureService, Errors.CheckNotNull(d.Self.RankPosition), filePosition);
       if (rank.HasValue)
       {
         var summon = d.Skill.ItemData.Summons[Random.Range(0, d.Skill.ItemData.Summons.Count)];
@@ -41,6 +41,28 @@ namespace Nighthollow.Delegates.Implementations
           rank.Value,
           filePosition,
           isMoving: true);
+      }
+    }
+
+    /// <summary>
+    ///   Returns the first open rank position in front of this (rank, file) if one exists
+    /// </summary>
+    public static RankValue? GetOpenForwardRank(ICreatureService service, RankValue rank, FileValue file)
+    {
+      while (true)
+      {
+        var result = rank.Increment();
+        if (result == null)
+        {
+          return null;
+        }
+
+        if (!service.PlacedCreatures.ContainsKey((result.Value, file)))
+        {
+          return result.Value;
+        }
+
+        rank = result.Value;
       }
     }
   }

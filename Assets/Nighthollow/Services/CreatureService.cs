@@ -13,9 +13,8 @@
 // limitations under the License.
 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.State;
@@ -27,7 +26,31 @@ using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class CreatureService : MonoBehaviour
+  public interface ICreatureService
+  {
+    /// <summary>Map of all currently-known creatures, including creatures in the 'placing' or 'dying' states</summary>
+    ImmutableDictionary<CreatureId, CreatureState> Creatures { get; }
+
+    /// <summary>Allows the look up of creature states by creature ID.</summary>
+    CreatureState this[CreatureId index] { get; }
+
+    /// <summary>Set of both user and enemy creature IDs which are not anchored to a specific board position</summary>
+    ImmutableHashSet<CreatureId> MovingCreatures { get; }
+
+    /// <summary>Map of both user and enemy creature IDs which have a specific board position</summary>
+    ImmutableDictionary<(RankValue, FileValue), CreatureId> PlacedCreatures { get; }
+
+    /// <summary>Return the collider for a given creature.</summary>
+    Collider2D GetCollider(CreatureId creatureId);
+
+    /// <summary>Returns the current position of a creature.</summary>
+    Vector2 GetPosition(CreatureId creatureId);
+
+    /// <summary>Returns the position from which a creature should fire projectiles.</summary>
+    Vector2 GetProjectileSourcePosition(CreatureId creatureId);
+  }
+
+  public sealed class CreatureService : MonoBehaviour, ICreatureService
   {
     int _nextCreatureId = 1;
 
@@ -41,6 +64,26 @@ namespace Nighthollow.Services
       new Dictionary<(RankValue, FileValue), CreatureId>();
 
     GameServiceRegistry? _registry;
+
+#region ICreatureService
+
+    public ImmutableDictionary<CreatureId, CreatureState> Creatures => _creatureState.ToImmutableDictionary();
+
+    public CreatureState this[CreatureId index] => _creatureState[index];
+
+    public ImmutableHashSet<CreatureId> MovingCreatures => _movingCreatures.ToImmutableHashSet();
+
+    public ImmutableDictionary<(RankValue, FileValue), CreatureId> PlacedCreatures =>
+      _userCreatures.ToImmutableDictionary();
+
+    public Collider2D GetCollider(CreatureId creatureId) => _creatures[creatureId].Collider;
+
+    public Vector2 GetPosition(CreatureId creatureId) => _creatures[creatureId].transform.position;
+
+    public Vector2 GetProjectileSourcePosition(CreatureId creatureId) =>
+      _creatures[creatureId].ProjectileSource.position;
+
+#endregion
 
     public Creature GetCreature(CreatureId id)
     {
@@ -57,12 +100,6 @@ namespace Nighthollow.Services
     public void OnServicesReady(GameServiceRegistry registry)
     {
       _registry = registry;
-    }
-
-    public IEnumerable<CreatureId> EnemyCreatures()
-    {
-      // TODO: return opponent creatures instead
-      return _movingCreatures.Where(c => _creatureState[c].Owner == PlayerName.Enemy);
     }
 
     public Creature CreateUserCreature(CreatureData creatureData)
@@ -177,73 +214,6 @@ namespace Nighthollow.Services
     {
       var state = _creatureState[creatureId];
       _creatureState[creatureId] = state.WithSkillLastUsedTimes(state.SkillLastUsedTimes.SetItem(skillId, Time.time));
-    }
-
-    /// <summary>
-    ///   Returns the first open rank position in front of this (rank, file) if one exists
-    /// </summary>
-    public RankValue? GetOpenForwardRank(RankValue rank, FileValue file)
-    {
-      while (true)
-      {
-        var result = rank.Increment();
-        if (result == null)
-        {
-          return null;
-        }
-
-        if (!_userCreatures.ContainsKey((result.Value, file)))
-        {
-          return result.Value;
-        }
-
-        rank = result.Value;
-      }
-    }
-
-    /// <summary>
-    ///   Returns all User creatures in the 9 squares around the given (rank, file) position (including the creature at
-    ///   that position, if any).
-    /// </summary>
-    public IEnumerable<CreatureId> GetAdjacentUserCreatures(RankValue inputRank, FileValue inputFile) =>
-      from rank in BoardPositions.AdjacentRanks(inputRank)
-      from file in BoardPositions.AdjacentFiles(inputFile)
-      where _userCreatures.ContainsKey((rank, file))
-      select _userCreatures[(rank, file)];
-
-    /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
-    public (RankValue, FileValue) GetClosestAvailablePosition(Vector2 position)
-    {
-      RankValue? closestRank = null;
-      FileValue? closestFile = null;
-      var closestDistance = float.MaxValue;
-
-      foreach (var rank in BoardPositions.AllRanks)
-      foreach (var file in BoardPositions.AllFiles)
-      {
-        if (rank == RankValue.Unknown ||
-            file == FileValue.Unknown ||
-            _userCreatures.ContainsKey((rank, file)))
-        {
-          continue;
-        }
-
-        var distance = Vector2.Distance(position,
-          new Vector2(rank.ToXPosition(), file.ToYPosition()));
-        if (distance < closestDistance)
-        {
-          closestDistance = distance;
-          closestRank = rank;
-          closestFile = file;
-        }
-      }
-
-      if (closestRank == null || closestFile == null)
-      {
-        throw new InvalidOperationException("Board is full!");
-      }
-
-      return (closestRank.Value, closestFile.Value);
     }
 
     void Update()

@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Data;
 using Nighthollow.Delegates.Effects;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
@@ -30,12 +31,24 @@ namespace Nighthollow.Delegates.Implementations
 
     public IEnumerable<Effect> OnSkillUsed(GameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {
-      var adjacent = c.CreatureService.GetAdjacentUserCreatures(
-        Errors.CheckNotNull(d.Self.RankPosition), Errors.CheckNotNull(d.Self.FilePosition));
+      var adjacent = GetAdjacentUserCreatures(c.CreatureService,
+        Errors.CheckNotNull(d.Self.RankPosition),
+        Errors.CheckNotNull(d.Self.FilePosition));
       return (
         from target in adjacent
         from statusEffect in d.Skill.ItemData.StatusEffects
         select new ApplyStatusEffectEffect(target, statusEffect));
     }
+
+    /// <summary>
+    ///   Returns all User creatures in the 9 squares around the given (rank, file) position (including the creature at
+    ///   that position, if any).
+    /// </summary>
+    public static IEnumerable<CreatureId> GetAdjacentUserCreatures(
+      ICreatureService service, RankValue inputRank, FileValue inputFile) =>
+      from rank in BoardPositions.AdjacentRanks(inputRank)
+      from file in BoardPositions.AdjacentFiles(inputFile)
+      where service.PlacedCreatures.ContainsKey((rank, file))
+      select service.PlacedCreatures[(rank, file)];
   }
 }

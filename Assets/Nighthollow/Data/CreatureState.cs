@@ -58,26 +58,26 @@ namespace Nighthollow.Data
     [Field] public bool IsAlive { get; }
     [Field] public ImmutableDictionary<int, float> SkillLastUsedTimes { get; }
 
-    public Vector2 GetProjectileSourcePosition(GameContext c) =>
-      c.CreatureService.GetCreature(CreatureId).ProjectileSource.position;
-
     /// <summary>
     ///   Returns the timestamp at which the provided skill was last used by this creature, or 0 if it has never been used
     /// </summary>
     public float? SkillLastUsedTimeSeconds(int skillId) =>
       SkillLastUsedTimes.ContainsKey(skillId) ? (float?) SkillLastUsedTimes[skillId] : null;
 
-    public bool HasOverlapWithOpponentCreature(GameContext c) =>
-      c.CreatureService.GetCreature(CreatureId).Collider.IsTouchingLayers(
-        Constants.LayerMaskForCreatures(Owner.GetOpponent()));
-
-    public Collider2D GetCollider(GameContext c) => c.CreatureService.GetCreature(CreatureId).Collider;
-
-    public Vector2 GetColliderCenter(GameContext c) =>
-      c.CreatureService.GetCreature(CreatureId).Collider.bounds.center;
-
-    public Vector2 GetCurrentPosition(GameContext c) =>
-      c.CreatureService.GetCreature(CreatureId).transform.position;
+    // public Vector2 GetProjectileSourcePosition(GameContext c) =>
+    //   c.CreatureService.GetCreature(CreatureId).ProjectileSource.position;
+    //
+    // public bool HasOverlapWithOpponentCreature(GameContext c) =>
+    //   c.CreatureService.GetCreature(CreatureId).Collider.IsTouchingLayers(
+    //     Constants.LayerMaskForCreatures(Owner.GetOpponent()));
+    //
+    // public Collider2D GetCollider(GameContext c) => c.CreatureService.GetCreature(CreatureId).Collider;
+    //
+    // public Vector2 GetColliderCenter(GameContext c) =>
+    //   c.CreatureService.GetCreature(CreatureId).Collider.bounds.center;
+    //
+    // public Vector2 GetCurrentPosition(GameContext c) =>
+    //   c.CreatureService.GetCreature(CreatureId).transform.position;
 
     public DelegateList DelegateList => CurrentSkill != null ? CurrentSkill.DelegateList : Data.DelegateList;
   }

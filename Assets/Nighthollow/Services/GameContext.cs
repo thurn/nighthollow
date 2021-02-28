@@ -23,6 +23,6 @@ namespace Nighthollow.Services
       CreatureService = creatureService;
     }
 
-    public CreatureService CreatureService { get; }
+    public ICreatureService CreatureService { get; }
   }
 }

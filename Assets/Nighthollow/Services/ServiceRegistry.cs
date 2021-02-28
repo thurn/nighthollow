@@ -69,7 +69,8 @@ namespace Nighthollow.Services
         objectPoolService,
         prefabs)
     {
-      Context = new GameContext(creatureService);
+      CreatureService = creatureService;
+      Context = new GameContext(CreatureService);
       MainCanvas = mainCanvas;
       User = user;
       Enemy = enemy;
@@ -78,7 +79,7 @@ namespace Nighthollow.Services
     }
 
     public GameContext Context { get; }
-    public CreatureService CreatureService => Context.CreatureService;
+    public CreatureService CreatureService { get; }
     public RectTransform MainCanvas { get; }
     public User User { get; }
     public Enemy Enemy { get; }

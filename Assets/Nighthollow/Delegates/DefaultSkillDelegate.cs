@@ -47,19 +47,21 @@ namespace Nighthollow.Delegates
             d.Self.CreatureId,
             d.Skill,
             delegateIndex,
-            d.Self.GetProjectileSourcePosition(c),
+            c.CreatureService.GetProjectileSourcePosition(d.Self.CreatureId),
             Vector2.zero);
           break;
         case SkillType.Melee when d.Skill.BaseType.Address != null:
           yield return
-            new PlayTimedEffectEffect(d.Skill.BaseType.Address, d.Self.GetColliderCenter(c));
+            new PlayTimedEffectEffect(d.Skill.BaseType.Address,
+              c.CreatureService.GetCollider(d.Self.CreatureId).bounds.center);
           break;
         case SkillType.Area when d.Skill.BaseType.Address != null:
+          var position = c.CreatureService.GetPosition(d.Self.CreatureId);
           yield return
             new PlayTimedEffectEffect(d.Skill.BaseType.Address,
               new Vector2(
-                d.Self.RankPosition?.ToCenterXPosition() ?? d.Self.GetCurrentPosition(c).x,
-                d.Self.FilePosition?.ToCenterYPosition() ?? d.Self.GetCurrentPosition(c).y));
+                d.Self.RankPosition?.ToCenterXPosition() ?? position.x,
+                d.Self.FilePosition?.ToCenterYPosition() ?? position.y));
           break;
       }
     }
@@ -73,7 +75,7 @@ namespace Nighthollow.Delegates
         yield return new EventEffect<IOnApplySkillToTarget>(new IOnApplySkillToTarget.Data(
           d.Self,
           d.Skill,
-          c.CreatureService.GetCreatureState(target),
+          c.CreatureService[target],
           d.Projectile));
       }
     }
@@ -167,7 +169,7 @@ namespace Nighthollow.Delegates
         : d.Hits;
 
     public Collider2D GetCollider(GameContext c, int delegateIndex, IGetCollider.Data d) =>
-      d.Projectile ? d.Projectile!.Collider : d.Self.GetCollider(c);
+      d.Projectile ? d.Projectile!.Collider : c.CreatureService.GetCollider(d.Self.CreatureId);
 
     public ImmutableDictionary<DamageType, int> RollForBaseDamage(
       GameContext c, int delegateIndex, IRollForBaseDamage.Data d) =>

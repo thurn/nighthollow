@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Implementations
       skill.GetInt(Stat.ProjectileAdjacentsCount) + 1;
 
     protected override Vector2 GetOrigin(GameContext c, CreatureState self, SkillData skill, int projectileNumber) =>
-      self.GetProjectileSourcePosition(c) +
+      c.CreatureService.GetProjectileSourcePosition(self.CreatureId) +
       projectileNumber * new Vector2(x: 0, self.Data.GetInt(Stat.ProjectileAdjacentsOffset) / 1000f);
 
     protected override Vector2 GetDirection(GameContext c, CreatureState self, SkillData skill, int projectileNumber) =>
