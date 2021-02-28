@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Services;
+using UnityEngine;
 
 #nullable enable
 
@@ -31,7 +32,8 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.MarkSkillUsed(CreatureId, SkillId);
+      registry.CreatureService.Mutate(CreatureId,
+        s => s.WithSkillLastUsedTimes(s.SkillLastUsedTimes.SetItem(SkillId, Time.time)));
     }
   }
 }

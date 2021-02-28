@@ -20,7 +20,7 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
-  public sealed partial class SkillData : StatEntity, IHasDelegateList
+  public sealed partial class SkillData : StatEntity
   {
     public SkillData(
       DelegateList delegateList,

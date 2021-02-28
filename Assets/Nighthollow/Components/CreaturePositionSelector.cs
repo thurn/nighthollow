@@ -27,19 +27,20 @@ namespace Nighthollow.Components
   public sealed class CreaturePositionSelector : MonoBehaviour
   {
     [Header("State")] [SerializeField] Card? _card;
-    [SerializeField] Creature _creature = null!;
     [SerializeField] RankValue _rank;
     [SerializeField] FileValue _file;
     [SerializeField] GameObject _cursor = null!;
     [SerializeField] List<SpriteRenderer> _spriteRenderers = null!;
-    GameServiceRegistry _registry = null!;
 
-    public void Initialize(GameServiceRegistry registry, Creature creature, Card? card = null)
+    GameServiceRegistry _registry = null!;
+    CreatureId _creatureId;
+
+    public void Initialize(GameServiceRegistry registry, CreatureId creatureId, Card? card = null)
     {
       _registry = registry;
       _card = card;
-      _creature = creature;
-      _creature.SetAnimationPaused(true);
+      _creatureId = creatureId;
+      registry.CreatureService.SetAnimationPaused(_creatureId, true);
       _cursor = Root.Instance.Prefabs.CreateCursor().gameObject;
 
       _spriteRenderers = new List<SpriteRenderer>();
@@ -77,8 +78,8 @@ namespace Nighthollow.Components
             .Append(transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), z: 0), duration: 0.3f))
             .AppendCallback(() =>
             {
-              _creature.SetAnimationPaused(false);
-              _registry.CreatureService.AddUserCreatureAtPosition(_creature, rank, file);
+              _registry.CreatureService.SetAnimationPaused(_creatureId, false);
+              _registry.CreatureService.AddUserCreatureAtPosition(_creatureId, rank, file);
             });
         }
         else
@@ -106,7 +107,7 @@ namespace Nighthollow.Components
       _card!.transform.position = Input.mousePosition;
 
       Destroy(_cursor);
-      _creature.DestroyCreature();
+      _registry.CreatureService.DespawnCreature(_creatureId);
     }
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>

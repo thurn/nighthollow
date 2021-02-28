@@ -13,12 +13,14 @@
 // limitations under the License.
 
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using DG.Tweening;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Delegates;
 using Nighthollow.Delegates.Handlers;
-using Nighthollow.State;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -55,9 +57,9 @@ namespace Nighthollow.Services
   {
     int _nextCreatureId = 1;
 
-    readonly Dictionary<CreatureId, Creature> _creatures = new Dictionary<CreatureId, Creature>();
+    readonly Dictionary<CreatureId, Creature> _components = new Dictionary<CreatureId, Creature>();
 
-    readonly Dictionary<CreatureId, CreatureState> _creatureState = new Dictionary<CreatureId, CreatureState>();
+    readonly Dictionary<CreatureId, CreatureState> _creatures = new Dictionary<CreatureId, CreatureState>();
 
     readonly HashSet<CreatureId> _movingCreatures = new HashSet<CreatureId>();
 
@@ -66,42 +68,50 @@ namespace Nighthollow.Services
 
     #region ICreatureService
 
-    public ImmutableDictionary<CreatureId, CreatureState> Creatures => _creatureState.ToImmutableDictionary();
+    public ImmutableDictionary<CreatureId, CreatureState> Creatures => _creatures.ToImmutableDictionary();
 
-    public CreatureState this[CreatureId index] => _creatureState[index];
+    public CreatureState this[CreatureId index] => _creatures[index];
 
     public ImmutableHashSet<CreatureId> MovingCreatures => _movingCreatures.ToImmutableHashSet();
 
     public ImmutableDictionary<(RankValue, FileValue), CreatureId> PlacedCreatures =>
       _userCreatures.ToImmutableDictionary();
 
-    public Collider2D GetCollider(CreatureId creatureId) => _creatures[creatureId].Collider;
+    public Collider2D GetCollider(CreatureId creatureId) => _components[creatureId].Collider;
 
-    public Vector2 GetPosition(CreatureId creatureId) => _creatures[creatureId].transform.position;
+    public Vector2 GetPosition(CreatureId creatureId) => _components[creatureId].transform.position;
 
     public Vector2 GetProjectileSourcePosition(CreatureId creatureId) =>
-      _creatures[creatureId].ProjectileSource.position;
+      _components[creatureId].ProjectileSource.position;
 
     #endregion
 
-    public Creature GetCreature(CreatureId id)
+    public void OnUpdate(GameContext c)
     {
-      Errors.CheckState(_creatures.ContainsKey(id), $"Creature with ID {id.Value} not found");
-      return _creatures[id];
+      foreach (var pair in _components)
+      {
+        var state = _creatures[pair.Key];
+        _creatures[pair.Key] = state.WithData(state.Data.OnTick(c));
+        pair.Value.OnUpdate(_creatures[pair.Key]);
+      }
     }
 
-    public Creature CreateUserCreature(GameServiceRegistry registry, CreatureData creatureData)
+    public CreatureId CreateUserCreature(
+      GameServiceRegistry registry,
+      CreatureData creatureData,
+      Action<CreatureId, CreaturePositionSelector>? addPositionSelector)
     {
       var result = registry.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       var creatureId = new CreatureId(_nextCreatureId++);
-      _creatures[creatureId] = result;
-      _creatureState[creatureId] = new CreatureState(creatureId, creatureData, creatureData.BaseType.Owner);
+      _components[creatureId] = result;
+      _creatures[creatureId] = new CreatureState(creatureId, creatureData, creatureData.BaseType.Owner);
 
       result.Initialize(registry, creatureId, creatureData.BaseType.Owner);
-      return result;
+      addPositionSelector?.Invoke(creatureId, result.gameObject.AddComponent<CreaturePositionSelector>());
+      return creatureId;
     }
 
-    public Creature CreateMovingCreature(
+    public void CreateMovingCreature(
       GameServiceRegistry registry,
       CreatureData creatureData,
       FileValue file,
@@ -109,39 +119,100 @@ namespace Nighthollow.Services
     {
       var result = registry.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       var creatureId = new CreatureId(_nextCreatureId++);
-      _creatures[creatureId] = result;
+      _components[creatureId] = result;
       var creatureState = new CreatureState(
         creatureId,
         creatureData,
         creatureData.BaseType.Owner,
         filePosition: file);
-      _creatureState[creatureId] = creatureState;
+      _creatures[creatureId] = creatureState;
       _movingCreatures.Add(creatureId);
 
       result.Initialize(registry, creatureId, creatureData.BaseType.Owner);
       result.ActivateCreature(
         creatureState,
         startingX: startingX);
+    }
 
+    public void AddUserCreatureAtPosition(CreatureId creatureId, RankValue rank, FileValue file)
+    {
+      _userCreatures[(rank, file)] = creatureId;
+      _creatures[creatureId] = _creatures[creatureId].WithRankPosition(rank).WithFilePosition(file);
+      _components[creatureId].ActivateCreature(_creatures[creatureId]);
+    }
+
+    public CreatureState Mutate(CreatureId creatureId, Func<CreatureState, CreatureState> mutation)
+    {
+      var result = mutation(this[creatureId]);
+      _creatures[creatureId] = result;
       return result;
     }
 
-    public void AddUserCreatureAtPosition(Creature creature, RankValue rank, FileValue file)
+    public void AddDamage(GameServiceRegistry registry, CreatureId appliedById, CreatureId targetId, int damage)
     {
-      var id = creature.CreatureId;
-      _userCreatures[(rank, file)] = id;
-      _creatureState[id] = _creatureState[id].WithRankPosition(rank).WithFilePosition(file);
-      creature.ActivateCreature(_creatureState[id]);
+      var targetState = this[targetId];
+      Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
+      var health = targetState.GetInt(Stat.Health);
+      var newState = Mutate(targetId, s => s.WithDamageTaken(Mathf.Clamp(value: 0, s.DamageTaken + damage, health)));
+      if (newState.DamageTaken >= health)
+      {
+        var appliedByState = this[appliedById];
+        registry.Invoke(appliedById, new IOnKilledEnemy.Data(appliedByState));
+        registry.Invoke(targetId, new IOnCreatureDeath.Data(newState));
+        _components[targetId].Kill();
+        OnDeath(targetId);
+      }
     }
 
-    public void OnDeath(CreatureId creatureId)
+    public void Heal(CreatureId creatureId, int healing)
     {
-      if (!_creatures.ContainsKey(creatureId))
+      var state = this[creatureId];
+      Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
+      var health = state.GetInt(Stat.Health);
+      Mutate(creatureId, s => s.WithDamageTaken(Mathf.Clamp(value: 0, state.DamageTaken - healing, health)));
+    }
+
+    public void ApplyKnockback(CreatureId target, float distance, float durationSeconds)
+    {
+      var t = _components[target].transform;
+      t.DOMove(
+        (Vector2) t.position +
+        distance *
+        Constants.ForwardDirectionForPlayer(this[target].Owner.GetOpponent()),
+        durationSeconds);
+    }
+
+    public void ApplyStun(CreatureId target, float durationSeconds)
+    {
+      _components[target].Stun(durationSeconds);
+    }
+
+    public void SetAnimationPaused(CreatureId target, bool animationPaused)
+    {
+      _components[target].SetAnimationPaused(animationPaused);
+    }
+
+    public void DespawnCreature(CreatureId target)
+    {
+      if (!_components.ContainsKey(target))
       {
         return;
       }
 
-      var state = _creatureState[creatureId];
+      _components[target].Despawn();
+
+      _creatures.Remove(target);
+      _components.Remove(target);
+    }
+
+    void OnDeath(CreatureId creatureId)
+    {
+      if (!_components.ContainsKey(creatureId))
+      {
+        return;
+      }
+
+      var state = _creatures[creatureId];
 
       if (state.RankPosition.HasValue && state.FilePosition.HasValue)
       {
@@ -152,95 +223,11 @@ namespace Nighthollow.Services
         _movingCreatures.Remove(creatureId);
       }
 
-      _creatureState[creatureId] = state.WithIsAlive(false);
-    }
-
-    public void OnDestroyed(Creature creature)
-    {
-      if (!_creatures.ContainsKey(creature.CreatureId))
-      {
-        return;
-      }
-
-      _creatures.Remove(creature.CreatureId);
-    }
-
-    public CreatureState SetCurrentSkill(CreatureId creatureId, SkillData skillData)
-    {
-      var state = _creatureState[creatureId].WithCurrentSkill(skillData);
-      _creatureState[creatureId] = state;
-      return state;
-    }
-
-    public CreatureState SetDamageTaken(CreatureId creatureId, int damageTaken)
-    {
-      var state = _creatureState[creatureId].WithDamageTaken(damageTaken);
-      _creatureState[creatureId] = state;
-      return state;
-    }
-
-    public void InsertModifier(CreatureId creatureId, IStatModifier modifier)
-    {
-      var state = _creatureState[creatureId];
-      _creatureState[creatureId] = state.WithData(state.Data.WithStats(state.Data.Stats.InsertModifier(modifier)));
-    }
-
-    public void InsertStatusEffect(CreatureId creatureId, StatusEffectData statusEffectData)
-    {
-      var state = _creatureState[creatureId];
-      _creatureState[creatureId] =
-        state.WithData(state.Data.WithStats(state.Data.Stats.InsertStatusEffect(statusEffectData)));
-    }
-
-    public void ExecuteMutatation(CreatureId creatureId, IMutation mutation)
-    {
-      var state = _creatureState[creatureId];
-      _creatureState[creatureId] =
-        state.WithData(state.Data.WithKeyValueStore(mutation.Mutate(state.Data.KeyValueStore)));
-    }
-
-    public void MarkSkillUsed(CreatureId creatureId, int skillId)
-    {
-      var state = _creatureState[creatureId];
-      _creatureState[creatureId] = state.WithSkillLastUsedTimes(state.SkillLastUsedTimes.SetItem(skillId, Time.time));
-    }
-
-    public void AddDamage(GameServiceRegistry registry, CreatureId appliedById, CreatureId targetId, int damage)
-    {
-      var targetState = this[targetId];
-      Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
-      var health = targetState.GetInt(Stat.Health);
-      targetState = SetDamageTaken(targetId, Mathf.Clamp(value: 0, targetState.DamageTaken + damage, health));
-      if (targetState.DamageTaken >= health)
-      {
-        var appliedByState = this[appliedById];
-        registry.Invoke(appliedByState, new IOnKilledEnemy.Data(appliedByState));
-        registry.Invoke(targetState, new IOnCreatureDeath.Data(targetState));
-        _creatures[targetId].Kill();
-        OnDeath(targetId);
-      }
-    }
-
-    public void Heal(CreatureId creatureId, int healing)
-    {
-      var state = this[creatureId];
-      Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
-      var health = state.GetInt(Stat.Health);
-      SetDamageTaken(creatureId, Mathf.Clamp(value: 0, state.DamageTaken - healing, health));
-    }
-
-    public void OnUpdate(GameContext c)
-    {
-      foreach (var pair in _creatures)
-      {
-        var state = _creatureState[pair.Key];
-        _creatureState[pair.Key] = state.WithData(state.Data.OnTick(c));
-        pair.Value.OnUpdate(_creatureState[pair.Key]);
-      }
+      Mutate(creatureId, s => s.WithIsAlive(false));
     }
   }
 
-  public readonly struct CreatureId
+  public readonly struct CreatureId : IDelegateLocator
   {
     public readonly int Value;
 
@@ -260,5 +247,11 @@ namespace Nighthollow.Services
     public static bool operator !=(CreatureId left, CreatureId right) => !left.Equals(right);
 
     public override string ToString() => Value.ToString();
+
+    public DelegateList GetDelegateList(GameContext c)
+    {
+      var state = c.CreatureService[this];
+      return state.CurrentSkill != null ? state.CurrentSkill.DelegateList : state.Data.DelegateList;
+    }
   }
 }

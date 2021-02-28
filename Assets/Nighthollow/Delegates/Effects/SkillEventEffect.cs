@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using Nighthollow.Components;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -43,29 +41,29 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      var creature = registry.CreatureService.GetCreature(CreatureId);
+      var collider = registry.CreatureService.GetCollider(CreatureId);
       switch (EventName)
       {
         case Event.Missed:
-          Root.Instance.Prefabs.CreateMiss(RandomEffectPoint(creature));
+          Root.Instance.Prefabs.CreateMiss(RandomEffectPoint(collider));
           break;
         case Event.Evade:
-          Root.Instance.Prefabs.CreateEvade(RandomEffectPoint(creature));
+          Root.Instance.Prefabs.CreateEvade(RandomEffectPoint(collider));
           break;
         case Event.Crit:
-          Root.Instance.Prefabs.CreateCrit(RandomEffectPoint(creature));
+          Root.Instance.Prefabs.CreateCrit(RandomEffectPoint(collider));
           break;
         case Event.Stun:
-          Root.Instance.Prefabs.CreateStun(RandomEffectPoint(creature));
+          Root.Instance.Prefabs.CreateStun(RandomEffectPoint(collider));
           break;
         default:
           throw Errors.UnknownEnumValue(EventName);
       }
     }
 
-    public static Vector3 RandomEffectPoint(Creature creature)
+    public static Vector3 RandomEffectPoint(Collider2D collider)
     {
-      var bounds = creature.Collider.bounds;
+      var bounds = collider.bounds;
       return bounds.center + new Vector3(
         (Random.value - 0.5f) * bounds.size.x,
         (Random.value - 0.5f) * bounds.size.y,

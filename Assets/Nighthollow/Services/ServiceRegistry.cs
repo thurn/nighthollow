@@ -95,7 +95,7 @@ namespace Nighthollow.Services
       };
     }
 
-    public void Invoke(IHasDelegateList locator, IEventData arg)
+    public void Invoke(IDelegateLocator locator, IEventData arg)
     {
       var eventQueue = new Queue<IEventData>();
       eventQueue.Enqueue(arg);

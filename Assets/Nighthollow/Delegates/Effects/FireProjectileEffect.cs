@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using DG.Tweening;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Handlers;
@@ -58,7 +59,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.GetCreature(FiredBy).StartCoroutine(FireAsync(registry));
+      DOTween.Sequence().InsertCallback(FiringDelayMs / 1000f, () => FireAsync(registry));
     }
 
     public override IEnumerable<IEventData> Events(GameContext c)
@@ -66,9 +67,8 @@ namespace Nighthollow.Delegates.Effects
       yield return new IOnFiredProjectile.Data(c.CreatureService[FiredBy], Skill, this);
     }
 
-    IEnumerator<YieldInstruction> FireAsync(GameServiceRegistry registry)
+    void FireAsync(GameServiceRegistry registry)
     {
-      yield return new WaitForSeconds(FiringDelayMs / 1000f);
       var projectile = registry.AssetService.InstantiatePrefab<Projectile>(
         Errors.CheckNotNull(Skill.BaseType.Address));
       if (Values != null)

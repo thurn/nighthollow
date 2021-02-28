@@ -47,7 +47,7 @@ namespace Nighthollow.Services
       _averageDamage = _count == 0 ? amount : alpha * amount + (1 - alpha) * _averageDamage;
       _count++;
       var point = ScreenUtils.WorldToCanvasAnchorPosition(
-        SkillEventEffect.RandomEffectPoint(registry.CreatureService.GetCreature(target)));
+        SkillEventEffect.RandomEffectPoint(registry.CreatureService.GetCollider(target)));
 
       DamageText result;
       if (_count < 4 || amount < _averageDamage * Constants.MultiplierBasisPoints(_mediumHitThreshold))

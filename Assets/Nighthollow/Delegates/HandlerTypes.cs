@@ -19,22 +19,22 @@ using Nighthollow.Services;
 
 namespace Nighthollow.Delegates
 {
-  public interface IHasDelegateList
+  public interface IDelegateLocator
   {
-    public DelegateList DelegateList { get; }
+    public DelegateList GetDelegateList(GameContext c);
   }
 
   public interface IEventData
   {
-    IEnumerable<Effect> Raise(GameContext c, IHasDelegateList delegateLocator);
+    IEnumerable<Effect> Raise(GameContext c, IDelegateLocator delegateLocator);
   }
 
   public abstract class EventData<THandler> : IEventData where THandler : IHandler
   {
     public abstract IEnumerable<Effect> Invoke(GameContext c, int delegateIndex, THandler handler);
 
-    public IEnumerable<Effect> Raise(GameContext c, IHasDelegateList delegateLocator) =>
-      delegateLocator.DelegateList.Invoke(c, this);
+    public IEnumerable<Effect> Raise(GameContext c, IDelegateLocator delegateLocator) =>
+      delegateLocator.GetDelegateList(c).Invoke(c, this);
   }
 
   public abstract class QueryData<THandler, TResult>

@@ -23,7 +23,7 @@ using UnityEngine;
 
 namespace Nighthollow.Data
 {
-  public sealed partial class CreatureState : StatEntity, IHasDelegateList
+  public sealed partial class CreatureState : StatEntity
   {
     public CreatureState(
       CreatureId creatureId,
@@ -63,22 +63,5 @@ namespace Nighthollow.Data
     /// </summary>
     public float? SkillLastUsedTimeSeconds(int skillId) =>
       SkillLastUsedTimes.ContainsKey(skillId) ? (float?) SkillLastUsedTimes[skillId] : null;
-
-    // public Vector2 GetProjectileSourcePosition(GameContext c) =>
-    //   c.CreatureService.GetCreature(CreatureId).ProjectileSource.position;
-    //
-    // public bool HasOverlapWithOpponentCreature(GameContext c) =>
-    //   c.CreatureService.GetCreature(CreatureId).Collider.IsTouchingLayers(
-    //     Constants.LayerMaskForCreatures(Owner.GetOpponent()));
-    //
-    // public Collider2D GetCollider(GameContext c) => c.CreatureService.GetCreature(CreatureId).Collider;
-    //
-    // public Vector2 GetColliderCenter(GameContext c) =>
-    //   c.CreatureService.GetCreature(CreatureId).Collider.bounds.center;
-    //
-    // public Vector2 GetCurrentPosition(GameContext c) =>
-    //   c.CreatureService.GetCreature(CreatureId).transform.position;
-
-    public DelegateList DelegateList => CurrentSkill != null ? CurrentSkill.DelegateList : Data.DelegateList;
   }
 }

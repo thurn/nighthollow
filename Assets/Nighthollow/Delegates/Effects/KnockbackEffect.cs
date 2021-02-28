@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using DG.Tweening;
 using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -37,13 +36,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      var target = registry.CreatureService.GetCreature(Target);
-      var targetState = registry.CreatureService[Target];
-      target.transform.DOMove(
-        (Vector2) target.transform.position +
-        Distance *
-        Constants.ForwardDirectionForPlayer(targetState.Owner.GetOpponent()),
-        DurationSeconds);
+      registry.CreatureService.ApplyKnockback(Target, Distance, DurationSeconds);
     }
   }
 }

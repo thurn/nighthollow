@@ -32,7 +32,9 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.InsertStatusEffect(Target, StatusEffect.BuildStatusEffect(registry.Database.Snapshot()));
+      registry.CreatureService.Mutate(Target,
+        s => s.WithData(s.Data.WithStats(
+          s.Data.Stats.InsertStatusEffect(StatusEffect.BuildStatusEffect(registry.Database.Snapshot())))));
     }
   }
 }

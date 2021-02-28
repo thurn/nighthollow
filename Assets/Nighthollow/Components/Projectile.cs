@@ -107,7 +107,7 @@ namespace Nighthollow.Components
 
       var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;
-      _registry.Invoke(firedBy, new IOnSkillImpact.Data(firedBy, _skillData, this));
+      _registry.Invoke(_firedById, new IOnSkillImpact.Data(firedBy, _skillData, this));
       gameObject.SetActive(value: false);
     }
 

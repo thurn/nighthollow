@@ -33,7 +33,7 @@ namespace Nighthollow.Data
     Stunned
   }
 
-  public sealed partial class CreatureData : StatEntity, IHasDelegateList
+  public sealed partial class CreatureData : StatEntity
   {
     public CreatureData(
       DelegateList delegateList,
