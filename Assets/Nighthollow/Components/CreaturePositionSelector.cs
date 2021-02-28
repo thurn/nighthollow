@@ -30,9 +30,25 @@ namespace Nighthollow.Components
     [SerializeField] Creature _creature = null!;
     [SerializeField] RankValue _rank;
     [SerializeField] FileValue _file;
-    [SerializeField] CreatureService _creatureService = null!;
     [SerializeField] GameObject _cursor = null!;
     [SerializeField] List<SpriteRenderer> _spriteRenderers = null!;
+    GameServiceRegistry _registry = null!;
+
+    public void Initialize(GameServiceRegistry registry, Creature creature, Card? card = null)
+    {
+      _registry = registry;
+      _card = card;
+      _creature = creature;
+      _creature.SetAnimationPaused(true);
+      _cursor = Root.Instance.Prefabs.CreateCursor().gameObject;
+
+      _spriteRenderers = new List<SpriteRenderer>();
+      foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
+      {
+        spriteRenderer.color = Color.gray;
+        _spriteRenderers.Add(spriteRenderer);
+      }
+    }
 
     void Update()
     {
@@ -40,7 +56,7 @@ namespace Nighthollow.Components
       if (!_card || mousePosition.y >= Constants.IndicatorBottomY &&
         mousePosition.x <= Constants.IndicatorRightX)
       {
-        var (rank, file) = GetClosestAvailablePosition(_creatureService, mousePosition);
+        var (rank, file) = GetClosestAvailablePosition(_registry.CreatureService, mousePosition);
 
         if (Input.GetMouseButtonUp(button: 0))
         {
@@ -62,7 +78,7 @@ namespace Nighthollow.Components
             .AppendCallback(() =>
             {
               _creature.SetAnimationPaused(false);
-              _creatureService.AddUserCreatureAtPosition(_creature, rank, file);
+              _registry.CreatureService.AddUserCreatureAtPosition(_creature, rank, file);
             });
         }
         else
@@ -81,22 +97,6 @@ namespace Nighthollow.Components
       else if (_card)
       {
         SwitchToCard();
-      }
-    }
-
-    public void Initialize(Creature creature, Card? card = null)
-    {
-      _card = card;
-      _creature = creature;
-      _creature.SetAnimationPaused(true);
-      _creatureService = Root.Instance.CreatureService;
-      _cursor = Root.Instance.Prefabs.CreateCursor().gameObject;
-
-      _spriteRenderers = new List<SpriteRenderer>();
-      foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
-      {
-        spriteRenderer.color = Color.gray;
-        _spriteRenderers.Add(spriteRenderer);
       }
     }
 

@@ -91,7 +91,8 @@ namespace Nighthollow.Components
       while (_spawnCount < Data.Get(Stat.EnemiesToSpawn))
       {
         _spawnCount++;
-        Root.Instance.CreatureService.CreateMovingCreature(
+        _registry!.CreatureService.CreateMovingCreature(
+          _registry,
           RandomEnemy(),
           RandomFile(),
           Constants.EnemyCreatureStartingX);

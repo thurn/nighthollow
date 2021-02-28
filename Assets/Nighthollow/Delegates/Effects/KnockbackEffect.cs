@@ -38,7 +38,7 @@ namespace Nighthollow.Delegates.Effects
     public override void Execute(GameServiceRegistry registry)
     {
       var target = registry.CreatureService.GetCreature(Target);
-      var targetState = registry.CreatureService.GetCreatureState(Target);
+      var targetState = registry.CreatureService[Target];
       target.transform.DOMove(
         (Vector2) target.transform.position +
         Distance *

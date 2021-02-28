@@ -30,10 +30,9 @@ namespace Nighthollow.Components
     [SerializeField] TimedEffect _flashEffect = null!;
     [SerializeField] TimedEffect _hitEffect = null!;
     [SerializeField] Collider2D _collider = null!;
-    [SerializeField] Creature _trackCreature = null!;
-
     CreatureId _firedById;
     SkillData _skillData = null!;
+    CreatureId? _trackCreature;
     GameServiceRegistry _registry = null!;
 
     public SkillData Data => _skillData;
@@ -52,8 +51,8 @@ namespace Nighthollow.Components
 
       if (effect.TrackCreature.HasValue)
       {
-        _trackCreature = _registry.CreatureService.GetCreature(effect.TrackCreature.Value);
-        transform.LookAt(_trackCreature.transform.position);
+        _trackCreature = effect.TrackCreature;
+        transform.LookAt(registry.CreatureService.GetPosition(_trackCreature.Value));
       }
       else
       {
@@ -77,9 +76,9 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      if (_trackCreature)
+      if (_trackCreature.HasValue)
       {
-        transform.LookAt(_trackCreature.transform.position);
+        transform.LookAt(_registry.CreatureService.GetPosition(_trackCreature.Value));
       }
 
       transform.position += Errors.CheckPositive(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f
@@ -93,13 +92,13 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      var firedBy = _registry.CreatureService.GetCreatureState(_firedById);
+      var firedBy = _registry.CreatureService[_firedById];
       if (firedBy.CurrentSkill!.DelegateList.First(
         _registry.Context,
         new IShouldSkipProjectileImpact.Data(firedBy, _skillData, this),
         notFound: false))
       {
-        if (!_trackCreature || _trackCreature.gameObject != other.gameObject)
+        if (_trackCreature == null || _trackCreature != ComponentUtils.GetComponent<Creature>(other).CreatureId)
           // Tracking projectiles cannot skip their target
         {
           return;

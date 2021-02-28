@@ -57,7 +57,6 @@ namespace Nighthollow.Services
       ObjectPoolService objectPoolService,
       Prefabs prefabs,
       RectTransform mainCanvas,
-      CreatureService creatureService,
       User user,
       Enemy enemy,
       DamageTextService damageTextService,
@@ -69,7 +68,7 @@ namespace Nighthollow.Services
         objectPoolService,
         prefabs)
     {
-      CreatureService = creatureService;
+      CreatureService = new CreatureService();
       Context = new GameContext(CreatureService);
       MainCanvas = mainCanvas;
       User = user;

@@ -96,7 +96,7 @@ namespace Nighthollow.Components
       foreach (var cardData in cards)
       {
         var card = Root.Instance.Prefabs.CreateCard();
-        card.Initialize(cardData, _registry);
+        card.Initialize(cardData, _registry!);
         card.transform.position = _deckPosition.position;
         card.transform.localScale = Vector2.one * _initialCardScale;
         AddToHand(card);

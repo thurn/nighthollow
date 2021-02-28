@@ -76,7 +76,7 @@ namespace Nighthollow.Delegates.Effects
         projectile.KeyValueStore = Values;
       }
 
-      projectile.Initialize(registry, registry.CreatureService.GetCreatureState(FiredBy), Skill, this);
+      projectile.Initialize(registry, registry.CreatureService[FiredBy], Skill, this);
     }
   }
 }

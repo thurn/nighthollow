@@ -36,7 +36,7 @@ namespace Nighthollow.Services
 
     public void ShowDamageText(GameServiceRegistry registry, CreatureId target, int amount)
     {
-      var state = registry.CreatureService.GetCreatureState(target);
+      var state = registry.CreatureService[target];
       if (state.Owner != PlayerName.Enemy)
       {
         return;

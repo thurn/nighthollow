@@ -18,11 +18,18 @@ namespace Nighthollow.Services
 {
   public sealed class GameContext
   {
+    readonly CreatureService _creatureService;
+
     public GameContext(CreatureService creatureService)
     {
-      CreatureService = creatureService;
+      _creatureService = creatureService;
     }
 
-    public ICreatureService CreatureService { get; }
+    public ICreatureService CreatureService => _creatureService;
+
+    public void OnUpdate()
+    {
+      _creatureService.OnUpdate(this);
+    }
   }
 }

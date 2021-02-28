@@ -38,8 +38,6 @@ namespace Nighthollow.Services
 
     [SerializeField] ObjectPoolService _objectPoolService = null!;
 
-    [SerializeField] CreatureService _creatureService = null!;
-
     [SerializeField] ScreenController _screenController = null!;
 
     [SerializeField] User _user = null!;
@@ -54,12 +52,12 @@ namespace Nighthollow.Services
     public RectTransform MainCanvas => _mainCanvas;
     public Prefabs Prefabs => _prefabs;
     public ObjectPoolService ObjectPoolService => _objectPoolService;
-    public CreatureService CreatureService => _creatureService;
     public ScreenController ScreenController => _screenController;
     public User User => _user;
     public Enemy Enemy => _enemy;
     public DamageTextService DamageTextService => _damageTextService;
     public HelperTextService HelperTextService => _helperTextService;
+    GameServiceRegistry? _registry;
 
     public static Root Instance
     {
@@ -81,7 +79,6 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_prefabs);
       Errors.CheckNotNull(_dataService);
       Errors.CheckNotNull(_objectPoolService);
-      Errors.CheckNotNull(_creatureService);
       Errors.CheckNotNull(_screenController);
       Errors.CheckNotNull(_user);
       Errors.CheckNotNull(_enemy);
@@ -94,26 +91,29 @@ namespace Nighthollow.Services
       _dataService.OnReady(OnDataFetched);
     }
 
+    void Update()
+    {
+      _registry?.Context.OnUpdate();
+    }
+
     void OnDataFetched(FetchResult fetchResult)
     {
-      var registry = new GameServiceRegistry(
+      _registry = new GameServiceRegistry(
         fetchResult.Database,
         fetchResult.AssetService,
         _screenController,
         _objectPoolService,
         _prefabs,
         _mainCanvas,
-        _creatureService,
         _user,
         _enemy,
         _damageTextService,
         _helperTextService);
 
-      _screenController.OnServicesReady(registry);
-      _creatureService.OnServicesReady(registry);
-      _helperTextService.OnServicesReady(registry);
-      _user.Hand.OnServicesReady(registry);
-      _user.DrawOpeningHand(registry);
+      _screenController.OnServicesReady(_registry);
+      _helperTextService.OnServicesReady(_registry);
+      _user.Hand.OnServicesReady(_registry);
+      _user.DrawOpeningHand(_registry);
     }
 
     public StatTable StatsForPlayer(PlayerName player)

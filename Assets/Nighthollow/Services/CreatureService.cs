@@ -50,7 +50,7 @@ namespace Nighthollow.Services
     Vector2 GetProjectileSourcePosition(CreatureId creatureId);
   }
 
-  public sealed class CreatureService : MonoBehaviour, ICreatureService
+  public sealed class CreatureService : ICreatureService
   {
     int _nextCreatureId = 1;
 
@@ -63,9 +63,7 @@ namespace Nighthollow.Services
     readonly Dictionary<(RankValue, FileValue), CreatureId> _userCreatures =
       new Dictionary<(RankValue, FileValue), CreatureId>();
 
-    GameServiceRegistry? _registry;
-
-#region ICreatureService
+    #region ICreatureService
 
     public ImmutableDictionary<CreatureId, CreatureState> Creatures => _creatureState.ToImmutableDictionary();
 
@@ -83,7 +81,7 @@ namespace Nighthollow.Services
     public Vector2 GetProjectileSourcePosition(CreatureId creatureId) =>
       _creatures[creatureId].ProjectileSource.position;
 
-#endregion
+    #endregion
 
     public Creature GetCreature(CreatureId id)
     {
@@ -91,34 +89,24 @@ namespace Nighthollow.Services
       return _creatures[id];
     }
 
-    public CreatureState GetCreatureState(CreatureId id)
+    public Creature CreateUserCreature(GameServiceRegistry registry, CreatureData creatureData)
     {
-      Errors.CheckState(_creatures.ContainsKey(id), $"Creature with ID {id.Value} not found");
-      return _creatureState[id];
-    }
-
-    public void OnServicesReady(GameServiceRegistry registry)
-    {
-      _registry = registry;
-    }
-
-    public Creature CreateUserCreature(CreatureData creatureData)
-    {
-      var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      var result = registry.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       var creatureId = new CreatureId(_nextCreatureId++);
       _creatures[creatureId] = result;
       _creatureState[creatureId] = new CreatureState(creatureId, creatureData, creatureData.BaseType.Owner);
 
-      result.Initialize(_registry!, creatureId, creatureData.BaseType.Owner);
+      result.Initialize(registry, creatureId, creatureData.BaseType.Owner);
       return result;
     }
 
     public Creature CreateMovingCreature(
+      GameServiceRegistry registry,
       CreatureData creatureData,
       FileValue file,
       float startingX)
     {
-      var result = _registry!.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
+      var result = registry.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
       var creatureId = new CreatureId(_nextCreatureId++);
       _creatures[creatureId] = result;
       var creatureState = new CreatureState(
@@ -129,7 +117,7 @@ namespace Nighthollow.Services
       _creatureState[creatureId] = creatureState;
       _movingCreatures.Add(creatureId);
 
-      result.Initialize(_registry!, creatureId, creatureData.BaseType.Owner);
+      result.Initialize(registry, creatureId, creatureData.BaseType.Owner);
       result.ActivateCreature(
         creatureState,
         startingX: startingX);
@@ -216,12 +204,12 @@ namespace Nighthollow.Services
       _creatureState[creatureId] = state.WithSkillLastUsedTimes(state.SkillLastUsedTimes.SetItem(skillId, Time.time));
     }
 
-    void Update()
+    public void OnUpdate(GameContext c)
     {
       foreach (var pair in _creatures)
       {
         var state = _creatureState[pair.Key];
-        _creatureState[pair.Key] = state.WithData(state.Data.OnTick(_registry!.Context));
+        _creatureState[pair.Key] = state.WithData(state.Data.OnTick(c));
         pair.Value.OnUpdate(_creatureState[pair.Key]);
       }
     }

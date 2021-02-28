@@ -54,15 +54,13 @@ namespace Nighthollow.Components
     GameServiceRegistry _registry = null!;
 
     public CreatureId CreatureId => _creatureId;
-
     public Transform ProjectileSource => _projectileSource;
-
     public Collider2D Collider => _collider;
 
     public void Initialize(GameServiceRegistry registry, CreatureId creatureId, PlayerName owner)
     {
       _creatureId = creatureId;
-      _creatureService = Root.Instance.CreatureService;
+      _creatureService = registry.CreatureService;
       _registry = registry;
       _animationState = CreatureAnimation.Placing;
       _animator = GetComponent<Animator>();
@@ -258,7 +256,7 @@ namespace Nighthollow.Components
     // Called by skill animations on their 'start impact' frame
     public void AttackStart()
     {
-      var state = _creatureService.GetCreatureState(CreatureId);
+      var state = _creatureService[CreatureId];
       if (!IsAlive() || state.CurrentSkill == null)
       {
         return;
@@ -274,20 +272,20 @@ namespace Nighthollow.Components
 
     public void AddDamage(CreatureState appliedBy, int damage)
     {
-      var state = _creatureService.GetCreatureState(CreatureId);
+      var state = _creatureService[CreatureId];
       Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
       var health = state.GetInt(Stat.Health);
       state = _creatureService.SetDamageTaken(_creatureId, Mathf.Clamp(value: 0, state.DamageTaken + damage, health));
       if (state.DamageTaken >= health)
       {
-        _registry.Invoke(_creatureService.GetCreatureState(appliedBy.CreatureId), new IOnKilledEnemy.Data(appliedBy));
+        _registry.Invoke(_creatureService[appliedBy.CreatureId], new IOnKilledEnemy.Data(appliedBy));
         Kill(state);
       }
     }
 
     public void Heal(int healing)
     {
-      var state = _creatureService.GetCreatureState(CreatureId);
+      var state = _creatureService[CreatureId];
       Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
       var health = state.GetInt(Stat.Health);
       _creatureService.SetDamageTaken(_creatureId, Mathf.Clamp(value: 0, state.DamageTaken - healing, health));
@@ -295,7 +293,7 @@ namespace Nighthollow.Components
 
     public void OnActionAnimationCompleted()
     {
-      var state = _creatureService.GetCreatureState(CreatureId);
+      var state = _creatureService[CreatureId];
       if (!IsAlive() || IsStunned())
         // Ignore exit states from skills that ended early due to stun
       {
@@ -325,7 +323,7 @@ namespace Nighthollow.Components
       _animator.SetTrigger(Hit);
       _animationState = CreatureAnimation.Stunned;
       yield return new WaitForSeconds(durationSeconds);
-      ToDefaultState(_creatureService.GetCreatureState(CreatureId));
+      ToDefaultState(_creatureService[CreatureId]);
     }
 
     public bool IsAlive() => _animationState != CreatureAnimation.Placing && _animationState != CreatureAnimation.Dying;
@@ -339,7 +337,7 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(seconds: 1);
-        Heal(_creatureService.GetCreatureState(CreatureId).GetInt(Stat.HealthRegenerationPerSecond));
+        Heal(_creatureService[CreatureId].GetInt(Stat.HealthRegenerationPerSecond));
       }
 
       // ReSharper disable once IteratorNeverReturns
