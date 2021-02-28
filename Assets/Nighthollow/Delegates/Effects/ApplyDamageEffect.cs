@@ -20,20 +20,20 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class ApplyDamageEffect : Effect
   {
-    public ApplyDamageEffect(CreatureId self, CreatureId target, int amount)
+    public ApplyDamageEffect(CreatureId appliedBy, CreatureId target, int amount)
     {
-      Self = self;
+      AppliedBy = appliedBy;
       Target = target;
       Amount = amount;
     }
 
-    public CreatureId Self { get; }
+    public CreatureId AppliedBy { get; }
     public CreatureId Target { get; }
     public int Amount { get; }
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.GetCreature(Target).AddDamage(registry.CreatureService[Self], Amount);
+      registry.CreatureService.AddDamage(registry, AppliedBy, Target, Amount);
     }
   }
 }

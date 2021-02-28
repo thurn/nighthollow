@@ -327,7 +327,6 @@ GameObject:
   - component: {fileID: 169299297}
   - component: {fileID: 169299299}
   - component: {fileID: 169299296}
-  - component: {fileID: 169299295}
   - component: {fileID: 169299298}
   - component: {fileID: 169299300}
   - component: {fileID: 169299301}
@@ -352,18 +351,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &169299295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 169299293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0263479984ae429283da82683facb9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &169299296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,7 +380,6 @@ MonoBehaviour:
   _prefabs: {fileID: 169299299}
   _dataService: {fileID: 307991781}
   _objectPoolService: {fileID: 169299296}
-  _creatureService: {fileID: 169299295}
   _screenController: {fileID: 2115052129}
   _user: {fileID: 169299301}
   _enemy: {fileID: 1160944780}

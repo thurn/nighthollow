@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Delegates.Handlers;
 using Nighthollow.State;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
@@ -133,14 +134,14 @@ namespace Nighthollow.Services
       creature.ActivateCreature(_creatureState[id]);
     }
 
-    public void OnDeath(Creature creature)
+    public void OnDeath(CreatureId creatureId)
     {
-      if (!_creatures.ContainsKey(creature.CreatureId))
+      if (!_creatures.ContainsKey(creatureId))
       {
         return;
       }
 
-      var state = _creatureState[creature.CreatureId];
+      var state = _creatureState[creatureId];
 
       if (state.RankPosition.HasValue && state.FilePosition.HasValue)
       {
@@ -148,10 +149,10 @@ namespace Nighthollow.Services
       }
       else if (state.FilePosition.HasValue)
       {
-        _movingCreatures.Remove(creature.CreatureId);
+        _movingCreatures.Remove(creatureId);
       }
 
-      _creatureState[creature.CreatureId] = state.WithIsAlive(false);
+      _creatureState[creatureId] = state.WithIsAlive(false);
     }
 
     public void OnDestroyed(Creature creature)
@@ -204,6 +205,30 @@ namespace Nighthollow.Services
       _creatureState[creatureId] = state.WithSkillLastUsedTimes(state.SkillLastUsedTimes.SetItem(skillId, Time.time));
     }
 
+    public void AddDamage(GameServiceRegistry registry, CreatureId appliedById, CreatureId targetId, int damage)
+    {
+      var targetState = this[targetId];
+      Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
+      var health = targetState.GetInt(Stat.Health);
+      targetState = SetDamageTaken(targetId, Mathf.Clamp(value: 0, targetState.DamageTaken + damage, health));
+      if (targetState.DamageTaken >= health)
+      {
+        var appliedByState = this[appliedById];
+        registry.Invoke(appliedByState, new IOnKilledEnemy.Data(appliedByState));
+        registry.Invoke(targetState, new IOnCreatureDeath.Data(targetState));
+        _creatures[targetId].Kill();
+        OnDeath(targetId);
+      }
+    }
+
+    public void Heal(CreatureId creatureId, int healing)
+    {
+      var state = this[creatureId];
+      Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
+      var health = state.GetInt(Stat.Health);
+      SetDamageTaken(creatureId, Mathf.Clamp(value: 0, state.DamageTaken - healing, health));
+    }
+
     public void OnUpdate(GameContext c)
     {
       foreach (var pair in _creatures)
@@ -224,30 +249,15 @@ namespace Nighthollow.Services
       Value = value;
     }
 
-    public bool Equals(CreatureId other)
-    {
-      return Value == other.Value;
-    }
+    public bool Equals(CreatureId other) => Value == other.Value;
 
-    public override bool Equals(object? obj)
-    {
-      return obj is CreatureId other && Equals(other);
-    }
+    public override bool Equals(object? obj) => obj is CreatureId other && Equals(other);
 
-    public override int GetHashCode()
-    {
-      return Value;
-    }
+    public override int GetHashCode() => Value;
 
-    public static bool operator ==(CreatureId left, CreatureId right)
-    {
-      return left.Equals(right);
-    }
+    public static bool operator ==(CreatureId left, CreatureId right) => left.Equals(right);
 
-    public static bool operator !=(CreatureId left, CreatureId right)
-    {
-      return !left.Equals(right);
-    }
+    public static bool operator !=(CreatureId left, CreatureId right) => !left.Equals(right);
 
     public override string ToString() => Value.ToString();
   }

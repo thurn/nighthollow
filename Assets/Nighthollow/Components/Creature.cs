@@ -46,12 +46,12 @@ namespace Nighthollow.Components
     [SerializeField] Animator _animator = null!;
     [SerializeField] Collider2D _collider = null!;
     [SerializeField] StatusBarsHolder _statusBars = null!;
-    [SerializeField] CreatureService _creatureService = null!;
     [SerializeField] SortingGroup _sortingGroup = null!;
 
     Coroutine _coroutine = null!;
     CreatureId _creatureId;
     GameServiceRegistry _registry = null!;
+    CreatureService _creatureService = null!;
 
     public CreatureId CreatureId => _creatureId;
     public Transform ProjectileSource => _projectileSource;
@@ -226,19 +226,13 @@ namespace Nighthollow.Components
       _animationState = state.GetInt(Stat.CreatureSpeed) > 0 ? CreatureAnimation.Moving : CreatureAnimation.Idle;
     }
 
-    void Kill(CreatureState state)
+    public void Kill()
     {
-      _registry.Invoke(state, new IOnCreatureDeath.Data(state));
-
       StopCoroutine(_coroutine);
-
       _statusBars.HealthBar.gameObject.SetActive(value: false);
       _animator.SetTrigger(Death);
       _collider.enabled = false;
-
       _animationState = CreatureAnimation.Dying;
-
-      _creatureService.OnDeath(this);
     }
 
     public void SetAnimationPaused(bool paused)
@@ -268,27 +262,6 @@ namespace Nighthollow.Components
       {
         _registry.Invoke(state, new IOnSkillImpact.Data(state, state.CurrentSkill, projectile: null));
       }
-    }
-
-    public void AddDamage(CreatureState appliedBy, int damage)
-    {
-      var state = _creatureService[CreatureId];
-      Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
-      var health = state.GetInt(Stat.Health);
-      state = _creatureService.SetDamageTaken(_creatureId, Mathf.Clamp(value: 0, state.DamageTaken + damage, health));
-      if (state.DamageTaken >= health)
-      {
-        _registry.Invoke(_creatureService[appliedBy.CreatureId], new IOnKilledEnemy.Data(appliedBy));
-        Kill(state);
-      }
-    }
-
-    public void Heal(int healing)
-    {
-      var state = _creatureService[CreatureId];
-      Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
-      var health = state.GetInt(Stat.Health);
-      _creatureService.SetDamageTaken(_creatureId, Mathf.Clamp(value: 0, state.DamageTaken - healing, health));
     }
 
     public void OnActionAnimationCompleted()
@@ -337,7 +310,7 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(seconds: 1);
-        Heal(_creatureService[CreatureId].GetInt(Stat.HealthRegenerationPerSecond));
+        _creatureService.Heal(CreatureId, _creatureService[CreatureId].GetInt(Stat.HealthRegenerationPerSecond));
       }
 
       // ReSharper disable once IteratorNeverReturns

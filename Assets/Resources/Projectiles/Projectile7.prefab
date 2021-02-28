@@ -9789,9 +9789,7 @@ MonoBehaviour:
     type: 3}
   _hitEffect: {fileID: 4097483324003809474, guid: 0ece6f2fed190433792a3078ee1f6e1b,
     type: 3}
-  _firedBy: {fileID: 0}
   _collider: {fileID: 0}
-  _trackCreature: {fileID: 0}
 --- !u!50 &7511875776196507395
 Rigidbody2D:
   serializedVersion: 4
