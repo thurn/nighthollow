@@ -40,7 +40,7 @@ namespace Nighthollow.Components
       _registry = registry;
       _card = card;
       _creatureId = creatureId;
-      registry.CreatureService.SetAnimationPaused(_creatureId, true);
+      CreatureService.SetAnimationPaused(_registry, _creatureId, true);
       _cursor = Root.Instance.Prefabs.CreateCursor().gameObject;
 
       _spriteRenderers = new List<SpriteRenderer>();
@@ -57,7 +57,7 @@ namespace Nighthollow.Components
       if (!_card || mousePosition.y >= Constants.IndicatorBottomY &&
         mousePosition.x <= Constants.IndicatorRightX)
       {
-        var (rank, file) = GetClosestAvailablePosition(_registry.CreatureService, mousePosition);
+        var (rank, file) = GetClosestAvailablePosition(_registry.Creatures, mousePosition);
 
         if (Input.GetMouseButtonUp(button: 0))
         {
@@ -78,8 +78,8 @@ namespace Nighthollow.Components
             .Append(transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), z: 0), duration: 0.3f))
             .AppendCallback(() =>
             {
-              _registry.CreatureService.SetAnimationPaused(_creatureId, false);
-              _registry.CreatureService.AddUserCreatureAtPosition(_registry, _creatureId, rank, file);
+              CreatureService.SetAnimationPaused(_registry, _creatureId, false);
+              CreatureService.AddUserCreatureAtPosition(_registry, _creatureId, rank, file);
             });
         }
         else
@@ -107,11 +107,11 @@ namespace Nighthollow.Components
       _card!.transform.position = Input.mousePosition;
 
       Destroy(_cursor);
-      _registry.CreatureService.DespawnCreature(_registry, _creatureId);
+      CreatureService.DespawnCreature(_registry, _creatureId);
     }
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
-    public static (RankValue, FileValue) GetClosestAvailablePosition(ICreatureService service, Vector2 position)
+    public static (RankValue, FileValue) GetClosestAvailablePosition(CreatureService service, Vector2 position)
     {
       RankValue? closestRank = null;
       FileValue? closestFile = null;

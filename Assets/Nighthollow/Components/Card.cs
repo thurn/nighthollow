@@ -131,7 +131,7 @@ namespace Nighthollow.Components
           if (!_overBoard)
           {
             gameObject.SetActive(value: false);
-            _registry.CreatureService.CreateUserCreature(
+            CreatureService.CreateUserCreature(
               _registry,
               _data,
               this);

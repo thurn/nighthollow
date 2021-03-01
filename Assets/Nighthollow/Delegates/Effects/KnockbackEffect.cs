@@ -36,7 +36,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.ApplyKnockback(Target, Distance, DurationSeconds);
+      CreatureService.ApplyKnockback(registry, Target, Distance, DurationSeconds);
     }
   }
 }

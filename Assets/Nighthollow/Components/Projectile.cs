@@ -52,7 +52,7 @@ namespace Nighthollow.Components
       if (effect.TrackCreature.HasValue)
       {
         _trackCreature = effect.TrackCreature;
-        transform.LookAt(registry.CreatureService.GetPosition(_trackCreature.Value));
+        transform.LookAt(registry.Creatures.GetPosition(_trackCreature.Value));
       }
       else
       {
@@ -78,7 +78,7 @@ namespace Nighthollow.Components
     {
       if (_trackCreature.HasValue)
       {
-        transform.LookAt(_registry.CreatureService.GetPosition(_trackCreature.Value));
+        transform.LookAt(_registry.Creatures.GetPosition(_trackCreature.Value));
       }
 
       transform.position += Errors.CheckPositive(_skillData.GetInt(Stat.ProjectileSpeed)) / 1000f
@@ -92,7 +92,7 @@ namespace Nighthollow.Components
 
     void OnTriggerEnter2D(Collider2D other)
     {
-      var firedBy = _registry.CreatureService[_firedById];
+      var firedBy = _registry.Creatures[_firedById];
       if (firedBy.CurrentSkill!.DelegateList.First(
         _registry,
         new IShouldSkipProjectileImpact.Data(firedBy, _skillData, this),

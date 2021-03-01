@@ -41,7 +41,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      var collider = registry.CreatureService.GetCollider(CreatureId);
+      var collider = registry.Creatures.GetCollider(CreatureId);
       switch (EventName)
       {
         case Event.Missed:

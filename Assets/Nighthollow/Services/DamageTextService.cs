@@ -36,7 +36,7 @@ namespace Nighthollow.Services
 
     public void ShowDamageText(GameServiceRegistry registry, CreatureId target, int amount)
     {
-      var state = registry.CreatureService[target];
+      var state = registry.Creatures[target];
       if (state.Owner != PlayerName.Enemy)
       {
         return;
@@ -47,7 +47,7 @@ namespace Nighthollow.Services
       _averageDamage = _count == 0 ? amount : alpha * amount + (1 - alpha) * _averageDamage;
       _count++;
       var point = ScreenUtils.WorldToCanvasAnchorPosition(
-        SkillEventEffect.RandomEffectPoint(registry.CreatureService.GetCollider(target)));
+        SkillEventEffect.RandomEffectPoint(registry.Creatures.GetCollider(target)));
 
       DamageText result;
       if (_count < 4 || amount < _averageDamage * Constants.MultiplierBasisPoints(_mediumHitThreshold))

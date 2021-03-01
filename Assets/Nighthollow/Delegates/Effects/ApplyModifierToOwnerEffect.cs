@@ -35,7 +35,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      switch (registry.CreatureService[Self].Owner)
+      switch (registry.Creatures[Self].Owner)
       {
         case PlayerName.User:
           Root.Instance.User.InsertModifier(Modifier);

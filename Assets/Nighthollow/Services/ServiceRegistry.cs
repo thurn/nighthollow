@@ -68,7 +68,7 @@ namespace Nighthollow.Services
         objectPoolService,
         prefabs)
     {
-      CreatureService = new CreatureService();
+      Creatures = new CreatureService();
       MainCanvas = mainCanvas;
       User = user;
       Enemy = enemy;
@@ -82,8 +82,7 @@ namespace Nighthollow.Services
     public DamageTextService DamageTextService { get; }
     public HelperTextService HelperTextService { get; }
 
-    public ICreatureService Creatures => CreatureService;
-    public CreatureService CreatureService { get; set; }
+    public CreatureService Creatures { get; set; }
 
     public void OnUpdate()
     {

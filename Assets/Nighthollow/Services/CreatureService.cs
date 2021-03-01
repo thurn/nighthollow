@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using DG.Tweening;
 using Nighthollow.Components;
 using Nighthollow.Data;
@@ -27,50 +27,41 @@ using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public interface ICreatureService
+  public sealed class CreatureService
   {
-    /// <summary>Map of all currently-known creatures, including creatures in the 'placing' or 'dying' states</summary>
-    IReadOnlyDictionary<CreatureId, CreatureState> Creatures { get; }
+    readonly int _nextCreatureId;
+    readonly ImmutableDictionary<CreatureId, Creature> _components;
 
-    /// <summary>Look up creature state by creature ID.</summary>
-    CreatureState this[CreatureId index] { get; }
+    public CreatureService() : this(
+      1,
+      ImmutableDictionary<CreatureId, Creature>.Empty,
+      ImmutableDictionary<CreatureId, CreatureState>.Empty,
+      ImmutableHashSet<CreatureId>.Empty,
+      ImmutableDictionary<(RankValue, FileValue), CreatureId>.Empty)
+    {
+    }
 
-    /// <summary>Set of both user and enemy creature IDs which are not anchored to a specific board position</summary>
-    IEnumerable<CreatureId> MovingCreatures { get; }
+    CreatureService(
+      int nextCreatureId,
+      ImmutableDictionary<CreatureId, Creature> components,
+      ImmutableDictionary<CreatureId, CreatureState> creatures,
+      ImmutableHashSet<CreatureId> movingCreatures,
+      ImmutableDictionary<(RankValue, FileValue), CreatureId> placedCreatures)
+    {
+      _nextCreatureId = nextCreatureId;
+      _components = components;
+      Creatures = creatures;
+      MovingCreatures = movingCreatures;
+      PlacedCreatures = placedCreatures;
+    }
 
-    /// <summary>Map of both user and enemy creature IDs which have a specific board position</summary>
-    IReadOnlyDictionary<(RankValue, FileValue), CreatureId> PlacedCreatures { get; }
+    public ImmutableDictionary<CreatureId, CreatureState> Creatures { get; }
 
-    /// <summary>Return the collider for a given creature.</summary>
-    Collider2D GetCollider(CreatureId creatureId);
+    public CreatureState this[CreatureId index] => Creatures[index];
 
-    /// <summary>Returns the current position of a creature.</summary>
-    Vector2 GetPosition(CreatureId creatureId);
+    public ImmutableHashSet<CreatureId> MovingCreatures { get; }
 
-    /// <summary>Returns the position from which a creature should fire projectiles.</summary>
-    Vector2 GetProjectileSourcePosition(CreatureId creatureId);
-  }
-
-  public sealed class CreatureService : ICreatureService
-  {
-    int _nextCreatureId = 1;
-
-    readonly Dictionary<CreatureId, Creature> _components = new Dictionary<CreatureId, Creature>();
-
-    readonly Dictionary<CreatureId, CreatureState> _creatures = new Dictionary<CreatureId, CreatureState>();
-
-    readonly HashSet<CreatureId> _movingCreatures = new HashSet<CreatureId>();
-
-    readonly Dictionary<(RankValue, FileValue), CreatureId> _userCreatures =
-      new Dictionary<(RankValue, FileValue), CreatureId>();
-
-    public IReadOnlyDictionary<CreatureId, CreatureState> Creatures => _creatures;
-
-    public CreatureState this[CreatureId index] => _creatures[index];
-
-    public IEnumerable<CreatureId> MovingCreatures => _movingCreatures;
-
-    public IReadOnlyDictionary<(RankValue, FileValue), CreatureId> PlacedCreatures => _userCreatures;
+    public ImmutableDictionary<(RankValue, FileValue), CreatureId> PlacedCreatures { get; }
 
     public Collider2D GetCollider(CreatureId creatureId) => _components[creatureId].Collider;
 
@@ -79,170 +70,205 @@ namespace Nighthollow.Services
     public Vector2 GetProjectileSourcePosition(CreatureId creatureId) =>
       _components[creatureId].ProjectileSource.position;
 
-    public void OnUpdate(GameServiceRegistry registry)
+    public static void OnUpdate(GameServiceRegistry registry)
     {
-      foreach (var pair in _creatures)
-      {
-        _creatures[pair.Key] = pair.Value.WithData(pair.Value.Data.OnTick(registry));
-      }
+      var self = registry.Creatures;
+      registry.Creatures = new CreatureService(
+        self._nextCreatureId,
+        self._components,
+        self.Creatures.ToImmutableDictionary(
+          pair => pair.Key,
+          pair => pair.Value.WithData(pair.Value.Data.OnTick(registry))),
+        self.MovingCreatures,
+        self.PlacedCreatures);
 
-      foreach (var component in _components.Values)
+      foreach (var component in self._components.Values)
       {
         component.OnUpdate();
       }
     }
 
-    public CreatureId CreateUserCreature(
+    public static CreatureId CreateUserCreature(
       GameServiceRegistry registry,
       CreatureData creatureData,
       Card? addPositionSelector = null)
     {
+      var self = registry.Creatures;
       var result = registry.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
-      var creatureId = new CreatureId(_nextCreatureId++);
-      _components[creatureId] = result;
-      _creatures[creatureId] = new CreatureState(creatureId, creatureData, creatureData.BaseType.Owner);
+      var creatureId = new CreatureId(self._nextCreatureId);
+      registry.Creatures = new CreatureService(
+        self._nextCreatureId + 1,
+        self._components.SetItem(creatureId, result),
+        self.Creatures.SetItem(creatureId, new CreatureState(creatureId, creatureData, creatureData.BaseType.Owner)),
+        self.MovingCreatures,
+        self.PlacedCreatures);
 
-      result.Initialize(registry, creatureId, creatureData.BaseType.Owner);
+      result.Initialize(registry, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
       if (addPositionSelector)
       {
         result.gameObject.AddComponent<CreaturePositionSelector>()
           .Initialize(registry, creatureId, addPositionSelector);
       }
 
-      registry.CreatureService = this;
       return creatureId;
     }
 
-    public void CreateMovingCreature(
+    public static void CreateMovingCreature(
       GameServiceRegistry registry,
       CreatureData creatureData,
       FileValue file,
       float startingX)
     {
+      var self = registry.Creatures;
       var result = registry.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
-      var creatureId = new CreatureId(_nextCreatureId++);
-      _components[creatureId] = result;
+      var creatureId = new CreatureId(self._nextCreatureId);
       var creatureState = new CreatureState(
         creatureId,
         creatureData,
         creatureData.BaseType.Owner,
         filePosition: file);
-      _creatures[creatureId] = creatureState;
-      _movingCreatures.Add(creatureId);
 
-      result.Initialize(registry, creatureId, creatureData.BaseType.Owner);
-      result.ActivateCreature(
-        creatureState,
-        startingX: startingX);
+      registry.Creatures = new CreatureService(
+        self._nextCreatureId + 1,
+        self._components.SetItem(creatureId, result),
+        self.Creatures.SetItem(creatureId, creatureState),
+        self.MovingCreatures.Add(creatureId),
+        self.PlacedCreatures);
 
-      registry.CreatureService = this;
+      result.Initialize(registry, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
+      result.ActivateCreature(startingX: startingX);
     }
 
-    public void AddUserCreatureAtPosition(
+    public static void AddUserCreatureAtPosition(
       GameServiceRegistry registry,
       CreatureId creatureId,
       RankValue rank,
       FileValue file)
     {
-      _userCreatures[(rank, file)] = creatureId;
-      _creatures[creatureId] = _creatures[creatureId].WithRankPosition(rank).WithFilePosition(file);
-      _components[creatureId].ActivateCreature(_creatures[creatureId]);
-      registry.CreatureService = this;
+      var self = registry.Creatures;
+      registry.Creatures = new CreatureService(
+        self._nextCreatureId,
+        self._components,
+        self.Creatures.SetItem(creatureId, self.Creatures[creatureId].WithRankPosition(rank).WithFilePosition(file)),
+        self.MovingCreatures,
+        self.PlacedCreatures.SetItem((rank, file), creatureId));
+
+      self._components[creatureId].ActivateCreature();
     }
 
-    public CreatureState Mutate(
+    public static CreatureState Mutate(
       GameServiceRegistry registry,
       CreatureId creatureId,
       Func<CreatureState, CreatureState> mutation)
     {
-      var newState = mutation(this[creatureId]);
-      _creatures[creatureId] = newState;
-      registry.CreatureService = this;
+      var self = registry.Creatures;
+      var newState = mutation(self[creatureId]);
+      registry.Creatures = new CreatureService(
+        self._nextCreatureId,
+        self._components,
+        self.Creatures.SetItem(creatureId, newState),
+        self.MovingCreatures,
+        self.PlacedCreatures);
       return newState;
     }
 
-    public void AddDamage(GameServiceRegistry registry, CreatureId appliedById, CreatureId targetId, int damage)
+    public static void AddDamage(GameServiceRegistry registry, CreatureId appliedById, CreatureId targetId, int damage)
     {
-      var targetState = this[targetId];
+      var self = registry.Creatures;
       Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
-      var health = targetState.GetInt(Stat.Health);
+      var health = self[targetId].GetInt(Stat.Health);
       var newState = Mutate(
         registry,
         targetId,
         s => s.WithDamageTaken(Mathf.Clamp(value: 0, s.DamageTaken + damage, health)));
       if (newState.DamageTaken >= health)
       {
-        var appliedByState = this[appliedById];
+        var appliedByState = self[appliedById];
         registry.Invoke(appliedById, new IOnKilledEnemy.Data(appliedByState));
         registry.Invoke(targetId, new IOnCreatureDeath.Data(newState));
-        _components[targetId].Kill();
+        self._components[targetId].Kill();
         OnDeath(registry, targetId);
       }
     }
 
-    public void Heal(GameServiceRegistry registry, CreatureId creatureId, int healing)
+    public static void Heal(GameServiceRegistry registry, CreatureId creatureId, int healing)
     {
-      var state = this[creatureId];
+      var state = registry.Creatures[creatureId];
       Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
       var health = state.GetInt(Stat.Health);
       Mutate(registry, creatureId, s => s.WithDamageTaken(Mathf.Clamp(value: 0, state.DamageTaken - healing, health)));
     }
 
-    public void ApplyKnockback(CreatureId target, float distance, float durationSeconds)
+    public static void ApplyKnockback(
+      GameServiceRegistry registry, CreatureId target, float distance, float durationSeconds)
     {
-      var t = _components[target].transform;
+      var self = registry.Creatures;
+      var t = self._components[target].transform;
       t.DOMove(
         (Vector2) t.position +
         distance *
-        Constants.ForwardDirectionForPlayer(this[target].Owner.GetOpponent()),
+        Constants.ForwardDirectionForPlayer(self[target].Owner.GetOpponent()),
         durationSeconds);
     }
 
-    public void ApplyStun(CreatureId target, float durationSeconds)
+    public static void ApplyStun(GameServiceRegistry registry, CreatureId target, float durationSeconds)
     {
-      _components[target].Stun(durationSeconds);
+      registry.Creatures._components[target].Stun(durationSeconds);
     }
 
-    public void SetAnimationPaused(CreatureId target, bool animationPaused)
+    public static void SetAnimationPaused(GameServiceRegistry registry, CreatureId target, bool animationPaused)
     {
-      _components[target].SetAnimationPaused(animationPaused);
+      registry.Creatures._components[target].SetAnimationPaused(animationPaused);
     }
 
-    public void DespawnCreature(GameServiceRegistry registry, CreatureId target)
+    public static void DespawnCreature(GameServiceRegistry registry, CreatureId target)
     {
-      if (!_components.ContainsKey(target))
-      {
-        registry.CreatureService = this;
-        return;
-      }
-
-      _components[target].Despawn();
-
-      _creatures.Remove(target);
-      _components.Remove(target);
-      registry.CreatureService = this;
-    }
-
-    void OnDeath(GameServiceRegistry registry, CreatureId creatureId)
-    {
-      if (!_components.ContainsKey(creatureId))
+      var self = registry.Creatures;
+      if (!self._components.ContainsKey(target))
       {
         return;
       }
 
-      var state = _creatures[creatureId];
+      self._components[target].Despawn();
+
+      registry.Creatures = new CreatureService(
+        self._nextCreatureId,
+        self._components.Remove(target),
+        self.Creatures.Remove(target),
+        self.MovingCreatures,
+        self.PlacedCreatures);
+    }
+
+    static void OnDeath(GameServiceRegistry registry, CreatureId creatureId)
+    {
+      var self = registry.Creatures;
+      if (!self._components.ContainsKey(creatureId))
+      {
+        return;
+      }
+
+      var state = self[creatureId];
 
       if (state.RankPosition.HasValue && state.FilePosition.HasValue)
       {
-        _userCreatures.Remove((state.RankPosition.Value, state.FilePosition.Value));
+        registry.Creatures = new CreatureService(
+          self._nextCreatureId,
+          self._components,
+          self.Creatures,
+          self.MovingCreatures,
+          self.PlacedCreatures.Remove((state.RankPosition.Value, state.FilePosition.Value)));
       }
       else if (state.FilePosition.HasValue)
       {
-        _movingCreatures.Remove(creatureId);
+        registry.Creatures = new CreatureService(
+          self._nextCreatureId,
+          self._components,
+          self.Creatures,
+          self.MovingCreatures.Remove(creatureId),
+          self.PlacedCreatures);
       }
 
       Mutate(registry, creatureId, s => s.WithIsAlive(false));
-      registry.CreatureService = this;
     }
   }
 

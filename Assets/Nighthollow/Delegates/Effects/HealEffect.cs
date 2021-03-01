@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.Heal(registry, Target, Amount);
+      CreatureService.Heal(registry, Target, Amount);
     }
   }
 }

@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      registry.CreatureService.Mutate(
+      CreatureService.Mutate(
         registry,
         Target,
         s => s.WithData(s.Data.WithKeyValueStore(Mutation.Mutate(s.Data.KeyValueStore))));

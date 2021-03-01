@@ -45,7 +45,7 @@ namespace Nighthollow.Delegates.Implementations
     ///   that position, if any).
     /// </summary>
     public static IEnumerable<CreatureId> GetAdjacentUserCreatures(
-      ICreatureService service, RankValue inputRank, FileValue inputFile) =>
+      CreatureService service, RankValue inputRank, FileValue inputFile) =>
       from rank in BoardPositions.AdjacentRanks(inputRank)
       from file in BoardPositions.AdjacentFiles(inputFile)
       where service.PlacedCreatures.ContainsKey((rank, file))
