@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Implementations
     public IEnumerable<Effect> OnSkillUsed(IGameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {
       var filePosition = Errors.CheckNotNull(d.Self.FilePosition);
-      var rank = GetOpenForwardRank(c.CreatureService, Errors.CheckNotNull(d.Self.RankPosition), filePosition);
+      var rank = GetOpenForwardRank(c.Creatures, Errors.CheckNotNull(d.Self.RankPosition), filePosition);
       if (rank.HasValue)
       {
         var summon = d.Skill.ItemData.Summons[Random.Range(0, d.Skill.ItemData.Summons.Count)];

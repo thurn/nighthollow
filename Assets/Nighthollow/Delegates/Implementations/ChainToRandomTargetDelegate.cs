@@ -39,7 +39,7 @@ namespace Nighthollow.Delegates.Implementations
       if (d.Projectile &&
           d.Projectile!.KeyValueStore.Get(Key.TimesChained) < d.Skill.GetInt(Stat.MaxProjectileTimesChained))
       {
-        var enemies = c.CreatureService.MovingCreatures.Where(cid => c.CreatureService[cid].Owner == PlayerName.Enemy)
+        var enemies = c.Creatures.MovingCreatures.Where(cid => c.Creatures[cid].Owner == PlayerName.Enemy)
           .Except(d.Projectile.KeyValueStore.Get(Key.SkipProjectileImpacts))
           .ToList();
         if (enemies.Count > 0)

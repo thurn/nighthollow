@@ -83,7 +83,7 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      _data = _data.OnTick(_registry.Context);
+      _data = _data.OnTick(_registry);
       _cardImage.sprite = _registry.AssetService.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
 
       var manaCost = _data.GetInt(Stat.ManaCost);
@@ -134,8 +134,7 @@ namespace Nighthollow.Components
             _registry.CreatureService.CreateUserCreature(
               _registry,
               _data,
-              out var _,
-              (id, positionSelector) => { positionSelector.Initialize(_registry, id, this); });
+              this);
             _overBoard = true;
           }
         }

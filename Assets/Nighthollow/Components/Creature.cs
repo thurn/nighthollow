@@ -71,8 +71,9 @@ namespace Nighthollow.Components
       _animator.speed = _animationSpeedMultiplier;
     }
 
-    public void OnUpdate(CreatureState state)
+    public void OnUpdate()
     {
+      var state = _registry.CreatureService[CreatureId];
       if (_animationState == CreatureAnimation.Dying)
       {
         _attachmentDisplay.ClearAttachments();
@@ -98,7 +99,8 @@ namespace Nighthollow.Components
       if (transform.position.x > Constants.CreatureDespawnRightX ||
           transform.position.x < Constants.CreatureDespawnLeftX)
       {
-        _registry.CreatureService = _registry.CreatureService.DespawnCreature(CreatureId);
+        _registry.CreatureService.DespawnCreature(_registry, CreatureId);
+        return;
       }
       else if (state.Owner == PlayerName.Enemy &&
                transform.position.x < Constants.EnemyCreatureEndzoneX)
@@ -173,12 +175,11 @@ namespace Nighthollow.Components
 
     void TryToUseSkill(CreatureState state)
     {
-      var skill = state.Data.DelegateList.FirstNonNull(_registry.Context, new ISelectSkill.Data(state));
+      var skill = state.Data.DelegateList.FirstNonNull(_registry, new ISelectSkill.Data(state));
       if (skill != null)
       {
         _animationState = CreatureAnimation.UsingSkill;
-        _registry.CreatureService =
-          _registry.CreatureService.Mutate(CreatureId, s => s.WithCurrentSkill(skill), out var newState);
+        var newState = _registry.CreatureService.Mutate(_registry, CreatureId, s => s.WithCurrentSkill(skill));
 
         var skillAnimation = SelectAnimation(newState, skill);
         switch (skillAnimation)
@@ -277,7 +278,7 @@ namespace Nighthollow.Components
 
     public void OnDeathAnimationCompleted()
     {
-      _registry.CreatureService = _registry.CreatureService.DespawnCreature(CreatureId);
+      _registry.CreatureService.DespawnCreature(_registry, CreatureId);
     }
 
     public void Stun(float durationSeconds)
@@ -309,7 +310,9 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(seconds: 1);
-        _registry.CreatureService = _registry.CreatureService.Heal(CreatureId,
+        _registry.CreatureService.Heal(
+          _registry,
+          CreatureId,
           _registry.CreatureService[CreatureId].GetInt(Stat.HealthRegenerationPerSecond));
       }
 

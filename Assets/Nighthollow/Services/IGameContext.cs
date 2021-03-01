@@ -18,6 +18,6 @@ namespace Nighthollow.Services
 {
   public interface IGameContext
   {
-    ICreatureService CreatureService { get; }
+    ICreatureService Creatures { get; }
   }
 }

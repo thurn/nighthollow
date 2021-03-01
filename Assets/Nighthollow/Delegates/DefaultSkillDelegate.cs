@@ -47,16 +47,16 @@ namespace Nighthollow.Delegates
             d.Self.CreatureId,
             d.Skill,
             delegateIndex,
-            c.CreatureService.GetProjectileSourcePosition(d.Self.CreatureId),
+            c.Creatures.GetProjectileSourcePosition(d.Self.CreatureId),
             Vector2.zero);
           break;
         case SkillType.Melee when d.Skill.BaseType.Address != null:
           yield return
             new PlayTimedEffectEffect(d.Skill.BaseType.Address,
-              c.CreatureService.GetCollider(d.Self.CreatureId).bounds.center);
+              c.Creatures.GetCollider(d.Self.CreatureId).bounds.center);
           break;
         case SkillType.Area when d.Skill.BaseType.Address != null:
-          var position = c.CreatureService.GetPosition(d.Self.CreatureId);
+          var position = c.Creatures.GetPosition(d.Self.CreatureId);
           yield return
             new PlayTimedEffectEffect(d.Skill.BaseType.Address,
               new Vector2(
@@ -75,7 +75,7 @@ namespace Nighthollow.Delegates
         yield return new EventEffect<IOnApplySkillToTarget>(new IOnApplySkillToTarget.Data(
           d.Self,
           d.Skill,
-          c.CreatureService[target],
+          c.Creatures[target],
           d.Projectile));
       }
     }
@@ -169,7 +169,7 @@ namespace Nighthollow.Delegates
         : d.Hits;
 
     public Collider2D GetCollider(IGameContext c, int delegateIndex, IGetCollider.Data d) =>
-      d.Projectile ? d.Projectile!.Collider : c.CreatureService.GetCollider(d.Self.CreatureId);
+      d.Projectile ? d.Projectile!.Collider : c.Creatures.GetCollider(d.Self.CreatureId);
 
     public ImmutableDictionary<DamageType, int> RollForBaseDamage(
       IGameContext c, int delegateIndex, IRollForBaseDamage.Data d) =>

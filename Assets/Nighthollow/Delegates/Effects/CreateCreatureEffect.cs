@@ -44,8 +44,9 @@ namespace Nighthollow.Delegates.Effects
       }
       else
       {
-        registry.CreatureService.CreateUserCreature(registry, data, out var creatureId);
-        registry.CreatureService = registry.CreatureService.AddUserCreatureAtPosition(
+        var creatureId = registry.CreatureService.CreateUserCreature(registry, data);
+        registry.CreatureService.AddUserCreatureAtPosition(
+          registry,
           creatureId,
           RankPosition,
           FilePosition);

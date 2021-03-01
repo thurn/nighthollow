@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using DG.Tweening;
-using JetBrains.Annotations;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates;
@@ -33,16 +30,16 @@ namespace Nighthollow.Services
   public interface ICreatureService
   {
     /// <summary>Map of all currently-known creatures, including creatures in the 'placing' or 'dying' states</summary>
-    ImmutableDictionary<CreatureId, CreatureState> Creatures { get; }
+    IReadOnlyDictionary<CreatureId, CreatureState> Creatures { get; }
 
     /// <summary>Look up creature state by creature ID.</summary>
     CreatureState this[CreatureId index] { get; }
 
     /// <summary>Set of both user and enemy creature IDs which are not anchored to a specific board position</summary>
-    ImmutableHashSet<CreatureId> MovingCreatures { get; }
+    IEnumerable<CreatureId> MovingCreatures { get; }
 
     /// <summary>Map of both user and enemy creature IDs which have a specific board position</summary>
-    ImmutableDictionary<(RankValue, FileValue), CreatureId> PlacedCreatures { get; }
+    IReadOnlyDictionary<(RankValue, FileValue), CreatureId> PlacedCreatures { get; }
 
     /// <summary>Return the collider for a given creature.</summary>
     Collider2D GetCollider(CreatureId creatureId);
@@ -67,14 +64,13 @@ namespace Nighthollow.Services
     readonly Dictionary<(RankValue, FileValue), CreatureId> _userCreatures =
       new Dictionary<(RankValue, FileValue), CreatureId>();
 
-    public ImmutableDictionary<CreatureId, CreatureState> Creatures => _creatures.ToImmutableDictionary();
+    public IReadOnlyDictionary<CreatureId, CreatureState> Creatures => _creatures;
 
     public CreatureState this[CreatureId index] => _creatures[index];
 
-    public ImmutableHashSet<CreatureId> MovingCreatures => _movingCreatures.ToImmutableHashSet();
+    public IEnumerable<CreatureId> MovingCreatures => _movingCreatures;
 
-    public ImmutableDictionary<(RankValue, FileValue), CreatureId> PlacedCreatures =>
-      _userCreatures.ToImmutableDictionary();
+    public IReadOnlyDictionary<(RankValue, FileValue), CreatureId> PlacedCreatures => _userCreatures;
 
     public Collider2D GetCollider(CreatureId creatureId) => _components[creatureId].Collider;
 
@@ -83,33 +79,38 @@ namespace Nighthollow.Services
     public Vector2 GetProjectileSourcePosition(CreatureId creatureId) =>
       _components[creatureId].ProjectileSource.position;
 
-    [MustUseReturnValue] public CreatureService OnUpdate(IGameContext c)
+    public void OnUpdate(GameServiceRegistry registry)
     {
-      foreach (var pair in _components)
+      foreach (var pair in _creatures)
       {
-        var state = _creatures[pair.Key];
-        _creatures[pair.Key] = state.WithData(state.Data.OnTick(c));
-        pair.Value.OnUpdate(_creatures[pair.Key]);
+        _creatures[pair.Key] = pair.Value.WithData(pair.Value.Data.OnTick(registry));
       }
 
-      return this;
+      foreach (var component in _components.Values)
+      {
+        component.OnUpdate();
+      }
     }
 
-    public void CreateUserCreature(
+    public CreatureId CreateUserCreature(
       GameServiceRegistry registry,
       CreatureData creatureData,
-      out CreatureId creatureId,
-      Action<CreatureId, CreaturePositionSelector>? addPositionSelector = null)
+      Card? addPositionSelector = null)
     {
       var result = registry.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
-      creatureId = new CreatureId(_nextCreatureId++);
+      var creatureId = new CreatureId(_nextCreatureId++);
       _components[creatureId] = result;
       _creatures[creatureId] = new CreatureState(creatureId, creatureData, creatureData.BaseType.Owner);
 
       result.Initialize(registry, creatureId, creatureData.BaseType.Owner);
-      addPositionSelector?.Invoke(creatureId, result.gameObject.AddComponent<CreaturePositionSelector>());
+      if (addPositionSelector)
+      {
+        result.gameObject.AddComponent<CreaturePositionSelector>()
+          .Initialize(registry, creatureId, addPositionSelector);
+      }
 
       registry.CreatureService = this;
+      return creatureId;
     }
 
     public void CreateMovingCreature(
@@ -137,7 +138,8 @@ namespace Nighthollow.Services
       registry.CreatureService = this;
     }
 
-    [MustUseReturnValue] public CreatureService AddUserCreatureAtPosition(
+    public void AddUserCreatureAtPosition(
+      GameServiceRegistry registry,
       CreatureId creatureId,
       RankValue rank,
       FileValue file)
@@ -145,26 +147,18 @@ namespace Nighthollow.Services
       _userCreatures[(rank, file)] = creatureId;
       _creatures[creatureId] = _creatures[creatureId].WithRankPosition(rank).WithFilePosition(file);
       _components[creatureId].ActivateCreature(_creatures[creatureId]);
-      return this;
+      registry.CreatureService = this;
     }
 
-    [MustUseReturnValue] public CreatureService Mutate(
+    public CreatureState Mutate(
+      GameServiceRegistry registry,
       CreatureId creatureId,
       Func<CreatureState, CreatureState> mutation)
     {
-      var result = mutation(this[creatureId]);
-      _creatures[creatureId] = result;
-      return this;
-    }
-
-    [MustUseReturnValue] public CreatureService Mutate(
-      CreatureId creatureId,
-      Func<CreatureState, CreatureState> mutation,
-      out CreatureState newState)
-    {
-      newState = mutation(this[creatureId]);
+      var newState = mutation(this[creatureId]);
       _creatures[creatureId] = newState;
-      return this;
+      registry.CreatureService = this;
+      return newState;
     }
 
     public void AddDamage(GameServiceRegistry registry, CreatureId appliedById, CreatureId targetId, int damage)
@@ -172,26 +166,26 @@ namespace Nighthollow.Services
       var targetState = this[targetId];
       Errors.CheckArgument(damage >= 0, "Damage must be non-negative");
       var health = targetState.GetInt(Stat.Health);
-      registry.CreatureService = Mutate(
+      var newState = Mutate(
+        registry,
         targetId,
-        s => s.WithDamageTaken(Mathf.Clamp(value: 0, s.DamageTaken + damage, health)),
-        out var newState);
+        s => s.WithDamageTaken(Mathf.Clamp(value: 0, s.DamageTaken + damage, health)));
       if (newState.DamageTaken >= health)
       {
         var appliedByState = this[appliedById];
         registry.Invoke(appliedById, new IOnKilledEnemy.Data(appliedByState));
         registry.Invoke(targetId, new IOnCreatureDeath.Data(newState));
         _components[targetId].Kill();
-        registry.CreatureService = OnDeath(targetId);
+        OnDeath(registry, targetId);
       }
     }
 
-    [MustUseReturnValue] public CreatureService Heal(CreatureId creatureId, int healing)
+    public void Heal(GameServiceRegistry registry, CreatureId creatureId, int healing)
     {
       var state = this[creatureId];
       Errors.CheckArgument(healing >= 0, "Healing must be non-negative");
       var health = state.GetInt(Stat.Health);
-      return Mutate(creatureId, s => s.WithDamageTaken(Mathf.Clamp(value: 0, state.DamageTaken - healing, health)));
+      Mutate(registry, creatureId, s => s.WithDamageTaken(Mathf.Clamp(value: 0, state.DamageTaken - healing, health)));
     }
 
     public void ApplyKnockback(CreatureId target, float distance, float durationSeconds)
@@ -214,25 +208,26 @@ namespace Nighthollow.Services
       _components[target].SetAnimationPaused(animationPaused);
     }
 
-    [MustUseReturnValue] public CreatureService DespawnCreature(CreatureId target)
+    public void DespawnCreature(GameServiceRegistry registry, CreatureId target)
     {
       if (!_components.ContainsKey(target))
       {
-        return this;
+        registry.CreatureService = this;
+        return;
       }
 
       _components[target].Despawn();
 
       _creatures.Remove(target);
       _components.Remove(target);
-      return this;
+      registry.CreatureService = this;
     }
 
-    [MustUseReturnValue] CreatureService OnDeath(CreatureId creatureId)
+    void OnDeath(GameServiceRegistry registry, CreatureId creatureId)
     {
       if (!_components.ContainsKey(creatureId))
       {
-        return this;
+        return;
       }
 
       var state = _creatures[creatureId];
@@ -246,7 +241,8 @@ namespace Nighthollow.Services
         _movingCreatures.Remove(creatureId);
       }
 
-      return Mutate(creatureId, s => s.WithIsAlive(false));
+      Mutate(registry, creatureId, s => s.WithIsAlive(false));
+      registry.CreatureService = this;
     }
   }
 
@@ -273,7 +269,7 @@ namespace Nighthollow.Services
 
     public DelegateList GetDelegateList(IGameContext c)
     {
-      var state = c.CreatureService[this];
+      var state = c.Creatures[this];
       return state.CurrentSkill != null ? state.CurrentSkill.DelegateList : state.Data.DelegateList;
     }
   }

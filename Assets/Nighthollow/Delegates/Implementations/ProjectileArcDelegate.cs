@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Implementations
       skill.GetInt(Stat.ProjectileArcCount);
 
     protected override Vector2 GetOrigin(IGameContext c, CreatureState self, SkillData skill, int projectileNumber) =>
-      c.CreatureService.GetProjectileSourcePosition(self.CreatureId);
+      c.Creatures.GetProjectileSourcePosition(self.CreatureId);
 
     protected override Vector2 GetDirection(
       IGameContext c, CreatureState self, SkillData skill, int projectileNumber) =>

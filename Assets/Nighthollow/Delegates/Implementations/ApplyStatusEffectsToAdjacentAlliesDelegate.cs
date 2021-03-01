@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Implementations
 
     public IEnumerable<Effect> OnSkillUsed(IGameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {
-      var adjacent = GetAdjacentUserCreatures(c.CreatureService,
+      var adjacent = GetAdjacentUserCreatures(c.Creatures,
         Errors.CheckNotNull(d.Self.RankPosition),
         Errors.CheckNotNull(d.Self.FilePosition));
       return (

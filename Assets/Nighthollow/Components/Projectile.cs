@@ -94,7 +94,7 @@ namespace Nighthollow.Components
     {
       var firedBy = _registry.CreatureService[_firedById];
       if (firedBy.CurrentSkill!.DelegateList.First(
-        _registry.Context,
+        _registry,
         new IShouldSkipProjectileImpact.Data(firedBy, _skillData, this),
         notFound: false))
       {

@@ -61,7 +61,7 @@ namespace Nighthollow.Components
     {
       if (_registry != null)
       {
-        Data = Data.OnTick(_registry.Context);
+        Data = Data.OnTick(_registry);
       }
     }
 

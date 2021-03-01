@@ -34,7 +34,7 @@ namespace Nighthollow.Stats
       _creatureId = creatureId;
     }
 
-    public bool IsValid(IGameContext c) => c.CreatureService[_creatureId].IsAlive;
+    public bool IsValid(IGameContext c) => c.Creatures[_creatureId].IsAlive;
   }
 
   public sealed class TimedLifetime : ILifetime

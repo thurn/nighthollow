@@ -48,10 +48,8 @@ namespace Nighthollow.Services
     public Prefabs Prefabs { get; }
   }
 
-  public sealed class GameServiceRegistry : ServiceRegistry
+  public sealed class GameServiceRegistry : ServiceRegistry, IGameContext
   {
-    InternalGameContext _gameContext;
-
     public GameServiceRegistry(
       Database database,
       AssetService assetService,
@@ -70,7 +68,7 @@ namespace Nighthollow.Services
         objectPoolService,
         prefabs)
     {
-      _gameContext = new InternalGameContext();
+      CreatureService = new CreatureService();
       MainCanvas = mainCanvas;
       User = user;
       Enemy = enemy;
@@ -84,23 +82,12 @@ namespace Nighthollow.Services
     public DamageTextService DamageTextService { get; }
     public HelperTextService HelperTextService { get; }
 
-    public IGameContext Context => _gameContext;
-
-    public CreatureService CreatureService
-    {
-      get => _gameContext.InternalCreatureService;
-      set
-      {
-        if (!ReferenceEquals(value, CreatureService))
-        {
-          _gameContext = new InternalGameContext(value);
-        }
-      }
-    }
+    public ICreatureService Creatures => CreatureService;
+    public CreatureService CreatureService { get; set; }
 
     public void OnUpdate()
     {
-      _gameContext.OnUpdate(this);
+      CreatureService.OnUpdate(this);
     }
 
     public void Invoke(IDelegateLocator locator, IEventData arg)
@@ -110,12 +97,12 @@ namespace Nighthollow.Services
 
       while (true)
       {
-        var effects = eventQueue.Dequeue().Raise(Context, locator);
+        var effects = eventQueue.Dequeue().Raise(this, locator);
 
         foreach (var effect in effects)
         {
           effect.Execute(this);
-          foreach (var eventData in effect.Events(Context))
+          foreach (var eventData in effect.Events(this))
           {
             eventQueue.Enqueue(eventData);
           }
@@ -136,22 +123,6 @@ namespace Nighthollow.Services
         PlayerName.Enemy => Enemy.Data.Stats,
         _ => throw Errors.UnknownEnumValue(player)
       };
-    }
-
-    sealed class InternalGameContext : IGameContext
-    {
-      public InternalGameContext(CreatureService? creatureService = null)
-      {
-        InternalCreatureService = creatureService ?? new CreatureService();
-      }
-
-      public CreatureService InternalCreatureService { get; }
-      public ICreatureService CreatureService => InternalCreatureService;
-
-      public void OnUpdate(GameServiceRegistry registry)
-      {
-        registry.CreatureService = InternalCreatureService.OnUpdate(this);
-      }
     }
   }
 }

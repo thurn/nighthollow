@@ -100,13 +100,13 @@ namespace Nighthollow.Delegates
     }
 
     public bool MeleeSkillCouldHit(IGameContext c, int delegateIndex, IMeleeSkillCouldHit.Data d) =>
-      c.CreatureService.GetCollider(d.Self.CreatureId).IsTouchingLayers(
+      c.Creatures.GetCollider(d.Self.CreatureId).IsTouchingLayers(
         Constants.LayerMaskForCreatures(d.Self.Owner.GetOpponent()));
 
     public bool ProjectileSkillCouldHit(IGameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
     {
       var hit = Physics2D.Raycast(
-        c.CreatureService.GetProjectileSourcePosition(d.Self.CreatureId),
+        c.Creatures.GetProjectileSourcePosition(d.Self.CreatureId),
         Constants.ForwardDirectionForPlayer(d.Self.Owner),
         Mathf.Infinity,
         Constants.LayerMaskForCreatures(d.Self.Owner.GetOpponent()));
