@@ -1642,6 +1642,5 @@ namespace Nighthollow.Data
         ? this
         : new UserData(
           stats);
-
   }
 }

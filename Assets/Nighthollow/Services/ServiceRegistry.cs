@@ -70,6 +70,8 @@ namespace Nighthollow.Services
         prefabs)
     {
       Creatures = new CreatureService();
+      UserService = new UserService(user, database.Snapshot());
+
       MainCanvas = mainCanvas;
       User = user;
       Enemy = enemy;
@@ -82,6 +84,13 @@ namespace Nighthollow.Services
     public Enemy Enemy { get; }
     public DamageTextService DamageTextService { get; }
     public HelperTextService HelperTextService { get; }
+
+    public UserService UserService { get; private set; }
+
+    public void MutateUser(Func<UserService, UserService> function)
+    {
+      UserService = function(UserService);
+    }
 
     public CreatureState this[CreatureId creatureId] => Creatures[creatureId];
 

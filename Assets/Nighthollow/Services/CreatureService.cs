@@ -241,21 +241,19 @@ namespace Nighthollow.Services
         registry.MutateCreatures(self => new CreatureService(
           self._nextCreatureId,
           self._components,
-          self.Creatures,
+          self.Creatures.SetItem(creatureId, self[creatureId].WithIsAlive(false)),
           self.MovingCreatures,
           self.PlacedCreatures.Remove((state.RankPosition.Value, state.FilePosition.Value))));
       }
-      else if (state.FilePosition.HasValue)
+      else
       {
         registry.MutateCreatures(self => new CreatureService(
           self._nextCreatureId,
           self._components,
-          self.Creatures,
+          self.Creatures.SetItem(creatureId, self[creatureId].WithIsAlive(false)),
           self.MovingCreatures.Remove(creatureId),
           self.PlacedCreatures));
       }
-
-      Mutate(registry, creatureId, s => s.WithIsAlive(false));
     }
   }
 
