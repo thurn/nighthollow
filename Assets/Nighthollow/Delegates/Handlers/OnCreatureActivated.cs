@@ -24,7 +24,7 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : EventData<IOnCreatureActivated>
     {
-      public Data(CreatureState self)
+      public Data(CreatureId self)
       {
         Self = self;
       }
@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Handlers
       public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnCreatureActivated handler) =>
         handler.OnCreatureActivated(c, delegateIndex, this);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
     }
 
     /// <summary>Called when a creature is first placed.</summary>

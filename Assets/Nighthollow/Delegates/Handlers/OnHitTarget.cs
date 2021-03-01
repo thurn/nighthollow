@@ -25,7 +25,7 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : EventData<IOnHitTarget>
     {
-      public Data(CreatureState self, SkillData skill, CreatureState target, Projectile? projectile, int damage)
+      public Data(CreatureId self, SkillData skill, CreatureId target, Projectile? projectile, int damage)
       {
         Self = self;
         Skill = skill;
@@ -37,9 +37,9 @@ namespace Nighthollow.Delegates.Handlers
       public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnHitTarget handler) =>
         handler.OnHitTarget(c, delegateIndex, this);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
       public SkillData Skill { get; }
-      public CreatureState Target { get; }
+      public CreatureId Target { get; }
       public Projectile? Projectile { get; }
       public int Damage { get; }
     }

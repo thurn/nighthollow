@@ -41,10 +41,10 @@ namespace Nighthollow.Delegates.Implementations
       for (var i = 1; i < d.Skill.GetInt(Stat.ProjectileSequenceCount); ++i)
       {
         yield return new FireProjectileEffect(
-          d.Self.CreatureId,
+          d.Self,
           d.Skill,
           delegateIndex,
-          c.Creatures.GetProjectileSourcePosition(d.Self.CreatureId),
+          c.Creatures.GetProjectileSourcePosition(d.Self),
           Vector2.zero,
           firingDelayMs: i * d.Skill.Get(Stat.ProjectileSequenceDelay).AsMilliseconds());
       }

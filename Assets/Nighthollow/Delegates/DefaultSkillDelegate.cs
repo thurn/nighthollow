@@ -39,29 +39,29 @@ namespace Nighthollow.Delegates
 
     public IEnumerable<Effect> OnSkillUsed(IGameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {
-      yield return new MarkSkillUsedEffect(d.Self.CreatureId, d.Skill.BaseTypeId);
+      yield return new MarkSkillUsedEffect(d.Self, d.Skill.BaseTypeId);
       switch (d.Skill.BaseType.SkillType)
       {
         case SkillType.Projectile:
           yield return new FireProjectileEffect(
-            d.Self.CreatureId,
+            d.Self,
             d.Skill,
             delegateIndex,
-            c.Creatures.GetProjectileSourcePosition(d.Self.CreatureId),
+            c.Creatures.GetProjectileSourcePosition(d.Self),
             Vector2.zero);
           break;
         case SkillType.Melee when d.Skill.BaseType.Address != null:
           yield return
             new PlayTimedEffectEffect(d.Skill.BaseType.Address,
-              c.Creatures.GetCollider(d.Self.CreatureId).bounds.center);
+              c.Creatures.GetCollider(d.Self).bounds.center);
           break;
         case SkillType.Area when d.Skill.BaseType.Address != null:
-          var position = c.Creatures.GetPosition(d.Self.CreatureId);
+          var position = c.Creatures.GetPosition(d.Self);
           yield return
             new PlayTimedEffectEffect(d.Skill.BaseType.Address,
               new Vector2(
-                d.Self.RankPosition?.ToCenterXPosition() ?? position.x,
-                d.Self.FilePosition?.ToCenterYPosition() ?? position.y));
+                c[d.Self].RankPosition?.ToCenterXPosition() ?? position.x,
+                c[d.Self].FilePosition?.ToCenterYPosition() ?? position.y));
           break;
       }
     }
@@ -75,7 +75,7 @@ namespace Nighthollow.Delegates
         yield return new EventEffect<IOnApplySkillToTarget>(new IOnApplySkillToTarget.Data(
           d.Self,
           d.Skill,
-          c.Creatures[target],
+          target,
           d.Projectile));
       }
     }
@@ -85,9 +85,9 @@ namespace Nighthollow.Delegates
       if (d.Skill.GetBool(Stat.UsesAccuracy) &&
           !d.Skill.DelegateList.First(c, new IRollForHit.Data(d.Self, d.Skill, d.Target), notFound: false))
       {
-        yield return d.Self.Owner == PlayerName.User
-          ? new SkillEventEffect(SkillEventEffect.Event.Missed, d.Self.CreatureId)
-          : new SkillEventEffect(SkillEventEffect.Event.Evade, d.Target.CreatureId);
+        yield return c[d.Self].Owner == PlayerName.User
+          ? new SkillEventEffect(SkillEventEffect.Event.Missed, d.Self)
+          : new SkillEventEffect(SkillEventEffect.Event.Evade, d.Target);
         yield break;
       }
 
@@ -95,7 +95,7 @@ namespace Nighthollow.Delegates
       if (d.Skill.GetBool(Stat.CanCrit) &&
           d.Skill.DelegateList.First(c, new IRollForCrit.Data(d.Self, d.Skill, d.Target), notFound: false))
       {
-        yield return new SkillEventEffect(SkillEventEffect.Event.Crit, d.Self.CreatureId);
+        yield return new SkillEventEffect(SkillEventEffect.Event.Crit, d.Self);
         isCriticalHit = true;
       }
 
@@ -117,22 +117,22 @@ namespace Nighthollow.Delegates
         yield break;
       }
 
-      yield return new ApplyDamageEffect(d.Self.CreatureId, d.Target.CreatureId, totalDamage);
-      yield return new DamageTextEffect(d.Target.CreatureId, totalDamage);
+      yield return new ApplyDamageEffect(d.Self, d.Target, totalDamage);
+      yield return new DamageTextEffect(d.Target, totalDamage);
 
       var healthDrain = d.Skill.DelegateList.First(c,
         new IComputeHealthDrain.Data(d.Self, d.Skill, d.Target, totalDamage),
         notFound: 0);
       if (healthDrain > 0)
       {
-        yield return new HealEffect(d.Self.CreatureId, healthDrain);
+        yield return new HealEffect(d.Self, healthDrain);
       }
 
       if (d.Skill.GetBool(Stat.CanStun) &&
           d.Skill.DelegateList.First(c, new IRollForStun.Data(d.Self, d.Skill, d.Target, totalDamage), notFound: false))
       {
-        yield return new StunEffect(d.Target.CreatureId, d.Skill.GetDurationSeconds(Stat.StunDurationOnEnemies));
-        yield return new SkillEventEffect(SkillEventEffect.Event.Stun, d.Target.CreatureId);
+        yield return new StunEffect(d.Target, d.Skill.GetDurationSeconds(Stat.StunDurationOnEnemies));
+        yield return new SkillEventEffect(SkillEventEffect.Event.Stun, d.Target);
       }
     }
 
@@ -140,7 +140,7 @@ namespace Nighthollow.Delegates
     {
       var filter = new ContactFilter2D
       {
-        layerMask = Constants.LayerMaskForCreatures(d.Self.Owner.GetOpponent()),
+        layerMask = Constants.LayerMaskForCreatures(c[d.Self].Owner.GetOpponent()),
         useLayerMask = true,
         useTriggers = true
       };
@@ -169,7 +169,7 @@ namespace Nighthollow.Delegates
         : d.Hits;
 
     public Collider2D GetCollider(IGameContext c, int delegateIndex, IGetCollider.Data d) =>
-      d.Projectile ? d.Projectile!.Collider : c.Creatures.GetCollider(d.Self.CreatureId);
+      d.Projectile ? d.Projectile!.Collider : c.Creatures.GetCollider(d.Self);
 
     public ImmutableDictionary<DamageType, int> RollForBaseDamage(
       IGameContext c, int delegateIndex, IRollForBaseDamage.Data d) =>
@@ -183,7 +183,7 @@ namespace Nighthollow.Delegates
         pair => ApplyReduction(
           d.Skill,
           pair.Value,
-          d.Target.Data.Get(Stat.DamageReduction).GetOrReturnDefault(pair.Key, defaultValue: 0)));
+          c[d.Target].Data.Get(Stat.DamageReduction).GetOrReturnDefault(pair.Key, defaultValue: 0)));
     }
 
     static int ApplyReduction(SkillData skill, int damage, int reduction) =>
@@ -200,7 +200,7 @@ namespace Nighthollow.Delegates
         pair => ApplyResistance(
           d.Skill,
           pair.Value,
-          d.Target.Data.Get(Stat.DamageResistance).GetOrReturnDefault(pair.Key, defaultValue: 0)));
+          c[d.Target].Data.Get(Stat.DamageResistance).GetOrReturnDefault(pair.Key, defaultValue: 0)));
     }
 
     static int ApplyResistance(SkillData skill, int damageValue, float resistance) =>
@@ -244,14 +244,14 @@ namespace Nighthollow.Delegates
       var accuracy = d.Skill.GetInt(Stat.Accuracy);
       var hitChance = Mathf.Clamp(
         value: 0.1f,
-        accuracy / (accuracy + Mathf.Pow(d.Target.GetInt(Stat.Evasion) / 4.0f, p: 0.8f)),
+        accuracy / (accuracy + Mathf.Pow(c[d.Target].GetInt(Stat.Evasion) / 4.0f, p: 0.8f)),
         max: 0.95f);
       return Random.value <= hitChance;
     }
 
     public bool RollForCrit(IGameContext c, int delegateIndex, IRollForCrit.Data d) =>
       Random.value <= d.Skill.Get(Stat.CritChance).AsMultiplier() +
-      d.Target.Stats.Get(Stat.ReceiveCritsChance).AsMultiplier();
+      c[d.Target].Stats.Get(Stat.ReceiveCritsChance).AsMultiplier();
 
     public int ComputeHealthDrain(IGameContext c, int delegateIndex, IComputeHealthDrain.Data d) => d.Skill.IsMelee()
       ? d.Skill.Get(Stat.MeleeHealthDrainPercent).CalculateFraction(d.TotalDamage)
@@ -260,7 +260,7 @@ namespace Nighthollow.Delegates
     public bool RollForStun(IGameContext c, int delegateIndex, IRollForStun.Data d)
     {
       var stunChance = d.Skill.Get(Stat.AddedStunChance).AsMultiplier() +
-                       d.DamageAmount / (float) d.Target.GetInt(Stat.Health);
+                       d.DamageAmount / (float) c[d.Target].GetInt(Stat.Health);
       return Random.value <= Mathf.Clamp(
         stunChance,
         min: 0,

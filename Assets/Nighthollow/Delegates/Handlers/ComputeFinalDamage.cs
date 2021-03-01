@@ -25,9 +25,9 @@ namespace Nighthollow.Delegates.Handlers
     public sealed class Data : QueryData<IComputeFinalDamage, int>
     {
       public Data(
-        CreatureState self,
+        CreatureId self,
         SkillData skill,
-        CreatureState target,
+        CreatureId target,
         ImmutableDictionary<DamageType, int> damage,
         bool isCriticalHit)
       {
@@ -41,9 +41,9 @@ namespace Nighthollow.Delegates.Handlers
       public override int Invoke(IGameContext c, int delegateIndex, IComputeFinalDamage handler) =>
         handler.ComputeFinalDamage(c, delegateIndex, this);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
       public SkillData Skill { get; }
-      public CreatureState Target { get; }
+      public CreatureId Target { get; }
       public ImmutableDictionary<DamageType, int> Damage { get; }
       public bool IsCriticalHit { get; }
     }

@@ -24,7 +24,7 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : QueryData<IFilterTargets, IEnumerable<CreatureId>>
     {
-      public Data(CreatureState self, SkillData skill, IEnumerable<CreatureId> hits)
+      public Data(CreatureId self, SkillData skill, IEnumerable<CreatureId> hits)
       {
         Self = self;
         Skill = skill;
@@ -34,7 +34,7 @@ namespace Nighthollow.Delegates.Handlers
       public override IEnumerable<CreatureId> Invoke(IGameContext c, int delegateIndex, IFilterTargets handler) =>
         handler.FilterTargets(c, delegateIndex, this);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
       public SkillData Skill { get; }
       public IEnumerable<CreatureId> Hits { get; }
     }

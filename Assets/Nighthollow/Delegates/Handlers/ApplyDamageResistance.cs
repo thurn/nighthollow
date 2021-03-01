@@ -24,7 +24,7 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : QueryData<IApplyDamageResistance, ImmutableDictionary<DamageType, int>>
     {
-      public Data(CreatureState self, SkillData skill, CreatureState target, ImmutableDictionary<DamageType, int> damage)
+      public Data(CreatureId self, SkillData skill, CreatureId target, ImmutableDictionary<DamageType, int> damage)
       {
         Self = self;
         Skill = skill;
@@ -36,9 +36,9 @@ namespace Nighthollow.Delegates.Handlers
         IGameContext c, int delegateIndex, IApplyDamageResistance handler) =>
         handler.ApplyDamageResistance(c, delegateIndex, this);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
       public SkillData Skill { get; }
-      public CreatureState Target { get; }
+      public CreatureId Target { get; }
       public ImmutableDictionary<DamageType, int> Damage { get; }
     }
 

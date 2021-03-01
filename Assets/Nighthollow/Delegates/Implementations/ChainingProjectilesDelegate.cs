@@ -70,14 +70,14 @@ namespace Nighthollow.Delegates.Implementations
             Mathf.Lerp(a: 0f, b: 360f, (i + add) / (chainCount + add)),
             Vector3.forward) * d.Projectile.transform.forward;
           yield return new FireProjectileEffect(
-            d.Self.CreatureId,
+            d.Self,
             d.Skill,
             delegateIndex,
             d.Projectile.transform.position,
             direction,
             values: d.Projectile.KeyValueStore
               .Increment(Key.TimesChained)
-              .Append(Key.SkipProjectileImpacts, d.Target.CreatureId));
+              .Append(Key.SkipProjectileImpacts, d.Target));
         }
       }
     }

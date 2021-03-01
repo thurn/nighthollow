@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Data;
+
 #nullable enable
 
 namespace Nighthollow.Services
 {
   public interface IGameContext
   {
+    CreatureState this[CreatureId creatureId] { get; }
+
     CreatureService Creatures { get; }
   }
 }

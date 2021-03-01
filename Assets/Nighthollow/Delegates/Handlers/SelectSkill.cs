@@ -23,7 +23,7 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : QueryData<ISelectSkill, SkillData?>
     {
-      public Data(CreatureState self)
+      public Data(CreatureId self)
       {
         Self = self;
       }
@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Handlers
       public override SkillData? Invoke(IGameContext c, int delegateIndex, ISelectSkill handler) =>
         handler.SelectSkill(c, delegateIndex, this);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
     }
 
     /// <summary>

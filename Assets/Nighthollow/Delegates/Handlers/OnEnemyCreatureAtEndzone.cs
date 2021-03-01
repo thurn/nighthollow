@@ -24,7 +24,7 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : EventData<IOnEnemyCreatureAtEndzone>
     {
-      public Data(CreatureState self)
+      public Data(CreatureId self)
       {
         Self = self;
       }
@@ -33,7 +33,7 @@ namespace Nighthollow.Delegates.Handlers
         IGameContext c, int delegateIndex, IOnEnemyCreatureAtEndzone handler) =>
         handler.OnEnemyCreatureAtEndzone(c, delegateIndex, this);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
     }
 
     /// <summary>Called when an enemy creature passes all defenders and reaches the end of the board.</summary>

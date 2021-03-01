@@ -24,7 +24,7 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : EventData<IOnCreatureDeath>
     {
-      public Data(CreatureState self)
+      public Data(CreatureId self)
       {
         Self = self;
       }
@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Handlers
       public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnCreatureDeath handler) =>
         handler.OnCreatureDeath(c, delegateIndex, this);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
     }
 
     /// <summary>Called when a creature dies.</summary>

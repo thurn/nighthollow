@@ -42,13 +42,13 @@ namespace Nighthollow.Delegates.Implementations
     public bool ProjectileSkillCouldHit(IGameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
     {
       return CollectionUtils.AlternatingIntegers()
-        .Take(GetProjectileCount(c, d.Self, d.Skill) - 1)
+        .Take(GetProjectileCount(c, c[d.Self], d.Skill) - 1)
         .Select(i =>
           Physics2D.Raycast(
-            GetOrigin(c, d.Self, d.Skill, i),
-            GetDirection(c, d.Self, d.Skill, i),
+            GetOrigin(c, c[d.Self], d.Skill, i),
+            GetDirection(c, c[d.Self], d.Skill, i),
             Mathf.Infinity,
-            Constants.LayerMaskForCreatures(d.Self.Owner.GetOpponent())))
+            Constants.LayerMaskForCreatures(c[d.Self].Owner.GetOpponent())))
         .Any(hit => hit.collider);
     }
 
@@ -61,8 +61,8 @@ namespace Nighthollow.Delegates.Implementations
       }
 
       return CollectionUtils.AlternatingIntegers()
-        .Take(GetProjectileCount(c, d.Self, d.Skill) - 1)
-        .Select(i => Result(c, delegateIndex, d.Self, d.Skill, i));
+        .Take(GetProjectileCount(c, c[d.Self], d.Skill) - 1)
+        .Select(i => Result(c, delegateIndex, c[d.Self], d.Skill, i));
     }
 
     FireProjectileEffect Result(

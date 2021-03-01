@@ -23,7 +23,7 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : QueryData<IComputeHealthDrain, int>
     {
-      public Data(CreatureState self, SkillData skill, CreatureState target, int totalDamage)
+      public Data(CreatureId self, SkillData skill, CreatureId target, int totalDamage)
       {
         Self = self;
         Skill = skill;
@@ -34,9 +34,9 @@ namespace Nighthollow.Delegates.Handlers
       public override int Invoke(IGameContext c, int delegateIndex, IComputeHealthDrain handler) =>
         handler.ComputeHealthDrain(c, delegateIndex, this);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
       public SkillData Skill { get; }
-      public CreatureState Target { get; }
+      public CreatureId Target { get; }
       public int TotalDamage { get; }
     }
 

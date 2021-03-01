@@ -24,7 +24,7 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : IteratedQueryData<ITransformDamage, ImmutableDictionary<DamageType, int>>
     {
-      public Data(CreatureState self, SkillData skill, CreatureState target)
+      public Data(CreatureId self, SkillData skill, CreatureId target)
       {
         Self = self;
         Skill = skill;
@@ -38,9 +38,9 @@ namespace Nighthollow.Delegates.Handlers
         ImmutableDictionary<DamageType, int> current) =>
         handler.TransformDamage(c, delegateIndex, this, current);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
       public SkillData Skill { get; }
-      public CreatureState Target { get; }
+      public CreatureId Target { get; }
     }
 
     /// <summary>

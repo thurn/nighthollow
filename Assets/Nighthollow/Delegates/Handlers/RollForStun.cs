@@ -23,7 +23,7 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : QueryData<IRollForStun, bool>
     {
-      public Data(CreatureState self, SkillData skill, CreatureState target, int damageAmount)
+      public Data(CreatureId self, SkillData skill, CreatureId target, int damageAmount)
       {
         Self = self;
         Skill = skill;
@@ -34,9 +34,9 @@ namespace Nighthollow.Delegates.Handlers
       public override bool Invoke(IGameContext c, int delegateIndex, IRollForStun handler) =>
         handler.RollForStun(c, delegateIndex, this);
 
-      public CreatureState Self { get; }
+      public CreatureId Self { get; }
       public SkillData Skill { get; }
-      public CreatureState Target { get; }
+      public CreatureId Target { get; }
       public int DamageAmount { get; }
     }
 

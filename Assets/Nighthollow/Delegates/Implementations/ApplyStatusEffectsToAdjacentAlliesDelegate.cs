@@ -32,8 +32,8 @@ namespace Nighthollow.Delegates.Implementations
     public IEnumerable<Effect> OnSkillUsed(IGameContext c, int delegateIndex, IOnSkillUsed.Data d)
     {
       var adjacent = GetAdjacentUserCreatures(c.Creatures,
-        Errors.CheckNotNull(d.Self.RankPosition),
-        Errors.CheckNotNull(d.Self.FilePosition));
+        Errors.CheckNotNull(c[d.Self].RankPosition),
+        Errors.CheckNotNull(c[d.Self].FilePosition));
       return (
         from target in adjacent
         from statusEffect in d.Skill.ItemData.StatusEffects

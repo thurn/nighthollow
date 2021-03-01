@@ -34,7 +34,7 @@ namespace Nighthollow.Delegates
 
     public IEnumerable<Effect> OnCreatureDeath(IGameContext c, int delegateIndex, IOnCreatureDeath.Data d)
     {
-      if (d.Self.Owner == PlayerName.Enemy)
+      if (c[d.Self].Owner == PlayerName.Enemy)
       {
         // TODO: should be a triggered event
         yield return new EnemyRemovedEffect();
@@ -43,39 +43,39 @@ namespace Nighthollow.Delegates
 
     public SkillData? SelectSkill(IGameContext c, int delegateIndex, ISelectSkill.Data d)
     {
-      if (AnyMeleeSkillCouldHit(c, d.Self))
+      if (AnyMeleeSkillCouldHit(c, c[d.Self]))
       {
-        var skill = SelectMatching(c, d.Self, s => s.IsMelee());
+        var skill = SelectMatching(c, c[d.Self], s => s.IsMelee());
         if (skill != null)
         {
           return skill;
         }
       }
 
-      if (AnyProjectileSkillCouldHit(c, d.Self))
+      if (AnyProjectileSkillCouldHit(c, c[d.Self]))
       {
-        var skill = SelectMatching(c, d.Self, s => s.IsProjectile());
+        var skill = SelectMatching(c, c[d.Self], s => s.IsProjectile());
         if (skill != null)
         {
           return skill;
         }
       }
 
-      return SelectMatching(c, d.Self, s => !s.IsMelee() && !s.IsProjectile());
+      return SelectMatching(c, c[d.Self], s => !s.IsMelee() && !s.IsProjectile());
     }
 
     static bool AnyMeleeSkillCouldHit(IGameContext c, CreatureState self)
     {
       return self.Data.Skills
         .Where(s => s.IsMelee())
-        .Any(skill => skill.DelegateList.Any(c, new IMeleeSkillCouldHit.Data(self, skill)));
+        .Any(skill => skill.DelegateList.Any(c, new IMeleeSkillCouldHit.Data(self.CreatureId, skill)));
     }
 
     static bool AnyProjectileSkillCouldHit(IGameContext c, CreatureState self)
     {
       return self.Data.Skills
         .Where(s => s.IsProjectile())
-        .Any(skill => skill.DelegateList.Any(c, new IProjectileSkillCouldHit.Data(self, skill)));
+        .Any(skill => skill.DelegateList.Any(c, new IProjectileSkillCouldHit.Data(self.CreatureId, skill)));
     }
 
     static SkillData? SelectMatching(IGameContext c, CreatureState self, Func<SkillData, bool> predicate)
@@ -100,16 +100,16 @@ namespace Nighthollow.Delegates
     }
 
     public bool MeleeSkillCouldHit(IGameContext c, int delegateIndex, IMeleeSkillCouldHit.Data d) =>
-      c.Creatures.GetCollider(d.Self.CreatureId).IsTouchingLayers(
-        Constants.LayerMaskForCreatures(d.Self.Owner.GetOpponent()));
+      c.Creatures.GetCollider(d.Self).IsTouchingLayers(
+        Constants.LayerMaskForCreatures(c[d.Self].Owner.GetOpponent()));
 
     public bool ProjectileSkillCouldHit(IGameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
     {
       var hit = Physics2D.Raycast(
-        c.Creatures.GetProjectileSourcePosition(d.Self.CreatureId),
-        Constants.ForwardDirectionForPlayer(d.Self.Owner),
+        c.Creatures.GetProjectileSourcePosition(d.Self),
+        Constants.ForwardDirectionForPlayer(c[d.Self].Owner),
         Mathf.Infinity,
-        Constants.LayerMaskForCreatures(d.Self.Owner.GetOpponent()));
+        Constants.LayerMaskForCreatures(c[d.Self].Owner.GetOpponent()));
       return hit.collider;
     }
   }

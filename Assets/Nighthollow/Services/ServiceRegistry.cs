@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
@@ -82,7 +83,14 @@ namespace Nighthollow.Services
     public DamageTextService DamageTextService { get; }
     public HelperTextService HelperTextService { get; }
 
-    public CreatureService Creatures { get; set; }
+    public CreatureState this[CreatureId creatureId] => Creatures[creatureId];
+
+    public CreatureService Creatures { get; private set; }
+
+    public void MutateCreatures(Func<CreatureService, CreatureService> function)
+    {
+      Creatures = function(Creatures);
+    }
 
     public void OnUpdate()
     {
