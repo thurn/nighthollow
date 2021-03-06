@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Interface;
@@ -24,7 +25,12 @@ using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class Root : MonoBehaviour
+  public interface IStartCoroutine
+  {
+    Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine);
+  }
+
+  public sealed class Root : MonoBehaviour, IStartCoroutine
   {
     static Root _instance = null!;
 
@@ -72,6 +78,8 @@ namespace Nighthollow.Services
       }
     }
 
+    public Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine) => base.StartCoroutine(routine);
+
     void Start()
     {
       Errors.CheckNotNull(_mainCamera);
@@ -99,6 +107,7 @@ namespace Nighthollow.Services
     void OnDataFetched(FetchResult fetchResult)
     {
       _registry = new GameServiceRegistry(
+        this,
         fetchResult.Database,
         fetchResult.AssetService,
         _screenController,

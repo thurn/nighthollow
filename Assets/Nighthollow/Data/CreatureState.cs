@@ -13,11 +13,8 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
-using Nighthollow.Delegates;
 using Nighthollow.Services;
 using Nighthollow.Stats;
-using Nighthollow.Utils;
-using UnityEngine;
 
 #nullable enable
 
@@ -34,6 +31,7 @@ namespace Nighthollow.Data
       int damageTaken = 0,
       SkillData? currentSkill = null,
       bool isAlive = true,
+      bool isStunned = false,
       ImmutableDictionary<int, float>? skillLastUsedTimes = null)
     {
       CreatureId = creatureId;
@@ -44,6 +42,7 @@ namespace Nighthollow.Data
       DamageTaken = damageTaken;
       CurrentSkill = currentSkill;
       IsAlive = isAlive;
+      IsStunned = isStunned;
       SkillLastUsedTimes = skillLastUsedTimes ?? ImmutableDictionary<int, float>.Empty;
     }
 
@@ -56,6 +55,7 @@ namespace Nighthollow.Data
     [Field] public int DamageTaken { get; }
     [Field] public SkillData? CurrentSkill { get; }
     [Field] public bool IsAlive { get; }
+    [Field] public bool IsStunned { get; }
     [Field] public ImmutableDictionary<int, float> SkillLastUsedTimes { get; }
 
     /// <summary>

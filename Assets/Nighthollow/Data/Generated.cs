@@ -1029,6 +1029,7 @@ namespace Nighthollow.Data
           DamageTaken,
           CurrentSkill,
           IsAlive,
+          IsStunned,
           SkillLastUsedTimes);
 
     public CreatureState WithData(CreatureData data) =>
@@ -1043,6 +1044,7 @@ namespace Nighthollow.Data
           DamageTaken,
           CurrentSkill,
           IsAlive,
+          IsStunned,
           SkillLastUsedTimes);
 
     public CreatureState WithOwner(PlayerName owner) =>
@@ -1057,6 +1059,7 @@ namespace Nighthollow.Data
           DamageTaken,
           CurrentSkill,
           IsAlive,
+          IsStunned,
           SkillLastUsedTimes);
 
     public CreatureState WithRankPosition(RankValue? rankPosition) =>
@@ -1071,6 +1074,7 @@ namespace Nighthollow.Data
           DamageTaken,
           CurrentSkill,
           IsAlive,
+          IsStunned,
           SkillLastUsedTimes);
 
     public CreatureState WithFilePosition(FileValue? filePosition) =>
@@ -1085,6 +1089,7 @@ namespace Nighthollow.Data
           DamageTaken,
           CurrentSkill,
           IsAlive,
+          IsStunned,
           SkillLastUsedTimes);
 
     public CreatureState WithDamageTaken(int damageTaken) =>
@@ -1099,6 +1104,7 @@ namespace Nighthollow.Data
           damageTaken,
           CurrentSkill,
           IsAlive,
+          IsStunned,
           SkillLastUsedTimes);
 
     public CreatureState WithCurrentSkill(SkillData? currentSkill) =>
@@ -1113,6 +1119,7 @@ namespace Nighthollow.Data
           DamageTaken,
           currentSkill,
           IsAlive,
+          IsStunned,
           SkillLastUsedTimes);
 
     public CreatureState WithIsAlive(bool isAlive) =>
@@ -1127,6 +1134,22 @@ namespace Nighthollow.Data
           DamageTaken,
           CurrentSkill,
           isAlive,
+          IsStunned,
+          SkillLastUsedTimes);
+
+    public CreatureState WithIsStunned(bool isStunned) =>
+      Equals(isStunned, IsStunned)
+        ? this
+        : new CreatureState(
+          CreatureId,
+          Data,
+          Owner,
+          RankPosition,
+          FilePosition,
+          DamageTaken,
+          CurrentSkill,
+          IsAlive,
+          isStunned,
           SkillLastUsedTimes);
 
     public CreatureState WithSkillLastUsedTimes(ImmutableDictionary<int, float> skillLastUsedTimes) =>
@@ -1141,6 +1164,7 @@ namespace Nighthollow.Data
           DamageTaken,
           CurrentSkill,
           IsAlive,
+          IsStunned,
           skillLastUsedTimes);
 
   }
@@ -1642,5 +1666,6 @@ namespace Nighthollow.Data
         ? this
         : new UserData(
           stats);
+
   }
 }

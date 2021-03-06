@@ -13,7 +13,9 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using DG.Tweening;
 using Nighthollow.Components;
 using Nighthollow.Data;
@@ -70,7 +72,7 @@ namespace Nighthollow.Services
     public Vector2 GetProjectileSourcePosition(CreatureId creatureId) =>
       _components[creatureId].ProjectileSource.position;
 
-    public sealed class Controller
+    public sealed class Controller : ICreatureCallbacks
     {
       readonly GameServiceRegistry _registry;
       readonly GameServiceRegistry.ICreatureServiceMutator _mutator;
@@ -79,6 +81,8 @@ namespace Nighthollow.Services
       {
         _registry = registry;
         _mutator = mutator;
+
+        _registry.CoroutineRunner.StartCoroutine(UpdateCreaturesCoroutine());
       }
 
       public void OnUpdate()
@@ -98,6 +102,20 @@ namespace Nighthollow.Services
         }
       }
 
+      IEnumerator<YieldInstruction> UpdateCreaturesCoroutine()
+      {
+        while (true)
+        {
+          yield return new WaitForSeconds(seconds: 1);
+          foreach (var pair in _registry.Creatures.Creatures.Where(pair => pair.Value.IsAlive))
+          {
+            Heal(pair.Key, pair.Value.GetInt(Stat.HealthRegenerationPerSecond));
+          }
+        }
+
+        // ReSharper disable once IteratorNeverReturns
+      }
+
       public CreatureId CreateUserCreature(
         CreatureData creatureData,
         Card? addPositionSelector = null)
@@ -111,7 +129,7 @@ namespace Nighthollow.Services
           self.MovingCreatures,
           self.PlacedCreatures));
 
-        result.Initialize(_registry, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
+        result.Initialize(_registry, this, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
         if (addPositionSelector)
         {
           result.gameObject.AddComponent<CreaturePositionSelector>()
@@ -141,7 +159,7 @@ namespace Nighthollow.Services
           self.MovingCreatures.Add(creatureId),
           self.PlacedCreatures));
 
-        result.Initialize(_registry, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
+        result.Initialize(_registry, this, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
         result.ActivateCreature(startingX: startingX);
       }
 
@@ -202,7 +220,15 @@ namespace Nighthollow.Services
 
       public void ApplyStun(CreatureId target, float durationSeconds)
       {
-        _registry.Creatures._components[target].Stun(durationSeconds);
+        _registry.CoroutineRunner.StartCoroutine(StunAsync(target, durationSeconds));
+      }
+
+      IEnumerator<YieldInstruction> StunAsync(CreatureId creatureId, float durationSeconds)
+      {
+        var creature = _registry.Creatures._components[creatureId];
+        creature.StartStunAnimation();
+        yield return new WaitForSeconds(durationSeconds);
+        creature.ToDefaultAnimation(_registry.Creatures[creatureId]);
       }
 
       public void SetAnimationPaused(CreatureId target, bool animationPaused)
@@ -225,6 +251,40 @@ namespace Nighthollow.Services
           self.Creatures.Remove(target),
           self.MovingCreatures,
           self.PlacedCreatures));
+      }
+
+      public void OnAttackStart(CreatureId creatureId)
+      {
+        var state = _registry.Creatures[creatureId];
+        if (state.CurrentSkill == null || !state.IsAlive || state.IsStunned)
+        {
+          return;
+        }
+
+        _registry.Invoke(new IOnSkillUsed.Data(creatureId, state.CurrentSkill));
+        state = _registry.Creatures[creatureId];
+
+        if (state.CurrentSkill != null && state.CurrentSkill.IsMelee())
+        {
+          _registry.Invoke(new IOnSkillImpact.Data(creatureId, state.CurrentSkill, projectile: null));
+        }
+      }
+
+      public void OnActionAnimationCompleted(CreatureId creatureId)
+      {
+        var state = _registry.Creatures[creatureId];
+        if (!state.IsAlive || state.IsStunned)
+        {
+          // Ignore exit states from skills that ended early due to stun
+          return;
+        }
+
+        _registry.Creatures._components[creatureId].ToDefaultAnimation(state);
+      }
+
+      public void OnDeathAnimationCompleted(CreatureId creatureId)
+      {
+        DespawnCreature(creatureId);
       }
 
       void OnDeath(CreatureId creatureId)

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Handlers;
@@ -26,6 +25,15 @@ using UnityEngine.Rendering;
 
 namespace Nighthollow.Components
 {
+  public interface ICreatureCallbacks
+  {
+    void OnAttackStart(CreatureId creatureId);
+
+    void OnActionAnimationCompleted(CreatureId creatureId);
+
+    void OnDeathAnimationCompleted(CreatureId creatureId);
+  }
+
   public sealed class Creature : MonoBehaviour
   {
     static readonly int Skill1 = Animator.StringToHash("Skill1");
@@ -48,8 +56,8 @@ namespace Nighthollow.Components
     [SerializeField] StatusBarsHolder _statusBars = null!;
     [SerializeField] SortingGroup _sortingGroup = null!;
 
-    Coroutine _coroutine = null!;
     CreatureId _creatureId;
+    ICreatureCallbacks _callbacks = null!;
     GameServiceRegistry _registry = null!;
 
     public CreatureId CreatureId => _creatureId;
@@ -58,11 +66,17 @@ namespace Nighthollow.Components
 
     CreatureState State => _registry[CreatureId];
 
-    public void Initialize(GameServiceRegistry registry, CreatureId creatureId, string creatureName, PlayerName owner)
+    public void Initialize(
+      GameServiceRegistry registry,
+      ICreatureCallbacks callbacks,
+      CreatureId creatureId,
+      string creatureName,
+      PlayerName owner)
     {
       gameObject.name = $"{creatureName}#{creatureId}";
       _creatureId = creatureId;
       _registry = registry;
+      _callbacks = callbacks;
       _animationState = CreatureAnimation.Placing;
       _animator = GetComponent<Animator>();
       _collider = GetComponent<Collider2D>();
@@ -169,8 +183,6 @@ namespace Nighthollow.Components
 
       _registry.Invoke(new IOnCreatureActivated.Data(CreatureId));
       Root.Instance.HelperTextService.OnCreaturePlayed();
-
-      _coroutine = StartCoroutine(RunCoroutine());
     }
 
     void TryToUseSkill()
@@ -223,14 +235,16 @@ namespace Nighthollow.Components
 
     void ToDefaultState()
     {
-      _animationState = _registry.Creatures[CreatureId].GetInt(Stat.CreatureSpeed) > 0
-        ? CreatureAnimation.Moving
-        : CreatureAnimation.Idle;
+      ToDefaultAnimation(_registry.Creatures[CreatureId]);
+    }
+
+    public void ToDefaultAnimation(CreatureState state)
+    {
+      _animationState = state.GetInt(Stat.CreatureSpeed) > 0 ? CreatureAnimation.Moving : CreatureAnimation.Idle;
     }
 
     public void Kill()
     {
-      StopCoroutine(_coroutine);
       _statusBars.HealthBar.gameObject.SetActive(value: false);
       _animator.SetTrigger(Death);
       _collider.enabled = false;
@@ -251,70 +265,25 @@ namespace Nighthollow.Components
     // Called by skill animations on their 'start impact' frame
     public void AttackStart()
     {
-      if (!IsAlive() || State.CurrentSkill == null)
-      {
-        return;
-      }
-
-      _registry.Invoke(new IOnSkillUsed.Data(CreatureId, State.CurrentSkill));
-
-      if (State.CurrentSkill.IsMelee())
-      {
-        _registry.Invoke(new IOnSkillImpact.Data(CreatureId, State.CurrentSkill, projectile: null));
-      }
+      _callbacks.OnAttackStart(CreatureId);
     }
 
     public void OnActionAnimationCompleted()
     {
-      if (!IsAlive() || IsStunned())
-        // Ignore exit states from skills that ended early due to stun
-      {
-        return;
-      }
-
-      ToDefaultState();
+      _callbacks.OnActionAnimationCompleted(CreatureId);
     }
 
     public void OnDeathAnimationCompleted()
     {
-      _registry.CreatureController.DespawnCreature(CreatureId);
+      _callbacks.OnDeathAnimationCompleted(CreatureId);
     }
 
-    public void Stun(float durationSeconds)
-    {
-      if (!IsAlive() || IsStunned())
-      {
-        return;
-      }
-
-      StartCoroutine(StunAsync(durationSeconds));
-    }
-
-    IEnumerator<YieldInstruction> StunAsync(float durationSeconds)
+    public void StartStunAnimation()
     {
       _animator.SetTrigger(Hit);
       _animationState = CreatureAnimation.Stunned;
-      yield return new WaitForSeconds(durationSeconds);
-      ToDefaultState();
     }
-
-    public bool IsAlive() => _animationState != CreatureAnimation.Placing && _animationState != CreatureAnimation.Dying;
-
-    bool IsStunned() => _animationState == CreatureAnimation.Stunned;
 
     bool CanUseSkill() => _animationState == CreatureAnimation.Idle || _animationState == CreatureAnimation.Moving;
-
-    IEnumerator<YieldInstruction> RunCoroutine()
-    {
-      while (true)
-      {
-        yield return new WaitForSeconds(seconds: 1);
-        _registry.CreatureController.Heal(
-          CreatureId,
-          _registry.Creatures[CreatureId].GetInt(Stat.HealthRegenerationPerSecond));
-      }
-
-      // ReSharper disable once IteratorNeverReturns
-    }
   }
 }

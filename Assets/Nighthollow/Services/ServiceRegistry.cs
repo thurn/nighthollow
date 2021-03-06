@@ -52,6 +52,7 @@ namespace Nighthollow.Services
   public sealed class GameServiceRegistry : ServiceRegistry, IGameContext
   {
     public GameServiceRegistry(
+      IStartCoroutine coroutineRunner,
       Database database,
       AssetService assetService,
       ScreenController screenController,
@@ -69,6 +70,7 @@ namespace Nighthollow.Services
         objectPoolService,
         prefabs)
     {
+      CoroutineRunner = coroutineRunner;
       Creatures = new CreatureService();
       UserService = new UserService(user, database.Snapshot());
 
@@ -79,6 +81,7 @@ namespace Nighthollow.Services
       HelperTextService = helperTextService;
     }
 
+    public IStartCoroutine CoroutineRunner { get; }
     public RectTransform MainCanvas { get; }
     public User User { get; }
     public Enemy Enemy { get; }
