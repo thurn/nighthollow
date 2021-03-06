@@ -96,14 +96,13 @@ namespace Nighthollow.Services
 
     public CreatureService Creatures { get; private set; }
 
-    public void MutateCreatures(Func<CreatureService, CreatureService> function)
-    {
-      Creatures = function(Creatures);
-    }
+    CreatureService.Controller? _creatureController;
+    public CreatureService.Controller CreatureController =>
+      _creatureController ??= new CreatureService.Controller(this, new CreatureServiceMutator(this));
 
     public void OnUpdate()
     {
-      CreatureService.OnUpdate(this);
+      CreatureController.OnUpdate();
     }
 
     public void Invoke(IDelegateLocator locator, IEventData arg)
@@ -139,6 +138,33 @@ namespace Nighthollow.Services
         PlayerName.Enemy => Enemy.Data.Stats,
         _ => throw Errors.UnknownEnumValue(player)
       };
+    }
+
+    public interface ICreatureServiceMutator
+    {
+      void SetCreatureService(CreatureService service);
+
+      void MutateCreatures(Func<CreatureService, CreatureService> function);
+    }
+
+    sealed class CreatureServiceMutator : ICreatureServiceMutator
+    {
+      readonly GameServiceRegistry _registry;
+
+      public CreatureServiceMutator(GameServiceRegistry registry)
+      {
+        _registry = registry;
+      }
+
+      public void SetCreatureService(CreatureService service)
+      {
+        _registry.Creatures = service;
+      }
+
+      public void MutateCreatures(Func<CreatureService, CreatureService> function)
+      {
+        _registry.Creatures = function(_registry.Creatures);
+      }
     }
   }
 }

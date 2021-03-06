@@ -33,7 +33,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      CreatureService.AddDamage(registry, AppliedBy, Target, Amount);
+      registry.CreatureController.AddDamage(AppliedBy, Target, Amount);
     }
   }
 }

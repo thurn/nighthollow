@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      CreatureService.ApplyStun(registry, Target, DurationSeconds);
+      registry.CreatureController.ApplyStun(Target, DurationSeconds);
     }
   }
 }

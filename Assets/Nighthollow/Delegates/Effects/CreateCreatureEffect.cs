@@ -40,13 +40,12 @@ namespace Nighthollow.Delegates.Effects
       var data = Data.BuildCreature(registry);
       if (IsMoving)
       {
-        CreatureService.CreateMovingCreature(registry, data, FilePosition, RankPosition.ToXPosition());
+        registry.CreatureController.CreateMovingCreature(data, FilePosition, RankPosition.ToXPosition());
       }
       else
       {
-        var creatureId = CreatureService.CreateUserCreature(registry, data);
-        CreatureService.AddUserCreatureAtPosition(
-          registry,
+        var creatureId = registry.CreatureController.CreateUserCreature(data);
+        registry.CreatureController.AddUserCreatureAtPosition(
           creatureId,
           RankPosition,
           FilePosition);

@@ -101,7 +101,7 @@ namespace Nighthollow.Components
       if (transform.position.x > Constants.CreatureDespawnRightX ||
           transform.position.x < Constants.CreatureDespawnLeftX)
       {
-        CreatureService.DespawnCreature(_registry, CreatureId);
+        _registry.CreatureController.DespawnCreature(CreatureId);
         return;
       }
       else if (State.Owner == PlayerName.Enemy &&
@@ -179,7 +179,7 @@ namespace Nighthollow.Components
       if (skill != null)
       {
         _animationState = CreatureAnimation.UsingSkill;
-        CreatureService.Mutate(_registry, CreatureId, s => s.WithCurrentSkill(skill));
+        _registry.CreatureController.Mutate(CreatureId, s => s.WithCurrentSkill(skill));
 
         var skillAnimation = SelectAnimation(skill);
         switch (skillAnimation)
@@ -277,7 +277,7 @@ namespace Nighthollow.Components
 
     public void OnDeathAnimationCompleted()
     {
-      CreatureService.DespawnCreature(_registry, CreatureId);
+      _registry.CreatureController.DespawnCreature(CreatureId);
     }
 
     public void Stun(float durationSeconds)
@@ -309,8 +309,7 @@ namespace Nighthollow.Components
       while (true)
       {
         yield return new WaitForSeconds(seconds: 1);
-        CreatureService.Heal(
-          _registry,
+        _registry.CreatureController.Heal(
           CreatureId,
           _registry.Creatures[CreatureId].GetInt(Stat.HealthRegenerationPerSecond));
       }

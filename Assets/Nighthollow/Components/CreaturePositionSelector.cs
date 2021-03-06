@@ -40,7 +40,7 @@ namespace Nighthollow.Components
       _registry = registry;
       _card = card;
       _creatureId = creatureId;
-      CreatureService.SetAnimationPaused(_registry, _creatureId, true);
+      _registry.CreatureController.SetAnimationPaused(_creatureId, true);
       _cursor = Root.Instance.Prefabs.CreateCursor().gameObject;
 
       _spriteRenderers = new List<SpriteRenderer>();
@@ -78,8 +78,8 @@ namespace Nighthollow.Components
             .Append(transform.DOMove(new Vector3(rank.ToXPosition(), file.ToYPosition(), z: 0), duration: 0.3f))
             .AppendCallback(() =>
             {
-              CreatureService.SetAnimationPaused(_registry, _creatureId, false);
-              CreatureService.AddUserCreatureAtPosition(_registry, _creatureId, rank, file);
+              _registry.CreatureController.SetAnimationPaused(_creatureId, false);
+              _registry.CreatureController.AddUserCreatureAtPosition(_creatureId, rank, file);
             });
         }
         else
@@ -107,7 +107,7 @@ namespace Nighthollow.Components
       _card!.transform.position = Input.mousePosition;
 
       Destroy(_cursor);
-      CreatureService.DespawnCreature(_registry, _creatureId);
+      _registry.CreatureController.DespawnCreature(_creatureId);
     }
 
     /// <summary>Gets the position closest file to 'filePosition' which is not full.</summary>
