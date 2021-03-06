@@ -107,7 +107,7 @@ namespace Nighthollow.Components
       else if (State.Owner == PlayerName.Enemy &&
                transform.position.x < Constants.EnemyCreatureEndzoneX)
       {
-        _registry.Invoke(CreatureId, new IOnEnemyCreatureAtEndzone.Data(CreatureId));
+        _registry.Invoke(new IOnEnemyCreatureAtEndzone.Data(CreatureId));
       }
 
       var health = State.GetInt(Stat.Health);
@@ -167,7 +167,7 @@ namespace Nighthollow.Components
 
       ToDefaultState();
 
-      _registry.Invoke(CreatureId, new IOnCreatureActivated.Data(CreatureId));
+      _registry.Invoke(new IOnCreatureActivated.Data(CreatureId));
       Root.Instance.HelperTextService.OnCreaturePlayed();
 
       _coroutine = StartCoroutine(RunCoroutine());
@@ -204,7 +204,7 @@ namespace Nighthollow.Components
             throw Errors.UnknownEnumValue(skillAnimation);
         }
 
-        _registry.Invoke(CreatureId, new IOnSkillStarted.Data(CreatureId, skill));
+        _registry.Invoke(new IOnSkillStarted.Data(CreatureId, skill));
       }
       else
       {
@@ -256,11 +256,11 @@ namespace Nighthollow.Components
         return;
       }
 
-      _registry.Invoke(CreatureId, new IOnSkillUsed.Data(CreatureId, State.CurrentSkill));
+      _registry.Invoke(new IOnSkillUsed.Data(CreatureId, State.CurrentSkill));
 
       if (State.CurrentSkill.IsMelee())
       {
-        _registry.Invoke(CreatureId, new IOnSkillImpact.Data(CreatureId, State.CurrentSkill, projectile: null));
+        _registry.Invoke(new IOnSkillImpact.Data(CreatureId, State.CurrentSkill, projectile: null));
       }
     }
 

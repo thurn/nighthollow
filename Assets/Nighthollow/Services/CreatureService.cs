@@ -175,8 +175,8 @@ namespace Nighthollow.Services
           s => s.WithDamageTaken(Mathf.Clamp(value: 0, s.DamageTaken + damage, health)));
         if (_registry.Creatures[targetId].DamageTaken >= health)
         {
-          _registry.Invoke(appliedById, new IOnKilledEnemy.Data(appliedById));
-          _registry.Invoke(targetId, new IOnCreatureDeath.Data(targetId));
+          _registry.Invoke(new IOnKilledEnemy.Data(appliedById));
+          _registry.Invoke(new IOnCreatureDeath.Data(targetId));
           _registry.Creatures._components[targetId].Kill();
           OnDeath(targetId);
         }

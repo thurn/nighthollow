@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Data;
 using Nighthollow.Services;
 
 #nullable enable
@@ -22,18 +21,15 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IOnEnemyCreatureAtEndzone : IHandler
   {
-    public sealed class Data : EventData<IOnEnemyCreatureAtEndzone>
+    public sealed class Data : CreatureEventData<IOnEnemyCreatureAtEndzone>
     {
-      public Data(CreatureId self)
+      public Data(CreatureId self) : base(self)
       {
-        Self = self;
       }
 
       public override IEnumerable<Effect> Invoke(
         IGameContext c, int delegateIndex, IOnEnemyCreatureAtEndzone handler) =>
         handler.OnEnemyCreatureAtEndzone(c, delegateIndex, this);
-
-      public CreatureId Self { get; }
     }
 
     /// <summary>Called when an enemy creature passes all defenders and reaches the end of the board.</summary>

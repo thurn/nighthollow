@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Data;
 using Nighthollow.Services;
 
 #nullable enable
@@ -22,17 +21,14 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IOnCreatureActivated : IHandler
   {
-    public sealed class Data : EventData<IOnCreatureActivated>
+    public sealed class Data : CreatureEventData<IOnCreatureActivated>
     {
-      public Data(CreatureId self)
+      public Data(CreatureId self) : base(self)
       {
-        Self = self;
       }
 
       public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnCreatureActivated handler) =>
         handler.OnCreatureActivated(c, delegateIndex, this);
-
-      public CreatureId Self { get; }
     }
 
     /// <summary>Called when a creature is first placed.</summary>

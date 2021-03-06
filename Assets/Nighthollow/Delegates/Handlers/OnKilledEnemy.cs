@@ -22,17 +22,14 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IOnKilledEnemy : IHandler
   {
-    public sealed class Data : EventData<IOnKilledEnemy>
+    public sealed class Data : CreatureEventData<IOnKilledEnemy>
     {
-      public Data(CreatureId self)
+      public Data(CreatureId self) : base(self)
       {
-        Self = self;
       }
 
       public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnKilledEnemy handler) =>
         handler.OnKilledEnemy(c, delegateIndex, this);
-
-      public CreatureId Self { get; }
     }
 
     /// <summary>Called when a creature kills an enemy creature.</summary>

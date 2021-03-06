@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Data;
 using Nighthollow.Services;
 
 #nullable enable
@@ -22,17 +21,14 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IOnCreatureDeath : IHandler
   {
-    public sealed class Data : EventData<IOnCreatureDeath>
+    public sealed class Data : CreatureEventData<IOnCreatureDeath>
     {
-      public Data(CreatureId self)
+      public Data(CreatureId self) : base(self)
       {
-        Self = self;
       }
 
       public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnCreatureDeath handler) =>
         handler.OnCreatureDeath(c, delegateIndex, this);
-
-      public CreatureId Self { get; }
     }
 
     /// <summary>Called when a creature dies.</summary>

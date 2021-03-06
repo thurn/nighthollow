@@ -23,11 +23,10 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IOnFiredProjectile : IHandler
   {
-    public sealed class Data : EventData<IOnFiredProjectile>
+    public sealed class Data : CreatureEventData<IOnFiredProjectile>
     {
-      public Data(CreatureId self, SkillData skill, FireProjectileEffect effect)
+      public Data(CreatureId self, SkillData skill, FireProjectileEffect effect) : base(self)
       {
-        Self = self;
         Skill = skill;
         Effect = effect;
       }
@@ -35,7 +34,6 @@ namespace Nighthollow.Delegates.Handlers
       public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnFiredProjectile handler) =>
         handler.OnFiredProjectile(c, delegateIndex, this);
 
-      public CreatureId Self { get; }
       public SkillData Skill { get; }
       public FireProjectileEffect Effect { get; }
     }

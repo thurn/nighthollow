@@ -26,15 +26,26 @@ namespace Nighthollow.Delegates
 
   public interface IEventData
   {
-    IEnumerable<Effect> Raise(IGameContext c, IDelegateLocator delegateLocator);
+    IEnumerable<Effect> Raise(IGameContext c);
   }
 
   public abstract class EventData<THandler> : IEventData where THandler : IHandler
   {
-    public abstract IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, THandler handler);
+    public abstract IEnumerable<Effect> Raise(IGameContext c);
 
-    public IEnumerable<Effect> Raise(IGameContext c, IDelegateLocator delegateLocator) =>
-      delegateLocator.GetDelegateList(c).Invoke(c, this);
+    public abstract IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, THandler handler);
+  }
+
+  public abstract class CreatureEventData<THandler> : EventData<THandler> where THandler : IHandler
+  {
+    protected CreatureEventData(CreatureId self)
+    {
+      Self = self;
+    }
+
+    public CreatureId Self { get; }
+
+    public override IEnumerable<Effect> Raise(IGameContext c) => Self.GetDelegateList(c).Invoke(c, this);
   }
 
   public abstract class QueryData<THandler, TResult>

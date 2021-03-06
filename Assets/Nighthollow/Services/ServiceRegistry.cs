@@ -97,6 +97,7 @@ namespace Nighthollow.Services
     public CreatureService Creatures { get; private set; }
 
     CreatureService.Controller? _creatureController;
+
     public CreatureService.Controller CreatureController =>
       _creatureController ??= new CreatureService.Controller(this, new CreatureServiceMutator(this));
 
@@ -105,14 +106,14 @@ namespace Nighthollow.Services
       CreatureController.OnUpdate();
     }
 
-    public void Invoke(IDelegateLocator locator, IEventData arg)
+    public void Invoke(IEventData arg)
     {
       var eventQueue = new Queue<IEventData>();
       eventQueue.Enqueue(arg);
 
       while (true)
       {
-        var effects = eventQueue.Dequeue().Raise(this, locator);
+        var effects = eventQueue.Dequeue().Raise(this);
 
         foreach (var effect in effects)
         {

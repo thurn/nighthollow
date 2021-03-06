@@ -23,11 +23,10 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IOnApplySkillToTarget : IHandler
   {
-    public sealed class Data : EventData<IOnApplySkillToTarget>
+    public sealed class Data : CreatureEventData<IOnApplySkillToTarget>
     {
-      public Data(CreatureId self, SkillData skill, CreatureId target, Projectile? projectile)
+      public Data(CreatureId self, SkillData skill, CreatureId target, Projectile? projectile) : base(self)
       {
-        Self = self;
         Skill = skill;
         Target = target;
         Projectile = projectile;
@@ -36,7 +35,6 @@ namespace Nighthollow.Delegates.Handlers
       public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnApplySkillToTarget handler) =>
         handler.OnApplySkillToTarget(c, delegateIndex, this);
 
-      public CreatureId Self { get; }
       public SkillData Skill { get; }
       public CreatureId Target { get; }
       public Projectile? Projectile { get; }

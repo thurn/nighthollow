@@ -22,18 +22,16 @@ namespace Nighthollow.Delegates.Handlers
 {
   public interface IOnSkillUsed : IHandler
   {
-    public sealed class Data : EventData<IOnSkillUsed>
+    public sealed class Data : CreatureEventData<IOnSkillUsed>
     {
-      public Data(CreatureId self, SkillData skill)
+      public Data(CreatureId self, SkillData skill) : base(self)
       {
-        Self = self;
         Skill = skill;
       }
 
       public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnSkillUsed handler) =>
         handler.OnSkillUsed(c, delegateIndex, this);
 
-      public CreatureId Self { get; }
       public SkillData Skill { get; }
     }
 
