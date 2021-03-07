@@ -96,13 +96,24 @@ namespace Nighthollow.Services
           self.MovingCreatures,
           self.PlacedCreatures));
 
+        var events = new List<IEventData>();
+
         foreach (var pair in _registry.Creatures._components)
         {
-          UpdateCreature(pair.Key, pair.Value);
+          var eventData = UpdateCreature(pair.Key, pair.Value);
+          if (eventData != null)
+          {
+            events.Add(eventData);
+          }
+        }
+
+        foreach (var eventData in events)
+        {
+          _registry.Invoke(eventData);
         }
       }
 
-      void UpdateCreature(CreatureId creatureId, Creature creature)
+      IEventData? UpdateCreature(CreatureId creatureId, Creature creature)
       {
         if (creature.CanUseSkill())
         {
@@ -111,12 +122,12 @@ namespace Nighthollow.Services
           if (skill != null)
           {
             Mutate(creatureId, s => s.WithCurrentSkill(skill));
-            creature.PlayAnimationForSkill(skill);
+            creature.PlayAnimationForSkill(_registry.Creatures[creatureId], skill);
             _registry.Invoke(new IOnSkillStarted.Data(creatureId, skill));
           }
         }
 
-        creature.OnUpdate();
+        return creature.OnUpdate(_registry.Creatures[creatureId]);
       }
 
       IEnumerator<YieldInstruction> UpdateCreaturesCoroutine()
@@ -146,7 +157,8 @@ namespace Nighthollow.Services
           self.MovingCreatures,
           self.PlacedCreatures));
 
-        result.Initialize(_registry, this, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
+        result.Initialize(
+          _registry.AssetService, this, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
         if (addPositionSelector)
         {
           result.gameObject.AddComponent<CreaturePositionSelector>()
@@ -176,8 +188,10 @@ namespace Nighthollow.Services
           self.MovingCreatures.Add(creatureId),
           self.PlacedCreatures));
 
-        result.Initialize(_registry, this, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
-        result.ActivateCreature(startingX: startingX);
+        result.Initialize(
+          _registry.AssetService, this, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
+        result.ActivateCreature(_registry.Creatures[creatureId], startingX: startingX);
+        _registry.Invoke(new IOnCreatureActivated.Data(creatureId));
       }
 
       public void AddUserCreatureAtPosition(CreatureId creatureId, RankValue rank, FileValue file)
@@ -188,7 +202,8 @@ namespace Nighthollow.Services
           self.Creatures.SetItem(creatureId, self.Creatures[creatureId].WithRankPosition(rank).WithFilePosition(file)),
           self.MovingCreatures,
           self.PlacedCreatures.SetItem((rank, file), creatureId)));
-        _registry.Creatures._components[creatureId].ActivateCreature();
+        _registry.Creatures._components[creatureId].ActivateCreature(_registry.Creatures[creatureId]);
+        _registry.Invoke(new IOnCreatureActivated.Data(creatureId));
       }
 
       public void Mutate(CreatureId creatureId, Func<CreatureState, CreatureState> mutation)

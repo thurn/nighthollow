@@ -13,29 +13,26 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Nighthollow.Delegates.Effects;
-using Nighthollow.Delegates.Handlers;
 using Nighthollow.Services;
-using Nighthollow.Stats;
 
 #nullable enable
 
-namespace Nighthollow.Delegates
+namespace Nighthollow.Delegates.Handlers
 {
-  public sealed class GlobalDelegate : IDelegate, IOnEnemyCreatureAtEndzone, IOnCreatureOutOfBounds
+  public interface IOnCreatureOutOfBounds : IHandler
   {
-    public string Describe(IStatDescriptionProvider provider) => "Global Delegate";
-
-    public IEnumerable<Effect> OnEnemyCreatureAtEndzone(
-      IGameContext c, int delegateIndex, IOnEnemyCreatureAtEndzone.Data d)
+    public sealed class Data : CreatureEventData<IOnCreatureOutOfBounds>
     {
-      yield return new GameOverEffect();
+      public Data(CreatureId self) : base(self)
+      {
+      }
+
+      public override IEnumerable<Effect> Invoke(
+        IGameContext c, int delegateIndex, IOnCreatureOutOfBounds handler) =>
+        handler.OnCreatureOutOfBounds(c, delegateIndex, this);
     }
 
-    public IEnumerable<Effect> OnCreatureOutOfBounds(
-      IGameContext context, int delegateIndex, IOnCreatureOutOfBounds.Data data)
-    {
-      yield return new DespawnCreatureEffect(data.Self);
-    }
+    /// <summary>Called when an enemy creature passes all defenders and reaches the end of the board.</summary>
+    IEnumerable<Effect> OnCreatureOutOfBounds(IGameContext context, int delegateIndex, Data data);
   }
 }
