@@ -105,10 +105,10 @@ namespace Nighthollow.Components
         return;
       }
 
-      if (CanUseSkill())
-      {
-        TryToUseSkill();
-      }
+      // if (CanUseSkill())
+      // {
+      //   TryToUseSkill();
+      // }
 
       transform.eulerAngles = State.Owner == PlayerName.Enemy ? new Vector3(x: 0, y: 180, z: 0) : Vector3.zero;
 
@@ -185,42 +185,30 @@ namespace Nighthollow.Components
       Root.Instance.HelperTextService.OnCreaturePlayed();
     }
 
-    void TryToUseSkill()
+    public void PlayAnimationForSkill(SkillData skillData)
     {
-      var skill = State.Data.DelegateList.FirstNonNull(_registry, new ISelectSkill.Data(CreatureId));
-      if (skill != null)
+      _animationState = CreatureAnimation.UsingSkill;
+      var skillAnimation = SelectAnimation(skillData);
+      switch (skillAnimation)
       {
-        _animationState = CreatureAnimation.UsingSkill;
-        _registry.CreatureController.Mutate(CreatureId, s => s.WithCurrentSkill(skill));
-
-        var skillAnimation = SelectAnimation(skill);
-        switch (skillAnimation)
-        {
-          case SkillAnimationNumber.Skill1:
-            _animator.SetTrigger(Skill1);
-            break;
-          case SkillAnimationNumber.Skill2:
-            _animator.SetTrigger(Skill2);
-            break;
-          case SkillAnimationNumber.Skill3:
-            _animator.SetTrigger(Skill3);
-            break;
-          case SkillAnimationNumber.Skill4:
-            _animator.SetTrigger(Skill4);
-            break;
-          case SkillAnimationNumber.Skill5:
-            _animator.SetTrigger(Skill5);
-            break;
-          case SkillAnimationNumber.Unknown:
-          default:
-            throw Errors.UnknownEnumValue(skillAnimation);
-        }
-
-        _registry.Invoke(new IOnSkillStarted.Data(CreatureId, skill));
-      }
-      else
-      {
-        ToDefaultState();
+        case SkillAnimationNumber.Skill1:
+          _animator.SetTrigger(Skill1);
+          break;
+        case SkillAnimationNumber.Skill2:
+          _animator.SetTrigger(Skill2);
+          break;
+        case SkillAnimationNumber.Skill3:
+          _animator.SetTrigger(Skill3);
+          break;
+        case SkillAnimationNumber.Skill4:
+          _animator.SetTrigger(Skill4);
+          break;
+        case SkillAnimationNumber.Skill5:
+          _animator.SetTrigger(Skill5);
+          break;
+        case SkillAnimationNumber.Unknown:
+        default:
+          throw Errors.UnknownEnumValue(skillAnimation);
       }
     }
 
@@ -284,6 +272,7 @@ namespace Nighthollow.Components
       _animationState = CreatureAnimation.Stunned;
     }
 
-    bool CanUseSkill() => _animationState == CreatureAnimation.Idle || _animationState == CreatureAnimation.Moving;
+    public bool CanUseSkill() =>
+      _animationState == CreatureAnimation.Idle || _animationState == CreatureAnimation.Moving;
   }
 }

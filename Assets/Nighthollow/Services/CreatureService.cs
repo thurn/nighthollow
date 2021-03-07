@@ -96,10 +96,27 @@ namespace Nighthollow.Services
           self.MovingCreatures,
           self.PlacedCreatures));
 
-        foreach (var component in _registry.Creatures._components.Values)
+        foreach (var pair in _registry.Creatures._components)
         {
-          component.OnUpdate();
+          UpdateCreature(pair.Key, pair.Value);
         }
+      }
+
+      void UpdateCreature(CreatureId creatureId, Creature creature)
+      {
+        if (creature.CanUseSkill())
+        {
+          var delegateList = _registry.Creatures[creatureId].Data.DelegateList;
+          var skill = delegateList.FirstNonNull(_registry, new ISelectSkill.Data(creatureId));
+          if (skill != null)
+          {
+            Mutate(creatureId, s => s.WithCurrentSkill(skill));
+            creature.PlayAnimationForSkill(skill);
+            _registry.Invoke(new IOnSkillStarted.Data(creatureId, skill));
+          }
+        }
+
+        creature.OnUpdate();
       }
 
       IEnumerator<YieldInstruction> UpdateCreaturesCoroutine()
@@ -226,9 +243,14 @@ namespace Nighthollow.Services
       IEnumerator<YieldInstruction> StunAsync(CreatureId creatureId, float durationSeconds)
       {
         var creature = _registry.Creatures._components[creatureId];
+        Mutate(creatureId, state => state.WithIsStunned(true));
         creature.StartStunAnimation();
         yield return new WaitForSeconds(durationSeconds);
-        creature.ToDefaultAnimation(_registry.Creatures[creatureId]);
+        if (_registry.Creatures.Creatures.ContainsKey(creatureId) && _registry.Creatures[creatureId].IsAlive)
+        {
+          Mutate(creatureId, state => state.WithIsStunned(false));
+          _registry.Creatures._components[creatureId].ToDefaultAnimation(_registry.Creatures[creatureId]);
+        }
       }
 
       public void SetAnimationPaused(CreatureId target, bool animationPaused)
