@@ -52,14 +52,14 @@ namespace Nighthollow.Services
     {
       _nextCreatureId = nextCreatureId;
       _components = components;
-      Creatures = creatures;
+      CreatureState = creatures;
       MovingCreatures = movingCreatures;
       PlacedCreatures = placedCreatures;
     }
 
-    public ImmutableDictionary<CreatureId, CreatureState> Creatures { get; }
+    public ImmutableDictionary<CreatureId, CreatureState> CreatureState { get; }
 
-    public CreatureState this[CreatureId index] => Creatures[index];
+    public CreatureState this[CreatureId index] => CreatureState[index];
 
     public ImmutableHashSet<CreatureId> MovingCreatures { get; }
 
@@ -87,25 +87,13 @@ namespace Nighthollow.Services
 
       public void OnUpdate()
       {
-        _mutator.MutateCreatures(self => new CreatureService(
+        var self = _registry.Creatures;
+        _mutator.SetCreatureService(new CreatureService(
           self._nextCreatureId,
           self._components,
-          self.Creatures.ToImmutableDictionary(
-            pair => pair.Key,
-            pair => pair.Value.WithData(pair.Value.Data.OnTick(_registry))),
+          RunUpdate(_registry, out var events),
           self.MovingCreatures,
           self.PlacedCreatures));
-
-        var events = new List<IEventData>();
-
-        foreach (var pair in _registry.Creatures._components)
-        {
-          var eventData = UpdateCreature(pair.Key, pair.Value);
-          if (eventData != null)
-          {
-            events.Add(eventData);
-          }
-        }
 
         foreach (var eventData in events)
         {
@@ -113,29 +101,12 @@ namespace Nighthollow.Services
         }
       }
 
-      IEventData? UpdateCreature(CreatureId creatureId, Creature creature)
-      {
-        if (creature.CanUseSkill())
-        {
-          var delegateList = _registry.Creatures[creatureId].Data.DelegateList;
-          var skill = delegateList.FirstNonNull(_registry, new ISelectSkill.Data(creatureId));
-          if (skill != null)
-          {
-            Mutate(creatureId, s => s.WithCurrentSkill(skill));
-            creature.PlayAnimationForSkill(_registry.Creatures[creatureId], skill);
-            _registry.Invoke(new IOnSkillStarted.Data(creatureId, skill));
-          }
-        }
-
-        return creature.OnUpdate(_registry.Creatures[creatureId]);
-      }
-
       IEnumerator<YieldInstruction> UpdateCreaturesCoroutine()
       {
         while (true)
         {
           yield return new WaitForSeconds(seconds: 1);
-          foreach (var pair in _registry.Creatures.Creatures.Where(pair => pair.Value.IsAlive))
+          foreach (var pair in _registry.Creatures.CreatureState.Where(pair => pair.Value.IsAlive))
           {
             Heal(pair.Key, pair.Value.GetInt(Stat.HealthRegenerationPerSecond));
           }
@@ -153,7 +124,8 @@ namespace Nighthollow.Services
         _mutator.MutateCreatures(self => new CreatureService(
           self._nextCreatureId + 1,
           self._components.SetItem(creatureId, result),
-          self.Creatures.SetItem(creatureId, new CreatureState(creatureId, creatureData, creatureData.BaseType.Owner)),
+          self.CreatureState.SetItem(creatureId,
+            new CreatureState(creatureId, creatureData, creatureData.BaseType.Owner)),
           self.MovingCreatures,
           self.PlacedCreatures));
 
@@ -184,7 +156,7 @@ namespace Nighthollow.Services
         _mutator.MutateCreatures(self => new CreatureService(
           self._nextCreatureId + 1,
           self._components.SetItem(creatureId, result),
-          self.Creatures.SetItem(creatureId, creatureState),
+          self.CreatureState.SetItem(creatureId, creatureState),
           self.MovingCreatures.Add(creatureId),
           self.PlacedCreatures));
 
@@ -199,7 +171,8 @@ namespace Nighthollow.Services
         _mutator.MutateCreatures(self => new CreatureService(
           self._nextCreatureId,
           self._components,
-          self.Creatures.SetItem(creatureId, self.Creatures[creatureId].WithRankPosition(rank).WithFilePosition(file)),
+          self.CreatureState.SetItem(creatureId,
+            self.CreatureState[creatureId].WithRankPosition(rank).WithFilePosition(file)),
           self.MovingCreatures,
           self.PlacedCreatures.SetItem((rank, file), creatureId)));
         _registry.Creatures._components[creatureId].ActivateCreature(_registry.Creatures[creatureId]);
@@ -211,7 +184,7 @@ namespace Nighthollow.Services
         _mutator.MutateCreatures(self => new CreatureService(
           self._nextCreatureId,
           self._components,
-          self.Creatures.SetItem(creatureId, mutation(self[creatureId])),
+          self.CreatureState.SetItem(creatureId, mutation(self[creatureId])),
           self.MovingCreatures,
           self.PlacedCreatures));
       }
@@ -261,7 +234,7 @@ namespace Nighthollow.Services
         Mutate(creatureId, state => state.WithIsStunned(true));
         creature.StartStunAnimation();
         yield return new WaitForSeconds(durationSeconds);
-        if (_registry.Creatures.Creatures.ContainsKey(creatureId) && _registry.Creatures[creatureId].IsAlive)
+        if (_registry.Creatures.CreatureState.ContainsKey(creatureId) && _registry.Creatures[creatureId].IsAlive)
         {
           Mutate(creatureId, state => state.WithIsStunned(false));
           _registry.Creatures._components[creatureId].ToDefaultAnimation(_registry.Creatures[creatureId]);
@@ -285,7 +258,7 @@ namespace Nighthollow.Services
         _mutator.MutateCreatures(self => new CreatureService(
           self._nextCreatureId,
           self._components.Remove(target),
-          self.Creatures.Remove(target),
+          self.CreatureState.Remove(target),
           self.MovingCreatures,
           self.PlacedCreatures));
       }
@@ -338,7 +311,7 @@ namespace Nighthollow.Services
           _mutator.MutateCreatures(self => new CreatureService(
             self._nextCreatureId,
             self._components,
-            self.Creatures.SetItem(creatureId, self[creatureId].WithIsAlive(false)),
+            self.CreatureState.SetItem(creatureId, self[creatureId].WithIsAlive(false)),
             self.MovingCreatures,
             self.PlacedCreatures.Remove((state.RankPosition.Value, state.FilePosition.Value))));
         }
@@ -347,39 +320,50 @@ namespace Nighthollow.Services
           _mutator.MutateCreatures(self => new CreatureService(
             self._nextCreatureId,
             self._components,
-            self.Creatures.SetItem(creatureId, self[creatureId].WithIsAlive(false)),
+            self.CreatureState.SetItem(creatureId, self[creatureId].WithIsAlive(false)),
             self.MovingCreatures.Remove(creatureId),
             self.PlacedCreatures));
         }
       }
-    }
-  }
 
-  public readonly struct CreatureId : IDelegateLocator
-  {
-    public readonly int Value;
+      static ImmutableDictionary<CreatureId, CreatureState> RunUpdate(
+        IGameContext c, out ImmutableList<IEventData> events)
+      {
+        var states = ImmutableDictionary.CreateBuilder<CreatureId, CreatureState>();
+        events = ImmutableList<IEventData>.Empty;
+        foreach (var pair in c.Creatures.CreatureState)
+        {
+          var creatureId = pair.Key;
+          var state = pair.Value;
+          state = state.WithData(state.Data.OnTick(c));
+          state = UpdateCreature(c, c.Creatures._components[creatureId], state, ref events);
+          states[creatureId] = state;
+        }
 
-    public CreatureId(int value)
-    {
-      Value = value;
-    }
+        return states.ToImmutable();
+      }
 
-    public bool Equals(CreatureId other) => Value == other.Value;
+      static CreatureState UpdateCreature(
+        IGameContext c,
+        Creature creature,
+        CreatureState state,
+        ref ImmutableList<IEventData> events)
+      {
+        if (creature.CanUseSkill())
+        {
+          var delegateList = state.Data.DelegateList;
+          var skill = delegateList.FirstNonNull(c, new ISelectSkill.Data(state.CreatureId));
+          if (skill != null)
+          {
+            state = state.WithCurrentSkill(skill);
+            creature.PlayAnimationForSkill(state, skill);
+            events = events.Add(new IOnSkillStarted.Data(state.CreatureId, skill));
+          }
+        }
 
-    public override bool Equals(object? obj) => obj is CreatureId other && Equals(other);
-
-    public override int GetHashCode() => Value;
-
-    public static bool operator ==(CreatureId left, CreatureId right) => left.Equals(right);
-
-    public static bool operator !=(CreatureId left, CreatureId right) => !left.Equals(right);
-
-    public override string ToString() => Value.ToString();
-
-    public DelegateList GetDelegateList(IGameContext c)
-    {
-      var state = c.Creatures[this];
-      return state.CurrentSkill != null ? state.CurrentSkill.DelegateList : state.Data.DelegateList;
+        events = events.AddRange(creature.OnUpdate(state));
+        return state;
+      }
     }
   }
 }

@@ -87,12 +87,12 @@ namespace Nighthollow.Components
       _attachmentDisplay.Initialize(assetService);
     }
 
-    public IEventData? OnUpdate(CreatureState state)
+    public IEnumerable<IEventData> OnUpdate(CreatureState state)
     {
       if (_animationState == CreatureAnimation.Dying)
       {
         _attachmentDisplay.ClearAttachments();
-        return null;
+        yield break;
       }
 
       // Ensure lower Y creatures are always rendered on top of higher Y creatures
@@ -101,7 +101,7 @@ namespace Nighthollow.Components
 
       if (_animationState == CreatureAnimation.Placing)
       {
-        return null;
+        yield break;
       }
 
       transform.eulerAngles = state.Owner == PlayerName.Enemy ? new Vector3(x: 0, y: 180, z: 0) : Vector3.zero;
@@ -109,12 +109,14 @@ namespace Nighthollow.Components
       if (transform.position.x > Constants.CreatureDespawnRightX ||
           transform.position.x < Constants.CreatureDespawnLeftX)
       {
-        return new IOnCreatureOutOfBounds.Data(CreatureId);
+        yield return new IOnCreatureOutOfBounds.Data(CreatureId);
+        yield break;
       }
       else if (state.Owner == PlayerName.Enemy &&
                transform.position.x < Constants.EnemyCreatureEndzoneX)
       {
-        return new IOnEnemyCreatureAtEndzone.Data(CreatureId);
+        yield return new IOnEnemyCreatureAtEndzone.Data(CreatureId);
+        yield break;
       }
 
       var health = state.GetInt(Stat.Health);
@@ -143,7 +145,6 @@ namespace Nighthollow.Components
       }
 
       _attachmentDisplay.SetStatusEffects(state.Data.Stats.StatusEffects);
-      return null;
     }
 
     public void EditorSetReferences(Transform projectileSource,
