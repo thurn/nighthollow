@@ -33,6 +33,17 @@ namespace Nighthollow.World
     const int LeftZ = 4;
     const int IconZ = 5;
 
+    [SerializeField] Tile _bottomLeftSelection = null!;
+    [SerializeField] Tile _bottomRightSelection = null!;
+    [SerializeField] Tile _rightSelection = null!;
+    [SerializeField] Tile _leftSelection = null!;
+    [SerializeField] Tilemap _overlayTilemap = null!;
+    [SerializeField] Camera _mainCamera = null!;
+    [SerializeField] Grid _grid = null!;
+    [SerializeField] List<KingdomData> _kingdoms = null!;
+    [SerializeField] Tile _selectedTileIcon = null!;
+
+    WorldServiceRegistry _registry = null!;
     readonly Dictionary<int, Tilemap> _children = new Dictionary<int, Tilemap>();
     Vector2Int? _currentlySelected;
     TileBase _previousIconOnSelectedTile = null!;
@@ -44,34 +55,9 @@ namespace Nighthollow.World
       Errors.CheckNotNull(_grid);
     }
 
-    void Update()
+    public void Initialize(WorldServiceRegistry registry)
     {
-      if (Input.GetMouseButtonDown(button: 0) && !_screen.ConsumesMousePosition(Input.mousePosition))
-      {
-        var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-        var worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);
-        var position = _grid.WorldToCell(worldPoint);
-        var hex = new Vector2Int(position.x, position.y);
-
-        ClearPreviousSelection();
-
-        _previousIconOnSelectedTile = GetIcon(hex);
-        ShowIcon(hex, _selectedTileIcon);
-        _currentlySelected = hex;
-
-        var tile = _children[hex.y].GetTile(new Vector3Int(hex.x, hex.y, z: 0));
-        var screenPoint = _mainCamera.WorldToScreenPoint(_grid.CellToWorld(position));
-        _screen.ShowTooltip(WorldHexTooltip.Create(
-            this,
-            tile.name,
-            hex == WorldTutorial.StartingHex ? "Kingdom of Nighthollow" : "None",
-            hex == WorldTutorial.TutorialAttackHex),
-          InterfaceUtils.ScreenPointToInterfacePoint(screenPoint));
-      }
-    }
-
-    public void Initialize()
-    {
+      _registry = registry;
       var map = ComponentUtils.GetComponent<Tilemap>(gameObject);
 
       // Unity is supposed to be able to handle overlapping by y coordinate correctly in a single chunked tilemap, but
@@ -102,6 +88,33 @@ namespace Nighthollow.World
       {
         OutlineHexes(kingdom.BorderColor, new HashSet<Vector2Int> {kingdom.StartingLocation});
         ShowIcon(kingdom.StartingLocation, kingdom.Icon);
+      }
+    }
+
+    void Update()
+    {
+      if (Input.GetMouseButtonDown(button: 0) &&
+          !_registry.ScreenController.ConsumesMousePosition(Input.mousePosition))
+      {
+        var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        var worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);
+        var position = _grid.WorldToCell(worldPoint);
+        var hex = new Vector2Int(position.x, position.y);
+
+        ClearPreviousSelection();
+
+        _previousIconOnSelectedTile = GetIcon(hex);
+        ShowIcon(hex, _selectedTileIcon);
+        _currentlySelected = hex;
+
+        var tile = _children[hex.y].GetTile(new Vector3Int(hex.x, hex.y, z: 0));
+        var screenPoint = _mainCamera.WorldToScreenPoint(_grid.CellToWorld(position));
+        _registry.ScreenController.ShowTooltip(WorldHexTooltip.Create(
+            this,
+            tile.name,
+            hex == WorldTutorial.StartingHex ? "Kingdom of Nighthollow" : "None",
+            hex == WorldTutorial.TutorialAttackHex),
+          InterfaceUtils.ScreenPointToInterfacePoint(screenPoint));
       }
     }
 
@@ -179,7 +192,7 @@ namespace Nighthollow.World
     public void ClearSelection()
     {
       ClearPreviousSelection();
-      _screen.HideTooltip();
+      _registry.ScreenController.HideTooltip();
       _currentlySelected = null;
     }
 
@@ -202,27 +215,15 @@ namespace Nighthollow.World
 
     IEnumerator<YieldInstruction> LoadGame()
     {
-      _screen.HideTooltip();
-      _screen.Get(ScreenController.BlackoutWindow).Show(argument: 1.0f);
-      _screen.ShowDialog("you", "Surrender to the night!", hideCloseButton: true);
+      _registry.ScreenController.HideTooltip();
+      _registry.ScreenController.Get(ScreenController.BlackoutWindow).Show(argument: 1.0f);
+      _registry.ScreenController.ShowDialog("you", "Surrender to the night!", hideCloseButton: true);
       yield return new WaitForSeconds(seconds: 3.5f);
-      _screen.HideDialog();
+      _registry.ScreenController.HideDialog();
       yield return new WaitForSeconds(seconds: 0.5f);
 
       // Database.Instance.UserData.TutorialState = UserDataService.Tutorial.GameOne;
-      SceneManager.LoadScene("Game");
+      SceneManager.LoadScene("Battle");
     }
-#pragma warning disable 0649
-    [SerializeField] ScreenController _screen = null!;
-    [SerializeField] Tile _bottomLeftSelection = null!;
-    [SerializeField] Tile _bottomRightSelection = null!;
-    [SerializeField] Tile _rightSelection = null!;
-    [SerializeField] Tile _leftSelection = null!;
-    [SerializeField] Tilemap _overlayTilemap = null!;
-    [SerializeField] Camera _mainCamera = null!;
-    [SerializeField] Grid _grid = null!;
-    [SerializeField] List<KingdomData> _kingdoms = null!;
-    [SerializeField] Tile _selectedTileIcon = null!;
-#pragma warning restore 0649
   }
 }

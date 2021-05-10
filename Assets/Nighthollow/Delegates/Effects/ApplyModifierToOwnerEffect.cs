@@ -33,7 +33,7 @@ namespace Nighthollow.Delegates.Effects
     public CreatureId Self { get; }
     public IStatModifier Modifier { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       switch (registry.Creatures[Self].Owner)
       {

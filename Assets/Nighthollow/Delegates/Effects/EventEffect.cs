@@ -28,7 +28,7 @@ namespace Nighthollow.Delegates.Effects
 
     public EventData<THandler> EventData { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
     }
 

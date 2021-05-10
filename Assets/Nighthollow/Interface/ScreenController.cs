@@ -60,7 +60,7 @@ namespace Nighthollow.Interface
     }
   }
 
-  public sealed class ScreenController : MonoBehaviour
+  public sealed class ScreenController
   {
     public static ElementKey<HideableVisualElement> Background =
       new ElementKey<HideableVisualElement>("Background");
@@ -86,8 +86,6 @@ namespace Nighthollow.Interface
     public static ElementKey<GameDataEditor> GameDataEditor =
       new ElementKey<GameDataEditor>("GameDataEditor", createAtRuntime: true);
 
-    [SerializeField] UIDocument _document = null!;
-
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
     readonly List<IElementKey> _keys = new List<IElementKey>
@@ -102,27 +100,22 @@ namespace Nighthollow.Interface
       GameDataEditor,
     };
 
-    DragInfo? _currentlyDragging;
-    CardsWindow _cardsWindow = null!;
-    AbstractWindow? _currentWindow;
-    Dialog _dialog = null!;
-    ItemTooltip _itemTooltip = null!;
-
-    VisualElement _screen = null!;
-    int? _currentlyWithinDragTarget;
-    ServiceRegistry? _registry;
-
+    readonly ServiceRegistry _registry;
+    readonly VisualElement _screen;
     public VisualElement Screen => _screen;
+    readonly CardsWindow _cardsWindow;
+    readonly Dialog _dialog;
+    readonly ItemTooltip _itemTooltip;
+
+    DragInfo? _currentlyDragging;
+    AbstractWindow? _currentWindow;
+    int? _currentlyWithinDragTarget;
     public bool IsCurrentlyDragging => _currentlyDragging != null;
 
-    public void Initialize()
+    public ScreenController(UIDocument document, ServiceRegistry registry)
     {
-      Initialize(_document.rootVisualElement);
-    }
-
-    public void Initialize(VisualElement rootVisualElement)
-    {
-      _screen = InterfaceUtils.FindByName<VisualElement>(rootVisualElement, "Screen");
+      _screen = InterfaceUtils.FindByName<VisualElement>(document.rootVisualElement, "Screen");
+      _registry = registry;
 
       foreach (var key in _keys)
       {
@@ -142,14 +135,9 @@ namespace Nighthollow.Interface
       _screen.RegisterCallback<MouseUpEvent>(MouseUp);
     }
 
-    public void OnServicesReady(GameServiceRegistry registry)
+    public void OnUpdate()
     {
-      _registry = registry;
-    }
-
-    void Update()
-    {
-      if (Input.GetKeyDown(KeyCode.G) && CtrlDown() && _registry != null)
+      if (Input.GetKeyDown(KeyCode.G) && CtrlOrCmdDown())
       {
         var editor = Get(GameDataEditor);
         if (editor.Visible)
@@ -162,14 +150,14 @@ namespace Nighthollow.Interface
         }
       }
 
-      if (Input.GetKeyDown(KeyCode.R) && CtrlDown())
+      if (Input.GetKeyDown(KeyCode.R) && CtrlOrCmdDown())
       {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
       }
     }
 
-    static bool CtrlDown() => Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) ||
-                              Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
+    static bool CtrlOrCmdDown() => Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) ||
+                                   Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
 
     public T Get<T>(ElementKey<T> key) where T : AbstractHideableElement, new() => (T) GetElement(key);
 

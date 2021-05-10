@@ -37,16 +37,16 @@ namespace Nighthollow.Components
 
   public sealed class RewardsScreenInitializer : MonoBehaviour
   {
-    [SerializeField] ScreenController _screenController = null!;
-    [SerializeField] DataService _dataService = null!;
+    // [SerializeField] OldScreenController _screenController = null!;
+    // [SerializeField] DataService _dataService = null!;
 
     void Start()
     {
-      _screenController.Initialize();
-      _dataService.OnReady(result =>
-      {
-        _screenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(result.Database));
-      });
+      // _screenController.Initialize();
+      // _dataService.OnReady(result =>
+      // {
+      //   _screenController.Get(OldScreenController.GameDataEditor).Show(new GameDataEditor.Args(result.Database));
+      // });
 
       // Database.OnReady(data =>
       // {
@@ -59,7 +59,7 @@ namespace Nighthollow.Components
       // });
     }
 
-    public void OnServicesReady(GameServiceRegistry registry)
+    public void OnServicesReady(BattleServiceRegistry registry)
     {
       // database.Insert(TableId.CreatureTypes, 0, TestCreatures()[0]);
       // database.Insert(TableId.CreatureTypes, 1, TestCreatures()[1]);

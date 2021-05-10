@@ -22,7 +22,7 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class GameOverEffect : Effect
   {
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       registry.ScreenController.Get(ScreenController.GameOverMessage)
         .Show(new GameOverMessage.Args("Game Over", "World"));

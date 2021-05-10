@@ -30,7 +30,7 @@ namespace Nighthollow.Delegates.Effects
     public CreatureId Target { get; }
     public int DamageAmount { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       registry.DamageTextService.ShowDamageText(registry, Target, DamageAmount);
     }

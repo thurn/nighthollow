@@ -30,7 +30,7 @@ namespace Nighthollow.Delegates.Effects
     public CreatureId CreatureId { get; }
     public int SkillId { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       registry.CreatureController.Mutate(
         CreatureId,

@@ -31,7 +31,7 @@ namespace Nighthollow.Services
     [SerializeField] int _count;
     [SerializeField] float _averageDamage;
 
-    public void ShowDamageText(GameServiceRegistry registry, CreatureId target, int amount)
+    public void ShowDamageText(BattleServiceRegistry registry, CreatureId target, int amount)
     {
       var state = registry.Creatures[target];
       if (state.Owner != PlayerName.Enemy)

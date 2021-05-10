@@ -58,10 +58,10 @@ namespace Nighthollow.Services
 
     public sealed class Controller
     {
-      readonly GameServiceRegistry _registry;
-      readonly GameServiceRegistry.IEnemyServiceMutator _mutator;
+      readonly BattleServiceRegistry _registry;
+      readonly BattleServiceRegistry.IEnemyServiceMutator _mutator;
 
-      public Controller(GameServiceRegistry registry, GameServiceRegistry.IEnemyServiceMutator mutator)
+      public Controller(BattleServiceRegistry registry, BattleServiceRegistry.IEnemyServiceMutator mutator)
       {
         _registry = registry;
         _mutator = mutator;

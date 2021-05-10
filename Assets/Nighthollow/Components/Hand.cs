@@ -61,12 +61,12 @@ namespace Nighthollow.Components
     /// Synchronizes the displayed hand with the logical 'cardId -> data' model provided, drawing cards if they are
     /// missing from the displayed content and destroying them if they are missing from the input.
     /// </summary>
-    public void SynchronizeHand(GameServiceRegistry registry, Action? onComplete = null)
+    public void SynchronizeHand(BattleServiceRegistry registry, Action? onComplete = null)
     {
       StartCoroutine(SynchronizeHandAsync(registry, onComplete));
     }
 
-    IEnumerator<YieldInstruction> SynchronizeHandAsync(GameServiceRegistry registry, Action? onComplete = null)
+    IEnumerator<YieldInstruction> SynchronizeHandAsync(BattleServiceRegistry registry, Action? onComplete = null)
     {
       var hand = registry.UserService.Hand;
       var newIds = hand.Keys.ToImmutableHashSet();

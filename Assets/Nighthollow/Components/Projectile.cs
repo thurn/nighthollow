@@ -33,14 +33,14 @@ namespace Nighthollow.Components
     CreatureId _firedById;
     SkillData _skillData = null!;
     CreatureId? _trackCreature;
-    GameServiceRegistry _registry = null!;
+    BattleServiceRegistry _registry = null!;
 
     public SkillData Data => _skillData;
     public Collider2D Collider => _collider;
     public KeyValueStore KeyValueStore { get; set; } = new KeyValueStore();
 
     public void Initialize(
-      GameServiceRegistry registry,
+      BattleServiceRegistry registry,
       CreatureState firedBy,
       SkillData skillData,
       FireProjectileEffect effect)

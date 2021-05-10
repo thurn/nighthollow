@@ -12,8 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Data;
 using Nighthollow.Interface;
+using Nighthollow.Services;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 #nullable enable
 
@@ -21,16 +24,38 @@ namespace Nighthollow.World
 {
   public sealed class WorldInitializer : MonoBehaviour
   {
+    [SerializeField] Camera _mainCamera = null!;
+    [SerializeField] DataService _dataService = null!;
+    [SerializeField] ObjectPoolService _objectPoolService = null!;
+    [SerializeField] UIDocument _document = null!;
     [SerializeField] WorldMap _worldMap = null!;
-    [SerializeField] ScreenController _screenController = null!;
-    [SerializeField] WorldTutorial _worldTutorial = null!;
+    [SerializeField] WorldStaticAssets _staticAssets = null!;
+    WorldServiceRegistry? _registry;
 
     void Start()
     {
-      _worldMap.Initialize();
-      _screenController.Initialize();
-      _screenController.Show(ScreenController.AdvisorBar);
-      _worldTutorial.Initialize();
+      _dataService.OnReady(OnDataFetched);
+    }
+
+    void Update()
+    {
+      _registry?.OnUpdate();
+    }
+
+    void OnDataFetched(FetchResult result)
+    {
+      _registry = new WorldServiceRegistry(
+        result.Database,
+        result.AssetService,
+        _document,
+        _mainCamera,
+        _objectPoolService,
+        _worldMap,
+        _staticAssets);
+
+      _worldMap.Initialize(_registry);
+      _registry.ScreenController.Show(ScreenController.AdvisorBar);
+      _registry.WorldTutorial.OnWorldSceneLoaded();
     }
   }
 }

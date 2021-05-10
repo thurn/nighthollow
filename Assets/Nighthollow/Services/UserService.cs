@@ -83,10 +83,10 @@ namespace Nighthollow.Services
 
     public sealed class Controller : ICardCallbacks
     {
-      readonly GameServiceRegistry _registry;
-      readonly GameServiceRegistry.IUserServiceMutator _mutator;
+      readonly BattleServiceRegistry _registry;
+      readonly BattleServiceRegistry.IUserServiceMutator _mutator;
 
-      public Controller(GameServiceRegistry registry, GameServiceRegistry.IUserServiceMutator mutator)
+      public Controller(BattleServiceRegistry registry, BattleServiceRegistry.IUserServiceMutator mutator)
       {
         _registry = registry;
         _mutator = mutator;

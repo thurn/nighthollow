@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Nighthollow.Data;
 using Nighthollow.Editing;
 using Nighthollow.Interface;
@@ -66,31 +67,23 @@ namespace Nighthollow.Editor.Data
 
     void Initialize(Database database)
     {
-      if (_editorDocument)
-      {
-        DestroyImmediate(_editorDocument);
-      }
+      throw new NotImplementedException("fix screen controller");
 
-      _database = database;
-      rootVisualElement.Clear();
-      rootVisualElement.styleSheets.Clear();
-
-      var tree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Nighthollow/Interface/UXML/Screen.uxml");
-      tree.CloneTree(rootVisualElement);
-      _editorDocument = new GameObject("EditorDocument");
-      var controller = _editorDocument.AddComponent<ScreenController>();
-      controller.Initialize(rootVisualElement);
-      controller.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(database));
-
-      // rootVisualElement.styleSheets.Clear();
-      // rootVisualElement.styleSheets.Add(
-      //   AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Nighthollow/Interface/Styles/styles.uss"));
-      // rootVisualElement.AddToClassList("full-screen");
-      // rootVisualElement.name = "Screen";
+      // if (_editorDocument)
+      // {
+      //   DestroyImmediate(_editorDocument);
+      // }
       //
-      // var editor = new GameDataEditor();
-      // editor.Show(new GameDataEditor.Args(database));
-      // rootVisualElement.Add(editor);
+      // _database = database;
+      // rootVisualElement.Clear();
+      // rootVisualElement.styleSheets.Clear();
+      //
+      // var tree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Nighthollow/Interface/UXML/Screen.uxml");
+      // tree.CloneTree(rootVisualElement);
+      // _editorDocument = new GameObject("EditorDocument");
+      // var controller = _editorDocument.AddComponent<OldScreenController>();
+      // controller.Initialize(rootVisualElement);
+      // controller.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(database));
     }
   }
 }

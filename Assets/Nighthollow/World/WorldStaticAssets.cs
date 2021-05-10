@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using Nighthollow.Services;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 #nullable enable
 
-namespace Nighthollow.Delegates.Effects
+namespace Nighthollow.World
 {
-  public sealed class EnemyRemovedEffect : Effect
+  public sealed class WorldStaticAssets : MonoBehaviour
   {
-    public override void Execute(BattleServiceRegistry registry)
-    {
-      registry.EnemyController.OnEnemyCreatureKilled();
-    }
+    [SerializeField] Tile _fightIcon = null!;
+    public Tile FightIcon => _fightIcon;
   }
 }

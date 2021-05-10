@@ -42,7 +42,7 @@ namespace Nighthollow.Delegates.Effects
     public FileValue FilePosition { get; }
     public bool IsMoving { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       var data = Data.BuildCreature(registry.Database.Snapshot(), registry.StateForPlayer(Owner));
       if (IsMoving)

@@ -39,7 +39,7 @@ namespace Nighthollow.Delegates.Effects
     public Event EventName { get; }
     public CreatureId CreatureId { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       var collider = registry.Creatures.GetCollider(CreatureId);
       switch (EventName)

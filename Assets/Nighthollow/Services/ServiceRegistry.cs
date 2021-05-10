@@ -19,7 +19,9 @@ using Nighthollow.Data;
 using Nighthollow.Delegates;
 using Nighthollow.Interface;
 using Nighthollow.Utils;
+using Nighthollow.World;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 #nullable enable
 
@@ -27,37 +29,64 @@ namespace Nighthollow.Services
 {
   public class ServiceRegistry
   {
+    readonly UIDocument _document;
+
     public ServiceRegistry(
       Database database,
       AssetService assetService,
-      ScreenController screenController,
+      UIDocument document,
       Camera mainCamera,
-      ObjectPoolService objectPoolService,
-      Prefabs prefabs)
+      ObjectPoolService objectPoolService)
     {
       Database = database;
       AssetService = assetService;
-      ScreenController = screenController;
+      _document = document;
       MainCamera = mainCamera;
       ObjectPoolService = objectPoolService;
-      Prefabs = prefabs;
+    }
+
+    public virtual void OnUpdate()
+    {
+      ScreenController.OnUpdate();
     }
 
     public Database Database { get; }
     public AssetService AssetService { get; }
-    public ScreenController ScreenController { get; }
+    ScreenController? _screenController;
+    public ScreenController ScreenController => _screenController ??= new ScreenController(_document, this);
     public Camera MainCamera { get; }
     public ObjectPoolService ObjectPoolService { get; }
-    public Prefabs Prefabs { get; }
   }
 
-  public sealed class GameServiceRegistry : ServiceRegistry, IGameContext
+  public sealed class WorldServiceRegistry : ServiceRegistry
   {
-    public GameServiceRegistry(
+    public WorldServiceRegistry(
+      Database database,
+      AssetService assetService,
+      UIDocument document,
+      Camera mainCamera,
+      ObjectPoolService objectPoolService,
+      WorldMap worldMap,
+      WorldStaticAssets staticAssets) : base(database, assetService, document, mainCamera, objectPoolService)
+    {
+      WorldMap = worldMap;
+      StaticAssets = staticAssets;
+    }
+
+    public WorldMap WorldMap { get; }
+    public WorldStaticAssets StaticAssets { get; }
+
+    WorldTutorial? _worldTutorial;
+    public WorldTutorial WorldTutorial => _worldTutorial ??= new WorldTutorial(this);
+  }
+
+  public sealed class BattleServiceRegistry : ServiceRegistry, IGameContext
+  {
+    public BattleServiceRegistry(
       IStartCoroutine coroutineRunner,
       Database database,
       AssetService assetService,
-      ScreenController screenController,
+      UIDocument document,
       Camera mainCamera,
       ObjectPoolService objectPoolService,
       Prefabs prefabs,
@@ -68,22 +97,22 @@ namespace Nighthollow.Services
       base(
         database,
         assetService,
-        screenController,
+        document,
         mainCamera,
-        objectPoolService,
-        prefabs)
+        objectPoolService)
     {
+      Prefabs = prefabs;
       CoroutineRunner = coroutineRunner;
       Creatures = new CreatureService();
       var gameData = database.Snapshot();
       UserService = new UserService(hand, gameData);
       EnemyService = new EnemyService(gameData);
-
       MainCanvas = mainCanvas;
       DamageTextService = damageTextService;
       HelperTextService = helperTextService;
     }
 
+    public Prefabs Prefabs { get; }
     public IStartCoroutine CoroutineRunner { get; }
     public RectTransform MainCanvas { get; }
     public DamageTextService DamageTextService { get; }
@@ -91,22 +120,26 @@ namespace Nighthollow.Services
 
     public UserService UserService { get; private set; }
     UserService.Controller? _userController;
+
     public UserService.Controller UserController =>
       _userController ??= new UserService.Controller(this, new UserServiceMutator(this));
 
     public EnemyService EnemyService { get; private set; }
     EnemyService.Controller? _enemyController;
+
     public EnemyService.Controller EnemyController =>
       _enemyController ??= new EnemyService.Controller(this, new EnemyServiceMutator(this));
 
     public CreatureState this[CreatureId creatureId] => Creatures[creatureId];
     public CreatureService Creatures { get; private set; }
     CreatureService.Controller? _creatureController;
+
     public CreatureService.Controller CreatureController =>
       _creatureController ??= new CreatureService.Controller(this, new CreatureServiceMutator(this));
 
-    public void OnUpdate()
+    public override void OnUpdate()
     {
+      base.OnUpdate();
       UserController.OnUpdate();
       CreatureController.OnUpdate();
     }
@@ -155,9 +188,9 @@ namespace Nighthollow.Services
 
     sealed class CreatureServiceMutator : ICreatureServiceMutator
     {
-      readonly GameServiceRegistry _registry;
+      readonly BattleServiceRegistry _registry;
 
-      public CreatureServiceMutator(GameServiceRegistry registry)
+      public CreatureServiceMutator(BattleServiceRegistry registry)
       {
         _registry = registry;
       }
@@ -180,9 +213,9 @@ namespace Nighthollow.Services
 
     sealed class UserServiceMutator : IUserServiceMutator
     {
-      readonly GameServiceRegistry _registry;
+      readonly BattleServiceRegistry _registry;
 
-      public UserServiceMutator(GameServiceRegistry registry)
+      public UserServiceMutator(BattleServiceRegistry registry)
       {
         _registry = registry;
       }
@@ -200,9 +233,9 @@ namespace Nighthollow.Services
 
     sealed class EnemyServiceMutator : IEnemyServiceMutator
     {
-      readonly GameServiceRegistry _registry;
+      readonly BattleServiceRegistry _registry;
 
-      public EnemyServiceMutator(GameServiceRegistry registry)
+      public EnemyServiceMutator(BattleServiceRegistry registry)
       {
         _registry = registry;
       }
@@ -212,6 +245,5 @@ namespace Nighthollow.Services
         _registry.EnemyService = enemyService;
       }
     }
-
   }
 }

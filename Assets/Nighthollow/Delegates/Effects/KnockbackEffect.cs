@@ -34,7 +34,7 @@ namespace Nighthollow.Delegates.Effects
     public float Distance { get; }
     public float DurationSeconds { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       registry.CreatureController.ApplyKnockback(Target, Distance, DurationSeconds);
     }

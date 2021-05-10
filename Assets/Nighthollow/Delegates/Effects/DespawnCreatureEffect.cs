@@ -27,7 +27,7 @@ namespace Nighthollow.Delegates.Effects
 
     public CreatureId Target { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       registry.CreatureController.DespawnCreature(Target);
     }

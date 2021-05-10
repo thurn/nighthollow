@@ -20,7 +20,7 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class DrawOpeningHandEffect : Effect
   {
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       registry.UserController.DrawOpeningHand();
     }

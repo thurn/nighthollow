@@ -57,7 +57,7 @@ namespace Nighthollow.Delegates.Effects
     public int FiringDelayMs { get; }
     public KeyValueStore? Values { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       DOTween.Sequence().InsertCallback(FiringDelayMs / 1000f, () => FireAsync(registry));
     }
@@ -67,7 +67,7 @@ namespace Nighthollow.Delegates.Effects
       yield return new IOnFiredProjectile.Data(FiredBy, Skill, this);
     }
 
-    void FireAsync(GameServiceRegistry registry)
+    void FireAsync(BattleServiceRegistry registry)
     {
       var projectile = registry.AssetService.InstantiatePrefab<Projectile>(
         Errors.CheckNotNull(Skill.BaseType.Address));

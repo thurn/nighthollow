@@ -29,7 +29,7 @@ namespace Nighthollow.Delegates.Effects
     public CreatureId Target { get; }
     public float DurationSeconds { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       registry.CreatureController.ApplyStun(Target, DurationSeconds);
     }

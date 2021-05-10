@@ -74,10 +74,10 @@ namespace Nighthollow.Services
 
     public sealed class Controller : ICreatureCallbacks
     {
-      readonly GameServiceRegistry _registry;
-      readonly GameServiceRegistry.ICreatureServiceMutator _mutator;
+      readonly BattleServiceRegistry _registry;
+      readonly BattleServiceRegistry.ICreatureServiceMutator _mutator;
 
-      public Controller(GameServiceRegistry registry, GameServiceRegistry.ICreatureServiceMutator mutator)
+      public Controller(BattleServiceRegistry registry, BattleServiceRegistry.ICreatureServiceMutator mutator)
       {
         _registry = registry;
         _mutator = mutator;

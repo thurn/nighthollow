@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Effects
     public CreatureId Target { get; }
     public int Amount { get; }
 
-    public override void Execute(GameServiceRegistry registry)
+    public override void Execute(BattleServiceRegistry registry)
     {
       registry.CreatureController.AddDamage(AppliedBy, Target, Amount);
     }

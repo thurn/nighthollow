@@ -16,9 +16,9 @@ using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Handlers;
-using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 #nullable enable
 
@@ -29,18 +29,18 @@ namespace Nighthollow.Services
     Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine);
   }
 
-  public sealed class Root : MonoBehaviour, IStartCoroutine
+  public sealed class BattleInitializer : MonoBehaviour, IStartCoroutine
   {
     [SerializeField] Camera _mainCamera = null!;
     [SerializeField] RectTransform _mainCanvas = null!;
     [SerializeField] Prefabs _prefabs = null!;
     [SerializeField] DataService _dataService = null!;
     [SerializeField] ObjectPoolService _objectPoolService = null!;
-    [SerializeField] ScreenController _screenController = null!;
+    [SerializeField] UIDocument _document = null!;
     [SerializeField] Hand _hand = null!;
     [SerializeField] DamageTextService _damageTextService = null!;
     [SerializeField] HelperTextService _helperTextService = null!;
-    GameServiceRegistry? _registry;
+    BattleServiceRegistry? _registry;
 
     public Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine) => base.StartCoroutine(routine);
 
@@ -51,12 +51,11 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_prefabs);
       Errors.CheckNotNull(_dataService);
       Errors.CheckNotNull(_objectPoolService);
-      Errors.CheckNotNull(_screenController);
+      Errors.CheckNotNull(_document);
       Errors.CheckNotNull(_hand);
       Errors.CheckNotNull(_damageTextService);
       Errors.CheckNotNull(_helperTextService);
 
-      _screenController.Initialize();
       _dataService.OnReady(OnDataFetched);
     }
 
@@ -67,11 +66,11 @@ namespace Nighthollow.Services
 
     void OnDataFetched(FetchResult fetchResult)
     {
-      _registry = new GameServiceRegistry(
+      _registry = new BattleServiceRegistry(
         this,
         fetchResult.Database,
         fetchResult.AssetService,
-        _screenController,
+        _document,
         _mainCamera,
         _objectPoolService,
         _prefabs,
@@ -80,8 +79,7 @@ namespace Nighthollow.Services
         _damageTextService,
         _helperTextService);
 
-      _screenController.OnServicesReady(_registry);
-      _helperTextService.Initialize(_screenController);
+      _helperTextService.Initialize(_registry.ScreenController);
       _registry.Invoke(new IOnBattleSceneLoaded.Data());
     }
   }

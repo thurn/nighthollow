@@ -32,10 +32,10 @@ namespace Nighthollow.Components
     [SerializeField] GameObject _cursor = null!;
     [SerializeField] List<SpriteRenderer> _spriteRenderers = null!;
 
-    GameServiceRegistry _registry = null!;
+    BattleServiceRegistry _registry = null!;
     CreatureId _creatureId;
 
-    public void Initialize(GameServiceRegistry registry, CreatureId creatureId, Card? card = null)
+    public void Initialize(BattleServiceRegistry registry, CreatureId creatureId, Card? card = null)
     {
       _registry = registry;
       _card = card;

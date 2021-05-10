@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Items;
 using Nighthollow.Data;
-using Nighthollow.Services;
+using Nighthollow.Items;
 using UnityEngine;
 using UnityEngine.UIElements;
 
