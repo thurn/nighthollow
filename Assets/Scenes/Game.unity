@@ -329,7 +329,6 @@ GameObject:
   - component: {fileID: 169299296}
   - component: {fileID: 169299298}
   - component: {fileID: 169299300}
-  - component: {fileID: 169299301}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -381,7 +380,8 @@ MonoBehaviour:
   _dataService: {fileID: 307991781}
   _objectPoolService: {fileID: 169299296}
   _screenController: {fileID: 2115052129}
-  _user: {fileID: 169299301}
+  _hand: {fileID: 1841190611970440670}
+  _user: {fileID: 0}
   _enemy: {fileID: 1160944780}
   _damageTextService: {fileID: 169299298}
   _helperTextService: {fileID: 169299300}
@@ -460,21 +460,6 @@ MonoBehaviour:
   _debugText: 
   _debugPosition: {x: 0, y: 0}
   _debugArrowDirection: 0
---- !u!114 &169299301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 169299293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 463f68d7cef4405a97e1cb16805690cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hand: {fileID: 1841190611970440670}
-  _deck: {fileID: 1166200429}
-  _mana: 0
 --- !u!213 &192261797
 Sprite:
   m_ObjectHideFlags: 0
@@ -4155,16 +4140,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 855fa7a26b534015a021e23fff0c5680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugMode: 0
   _deckPosition: {fileID: 1976365984}
   _initialCardScale: 0.4
-  _finalCardScale: 0.6
   _zRotationMultiplier: 1
   _controlPoint1: {fileID: 989472871}
   _controlPoint2: {fileID: 1229564138}
   _controlPoint3: {fileID: 1506395221}
   _controlPoint4: {fileID: 1766285365}
-  _cards: []
   _handOverridePosition: {fileID: 0}
 --- !u!1001 &1342586154
 PrefabInstance:
@@ -6216,16 +6198,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 855fa7a26b534015a021e23fff0c5680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugMode: 0
   _deckPosition: {fileID: 1976365984}
   _initialCardScale: 0.4
-  _finalCardScale: 0.6
   _zRotationMultiplier: 1
   _controlPoint1: {fileID: 1841190612781940161}
   _controlPoint2: {fileID: 1841190610868852013}
   _controlPoint3: {fileID: 1841190611251775494}
   _controlPoint4: {fileID: 1841190612924677769}
-  _cards: []
   _handOverridePosition: {fileID: 1286927310}
 --- !u!224 &1841190612781940161
 RectTransform:

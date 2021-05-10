@@ -126,7 +126,7 @@ namespace Nighthollow.Components
     public void OnBeginDrag(PointerEventData eventData)
     {
       Debug.Log($"Card::OnBeginDrag previewMode: {_previewMode}");
-      if (!_previewMode && !Root.Instance.User.GameOver)
+      if (!_previewMode)
       {
         _isDragging = true;
         _initialDragPosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);

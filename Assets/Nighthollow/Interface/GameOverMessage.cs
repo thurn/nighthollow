@@ -48,7 +48,6 @@ namespace Nighthollow.Interface
 
     protected override void OnShow(Args args)
     {
-      Root.Instance.User.OnGameOver();
       _text.text = args.Text;
       ButtonUtil.DisplayMainButtons(Controller,
         new List<ButtonUtil.Button>

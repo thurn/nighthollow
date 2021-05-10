@@ -47,7 +47,7 @@ namespace Nighthollow.Services
 
     [SerializeField] ScreenController _screenController = null!;
 
-    [SerializeField] User _user = null!;
+    [SerializeField] Hand _hand = null!;
 
     [SerializeField] Enemy _enemy = null!;
 
@@ -60,7 +60,6 @@ namespace Nighthollow.Services
     public Prefabs Prefabs => _prefabs;
     public ObjectPoolService ObjectPoolService => _objectPoolService;
     public ScreenController ScreenController => _screenController;
-    public User User => _user;
     public Enemy Enemy => _enemy;
     public DamageTextService DamageTextService => _damageTextService;
     public HelperTextService HelperTextService => _helperTextService;
@@ -89,7 +88,7 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_dataService);
       Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_screenController);
-      Errors.CheckNotNull(_user);
+      Errors.CheckNotNull(_hand);
       Errors.CheckNotNull(_enemy);
       Errors.CheckNotNull(_damageTextService);
       Errors.CheckNotNull(_helperTextService);
@@ -115,7 +114,7 @@ namespace Nighthollow.Services
         _objectPoolService,
         _prefabs,
         _mainCanvas,
-        _user,
+        _hand,
         _enemy,
         _damageTextService,
         _helperTextService);
@@ -123,7 +122,7 @@ namespace Nighthollow.Services
       _screenController.OnServicesReady(_registry);
       _helperTextService.OnServicesReady(_registry);
       _registry.Invoke(new IOnBattleSceneLoaded.Data());
-      
+
       // _user.Hand.OnServicesReady(_registry);
       // _user.DrawOpeningHand(_registry);
     }
@@ -132,7 +131,7 @@ namespace Nighthollow.Services
     {
       return player switch
       {
-        PlayerName.User => User.State.Stats,
+        PlayerName.User => _registry!.UserService.Stats,
         PlayerName.Enemy => Enemy.Data.Stats,
         _ => throw Errors.UnknownEnumValue(player)
       };

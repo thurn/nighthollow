@@ -45,24 +45,24 @@ namespace Nighthollow.Components
 
     // void Start()
     // {
-      // if (_debugMode)
-      // {
-      //   var children = GetComponentsInChildren<Card>();
-      //   foreach (var child in children)
-      //   {
-      //     _cards.Add(child);
-      //   }
-      //
-      //   AnimateCardsToPosition();
-      // }
+    // if (_debugMode)
+    // {
+    //   var children = GetComponentsInChildren<Card>();
+    //   foreach (var child in children)
+    //   {
+    //     _cards.Add(child);
+    //   }
+    //
+    //   AnimateCardsToPosition();
+    // }
     // }
 
     // void Update()
     // {
-      // if (_debugMode)
-      // {
-      //   AnimateCardsToPosition();
-      // }
+    // if (_debugMode)
+    // {
+    //   AnimateCardsToPosition();
+    // }
     // }
 
     void OnDrawGizmosSelected()
@@ -109,6 +109,8 @@ namespace Nighthollow.Components
         }
       }
 
+      Cards = cards.ToImmutable();
+
       foreach (var cardId in newIds)
       {
         // Card should be drawn
@@ -119,9 +121,11 @@ namespace Nighthollow.Components
         card.transform.SetParent(transform);
         Cards = Cards.Add((cardId, card));
         card.PreviewMode = _previewMode;
-        AnimateCardsToPosition(onComplete);
+        AnimateCardsToPosition();
         yield return new WaitForSeconds(seconds: 0.2f);
       }
+
+      AnimateCardsToPosition(onComplete);
     }
 
     // public void DrawCards(

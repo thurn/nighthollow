@@ -117,11 +117,15 @@ namespace Nighthollow.Services
 
         foreach (var (cardId, card) in self._handComponent.Cards)
         {
-          var manaCost = hand[cardId].GetInt(Stat.ManaCost);
-          var influenceCost = hand[cardId].Get(Stat.InfluenceCost);
-          var canPlay = manaCost <= userState.Mana &&
-                        InfluenceUtil.LessThanOrEqualTo(influenceCost, userState.Get(Stat.Influence));
-          card.OnUpdate(manaCost, influenceCost, canPlay);
+          if (hand.ContainsKey(cardId))
+          {
+            // Cards in the Hand component are not always 1:1 with the logical value we have, due to animation delays
+            var manaCost = hand[cardId].GetInt(Stat.ManaCost);
+            var influenceCost = hand[cardId].Get(Stat.InfluenceCost);
+            var canPlay = manaCost <= userState.Mana &&
+                          InfluenceUtil.LessThanOrEqualTo(influenceCost, userState.Get(Stat.Influence));
+            card.OnUpdate(manaCost, influenceCost, canPlay);
+          }
         }
       }
 
@@ -219,6 +223,18 @@ namespace Nighthollow.Services
         userService._handComponent.SynchronizeHand(_registry, onComplete);
       }
 
+      public void InsertStatModifier(IStatModifier modifier)
+      {
+        var self = _registry.UserService;
+        _mutator.SetUserService(new UserService(
+          self._statusDisplay,
+          self._handComponent,
+          self.UserState.WithStats(self.UserState.Stats.InsertModifier(modifier)),
+          self.Deck,
+          self.Hand,
+          self._nextCardId));
+      }
+
       IEnumerator<YieldInstruction> GainManaCoroutine()
       {
         while (true)
@@ -244,17 +260,29 @@ namespace Nighthollow.Services
 
       public void OnCardOverBoard(int cardId, Card card)
       {
-        throw new NotImplementedException();
+        _registry.CreatureController.CreateUserCreature(_registry.UserService.Hand[cardId], card);
       }
 
       public void OnReturnToHand(int cardId)
       {
-        throw new NotImplementedException();
+        _registry.UserService._handComponent.SynchronizeHand(_registry);
       }
 
       public void OnCardPlayed(int cardId)
       {
-        throw new NotImplementedException();
+        var self = _registry.UserService;
+        var mana = self.UserState.Mana - self.Hand[cardId].GetInt(Stat.ManaCost);
+        Errors.CheckState(mana >= 0, "Cannot spend mana in excess of current total");
+
+        _mutator.SetUserService(new UserService(
+          self._statusDisplay,
+          self._handComponent,
+          self.UserState.WithMana(mana),
+          self.Deck,
+          self.Hand.Remove(cardId),
+          self._nextCardId));
+
+        self._handComponent.SynchronizeHand(_registry);
       }
     }
 

@@ -59,7 +59,7 @@ namespace Nighthollow.Services
       ObjectPoolService objectPoolService,
       Prefabs prefabs,
       RectTransform mainCanvas,
-      User user,
+      Hand hand,
       Enemy enemy,
       DamageTextService damageTextService,
       HelperTextService helperTextService) :
@@ -72,10 +72,9 @@ namespace Nighthollow.Services
     {
       CoroutineRunner = coroutineRunner;
       Creatures = new CreatureService();
-      UserService = new UserService(user.Hand, database.Snapshot());
+      UserService = new UserService(hand, database.Snapshot());
 
       MainCanvas = mainCanvas;
-      User = user;
       Enemy = enemy;
       DamageTextService = damageTextService;
       HelperTextService = helperTextService;
@@ -83,7 +82,6 @@ namespace Nighthollow.Services
 
     public IStartCoroutine CoroutineRunner { get; }
     public RectTransform MainCanvas { get; }
-    public User User { get; }
     public Enemy Enemy { get; }
     public DamageTextService DamageTextService { get; }
     public HelperTextService HelperTextService { get; }
@@ -137,7 +135,7 @@ namespace Nighthollow.Services
     {
       return player switch
       {
-        PlayerName.User => User.State.Stats,
+        PlayerName.User => UserService.Stats,
         PlayerName.Enemy => Enemy.Data.Stats,
         _ => throw Errors.UnknownEnumValue(player)
       };

@@ -29,7 +29,7 @@ using UnityEngine;
 
 namespace Nighthollow.Components
 {
-  public sealed class User : MonoBehaviour, IStatOwner
+  public sealed class User : MonoBehaviour
   {
     [SerializeField] Hand _hand = null!;
     [SerializeField] Deck _deck = null!;
@@ -37,127 +37,127 @@ namespace Nighthollow.Components
     UserStatus? _statusDisplay;
     GameServiceRegistry? _registry;
 
-    public Hand Hand => _hand;
-    public Deck Deck => _deck;
+    // public Hand Hand => _hand;
+    // public Deck Deck => _deck;
 
-    public UserState State { get; private set; } = null!;
+    // public UserState State { get; private set; } = null!;
 
-    public bool GameOver { get; private set; }
+    // public bool GameOver { get; private set; }
 
-    public int Mana
-    {
-      get => _mana;
-      private set => _mana = NumericUtils.Clamp(value, low: 0, high: 999);
-    }
+    // public int Mana
+    // {
+    //   get => _mana;
+    //   private set => _mana = NumericUtils.Clamp(value, low: 0, high: 999);
+    // }
 
-    public void DrawOpeningHand(GameServiceRegistry registry)
-    {
-      Debug.Log($"User::DrawOpeningHand");
-      _registry = registry;
-      var gameData = registry.Database.Snapshot();
-      State = UserState.BuildUserData(gameData);
+    // public void DrawOpeningHand(GameServiceRegistry registry)
+    // {
+    //   Debug.Log($"User::DrawOpeningHand");
+    //   _registry = registry;
+    //   var gameData = registry.Database.Snapshot();
+    //   State = UserState.BuildUserData(gameData);
+    //
+    //   var cards =
+    //     gameData.BattleData.UserDeckOverride.HasValue
+    //       ? gameData.ItemLists[gameData.BattleData.UserDeckOverride.Value].Creatures
+    //       : gameData.Deck.Values.ToImmutableList();
+    //   Errors.CheckState(cards.Count > 0, "No cards in deck");
+    //
+    //   var builtDeck = cards.Select(item => item.BuildCreatureTemp(registry));
+    //   _deck.OnStartGame(builtDeck, orderedDraws: gameData.BattleData.UserDeckOverride.HasValue);
+    //
+    //   var openingHand = new List<CreatureData>();
+    //   for (var i = 0; i < Errors.CheckPositive(State.GetInt(Stat.StartingHandSize)); ++i)
+    //   {
+    //     openingHand.Add(_deck.Draw());
+    //   }
+    //
+    //   _hand.OverrideHandPosition(value: true);
+    //   // _hand.DrawCards(_registry, openingHand, () => OnDrewHand(registry));
+    // }
 
-      var cards =
-        gameData.BattleData.UserDeckOverride.HasValue
-          ? gameData.ItemLists[gameData.BattleData.UserDeckOverride.Value].Creatures
-          : gameData.Deck.Values.ToImmutableList();
-      Errors.CheckState(cards.Count > 0, "No cards in deck");
+    // void OnDrewHand(GameServiceRegistry registry)
+    // {
+    //   Debug.Log($"User::OnDrewHand ");
+    //   _hand.SetCardsToPreviewMode(value: true);
+    //   ButtonUtil.DisplayMainButtons(Root.Instance.ScreenController,
+    //     new List<ButtonUtil.Button>
+    //     {
+    //       new ButtonUtil.Button("Start Game!", () =>
+    //       {
+    //         _hand.SetCardsToPreviewMode(value: false);
+    //         _hand.OverrideHandPosition(value: false, () => OnStartGame(registry));
+    //       }, large: true)
+    //     });
+    //   Root.Instance.HelperTextService.OnDrewOpeningHand();
+    // }
 
-      var builtDeck = cards.Select(item => item.BuildCreatureTemp(registry));
-      _deck.OnStartGame(builtDeck, orderedDraws: gameData.BattleData.UserDeckOverride.HasValue);
+    // public void OnStartGame(GameServiceRegistry registry)
+    // {
+    //   Debug.Log($"User::OnStartGame");
+    //   gameObject.SetActive(value: true);
+    //   Root.Instance.Enemy.OnGameStarted(registry);
+    //   Root.Instance.HelperTextService.OnGameStarted();
+    //   StartCoroutine(GainMana());
+    //   StartCoroutine(DrawCards());
+    //
+    //   _statusDisplay = Root.Instance.ScreenController.Get(ScreenController.UserStatus);
+    //   _statusDisplay.Show(animate: true);
+    //
+    //   Mana = State.GetInt(Stat.StartingMana);
+    // }
 
-      var openingHand = new List<CreatureData>();
-      for (var i = 0; i < Errors.CheckPositive(State.GetInt(Stat.StartingHandSize)); ++i)
-      {
-        openingHand.Add(_deck.Draw());
-      }
+    // void InsertModifier(IStatModifier modifier)
+    // {
+    //   State = State.WithStats(State.Stats.InsertModifier(modifier));
+    // }
+    //
+    // void InsertStatusEffect(StatusEffectData statusEffectData)
+    // {
+    //   State = State.WithStats(State.Stats.InsertStatusEffect(statusEffectData));
+    // }
 
-      _hand.OverrideHandPosition(value: true);
-      // _hand.DrawCards(_registry, openingHand, () => OnDrewHand(registry));
-    }
+    // void Update()
+    // {
+    //   if (_statusDisplay != null)
+    //   {
+    //     _statusDisplay.Mana = Mana;
+    //     _statusDisplay.Influence = State.Stats.Get(Stat.Influence);
+    //   }
+    //
+    //   if (_registry != null)
+    //   {
+    //     State = State.OnTick(_registry);
+    //   }
+    // }
 
-    void OnDrewHand(GameServiceRegistry registry)
-    {
-      Debug.Log($"User::OnDrewHand ");
-      _hand.SetCardsToPreviewMode(value: true);
-      ButtonUtil.DisplayMainButtons(Root.Instance.ScreenController,
-        new List<ButtonUtil.Button>
-        {
-          new ButtonUtil.Button("Start Game!", () =>
-          {
-            _hand.SetCardsToPreviewMode(value: false);
-            _hand.OverrideHandPosition(value: false, () => OnStartGame(registry));
-          }, large: true)
-        });
-      Root.Instance.HelperTextService.OnDrewOpeningHand();
-    }
+    // public void SpendMana(int amount)
+    // {
+    //   Mana -= amount;
+    // }
 
-    public void OnStartGame(GameServiceRegistry registry)
-    {
-      Debug.Log($"User::OnStartGame");
-      gameObject.SetActive(value: true);
-      Root.Instance.Enemy.OnGameStarted(registry);
-      Root.Instance.HelperTextService.OnGameStarted();
-      StartCoroutine(GainMana());
-      StartCoroutine(DrawCards());
+    // public void OnGameOver()
+    // {
+    //   GameOver = true;
+    // }
 
-      _statusDisplay = Root.Instance.ScreenController.Get(ScreenController.UserStatus);
-      _statusDisplay.Show(animate: true);
+    // IEnumerator<YieldInstruction> GainMana()
+    // {
+    //   while (!GameOver)
+    //   {
+    //     yield return new WaitForSeconds(State.GetDurationSeconds(Stat.ManaGainInterval));
+    //     Mana += State.GetInt(Stat.ManaGain);
+    //   }
+    // }
 
-      Mana = State.GetInt(Stat.StartingMana);
-    }
-
-    public void InsertModifier(IStatModifier modifier)
-    {
-      State = State.WithStats(State.Stats.InsertModifier(modifier));
-    }
-
-    public void InsertStatusEffect(StatusEffectData statusEffectData)
-    {
-      State = State.WithStats(State.Stats.InsertStatusEffect(statusEffectData));
-    }
-
-    void Update()
-    {
-      if (_statusDisplay != null)
-      {
-        _statusDisplay.Mana = Mana;
-        _statusDisplay.Influence = State.Stats.Get(Stat.Influence);
-      }
-
-      if (_registry != null)
-      {
-        State = State.OnTick(_registry);
-      }
-    }
-
-    public void SpendMana(int amount)
-    {
-      Mana -= amount;
-    }
-
-    public void OnGameOver()
-    {
-      GameOver = true;
-    }
-
-    IEnumerator<YieldInstruction> GainMana()
-    {
-      while (!GameOver)
-      {
-        yield return new WaitForSeconds(State.GetDurationSeconds(Stat.ManaGainInterval));
-        Mana += State.GetInt(Stat.ManaGain);
-      }
-    }
-
-    IEnumerator<YieldInstruction> DrawCards()
-    {
-      while (!GameOver)
-      {
-        Errors.CheckArgument(State.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
-        yield return new WaitForSeconds(State.GetDurationSeconds(Stat.CardDrawInterval));
-        // _hand.DrawCards(_registry!, new List<CreatureData> {_deck.Draw()});
-      }
-    }
+    // IEnumerator<YieldInstruction> DrawCards()
+    // {
+    //   while (!GameOver)
+    //   {
+    //     Errors.CheckArgument(State.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
+    //     yield return new WaitForSeconds(State.GetDurationSeconds(Stat.CardDrawInterval));
+    //     // _hand.DrawCards(_registry!, new List<CreatureData> {_deck.Draw()});
+    //   }
+    // }
   }
 }

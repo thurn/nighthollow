@@ -38,7 +38,7 @@ namespace Nighthollow.Delegates.Effects
       switch (registry.Creatures[Self].Owner)
       {
         case PlayerName.User:
-          Root.Instance.User.InsertModifier(Modifier);
+          registry.UserController.InsertStatModifier(Modifier);
           break;
         case PlayerName.Enemy:
           Root.Instance.Enemy.InsertModifier(Modifier);
