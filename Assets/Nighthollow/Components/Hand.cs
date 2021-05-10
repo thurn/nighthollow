@@ -28,7 +28,6 @@ namespace Nighthollow.Components
   {
     public const float FinalCardScale = 0.6f;
 
-    // [SerializeField] bool _debugMode;
     [SerializeField] Transform _deckPosition = null!;
     [SerializeField] float _initialCardScale;
     [SerializeField] int _zRotationMultiplier;
@@ -42,28 +41,6 @@ namespace Nighthollow.Components
 
     bool _previewMode;
     bool _shouldOverrideHandPosition;
-
-    // void Start()
-    // {
-    // if (_debugMode)
-    // {
-    //   var children = GetComponentsInChildren<Card>();
-    //   foreach (var child in children)
-    //   {
-    //     _cards.Add(child);
-    //   }
-    //
-    //   AnimateCardsToPosition();
-    // }
-    // }
-
-    // void Update()
-    // {
-    // if (_debugMode)
-    // {
-    //   AnimateCardsToPosition();
-    // }
-    // }
 
     void OnDrawGizmosSelected()
     {
@@ -128,50 +105,6 @@ namespace Nighthollow.Components
       AnimateCardsToPosition(onComplete);
     }
 
-    // public void DrawCards(
-    //   GameServiceRegistry registry,
-    //   IEnumerable<CreatureData> cards,
-    //   Action? onComplete = null)
-    // {
-    //   StartCoroutine(DrawsCardAsync(registry, cards, onComplete));
-    // }
-    //
-    // IEnumerator<YieldInstruction> DrawsCardAsync(
-    //   GameServiceRegistry registry,
-    //   IEnumerable<CreatureData> cards,
-    //   Action? onComplete)
-    // {
-    //   foreach (var cardData in cards)
-    //   {
-    //     var card = Root.Instance.Prefabs.CreateCard();
-    //     card.Initialize(cardData, registry);
-    //     card.transform.position = _deckPosition.position;
-    //     card.transform.localScale = Vector2.one * _initialCardScale;
-    //     AddToHand(card);
-    //     yield return new WaitForSeconds(seconds: 0.2f);
-    //   }
-    //
-    //   onComplete?.Invoke();
-    // }
-
-    // void AddToHand(Card card, bool animate = true)
-    // {
-    //   card.transform.SetParent(transform);
-    //   _cards.Add(card);
-    //   card.PreviewMode = _previewMode;
-    //
-    //   if (animate)
-    //   {
-    //     AnimateCardsToPosition();
-    //   }
-    // }
-
-    // void RemoveFromHand(Card card)
-    // {
-    //   _cards.Remove(card);
-    //   AnimateCardsToPosition();
-    // }
-
     public void OverrideHandPosition(bool value, Action? onComplete = null)
     {
       _shouldOverrideHandPosition = value;
@@ -187,16 +120,6 @@ namespace Nighthollow.Components
         card.PreviewMode = value;
       }
     }
-
-    // public void DestroyAllCards()
-    // {
-    //   foreach (var (_, card) in _cards)
-    //   {
-    //     Destroy(card.gameObject);
-    //   }
-    //
-    //   _cards.Clear();
-    // }
 
     void AnimateCardsToPosition(Action? onComplete = null)
     {

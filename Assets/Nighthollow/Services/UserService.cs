@@ -131,14 +131,12 @@ namespace Nighthollow.Services
 
       public void DrawOpeningHand()
       {
-        Debug.Log($"Controller::DrawOpeningHand ");
         _registry.UserService._handComponent.OverrideHandPosition(true);
         DrawCards(_registry.UserService.GetInt(Stat.StartingHandSize), OnDrewHand);
       }
 
       void OnDrewHand()
       {
-        Debug.Log($"Controller::OnDrewHand ");
         var hand = _registry.UserService._handComponent;
         hand.SetCardsToPreviewMode(value: true);
         ButtonUtil.DisplayMainButtons(Root.Instance.ScreenController,
@@ -155,7 +153,6 @@ namespace Nighthollow.Services
 
       public void StartBattle()
       {
-        Debug.Log($"Controller::StartBattle");
         var statusDisplay = _registry.ScreenController.Get(ScreenController.UserStatus);
         statusDisplay.Show(animate: true);
         _registry.HelperTextService.OnGameStarted();

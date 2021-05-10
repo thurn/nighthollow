@@ -125,7 +125,6 @@ namespace Nighthollow.Components
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-      Debug.Log($"Card::OnBeginDrag previewMode: {_previewMode}");
       if (!_previewMode)
       {
         _isDragging = true;
@@ -176,7 +175,6 @@ namespace Nighthollow.Components
       {
         _isDragging = false;
         transform.SetSiblingIndex(_initialDragSiblingIndex);
-        // _user.Hand.AnimateCardsToPosition();
         _callbacks.OnReturnToHand(_cardId);
       }
     }
@@ -203,10 +201,7 @@ namespace Nighthollow.Components
 
     public void OnPlayed()
     {
-      // _user.Hand.RemoveFromHand(this);
-      // _user.SpendMana(_data.GetInt(Stat.ManaCost));
       _callbacks.OnCardPlayed(_cardId);
-      // Destroy(gameObject);
     }
 
     void AddInfluence(School school, int influence, ref int addIndex)
