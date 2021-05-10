@@ -41,7 +41,7 @@ namespace Nighthollow.Delegates.Effects
           registry.UserController.InsertStatModifier(Modifier);
           break;
         case PlayerName.Enemy:
-          Root.Instance.Enemy.InsertModifier(Modifier);
+          registry.EnemyController.InsertStatModifier(Modifier);
           break;
         case PlayerName.Unknown:
         default:

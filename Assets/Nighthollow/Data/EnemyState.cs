@@ -23,31 +23,38 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Data
 {
-  public sealed partial class UserState : StatEntity, IPlayerState
+  public sealed partial class EnemyState : StatEntity, IPlayerState
   {
-    public UserState(StatTable stats, DelegateList delegateList, KeyValueStore keyValueStore, int mana)
+    public EnemyState(
+      StatTable stats,
+      DelegateList delegateList,
+      KeyValueStore keyValueStore,
+      int spawnCount = 0,
+      int deathCount = 0)
     {
       Stats = stats;
       DelegateList = delegateList;
       KeyValueStore = keyValueStore;
-      Mana = mana;
+      SpawnCount = spawnCount;
+      DeathCount = deathCount;
     }
 
     [Field] public override StatTable Stats { get; }
     [Field] public DelegateList DelegateList { get; }
     [Field] public KeyValueStore KeyValueStore { get; }
-    [Field] public int Mana { get; }
+    [Field] public int SpawnCount { get; }
+    [Field] public int DeathCount { get; }
 
-    public UserState OnTick(IGameContext c) => WithStats(Stats.OnTick(c));
+    public EnemyState OnTick(IGameContext c) => WithStats(Stats.OnTick(c));
 
-    public static UserState BuildUserState(GameData gameData)
+    public static EnemyState BuildEnemyState(GameData gameData)
     {
-      var stats = gameData.UserModifiers.Values.Aggregate(
+      var stats = gameData.BattleData.EnemyModifiers.Aggregate(
         new StatTable(StatData.BuildDefaultStatTable(gameData)),
         (current, modifier) => current.InsertNullableModifier(modifier.BuildStatModifier()));
-      // TODO: Persist user delegate list
+      // TODO: Persist enemy delegate list
       var delegateList = new DelegateList(ImmutableList<IDelegate>.Empty, DelegateList.Root);
-      return new UserState(stats, delegateList, new KeyValueStore(), stats.Get(Stat.StartingMana));
+      return new EnemyState(stats, delegateList, new KeyValueStore());
     }
   }
 }

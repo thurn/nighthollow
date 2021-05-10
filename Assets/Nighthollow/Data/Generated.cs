@@ -193,6 +193,46 @@ namespace Nighthollow.Data
 
   }
 
+  public sealed partial class UserState
+  {
+    public UserState WithStats(StatTable stats) =>
+      Equals(stats, Stats)
+        ? this
+        : new UserState(
+          stats,
+          DelegateList,
+          KeyValueStore,
+          Mana);
+
+    public UserState WithDelegateList(DelegateList delegateList) =>
+      Equals(delegateList, DelegateList)
+        ? this
+        : new UserState(
+          Stats,
+          delegateList,
+          KeyValueStore,
+          Mana);
+
+    public UserState WithKeyValueStore(KeyValueStore keyValueStore) =>
+      Equals(keyValueStore, KeyValueStore)
+        ? this
+        : new UserState(
+          Stats,
+          DelegateList,
+          keyValueStore,
+          Mana);
+
+    public UserState WithMana(int mana) =>
+      Equals(mana, Mana)
+        ? this
+        : new UserState(
+          Stats,
+          DelegateList,
+          KeyValueStore,
+          mana);
+
+  }
+
   public sealed partial class AffixData
   {
     public AffixData WithAffixTypeId(int affixTypeId) =>
@@ -1487,24 +1527,6 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class EnemyData
-  {
-    public EnemyData WithEnemies(ImmutableList<CreatureItemData> enemies) =>
-      Equals(enemies, Enemies)
-        ? this
-        : new EnemyData(
-          enemies,
-          Stats);
-
-    public EnemyData WithStats(StatTable stats) =>
-      Equals(stats, Stats)
-        ? this
-        : new EnemyData(
-          Enemies,
-          stats);
-
-  }
-
   public sealed partial class CreatureItemData
   {
     public CreatureItemData WithCreatureTypeId(int creatureTypeId) =>
@@ -1659,43 +1681,57 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class UserState
+  public sealed partial class EnemyState
   {
-    public UserState WithStats(StatTable stats) =>
+    public EnemyState WithStats(StatTable stats) =>
       Equals(stats, Stats)
         ? this
-        : new UserState(
+        : new EnemyState(
           stats,
           DelegateList,
           KeyValueStore,
-          Mana);
+          SpawnCount,
+          DeathCount);
 
-    public UserState WithDelegateList(DelegateList delegateList) =>
+    public EnemyState WithDelegateList(DelegateList delegateList) =>
       Equals(delegateList, DelegateList)
         ? this
-        : new UserState(
+        : new EnemyState(
           Stats,
           delegateList,
           KeyValueStore,
-          Mana);
+          SpawnCount,
+          DeathCount);
 
-    public UserState WithKeyValueStore(KeyValueStore keyValueStore) =>
+    public EnemyState WithKeyValueStore(KeyValueStore keyValueStore) =>
       Equals(keyValueStore, KeyValueStore)
         ? this
-        : new UserState(
+        : new EnemyState(
           Stats,
           DelegateList,
           keyValueStore,
-          Mana);
+          SpawnCount,
+          DeathCount);
 
-    public UserState WithMana(int mana) =>
-      Equals(mana, Mana)
+    public EnemyState WithSpawnCount(int spawnCount) =>
+      Equals(spawnCount, SpawnCount)
         ? this
-        : new UserState(
+        : new EnemyState(
           Stats,
           DelegateList,
           KeyValueStore,
-          mana);
+          spawnCount,
+          DeathCount);
+
+    public EnemyState WithDeathCount(int deathCount) =>
+      Equals(deathCount, DeathCount)
+        ? this
+        : new EnemyState(
+          Stats,
+          DelegateList,
+          KeyValueStore,
+          SpawnCount,
+          deathCount);
 
   }
 }

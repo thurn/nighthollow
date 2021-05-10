@@ -16,8 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using DataStructures.RandomSelector;
-using JetBrains.Annotations;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Handlers;
@@ -42,7 +40,7 @@ namespace Nighthollow.Services
     {
       _statusDisplay = null;
       _handComponent = handComponent;
-      UserState = UserState.BuildUserData(gameData);
+      UserState = UserState.BuildUserState(gameData);
       Deck = BuildStartingDeck(gameData, UserState);
       Hand = ImmutableDictionary<int, CreatureData>.Empty;
       _nextCardId = 1;
@@ -65,6 +63,7 @@ namespace Nighthollow.Services
     }
 
     public UserState UserState { get; }
+
     public override StatTable Stats => UserState.Stats;
 
     public DeckData Deck { get; }
@@ -280,65 +279,6 @@ namespace Nighthollow.Services
           self._nextCardId));
 
         self._handComponent.SynchronizeHand(_registry);
-      }
-    }
-
-    public sealed class DeckData
-    {
-      readonly bool _orderedDraws;
-      readonly int _lastDraw;
-      readonly ImmutableList<CreatureData> _cards;
-      readonly ImmutableList<int> _weights;
-
-      public DeckData(ImmutableList<CreatureData> cards, bool orderedDraws) :
-        this(orderedDraws, 0, cards, StartingWeights(cards))
-      {
-      }
-
-      DeckData(bool orderedDraws, int lastDraw, ImmutableList<CreatureData> cards, ImmutableList<int> cardWeights)
-      {
-        Errors.CheckState(cards.Count > 0, "No cards in deck");
-        _orderedDraws = orderedDraws;
-        _lastDraw = lastDraw;
-        _cards = cards;
-        _weights = cardWeights;
-      }
-
-      [MustUseReturnValue] public DeckData DrawCard(out CreatureData card)
-      {
-        if (_orderedDraws)
-        {
-          card = _cards[_lastDraw % _cards.Count];
-          return new DeckData(_orderedDraws, _lastDraw + 1, _cards, _weights);
-        }
-
-        var selector = new DynamicRandomSelector<int>(seed: -1, _cards.Count);
-        for (var i = 0; i < _cards.Count; ++i)
-        {
-          selector.Add(i, _weights[i]);
-        }
-
-        selector.Build();
-
-        var index = selector.SelectRandomItem();
-        card = _cards[index];
-        return DecrementWeight(index);
-      }
-
-      DeckData DecrementWeight(int index) => new DeckData(
-        _orderedDraws,
-        _lastDraw,
-        _cards,
-        _weights.SetItem(index,
-          _weights[index] > 1000 ? _weights[index] - 1000 : _weights[index] / 2));
-
-      static ImmutableList<int> StartingWeights(ImmutableList<CreatureData> cards)
-      {
-        var manaCreatureCount = cards.Count(c => c.GetBool(Stat.IsManaCreature));
-        var manaCreatureWeight = 4000 * ((2.0 * cards.Count - manaCreatureCount) / 3.0);
-        return cards
-          .Select(card => card.GetBool(Stat.IsManaCreature) ? (int) Math.Round(manaCreatureWeight) : 4000)
-          .ToImmutableList();
       }
     }
   }

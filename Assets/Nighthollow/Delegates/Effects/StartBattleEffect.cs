@@ -23,9 +23,7 @@ namespace Nighthollow.Delegates.Effects
     public override void Execute(GameServiceRegistry registry)
     {
       registry.UserController.StartBattle();
-
-      // TODO: Switch to EnemyController
-      Root.Instance.Enemy.OnGameStarted(registry);
+      registry.EnemyController.StartBattle();
     }
   }
 }

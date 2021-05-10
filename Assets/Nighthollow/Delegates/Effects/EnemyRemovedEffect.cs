@@ -23,7 +23,7 @@ namespace Nighthollow.Delegates.Effects
   {
     public override void Execute(GameServiceRegistry registry)
     {
-      Root.Instance.Enemy.OnEnemyCreatureKilled();
+      registry.EnemyController.OnEnemyCreatureKilled();
     }
   }
 }

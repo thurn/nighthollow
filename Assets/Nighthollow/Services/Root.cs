@@ -49,8 +49,6 @@ namespace Nighthollow.Services
 
     [SerializeField] Hand _hand = null!;
 
-    [SerializeField] Enemy _enemy = null!;
-
     [SerializeField] DamageTextService _damageTextService = null!;
 
     [SerializeField] HelperTextService _helperTextService = null!;
@@ -60,7 +58,6 @@ namespace Nighthollow.Services
     public Prefabs Prefabs => _prefabs;
     public ObjectPoolService ObjectPoolService => _objectPoolService;
     public ScreenController ScreenController => _screenController;
-    public Enemy Enemy => _enemy;
     public DamageTextService DamageTextService => _damageTextService;
     public HelperTextService HelperTextService => _helperTextService;
     GameServiceRegistry? _registry;
@@ -89,7 +86,6 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_screenController);
       Errors.CheckNotNull(_hand);
-      Errors.CheckNotNull(_enemy);
       Errors.CheckNotNull(_damageTextService);
       Errors.CheckNotNull(_helperTextService);
 
@@ -115,7 +111,6 @@ namespace Nighthollow.Services
         _prefabs,
         _mainCanvas,
         _hand,
-        _enemy,
         _damageTextService,
         _helperTextService);
 
@@ -127,12 +122,13 @@ namespace Nighthollow.Services
       // _user.DrawOpeningHand(_registry);
     }
 
+    // TODO: Remove this
     public StatTable StatsForPlayer(PlayerName player)
     {
       return player switch
       {
         PlayerName.User => _registry!.UserService.Stats,
-        PlayerName.Enemy => Enemy.Data.Stats,
+        PlayerName.Enemy => _registry!.EnemyService.Stats,
         _ => throw Errors.UnknownEnumValue(player)
       };
     }

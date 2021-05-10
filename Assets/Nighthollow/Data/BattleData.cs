@@ -15,7 +15,6 @@
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
-using Nighthollow.Delegates;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -23,7 +22,7 @@ using Nighthollow.Stats;
 namespace Nighthollow.Data
 {
   /// <summary>
-  /// Configuration and state for a single battle (individual game or match), describing things such as the set of
+  /// Configuration and state for a single battle (individual game/match), describing things such as the set of
   /// enemies which will be be faced. This data can represent different things depending on the overall game state:
   ///
   /// - Immediately before a battle begins, it provides the configuration for the upcoming conflict
@@ -55,12 +54,5 @@ namespace Nighthollow.Data
 
     [ForeignKey(typeof(StaticItemListData))]
     [Key(3)] public int? EnemyListOverride { get; }
-
-    public EnemyData BuildEnemyData(GameData gameData) =>
-      new EnemyData(
-        EnemyListOverride.HasValue ? gameData.ItemLists[EnemyListOverride.Value].Creatures : Enemies,
-        EnemyModifiers.Aggregate(
-          new StatTable(StatData.BuildDefaultStatTable(gameData)),
-          (current, modifier) => current.InsertNullableModifier(modifier.BuildStatModifier())));
   }
 }

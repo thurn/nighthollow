@@ -60,7 +60,6 @@ namespace Nighthollow.Services
       Prefabs prefabs,
       RectTransform mainCanvas,
       Hand hand,
-      Enemy enemy,
       DamageTextService damageTextService,
       HelperTextService helperTextService) :
       base(
@@ -72,31 +71,33 @@ namespace Nighthollow.Services
     {
       CoroutineRunner = coroutineRunner;
       Creatures = new CreatureService();
-      UserService = new UserService(hand, database.Snapshot());
+      var gameData = database.Snapshot();
+      UserService = new UserService(hand, gameData);
+      EnemyService = new EnemyService(gameData);
 
       MainCanvas = mainCanvas;
-      Enemy = enemy;
       DamageTextService = damageTextService;
       HelperTextService = helperTextService;
     }
 
     public IStartCoroutine CoroutineRunner { get; }
     public RectTransform MainCanvas { get; }
-    public Enemy Enemy { get; }
     public DamageTextService DamageTextService { get; }
     public HelperTextService HelperTextService { get; }
 
     public UserService UserService { get; private set; }
     UserService.Controller? _userController;
-
     public UserService.Controller UserController =>
       _userController ??= new UserService.Controller(this, new UserServiceMutator(this));
 
+    public EnemyService EnemyService { get; private set; }
+    EnemyService.Controller? _enemyController;
+    public EnemyService.Controller EnemyController =>
+      _enemyController ??= new EnemyService.Controller(this, new EnemyServiceMutator(this));
+
     public CreatureState this[CreatureId creatureId] => Creatures[creatureId];
     public CreatureService Creatures { get; private set; }
-
     CreatureService.Controller? _creatureController;
-
     public CreatureService.Controller CreatureController =>
       _creatureController ??= new CreatureService.Controller(this, new CreatureServiceMutator(this));
 
@@ -136,7 +137,7 @@ namespace Nighthollow.Services
       return player switch
       {
         PlayerName.User => UserService.Stats,
-        PlayerName.Enemy => Enemy.Data.Stats,
+        PlayerName.Enemy => EnemyService.Stats,
         _ => throw Errors.UnknownEnumValue(player)
       };
     }
@@ -187,5 +188,26 @@ namespace Nighthollow.Services
         _registry.UserService = userService;
       }
     }
+
+    public interface IEnemyServiceMutator
+    {
+      void SetEnemyService(EnemyService enemyService);
+    }
+
+    sealed class EnemyServiceMutator : IEnemyServiceMutator
+    {
+      readonly GameServiceRegistry _registry;
+
+      public EnemyServiceMutator(GameServiceRegistry registry)
+      {
+        _registry = registry;
+      }
+
+      public void SetEnemyService(EnemyService enemyService)
+      {
+        _registry.EnemyService = enemyService;
+      }
+    }
+
   }
 }
