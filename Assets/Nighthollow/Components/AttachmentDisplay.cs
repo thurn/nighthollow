@@ -27,10 +27,12 @@ namespace Nighthollow.Components
   {
     readonly List<Transform> _attachments = new List<Transform>();
     ImmutableList<(StatusEffectTypeData, int)>? _currentStatusEffects;
+    Prefabs _prefabs = null!;
     AssetService _assetService = null!;
 
-    public void Initialize(AssetService assetService)
+    public void Initialize(Prefabs prefabs, AssetService assetService)
     {
+      _prefabs = prefabs;
       _assetService = assetService;
     }
 
@@ -44,7 +46,7 @@ namespace Nighthollow.Components
         {
           if (effect.Item1.ImageAddress is { } address)
           {
-            var newInstance = Root.Instance.Prefabs.CreateAttachment();
+            var newInstance = _prefabs.CreateAttachment();
             newInstance.Initialize(_assetService.GetImage(address));
             AddAttachment(newInstance.transform);
           }

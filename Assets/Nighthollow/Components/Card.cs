@@ -55,6 +55,7 @@ namespace Nighthollow.Components
     [SerializeField] Vector3 _initialDragPosition;
     [SerializeField] Quaternion _initialDragRotation;
 
+    Camera _mainCamera = null!;
     int _cardId;
     ICardCallbacks _callbacks = null!;
 
@@ -66,11 +67,13 @@ namespace Nighthollow.Components
     }
 
     public void Initialize(
+      Camera mainCamera,
       AssetService assetService,
       ICardCallbacks callbacks,
       int cardId,
       CreatureData data)
     {
+      _mainCamera = mainCamera;
       _callbacks = callbacks;
       _cardId = cardId;
 
@@ -96,17 +99,11 @@ namespace Nighthollow.Components
     }
 
     public void OnUpdate(
+      Prefabs prefabs,
       int manaCost,
       ImmutableDictionary<School, int> influenceCost,
       bool canPlay)
     {
-      // _cardImage.sprite = _registry.AssetService.GetImage(Errors.CheckNotNull(_data.BaseType.ImageAddress));
-      //
-      // var manaCost = _data.GetInt(Stat.ManaCost);
-      // var influenceCost = _data.Stats.Get(Stat.InfluenceCost);
-      // _canPlay = manaCost <= _user.Mana &&
-      //            InfluenceUtil.LessThanOrEqualTo(influenceCost, _user.State.Stats.Get(Stat.Influence));
-
       _canPlay = canPlay;
       _outline.enabled = _canPlay;
       _cost.text = manaCost.ToString();
@@ -114,7 +111,7 @@ namespace Nighthollow.Components
       var addIndex = 0;
       foreach (var pair in influenceCost)
       {
-        AddInfluence(pair.Key, pair.Value, ref addIndex);
+        AddInfluence(prefabs, pair.Key, pair.Value, ref addIndex);
       }
 
       while (addIndex < _influence.Count)
@@ -128,7 +125,7 @@ namespace Nighthollow.Components
       if (!_previewMode)
       {
         _isDragging = true;
-        _initialDragPosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+        _initialDragPosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
         _initialDragRotation = transform.rotation;
         _initialDragSiblingIndex = transform.GetSiblingIndex();
         transform.SetAsLastSibling();
@@ -139,7 +136,7 @@ namespace Nighthollow.Components
     {
       if (_isDragging)
       {
-        var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+        var mousePosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
         transform.position = Input.mousePosition;
 
         if (_canPlay && mousePosition.x < Constants.IndicatorRightX &&
@@ -204,12 +201,12 @@ namespace Nighthollow.Components
       _callbacks.OnCardPlayed(_cardId);
     }
 
-    void AddInfluence(School school, int influence, ref int addIndex)
+    void AddInfluence(Prefabs prefabs, School school, int influence, ref int addIndex)
     {
       for (var i = 0; i < influence; ++i)
       {
         _influence[addIndex].enabled = true;
-        _influence[addIndex].sprite = Root.Instance.Prefabs.SpriteForInfluenceType(school);
+        _influence[addIndex].sprite = prefabs.SpriteForInfluenceType(school);
         addIndex++;
       }
     }

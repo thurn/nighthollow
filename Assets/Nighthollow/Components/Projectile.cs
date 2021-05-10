@@ -64,7 +64,7 @@ namespace Nighthollow.Components
 
       _collider = GetComponent<Collider2D>();
 
-      var flash = Root.Instance.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);
+      var flash = _registry.ObjectPoolService.Create(_flashEffect.gameObject, transform.position);
       flash.transform.forward = transform.forward;
       _skillData = skillData;
     }
@@ -106,7 +106,7 @@ namespace Nighthollow.Components
         }
       }
 
-      var hit = Root.Instance.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
+      var hit = _registry.ObjectPoolService.Create(_hitEffect.gameObject, transform.position);
       hit.transform.forward = -transform.forward;
       _registry.Invoke(new IOnSkillImpact.Data(_firedById, _skillData, this));
       gameObject.SetActive(value: false);

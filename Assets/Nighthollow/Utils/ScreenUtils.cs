@@ -26,10 +26,9 @@ namespace Nighthollow.Utils
 
     public static Vector2 WorldToCanvasPosition(Vector2 worldPosition) => ReferencePixelsPerUnit * worldPosition;
 
-    public static Vector2 WorldToCanvasAnchorPosition(Vector2 worldPosition)
+    public static Vector2 WorldToCanvasAnchorPosition(Camera camera, RectTransform canvasRect, Vector2 worldPosition)
     {
-      var canvasRect = Root.Instance.MainCanvas;
-      var viewportPosition = Root.Instance.MainCamera.WorldToViewportPoint(worldPosition);
+      var viewportPosition = camera.WorldToViewportPoint(worldPosition);
       return new Vector2(
         viewportPosition.x * canvasRect.sizeDelta.x - canvasRect.sizeDelta.x * 0.5f,
         viewportPosition.y * canvasRect.sizeDelta.y - canvasRect.sizeDelta.y * 0.5f);

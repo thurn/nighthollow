@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Interface;
-using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -33,47 +31,16 @@ namespace Nighthollow.Services
 
   public sealed class Root : MonoBehaviour, IStartCoroutine
   {
-    static Root _instance = null!;
-
     [SerializeField] Camera _mainCamera = null!;
-
     [SerializeField] RectTransform _mainCanvas = null!;
-
     [SerializeField] Prefabs _prefabs = null!;
-
     [SerializeField] DataService _dataService = null!;
-
     [SerializeField] ObjectPoolService _objectPoolService = null!;
-
     [SerializeField] ScreenController _screenController = null!;
-
     [SerializeField] Hand _hand = null!;
-
     [SerializeField] DamageTextService _damageTextService = null!;
-
     [SerializeField] HelperTextService _helperTextService = null!;
-
-    public Camera MainCamera => _mainCamera;
-    public RectTransform MainCanvas => _mainCanvas;
-    public Prefabs Prefabs => _prefabs;
-    public ObjectPoolService ObjectPoolService => _objectPoolService;
-    public ScreenController ScreenController => _screenController;
-    public DamageTextService DamageTextService => _damageTextService;
-    public HelperTextService HelperTextService => _helperTextService;
     GameServiceRegistry? _registry;
-
-    public static Root Instance
-    {
-      get
-      {
-        if (!_instance)
-        {
-          throw new NullReferenceException("Attempted to access Root before OnEnable!");
-        }
-
-        return _instance;
-      }
-    }
 
     public Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine) => base.StartCoroutine(routine);
 
@@ -88,8 +55,6 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_hand);
       Errors.CheckNotNull(_damageTextService);
       Errors.CheckNotNull(_helperTextService);
-
-      _instance = this;
 
       _screenController.Initialize();
       _dataService.OnReady(OnDataFetched);
@@ -107,6 +72,7 @@ namespace Nighthollow.Services
         fetchResult.Database,
         fetchResult.AssetService,
         _screenController,
+        _mainCamera,
         _objectPoolService,
         _prefabs,
         _mainCanvas,
@@ -115,22 +81,8 @@ namespace Nighthollow.Services
         _helperTextService);
 
       _screenController.OnServicesReady(_registry);
-      _helperTextService.OnServicesReady(_registry);
+      _helperTextService.Initialize(_screenController);
       _registry.Invoke(new IOnBattleSceneLoaded.Data());
-
-      // _user.Hand.OnServicesReady(_registry);
-      // _user.DrawOpeningHand(_registry);
-    }
-
-    // TODO: Remove this
-    public StatTable StatsForPlayer(PlayerName player)
-    {
-      return player switch
-      {
-        PlayerName.User => _registry!.UserService.Stats,
-        PlayerName.Enemy => _registry!.EnemyService.Stats,
-        _ => throw Errors.UnknownEnumValue(player)
-      };
     }
   }
 }

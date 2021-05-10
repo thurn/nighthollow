@@ -25,13 +25,10 @@ namespace Nighthollow.Services
 {
   public sealed class DamageTextService : MonoBehaviour
   {
-    [Header("Config")] [SerializeField] int _alpha;
-
+    [SerializeField] int _alpha;
     [SerializeField] int _mediumHitThreshold;
     [SerializeField] int _bigHitThreshold;
-
-    [Header("State")] [SerializeField] int _count;
-
+    [SerializeField] int _count;
     [SerializeField] float _averageDamage;
 
     public void ShowDamageText(GameServiceRegistry registry, CreatureId target, int amount)
@@ -47,20 +44,22 @@ namespace Nighthollow.Services
       _averageDamage = _count == 0 ? amount : alpha * amount + (1 - alpha) * _averageDamage;
       _count++;
       var point = ScreenUtils.WorldToCanvasAnchorPosition(
+        registry.MainCamera,
+        registry.MainCanvas,
         SkillEventEffect.RandomEffectPoint(registry.Creatures.GetCollider(target)));
 
       DamageText result;
       if (_count < 4 || amount < _averageDamage * Constants.MultiplierBasisPoints(_mediumHitThreshold))
       {
-        result = Root.Instance.Prefabs.CreateHitSmall();
+        result = registry.Prefabs.CreateHitSmall();
       }
       else if (amount < _averageDamage * Constants.MultiplierBasisPoints(_bigHitThreshold))
       {
-        result = Root.Instance.Prefabs.CreateHitMedium();
+        result = registry.Prefabs.CreateHitMedium();
       }
       else
       {
-        result = Root.Instance.Prefabs.CreateHitBig();
+        result = registry.Prefabs.CreateHitBig();
       }
 
       result.Initialize(amount.ToString(), point);

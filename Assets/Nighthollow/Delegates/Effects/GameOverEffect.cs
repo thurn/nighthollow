@@ -24,9 +24,9 @@ namespace Nighthollow.Delegates.Effects
   {
     public override void Execute(GameServiceRegistry registry)
     {
-      Root.Instance.ScreenController.Get(ScreenController.GameOverMessage)
+      registry.ScreenController.Get(ScreenController.GameOverMessage)
         .Show(new GameOverMessage.Args("Game Over", "World"));
-      Root.Instance.ScreenController.Get(ScreenController.BlackoutWindow).Show(argument: 0.5f);
+      registry.ScreenController.Get(ScreenController.BlackoutWindow).Show(argument: 0.5f);
       Time.timeScale = 0f;
     }
   }

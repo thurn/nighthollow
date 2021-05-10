@@ -24,6 +24,9 @@ namespace Nighthollow.Services
 {
   public sealed class Prefabs : MonoBehaviour
   {
+    [SerializeField] ObjectPoolService _objectPoolService = null!;
+    [SerializeField] Transform _mainCanvasTransform = null!;
+
     [SerializeField] Card _cardPrefab = null!;
     [SerializeField] StatusBarsHolder _statusBars = null!;
     [SerializeField] SpriteRenderer _cursorPrefab = null!;
@@ -44,11 +47,16 @@ namespace Nighthollow.Services
     [SerializeField] DamageText _hitBig = null!;
     [SerializeField] Sprite _stunIcon = null!;
 
-    public Card CreateCard() => ComponentUtils.Instantiate(_cardPrefab, Root.Instance.MainCanvas);
+    void Awake()
+    {
+      Errors.CheckNotNull(_objectPoolService);
+      Errors.CheckNotNull(_mainCanvasTransform);
+    }
+
+    public Card CreateCard() => ComponentUtils.Instantiate(_cardPrefab, _mainCanvasTransform);
 
     public StatusBarsHolder CreateStatusBars() =>
-      ComponentUtils.Instantiate(_statusBars,
-        Root.Instance.MainCanvas);
+      ComponentUtils.Instantiate(_statusBars, _mainCanvasTransform);
 
     public SpriteRenderer CreateCursor() => ComponentUtils.Instantiate(_cursorPrefab);
 
@@ -57,25 +65,25 @@ namespace Nighthollow.Services
     public Attachment CreateAttachment() => ComponentUtils.Instantiate(_attachmentPrefab);
 
     public GameObject CreateMiss(Vector3 position) =>
-      Root.Instance.ObjectPoolService.Create(_missEffect.gameObject, position);
+      _objectPoolService.Create(_missEffect.gameObject, position);
 
     public GameObject CreateEvade(Vector3 position) =>
-      Root.Instance.ObjectPoolService.Create(_evadeEffect.gameObject, position);
+      _objectPoolService.Create(_evadeEffect.gameObject, position);
 
     public GameObject CreateCrit(Vector3 position) =>
-      Root.Instance.ObjectPoolService.Create(_critEffect.gameObject, position);
+      _objectPoolService.Create(_critEffect.gameObject, position);
 
     public GameObject CreateStun(Vector3 position) =>
-      Root.Instance.ObjectPoolService.Create(_stunEffect.gameObject, position);
+      _objectPoolService.Create(_stunEffect.gameObject, position);
 
     public DamageText CreateHitSmall() =>
-      Root.Instance.ObjectPoolService.Create(_hitSmall, Constants.OffScreen, Root.Instance.MainCanvas);
+      _objectPoolService.Create(_hitSmall, Constants.OffScreen, _mainCanvasTransform);
 
     public DamageText CreateHitMedium() =>
-      Root.Instance.ObjectPoolService.Create(_hitMedium, Constants.OffScreen, Root.Instance.MainCanvas);
+      _objectPoolService.Create(_hitMedium, Constants.OffScreen, _mainCanvasTransform);
 
     public DamageText CreateHitBig() =>
-      Root.Instance.ObjectPoolService.Create(_hitBig, Constants.OffScreen, Root.Instance.MainCanvas);
+      _objectPoolService.Create(_hitBig, Constants.OffScreen, _mainCanvasTransform);
 
     public Sprite StunIcon() => Instantiate(_stunIcon);
 

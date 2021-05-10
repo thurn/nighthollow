@@ -14,7 +14,6 @@
 
 
 using System.Collections.Generic;
-using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -38,9 +37,9 @@ namespace Nighthollow.Services
     [SerializeField] string _debugText = null!;
     [SerializeField] Vector2 _debugPosition;
     [SerializeField] ArrowDirection _debugArrowDirection;
+    ScreenController _screenController = null!;
     readonly HashSet<int> _shown = new HashSet<int>();
     bool _active;
-    BattleData _battleData = null!;
 
     readonly struct HelperText
     {
@@ -58,23 +57,23 @@ namespace Nighthollow.Services
       }
     }
 
-    public void OnServicesReady(GameServiceRegistry registry)
+    public void Initialize(ScreenController screenController)
     {
-      _battleData = registry.Database.Snapshot().BattleData;
+      _screenController = screenController;
     }
 
     void Update()
     {
       if (Input.GetMouseButtonDown(button: 0) && _active)
       {
-        InterfaceUtils.FindByName<VisualElement>(Root.Instance.ScreenController.Screen, "HelperTextContainer").Clear();
+        InterfaceUtils.FindByName<VisualElement>(_screenController.Screen, "HelperTextContainer").Clear();
         _active = false;
       }
 
       if (_toggleDebugMode)
       {
         _shown.Remove(item: 0);
-        InterfaceUtils.FindByName<VisualElement>(Root.Instance.ScreenController.Screen, "HelperTextContainer").Clear();
+        InterfaceUtils.FindByName<VisualElement>(_screenController.Screen, "HelperTextContainer").Clear();
         ShowHelperText(new HelperText(id: 0, _debugPosition, _debugArrowDirection, _debugText));
         _toggleDebugMode = false;
       }
@@ -151,7 +150,7 @@ namespace Nighthollow.Services
 
       _active = true;
       InterfaceUtils
-        .FindByName<VisualElement>(Root.Instance.ScreenController.Screen, "HelperTextContainer")
+        .FindByName<VisualElement>(_screenController.Screen, "HelperTextContainer")
         .Add(element);
     }
   }

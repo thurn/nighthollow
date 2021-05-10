@@ -18,7 +18,6 @@ using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates;
 using Nighthollow.Interface;
-using Nighthollow.Stats;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -32,12 +31,14 @@ namespace Nighthollow.Services
       Database database,
       AssetService assetService,
       ScreenController screenController,
+      Camera mainCamera,
       ObjectPoolService objectPoolService,
       Prefabs prefabs)
     {
       Database = database;
       AssetService = assetService;
       ScreenController = screenController;
+      MainCamera = mainCamera;
       ObjectPoolService = objectPoolService;
       Prefabs = prefabs;
     }
@@ -45,6 +46,7 @@ namespace Nighthollow.Services
     public Database Database { get; }
     public AssetService AssetService { get; }
     public ScreenController ScreenController { get; }
+    public Camera MainCamera { get; }
     public ObjectPoolService ObjectPoolService { get; }
     public Prefabs Prefabs { get; }
   }
@@ -56,6 +58,7 @@ namespace Nighthollow.Services
       Database database,
       AssetService assetService,
       ScreenController screenController,
+      Camera mainCamera,
       ObjectPoolService objectPoolService,
       Prefabs prefabs,
       RectTransform mainCanvas,
@@ -66,6 +69,7 @@ namespace Nighthollow.Services
         database,
         assetService,
         screenController,
+        mainCamera,
         objectPoolService,
         prefabs)
     {

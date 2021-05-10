@@ -123,7 +123,7 @@ namespace Nighthollow.Services
             var influenceCost = hand[cardId].Get(Stat.InfluenceCost);
             var canPlay = manaCost <= userState.Mana &&
                           InfluenceUtil.LessThanOrEqualTo(influenceCost, userState.Get(Stat.Influence));
-            card.OnUpdate(manaCost, influenceCost, canPlay);
+            card.OnUpdate(_registry.Prefabs, manaCost, influenceCost, canPlay);
           }
         }
       }
@@ -138,7 +138,7 @@ namespace Nighthollow.Services
       {
         var hand = _registry.UserService._handComponent;
         hand.SetCardsToPreviewMode(value: true);
-        ButtonUtil.DisplayMainButtons(Root.Instance.ScreenController,
+        ButtonUtil.DisplayMainButtons(_registry.ScreenController,
           new List<ButtonUtil.Button>
           {
             new ButtonUtil.Button("Start Game!", () =>

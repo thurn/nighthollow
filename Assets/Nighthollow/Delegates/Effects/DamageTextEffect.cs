@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      Root.Instance.DamageTextService.ShowDamageText(registry, Target, DamageAmount);
+      registry.DamageTextService.ShowDamageText(registry, Target, DamageAmount);
     }
   }
 }

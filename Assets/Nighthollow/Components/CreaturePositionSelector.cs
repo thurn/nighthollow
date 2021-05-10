@@ -41,7 +41,7 @@ namespace Nighthollow.Components
       _card = card;
       _creatureId = creatureId;
       _registry.CreatureController.SetAnimationPaused(_creatureId, true);
-      _cursor = Root.Instance.Prefabs.CreateCursor().gameObject;
+      _cursor = registry.Prefabs.CreateCursor().gameObject;
 
       _spriteRenderers = new List<SpriteRenderer>();
       foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
@@ -53,7 +53,7 @@ namespace Nighthollow.Components
 
     void Update()
     {
-      var mousePosition = Root.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+      var mousePosition = _registry.MainCamera.ScreenToWorldPoint(Input.mousePosition);
       if (!_card || mousePosition.y >= Constants.IndicatorBottomY &&
         mousePosition.x <= Constants.IndicatorRightX)
       {

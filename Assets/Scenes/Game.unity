@@ -381,7 +381,6 @@ MonoBehaviour:
   _objectPoolService: {fileID: 169299296}
   _screenController: {fileID: 2115052129}
   _hand: {fileID: 1841190611970440670}
-  _enemy: {fileID: 0}
   _damageTextService: {fileID: 169299298}
   _helperTextService: {fileID: 169299300}
 --- !u!114 &169299298
@@ -413,6 +412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00874a7b8e524617b84cdde2a6fe1e46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _objectPoolService: {fileID: 169299296}
+  _mainCanvasTransform: {fileID: 1736363420}
   _cardPrefab: {fileID: 8201078851043189447, guid: b10a80a90394244668d5089010634cd3,
     type: 3}
   _statusBars: {fileID: 5067384424278121320, guid: c458a949a299d4f2a9f20c2602bc62b2,

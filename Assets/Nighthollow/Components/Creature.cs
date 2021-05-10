@@ -58,6 +58,7 @@ namespace Nighthollow.Components
     [SerializeField] StatusBarsHolder _statusBars = null!;
     [SerializeField] SortingGroup _sortingGroup = null!;
 
+    Camera _mainCamera = null!;
     CreatureId _creatureId;
     ICreatureCallbacks _callbacks = null!;
 
@@ -66,12 +67,15 @@ namespace Nighthollow.Components
     public Collider2D Collider => _collider;
 
     public void Initialize(
+      Camera mainCamera,
+      Prefabs prefabs,
       AssetService assetService,
       ICreatureCallbacks callbacks,
       CreatureId creatureId,
       string creatureName,
       PlayerName owner)
     {
+      _mainCamera = mainCamera;
       gameObject.name = $"{creatureName}#{creatureId}";
       _creatureId = creatureId;
       _callbacks = callbacks;
@@ -80,11 +84,11 @@ namespace Nighthollow.Components
       _collider = GetComponent<Collider2D>();
       _collider.enabled = false;
       _sortingGroup = GetComponent<SortingGroup>();
-      _statusBars = Root.Instance.Prefabs.CreateStatusBars();
+      _statusBars = prefabs.CreateStatusBars();
       _statusBars.HealthBar.gameObject.SetActive(value: false);
       gameObject.layer = Constants.LayerForCreatures(owner);
       _animator.speed = _animationSpeedMultiplier;
-      _attachmentDisplay.Initialize(assetService);
+      _attachmentDisplay.Initialize(prefabs, assetService);
     }
 
     public IEnumerable<IEventData> OnUpdate(CreatureState state)
@@ -127,7 +131,7 @@ namespace Nighthollow.Components
 
       _statusBars.HealthBar.gameObject.SetActive(state.DamageTaken > 0);
 
-      var pos = Root.Instance.MainCamera.WorldToScreenPoint(_healthbarAnchor.position);
+      var pos = _mainCamera.WorldToScreenPoint(_healthbarAnchor.position);
       _statusBars.transform.position = pos;
 
       var speedMultiplier = state.Get(Stat.SkillSpeedMultiplier).AsMultiplier();
@@ -175,9 +179,6 @@ namespace Nighthollow.Components
       _collider.enabled = true;
 
       ToDefaultAnimation(state);
-
-      // _registry.Invoke(new IOnCreatureActivated.Data(CreatureId));
-      Root.Instance.HelperTextService.OnCreaturePlayed();
     }
 
     public void PlayAnimationForSkill(CreatureState state, SkillData skillData)

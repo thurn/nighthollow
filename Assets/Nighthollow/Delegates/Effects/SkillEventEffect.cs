@@ -45,16 +45,16 @@ namespace Nighthollow.Delegates.Effects
       switch (EventName)
       {
         case Event.Missed:
-          Root.Instance.Prefabs.CreateMiss(RandomEffectPoint(collider));
+          registry.Prefabs.CreateMiss(RandomEffectPoint(collider));
           break;
         case Event.Evade:
-          Root.Instance.Prefabs.CreateEvade(RandomEffectPoint(collider));
+          registry.Prefabs.CreateEvade(RandomEffectPoint(collider));
           break;
         case Event.Crit:
-          Root.Instance.Prefabs.CreateCrit(RandomEffectPoint(collider));
+          registry.Prefabs.CreateCrit(RandomEffectPoint(collider));
           break;
         case Event.Stun:
-          Root.Instance.Prefabs.CreateStun(RandomEffectPoint(collider));
+          registry.Prefabs.CreateStun(RandomEffectPoint(collider));
           break;
         default:
           throw Errors.UnknownEnumValue(EventName);

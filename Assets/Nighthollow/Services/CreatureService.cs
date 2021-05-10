@@ -130,7 +130,13 @@ namespace Nighthollow.Services
           self.PlacedCreatures));
 
         result.Initialize(
-          _registry.AssetService, this, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
+          _registry.MainCamera,
+          _registry.Prefabs,
+          _registry.AssetService,
+          this,
+          creatureId,
+          creatureData.BaseType.Name,
+          creatureData.BaseType.Owner);
         if (addPositionSelector)
         {
           result.gameObject.AddComponent<CreaturePositionSelector>()
@@ -161,7 +167,12 @@ namespace Nighthollow.Services
           self.PlacedCreatures));
 
         result.Initialize(
-          _registry.AssetService, this, creatureId, creatureData.BaseType.Name, creatureData.BaseType.Owner);
+          _registry.MainCamera,
+          _registry.Prefabs,
+          _registry.AssetService,
+          this, creatureId,
+          creatureData.BaseType.Name,
+          creatureData.BaseType.Owner);
         result.ActivateCreature(_registry.Creatures[creatureId], startingX: startingX);
         _registry.Invoke(new IOnCreatureActivated.Data(creatureId));
       }
@@ -176,6 +187,7 @@ namespace Nighthollow.Services
           self.MovingCreatures,
           self.PlacedCreatures.SetItem((rank, file), creatureId)));
         _registry.Creatures._components[creatureId].ActivateCreature(_registry.Creatures[creatureId]);
+        _registry.HelperTextService.OnCreaturePlayed();
         _registry.Invoke(new IOnCreatureActivated.Data(creatureId));
       }
 

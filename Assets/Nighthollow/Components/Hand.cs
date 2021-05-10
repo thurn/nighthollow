@@ -92,7 +92,7 @@ namespace Nighthollow.Components
       {
         // Card should be drawn
         var card = registry.Prefabs.CreateCard();
-        card.Initialize(registry.AssetService, registry.UserController, cardId, hand[cardId]);
+        card.Initialize(registry.MainCamera, registry.AssetService, registry.UserController, cardId, hand[cardId]);
         card.transform.position = _deckPosition.position;
         card.transform.localScale = Vector2.one * _initialCardScale;
         card.transform.SetParent(transform);
