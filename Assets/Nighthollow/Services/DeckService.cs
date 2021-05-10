@@ -25,19 +25,19 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Services
 {
-  public sealed class DeckData
+  public sealed class DeckService
   {
     readonly bool _orderedDraws;
     readonly int _lastDraw;
     readonly ImmutableList<CreatureData> _cards;
     readonly ImmutableList<int> _weights;
 
-    public DeckData(ImmutableList<CreatureData> cards, bool orderedDraws) :
+    public DeckService(ImmutableList<CreatureData> cards, bool orderedDraws) :
       this(orderedDraws, 0, cards, StartingWeights(cards))
     {
     }
 
-    DeckData(bool orderedDraws, int lastDraw, ImmutableList<CreatureData> cards, ImmutableList<int> cardWeights)
+    DeckService(bool orderedDraws, int lastDraw, ImmutableList<CreatureData> cards, ImmutableList<int> cardWeights)
     {
       Errors.CheckState(cards.Count > 0, "No cards in deck");
       _orderedDraws = orderedDraws;
@@ -46,12 +46,12 @@ namespace Nighthollow.Services
       _weights = cardWeights;
     }
 
-    [MustUseReturnValue] public DeckData DrawCard(out CreatureData card)
+    [MustUseReturnValue] public DeckService DrawCard(out CreatureData card)
     {
       if (_orderedDraws)
       {
         card = _cards[_lastDraw % _cards.Count];
-        return new DeckData(_orderedDraws, _lastDraw + 1, _cards, _weights);
+        return new DeckService(_orderedDraws, _lastDraw + 1, _cards, _weights);
       }
 
       var selector = new DynamicRandomSelector<int>(seed: -1, _cards.Count);
@@ -67,7 +67,7 @@ namespace Nighthollow.Services
       return DecrementWeight(index);
     }
 
-    DeckData DecrementWeight(int index) => new DeckData(
+    DeckService DecrementWeight(int index) => new DeckService(
       _orderedDraws,
       _lastDraw,
       _cards,

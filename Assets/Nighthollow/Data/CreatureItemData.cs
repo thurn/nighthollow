@@ -17,7 +17,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
 using Nighthollow.Delegates;
-using Nighthollow.Services;
 using Nighthollow.State;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
@@ -26,20 +25,6 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
-  sealed class TempPlayerState : IPlayerState
-  {
-    public TempPlayerState(StatTable stats)
-    {
-      Stats = stats;
-      DelegateList = DelegateList.Root;
-      KeyValueStore = new KeyValueStore();
-    }
-
-    public StatTable Stats { get; }
-    public DelegateList DelegateList { get; }
-    public KeyValueStore KeyValueStore { get; }
-  }
-
   [MessagePackObject]
   public sealed partial class CreatureItemData : IItemData
   {
@@ -85,14 +70,6 @@ namespace Nighthollow.Data
     public T Switch<T>(
       Func<CreatureItemData, T> onCreature,
       Func<ResourceItemData, T> onResource) => onCreature(this);
-
-    public CreatureData BuildCreatureTemp(GameServiceRegistry registry)
-    {
-      var gameData = registry.Database.Snapshot();
-      var baseType = gameData.CreatureTypes[CreatureTypeId];
-      var stats = registry.StatsForPlayer(baseType.Owner);
-      return BuildCreature(gameData, new TempPlayerState(stats));
-    }
 
     public CreatureData BuildCreature(GameData gameData, IPlayerState parent)
     {

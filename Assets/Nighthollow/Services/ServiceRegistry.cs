@@ -132,12 +132,12 @@ namespace Nighthollow.Services
       }
     }
 
-    public StatTable StatsForPlayer(PlayerName player)
+    public IPlayerState StateForPlayer(PlayerName player)
     {
       return player switch
       {
-        PlayerName.User => UserService.Stats,
-        PlayerName.Enemy => EnemyService.Stats,
+        PlayerName.User => UserService.UserState,
+        PlayerName.Enemy => EnemyService.EnemyState,
         _ => throw Errors.UnknownEnumValue(player)
       };
     }

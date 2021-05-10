@@ -50,7 +50,7 @@ namespace Nighthollow.Services
       UserStatus? statusDisplay,
       Hand handComponent,
       UserState userState,
-      DeckData deck,
+      DeckService deck,
       ImmutableDictionary<int, CreatureData> hand,
       int nextCardId)
     {
@@ -66,17 +66,17 @@ namespace Nighthollow.Services
 
     public override StatTable Stats => UserState.Stats;
 
-    public DeckData Deck { get; }
+    public DeckService Deck { get; }
 
     public ImmutableDictionary<int, CreatureData> Hand { get; }
 
-    static DeckData BuildStartingDeck(GameData gameData, UserState state)
+    static DeckService BuildStartingDeck(GameData gameData, UserState state)
     {
       var cards =
         gameData.BattleData.UserDeckOverride.HasValue
           ? gameData.ItemLists[gameData.BattleData.UserDeckOverride.Value].Creatures
           : gameData.Deck.Values.ToImmutableList();
-      return new DeckData(
+      return new DeckService(
         cards.Select(card => card.BuildCreature(gameData, state)).ToImmutableList(),
         orderedDraws: gameData.BattleData.UserDeckOverride.HasValue);
     }

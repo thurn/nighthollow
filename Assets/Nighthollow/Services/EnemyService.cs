@@ -33,7 +33,7 @@ namespace Nighthollow.Services
       Deck = BuildStartingDeck(gameData, EnemyState);
     }
 
-    EnemyService(EnemyState enemyState, DeckData deck)
+    EnemyService(EnemyState enemyState, DeckService deck)
     {
       EnemyState = enemyState;
       Deck = deck;
@@ -43,15 +43,15 @@ namespace Nighthollow.Services
 
     public override StatTable Stats => EnemyState.Stats;
 
-    public DeckData Deck { get; }
+    public DeckService Deck { get; }
 
-    static DeckData BuildStartingDeck(GameData gameData, EnemyState state)
+    static DeckService BuildStartingDeck(GameData gameData, EnemyState state)
     {
       var cards =
         gameData.BattleData.EnemyListOverride.HasValue
           ? gameData.ItemLists[gameData.BattleData.EnemyListOverride.Value].Creatures
           : gameData.BattleData.Enemies;
-      return new DeckData(
+      return new DeckService(
         cards.Select(card => card.BuildCreature(gameData, state)).ToImmutableList(),
         orderedDraws: gameData.BattleData.UserDeckOverride.HasValue);
     }

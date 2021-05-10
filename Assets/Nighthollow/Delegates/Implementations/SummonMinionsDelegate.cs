@@ -37,6 +37,7 @@ namespace Nighthollow.Delegates.Implementations
       {
         var summon = d.Skill.ItemData.Summons[Random.Range(0, d.Skill.ItemData.Summons.Count)];
         yield return new CreateCreatureEffect(
+          c[d.Self].Owner,
           summon,
           rank.Value,
           filePosition,

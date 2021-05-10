@@ -22,14 +22,21 @@ namespace Nighthollow.Delegates.Effects
 {
   public sealed class CreateCreatureEffect : Effect
   {
-    public CreateCreatureEffect(CreatureItemData data, RankValue rankPosition, FileValue filePosition, bool isMoving)
+    public CreateCreatureEffect(
+      PlayerName owner,
+      CreatureItemData data,
+      RankValue rankPosition,
+      FileValue filePosition,
+      bool isMoving)
     {
+      Owner = owner;
       Data = data;
       RankPosition = rankPosition;
       FilePosition = filePosition;
       IsMoving = isMoving;
     }
 
+    public PlayerName Owner { get; }
     public CreatureItemData Data { get; }
     public RankValue RankPosition { get; }
     public FileValue FilePosition { get; }
@@ -37,7 +44,7 @@ namespace Nighthollow.Delegates.Effects
 
     public override void Execute(GameServiceRegistry registry)
     {
-      var data = Data.BuildCreatureTemp(registry);
+      var data = Data.BuildCreature(registry.Database.Snapshot(), registry.StateForPlayer(Owner));
       if (IsMoving)
       {
         registry.CreatureController.CreateMovingCreature(data, FilePosition, RankPosition.ToXPosition());
