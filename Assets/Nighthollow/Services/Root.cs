@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
+using Nighthollow.Delegates.Handlers;
 using Nighthollow.Interface;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
@@ -121,15 +122,17 @@ namespace Nighthollow.Services
 
       _screenController.OnServicesReady(_registry);
       _helperTextService.OnServicesReady(_registry);
-      _user.Hand.OnServicesReady(_registry);
-      _user.DrawOpeningHand(_registry);
+      _registry.Invoke(new IOnBattleSceneLoaded.Data());
+      
+      // _user.Hand.OnServicesReady(_registry);
+      // _user.DrawOpeningHand(_registry);
     }
 
     public StatTable StatsForPlayer(PlayerName player)
     {
       return player switch
       {
-        PlayerName.User => User.Data.Stats,
+        PlayerName.User => User.State.Stats,
         PlayerName.Enemy => Enemy.Data.Stats,
         _ => throw Errors.UnknownEnumValue(player)
       };

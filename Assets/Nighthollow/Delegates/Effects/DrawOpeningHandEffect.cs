@@ -12,28 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Linq;
 using Nighthollow.Services;
-using Nighthollow.Stats;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Delegates.Effects
 {
-  public sealed partial class UserData : StatEntity
+  public sealed class DrawOpeningHandEffect : Effect
   {
-    public UserData(StatTable stats)
+    public override void Execute(GameServiceRegistry registry)
     {
-      Stats = stats;
+      registry.UserController.DrawOpeningHand();
     }
-
-    [Field] public override StatTable Stats { get; }
-
-    public UserData OnTick(IGameContext c) => WithStats(Stats.OnTick(c));
-
-    public static UserData BuildUserData(GameData gameData) =>
-      new UserData(gameData.UserModifiers.Values.Aggregate(
-        new StatTable(StatData.BuildDefaultStatTable(gameData)),
-        (current, modifier) => current.InsertNullableModifier(modifier.BuildStatModifier())));
   }
 }

@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
+using Nighthollow.Delegates;
+using Nighthollow.State;
+using Nighthollow.Stats;
 
 #nullable enable
 
-namespace Nighthollow.Services
+namespace Nighthollow.Data
 {
-  public interface IGameContext
+  public interface IPlayerState
   {
-    CreatureState this[CreatureId creatureId] { get; }
-
-    CreatureService Creatures { get; }
-
-    UserService UserService { get; }
+    StatTable Stats { get; }
+    DelegateList DelegateList { get; }
+    KeyValueStore KeyValueStore { get; }
   }
 }

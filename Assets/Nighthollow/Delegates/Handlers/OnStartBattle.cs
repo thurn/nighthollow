@@ -12,18 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
+using System.Collections.Generic;
+using Nighthollow.Services;
 
 #nullable enable
 
-namespace Nighthollow.Services
+namespace Nighthollow.Delegates.Handlers
 {
-  public interface IGameContext
+  public interface IOnStartBattle : IHandler
   {
-    CreatureState this[CreatureId creatureId] { get; }
+    public sealed class Data : GlobalEventData<IOnStartBattle>
+    {
+      public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnStartBattle handler) =>
+        handler.OnStartBattle(c, delegateIndex, this);
+    }
 
-    CreatureService Creatures { get; }
-
-    UserService UserService { get; }
+    /// <summary>Called when a battle starts, after opening hand is accepted.</summary>
+    IEnumerable<Effect> OnStartBattle(IGameContext context, int delegateIndex, Data data);
   }
 }

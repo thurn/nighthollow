@@ -12,27 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using System.Collections.Generic;
-using SimpleJSON;
+using Nighthollow.Services;
 
 #nullable enable
 
-namespace Nighthollow.Utils
+namespace Nighthollow.Delegates.Handlers
 {
-  public static class JsonUtil
+  public interface IOnBattleSceneLoaded : IHandler
   {
-    public static JSONNode AsJsonArray(this IEnumerable<JSONNode> nodes)
+    public sealed class Data : GlobalEventData<IOnBattleSceneLoaded>
     {
-      var result = new JSONArray();
-      foreach (var node in nodes)
-      {
-        result.Add(node);
-      }
-
-      return result;
+      public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnBattleSceneLoaded handler) =>
+        handler.OnBattleSceneLoaded(c, delegateIndex, this);
     }
 
-    public static IEnumerable<JSONNode> FromJsonArray(this JSONNode node) => ((JSONArray) node).Children;
+    /// <summary>Called when the Battle scene has been loaded and all configuration data is ready.</summary>
+    IEnumerable<Effect> OnBattleSceneLoaded(IGameContext context, int delegateIndex, Data data);
   }
 }

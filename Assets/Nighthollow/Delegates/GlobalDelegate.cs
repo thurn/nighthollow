@@ -22,9 +22,24 @@ using Nighthollow.Stats;
 
 namespace Nighthollow.Delegates
 {
-  public sealed class GlobalDelegate : IDelegate, IOnEnemyCreatureAtEndzone, IOnCreatureOutOfBounds
+  public sealed class GlobalDelegate : IDelegate,
+    IOnBattleSceneLoaded,
+    IOnStartBattle,
+    IOnEnemyCreatureAtEndzone,
+    IOnCreatureOutOfBounds
   {
     public string Describe(IStatDescriptionProvider provider) => "Global Delegate";
+
+    public IEnumerable<Effect> OnBattleSceneLoaded(
+      IGameContext context, int delegateIndex, IOnBattleSceneLoaded.Data data)
+    {
+      yield return new DrawOpeningHandEffect();
+    }
+
+    public IEnumerable<Effect> OnStartBattle(IGameContext context, int delegateIndex, IOnStartBattle.Data data)
+    {
+      yield return new StartBattleEffect();
+    }
 
     public IEnumerable<Effect> OnEnemyCreatureAtEndzone(
       IGameContext c, int delegateIndex, IOnEnemyCreatureAtEndzone.Data d)

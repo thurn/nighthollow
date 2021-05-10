@@ -40,7 +40,7 @@ namespace Nighthollow.Components
     public Hand Hand => _hand;
     public Deck Deck => _deck;
 
-    public UserData Data { get; private set; } = null!;
+    public UserState State { get; private set; } = null!;
 
     public bool GameOver { get; private set; }
 
@@ -52,9 +52,10 @@ namespace Nighthollow.Components
 
     public void DrawOpeningHand(GameServiceRegistry registry)
     {
+      Debug.Log($"User::DrawOpeningHand");
       _registry = registry;
       var gameData = registry.Database.Snapshot();
-      Data = UserData.BuildUserData(gameData);
+      State = UserState.BuildUserData(gameData);
 
       var cards =
         gameData.BattleData.UserDeckOverride.HasValue
@@ -62,21 +63,22 @@ namespace Nighthollow.Components
           : gameData.Deck.Values.ToImmutableList();
       Errors.CheckState(cards.Count > 0, "No cards in deck");
 
-      var builtDeck = cards.Select(item => item.BuildCreature(registry));
+      var builtDeck = cards.Select(item => item.BuildCreatureTemp(registry));
       _deck.OnStartGame(builtDeck, orderedDraws: gameData.BattleData.UserDeckOverride.HasValue);
 
       var openingHand = new List<CreatureData>();
-      for (var i = 0; i < Errors.CheckPositive(Data.GetInt(Stat.StartingHandSize)); ++i)
+      for (var i = 0; i < Errors.CheckPositive(State.GetInt(Stat.StartingHandSize)); ++i)
       {
         openingHand.Add(_deck.Draw());
       }
 
       _hand.OverrideHandPosition(value: true);
-      _hand.DrawCards(openingHand, () => OnDrewHand(registry));
+      // _hand.DrawCards(_registry, openingHand, () => OnDrewHand(registry));
     }
 
     void OnDrewHand(GameServiceRegistry registry)
     {
+      Debug.Log($"User::OnDrewHand ");
       _hand.SetCardsToPreviewMode(value: true);
       ButtonUtil.DisplayMainButtons(Root.Instance.ScreenController,
         new List<ButtonUtil.Button>
@@ -92,6 +94,7 @@ namespace Nighthollow.Components
 
     public void OnStartGame(GameServiceRegistry registry)
     {
+      Debug.Log($"User::OnStartGame");
       gameObject.SetActive(value: true);
       Root.Instance.Enemy.OnGameStarted(registry);
       Root.Instance.HelperTextService.OnGameStarted();
@@ -101,17 +104,17 @@ namespace Nighthollow.Components
       _statusDisplay = Root.Instance.ScreenController.Get(ScreenController.UserStatus);
       _statusDisplay.Show(animate: true);
 
-      Mana = Data.GetInt(Stat.StartingMana);
+      Mana = State.GetInt(Stat.StartingMana);
     }
 
     public void InsertModifier(IStatModifier modifier)
     {
-      Data = Data.WithStats(Data.Stats.InsertModifier(modifier));
+      State = State.WithStats(State.Stats.InsertModifier(modifier));
     }
 
     public void InsertStatusEffect(StatusEffectData statusEffectData)
     {
-      Data = Data.WithStats(Data.Stats.InsertStatusEffect(statusEffectData));
+      State = State.WithStats(State.Stats.InsertStatusEffect(statusEffectData));
     }
 
     void Update()
@@ -119,12 +122,12 @@ namespace Nighthollow.Components
       if (_statusDisplay != null)
       {
         _statusDisplay.Mana = Mana;
-        _statusDisplay.Influence = Data.Stats.Get(Stat.Influence);
+        _statusDisplay.Influence = State.Stats.Get(Stat.Influence);
       }
 
       if (_registry != null)
       {
-        Data = Data.OnTick(_registry);
+        State = State.OnTick(_registry);
       }
     }
 
@@ -142,8 +145,8 @@ namespace Nighthollow.Components
     {
       while (!GameOver)
       {
-        yield return new WaitForSeconds(Data.GetDurationSeconds(Stat.ManaGainInterval));
-        Mana += Data.GetInt(Stat.ManaGain);
+        yield return new WaitForSeconds(State.GetDurationSeconds(Stat.ManaGainInterval));
+        Mana += State.GetInt(Stat.ManaGain);
       }
     }
 
@@ -151,9 +154,9 @@ namespace Nighthollow.Components
     {
       while (!GameOver)
       {
-        Errors.CheckArgument(Data.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
-        yield return new WaitForSeconds(Data.GetDurationSeconds(Stat.CardDrawInterval));
-        _hand.DrawCards(new List<CreatureData> {_deck.Draw()});
+        Errors.CheckArgument(State.GetDurationSeconds(Stat.CardDrawInterval) > 0.1f, "Card draw interval cannot be 0");
+        yield return new WaitForSeconds(State.GetDurationSeconds(Stat.CardDrawInterval));
+        // _hand.DrawCards(_registry!, new List<CreatureData> {_deck.Draw()});
       }
     }
   }

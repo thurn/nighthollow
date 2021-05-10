@@ -15,8 +15,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using DG.Tweening;
-using Nighthollow.Data;
 using Nighthollow.Services;
 using UnityEngine;
 
@@ -26,50 +26,44 @@ namespace Nighthollow.Components
 {
   public sealed class Hand : MonoBehaviour
   {
-    [Header("Config")] [SerializeField] bool _debugMode;
+    public const float FinalCardScale = 0.6f;
+
+    // [SerializeField] bool _debugMode;
     [SerializeField] Transform _deckPosition = null!;
     [SerializeField] float _initialCardScale;
-    [SerializeField] float _finalCardScale;
     [SerializeField] int _zRotationMultiplier;
-
-    [Header("State")] [SerializeField] Transform _controlPoint1 = null!;
+    [SerializeField] Transform _controlPoint1 = null!;
     [SerializeField] Transform _controlPoint2 = null!;
     [SerializeField] Transform _controlPoint3 = null!;
     [SerializeField] Transform _controlPoint4 = null!;
-    [SerializeField] List<Card> _cards = null!;
     [SerializeField] Hand _handOverridePosition = null!;
+
+    public ImmutableList<(int, Card)> Cards { get; private set; } = ImmutableList<(int, Card)>.Empty;
+
     bool _previewMode;
     bool _shouldOverrideHandPosition;
-    GameServiceRegistry? _registry;
 
-    public float FinalCardScale => _finalCardScale;
+    // void Start()
+    // {
+      // if (_debugMode)
+      // {
+      //   var children = GetComponentsInChildren<Card>();
+      //   foreach (var child in children)
+      //   {
+      //     _cards.Add(child);
+      //   }
+      //
+      //   AnimateCardsToPosition();
+      // }
+    // }
 
-    void Start()
-    {
-      if (_debugMode)
-      {
-        var children = GetComponentsInChildren<Card>();
-        foreach (var child in children)
-        {
-          _cards.Add(child);
-        }
-
-        AnimateCardsToPosition();
-      }
-    }
-
-    public void OnServicesReady(GameServiceRegistry registry)
-    {
-      _registry = registry;
-    }
-
-    void Update()
-    {
-      if (_debugMode)
-      {
-        AnimateCardsToPosition();
-      }
-    }
+    // void Update()
+    // {
+      // if (_debugMode)
+      // {
+      //   AnimateCardsToPosition();
+      // }
+    // }
 
     void OnDrawGizmosSelected()
     {
@@ -86,43 +80,93 @@ namespace Nighthollow.Components
       Gizmos.DrawSphere(_controlPoint4.position, radius: 10);
     }
 
-    public void DrawCards(IEnumerable<CreatureData> cards, Action? onComplete = null)
+    /// <summary>
+    /// Synchronizes the displayed hand with the logical 'cardId -> data' model provided, drawing cards if they are
+    /// missing from the displayed content and destroying them if they are missing from the input.
+    /// </summary>
+    public void SynchronizeHand(GameServiceRegistry registry, Action? onComplete = null)
     {
-      StartCoroutine(DrawsCardAsync(cards, onComplete));
+      StartCoroutine(SynchronizeHandAsync(registry, onComplete));
     }
 
-    IEnumerator<YieldInstruction> DrawsCardAsync(IEnumerable<CreatureData> cards, Action? onComplete)
+    IEnumerator<YieldInstruction> SynchronizeHandAsync(GameServiceRegistry registry, Action? onComplete = null)
     {
-      foreach (var cardData in cards)
+      var hand = registry.UserService.Hand;
+      var newIds = hand.Keys.ToImmutableHashSet();
+      var cards = ImmutableList.CreateBuilder<(int, Card)>();
+      foreach (var (cardId, card) in Cards)
       {
-        var card = Root.Instance.Prefabs.CreateCard();
-        card.Initialize(cardData, _registry!);
+        newIds = newIds.Remove(cardId);
+        if (hand.ContainsKey(cardId))
+        {
+          // Card is still present
+          cards.Add((cardId, card));
+        }
+        else
+        {
+          // Card is no longer in hand
+          Destroy(card);
+        }
+      }
+
+      foreach (var cardId in newIds)
+      {
+        // Card should be drawn
+        var card = registry.Prefabs.CreateCard();
+        card.Initialize(registry.AssetService, registry.UserController, cardId, hand[cardId]);
         card.transform.position = _deckPosition.position;
         card.transform.localScale = Vector2.one * _initialCardScale;
-        AddToHand(card);
+        card.transform.SetParent(transform);
+        Cards = Cards.Add((cardId, card));
+        card.PreviewMode = _previewMode;
+        AnimateCardsToPosition(onComplete);
         yield return new WaitForSeconds(seconds: 0.2f);
       }
-
-      onComplete?.Invoke();
     }
 
-    public void RemoveFromHand(Card card)
-    {
-      _cards.Remove(card);
-      AnimateCardsToPosition();
-    }
+    // public void DrawCards(
+    //   GameServiceRegistry registry,
+    //   IEnumerable<CreatureData> cards,
+    //   Action? onComplete = null)
+    // {
+    //   StartCoroutine(DrawsCardAsync(registry, cards, onComplete));
+    // }
+    //
+    // IEnumerator<YieldInstruction> DrawsCardAsync(
+    //   GameServiceRegistry registry,
+    //   IEnumerable<CreatureData> cards,
+    //   Action? onComplete)
+    // {
+    //   foreach (var cardData in cards)
+    //   {
+    //     var card = Root.Instance.Prefabs.CreateCard();
+    //     card.Initialize(cardData, registry);
+    //     card.transform.position = _deckPosition.position;
+    //     card.transform.localScale = Vector2.one * _initialCardScale;
+    //     AddToHand(card);
+    //     yield return new WaitForSeconds(seconds: 0.2f);
+    //   }
+    //
+    //   onComplete?.Invoke();
+    // }
 
-    public void AddToHand(Card card, bool animate = true)
-    {
-      card.transform.SetParent(transform);
-      _cards.Add(card);
-      card.PreviewMode = _previewMode;
+    // void AddToHand(Card card, bool animate = true)
+    // {
+    //   card.transform.SetParent(transform);
+    //   _cards.Add(card);
+    //   card.PreviewMode = _previewMode;
+    //
+    //   if (animate)
+    //   {
+    //     AnimateCardsToPosition();
+    //   }
+    // }
 
-      if (animate)
-      {
-        AnimateCardsToPosition();
-      }
-    }
+    // void RemoveFromHand(Card card)
+    // {
+    //   _cards.Remove(card);
+    //   AnimateCardsToPosition();
+    // }
 
     public void OverrideHandPosition(bool value, Action? onComplete = null)
     {
@@ -134,31 +178,32 @@ namespace Nighthollow.Components
     {
       _previewMode = value;
 
-      foreach (var card in _cards)
+      foreach (var (_, card) in Cards)
       {
         card.PreviewMode = value;
       }
     }
 
-    public void DestroyAllCards()
-    {
-      foreach (var card in _cards)
-      {
-        Destroy(card.gameObject);
-      }
+    // public void DestroyAllCards()
+    // {
+    //   foreach (var (_, card) in _cards)
+    //   {
+    //     Destroy(card.gameObject);
+    //   }
+    //
+    //   _cards.Clear();
+    // }
 
-      _cards.Clear();
-    }
-
-    public void AnimateCardsToPosition(Action? onComplete = null)
+    void AnimateCardsToPosition(Action? onComplete = null)
     {
       var sequence = DOTween.Sequence();
-      for (var i = 0; i < _cards.Count; ++i)
+      for (var i = 0; i < Cards.Count; ++i)
       {
+        var card = Cards[i].Item2;
         var curvePosition = CalculateCurvePosition(i);
-        var t = _cards[i].transform;
+        var t = card.transform;
         t.SetSiblingIndex(i);
-        sequence.Insert(atPosition: 0, t.DOScale(_finalCardScale, duration: 0.3f));
+        sequence.Insert(atPosition: 0, t.DOScale(FinalCardScale, duration: 0.3f));
         sequence.Insert(atPosition: 0,
           t.DOMove(
             _shouldOverrideHandPosition
@@ -174,27 +219,27 @@ namespace Nighthollow.Components
 
     float CalculateCurvePosition(int cardIndex)
     {
-      if (cardIndex < 0 || cardIndex >= _cards.Count)
+      if (cardIndex < 0 || cardIndex >= Cards.Count)
       {
         throw new ArgumentException("Index out of bounds");
       }
 
-      switch (_cards.Count)
+      switch (Cards.Count)
       {
         case 1:
           return 0.5f;
         case 2:
-          return PositionWithinRange(start: 0.4f, end: 0.6f, cardIndex, _cards.Count);
+          return PositionWithinRange(start: 0.4f, end: 0.6f, cardIndex, Cards.Count);
         case 3:
-          return PositionWithinRange(start: 0.3f, end: 0.7f, cardIndex, _cards.Count);
+          return PositionWithinRange(start: 0.3f, end: 0.7f, cardIndex, Cards.Count);
         case 4:
-          return PositionWithinRange(start: 0.2f, end: 0.8f, cardIndex, _cards.Count);
+          return PositionWithinRange(start: 0.2f, end: 0.8f, cardIndex, Cards.Count);
         case 5:
-          return PositionWithinRange(start: 0.15f, end: 0.85f, cardIndex, _cards.Count);
+          return PositionWithinRange(start: 0.15f, end: 0.85f, cardIndex, Cards.Count);
         case 6:
-          return PositionWithinRange(start: 0.1f, end: 0.9f, cardIndex, _cards.Count);
+          return PositionWithinRange(start: 0.1f, end: 0.9f, cardIndex, Cards.Count);
         default:
-          return PositionWithinRange(start: 0.0f, end: 1.0f, cardIndex, _cards.Count);
+          return PositionWithinRange(start: 0.0f, end: 1.0f, cardIndex, Cards.Count);
       }
     }
 

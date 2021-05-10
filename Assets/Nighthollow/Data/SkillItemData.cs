@@ -16,7 +16,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
 using Nighthollow.Delegates;
-using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -57,7 +56,6 @@ namespace Nighthollow.Data
     public override string ToString() => Name;
 
     public SkillData BuildSkill(
-      GameServiceRegistry registry,
       GameData gameData,
       StatTable parentStatTable,
       DelegateList parentDelegateList)
@@ -84,11 +82,11 @@ namespace Nighthollow.Data
     }
 
     public static SkillData BasicMeleeAttack(
-      GameServiceRegistry services, GameData gameData, StatTable parentStatTable, DelegateList parentDelegateList) =>
+      GameData gameData, StatTable parentStatTable, DelegateList parentDelegateList) =>
       new SkillItemData(
         SkillTypeData.BasicMeleeAttackId,
         ImmutableList<AffixData>.Empty,
         ImmutableList<ModifierData>.Empty,
-        "Basic Melee Attack").BuildSkill(services, gameData, parentStatTable, parentDelegateList);
+        "Basic Melee Attack").BuildSkill(gameData, parentStatTable, parentDelegateList);
   }
 }

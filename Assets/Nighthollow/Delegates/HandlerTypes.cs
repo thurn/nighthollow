@@ -48,6 +48,11 @@ namespace Nighthollow.Delegates
     public override IEnumerable<Effect> Raise(IGameContext c) => Self.GetDelegateList(c).Invoke(c, this);
   }
 
+  public abstract class GlobalEventData<THandler> : EventData<THandler> where THandler : IHandler
+  {
+    public override IEnumerable<Effect> Raise(IGameContext c) => DelegateList.Root.Invoke(c, this);
+  }
+
   public abstract class QueryData<THandler, TResult>
   {
     public abstract TResult Invoke(IGameContext c, int delegateIndex, THandler handler);

@@ -26,6 +26,20 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Data
 {
+  sealed class TempPlayerState : IPlayerState
+  {
+    public TempPlayerState(StatTable stats)
+    {
+      Stats = stats;
+      DelegateList = DelegateList.Root;
+      KeyValueStore = new KeyValueStore();
+    }
+
+    public StatTable Stats { get; }
+    public DelegateList DelegateList { get; }
+    public KeyValueStore KeyValueStore { get; }
+  }
+
   [MessagePackObject]
   public sealed partial class CreatureItemData : IItemData
   {
@@ -72,11 +86,18 @@ namespace Nighthollow.Data
       Func<CreatureItemData, T> onCreature,
       Func<ResourceItemData, T> onResource) => onCreature(this);
 
-    public CreatureData BuildCreature(GameServiceRegistry registry)
+    public CreatureData BuildCreatureTemp(GameServiceRegistry registry)
     {
       var gameData = registry.Database.Snapshot();
       var baseType = gameData.CreatureTypes[CreatureTypeId];
-      var statTable = new StatTable(registry.StatsForPlayer(baseType.Owner))
+      var stats = registry.StatsForPlayer(baseType.Owner);
+      return BuildCreature(gameData, new TempPlayerState(stats));
+    }
+
+    public CreatureData BuildCreature(GameData gameData, IPlayerState parent)
+    {
+      var baseType = gameData.CreatureTypes[CreatureTypeId];
+      var statTable = new StatTable(parent.Stats)
         .InsertModifier(Stat.Health.Set(Health))
         .InsertModifier(Stat.CreatureSpeed.Set(baseType.Speed))
         .InsertNullableModifier(Stat.IsManaCreature.SetIfTrue(baseType.IsManaCreature))
@@ -88,14 +109,14 @@ namespace Nighthollow.Data
       var delegateList = new DelegateList(delegates
         .Append(DelegateId.DefaultCreatureDelegate)
         .Select(DelegateMap.Get)
-        .ToImmutableList(), parent: DelegateList.Root);
+        .ToImmutableList(), parent: parent.DelegateList);
 
       return new CreatureData(
         delegateList,
         stats,
-        Skills.Select(s => s.BuildSkill(registry, gameData, stats, delegateList))
+        Skills.Select(s => s.BuildSkill(gameData, stats, delegateList))
           .AppendIfNotNull(baseType.SkillAnimations.Any(a => a.SkillAnimationType == SkillAnimationType.MeleeSkill)
-            ? SkillItemData.BasicMeleeAttack(registry, gameData, stats, delegateList)
+            ? SkillItemData.BasicMeleeAttack(gameData, stats, delegateList)
             : null)
           .ToImmutableList(),
         baseType,

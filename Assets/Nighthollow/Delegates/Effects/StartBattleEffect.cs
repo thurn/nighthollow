@@ -12,18 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Data;
+using Nighthollow.Services;
 
 #nullable enable
 
-namespace Nighthollow.Services
+namespace Nighthollow.Delegates.Effects
 {
-  public interface IGameContext
+  public sealed class StartBattleEffect : Effect
   {
-    CreatureState this[CreatureId creatureId] { get; }
+    public override void Execute(GameServiceRegistry registry)
+    {
+      registry.UserController.StartBattle();
 
-    CreatureService Creatures { get; }
-
-    UserService UserService { get; }
+      // TODO: Switch to EnemyController
+      Root.Instance.Enemy.OnGameStarted(registry);
+    }
   }
 }

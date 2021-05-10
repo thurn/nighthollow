@@ -1659,13 +1659,43 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class UserData
+  public sealed partial class UserState
   {
-    public UserData WithStats(StatTable stats) =>
+    public UserState WithStats(StatTable stats) =>
       Equals(stats, Stats)
         ? this
-        : new UserData(
-          stats);
+        : new UserState(
+          stats,
+          DelegateList,
+          KeyValueStore,
+          Mana);
+
+    public UserState WithDelegateList(DelegateList delegateList) =>
+      Equals(delegateList, DelegateList)
+        ? this
+        : new UserState(
+          Stats,
+          delegateList,
+          KeyValueStore,
+          Mana);
+
+    public UserState WithKeyValueStore(KeyValueStore keyValueStore) =>
+      Equals(keyValueStore, KeyValueStore)
+        ? this
+        : new UserState(
+          Stats,
+          DelegateList,
+          keyValueStore,
+          Mana);
+
+    public UserState WithMana(int mana) =>
+      Equals(mana, Mana)
+        ? this
+        : new UserState(
+          Stats,
+          DelegateList,
+          KeyValueStore,
+          mana);
 
   }
 }

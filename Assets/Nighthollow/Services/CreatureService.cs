@@ -121,7 +121,7 @@ namespace Nighthollow.Services
       {
         var result = _registry.AssetService.InstantiatePrefab<Creature>(creatureData.BaseType.PrefabAddress);
         var creatureId = new CreatureId(_registry.Creatures._nextCreatureId);
-        _mutator.MutateCreatures(self => new CreatureService(
+        _mutator.MutateCreatureService(self => new CreatureService(
           self._nextCreatureId + 1,
           self._components.SetItem(creatureId, result),
           self.CreatureState.SetItem(creatureId,
@@ -153,7 +153,7 @@ namespace Nighthollow.Services
           creatureData.BaseType.Owner,
           filePosition: file);
 
-        _mutator.MutateCreatures(self => new CreatureService(
+        _mutator.MutateCreatureService(self => new CreatureService(
           self._nextCreatureId + 1,
           self._components.SetItem(creatureId, result),
           self.CreatureState.SetItem(creatureId, creatureState),
@@ -168,7 +168,7 @@ namespace Nighthollow.Services
 
       public void AddUserCreatureAtPosition(CreatureId creatureId, RankValue rank, FileValue file)
       {
-        _mutator.MutateCreatures(self => new CreatureService(
+        _mutator.MutateCreatureService(self => new CreatureService(
           self._nextCreatureId,
           self._components,
           self.CreatureState.SetItem(creatureId,
@@ -181,7 +181,7 @@ namespace Nighthollow.Services
 
       public void Mutate(CreatureId creatureId, Func<CreatureState, CreatureState> mutation)
       {
-        _mutator.MutateCreatures(self => new CreatureService(
+        _mutator.MutateCreatureService(self => new CreatureService(
           self._nextCreatureId,
           self._components,
           self.CreatureState.SetItem(creatureId, mutation(self[creatureId])),
@@ -255,7 +255,7 @@ namespace Nighthollow.Services
 
         _registry.Creatures._components[target].Despawn();
 
-        _mutator.MutateCreatures(self => new CreatureService(
+        _mutator.MutateCreatureService(self => new CreatureService(
           self._nextCreatureId,
           self._components.Remove(target),
           self.CreatureState.Remove(target),
@@ -308,7 +308,7 @@ namespace Nighthollow.Services
 
         if (state.RankPosition.HasValue && state.FilePosition.HasValue)
         {
-          _mutator.MutateCreatures(self => new CreatureService(
+          _mutator.MutateCreatureService(self => new CreatureService(
             self._nextCreatureId,
             self._components,
             self.CreatureState.SetItem(creatureId, self[creatureId].WithIsAlive(false)),
@@ -317,7 +317,7 @@ namespace Nighthollow.Services
         }
         else
         {
-          _mutator.MutateCreatures(self => new CreatureService(
+          _mutator.MutateCreatureService(self => new CreatureService(
             self._nextCreatureId,
             self._components,
             self.CreatureState.SetItem(creatureId, self[creatureId].WithIsAlive(false)),

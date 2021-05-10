@@ -22,9 +22,11 @@ namespace Nighthollow.Delegates
   public enum DelegateId
   {
     Unknown = 0,
+
     GlobalDelegate = 14,
     DefaultCreatureDelegate = 1,
     DefaultSkillDelegate = 2,
+
     MultipleProjectilesDelegate = 3,
     ProjectileArcDelegate = 4,
     AdjacentFileProjectilesDelegate = 5,

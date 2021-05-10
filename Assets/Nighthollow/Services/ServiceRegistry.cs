@@ -72,7 +72,7 @@ namespace Nighthollow.Services
     {
       CoroutineRunner = coroutineRunner;
       Creatures = new CreatureService();
-      UserService = new UserService(user, database.Snapshot());
+      UserService = new UserService(user.Hand, database.Snapshot());
 
       MainCanvas = mainCanvas;
       User = user;
@@ -89,14 +89,12 @@ namespace Nighthollow.Services
     public HelperTextService HelperTextService { get; }
 
     public UserService UserService { get; private set; }
+    UserService.Controller? _userController;
 
-    public void MutateUser(Func<UserService, UserService> function)
-    {
-      UserService = function(UserService);
-    }
+    public UserService.Controller UserController =>
+      _userController ??= new UserService.Controller(this, new UserServiceMutator(this));
 
     public CreatureState this[CreatureId creatureId] => Creatures[creatureId];
-
     public CreatureService Creatures { get; private set; }
 
     CreatureService.Controller? _creatureController;
@@ -106,6 +104,7 @@ namespace Nighthollow.Services
 
     public void OnUpdate()
     {
+      UserController.OnUpdate();
       CreatureController.OnUpdate();
     }
 
@@ -138,7 +137,7 @@ namespace Nighthollow.Services
     {
       return player switch
       {
-        PlayerName.User => User.Data.Stats,
+        PlayerName.User => User.State.Stats,
         PlayerName.Enemy => Enemy.Data.Stats,
         _ => throw Errors.UnknownEnumValue(player)
       };
@@ -148,7 +147,7 @@ namespace Nighthollow.Services
     {
       void SetCreatureService(CreatureService service);
 
-      void MutateCreatures(Func<CreatureService, CreatureService> function);
+      void MutateCreatureService(Func<CreatureService, CreatureService> function);
     }
 
     sealed class CreatureServiceMutator : ICreatureServiceMutator
@@ -165,9 +164,29 @@ namespace Nighthollow.Services
         _registry.Creatures = service;
       }
 
-      public void MutateCreatures(Func<CreatureService, CreatureService> function)
+      public void MutateCreatureService(Func<CreatureService, CreatureService> function)
       {
         _registry.Creatures = function(_registry.Creatures);
+      }
+    }
+
+    public interface IUserServiceMutator
+    {
+      void SetUserService(UserService userService);
+    }
+
+    sealed class UserServiceMutator : IUserServiceMutator
+    {
+      readonly GameServiceRegistry _registry;
+
+      public UserServiceMutator(GameServiceRegistry registry)
+      {
+        _registry = registry;
+      }
+
+      public void SetUserService(UserService userService)
+      {
+        _registry.UserService = userService;
       }
     }
   }

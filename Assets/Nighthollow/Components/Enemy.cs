@@ -42,7 +42,7 @@ namespace Nighthollow.Components
       var gameData = registry.Database.Snapshot();
       Data = gameData.BattleData.BuildEnemyData(gameData);
       Errors.CheckState(Data.Enemies.Count > 0, "No enemies found");
-      _enemies = Data.Enemies.Select(item => item.BuildCreature(registry)).ToImmutableList();
+      _enemies = Data.Enemies.Select(item => item.BuildCreatureTemp(registry)).ToImmutableList();
 
       StartCoroutine(SpawnAsync());
     }
