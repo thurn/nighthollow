@@ -33,7 +33,7 @@ namespace Nighthollow.Triggers.Conditions
 
   public abstract class IntegerCondition<TEvent> : ICondition<TEvent> where TEvent : TriggerEvent
   {
-    protected IntegerCondition(int target, IntegerOperator op = IntegerOperator.EqualTo)
+    protected IntegerCondition(int target, IntegerOperator op)
     {
       Operator = op;
       Target = target;
@@ -58,5 +58,20 @@ namespace Nighthollow.Triggers.Conditions
     }
 
     public abstract int GetSource(TEvent triggerEvent, GameData data);
+
+    public abstract string SourceDescription { get; }
+
+    public string Description => $"{SourceDescription} {OperatorDescription} {Target}";
+
+    string OperatorDescription => Operator switch
+    {
+      IntegerOperator.EqualTo => "==",
+      IntegerOperator.NotEqualTo => "!=",
+      IntegerOperator.LessThan => "<",
+      IntegerOperator.LessThanOrEqualTo => "<=",
+      IntegerOperator.GreaterThan => ">",
+      IntegerOperator.GreaterThanOrEqualTo => ">=",
+      _ => "<?Operator?>"
+    };
   }
 }

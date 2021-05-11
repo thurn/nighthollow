@@ -26,11 +26,13 @@ namespace Nighthollow.Triggers.Conditions
   [MessagePackObject]
   public sealed class SceneNameCondition : EnumCondition<SceneReadyEvent, SceneReadyEvent.Name>
   {
-    public SceneNameCondition(SceneReadyEvent.Name target, EnumOperator op = EnumOperator.EqualTo) : base(target, op)
+    public SceneNameCondition(SceneReadyEvent.Name target, EnumOperator op) : base(target, op)
     {
     }
 
     public override SceneReadyEvent.Name GetSource(SceneReadyEvent triggerEvent, GameData data) =>
       triggerEvent.SceneName;
+
+    public override string SourceDescription => "that scene's name";
   }
 }

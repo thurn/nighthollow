@@ -53,6 +53,13 @@ namespace Nighthollow.Editing
           screenController, reflectivePath, foreignKey.TableType, parent);
       }
 
+      var nestedSheet = reflectivePath.AsPropertyInfo()?.GetCustomAttribute<NestedSheet>();
+      if (nestedSheet != null)
+      {
+        return new TextFieldEditorCell(reflectivePath, parent,
+          new NestedSheetTextFieldCellDelegate(screenController, reflectivePath));
+      }
+
       if (type.IsSubclassOf(typeof(Enum)))
       {
         return new EnumDropdownEditorCell(screenController, reflectivePath, type, parent);
@@ -108,7 +115,6 @@ namespace Nighthollow.Editing
       else
       {
         cellDelegate = new NestedSheetTextFieldCellDelegate(screenController, reflectivePath);
-        // throw new InvalidOperationException($"No editor registered for type {type}");
       }
 
       return new TextFieldEditorCell(reflectivePath, parent, cellDelegate);

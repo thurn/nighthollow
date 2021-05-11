@@ -29,7 +29,7 @@ namespace Nighthollow.Editor.Data
     Database? _database;
     GameObject? _editorDocument;
 
-    [MenuItem("Tools/Show Game Data Editor %#^j")]
+    [MenuItem("Tools/Show Game Data Editor %#^d")]
     public static void ToggleWindow()
     {
       var window = GetWindow<GameDataEditorWindow>();

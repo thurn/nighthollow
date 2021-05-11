@@ -90,5 +90,7 @@ namespace Nighthollow.Triggers.Effects
         .FindByName<VisualElement>(registry.ScreenController.Screen, "HelperTextContainer")
         .Add(element);
     }
+
+    public string Description => $"display the helper text: '{Text}'";
   }
 }

@@ -25,10 +25,12 @@ namespace Nighthollow.Triggers.Conditions
   [MessagePackObject]
   public sealed class UserDeckSizeCondition : IntegerCondition<TriggerEvent>
   {
-    public UserDeckSizeCondition(int target, IntegerOperator op = IntegerOperator.EqualTo) : base(target, op)
+    public UserDeckSizeCondition(int target, IntegerOperator op) : base(target, op)
     {
     }
 
     public override int GetSource(TriggerEvent triggerEvent, GameData data) => data.Deck.Count;
+
+    public override string SourceDescription => "the user's deck size";
   }
 }

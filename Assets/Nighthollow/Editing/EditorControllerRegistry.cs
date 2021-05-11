@@ -20,6 +20,7 @@ using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Stats;
+using Nighthollow.Triggers;
 
 #nullable enable
 
@@ -38,6 +39,9 @@ namespace Nighthollow.Editing
     {
       return EditorSheet.DefaultCellWidth;
     }
+
+    public virtual EditorSheetDelegate? GetCustomSheetDelegate(ReflectivePath reflectivePath, string propertyName)
+      => null;
   }
 
   abstract class EditorController<T> : EditorController
@@ -280,6 +284,29 @@ namespace Nighthollow.Editing
     };
   }
 
+  sealed class TriggerDataController : EditorController<ITriggerData>
+  {
+    public override int GetColumnWidth(string propertyName) => propertyName switch
+    {
+      nameof(ITriggerData.Name) => 400,
+      nameof(ITriggerData.EventDescription) => 400,
+      nameof(ITriggerData.ConditionsDescription) => 600,
+      nameof(ITriggerData.EffectsDescription) => 600,
+      _ => base.GetColumnWidth(propertyName)
+    };
+
+    public override EditorSheetDelegate? GetCustomSheetDelegate(ReflectivePath reflectivePath, string propertyName)
+    {
+      return propertyName switch
+      {
+        nameof(ITriggerData.EventDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
+        nameof(ITriggerData.ConditionsDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
+        nameof(ITriggerData.EffectsDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
+        _ => null
+      };
+    }
+  }
+
   public static class EditorControllerRegistry
   {
     static readonly IReadOnlyDictionary<Type, EditorController> Controllers =
@@ -290,7 +317,8 @@ namespace Nighthollow.Editing
         {typeof(CreatureItemData), new CreatureItemController()},
         {typeof(SkillItemData), new SkillItemController()},
         {typeof(StatusEffectTypeData), new StatusEffectTypeController()},
-        {typeof(StatusEffectItemData), new StatusEffectItemController()}
+        {typeof(StatusEffectItemData), new StatusEffectItemController()},
+        {typeof(ITriggerData), new TriggerDataController()}
       };
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)
@@ -341,5 +369,20 @@ namespace Nighthollow.Editing
       Controllers.ContainsKey(type)
         ? Controllers[type].GetColumnWidth(propertyInfo.Name)
         : EditorSheet.DefaultCellWidth;
+
+    public static EditorSheetDelegate? GetCustomSheetDelegate(ReflectivePath reflectivePath)
+    {
+      var propertyName = reflectivePath.AsPropertyInfo()?.Name;
+      var parent = reflectivePath.Parent();
+      var type = parent?.GetUnderlyingType();
+      if (parent != null && type != null && Controllers.ContainsKey(type) && propertyName != null)
+      {
+        return Controllers[type].GetCustomSheetDelegate(reflectivePath, propertyName);
+      }
+      else
+      {
+        return null;
+      }
+    }
   }
 }

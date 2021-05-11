@@ -33,7 +33,7 @@ namespace Nighthollow.Triggers.Conditions
   public abstract class EnumCondition<TEvent, TEnum> : ICondition<TEvent>
     where TEvent : TriggerEvent where TEnum : struct, Enum
   {
-    protected EnumCondition(TEnum target, EnumOperator op = EnumOperator.EqualTo)
+    protected EnumCondition(TEnum target, EnumOperator op)
     {
       Target = target;
       Operator = op;
@@ -54,5 +54,16 @@ namespace Nighthollow.Triggers.Conditions
     }
 
     public abstract TEnum GetSource(TEvent triggerEvent, GameData data);
+
+    public abstract string SourceDescription { get; }
+
+    public string Description => $"{SourceDescription} {OperatorDescription} {Target}";
+
+    string OperatorDescription => Operator switch
+    {
+      EnumOperator.EqualTo => "is",
+      EnumOperator.NotEqualTo => "is not",
+      _ => "<Operator?>"
+    };
   }
 }

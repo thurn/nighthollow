@@ -14,7 +14,9 @@
 
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
 using MessagePack;
+using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Triggers.Events;
 using UnityEngine;
@@ -26,6 +28,10 @@ namespace Nighthollow.Triggers
   [Union(0, typeof(TriggerData<SceneReadyEvent>))]
   public interface ITriggerData
   {
+    public string? Name { get; }
+    [NestedSheet] string EventDescription { get; }
+    [NestedSheet] string ConditionsDescription { get; }
+    [NestedSheet] string EffectsDescription { get; }
     bool Disabled { get; }
 
     public ITriggerData WithDisabled(bool disabled);
@@ -51,6 +57,15 @@ namespace Nighthollow.Triggers
     public ImmutableList<IEffect<TEvent>> Effects { get; }
     public bool Disabled { get; }
 
+    public string EventDescription =>
+      (string) typeof(TEvent)
+        .GetProperty("Description", BindingFlags.Static | BindingFlags.Public)!
+        .GetValue(typeof(TEvent));
+
+    public string ConditionsDescription => $"If {string.Join("\nAnd ", Conditions.Select(c => c.Description))}";
+
+    public string EffectsDescription => $"Then {string.Join("\nAnd ", Effects.Select(e => e.Description))}";
+
     /// <summary>
     /// Check trigger conditions and then fire effects if they all pass -- returns true if effects fired.
     /// </summary>
@@ -71,6 +86,10 @@ namespace Nighthollow.Triggers
 
       return true;
     }
+
+    public ITriggerData WithName(string? name) => ReferenceEquals(name, Name)
+      ? this
+      : new TriggerData<TEvent>(name, Conditions, Effects, Disabled);
 
     public ITriggerData WithDisabled(bool disabled) =>
       disabled == Disabled ? this : new TriggerData<TEvent>(Name, Conditions, Effects, disabled);

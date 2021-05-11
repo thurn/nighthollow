@@ -24,6 +24,7 @@ namespace Nighthollow.Triggers
   [Union(1, typeof(UserDeckSizeCondition))]
   public interface ICondition
   {
+    string Description { get; }
   }
 
   public interface ICondition<in TEvent> : ICondition where TEvent : TriggerEvent

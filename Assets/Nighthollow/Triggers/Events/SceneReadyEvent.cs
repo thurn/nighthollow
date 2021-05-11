@@ -34,5 +34,7 @@ namespace Nighthollow.Triggers.Events
     }
 
     public Name SceneName { get; }
+
+    public static string Description => "Whenever a new scene is ready";
   }
 }
