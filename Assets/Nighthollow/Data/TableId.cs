@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Immutable;
 using System.IO;
 using MessagePack;
+using Nighthollow.Triggers;
 
 #nullable enable
 
@@ -123,6 +124,9 @@ namespace Nighthollow.Data
     public static readonly TableId<BattleData> BattleData =
       new BattleDataTableId(10, "BattleData");
 
+    public static readonly TableId<ITriggerData> Triggers =
+      new TriggersTableId(11, "Triggers");
+
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
       TableMetadata,
       CreatureTypes,
@@ -134,7 +138,8 @@ namespace Nighthollow.Data
       Collection,
       Deck,
       StatusEffectTypes,
-      BattleData
+      BattleData,
+      Triggers
     );
 
     sealed class TableMetadataTableId : TableId<TableMetadata>
@@ -278,6 +283,21 @@ namespace Nighthollow.Data
 
       protected override GameData WriteSingleton(GameData gameData, BattleData newValue) =>
         gameData.WithBattleData(newValue);
+    }
+
+    sealed class TriggersTableId : TableId<ITriggerData>
+    {
+      public TriggersTableId(int id, string tableName) : base(id, tableName)
+      {
+      }
+
+      public override ImmutableDictionary<int, ITriggerData> GetIn(GameData gameData) =>
+        gameData.Triggers;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, ITriggerData> newValue)
+      {
+        throw new NotImplementedException();
+      }
     }
   }
 }

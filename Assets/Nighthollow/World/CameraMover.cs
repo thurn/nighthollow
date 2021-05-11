@@ -21,6 +21,19 @@ namespace Nighthollow.World
 {
   public sealed class CameraMover : MonoBehaviour
   {
+    [SerializeField] Camera _camera = null!;
+    [SerializeField] float _zoomDelta;
+    [SerializeField] WorldMap _worldMap = null!;
+    [SerializeField] float _keyboardMovementSpeed;
+    [SerializeField] float _scrollWheelZoomSpeed;
+    [SerializeField] float _keyboardZoomSpeed;
+    [SerializeField] float _minimumCameraSize;
+    [SerializeField] float _maximumCameraSize;
+    [SerializeField] float _maxXZoomedIn;
+    [SerializeField] float _maxXZoomedOut;
+    [SerializeField] float _maxYZoomedIn;
+    [SerializeField] float _maxYZoomedOut;
+
     public Camera Camera => _camera;
 
     void Awake()
@@ -31,8 +44,7 @@ namespace Nighthollow.World
     void Update()
     {
       var translation = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), z: 0) *
-                        _keyboardMovementSpeed *
-                        Time.deltaTime;
+                        (_keyboardMovementSpeed * Time.deltaTime);
       if (translation != Vector3.zero)
       {
         transform.Translate(translation, Space.Self);
@@ -74,19 +86,5 @@ namespace Nighthollow.World
         return 0;
       }
     }
-#pragma warning disable 0649
-    [SerializeField] Camera _camera = null!;
-    [SerializeField] WorldMap _worldMap = null!;
-    [SerializeField] float _keyboardMovementSpeed;
-    [SerializeField] float _scrollWheelZoomSpeed;
-    [SerializeField] float _keyboardZoomSpeed;
-    [SerializeField] float _minimumCameraSize;
-    [SerializeField] float _maximumCameraSize;
-    [SerializeField] float _maxXZoomedIn;
-    [SerializeField] float _maxXZoomedOut;
-    [SerializeField] float _maxYZoomedIn;
-    [SerializeField] float _maxYZoomedOut;
-    [Header("State")] [SerializeField] float _zoomDelta;
-#pragma warning restore 0649
   }
 }

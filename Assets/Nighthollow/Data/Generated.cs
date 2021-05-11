@@ -5,6 +5,7 @@ using Nighthollow.Delegates;
 using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.State;
+using Nighthollow.Triggers;
 
 #nullable enable
 
@@ -403,7 +404,8 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          StatusEffects);
+          StatusEffects,
+          Triggers);
 
     public GameData WithTableMetadata(ImmutableDictionary<int, TableMetadata> tableMetadata) =>
       Equals(tableMetadata, TableMetadata)
@@ -419,7 +421,8 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          StatusEffects);
+          StatusEffects,
+          Triggers);
 
     public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
       Equals(creatureTypes, CreatureTypes)
@@ -435,7 +438,8 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          StatusEffects);
+          StatusEffects,
+          Triggers);
 
     public GameData WithAffixTypes(ImmutableDictionary<int, AffixTypeData> affixTypes) =>
       Equals(affixTypes, AffixTypes)
@@ -451,7 +455,8 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          StatusEffects);
+          StatusEffects,
+          Triggers);
 
     public GameData WithSkillTypes(ImmutableDictionary<int, SkillTypeData> skillTypes) =>
       Equals(skillTypes, SkillTypes)
@@ -467,7 +472,8 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          StatusEffects);
+          StatusEffects,
+          Triggers);
 
     public GameData WithStatData(ImmutableDictionary<int, StatData> statData) =>
       Equals(statData, StatData)
@@ -483,7 +489,8 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          StatusEffects);
+          StatusEffects,
+          Triggers);
 
     public GameData WithItemLists(ImmutableDictionary<int, StaticItemListData> itemLists) =>
       Equals(itemLists, ItemLists)
@@ -499,7 +506,8 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          StatusEffects);
+          StatusEffects,
+          Triggers);
 
     public GameData WithUserModifiers(ImmutableDictionary<int, ModifierData> userModifiers) =>
       Equals(userModifiers, UserModifiers)
@@ -515,7 +523,8 @@ namespace Nighthollow.Data
           userModifiers,
           Collection,
           Deck,
-          StatusEffects);
+          StatusEffects,
+          Triggers);
 
     public GameData WithCollection(ImmutableDictionary<int, CreatureItemData> collection) =>
       Equals(collection, Collection)
@@ -531,7 +540,8 @@ namespace Nighthollow.Data
           UserModifiers,
           collection,
           Deck,
-          StatusEffects);
+          StatusEffects,
+          Triggers);
 
     public GameData WithDeck(ImmutableDictionary<int, CreatureItemData> deck) =>
       Equals(deck, Deck)
@@ -547,7 +557,8 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           deck,
-          StatusEffects);
+          StatusEffects,
+          Triggers);
 
     public GameData WithStatusEffects(ImmutableDictionary<int, StatusEffectTypeData> statusEffects) =>
       Equals(statusEffects, StatusEffects)
@@ -563,7 +574,25 @@ namespace Nighthollow.Data
           UserModifiers,
           Collection,
           Deck,
-          statusEffects);
+          statusEffects,
+          Triggers);
+
+    public GameData WithTriggers(ImmutableDictionary<int, ITriggerData> triggers) =>
+      Equals(triggers, Triggers)
+        ? this
+        : new GameData(
+          BattleData,
+          TableMetadata,
+          CreatureTypes,
+          AffixTypes,
+          SkillTypes,
+          StatData,
+          ItemLists,
+          UserModifiers,
+          Collection,
+          Deck,
+          StatusEffects,
+          triggers);
 
   }
 

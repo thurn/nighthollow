@@ -130,7 +130,7 @@ namespace Nighthollow.World
 
     public TileBase GetIcon(Vector2Int hex) => _overlayTilemap.GetTile(new Vector3Int(hex.x, hex.y, IconZ));
 
-    public void OutlineHexes(Color color, ISet<Vector2Int> hexes)
+    void OutlineHexes(Color color, ISet<Vector2Int> hexes)
     {
       var bottomLeftSelection = Instantiate(_bottomLeftSelection);
       var bottomRightSelection = Instantiate(_bottomRightSelection);

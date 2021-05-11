@@ -18,6 +18,7 @@ using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates;
 using Nighthollow.Interface;
+using Nighthollow.Triggers;
 using Nighthollow.Utils;
 using Nighthollow.World;
 using UnityEngine;
@@ -56,6 +57,8 @@ namespace Nighthollow.Services
     public ScreenController ScreenController => _screenController ??= new ScreenController(_document, this);
     public Camera MainCamera { get; }
     public ObjectPoolService ObjectPoolService { get; }
+    TriggerService? _triggerService;
+    public TriggerService TriggerService => _triggerService ??= new TriggerService(this);
   }
 
   public sealed class WorldServiceRegistry : ServiceRegistry

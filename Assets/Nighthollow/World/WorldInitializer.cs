@@ -12,9 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Services;
+using Nighthollow.Triggers;
+using Nighthollow.Triggers.Conditions;
+using Nighthollow.Triggers.Effects;
+using Nighthollow.Triggers.Events;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -56,6 +61,16 @@ namespace Nighthollow.World
       _worldMap.Initialize(_registry);
       _registry.ScreenController.Show(ScreenController.AdvisorBar);
       _registry.WorldTutorial.OnWorldSceneLoaded();
+      _registry.TriggerService.Invoke(new SceneReadyEvent(SceneReadyEvent.Name.World));
+
+      var testTrigger = new TriggerData<SceneReadyEvent>(
+        "Test",
+        ImmutableList<ICondition<SceneReadyEvent>>.Empty.Add(new SceneNameCondition(SceneReadyEvent.Name.World)),
+        ImmutableList<IEffect<SceneReadyEvent>>.Empty.Add(new DisplayHelpTextEffect(
+          new Vector2(x: 250, y: 300),
+          DisplayHelpTextEffect.Direction.Bottom,
+          "Hello, world")));
+      _registry.Database.Insert(TableId.Triggers, testTrigger);
     }
   }
 }
