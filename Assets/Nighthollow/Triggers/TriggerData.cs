@@ -31,11 +31,11 @@ namespace Nighthollow.Triggers
     public ITriggerData WithDisabled(bool disabled);
   }
 
-  [MessagePackObject]
+  [MessagePackFormatter(typeof(TriggerDataFormatter<>))]
   public sealed class TriggerData<TEvent> : ITriggerData where TEvent : TriggerEvent
   {
     public TriggerData(
-      string name,
+      string? name = null,
       ImmutableList<ICondition<TEvent>>? conditions = null,
       ImmutableList<IEffect<TEvent>>? effects = null,
       bool disabled = false)
@@ -46,10 +46,10 @@ namespace Nighthollow.Triggers
       Disabled = disabled;
     }
 
-    [Key(0)] public string Name { get; }
-    [Key(1)] public ImmutableList<ICondition<TEvent>> Conditions { get; }
-    [Key(2)] public ImmutableList<IEffect<TEvent>> Effects { get; }
-    [Key(3)] public bool Disabled { get; }
+    public string? Name { get; }
+    public ImmutableList<ICondition<TEvent>> Conditions { get; }
+    public ImmutableList<IEffect<TEvent>> Effects { get; }
+    public bool Disabled { get; }
 
     /// <summary>
     /// Check trigger conditions and then fire effects if they all pass -- returns true if effects fired.

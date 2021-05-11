@@ -137,7 +137,7 @@ namespace Nighthollow.Interface
 
     public void OnUpdate()
     {
-      if (Input.GetKeyDown(KeyCode.G) && CtrlOrCmdDown())
+      if (Input.GetKeyDown(KeyCode.J) && CtrlOrCmdDown())
       {
         var editor = Get(GameDataEditor);
         if (editor.Visible)

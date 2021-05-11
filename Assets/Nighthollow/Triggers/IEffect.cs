@@ -21,7 +21,11 @@ using Nighthollow.Triggers.Effects;
 namespace Nighthollow.Triggers
 {
   [Union(0, typeof(DisplayHelpTextEffect))]
-  public interface IEffect<in TEvent> where TEvent : TriggerEvent
+  public interface IEffect
+  {
+  }
+
+  public interface IEffect<in TEvent> : IEffect where TEvent : TriggerEvent
   {
     void Execute(TEvent triggerEvent, ServiceRegistry registry);
   }

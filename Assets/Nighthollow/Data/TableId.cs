@@ -294,10 +294,8 @@ namespace Nighthollow.Data
       public override ImmutableDictionary<int, ITriggerData> GetIn(GameData gameData) =>
         gameData.Triggers;
 
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, ITriggerData> newValue)
-      {
-        throw new NotImplementedException();
-      }
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, ITriggerData> newValue) =>
+        gameData.WithTriggers(newValue);
     }
   }
 }

@@ -22,7 +22,11 @@ namespace Nighthollow.Triggers
 {
   [Union(0, typeof(SceneNameCondition))]
   [Union(1, typeof(UserDeckSizeCondition))]
-  public interface ICondition<in TEvent> where TEvent : TriggerEvent
+  public interface ICondition
+  {
+  }
+
+  public interface ICondition<in TEvent> : ICondition where TEvent : TriggerEvent
   {
     bool Satisfied(TEvent triggerEvent, GameData data);
   }

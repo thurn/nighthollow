@@ -49,7 +49,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(79)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(78)
             {
                 { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Data.DamageType, global::Nighthollow.Stats.IntRangeValue>), 0 },
                 { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Data.DamageType, global::Nighthollow.Stats.PercentageValue>), 1 },
@@ -82,54 +82,53 @@ namespace MessagePack.Resolvers
                 { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ResourceItemData>), 28 },
                 { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillItemData>), 29 },
                 { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.StatusEffectItemData>), 30 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.Condition<TEvent>>), 31 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.Effect<TEvent>>), 32 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<int>), 33 },
-                { typeof(global::Nighthollow.Data.DamageType), 34 },
-                { typeof(global::Nighthollow.Data.PlayerName), 35 },
-                { typeof(global::Nighthollow.Data.School), 36 },
-                { typeof(global::Nighthollow.Data.SkillAnimationNumber), 37 },
-                { typeof(global::Nighthollow.Data.SkillAnimationType), 38 },
-                { typeof(global::Nighthollow.Data.SkillType), 39 },
-                { typeof(global::Nighthollow.Data.StatTagType), 40 },
-                { typeof(global::Nighthollow.Data.StatType), 41 },
-                { typeof(global::Nighthollow.Delegates.DelegateId), 42 },
-                { typeof(global::Nighthollow.Stats.ModifierType), 43 },
-                { typeof(global::Nighthollow.Stats.StatId), 44 },
-                { typeof(global::Nighthollow.Triggers.Conditions.EnumCondition<global::Nighthollow.Triggers.Events.SceneReadyEvent, global::Nighthollow.Triggers.Events.SceneReadyEvent.Name>.EnumOperator), 45 },
-                { typeof(global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum>.EnumOperator), 46 },
-                { typeof(global::Nighthollow.Triggers.Conditions.IntegerCondition<global::Nighthollow.Triggers.TriggerEvent>.IntegerOperator), 47 },
-                { typeof(global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent>.IntegerOperator), 48 },
-                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction), 49 },
-                { typeof(global::Nighthollow.Triggers.Events.SceneReadyEvent.Name), 50 },
-                { typeof(global::Nighthollow.Data.IItemData), 51 },
-                { typeof(global::Nighthollow.Data.IValueData), 52 },
-                { typeof(global::Nighthollow.Triggers.ITriggerData), 53 },
-                { typeof(global::Nighthollow.Components.GameDataHolder), 54 },
-                { typeof(global::Nighthollow.Data.AffixData), 55 },
-                { typeof(global::Nighthollow.Data.AffixTypeData), 56 },
-                { typeof(global::Nighthollow.Data.BattleData), 57 },
-                { typeof(global::Nighthollow.Data.BoolValueData), 58 },
-                { typeof(global::Nighthollow.Data.CreatureItemData), 59 },
-                { typeof(global::Nighthollow.Data.CreatureSkillAnimation), 60 },
-                { typeof(global::Nighthollow.Data.CreatureTypeData), 61 },
-                { typeof(global::Nighthollow.Data.IntValueData), 62 },
-                { typeof(global::Nighthollow.Data.ModifierData), 63 },
-                { typeof(global::Nighthollow.Data.ResourceItemData), 64 },
-                { typeof(global::Nighthollow.Data.SerializationList), 65 },
-                { typeof(global::Nighthollow.Data.SkillItemData), 66 },
-                { typeof(global::Nighthollow.Data.SkillTypeData), 67 },
-                { typeof(global::Nighthollow.Data.StatData), 68 },
-                { typeof(global::Nighthollow.Data.StaticItemListData), 69 },
-                { typeof(global::Nighthollow.Data.StatusEffectItemData), 70 },
-                { typeof(global::Nighthollow.Data.StatusEffectTypeData), 71 },
-                { typeof(global::Nighthollow.Data.TableMetadata), 72 },
-                { typeof(global::Nighthollow.Stats.DurationValue), 73 },
-                { typeof(global::Nighthollow.Stats.IntRangeValue), 74 },
-                { typeof(global::Nighthollow.Stats.PercentageValue), 75 },
-                { typeof(global::Nighthollow.Triggers.Conditions.SceneNameCondition), 76 },
-                { typeof(global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition), 77 },
-                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect), 78 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<int>), 31 },
+                { typeof(global::Nighthollow.Data.DamageType), 32 },
+                { typeof(global::Nighthollow.Data.PlayerName), 33 },
+                { typeof(global::Nighthollow.Data.School), 34 },
+                { typeof(global::Nighthollow.Data.SkillAnimationNumber), 35 },
+                { typeof(global::Nighthollow.Data.SkillAnimationType), 36 },
+                { typeof(global::Nighthollow.Data.SkillType), 37 },
+                { typeof(global::Nighthollow.Data.StatTagType), 38 },
+                { typeof(global::Nighthollow.Data.StatType), 39 },
+                { typeof(global::Nighthollow.Delegates.DelegateId), 40 },
+                { typeof(global::Nighthollow.Stats.ModifierType), 41 },
+                { typeof(global::Nighthollow.Stats.StatId), 42 },
+                { typeof(global::Nighthollow.Triggers.Conditions.EnumOperator), 43 },
+                { typeof(global::Nighthollow.Triggers.Conditions.IntegerOperator), 44 },
+                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction), 45 },
+                { typeof(global::Nighthollow.Triggers.Events.SceneReadyEvent.Name), 46 },
+                { typeof(global::Nighthollow.Data.IItemData), 47 },
+                { typeof(global::Nighthollow.Data.IValueData), 48 },
+                { typeof(global::Nighthollow.Triggers.ICondition), 49 },
+                { typeof(global::Nighthollow.Triggers.IEffect), 50 },
+                { typeof(global::Nighthollow.Triggers.ITriggerData), 51 },
+                { typeof(global::Nighthollow.Components.GameDataHolder), 52 },
+                { typeof(global::Nighthollow.Data.AffixData), 53 },
+                { typeof(global::Nighthollow.Data.AffixTypeData), 54 },
+                { typeof(global::Nighthollow.Data.BattleData), 55 },
+                { typeof(global::Nighthollow.Data.BoolValueData), 56 },
+                { typeof(global::Nighthollow.Data.CreatureItemData), 57 },
+                { typeof(global::Nighthollow.Data.CreatureSkillAnimation), 58 },
+                { typeof(global::Nighthollow.Data.CreatureTypeData), 59 },
+                { typeof(global::Nighthollow.Data.IntValueData), 60 },
+                { typeof(global::Nighthollow.Data.ModifierData), 61 },
+                { typeof(global::Nighthollow.Data.ResourceItemData), 62 },
+                { typeof(global::Nighthollow.Data.SerializationList), 63 },
+                { typeof(global::Nighthollow.Data.SkillItemData), 64 },
+                { typeof(global::Nighthollow.Data.SkillTypeData), 65 },
+                { typeof(global::Nighthollow.Data.StatData), 66 },
+                { typeof(global::Nighthollow.Data.StaticItemListData), 67 },
+                { typeof(global::Nighthollow.Data.StatusEffectItemData), 68 },
+                { typeof(global::Nighthollow.Data.StatusEffectTypeData), 69 },
+                { typeof(global::Nighthollow.Data.TableMetadata), 70 },
+                { typeof(global::Nighthollow.Stats.DurationValue), 71 },
+                { typeof(global::Nighthollow.Stats.IntRangeValue), 72 },
+                { typeof(global::Nighthollow.Stats.PercentageValue), 73 },
+                { typeof(global::Nighthollow.Triggers.Conditions.SceneNameCondition), 74 },
+                { typeof(global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition), 75 },
+                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect), 76 },
+                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition), 77 },
             };
         }
 
@@ -174,54 +173,53 @@ namespace MessagePack.Resolvers
                 case 28: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.ResourceItemData>();
                 case 29: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.SkillItemData>();
                 case 30: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.StatusEffectItemData>();
-                case 31: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Triggers.Condition<TEvent>>();
-                case 32: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Triggers.Effect<TEvent>>();
-                case 33: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<int>();
-                case 34: return new MessagePack.Formatters.Nighthollow.Data.DamageTypeFormatter();
-                case 35: return new MessagePack.Formatters.Nighthollow.Data.PlayerNameFormatter();
-                case 36: return new MessagePack.Formatters.Nighthollow.Data.SchoolFormatter();
-                case 37: return new MessagePack.Formatters.Nighthollow.Data.SkillAnimationNumberFormatter();
-                case 38: return new MessagePack.Formatters.Nighthollow.Data.SkillAnimationTypeFormatter();
-                case 39: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeFormatter();
-                case 40: return new MessagePack.Formatters.Nighthollow.Data.StatTagTypeFormatter();
-                case 41: return new MessagePack.Formatters.Nighthollow.Data.StatTypeFormatter();
-                case 42: return new MessagePack.Formatters.Nighthollow.Delegates.DelegateIdFormatter();
-                case 43: return new MessagePack.Formatters.Nighthollow.Stats.ModifierTypeFormatter();
-                case 44: return new MessagePack.Formatters.Nighthollow.Stats.StatIdFormatter();
-                case 45: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.EnumCondition_EnumOperatorFormatter();
-                case 46: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.EnumCondition_EnumOperatorFormatter();
-                case 47: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.IntegerCondition_IntegerOperatorFormatter();
-                case 48: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.IntegerCondition_IntegerOperatorFormatter();
-                case 49: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffect_DirectionFormatter();
-                case 50: return new MessagePack.Formatters.Nighthollow.Triggers.Events.SceneReadyEvent_NameFormatter();
-                case 51: return new MessagePack.Formatters.Nighthollow.Data.IItemDataFormatter();
-                case 52: return new MessagePack.Formatters.Nighthollow.Data.IValueDataFormatter();
-                case 53: return new MessagePack.Formatters.Nighthollow.Triggers.ITriggerDataFormatter();
-                case 54: return new MessagePack.Formatters.Nighthollow.Components.GameDataHolderFormatter();
-                case 55: return new MessagePack.Formatters.Nighthollow.Data.AffixDataFormatter();
-                case 56: return new MessagePack.Formatters.Nighthollow.Data.AffixTypeDataFormatter();
-                case 57: return new MessagePack.Formatters.Nighthollow.Data.BattleDataFormatter();
-                case 58: return new MessagePack.Formatters.Nighthollow.Data.BoolValueDataFormatter();
-                case 59: return new MessagePack.Formatters.Nighthollow.Data.CreatureItemDataFormatter();
-                case 60: return new MessagePack.Formatters.Nighthollow.Data.CreatureSkillAnimationFormatter();
-                case 61: return new MessagePack.Formatters.Nighthollow.Data.CreatureTypeDataFormatter();
-                case 62: return new MessagePack.Formatters.Nighthollow.Data.IntValueDataFormatter();
-                case 63: return new MessagePack.Formatters.Nighthollow.Data.ModifierDataFormatter();
-                case 64: return new MessagePack.Formatters.Nighthollow.Data.ResourceItemDataFormatter();
-                case 65: return new MessagePack.Formatters.Nighthollow.Data.SerializationListFormatter();
-                case 66: return new MessagePack.Formatters.Nighthollow.Data.SkillItemDataFormatter();
-                case 67: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeDataFormatter();
-                case 68: return new MessagePack.Formatters.Nighthollow.Data.StatDataFormatter();
-                case 69: return new MessagePack.Formatters.Nighthollow.Data.StaticItemListDataFormatter();
-                case 70: return new MessagePack.Formatters.Nighthollow.Data.StatusEffectItemDataFormatter();
-                case 71: return new MessagePack.Formatters.Nighthollow.Data.StatusEffectTypeDataFormatter();
-                case 72: return new MessagePack.Formatters.Nighthollow.Data.TableMetadataFormatter();
-                case 73: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
-                case 74: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
-                case 75: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
-                case 76: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.SceneNameConditionFormatter();
-                case 77: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.UserDeckSizeConditionFormatter();
-                case 78: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffectFormatter();
+                case 31: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<int>();
+                case 32: return new MessagePack.Formatters.Nighthollow.Data.DamageTypeFormatter();
+                case 33: return new MessagePack.Formatters.Nighthollow.Data.PlayerNameFormatter();
+                case 34: return new MessagePack.Formatters.Nighthollow.Data.SchoolFormatter();
+                case 35: return new MessagePack.Formatters.Nighthollow.Data.SkillAnimationNumberFormatter();
+                case 36: return new MessagePack.Formatters.Nighthollow.Data.SkillAnimationTypeFormatter();
+                case 37: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeFormatter();
+                case 38: return new MessagePack.Formatters.Nighthollow.Data.StatTagTypeFormatter();
+                case 39: return new MessagePack.Formatters.Nighthollow.Data.StatTypeFormatter();
+                case 40: return new MessagePack.Formatters.Nighthollow.Delegates.DelegateIdFormatter();
+                case 41: return new MessagePack.Formatters.Nighthollow.Stats.ModifierTypeFormatter();
+                case 42: return new MessagePack.Formatters.Nighthollow.Stats.StatIdFormatter();
+                case 43: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.EnumOperatorFormatter();
+                case 44: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.IntegerOperatorFormatter();
+                case 45: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffect_DirectionFormatter();
+                case 46: return new MessagePack.Formatters.Nighthollow.Triggers.Events.SceneReadyEvent_NameFormatter();
+                case 47: return new MessagePack.Formatters.Nighthollow.Data.IItemDataFormatter();
+                case 48: return new MessagePack.Formatters.Nighthollow.Data.IValueDataFormatter();
+                case 49: return new MessagePack.Formatters.Nighthollow.Triggers.IConditionFormatter();
+                case 50: return new MessagePack.Formatters.Nighthollow.Triggers.IEffectFormatter();
+                case 51: return new MessagePack.Formatters.Nighthollow.Triggers.ITriggerDataFormatter();
+                case 52: return new MessagePack.Formatters.Nighthollow.Components.GameDataHolderFormatter();
+                case 53: return new MessagePack.Formatters.Nighthollow.Data.AffixDataFormatter();
+                case 54: return new MessagePack.Formatters.Nighthollow.Data.AffixTypeDataFormatter();
+                case 55: return new MessagePack.Formatters.Nighthollow.Data.BattleDataFormatter();
+                case 56: return new MessagePack.Formatters.Nighthollow.Data.BoolValueDataFormatter();
+                case 57: return new MessagePack.Formatters.Nighthollow.Data.CreatureItemDataFormatter();
+                case 58: return new MessagePack.Formatters.Nighthollow.Data.CreatureSkillAnimationFormatter();
+                case 59: return new MessagePack.Formatters.Nighthollow.Data.CreatureTypeDataFormatter();
+                case 60: return new MessagePack.Formatters.Nighthollow.Data.IntValueDataFormatter();
+                case 61: return new MessagePack.Formatters.Nighthollow.Data.ModifierDataFormatter();
+                case 62: return new MessagePack.Formatters.Nighthollow.Data.ResourceItemDataFormatter();
+                case 63: return new MessagePack.Formatters.Nighthollow.Data.SerializationListFormatter();
+                case 64: return new MessagePack.Formatters.Nighthollow.Data.SkillItemDataFormatter();
+                case 65: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeDataFormatter();
+                case 66: return new MessagePack.Formatters.Nighthollow.Data.StatDataFormatter();
+                case 67: return new MessagePack.Formatters.Nighthollow.Data.StaticItemListDataFormatter();
+                case 68: return new MessagePack.Formatters.Nighthollow.Data.StatusEffectItemDataFormatter();
+                case 69: return new MessagePack.Formatters.Nighthollow.Data.StatusEffectTypeDataFormatter();
+                case 70: return new MessagePack.Formatters.Nighthollow.Data.TableMetadataFormatter();
+                case 71: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
+                case 72: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
+                case 73: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
+                case 74: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.SceneNameConditionFormatter();
+                case 75: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.UserDeckSizeConditionFormatter();
+                case 76: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffectFormatter();
+                case 77: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffect_ArrowPositionFormatter();
                 default: return null;
             }
         }
@@ -487,55 +485,29 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Conditions
     using System.Buffers;
     using MessagePack;
 
-    public sealed class EnumCondition_EnumOperatorFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.EnumCondition<global::Nighthollow.Triggers.Events.SceneReadyEvent, global::Nighthollow.Triggers.Events.SceneReadyEvent.Name>.EnumOperator>
+    public sealed class EnumOperatorFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.EnumOperator>
     {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Conditions.EnumCondition<global::Nighthollow.Triggers.Events.SceneReadyEvent, global::Nighthollow.Triggers.Events.SceneReadyEvent.Name>.EnumOperator value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Conditions.EnumOperator value, global::MessagePack.MessagePackSerializerOptions options)
         {
             writer.Write((Int32)value);
         }
 
-        public global::Nighthollow.Triggers.Conditions.EnumCondition<global::Nighthollow.Triggers.Events.SceneReadyEvent, global::Nighthollow.Triggers.Events.SceneReadyEvent.Name>.EnumOperator Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Triggers.Conditions.EnumOperator Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
-            return (global::Nighthollow.Triggers.Conditions.EnumCondition<global::Nighthollow.Triggers.Events.SceneReadyEvent, global::Nighthollow.Triggers.Events.SceneReadyEvent.Name>.EnumOperator)reader.ReadInt32();
+            return (global::Nighthollow.Triggers.Conditions.EnumOperator)reader.ReadInt32();
         }
     }
 
-    public sealed class EnumCondition_EnumOperatorFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum>.EnumOperator>
+    public sealed class IntegerOperatorFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.IntegerOperator>
     {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum>.EnumOperator value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Conditions.IntegerOperator value, global::MessagePack.MessagePackSerializerOptions options)
         {
             writer.Write((Int32)value);
         }
 
-        public global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum>.EnumOperator Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Triggers.Conditions.IntegerOperator Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
-            return (global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum>.EnumOperator)reader.ReadInt32();
-        }
-    }
-
-    public sealed class IntegerCondition_IntegerOperatorFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.IntegerCondition<global::Nighthollow.Triggers.TriggerEvent>.IntegerOperator>
-    {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Conditions.IntegerCondition<global::Nighthollow.Triggers.TriggerEvent>.IntegerOperator value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((Int32)value);
-        }
-
-        public global::Nighthollow.Triggers.Conditions.IntegerCondition<global::Nighthollow.Triggers.TriggerEvent>.IntegerOperator Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::Nighthollow.Triggers.Conditions.IntegerCondition<global::Nighthollow.Triggers.TriggerEvent>.IntegerOperator)reader.ReadInt32();
-        }
-    }
-
-    public sealed class IntegerCondition_IntegerOperatorFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent>.IntegerOperator>
-    {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent>.IntegerOperator value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((Int32)value);
-        }
-
-        public global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent>.IntegerOperator Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent>.IntegerOperator)reader.ReadInt32();
+            return (global::Nighthollow.Triggers.Conditions.IntegerOperator)reader.ReadInt32();
         }
     }
 }
@@ -907,6 +879,164 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
     using System.Buffers;
     using System.Collections.Generic;
     using MessagePack;
+
+    public sealed class IConditionFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.ICondition>
+    {
+        private readonly Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>> typeToKeyAndJumpMap;
+        private readonly Dictionary<int, int> keyToJumpMap;
+
+        public IConditionFormatter()
+        {
+            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(2, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
+            {
+                { typeof(global::Nighthollow.Triggers.Conditions.SceneNameCondition).TypeHandle, new KeyValuePair<int, int>(0, 0) },
+                { typeof(global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition).TypeHandle, new KeyValuePair<int, int>(1, 1) },
+            };
+            this.keyToJumpMap = new Dictionary<int, int>(2)
+            {
+                { 0, 0 },
+                { 1, 1 },
+            };
+        }
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.ICondition value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            KeyValuePair<int, int> keyValuePair;
+            if (value != null && this.typeToKeyAndJumpMap.TryGetValue(value.GetType().TypeHandle, out keyValuePair))
+            {
+                writer.WriteArrayHeader(2);
+                writer.WriteInt32(keyValuePair.Key);
+                switch (keyValuePair.Value)
+                {
+                    case 0:
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.SceneNameCondition>().Serialize(ref writer, (global::Nighthollow.Triggers.Conditions.SceneNameCondition)value, options);
+                        break;
+                    case 1:
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition>().Serialize(ref writer, (global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition)value, options);
+                        break;
+                    default:
+                        break;
+                }
+
+                return;
+            }
+
+            writer.WriteNil();
+        }
+
+        public global::Nighthollow.Triggers.ICondition Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            if (reader.ReadArrayHeader() != 2)
+            {
+                throw new InvalidOperationException("Invalid Union data was detected. Type:global::Nighthollow.Triggers.ICondition");
+            }
+
+            options.Security.DepthStep(ref reader);
+            var key = reader.ReadInt32();
+
+            if (!this.keyToJumpMap.TryGetValue(key, out key))
+            {
+                key = -1;
+            }
+
+            global::Nighthollow.Triggers.ICondition result = null;
+            switch (key)
+            {
+                case 0:
+                    result = (global::Nighthollow.Triggers.ICondition)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.SceneNameCondition>().Deserialize(ref reader, options);
+                    break;
+                case 1:
+                    result = (global::Nighthollow.Triggers.ICondition)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition>().Deserialize(ref reader, options);
+                    break;
+                default:
+                    reader.Skip();
+                    break;
+            }
+
+            reader.Depth--;
+            return result;
+        }
+    }
+
+    public sealed class IEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.IEffect>
+    {
+        private readonly Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>> typeToKeyAndJumpMap;
+        private readonly Dictionary<int, int> keyToJumpMap;
+
+        public IEffectFormatter()
+        {
+            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(1, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
+            {
+                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect).TypeHandle, new KeyValuePair<int, int>(0, 0) },
+            };
+            this.keyToJumpMap = new Dictionary<int, int>(1)
+            {
+                { 0, 0 },
+            };
+        }
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.IEffect value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            KeyValuePair<int, int> keyValuePair;
+            if (value != null && this.typeToKeyAndJumpMap.TryGetValue(value.GetType().TypeHandle, out keyValuePair))
+            {
+                writer.WriteArrayHeader(2);
+                writer.WriteInt32(keyValuePair.Key);
+                switch (keyValuePair.Value)
+                {
+                    case 0:
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect)value, options);
+                        break;
+                    default:
+                        break;
+                }
+
+                return;
+            }
+
+            writer.WriteNil();
+        }
+
+        public global::Nighthollow.Triggers.IEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            if (reader.ReadArrayHeader() != 2)
+            {
+                throw new InvalidOperationException("Invalid Union data was detected. Type:global::Nighthollow.Triggers.IEffect");
+            }
+
+            options.Security.DepthStep(ref reader);
+            var key = reader.ReadInt32();
+
+            if (!this.keyToJumpMap.TryGetValue(key, out key))
+            {
+                key = -1;
+            }
+
+            global::Nighthollow.Triggers.IEffect result = null;
+            switch (key)
+            {
+                case 0:
+                    result = (global::Nighthollow.Triggers.IEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect>().Deserialize(ref reader, options);
+                    break;
+                default:
+                    reader.Skip();
+                    break;
+            }
+
+            reader.Depth--;
+            return result;
+        }
+    }
 
     public sealed class ITriggerDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.ITriggerData>
     {
@@ -2712,298 +2842,11 @@ namespace MessagePack.Formatters.Nighthollow.Stats
 #pragma warning disable SA1403 // File may only contain a single namespace
 #pragma warning disable SA1649 // File name should match first type name
 
-namespace MessagePack.Formatters.Nighthollow.Triggers
-{
-    using System;
-    using System.Buffers;
-    using MessagePack;
-
-    public sealed class ConditionFormatter<TEvent> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Condition<TEvent>>
-        where TEvent : global::Nighthollow.Triggers.TriggerEvent
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Condition<TEvent> value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            writer.WriteArrayHeader(0);
-        }
-
-        public global::Nighthollow.Triggers.Condition<TEvent> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            var length = reader.ReadArrayHeader();
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Condition<TEvent>();
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class EffectFormatter<TEvent> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effect<TEvent>>
-        where TEvent : global::Nighthollow.Triggers.TriggerEvent
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effect<TEvent> value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            writer.WriteArrayHeader(0);
-        }
-
-        public global::Nighthollow.Triggers.Effect<TEvent> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            var length = reader.ReadArrayHeader();
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Effect<TEvent>();
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class TriggerDataFormatter<TEvent> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.TriggerData<TEvent>>
-        where TEvent : global::Nighthollow.Triggers.TriggerEvent
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.TriggerData<TEvent> value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(4);
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.Condition<TEvent>>>().Serialize(ref writer, value.Conditions, options);
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.Effect<TEvent>>>().Serialize(ref writer, value.Effects, options);
-            writer.Write(value.Disabled);
-        }
-
-        public global::Nighthollow.Triggers.TriggerData<TEvent> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __Name__ = default(string);
-            var __Conditions__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.Condition<TEvent>>);
-            var __Effects__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.Effect<TEvent>>);
-            var __Disabled__ = default(bool);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        break;
-                    case 1:
-                        __Conditions__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.Condition<TEvent>>>().Deserialize(ref reader, options);
-                        break;
-                    case 2:
-                        __Effects__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.Effect<TEvent>>>().Deserialize(ref reader, options);
-                        break;
-                    case 3:
-                        __Disabled__ = reader.ReadBoolean();
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.TriggerData<TEvent>(__Name__, __Conditions__, __Effects__, __Disabled__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-}
-
-#pragma warning restore 168
-#pragma warning restore 414
-#pragma warning restore 618
-#pragma warning restore 612
-
-#pragma warning restore SA1129 // Do not use default value type constructor
-#pragma warning restore SA1200 // Using directives should be placed correctly
-#pragma warning restore SA1309 // Field names should not begin with underscore
-#pragma warning restore SA1312 // Variable names should begin with lower-case letter
-#pragma warning restore SA1403 // File may only contain a single namespace
-#pragma warning restore SA1649 // File name should match first type name
-
-// <auto-generated>
-// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
-// </auto-generated>
-
-#pragma warning disable 618
-#pragma warning disable 612
-#pragma warning disable 414
-#pragma warning disable 168
-
-#pragma warning disable SA1129 // Do not use default value type constructor
-#pragma warning disable SA1200 // Using directives should be placed correctly
-#pragma warning disable SA1309 // Field names should not begin with underscore
-#pragma warning disable SA1312 // Variable names should begin with lower-case letter
-#pragma warning disable SA1403 // File may only contain a single namespace
-#pragma warning disable SA1649 // File name should match first type name
-
 namespace MessagePack.Formatters.Nighthollow.Triggers.Conditions
 {
     using System;
     using System.Buffers;
     using MessagePack;
-
-    public sealed class EnumConditionFormatter<TEvent,TEnum> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum>>
-        where TEvent : global::Nighthollow.Triggers.TriggerEvent
-        where TEnum : struct, global::System.Enum
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum> value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
-            formatterResolver.GetFormatterWithVerify<TEnum>().Serialize(ref writer, value.Target, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum>.EnumOperator>().Serialize(ref writer, value.Operator, options);
-        }
-
-        public global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __Target__ = default(TEnum);
-            var __Operator__ = default(global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum>.EnumOperator);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __Target__ = formatterResolver.GetFormatterWithVerify<TEnum>().Deserialize(ref reader, options);
-                        break;
-                    case 1:
-                        __Operator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum>.EnumOperator>().Deserialize(ref reader, options);
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Conditions.EnumCondition<TEvent, TEnum>(__Target__, __Operator__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class IntegerConditionFormatter<TEvent> : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent>>
-        where TEvent : global::Nighthollow.Triggers.TriggerEvent
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent> value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
-            writer.Write(value.Target);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent>.IntegerOperator>().Serialize(ref writer, value.Operator, options);
-        }
-
-        public global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent> Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __Target__ = default(int);
-            var __Operator__ = default(global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent>.IntegerOperator);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __Target__ = reader.ReadInt32();
-                        break;
-                    case 1:
-                        __Operator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent>.IntegerOperator>().Deserialize(ref reader, options);
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Conditions.IntegerCondition<TEvent>(__Target__, __Operator__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
 
     public sealed class SceneNameConditionFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.SceneNameCondition>
     {
@@ -3019,7 +2862,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Conditions
             IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(2);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Events.SceneReadyEvent.Name>().Serialize(ref writer, value.Target, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.EnumCondition<global::Nighthollow.Triggers.Events.SceneReadyEvent, global::Nighthollow.Triggers.Events.SceneReadyEvent.Name>.EnumOperator>().Serialize(ref writer, value.Operator, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.EnumOperator>().Serialize(ref writer, value.Operator, options);
         }
 
         public global::Nighthollow.Triggers.Conditions.SceneNameCondition Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -3033,7 +2876,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Conditions
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
             var __Target__ = default(global::Nighthollow.Triggers.Events.SceneReadyEvent.Name);
-            var __Operator__ = default(global::Nighthollow.Triggers.Conditions.EnumCondition<global::Nighthollow.Triggers.Events.SceneReadyEvent, global::Nighthollow.Triggers.Events.SceneReadyEvent.Name>.EnumOperator);
+            var __Operator__ = default(global::Nighthollow.Triggers.Conditions.EnumOperator);
 
             for (int i = 0; i < length; i++)
             {
@@ -3043,7 +2886,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Conditions
                         __Target__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Events.SceneReadyEvent.Name>().Deserialize(ref reader, options);
                         break;
                     case 1:
-                        __Operator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.EnumCondition<global::Nighthollow.Triggers.Events.SceneReadyEvent, global::Nighthollow.Triggers.Events.SceneReadyEvent.Name>.EnumOperator>().Deserialize(ref reader, options);
+                        __Operator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.EnumOperator>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -3071,7 +2914,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Conditions
             IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(2);
             writer.Write(value.Target);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.IntegerCondition<global::Nighthollow.Triggers.TriggerEvent>.IntegerOperator>().Serialize(ref writer, value.Operator, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.IntegerOperator>().Serialize(ref writer, value.Operator, options);
         }
 
         public global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -3085,7 +2928,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Conditions
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
             var __Target__ = default(int);
-            var __Operator__ = default(global::Nighthollow.Triggers.Conditions.IntegerCondition<global::Nighthollow.Triggers.TriggerEvent>.IntegerOperator);
+            var __Operator__ = default(global::Nighthollow.Triggers.Conditions.IntegerOperator);
 
             for (int i = 0; i < length; i++)
             {
@@ -3095,7 +2938,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Conditions
                         __Target__ = reader.ReadInt32();
                         break;
                     case 1:
-                        __Operator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.IntegerCondition<global::Nighthollow.Triggers.TriggerEvent>.IntegerOperator>().Deserialize(ref reader, options);
+                        __Operator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.IntegerOperator>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -3157,7 +3000,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
 
             IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(3);
-            formatterResolver.GetFormatterWithVerify<Vector2>().Serialize(ref writer, value.Position, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition>().Serialize(ref writer, value.Position, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction>().Serialize(ref writer, value.ArrowDirection, options);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Text, options);
         }
@@ -3172,7 +3015,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __Position__ = default(Vector2);
+            var __Position__ = default(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition);
             var __ArrowDirection__ = default(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction);
             var __Text__ = default(string);
 
@@ -3181,7 +3024,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
                 switch (i)
                 {
                     case 0:
-                        __Position__ = formatterResolver.GetFormatterWithVerify<Vector2>().Deserialize(ref reader, options);
+                        __Position__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition>().Deserialize(ref reader, options);
                         break;
                     case 1:
                         __ArrowDirection__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction>().Deserialize(ref reader, options);
@@ -3196,6 +3039,50 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
             }
 
             var ____result = new global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect(__Position__, __ArrowDirection__, __Text__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class DisplayHelpTextEffect_ArrowPositionFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.WriteArrayHeader(2);
+            writer.Write(value.X);
+            writer.Write(value.Y);
+        }
+
+        public global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                throw new InvalidOperationException("typecode is null, struct not supported");
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadArrayHeader();
+            var __X__ = default(int);
+            var __Y__ = default(int);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __X__ = reader.ReadInt32();
+                        break;
+                    case 1:
+                        __Y__ = reader.ReadInt32();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition(__X__, __Y__);
             reader.Depth--;
             return ____result;
         }

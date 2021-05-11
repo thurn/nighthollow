@@ -69,7 +69,8 @@ using = [
     "Nighthollow.Delegates",
     "Nighthollow.Services",
     "Nighthollow.Stats",
-    "Nighthollow.State"
+    "Nighthollow.State",
+    "Nighthollow.Triggers"
 ]
 
 out_file = open(os.path.join(sys.argv[1], "Generated.cs"), 'w')

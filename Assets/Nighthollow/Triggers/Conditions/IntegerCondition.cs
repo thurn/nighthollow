@@ -20,24 +20,23 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Triggers.Conditions
 {
-  [MessagePackObject]
+  public enum IntegerOperator
+  {
+    Unknown = 0,
+    EqualTo = 1,
+    NotEqualTo = 2,
+    LessThan = 3,
+    LessThanOrEqualTo = 4,
+    GreaterThan = 5,
+    GreaterThanOrEqualTo = 6
+  }
+
   public abstract class IntegerCondition<TEvent> : ICondition<TEvent> where TEvent : TriggerEvent
   {
     protected IntegerCondition(int target, IntegerOperator op = IntegerOperator.EqualTo)
     {
       Operator = op;
       Target = target;
-    }
-
-    public enum IntegerOperator
-    {
-      Unknown = 0,
-      EqualTo = 1,
-      NotEqualTo = 2,
-      LessThan = 3,
-      LessThanOrEqualTo = 4,
-      GreaterThan = 5,
-      GreaterThanOrEqualTo = 6
     }
 
     [Key(0)] public int Target { get; }

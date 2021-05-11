@@ -63,14 +63,14 @@ namespace Nighthollow.World
       _registry.WorldTutorial.OnWorldSceneLoaded();
       _registry.TriggerService.Invoke(new SceneReadyEvent(SceneReadyEvent.Name.World));
 
-      var testTrigger = new TriggerData<SceneReadyEvent>(
-        "Test",
-        ImmutableList<ICondition<SceneReadyEvent>>.Empty.Add(new SceneNameCondition(SceneReadyEvent.Name.World)),
-        ImmutableList<IEffect<SceneReadyEvent>>.Empty.Add(new DisplayHelpTextEffect(
-          new Vector2(x: 250, y: 300),
-          DisplayHelpTextEffect.Direction.Bottom,
-          "Hello, world")));
-      _registry.Database.Insert(TableId.Triggers, testTrigger);
+      // var testTrigger = new TriggerData<SceneReadyEvent>(
+      //   "Test",
+      //   ImmutableList<ICondition<SceneReadyEvent>>.Empty.Add(new SceneNameCondition(SceneReadyEvent.Name.World)),
+      //   ImmutableList<IEffect<SceneReadyEvent>>.Empty.Add(new DisplayHelpTextEffect(
+      //     new DisplayHelpTextEffect.ArrowPosition(x: 250, y: 300),
+      //     DisplayHelpTextEffect.Direction.Bottom,
+      //     "Hello, world")));
+      // _registry.Database.Insert(TableId.Triggers, testTrigger);
     }
   }
 }

@@ -20,24 +20,23 @@ using Nighthollow.Data;
 
 namespace Nighthollow.Triggers.Conditions
 {
+  public enum EnumOperator
+  {
+    Unknown = 0,
+    EqualTo = 1,
+    NotEqualTo = 2
+  }
+
   /// <summary>
   /// Parent class for standard operations on enum values
   /// </summary>
-  [MessagePackObject]
   public abstract class EnumCondition<TEvent, TEnum> : ICondition<TEvent>
     where TEvent : TriggerEvent where TEnum : struct, Enum
   {
     protected EnumCondition(TEnum target, EnumOperator op = EnumOperator.EqualTo)
     {
-      Operator = op;
       Target = target;
-    }
-
-    public enum EnumOperator
-    {
-      Unknown = 0,
-      EqualTo = 1,
-      NotEqualTo = 2
+      Operator = op;
     }
 
     [Key(0)] public TEnum Target { get; }

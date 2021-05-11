@@ -37,14 +37,27 @@ namespace Nighthollow.Triggers.Effects
       Left
     }
 
-    public DisplayHelpTextEffect(Vector2 position, Direction arrowDirection, string text)
+    [MessagePackObject]
+    public readonly struct ArrowPosition
+    {
+      public ArrowPosition(int x, int y)
+      {
+        X = x;
+        Y = y;
+      }
+
+      [Key(0)] public int X { get; }
+      [Key(1)] public int Y { get; }
+    }
+
+    public DisplayHelpTextEffect(ArrowPosition position, Direction arrowDirection, string text)
     {
       Position = position;
       ArrowDirection = arrowDirection;
       Text = text;
     }
 
-    [Key(0)] public Vector2 Position { get; }
+    [Key(0)] public ArrowPosition Position { get; }
     [Key(1)] public Direction ArrowDirection { get; }
     [Key(2)] public string Text { get; }
 
@@ -61,8 +74,8 @@ namespace Nighthollow.Triggers.Effects
         Direction.Left => "left-arrow",
         _ => throw Errors.UnknownEnumValue(ArrowDirection)
       });
-      element.style.left = new StyleLength(Position.x);
-      element.style.top = new StyleLength(Position.y);
+      element.style.left = new StyleLength(Position.X);
+      element.style.top = new StyleLength(Position.Y);
       element.style.opacity = new StyleFloat(v: 0f);
 
       var arrow = new VisualElement();
