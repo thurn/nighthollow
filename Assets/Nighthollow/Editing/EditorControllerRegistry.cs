@@ -22,6 +22,7 @@ using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Stats;
 using Nighthollow.Triggers;
+using Nighthollow.Triggers.Events;
 
 #nullable enable
 

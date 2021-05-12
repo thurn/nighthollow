@@ -15,6 +15,7 @@
 using System;
 using MessagePack;
 using Nighthollow.Data;
+using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -42,9 +43,9 @@ namespace Nighthollow.Triggers.Conditions
     [Key(0)] public TEnum Target { get; }
     [Key(1)] public EnumOperator Operator { get; }
 
-    public bool Satisfied(TEvent triggerEvent, GameData data)
+    public bool Satisfied(TEvent triggerEvent)
     {
-      var source = GetSource(triggerEvent, data);
+      var source = GetSource(triggerEvent);
       return Operator switch
       {
         EnumOperator.Is => Equals(source, Target),
@@ -53,7 +54,7 @@ namespace Nighthollow.Triggers.Conditions
       };
     }
 
-    protected abstract TEnum GetSource(TEvent triggerEvent, GameData data);
+    protected abstract TEnum GetSource(TEvent triggerEvent);
 
     protected abstract EnumCondition<TEvent, TEnum> Clone(TEnum target, EnumOperator op);
 

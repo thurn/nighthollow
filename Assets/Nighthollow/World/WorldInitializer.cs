@@ -61,7 +61,7 @@ namespace Nighthollow.World
       _worldMap.Initialize(_registry);
       _registry.ScreenController.Show(ScreenController.AdvisorBar);
       _registry.WorldTutorial.OnWorldSceneLoaded();
-      _registry.TriggerService.Invoke(new SceneReadyEvent(SceneReadyEvent.Name.World));
+      _registry.TriggerService.Invoke(new WorldSceneReadyEvent(_registry));
 
       // var testTrigger = new TriggerData<SceneReadyEvent>(
       //   "Test",

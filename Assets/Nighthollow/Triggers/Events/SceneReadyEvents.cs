@@ -12,29 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Services;
+
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
 {
-  /// <summary>
-  /// Fired whenever a new scene is ready, i.e. all of its startup data fetching is complete.
-  /// </summary>
-  public sealed class SceneReadyEvent : TriggerEvent
+  public sealed class WorldSceneReadyEvent : WorldEvent
   {
-    public enum Name
+    public WorldSceneReadyEvent(WorldServiceRegistry registry) : base(registry)
     {
-      Unknown = 0,
-      World = 1,
-      Battle = 2
     }
 
-    public SceneReadyEvent(Name sceneName)
+    public static Description Describe => new Description("the world scene is loaded");
+  }
+
+  public sealed class BattleSceneReadyEvent : BattleEvent
+  {
+    public BattleSceneReadyEvent(BattleServiceRegistry registry) : base(registry)
     {
-      SceneName = sceneName;
     }
 
-    public Name SceneName { get; }
-
-    public static Description Describe => new Description("a new scene is ready");
+    public static Description Describe => new Description("the battle scene is loaded");
   }
 }

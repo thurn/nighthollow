@@ -18,9 +18,9 @@ using Nighthollow.Services;
 
 namespace Nighthollow.Triggers.Events
 {
-  public abstract class CreatureEvent : TriggerEvent
+  public abstract class CreatureEvent : BattleEvent
   {
-    protected CreatureEvent(CreatureId creatureId)
+    protected CreatureEvent(BattleServiceRegistry registry, CreatureId creatureId) : base(registry)
     {
       CreatureId = creatureId;
     }

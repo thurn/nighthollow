@@ -16,18 +16,22 @@ using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
 using Nighthollow.Data;
-using Nighthollow.Services;
 using Nighthollow.Triggers.Events;
 
 #nullable enable
 
 namespace Nighthollow.Triggers
 {
-  [Union(0, typeof(TriggerData<SceneReadyEvent>))]
-  [Union(1, typeof(TriggerData<BattleStartedEvent>))]
+  [Union(0, typeof(TriggerData<WorldSceneReadyEvent>))]
+  [Union(1, typeof(TriggerData<BattleSceneReadyEvent>))]
+  [Union(2, typeof(TriggerData<BattleStartedEvent>))]
+  [Union(3, typeof(TriggerData<DrewOpeningHandEvent>))]
+  [Union(4, typeof(TriggerData<EnemyCreatureSpawnedEvent>))]
+  [Union(5, typeof(TriggerData<UserCreaturePlayedEvent>))]
   public interface ITrigger
   {
     public string? Name { get; }
+    TriggerCategory Category { get; }
     [NestedSheet] string EventDescription { get; }
     [NestedSheet] string ConditionsDescription { get; }
     [NestedSheet] string EffectsDescription { get; }
@@ -42,12 +46,14 @@ namespace Nighthollow.Triggers
   {
     public TriggerData(
       string? name = null,
+      TriggerCategory category = TriggerCategory.Uncategorized,
       ImmutableList<ICondition<TEvent>>? conditions = null,
       ImmutableList<IEffect<TEvent>>? effects = null,
       bool looping = false,
       bool disabled = false)
     {
       Name = name;
+      Category = category;
       Conditions = conditions ?? ImmutableList<ICondition<TEvent>>.Empty;
       Effects = effects ?? ImmutableList<IEffect<TEvent>>.Empty;
       Looping = looping;
@@ -55,6 +61,7 @@ namespace Nighthollow.Triggers
     }
 
     public string? Name { get; }
+    public TriggerCategory Category { get; }
     public ImmutableList<ICondition<TEvent>> Conditions { get; }
     public ImmutableList<IEffect<TEvent>> Effects { get; }
     public bool Looping { get; }
@@ -62,26 +69,27 @@ namespace Nighthollow.Triggers
 
     public string EventDescription => Description.Snippet("When", typeof(TEvent));
 
-    public string ConditionsDescription =>
-      $"If {string.Join("\nAnd ", Conditions.Select(Description.Describe))}";
+    public string ConditionsDescription => Conditions.IsEmpty
+      ? "No Conditions"
+      : $"If {string.Join("\nAnd ", Conditions.Select(Description.Describe))}";
 
-    public string EffectsDescription => $"Then {string.Join("\nAnd ", Effects.Select(Description.Describe))}";
+    public string EffectsDescription => Effects.IsEmpty
+      ? "No Effects"
+      : $"Then {string.Join("\nAnd ", Effects.Select(Description.Describe))}";
 
     /// <summary>
     /// Check trigger conditions and then fire effects if they all pass -- returns true if effects fired.
     /// </summary>
-    public bool Invoke(TEvent triggerEvent, ServiceRegistry registry)
+    public bool Invoke(TEvent triggerEvent)
     {
-      var gameData = registry.Database.Snapshot();
-
-      if (Conditions.Any(condition => !condition.Satisfied(triggerEvent, gameData)))
+      if (Conditions.Any(condition => !condition.Satisfied(triggerEvent)))
       {
         return false;
       }
 
       foreach (var effect in Effects)
       {
-        effect.Execute(triggerEvent, registry);
+        effect.Execute(triggerEvent);
       }
 
       return true;
@@ -89,22 +97,26 @@ namespace Nighthollow.Triggers
 
     public ITrigger WithName(string? name) => ReferenceEquals(name, Name)
       ? this
-      : new TriggerData<TEvent>(name, Conditions, Effects, Looping, Disabled);
+      : new TriggerData<TEvent>(name, Category, Conditions, Effects, Looping, Disabled);
+
+    public ITrigger WithCategory(TriggerCategory category) => category == Category
+      ? this
+      : new TriggerData<TEvent>(Name, category, Conditions, Effects, Looping, Disabled);
 
     public ITrigger WithConditions(ImmutableList<ICondition<TEvent>> conditions) =>
       ReferenceEquals(conditions, Conditions)
         ? this
-        : new TriggerData<TEvent>(Name, conditions, Effects, Looping, Disabled);
+        : new TriggerData<TEvent>(Name, Category, conditions, Effects, Looping, Disabled);
 
     public ITrigger WithEffects(ImmutableList<IEffect<TEvent>> effects) =>
       ReferenceEquals(effects, Effects)
         ? this
-        : new TriggerData<TEvent>(Name, Conditions, effects, Looping, Disabled);
+        : new TriggerData<TEvent>(Name, Category, Conditions, effects, Looping, Disabled);
 
     public ITrigger WithLooping(bool looping) =>
-      looping == Looping ? this : new TriggerData<TEvent>(Name, Conditions, Effects, looping, Disabled);
+      looping == Looping ? this : new TriggerData<TEvent>(Name, Category, Conditions, Effects, looping, Disabled);
 
     public ITrigger WithDisabled(bool disabled) =>
-      disabled == Disabled ? this : new TriggerData<TEvent>(Name, Conditions, Effects, Looping, disabled);
+      disabled == Disabled ? this : new TriggerData<TEvent>(Name, Category, Conditions, Effects, Looping, disabled);
   }
 }

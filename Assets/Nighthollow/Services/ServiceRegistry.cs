@@ -45,6 +45,7 @@ namespace Nighthollow.Services
       MainCamera = mainCamera;
       ObjectPoolService = objectPoolService;
       Globals = new GlobalsService(database);
+      TriggerService = new TriggerService(Database, Globals);
     }
 
     public virtual void OnUpdate()
@@ -58,9 +59,8 @@ namespace Nighthollow.Services
     public ScreenController ScreenController => _screenController ??= new ScreenController(_document, this);
     public Camera MainCamera { get; }
     public ObjectPoolService ObjectPoolService { get; }
-    TriggerService? _triggerService;
-    public TriggerService TriggerService => _triggerService ??= new TriggerService(this);
     public GlobalsService Globals { get; }
+    public TriggerService TriggerService { get; }
   }
 
   public sealed class WorldServiceRegistry : ServiceRegistry
@@ -97,8 +97,7 @@ namespace Nighthollow.Services
       Prefabs prefabs,
       RectTransform mainCanvas,
       Hand hand,
-      DamageTextService damageTextService,
-      HelperTextService helperTextService) :
+      DamageTextService damageTextService) :
       base(
         database,
         assetService,
@@ -114,14 +113,12 @@ namespace Nighthollow.Services
       EnemyService = new EnemyService(gameData);
       MainCanvas = mainCanvas;
       DamageTextService = damageTextService;
-      HelperTextService = helperTextService;
     }
 
     public Prefabs Prefabs { get; }
     public IStartCoroutine CoroutineRunner { get; }
     public RectTransform MainCanvas { get; }
     public DamageTextService DamageTextService { get; }
-    public HelperTextService HelperTextService { get; }
 
     public UserService UserService { get; private set; }
     UserService.Controller? _userController;

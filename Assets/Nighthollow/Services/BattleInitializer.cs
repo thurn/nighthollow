@@ -40,7 +40,6 @@ namespace Nighthollow.Services
     [SerializeField] UIDocument _document = null!;
     [SerializeField] Hand _hand = null!;
     [SerializeField] DamageTextService _damageTextService = null!;
-    [SerializeField] HelperTextService _helperTextService = null!;
     BattleServiceRegistry? _registry;
 
     public Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine) => base.StartCoroutine(routine);
@@ -55,7 +54,6 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_document);
       Errors.CheckNotNull(_hand);
       Errors.CheckNotNull(_damageTextService);
-      Errors.CheckNotNull(_helperTextService);
 
       _dataService.OnReady(OnDataFetched);
     }
@@ -77,12 +75,10 @@ namespace Nighthollow.Services
         _prefabs,
         _mainCanvas,
         _hand,
-        _damageTextService,
-        _helperTextService);
+        _damageTextService);
 
-      _helperTextService.Initialize(_registry.ScreenController);
       _registry.Invoke(new IOnBattleSceneLoaded.Data());
-      _registry.TriggerService.Invoke(new SceneReadyEvent(SceneReadyEvent.Name.Battle));
+      _registry.TriggerService.Invoke(new BattleSceneReadyEvent(_registry));
     }
   }
 }

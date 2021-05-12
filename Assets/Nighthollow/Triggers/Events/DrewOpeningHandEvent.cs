@@ -12,12 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Services;
+
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
 {
-  public sealed class DrewOpeningHandEvent : TriggerEvent
+  public sealed class DrewOpeningHandEvent : BattleEvent
   {
     public static Description Describe => new Description("an opening hand is drawn");
+
+    public DrewOpeningHandEvent(BattleServiceRegistry registry) : base(registry)
+    {
+    }
   }
 }

@@ -154,6 +154,11 @@ namespace Nighthollow.Interface
       {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
       }
+
+      if (Input.GetMouseButtonDown(0))
+      {
+        InterfaceUtils.FindByName<VisualElement>(Screen, "HelperTextContainer").Clear();
+      }
     }
 
     static bool CtrlOrCmdDown() => Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) ||

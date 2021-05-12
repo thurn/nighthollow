@@ -15,6 +15,7 @@
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Services;
+using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -22,21 +23,23 @@ namespace Nighthollow.Triggers
 {
   public sealed class TriggerService
   {
-    readonly ServiceRegistry _registry;
+    readonly Database _database;
+    readonly GlobalsService _globals;
     bool _initialized;
 
-    public TriggerService(ServiceRegistry registry)
+    public TriggerService(Database database, GlobalsService globals)
     {
-      _registry = registry;
+      _database = database;
+      _globals = globals;
     }
 
     void Initialize()
     {
-      if (_registry.Globals.GetBool(GlobalId.ShouldAutoenableTriggers))
+      if (_globals.GetBool(GlobalId.ShouldAutoenableTriggers))
       {
-        foreach (var pair in _registry.Database.Snapshot().Triggers.Where(pair => pair.Value.Disabled))
+        foreach (var pair in _database.Snapshot().Triggers.Where(pair => pair.Value.Disabled))
         {
-          _registry.Database.Update(TableId.Triggers, pair.Key, t => t.WithDisabled(false));
+          _database.Update(TableId.Triggers, pair.Key, t => t.WithDisabled(false));
         }
       }
 
@@ -49,16 +52,16 @@ namespace Nighthollow.Triggers
       {
         Initialize();
       }
-      
-      var gameData = _registry.Database.Snapshot();
+
+      var gameData = _database.Snapshot();
       foreach (var pair in gameData.Triggers)
       {
         if (!pair.Value.Disabled && pair.Value is TriggerData<TEvent> trigger)
         {
-          var fired = trigger.Invoke(triggerEvent, _registry);
+          var fired = trigger.Invoke(triggerEvent);
           if (fired && !trigger.Looping)
           {
-            _registry.Database.Update(TableId.Triggers, pair.Key, t => t.WithDisabled(true));
+            _database.Update(TableId.Triggers, pair.Key, t => t.WithDisabled(true));
           }
         }
       }

@@ -15,6 +15,7 @@
 using System;
 using MessagePack;
 using Nighthollow.Data;
+using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -42,9 +43,9 @@ namespace Nighthollow.Triggers.Conditions
     [Key(0)] public int Target { get; }
     [Key(1)] public IntegerOperator Operator { get; }
 
-    public bool Satisfied(TEvent triggerEvent, GameData data)
+    public bool Satisfied(TEvent triggerEvent)
     {
-      var source = GetSource(triggerEvent, data);
+      var source = GetSource(triggerEvent);
       return Operator switch
       {
         IntegerOperator.Is => source == Target,
@@ -57,7 +58,7 @@ namespace Nighthollow.Triggers.Conditions
       };
     }
 
-    public abstract int GetSource(TEvent triggerEvent, GameData data);
+    public abstract int GetSource(TEvent triggerEvent);
 
     protected abstract IntegerCondition<TEvent> Clone(int target, IntegerOperator op);
 

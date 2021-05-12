@@ -13,21 +13,20 @@
 // limitations under the License.
 
 using MessagePack;
-using Nighthollow.Data;
 using Nighthollow.Triggers.Conditions;
+using Nighthollow.Triggers.Events;
 
 #nullable enable
 
 namespace Nighthollow.Triggers
 {
-  [Union(0, typeof(SceneNameCondition))]
-  [Union(1, typeof(UserDeckSizeCondition))]
+  [Union(0, typeof(UserDeckSizeCondition))]
   public interface ICondition
   {
   }
 
   public interface ICondition<in TEvent> : ICondition where TEvent : TriggerEvent
   {
-    bool Satisfied(TEvent triggerEvent, GameData data);
+    bool Satisfied(TEvent trigger);
   }
 }

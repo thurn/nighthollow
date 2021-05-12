@@ -16,7 +16,10 @@
 
 namespace Nighthollow.Triggers
 {
-  public abstract class TriggerEvent
+  public enum TriggerCategory
   {
+    Uncategorized = 0,
+    Tutorial = 1,
+    MainDialogue = 2
   }
 }

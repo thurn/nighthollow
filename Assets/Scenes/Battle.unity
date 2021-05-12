@@ -328,7 +328,6 @@ GameObject:
   - component: {fileID: 169299299}
   - component: {fileID: 169299296}
   - component: {fileID: 169299298}
-  - component: {fileID: 169299300}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -382,7 +381,6 @@ MonoBehaviour:
   _document: {fileID: 2115052128}
   _hand: {fileID: 1841190611970440670}
   _damageTextService: {fileID: 169299298}
-  _helperTextService: {fileID: 169299300}
 --- !u!114 &169299298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,22 +442,6 @@ MonoBehaviour:
     type: 3}
   _hitBig: {fileID: 6052047142294731675, guid: bf308869e57754400bb92a6d8f95dc54, type: 3}
   _stunIcon: {fileID: 21300000, guid: d09b4b4cdd159c74d809b3baec2b47a1, type: 3}
---- !u!114 &169299300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 169299293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 548c23471ed5446ab47d97226b6ae6b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _toggleDebugMode: 0
-  _debugText: 
-  _debugPosition: {x: 0, y: 0}
-  _debugArrowDirection: 0
 --- !u!213 &192261797
 Sprite:
   m_ObjectHideFlags: 0

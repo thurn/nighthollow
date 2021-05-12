@@ -14,6 +14,7 @@
 
 using MessagePack;
 using Nighthollow.Data;
+using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -29,7 +30,7 @@ namespace Nighthollow.Triggers.Conditions
     {
     }
 
-    public override int GetSource(TriggerEvent triggerEvent, GameData data) => data.Deck.Count;
+    public override int GetSource(TriggerEvent trigger) => trigger.Data.Deck.Count;
 
     protected override IntegerCondition<TriggerEvent> Clone(int target, IntegerOperator op) =>
       new UserDeckSizeCondition(target, op);

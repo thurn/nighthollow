@@ -15,6 +15,7 @@
 using MessagePack;
 using Nighthollow.Interface;
 using Nighthollow.Services;
+using Nighthollow.Triggers.Events;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -50,7 +51,7 @@ namespace Nighthollow.Triggers.Effects
     [Key(2)] public int YPosition { get; }
     [Key(3)] public Direction ArrowDirection { get; }
 
-    public void Execute(TriggerEvent triggerEvent, ServiceRegistry registry)
+    public void Execute(TriggerEvent trigger)
     {
       Debug.Log($"DisplayHelpTextEffect::Execute");
       var element = new VisualElement();
@@ -76,7 +77,7 @@ namespace Nighthollow.Triggers.Effects
       InterfaceUtils.FadeIn(element, duration: 0.3f);
 
       InterfaceUtils
-        .FindByName<VisualElement>(registry.ScreenController.Screen, "HelperTextContainer")
+        .FindByName<VisualElement>(trigger.Registry.ScreenController.Screen, "HelperTextContainer")
         .Add(element);
     }
 

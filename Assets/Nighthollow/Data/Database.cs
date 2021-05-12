@@ -29,6 +29,7 @@ namespace Nighthollow.Data
   {
     readonly MessagePackSerializerOptions _serializationOptions;
 
+    ImmutableDictionary<ITableId, ImmutableList<Action>> _tableUpdatedListeners;
     ImmutableDictionary<(ITableId, int), ImmutableList<IListener>> _updatedListeners;
     ImmutableDictionary<ITableId, ImmutableList<IListener>> _addedListeners;
     ImmutableDictionary<ITableId, ImmutableList<IListener>> _removedListeners;
@@ -40,6 +41,7 @@ namespace Nighthollow.Data
     {
       _serializationOptions = serializationOptions;
       _gameData = gameData;
+      _tableUpdatedListeners = ImmutableDictionary<ITableId, ImmutableList<Action>>.Empty;
       _updatedListeners = ImmutableDictionary<(ITableId, int), ImmutableList<IListener>>.Empty;
       _addedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
       _removedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
@@ -51,6 +53,18 @@ namespace Nighthollow.Data
     /// will be at any given time, mutations may take an arbitrarily long time to be applied to it.
     /// </summary>
     public GameData Snapshot() => _gameData;
+
+    public void OnTableUpdated<T>(TableId<T> tableId, Action action) where T : class
+    {
+      if (!_tableUpdatedListeners.ContainsKey(tableId))
+      {
+        _tableUpdatedListeners = _tableUpdatedListeners.Add(tableId, ImmutableList<Action>.Empty);
+      }
+
+      _tableUpdatedListeners = _tableUpdatedListeners.SetItem(
+        tableId,
+        _tableUpdatedListeners[tableId].Add(action));
+    }
 
     public void OnEntityUpdated<T>(TableId<T> tableId, int entityId, Action<T> action) where T : class
     {
@@ -221,11 +235,11 @@ namespace Nighthollow.Data
 
       var events = _events;
       _events = ImmutableList<EntityEvent>.Empty;
-      FireEvents(events, _gameData);
+      FireEvents(events, tableIds, _gameData);
       _writeRequired = false;
     }
 
-    void FireEvents(IEnumerable<EntityEvent> events, GameData gameData)
+    void FireEvents(ImmutableList<EntityEvent> events, ImmutableHashSet<ITableId> tableIds, GameData gameData)
     {
       foreach (var entityEvent in events)
       {
@@ -265,6 +279,13 @@ namespace Nighthollow.Data
           default:
             throw new ArgumentOutOfRangeException();
         }
+      }
+
+      foreach (var action in tableIds
+        .Where(tableId => _tableUpdatedListeners.ContainsKey(tableId))
+        .SelectMany(tableId => _tableUpdatedListeners[tableId]))
+      {
+        action();
       }
     }
 

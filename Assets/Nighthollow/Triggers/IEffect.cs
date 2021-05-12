@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using MessagePack;
-using Nighthollow.Services;
 using Nighthollow.Triggers.Effects;
+using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -27,6 +27,6 @@ namespace Nighthollow.Triggers
 
   public interface IEffect<in TEvent> : IEffect where TEvent : TriggerEvent
   {
-    void Execute(TEvent triggerEvent, ServiceRegistry registry);
+    void Execute(TEvent trigger);
   }
 }

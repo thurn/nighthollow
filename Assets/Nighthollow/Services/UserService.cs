@@ -148,14 +148,14 @@ namespace Nighthollow.Services
               hand.OverrideHandPosition(value: false, () => _registry.Invoke(new IOnStartBattle.Data()));
             }, large: true)
           });
-        _registry.TriggerService.Invoke(new DrewOpeningHandEvent());
+        _registry.TriggerService.Invoke(new DrewOpeningHandEvent(_registry));
       }
 
       public void StartBattle()
       {
         var statusDisplay = _registry.ScreenController.Get(ScreenController.UserStatus);
         statusDisplay.Show(animate: true);
-        _registry.TriggerService.Invoke(new BattleStartedEvent());
+        _registry.TriggerService.Invoke(new BattleStartedEvent(_registry));
         _registry.CoroutineRunner.StartCoroutine(GainManaCoroutine());
         _registry.CoroutineRunner.StartCoroutine(DrawCardCoroutine());
 

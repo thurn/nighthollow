@@ -18,6 +18,7 @@ using System.Linq;
 using System.Reflection;
 using MessagePack;
 using Nighthollow.Editing;
+using Nighthollow.Triggers.Events;
 using Nighthollow.Utils;
 
 #nullable enable

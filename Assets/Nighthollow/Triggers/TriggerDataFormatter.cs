@@ -16,6 +16,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
 using MessagePack.Formatters;
+using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -36,8 +37,9 @@ namespace Nighthollow.Triggers
       }
 
       IFormatterResolver formatterResolver = options.Resolver;
-      writer.WriteArrayHeader(5);
+      writer.WriteArrayHeader(6);
       formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name!, options);
+      writer.WriteUInt32((uint) value.Category);
       formatterResolver.GetFormatterWithVerify<ImmutableList<ICondition>>()
         .Serialize(ref writer, value.Conditions.Cast<ICondition>().ToImmutableList(), options);
       formatterResolver.GetFormatterWithVerify<ImmutableList<IEffect>>()
@@ -57,6 +59,7 @@ namespace Nighthollow.Triggers
       IFormatterResolver formatterResolver = options.Resolver;
       var length = reader.ReadArrayHeader();
       string? name = null;
+      var category = TriggerCategory.Uncategorized;
       ImmutableList<ICondition>? conditions = null;
       ImmutableList<IEffect>? effects = null;
       var looping = false;
@@ -70,17 +73,20 @@ namespace Nighthollow.Triggers
             name = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
             break;
           case 1:
+            category = (TriggerCategory) reader.ReadUInt32();
+            break;
+          case 2:
             conditions = formatterResolver.GetFormatterWithVerify<ImmutableList<ICondition>>()
               .Deserialize(ref reader, options);
             break;
-          case 2:
+          case 3:
             effects = formatterResolver.GetFormatterWithVerify<ImmutableList<IEffect>>()
               .Deserialize(ref reader, options);
             break;
-          case 3:
+          case 4:
             looping = reader.ReadBoolean();
             break;
-          case 4:
+          case 5:
             disabled = reader.ReadBoolean();
             break;
           default:
@@ -91,6 +97,7 @@ namespace Nighthollow.Triggers
 
       var result = new TriggerData<TEvent>(
         name,
+        category,
         conditions?.Cast<ICondition<TEvent>>().ToImmutableList(),
         effects?.Cast<IEffect<TEvent>>().ToImmutableList(),
         looping,

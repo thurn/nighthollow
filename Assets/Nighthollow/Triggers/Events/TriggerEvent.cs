@@ -12,18 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Data;
 using Nighthollow.Services;
 
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
 {
-  public sealed class UserCreaturePlayedEvent : CreatureEvent
+  public abstract class TriggerEvent
   {
-    public static Description Describe => new Description("the user plays a creature");
-
-    public UserCreaturePlayedEvent(BattleServiceRegistry registry, CreatureId creatureId) : base(registry, creatureId)
+    protected TriggerEvent(ServiceRegistry registry)
     {
+      Registry = registry;
     }
+
+    public ServiceRegistry Registry { get; }
+    public GameData Data => Registry.Database.Snapshot();
+  }
+
+  public abstract class BattleEvent : TriggerEvent
+  {
+    protected BattleEvent(BattleServiceRegistry registry) : base(registry)
+    {
+      Registry = registry;
+    }
+
+    public new BattleServiceRegistry Registry { get; }
+  }
+
+  public abstract class WorldEvent : TriggerEvent
+  {
+    protected WorldEvent(WorldServiceRegistry registry) : base(registry)
+    {
+      Registry = registry;
+    }
+
+    public new WorldServiceRegistry Registry { get; }
   }
 }

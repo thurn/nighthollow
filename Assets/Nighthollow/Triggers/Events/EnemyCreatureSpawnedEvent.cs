@@ -22,7 +22,7 @@ namespace Nighthollow.Triggers.Events
   {
     public static Description Describe => new Description("an enemy creature is spawned");
 
-    public EnemyCreatureSpawnedEvent(CreatureId creatureId) : base(creatureId)
+    public EnemyCreatureSpawnedEvent(BattleServiceRegistry registry, CreatureId creatureId) : base(registry, creatureId)
     {
     }
   }
