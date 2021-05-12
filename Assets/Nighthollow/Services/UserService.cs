@@ -21,6 +21,7 @@ using Nighthollow.Data;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Interface;
 using Nighthollow.Stats;
+using Nighthollow.Triggers.Events;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -147,14 +148,14 @@ namespace Nighthollow.Services
               hand.OverrideHandPosition(value: false, () => _registry.Invoke(new IOnStartBattle.Data()));
             }, large: true)
           });
-        _registry.HelperTextService.OnDrewOpeningHand();
+        _registry.TriggerService.Invoke(new DrewOpeningHandEvent());
       }
 
       public void StartBattle()
       {
         var statusDisplay = _registry.ScreenController.Get(ScreenController.UserStatus);
         statusDisplay.Show(animate: true);
-        _registry.HelperTextService.OnGameStarted();
+        _registry.TriggerService.Invoke(new BattleStartedEvent());
         _registry.CoroutineRunner.StartCoroutine(GainManaCoroutine());
         _registry.CoroutineRunner.StartCoroutine(DrawCardCoroutine());
 

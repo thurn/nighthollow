@@ -22,6 +22,7 @@ using Nighthollow.Data;
 using Nighthollow.Delegates;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Stats;
+using Nighthollow.Triggers.Events;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -174,6 +175,7 @@ namespace Nighthollow.Services
           creatureData.BaseType.Name,
           creatureData.BaseType.Owner);
         result.ActivateCreature(_registry.Creatures[creatureId], startingX: startingX);
+        _registry.TriggerService.Invoke(new UserCreaturePlayedEvent(creatureId));
         _registry.Invoke(new IOnCreatureActivated.Data(creatureId));
       }
 
@@ -187,7 +189,7 @@ namespace Nighthollow.Services
           self.MovingCreatures,
           self.PlacedCreatures.SetItem((rank, file), creatureId)));
         _registry.Creatures._components[creatureId].ActivateCreature(_registry.Creatures[creatureId]);
-        _registry.HelperTextService.OnCreaturePlayed();
+        _registry.TriggerService.Invoke(new EnemyCreatureSpawnedEvent(creatureId));
         _registry.Invoke(new IOnCreatureActivated.Data(creatureId));
       }
 
