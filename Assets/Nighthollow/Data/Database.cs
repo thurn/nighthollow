@@ -32,9 +32,9 @@ namespace Nighthollow.Data
     ImmutableDictionary<(ITableId, int), ImmutableList<IListener>> _updatedListeners;
     ImmutableDictionary<ITableId, ImmutableList<IListener>> _addedListeners;
     ImmutableDictionary<ITableId, ImmutableList<IListener>> _removedListeners;
-    ImmutableList<IMutation> _mutations;
+    ImmutableList<EntityEvent> _events;
     GameData _gameData;
-    bool _writePending;
+    bool _writeRequired;
 
     public Database(MessagePackSerializerOptions serializationOptions, GameData gameData)
     {
@@ -43,7 +43,7 @@ namespace Nighthollow.Data
       _updatedListeners = ImmutableDictionary<(ITableId, int), ImmutableList<IListener>>.Empty;
       _addedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
       _removedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
-      _mutations = ImmutableList<IMutation>.Empty;
+      _events = ImmutableList<EntityEvent>.Empty;
     }
 
     /// <summary>
@@ -99,21 +99,41 @@ namespace Nighthollow.Data
     /// </summary>
     public void Insert<T>(TableId<T> tableId, T value) where T : class
     {
-      _mutations = _mutations.Add(new InsertMutation<T>(tableId, value));
+      var metadata = _gameData.TableMetadata.GetOrReturnDefault(tableId.Id, new TableMetadata());
+      var newId = metadata.NextId;
+      _events = _events.Add(new EntityEvent(EntityEventType.Added, tableId, newId));
+      _events = _events.Add(new EntityEvent(EntityEventType.Updated, TableId.TableMetadata, tableId.Id));
+      _gameData = tableId.Write(
+        _gameData.WithTableMetadata(_gameData.TableMetadata.SetItem(tableId.Id, metadata.WithNextId(newId + 1))),
+        tableId.GetIn(_gameData).SetItem(newId, value));
+      _writeRequired = true;
     }
 
     public void InsertRange<T>(TableId<T> tableId, IEnumerable<T> values) where T : class
     {
-      _mutations = _mutations.Add(new InsertRangeMutation<T>(tableId, values.ToImmutableList()));
+      var events = ImmutableList.CreateBuilder<EntityEvent>();
+      foreach (var value in values)
+      {
+        var metadata = _gameData.TableMetadata.GetOrReturnDefault(tableId.Id, new TableMetadata());
+        var newId = metadata.NextId;
+        events.Add(new EntityEvent(EntityEventType.Added, tableId, newId));
+        events.Add(new EntityEvent(EntityEventType.Updated, TableId.TableMetadata, tableId.Id));
+        _gameData = tableId.Write(
+          _gameData.WithTableMetadata(_gameData.TableMetadata.SetItem(tableId.Id, metadata.WithNextId(newId + 1))),
+          tableId.GetIn(_gameData).SetItem(newId, value));
+      }
+
+      _events = _events.AddRange(events);
+      _writeRequired = true;
     }
 
     /// <summary>
     /// Mutates an entity within a table by applying the provided mutation function to it. If no entity with the
-    /// provided ID exists at the time when this mutation is processed, it will be silently ignored.
+    /// provided ID exists, it will be silently ignored.
     /// </summary>
     public void Update<T>(TableId<T> tableId, int entityId, Func<T, T> mutation) where T : class
     {
-      _mutations = _mutations.Add(new UpdateMutation<T>(tableId, entityId, null, mutation));
+      UpdateInternal(tableId, entityId, null, mutation);
     }
 
     /// <summary>
@@ -122,16 +142,39 @@ namespace Nighthollow.Data
     /// </summary>
     public void Upsert<T>(TableId<T> tableId, int entityId, T defaultValue, Func<T, T> mutation) where T : class
     {
-      _mutations = _mutations.Add(new UpdateMutation<T>(tableId, entityId, defaultValue, mutation));
+      UpdateInternal(tableId, entityId, defaultValue, mutation);
+    }
+
+    void UpdateInternal<T>(TableId<T> tableId, int entityId, T? defaultValue, Func<T, T> update) where T : class
+    {
+      var table = tableId.GetIn(_gameData);
+      T result;
+      if (table.ContainsKey(entityId))
+      {
+        result = update(table[entityId]);
+      }
+      else if (defaultValue != null)
+      {
+        result = update(defaultValue);
+      }
+      else
+      {
+        return;
+      }
+
+      _events = _events.Add(new EntityEvent(EntityEventType.Updated, tableId, entityId));
+      _gameData = tableId.Write(_gameData, table.SetItem(entityId, Errors.CheckNotNull(result)));
+      _writeRequired = true;
     }
 
     /// <summary>
-    /// Removes an entity from a table.  If no entity with the provided ID exists at the time when this mutation is
-    /// processed, it will be silently ignored.
+    /// Removes an entity from a table. If no entity with the provided ID exists, it will be silently ignored.
     /// </summary>
     public void Delete<T>(TableId<T> tableId, int entityId) where T : class
     {
-      _mutations = _mutations.Add(new DeleteMutation<T>(tableId, entityId));
+      _events = _events.Add(new EntityEvent(EntityEventType.Removed, tableId, entityId));
+      _gameData = tableId.Write(_gameData, tableId.GetIn(_gameData).Remove(entityId));
+      _writeRequired = true;
     }
 
     public void ClearListeners()
@@ -144,38 +187,26 @@ namespace Nighthollow.Data
     /// <summary>Should only be invoked from <see cref="DataService"/>.</summary>
     public void PerformWritesInternal(bool disablePersistence)
     {
-      if (_mutations.Count == 0 || _writePending)
+      if (!_writeRequired)
       {
         return;
       }
 
-      _writePending = true;
-
-      var events = new List<EntityEvent>();
-      GameData gameData = _gameData;
-      foreach (var mutation in _mutations)
-      {
-        gameData = mutation.Apply(gameData, events);
-      }
-
-      _mutations = ImmutableList<IMutation>.Empty;
-      var tableIds = events.Select(e => e.TableId).ToImmutableHashSet();
+      var tableIds = _events.Select(e => e.TableId).ToImmutableHashSet();
 
       if (!disablePersistence)
       {
         foreach (var tableId in tableIds)
         {
           using var stream = File.OpenWrite(DataService.PersistentFilePath(tableId));
-          tableId.Serialize(gameData, stream, _serializationOptions);
+          tableId.Serialize(_gameData, stream, _serializationOptions);
           Debug.Log($"Wrote game data to {DataService.PersistentFilePath(tableId)}");
         }
 
-#if UNITY_WEBGL_API
 #pragma warning disable 618
         // See https://forum.unity.com/threads/how-does-saving-work-in-webgl.390385/
         Application.ExternalEval("_JS_FileSystem_Sync();");
 #pragma warning restore 618
-#endif
       }
 
 #if UNITY_EDITOR
@@ -183,14 +214,15 @@ namespace Nighthollow.Data
       foreach (var tableId in tableIds)
       {
         using var editorStream = File.OpenWrite(DataService.EditorFilePath(tableId));
-        tableId.Serialize(gameData, editorStream, _serializationOptions);
+        tableId.Serialize(_gameData, editorStream, _serializationOptions);
         Debug.Log($"Wrote game data to {DataService.EditorFilePath(tableId)}");
       }
 #endif
 
-      _gameData = gameData;
-      FireEvents(events, gameData);
-      _writePending = false;
+      var events = _events;
+      _events = ImmutableList<EntityEvent>.Empty;
+      FireEvents(events, _gameData);
+      _writeRequired = false;
     }
 
     void FireEvents(IEnumerable<EntityEvent> events, GameData gameData)
@@ -324,117 +356,6 @@ namespace Nighthollow.Data
       public void Invoke(GameData gameData, int entityId)
       {
         _listener(entityId);
-      }
-    }
-
-    interface IMutation
-    {
-      GameData Apply(GameData gameData, List<EntityEvent> events);
-    }
-
-    sealed class InsertMutation<T> : IMutation where T : class
-    {
-      readonly TableId<T> _tableId;
-      readonly T _value;
-
-      public InsertMutation(TableId<T> tableId, T value)
-      {
-        _tableId = tableId;
-        _value = Errors.CheckNotNull(value);
-      }
-
-      public GameData Apply(GameData gameData, List<EntityEvent> events)
-      {
-        var metadata = gameData.TableMetadata.GetOrReturnDefault(_tableId.Id, new TableMetadata());
-        var newId = metadata.NextId;
-        events.Add(new EntityEvent(EntityEventType.Added, _tableId, newId));
-        events.Add(new EntityEvent(EntityEventType.Updated, TableId.TableMetadata, _tableId.Id));
-        return _tableId.Write(
-          gameData.WithTableMetadata(gameData.TableMetadata.SetItem(_tableId.Id, metadata.WithNextId(newId + 1))),
-          _tableId.GetIn(gameData).SetItem(newId, _value));
-      }
-    }
-
-    sealed class InsertRangeMutation<T> : IMutation where T : class
-    {
-      readonly TableId<T> _tableId;
-      readonly ImmutableList<T> _values;
-
-      public InsertRangeMutation(TableId<T> tableId, ImmutableList<T> values)
-      {
-        _tableId = tableId;
-        _values = Errors.CheckNotNull(values);
-      }
-
-      public GameData Apply(GameData gameData, List<EntityEvent> events)
-      {
-        foreach (var value in _values)
-        {
-          var metadata = gameData.TableMetadata.GetOrReturnDefault(_tableId.Id, new TableMetadata());
-          var newId = metadata.NextId;
-          events.Add(new EntityEvent(EntityEventType.Added, _tableId, newId));
-          events.Add(new EntityEvent(EntityEventType.Updated, TableId.TableMetadata, _tableId.Id));
-          gameData = _tableId.Write(
-            gameData.WithTableMetadata(gameData.TableMetadata.SetItem(_tableId.Id, metadata.WithNextId(newId + 1))),
-            _tableId.GetIn(gameData).SetItem(newId, value));
-        }
-
-        return gameData;
-      }
-    }
-
-    sealed class UpdateMutation<T> : IMutation where T : class
-    {
-      readonly TableId<T> _tableId;
-      readonly int _entityId;
-      readonly T? _defaultValue;
-      readonly Func<T, T> _update;
-
-      public UpdateMutation(TableId<T> tableId, int entityId, T? defaultValue, Func<T, T> update)
-      {
-        _tableId = tableId;
-        _entityId = entityId;
-        _defaultValue = defaultValue;
-        _update = update;
-      }
-
-      public GameData Apply(GameData gameData, List<EntityEvent> events)
-      {
-        var table = _tableId.GetIn(gameData);
-        T result;
-        if (table.ContainsKey(_entityId))
-        {
-          result = _update(table[_entityId]);
-        }
-        else if (_defaultValue != null)
-        {
-          result = _update(_defaultValue);
-        }
-        else
-        {
-          return gameData;
-        }
-
-        events.Add(new EntityEvent(EntityEventType.Updated, _tableId, _entityId));
-        return _tableId.Write(gameData, table.SetItem(_entityId, Errors.CheckNotNull(result)));
-      }
-    }
-
-    sealed class DeleteMutation<T> : IMutation where T : class
-    {
-      readonly TableId<T> _tableId;
-      readonly int _entityId;
-
-      public DeleteMutation(TableId<T> tableId, int entityId)
-      {
-        _tableId = tableId;
-        _entityId = entityId;
-      }
-
-      public GameData Apply(GameData gameData, List<EntityEvent> events)
-      {
-        events.Add(new EntityEvent(EntityEventType.Removed, _tableId, _entityId));
-        return _tableId.Write(gameData, _tableId.GetIn(gameData).Remove(_entityId));
       }
     }
   }
