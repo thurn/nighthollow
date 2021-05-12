@@ -124,7 +124,7 @@ namespace Nighthollow.Data
     public static readonly TableId<BattleData> BattleData =
       new BattleDataTableId(10, "BattleData");
 
-    public static readonly TableId<ITriggerData> Triggers =
+    public static readonly TableId<ITrigger> Triggers =
       new TriggersTableId(11, "Triggers");
 
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
@@ -285,16 +285,16 @@ namespace Nighthollow.Data
         gameData.WithBattleData(newValue);
     }
 
-    sealed class TriggersTableId : TableId<ITriggerData>
+    sealed class TriggersTableId : TableId<ITrigger>
     {
       public TriggersTableId(int id, string tableName) : base(id, tableName)
       {
       }
 
-      public override ImmutableDictionary<int, ITriggerData> GetIn(GameData gameData) =>
+      public override ImmutableDictionary<int, ITrigger> GetIn(GameData gameData) =>
         gameData.Triggers;
 
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, ITriggerData> newValue) =>
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, ITrigger> newValue) =>
         gameData.WithTriggers(newValue);
     }
   }

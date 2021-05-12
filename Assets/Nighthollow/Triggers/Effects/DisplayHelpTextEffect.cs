@@ -91,6 +91,12 @@ namespace Nighthollow.Triggers.Effects
         .Add(element);
     }
 
-    public string Description => $"display the helper text: '{Text}'";
+    public static Description Describe => new Description(
+      "display the helper text",
+      nameof(Text),
+      "at position",
+      nameof(Position),
+      "with arrow direction",
+      nameof(ArrowDirection));
   }
 }

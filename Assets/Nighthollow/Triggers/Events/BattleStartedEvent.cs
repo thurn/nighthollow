@@ -17,24 +17,10 @@
 namespace Nighthollow.Triggers.Events
 {
   /// <summary>
-  /// Fired whenever a new scene is ready, i.e. all of its startup data fetching is complete.
+  /// Fired after the user accepts their opening hand and clicks the button to start a battle.
   /// </summary>
-  public sealed class SceneReadyEvent : TriggerEvent
+  public sealed class BattleStartedEvent : TriggerEvent
   {
-    public enum Name
-    {
-      Unknown = 0,
-      World = 1,
-      Battle = 2
-    }
-
-    public SceneReadyEvent(Name sceneName)
-    {
-      SceneName = sceneName;
-    }
-
-    public Name SceneName { get; }
-
-    public static Description Describe => new Description("a new scene is ready");
+    public static Description Describe => new Description("a battle is started");
   }
 }

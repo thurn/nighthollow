@@ -103,9 +103,9 @@ namespace Nighthollow.Editing
       _path.First().Write(_path.Skip(1).ToImmutableList(), _database, newValue);
     }
 
-    public void OnEntityUpdated(Action<object?> action)
+    public void OnEntityUpdated(Action action)
     {
-      ((TableEntitySegement) _path.First()).OnEntityUpdated(_database, _ => action(Read()));
+      ((TableEntitySegement) _path.First()).OnEntityUpdated(_database, _ => action());
     }
 
     public ReflectivePath? Parent() =>

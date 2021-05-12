@@ -23,7 +23,6 @@ namespace Nighthollow.Triggers
   [Union(0, typeof(DisplayHelpTextEffect))]
   public interface IEffect
   {
-    string Description { get; }
   }
 
   public interface IEffect<in TEvent> : IEffect where TEvent : TriggerEvent

@@ -129,7 +129,8 @@ namespace Nighthollow.Editing
       Type type,
       IEditor parent) : base(screenController, BuildContent(reflectivePath, type), parent)
     {
-      reflectivePath.OnEntityUpdated(_ => { SetTextFieldValue(reflectivePath.Read()?.ToString()); });
+      // TODO: This causes crashes when we change subtypes -- is it needed?
+      // reflectivePath.OnEntityUpdated(() => { SetTextFieldValue(reflectivePath.Read()?.ToString()); });
     }
 
     static EditorSheetDelegate.DropdownCellContent BuildContent(ReflectivePath reflectivePath, Type type)
@@ -175,7 +176,7 @@ namespace Nighthollow.Editing
       _reflectivePath.OnEntityUpdated(OnUpdated);
     }
 
-    void OnUpdated(object? obj)
+    void OnUpdated()
     {
       var id = (int) (_reflectivePath.Read() ?? 0);
       var table = GetTable(_reflectivePath, _tableType);

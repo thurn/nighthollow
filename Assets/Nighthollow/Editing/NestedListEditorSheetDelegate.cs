@@ -40,7 +40,7 @@ namespace Nighthollow.Editing
 
     public override void Initialize(Action onModified)
     {
-      _reflectivePath.OnEntityUpdated(_ => onModified());
+      _reflectivePath.OnEntityUpdated(onModified);
     }
 
     public override TableContent GetCells()
@@ -86,7 +86,7 @@ namespace Nighthollow.Editing
     void Insert(object value)
     {
       GetType()
-          .GetMethod(nameof(InsertInternal), BindingFlags.Instance | BindingFlags.NonPublic)!
+        .GetMethod(nameof(InsertInternal), BindingFlags.Instance | BindingFlags.NonPublic)!
         .MakeGenericMethod(_contentType)
         .Invoke(this, new[] {value});
     }
@@ -100,7 +100,7 @@ namespace Nighthollow.Editing
     void Delete(int index)
     {
       GetType()
-          .GetMethod(nameof(DeleteInternal), BindingFlags.Instance | BindingFlags.NonPublic)!
+        .GetMethod(nameof(DeleteInternal), BindingFlags.Instance | BindingFlags.NonPublic)!
         .MakeGenericMethod(_contentType)
         .Invoke(this, new object[] {index});
     }

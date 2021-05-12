@@ -102,7 +102,7 @@ namespace MessagePack.Resolvers
                 { typeof(global::Nighthollow.Data.IValueData), 48 },
                 { typeof(global::Nighthollow.Triggers.ICondition), 49 },
                 { typeof(global::Nighthollow.Triggers.IEffect), 50 },
-                { typeof(global::Nighthollow.Triggers.ITriggerData), 51 },
+                { typeof(global::Nighthollow.Triggers.ITrigger), 51 },
                 { typeof(global::Nighthollow.Components.GameDataHolder), 52 },
                 { typeof(global::Nighthollow.Data.AffixData), 53 },
                 { typeof(global::Nighthollow.Data.AffixTypeData), 54 },
@@ -193,7 +193,7 @@ namespace MessagePack.Resolvers
                 case 48: return new MessagePack.Formatters.Nighthollow.Data.IValueDataFormatter();
                 case 49: return new MessagePack.Formatters.Nighthollow.Triggers.IConditionFormatter();
                 case 50: return new MessagePack.Formatters.Nighthollow.Triggers.IEffectFormatter();
-                case 51: return new MessagePack.Formatters.Nighthollow.Triggers.ITriggerDataFormatter();
+                case 51: return new MessagePack.Formatters.Nighthollow.Triggers.ITriggerFormatter();
                 case 52: return new MessagePack.Formatters.Nighthollow.Components.GameDataHolderFormatter();
                 case 53: return new MessagePack.Formatters.Nighthollow.Data.AffixDataFormatter();
                 case 54: return new MessagePack.Formatters.Nighthollow.Data.AffixTypeDataFormatter();
@@ -1038,24 +1038,26 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
         }
     }
 
-    public sealed class ITriggerDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.ITriggerData>
+    public sealed class ITriggerFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.ITrigger>
     {
         private readonly Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>> typeToKeyAndJumpMap;
         private readonly Dictionary<int, int> keyToJumpMap;
 
-        public ITriggerDataFormatter()
+        public ITriggerFormatter()
         {
-            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(1, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
+            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(2, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
             {
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.SceneReadyEvent>).TypeHandle, new KeyValuePair<int, int>(0, 0) },
+                { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.BattleStartedEvent>).TypeHandle, new KeyValuePair<int, int>(1, 1) },
             };
-            this.keyToJumpMap = new Dictionary<int, int>(1)
+            this.keyToJumpMap = new Dictionary<int, int>(2)
             {
                 { 0, 0 },
+                { 1, 1 },
             };
         }
 
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.ITriggerData value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.ITrigger value, global::MessagePack.MessagePackSerializerOptions options)
         {
             KeyValuePair<int, int> keyValuePair;
             if (value != null && this.typeToKeyAndJumpMap.TryGetValue(value.GetType().TypeHandle, out keyValuePair))
@@ -1067,6 +1069,9 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                     case 0:
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.SceneReadyEvent>>().Serialize(ref writer, (global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.SceneReadyEvent>)value, options);
                         break;
+                    case 1:
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.BattleStartedEvent>>().Serialize(ref writer, (global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.BattleStartedEvent>)value, options);
+                        break;
                     default:
                         break;
                 }
@@ -1077,7 +1082,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
             writer.WriteNil();
         }
 
-        public global::Nighthollow.Triggers.ITriggerData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Triggers.ITrigger Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -1086,7 +1091,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
 
             if (reader.ReadArrayHeader() != 2)
             {
-                throw new InvalidOperationException("Invalid Union data was detected. Type:global::Nighthollow.Triggers.ITriggerData");
+                throw new InvalidOperationException("Invalid Union data was detected. Type:global::Nighthollow.Triggers.ITrigger");
             }
 
             options.Security.DepthStep(ref reader);
@@ -1097,11 +1102,14 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                 key = -1;
             }
 
-            global::Nighthollow.Triggers.ITriggerData result = null;
+            global::Nighthollow.Triggers.ITrigger result = null;
             switch (key)
             {
                 case 0:
-                    result = (global::Nighthollow.Triggers.ITriggerData)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.SceneReadyEvent>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Triggers.ITrigger)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.SceneReadyEvent>>().Deserialize(ref reader, options);
+                    break;
+                case 1:
+                    result = (global::Nighthollow.Triggers.ITrigger)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.BattleStartedEvent>>().Deserialize(ref reader, options);
                     break;
                 default:
                     reader.Skip();

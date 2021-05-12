@@ -23,8 +23,8 @@ namespace Nighthollow.Triggers.Conditions
   public enum EnumOperator
   {
     Unknown = 0,
-    EqualTo = 1,
-    NotEqualTo = 2
+    Is = 1,
+    IsNot = 2
   }
 
   /// <summary>
@@ -47,23 +47,22 @@ namespace Nighthollow.Triggers.Conditions
       var source = GetSource(triggerEvent, data);
       return Operator switch
       {
-        EnumOperator.EqualTo => Equals(source, Target),
-        EnumOperator.NotEqualTo => !Equals(source, Target),
+        EnumOperator.Is => Equals(source, Target),
+        EnumOperator.IsNot => !Equals(source, Target),
         _ => throw new ArgumentOutOfRangeException()
       };
     }
 
-    public abstract TEnum GetSource(TEvent triggerEvent, GameData data);
+    protected abstract TEnum GetSource(TEvent triggerEvent, GameData data);
 
-    public abstract string SourceDescription { get; }
+    protected abstract EnumCondition<TEvent, TEnum> Clone(TEnum target, EnumOperator op);
 
-    public string Description => $"{SourceDescription} {OperatorDescription} {Target}";
+    public EnumCondition<TEvent, TEnum> WithTarget(TEnum target) => Equals(target, Target)
+      ? this
+      : Clone(target, Operator);
 
-    string OperatorDescription => Operator switch
-    {
-      EnumOperator.EqualTo => "is",
-      EnumOperator.NotEqualTo => "is not",
-      _ => "<Operator?>"
-    };
+    public EnumCondition<TEvent, TEnum> WithOperator(EnumOperator op) => Equals(op, Operator)
+      ? this
+      : Clone(Target, op);
   }
 }

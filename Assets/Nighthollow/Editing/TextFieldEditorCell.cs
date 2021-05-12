@@ -44,7 +44,10 @@ namespace Nighthollow.Editing
       _field.RegisterCallback<KeyDownEvent>(OnKeyDownInternal);
       _cellDelegate.Initialize(_field, this);
 
-      reflectivePath.OnEntityUpdated(v => { _field.value = reflectivePath.RenderPreview(); });
+      _field.value = reflectivePath.RenderPreview();
+
+      // TODO: This causes crashes when we change subtypes -- is it needed?
+      // reflectivePath.OnEntityUpdated(() => { _field.value = reflectivePath.RenderPreview(); });
     }
 
     public VisualElement VisualElement => this;

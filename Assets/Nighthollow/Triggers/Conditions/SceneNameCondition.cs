@@ -30,9 +30,14 @@ namespace Nighthollow.Triggers.Conditions
     {
     }
 
-    public override SceneReadyEvent.Name GetSource(SceneReadyEvent triggerEvent, GameData data) =>
+    protected override SceneReadyEvent.Name GetSource(SceneReadyEvent triggerEvent, GameData data) =>
       triggerEvent.SceneName;
 
-    public override string SourceDescription => "that scene's name";
+    protected override EnumCondition<SceneReadyEvent, SceneReadyEvent.Name> Clone(
+      SceneReadyEvent.Name target,
+      EnumOperator op) =>
+      new SceneNameCondition(target, op);
+
+    public static Description Describe => new Description("that scene's name", nameof(Operator), nameof(Target));
   }
 }

@@ -577,7 +577,7 @@ namespace Nighthollow.Data
           statusEffects,
           Triggers);
 
-    public GameData WithTriggers(ImmutableDictionary<int, ITriggerData> triggers) =>
+    public GameData WithTriggers(ImmutableDictionary<int, ITrigger> triggers) =>
       Equals(triggers, Triggers)
         ? this
         : new GameData(

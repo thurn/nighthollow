@@ -137,7 +137,7 @@ namespace Nighthollow.Interface
 
     public void OnUpdate()
     {
-      if (Input.GetKeyDown(KeyCode.D) && CtrlOrCmdDown())
+      if (Input.GetKeyDown(KeyCode.E) && CtrlOrCmdDown() && ShiftDown())
       {
         var editor = Get(GameDataEditor);
         if (editor.Visible)
@@ -158,6 +158,8 @@ namespace Nighthollow.Interface
 
     static bool CtrlOrCmdDown() => Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) ||
                                    Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
+
+    static bool ShiftDown() => Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
     public T Get<T>(ElementKey<T> key) where T : AbstractHideableElement, new() => (T) GetElement(key);
 

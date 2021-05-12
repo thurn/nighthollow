@@ -86,12 +86,20 @@ namespace Nighthollow.Editing
           .ToList());
       }
 
-      result.Add(CollectionUtils
-        .Single(new ButtonCellContent(
-          $"Add {TypeUtils.NameWithSpaces(_underlyingType.Name)}",
-          () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(_underlyingType)); },
-          (AddButtonKey, 0)))
-        .ToList<ICellContent>());
+      var addRow = EditorControllerRegistry.GetAddButtonRow(_reflectivePath);
+      if (addRow != null)
+      {
+        result.Add(addRow);
+      }
+      else
+      {
+        result.Add(CollectionUtils
+          .Single(new ButtonCellContent(
+            $"Add{TypeUtils.NameWithSpaces(_underlyingType.Name)}",
+            () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(_underlyingType)); },
+            (AddButtonKey, 0)))
+          .ToList<ICellContent>());
+      }
 
       var columnWidths = new List<int> {50};
       if (imageProperty != null)

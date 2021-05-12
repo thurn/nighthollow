@@ -31,6 +31,9 @@ namespace Nighthollow.Triggers.Conditions
 
     public override int GetSource(TriggerEvent triggerEvent, GameData data) => data.Deck.Count;
 
-    public override string SourceDescription => "the user's deck size";
+    protected override IntegerCondition<TriggerEvent> Clone(int target, IntegerOperator op) =>
+      new UserDeckSizeCondition(target, op);
+
+    public static Description Describe => new Description("the user's deck size", nameof(Operator), nameof(Target));
   }
 }

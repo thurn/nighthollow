@@ -23,12 +23,12 @@ namespace Nighthollow.Triggers.Conditions
   public enum IntegerOperator
   {
     Unknown = 0,
-    EqualTo = 1,
-    NotEqualTo = 2,
-    LessThan = 3,
-    LessThanOrEqualTo = 4,
-    GreaterThan = 5,
-    GreaterThanOrEqualTo = 6
+    Is = 1,
+    IsNot = 2,
+    IsLessThan = 3,
+    IsLessThanOrEqualTo = 4,
+    IsGreaterThan = 5,
+    IsGreaterThanOrEqualTo = 6
   }
 
   public abstract class IntegerCondition<TEvent> : ICondition<TEvent> where TEvent : TriggerEvent
@@ -47,31 +47,26 @@ namespace Nighthollow.Triggers.Conditions
       var source = GetSource(triggerEvent, data);
       return Operator switch
       {
-        IntegerOperator.EqualTo => source == Target,
-        IntegerOperator.NotEqualTo => source != Target,
-        IntegerOperator.LessThan => source < Target,
-        IntegerOperator.LessThanOrEqualTo => source <= Target,
-        IntegerOperator.GreaterThan => source > Target,
-        IntegerOperator.GreaterThanOrEqualTo => source >= Target,
+        IntegerOperator.Is => source == Target,
+        IntegerOperator.IsNot => source != Target,
+        IntegerOperator.IsLessThan => source < Target,
+        IntegerOperator.IsLessThanOrEqualTo => source <= Target,
+        IntegerOperator.IsGreaterThan => source > Target,
+        IntegerOperator.IsGreaterThanOrEqualTo => source >= Target,
         _ => throw new ArgumentOutOfRangeException()
       };
     }
 
     public abstract int GetSource(TEvent triggerEvent, GameData data);
 
-    public abstract string SourceDescription { get; }
+    protected abstract IntegerCondition<TEvent> Clone(int target, IntegerOperator op);
 
-    public string Description => $"{SourceDescription} {OperatorDescription} {Target}";
+    public IntegerCondition<TEvent> WithTarget(int target) => Equals(target, Target)
+      ? this
+      : Clone(target, Operator);
 
-    string OperatorDescription => Operator switch
-    {
-      IntegerOperator.EqualTo => "==",
-      IntegerOperator.NotEqualTo => "!=",
-      IntegerOperator.LessThan => "<",
-      IntegerOperator.LessThanOrEqualTo => "<=",
-      IntegerOperator.GreaterThan => ">",
-      IntegerOperator.GreaterThanOrEqualTo => ">=",
-      _ => "<?Operator?>"
-    };
+    public IntegerCondition<TEvent> WithOperator(IntegerOperator op) => Equals(op, Operator)
+      ? this
+      : Clone(Target, op);
   }
 }

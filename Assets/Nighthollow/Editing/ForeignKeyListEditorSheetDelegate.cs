@@ -37,7 +37,7 @@ namespace Nighthollow.Editing
 
     public override void Initialize(Action onModified)
     {
-      _reflectivePath.OnEntityUpdated(_ => onModified());
+      _reflectivePath.OnEntityUpdated(onModified);
     }
 
     public override TableContent GetCells()

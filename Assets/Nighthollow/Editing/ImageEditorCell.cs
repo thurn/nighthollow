@@ -25,10 +25,10 @@ namespace Nighthollow.Editing
 
     public ImageEditorCell(ReflectivePath reflectivePath)
     {
-      reflectivePath.OnEntityUpdated(imageAddress =>
+      reflectivePath.OnEntityUpdated(() =>
       {
         Clear();
-        var address = imageAddress as string;
+        var address = reflectivePath.Read() as string;
         if (string.IsNullOrWhiteSpace(address))
         {
           Add(new Label("None"));

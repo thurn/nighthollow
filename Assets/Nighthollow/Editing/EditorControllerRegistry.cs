@@ -18,9 +18,11 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Stats;
 using Nighthollow.Triggers;
+using UnityEngine;
 
 #nullable enable
 
@@ -42,6 +44,8 @@ namespace Nighthollow.Editing
 
     public virtual EditorSheetDelegate? GetCustomSheetDelegate(ReflectivePath reflectivePath, string propertyName)
       => null;
+
+    public virtual List<EditorSheetDelegate.ICellContent>? GetAddButtonRow(ReflectivePath reflectivePath) => null;
   }
 
   abstract class EditorController<T> : EditorController
@@ -284,14 +288,14 @@ namespace Nighthollow.Editing
     };
   }
 
-  sealed class TriggerDataController : EditorController<ITriggerData>
+  sealed class TriggerDataController : EditorController<ITrigger>
   {
     public override int GetColumnWidth(string propertyName) => propertyName switch
     {
-      nameof(ITriggerData.Name) => 400,
-      nameof(ITriggerData.EventDescription) => 400,
-      nameof(ITriggerData.ConditionsDescription) => 600,
-      nameof(ITriggerData.EffectsDescription) => 600,
+      nameof(ITrigger.Name) => 400,
+      nameof(ITrigger.EventDescription) => 400,
+      nameof(ITrigger.ConditionsDescription) => 600,
+      nameof(ITrigger.EffectsDescription) => 600,
       _ => base.GetColumnWidth(propertyName)
     };
 
@@ -299,10 +303,39 @@ namespace Nighthollow.Editing
     {
       return propertyName switch
       {
-        nameof(ITriggerData.EventDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
-        nameof(ITriggerData.ConditionsDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
-        nameof(ITriggerData.EffectsDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
+        nameof(ITrigger.EventDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
+        nameof(ITrigger.ConditionsDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
+        nameof(ITrigger.EffectsDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
         _ => null
+      };
+    }
+
+    static List<Type> EventTypes() =>
+      typeof(ITrigger).GetCustomAttributes<UnionAttribute>()
+        .Select(attribute => attribute.SubType.GetGenericArguments()[0])
+        .ToList();
+
+    void AddNewTrigger<TEvent>(ReflectivePath path) where TEvent : TriggerEvent
+    {
+      path.Database.Insert(TableId.Triggers, new TriggerData<TEvent>("New Trigger"));
+    }
+
+    public override List<EditorSheetDelegate.ICellContent> GetAddButtonRow(ReflectivePath reflectivePath)
+    {
+      var eventTypes = EventTypes();
+      return new List<EditorSheetDelegate.ICellContent>
+      {
+        new EditorSheetDelegate.DropdownCellContent(
+          eventTypes.Select(t => Description.Snippet("When", t)).ToList(),
+          currentlySelected: null,
+          i =>
+          {
+            GetType()
+              .GetMethod(nameof(AddNewTrigger), BindingFlags.Instance | BindingFlags.NonPublic)!
+              .MakeGenericMethod(eventTypes[i])
+              .Invoke(this, new object[] {reflectivePath});
+          },
+          "Add Trigger...")
       };
     }
   }
@@ -318,7 +351,7 @@ namespace Nighthollow.Editing
         {typeof(SkillItemData), new SkillItemController()},
         {typeof(StatusEffectTypeData), new StatusEffectTypeController()},
         {typeof(StatusEffectItemData), new StatusEffectItemController()},
-        {typeof(ITriggerData), new TriggerDataController()}
+        {typeof(ITrigger), new TriggerDataController()},
       };
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)
@@ -384,5 +417,10 @@ namespace Nighthollow.Editing
         return null;
       }
     }
+
+    public static List<EditorSheetDelegate.ICellContent>? GetAddButtonRow(ReflectivePath reflectivePath) =>
+      Controllers.ContainsKey(reflectivePath.GetUnderlyingType())
+        ? Controllers[reflectivePath.GetUnderlyingType()].GetAddButtonRow(reflectivePath)
+        : null;
   }
 }

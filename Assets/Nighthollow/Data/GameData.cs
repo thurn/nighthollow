@@ -33,7 +33,7 @@ namespace Nighthollow.Data
       ImmutableDictionary<int, CreatureItemData>? collection = null,
       ImmutableDictionary<int, CreatureItemData>? deck = null,
       ImmutableDictionary<int, StatusEffectTypeData>? statusEffects = null,
-      ImmutableDictionary<int, ITriggerData>? triggers = null)
+      ImmutableDictionary<int, ITrigger>? triggers = null)
     {
       BattleData = battleData ?? new BattleData();
       TableMetadata = tableMetadata ?? ImmutableDictionary<int, TableMetadata>.Empty;
@@ -46,7 +46,7 @@ namespace Nighthollow.Data
       Collection = collection ?? ImmutableDictionary<int, CreatureItemData>.Empty;
       Deck = deck ?? ImmutableDictionary<int, CreatureItemData>.Empty;
       StatusEffects = statusEffects ?? ImmutableDictionary<int, StatusEffectTypeData>.Empty;
-      Triggers = triggers ?? ImmutableDictionary<int, ITriggerData>.Empty;
+      Triggers = triggers ?? ImmutableDictionary<int, ITrigger>.Empty;
     }
 
     [Field] public BattleData BattleData { get; }
@@ -60,6 +60,6 @@ namespace Nighthollow.Data
     [Field] public ImmutableDictionary<int, CreatureItemData> Collection { get; }
     [Field] public ImmutableDictionary<int, CreatureItemData> Deck { get; }
     [Field] public ImmutableDictionary<int, StatusEffectTypeData> StatusEffects { get; }
-    [Field] public ImmutableDictionary<int, ITriggerData> Triggers { get; }
+    [Field] public ImmutableDictionary<int, ITrigger> Triggers { get; }
   }
 }
