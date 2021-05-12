@@ -17,7 +17,7 @@ using Nighthollow.Services;
 
 #nullable enable
 
-namespace Nighthollow.Triggers.Events
+namespace Nighthollow.Triggers
 {
   public abstract class TriggerEvent
   {

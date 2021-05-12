@@ -68,6 +68,9 @@ namespace Nighthollow.Interface
     public static ElementKey<AdvisorBar> AdvisorBar =
       new ElementKey<AdvisorBar>("AdvisorBar");
 
+    public static ElementKey<CharacterDialogue> CharacterDialogue =
+      new ElementKey<CharacterDialogue>("CharacterDialogue");
+
     public static ElementKey<UserStatus> UserStatus =
       new ElementKey<UserStatus>("UserStatus");
 
@@ -92,6 +95,7 @@ namespace Nighthollow.Interface
     {
       Background,
       AdvisorBar,
+      CharacterDialogue,
       UserStatus,
       BlackoutWindow,
       GameOverMessage,

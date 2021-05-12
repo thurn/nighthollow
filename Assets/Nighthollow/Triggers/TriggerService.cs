@@ -15,7 +15,6 @@
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Services;
-using Nighthollow.Triggers.Events;
 
 #nullable enable
 

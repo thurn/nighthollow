@@ -21,10 +21,6 @@ namespace Nighthollow.World
 {
   public sealed class WorldTutorial
   {
-    const string IntroText =
-      "The sleeper awakes! We have been preparing for your return for many years, my lord. We will once again " +
-      "bring the Eternal Night to the world of the living!";
-
     public static readonly Vector2Int StartingHex = new Vector2Int(x: -12, y: 7);
     public static readonly Vector2Int TutorialAttackHex = new Vector2Int(x: -11, y: 7);
 
@@ -37,7 +33,7 @@ namespace Nighthollow.World
 
     public void OnWorldSceneLoaded()
     {
-      _registry.ScreenController.ShowDialog("ocerak", IntroText);
+      // _registry.ScreenController.ShowDialog("ocerak", IntroText);
       _registry.WorldMap.ShowIcon(TutorialAttackHex, _registry.StaticAssets.FightIcon);
     }
   }

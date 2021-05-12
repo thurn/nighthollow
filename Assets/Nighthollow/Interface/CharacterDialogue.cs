@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using MessagePack;
 using Nighthollow.Triggers.Effects;
-using Nighthollow.Triggers.Events;
+using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.Triggers
+namespace Nighthollow.Interface
 {
-  [Union(0, typeof(DisplayHelpTextEffect))]
-  [Union(1, typeof(CharacterDialogueEffect))]
-  public interface IEffect
+  public sealed class CharacterDialogue : HideableElement<CharacterDialogueEffect>
   {
-  }
+    public new sealed class UxmlFactory : UxmlFactory<CharacterDialogue, UxmlTraits>
+    {
+    }
 
-  public interface IEffect<in TEvent> : IEffect where TEvent : TriggerEvent
-  {
-    void Execute(TEvent trigger);
+    protected override void OnShow(CharacterDialogueEffect argument)
+    {
+    }
   }
 }

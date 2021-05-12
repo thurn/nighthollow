@@ -84,6 +84,9 @@
 .portrait {
   width: dimensions.$portrait-size;
   height: dimensions.$portrait-size;
+  flex-basis: dimensions.$portrait-size;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 .portrait.small {

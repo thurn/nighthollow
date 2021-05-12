@@ -30,6 +30,15 @@ namespace Nighthollow.Triggers.Effects
   [MessagePackObject]
   public sealed partial class DisplayHelpTextEffect : IEffect<TriggerEvent>
   {
+    public static Description Describe => new Description(
+      "display the helper text",
+      nameof(Text),
+      "at position",
+      nameof(XPosition),
+      nameof(YPosition),
+      "with arrow direction",
+      nameof(ArrowDirection));
+
     public enum Direction
     {
       Top,
@@ -80,14 +89,5 @@ namespace Nighthollow.Triggers.Effects
         .FindByName<VisualElement>(trigger.Registry.ScreenController.Screen, "HelperTextContainer")
         .Add(element);
     }
-
-    public static Description Describe => new Description(
-      "display the helper text",
-      nameof(Text),
-      "at position",
-      nameof(XPosition),
-      nameof(YPosition),
-      "with arrow direction",
-      nameof(ArrowDirection));
   }
 }
