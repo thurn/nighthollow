@@ -127,6 +127,9 @@ namespace Nighthollow.Data
     public static readonly TableId<ITrigger> Triggers =
       new TriggersTableId(11, "Triggers");
 
+    public static readonly TableId<GlobalData> Globals =
+      new GlobalsTableId(12, "Globals");
+
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
       TableMetadata,
       CreatureTypes,
@@ -139,7 +142,8 @@ namespace Nighthollow.Data
       Deck,
       StatusEffectTypes,
       BattleData,
-      Triggers
+      Triggers,
+      Globals
     );
 
     sealed class TableMetadataTableId : TableId<TableMetadata>
@@ -296,6 +300,19 @@ namespace Nighthollow.Data
 
       public override GameData Write(GameData gameData, ImmutableDictionary<int, ITrigger> newValue) =>
         gameData.WithTriggers(newValue);
+    }
+
+    sealed class GlobalsTableId : TableId<GlobalData>
+    {
+      public GlobalsTableId(int id, string tableName) : base(id, tableName)
+      {
+      }
+
+      public override ImmutableDictionary<int, GlobalData> GetIn(GameData gameData) =>
+        gameData.Globals;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, GlobalData> newValue) =>
+        gameData.WithGlobals(newValue);
     }
   }
 }

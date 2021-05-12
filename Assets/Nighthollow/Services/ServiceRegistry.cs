@@ -44,6 +44,7 @@ namespace Nighthollow.Services
       _document = document;
       MainCamera = mainCamera;
       ObjectPoolService = objectPoolService;
+      Globals = new GlobalsService(database);
     }
 
     public virtual void OnUpdate()
@@ -59,6 +60,7 @@ namespace Nighthollow.Services
     public ObjectPoolService ObjectPoolService { get; }
     TriggerService? _triggerService;
     public TriggerService TriggerService => _triggerService ??= new TriggerService(this);
+    public GlobalsService Globals { get; }
   }
 
   public sealed class WorldServiceRegistry : ServiceRegistry

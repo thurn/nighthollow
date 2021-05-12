@@ -405,7 +405,8 @@ namespace Nighthollow.Data
           Collection,
           Deck,
           StatusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithTableMetadata(ImmutableDictionary<int, TableMetadata> tableMetadata) =>
       Equals(tableMetadata, TableMetadata)
@@ -422,7 +423,8 @@ namespace Nighthollow.Data
           Collection,
           Deck,
           StatusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
       Equals(creatureTypes, CreatureTypes)
@@ -439,7 +441,8 @@ namespace Nighthollow.Data
           Collection,
           Deck,
           StatusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithAffixTypes(ImmutableDictionary<int, AffixTypeData> affixTypes) =>
       Equals(affixTypes, AffixTypes)
@@ -456,7 +459,8 @@ namespace Nighthollow.Data
           Collection,
           Deck,
           StatusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithSkillTypes(ImmutableDictionary<int, SkillTypeData> skillTypes) =>
       Equals(skillTypes, SkillTypes)
@@ -473,7 +477,8 @@ namespace Nighthollow.Data
           Collection,
           Deck,
           StatusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithStatData(ImmutableDictionary<int, StatData> statData) =>
       Equals(statData, StatData)
@@ -490,7 +495,8 @@ namespace Nighthollow.Data
           Collection,
           Deck,
           StatusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithItemLists(ImmutableDictionary<int, StaticItemListData> itemLists) =>
       Equals(itemLists, ItemLists)
@@ -507,7 +513,8 @@ namespace Nighthollow.Data
           Collection,
           Deck,
           StatusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithUserModifiers(ImmutableDictionary<int, ModifierData> userModifiers) =>
       Equals(userModifiers, UserModifiers)
@@ -524,7 +531,8 @@ namespace Nighthollow.Data
           Collection,
           Deck,
           StatusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithCollection(ImmutableDictionary<int, CreatureItemData> collection) =>
       Equals(collection, Collection)
@@ -541,7 +549,8 @@ namespace Nighthollow.Data
           collection,
           Deck,
           StatusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithDeck(ImmutableDictionary<int, CreatureItemData> deck) =>
       Equals(deck, Deck)
@@ -558,7 +567,8 @@ namespace Nighthollow.Data
           Collection,
           deck,
           StatusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithStatusEffects(ImmutableDictionary<int, StatusEffectTypeData> statusEffects) =>
       Equals(statusEffects, StatusEffects)
@@ -575,7 +585,8 @@ namespace Nighthollow.Data
           Collection,
           Deck,
           statusEffects,
-          Triggers);
+          Triggers,
+          Globals);
 
     public GameData WithTriggers(ImmutableDictionary<int, ITrigger> triggers) =>
       Equals(triggers, Triggers)
@@ -592,7 +603,26 @@ namespace Nighthollow.Data
           Collection,
           Deck,
           StatusEffects,
-          triggers);
+          triggers,
+          Globals);
+
+    public GameData WithGlobals(ImmutableDictionary<int, GlobalData> globals) =>
+      Equals(globals, Globals)
+        ? this
+        : new GameData(
+          BattleData,
+          TableMetadata,
+          CreatureTypes,
+          AffixTypes,
+          SkillTypes,
+          StatData,
+          ItemLists,
+          UserModifiers,
+          Collection,
+          Deck,
+          StatusEffects,
+          Triggers,
+          globals);
 
   }
 
@@ -815,6 +845,34 @@ namespace Nighthollow.Data
           Name,
           ImageAddress,
           description);
+
+  }
+
+  public sealed partial class GlobalData
+  {
+    public GlobalData WithName(string name) =>
+      Equals(name, Name)
+        ? this
+        : new GlobalData(
+          name,
+          Value,
+          Comment);
+
+    public GlobalData WithValue(int value) =>
+      Equals(value, Value)
+        ? this
+        : new GlobalData(
+          Name,
+          value,
+          Comment);
+
+    public GlobalData WithComment(string? comment) =>
+      Equals(comment, Comment)
+        ? this
+        : new GlobalData(
+          Name,
+          Value,
+          comment);
 
   }
 

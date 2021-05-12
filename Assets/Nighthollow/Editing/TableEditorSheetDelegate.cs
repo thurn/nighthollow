@@ -95,7 +95,7 @@ namespace Nighthollow.Editing
       {
         result.Add(CollectionUtils
           .Single(new ButtonCellContent(
-            $"Add{TypeUtils.NameWithSpaces(_underlyingType.Name)}",
+            $"Add {TypeUtils.NameWithSpaces(_underlyingType.Name).Replace("Data", "")}",
             () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(_underlyingType)); },
             (AddButtonKey, 0)))
           .ToList<ICellContent>());

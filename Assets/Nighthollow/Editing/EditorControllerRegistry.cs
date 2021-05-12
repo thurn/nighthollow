@@ -22,7 +22,6 @@ using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Stats;
 using Nighthollow.Triggers;
-using UnityEngine;
 
 #nullable enable
 
@@ -340,6 +339,17 @@ namespace Nighthollow.Editing
     }
   }
 
+  sealed class GlobalDataController : EditorController<GlobalData>
+  {
+    public override int GetColumnWidth(string propertyName) => propertyName switch
+    {
+      nameof(GlobalData.Name) => 600,
+      nameof(GlobalData.Value) => 100,
+      nameof(GlobalData.Comment) => 1000,
+      _ => base.GetColumnWidth(propertyName)
+    };
+  }
+
   public static class EditorControllerRegistry
   {
     static readonly IReadOnlyDictionary<Type, EditorController> Controllers =
@@ -352,6 +362,7 @@ namespace Nighthollow.Editing
         {typeof(StatusEffectTypeData), new StatusEffectTypeController()},
         {typeof(StatusEffectItemData), new StatusEffectItemController()},
         {typeof(ITrigger), new TriggerDataController()},
+        {typeof(GlobalData), new GlobalDataController()}
       };
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)

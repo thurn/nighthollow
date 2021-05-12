@@ -16,7 +16,6 @@ using System;
 using System.IO;
 using System.Text;
 using Nighthollow.Data;
-using Nighthollow.Services;
 using Nighthollow.Stats;
 using UnityEditor;
 using UnityEngine;
@@ -50,7 +49,32 @@ namespace Nighthollow.Editor.Data
       var dataService = root.AddComponent<DataService>();
       dataService.Initialize(synchronous: true).MoveNext();
       dataService.OnReady(Generate);
+      dataService.OnReady(GenerateGlobals);
       Object.DestroyImmediate(root);
+    }
+
+    static void GenerateGlobals(FetchResult fetchResult)
+    {
+      var globals = fetchResult.Database.Snapshot().Globals;
+      var builder = CreateHeader("", "Data");
+
+      builder.Append("  public enum GlobalId\n");
+      builder.Append("  {\n");
+      builder.Append($"    Unknown = 0,\n");
+      foreach (var pair in globals)
+      {
+        if (!string.IsNullOrWhiteSpace(pair.Value.Comment))
+        {
+          builder.Append($"    // {pair.Value.Comment}");
+        }
+
+        builder.Append($"    {pair.Value.Name} = {pair.Key},\n");
+      }
+
+      builder.Append("  }\n");
+      builder.Append("}\n");
+
+      File.WriteAllText("Assets/Nighthollow/Data/GlobalId.cs", builder.ToString());
     }
 
     static void Generate(FetchResult fetchResult)
@@ -95,7 +119,7 @@ namespace Nighthollow.Editor.Data
       builder.Append("  }\n");
       builder.Append("}\n");
 
-      File.WriteAllText("Assets/Nighthollow/Stats2/Generated.cs", builder.ToString());
+      File.WriteAllText("Assets/Nighthollow/Stats/Generated.cs", builder.ToString());
     }
 
     static (string, string) StatType(StatData statData)
@@ -129,13 +153,13 @@ namespace Nighthollow.Editor.Data
       return (baseType, "");
     }
 
-    static StringBuilder CreateHeader(string usingDirective = "")
+    static StringBuilder CreateHeader(string usingDirective = "", string ns = "Stats")
     {
       var builder = new StringBuilder();
       builder.Append(LicenseHeader);
       builder.Append($"\n{usingDirective}");
       builder.Append("\n// Generated Code - Do Not Modify!");
-      builder.Append("\nnamespace Nighthollow.Stats2\n");
+      builder.Append($"\nnamespace Nighthollow.{ns}\n");
       builder.Append("{\n");
       return builder;
     }
