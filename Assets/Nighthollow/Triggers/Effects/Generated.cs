@@ -20,7 +20,7 @@ namespace Nighthollow.Triggers.Effects
         : new CharacterDialogueEffect(
           characterName,
           Text,
-          Timeout);
+          OnContinueTriggerId);
 
     public CharacterDialogueEffect WithText(string text) =>
       Equals(text, Text)
@@ -28,15 +28,15 @@ namespace Nighthollow.Triggers.Effects
         : new CharacterDialogueEffect(
           CharacterName,
           text,
-          Timeout);
+          OnContinueTriggerId);
 
-    public CharacterDialogueEffect WithTimeout(DurationValue? timeout) =>
-      Equals(timeout, Timeout)
+    public CharacterDialogueEffect WithOnContinueTriggerId(int? onContinueTriggerId) =>
+      Equals(onContinueTriggerId, OnContinueTriggerId)
         ? this
         : new CharacterDialogueEffect(
           CharacterName,
           Text,
-          timeout);
+          onContinueTriggerId);
 
   }
 

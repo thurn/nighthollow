@@ -95,6 +95,8 @@ namespace Nighthollow.Triggers
       return true;
     }
 
+    public override string ToString() => Name ?? "<Unnamed>";
+
     public ITrigger WithName(string? name) => ReferenceEquals(name, Name)
       ? this
       : new TriggerData<TEvent>(name, Category, Conditions, Effects, Looping, Disabled);

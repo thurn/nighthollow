@@ -3003,7 +3003,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
             writer.WriteArrayHeader(3);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.CharacterName>().Serialize(ref writer, value.CharacterName, options);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Text, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue?>().Serialize(ref writer, value.Timeout, options);
+            formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.OnContinueTriggerId, options);
         }
 
         public global::Nighthollow.Triggers.Effects.CharacterDialogueEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -3018,7 +3018,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
             var length = reader.ReadArrayHeader();
             var __CharacterName__ = default(global::Nighthollow.Triggers.Effects.CharacterName);
             var __Text__ = default(string);
-            var __Timeout__ = default(global::Nighthollow.Stats.DurationValue?);
+            var __OnContinueTriggerId__ = default(int?);
 
             for (int i = 0; i < length; i++)
             {
@@ -3031,7 +3031,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
                         __Text__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
                         break;
                     case 2:
-                        __Timeout__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Stats.DurationValue?>().Deserialize(ref reader, options);
+                        __OnContinueTriggerId__ = formatterResolver.GetFormatterWithVerify<int?>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -3039,7 +3039,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
                 }
             }
 
-            var ____result = new global::Nighthollow.Triggers.Effects.CharacterDialogueEffect(__CharacterName__, __Text__, __Timeout__);
+            var ____result = new global::Nighthollow.Triggers.Effects.CharacterDialogueEffect(__CharacterName__, __Text__, __OnContinueTriggerId__);
             reader.Depth--;
             return ____result;
         }

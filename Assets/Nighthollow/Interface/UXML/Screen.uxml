@@ -115,17 +115,14 @@ limitations under the License.
         </ui:VisualElement>
 
         <ui:VisualElement class="character-dialogue-container">
-            <nh:CharacterDialogue name="CharacterDialogue" class="character-dialogue" style="display: visible;">
-                <ui:VisualElement class="message-container">
-                    <ui:VisualElement name="Portrait" class="portrait you"/>
-                    <ui:Label name="Text" class="dialogue-text"
+            <nh:CharacterDialogue name="CharacterDialogue" class="character-dialogue" style="display: none;">
+                <ui:VisualElement name="DialoguePortrait" class="portrait you"/>
+                <ui:VisualElement class="text-container">
+                    <ui:Label name="DialogueText" class="dialogue-text"
                               text="The sleeper awakes! We have been preparing for your return for many years, my lord. We will once again bring the Eternal Night to the world of the living!"/>
                 </ui:VisualElement>
-
-                <ui:VisualElement class="button-container" style="flex-direction: row; justify-content: flex-end;">
-                    <ui:VisualElement name="ContinueButton" class="button" style="flex-grow: 0; flex-shrink: 1;">
-                        <ui:Label text="Continue"/>
-                    </ui:VisualElement>
+                <ui:VisualElement name="DialogueContinueButton" class="button">
+                    <ui:Label text="Continue"/>
                 </ui:VisualElement>
             </nh:CharacterDialogue>
         </ui:VisualElement>

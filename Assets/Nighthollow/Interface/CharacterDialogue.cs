@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Nighthollow.Triggers.Effects;
 using UnityEngine.UIElements;
 
@@ -21,12 +22,32 @@ namespace Nighthollow.Interface
 {
   public sealed class CharacterDialogue : HideableElement<CharacterDialogueEffect>
   {
+    VisualElement _portrait = null!;
+    Label _text = null!;
+    VisualElement _continueButton = null!;
+
     public new sealed class UxmlFactory : UxmlFactory<CharacterDialogue, UxmlTraits>
     {
     }
 
+    protected override void Initialize()
+    {
+      _portrait = FindElement("DialoguePortrait");
+      _text = Find<Label>("DialogueText");
+      _continueButton = FindElement("DialogueContinueButton");
+    }
+
     protected override void OnShow(CharacterDialogueEffect argument)
     {
+      _portrait.ClearClassList();
+      _portrait.AddToClassList("portrait");
+      _portrait.AddToClassList(argument.CharacterName switch
+      {
+        CharacterName.Ocerak => "ocerak",
+        CharacterName.You => "you",
+        _ => throw new ArgumentOutOfRangeException()
+      });
+      _text.text = argument.Text;
     }
   }
 }

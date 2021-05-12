@@ -34,7 +34,7 @@ namespace Nighthollow.World
     public void OnWorldSceneLoaded()
     {
       // _registry.ScreenController.ShowDialog("ocerak", IntroText);
-      _registry.WorldMap.ShowIcon(TutorialAttackHex, _registry.StaticAssets.FightIcon);
+      // _registry.WorldMap.ShowIcon(TutorialAttackHex, _registry.StaticAssets.FightIcon);
     }
   }
 }

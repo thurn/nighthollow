@@ -13,8 +13,6 @@
 // limitations under the License.
 
 using MessagePack;
-using Nighthollow.Data;
-using Nighthollow.Triggers.Events;
 
 #nullable enable
 

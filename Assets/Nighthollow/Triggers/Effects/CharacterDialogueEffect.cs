@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using MessagePack;
-using Nighthollow.Stats;
-using Nighthollow.Triggers.Events;
+using Nighthollow.Data;
+using Nighthollow.Interface;
 
 #nullable enable
 
@@ -24,7 +23,8 @@ namespace Nighthollow.Triggers.Effects
   public enum CharacterName
   {
     Unknown = 0,
-    Ocerak = 1
+    Ocerak = 1,
+    You = 2
   }
 
   [MessagePackObject]
@@ -35,30 +35,25 @@ namespace Nighthollow.Triggers.Effects
       nameof(Text),
       "from character",
       nameof(CharacterName),
-      "with timeout",
-      nameof(Timeout));
+      "and then invoke trigger",
+      nameof(OnContinueTriggerId));
 
-    public CharacterDialogueEffect(CharacterName characterName, string text, DurationValue? timeout)
+    public CharacterDialogueEffect(CharacterName characterName, string text, int? onContinueTriggerId)
     {
       CharacterName = characterName;
       Text = text;
-      Timeout = timeout;
+      OnContinueTriggerId = onContinueTriggerId;
     }
 
     [Key(0)] public CharacterName CharacterName { get; }
     [Key(1)] public string Text { get; }
 
-    /// <summary>How long to display the message for. If null, a close button will be shown instead.</summary>
-    [Key(2)] public DurationValue? Timeout { get; }
+    [ForeignKey(typeof(ITrigger))]
+    [Key(2)] public int? OnContinueTriggerId { get; }
 
     public void Execute(TriggerEvent trigger)
     {
-      var portraitName = CharacterName switch
-      {
-        CharacterName.Ocerak => "ocerak",
-        _ => throw new ArgumentOutOfRangeException()
-      };
-      // trigger.Registry.ScreenController.ShowDialog(portraitName, Text);
+      trigger.Registry.ScreenController.Get(ScreenController.CharacterDialogue).Show(this, animate: true);
     }
   }
 }

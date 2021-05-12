@@ -28,31 +28,32 @@
 
   .character-dialogue {
     @include images.basic-bar;
-    flex-direction: column;
-    width: dimensions.$dialog-width;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     padding: 32px;
 
-    .message-container {
-      flex-direction: row;
-      align-items: center;
+    .portrait {
+      margin-right: 32px;
+    }
 
-      .portrait {
-        margin-right: 32px;
-      }
+    .button {
+      margin-left: 16px;
+    }
+
+    .text-container {
+      flex-basis: 900px;
 
       .dialogue-text {
         @include fonts.text;
         font-size: font-sizes.$title;
         -unity-text-align: middle-left;
-        width: dimensions.$dialog-width - dimensions.$portrait-size - 96px;
-      }
-
-      .dialogue-text.right {
-        -unity-text-align: middle-right;
+        white-space: normal;
       }
     }
 
-    .button-container {
+    .dialogue-text.right {
+      -unity-text-align: middle-right;
     }
   }
 
