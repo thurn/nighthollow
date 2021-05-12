@@ -325,6 +325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _disablePersistence: 0
+  _autoresetTriggers: 1
 --- !u!114 &178308611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,6 +441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 817099575}
+  _zoomDelta: 0
   _worldMap: {fileID: 1143359796}
   _keyboardMovementSpeed: 25
   _scrollWheelZoomSpeed: -10
@@ -450,7 +452,6 @@ MonoBehaviour:
   _maxXZoomedOut: 58
   _maxYZoomedIn: 53
   _maxYZoomedOut: 47
-  _zoomDelta: 0
 --- !u!1001 &1081939163
 PrefabInstance:
   m_ObjectHideFlags: 0

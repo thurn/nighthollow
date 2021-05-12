@@ -98,9 +98,10 @@ namespace Nighthollow.Data
         }
       }
 
+      var database = new Database(_serializerOptions, gameData);
       StartCoroutine(AssetFetcher.FetchAssets(gameData, synchronous, assetService =>
       {
-        _fetchResult = new FetchResult(new Database(_serializerOptions, gameData), assetService);
+        _fetchResult = new FetchResult(database, assetService);
         InvokeListeners(_fetchResult);
       }));
 

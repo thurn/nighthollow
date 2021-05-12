@@ -19,7 +19,6 @@ using System.Reflection;
 using MessagePack;
 using Nighthollow.Editing;
 using Nighthollow.Utils;
-using UnityEngine;
 
 #nullable enable
 
@@ -143,7 +142,7 @@ namespace Nighthollow.Triggers
     {
       var effectPath =
         _reflectivePath.Property(triggerData.GetType().GetProperty(nameof(TriggerData<TEvent>.Effects))!)
-          .ListIndex(typeof(ICondition<TEvent>), index);
+          .ListIndex(typeof(IEffect<TEvent>), index);
       var result = new List<ICellContent>
       {
         new ButtonCellContent("x",
@@ -160,12 +159,18 @@ namespace Nighthollow.Triggers
 
     List<ICellContent> AddEffectRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : TriggerEvent
     {
+      var types = EffectTypes();
       return new List<ICellContent>
       {
         new DropdownCellContent(
-          EffectTypes().Select(c => Description.Snippet(triggerData.Conditions.IsEmpty ? "Then" : "And", c)).ToList(),
+          types.Select(c => Description.Snippet(triggerData.Effects.IsEmpty ? "Then" : "And", c)).ToList(),
           currentlySelected: null,
-          i => { Debug.Log("Selected"); },
+          i =>
+          {
+            _reflectivePath.Write(
+              triggerData.WithEffects(
+                triggerData.Effects.Add((IEffect<TEvent>) TypeUtils.InstantiateWithDefaults(types[i]))));
+          },
           "Add Effect...")
       };
     }

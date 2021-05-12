@@ -27,7 +27,7 @@ namespace Nighthollow.Triggers.Effects
   /// Displays a tooltip with gameplay tutorial information
   /// </summary>
   [MessagePackObject]
-  public sealed class DisplayHelpTextEffect : IEffect<TriggerEvent>
+  public sealed partial class DisplayHelpTextEffect : IEffect<TriggerEvent>
   {
     public enum Direction
     {
@@ -37,29 +37,18 @@ namespace Nighthollow.Triggers.Effects
       Left
     }
 
-    [MessagePackObject]
-    public readonly struct ArrowPosition
+    public DisplayHelpTextEffect(string text, int xPosition, int yPosition, Direction arrowDirection)
     {
-      public ArrowPosition(int x, int y)
-      {
-        X = x;
-        Y = y;
-      }
-
-      [Key(0)] public int X { get; }
-      [Key(1)] public int Y { get; }
-    }
-
-    public DisplayHelpTextEffect(ArrowPosition position, Direction arrowDirection, string text)
-    {
-      Position = position;
-      ArrowDirection = arrowDirection;
       Text = text;
+      XPosition = xPosition;
+      YPosition = yPosition;
+      ArrowDirection = arrowDirection;
     }
 
-    [Key(0)] public ArrowPosition Position { get; }
-    [Key(1)] public Direction ArrowDirection { get; }
-    [Key(2)] public string Text { get; }
+    [Key(0)] public string Text { get; }
+    [Key(1)] public int XPosition { get; }
+    [Key(2)] public int YPosition { get; }
+    [Key(3)] public Direction ArrowDirection { get; }
 
     public void Execute(TriggerEvent triggerEvent, ServiceRegistry registry)
     {
@@ -74,8 +63,8 @@ namespace Nighthollow.Triggers.Effects
         Direction.Left => "left-arrow",
         _ => throw Errors.UnknownEnumValue(ArrowDirection)
       });
-      element.style.left = new StyleLength(Position.X);
-      element.style.top = new StyleLength(Position.Y);
+      element.style.left = new StyleLength(XPosition);
+      element.style.top = new StyleLength(YPosition);
       element.style.opacity = new StyleFloat(v: 0f);
 
       var arrow = new VisualElement();
@@ -95,7 +84,8 @@ namespace Nighthollow.Triggers.Effects
       "display the helper text",
       nameof(Text),
       "at position",
-      nameof(Position),
+      nameof(XPosition),
+      nameof(YPosition),
       "with arrow direction",
       nameof(ArrowDirection));
   }

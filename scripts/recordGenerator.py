@@ -4,7 +4,6 @@ import sys
 import os
 import re
 
-
 class_regex = re.compile(r'public sealed partial class (\w+)')
 property_regex = re.compile(r'\[(?:Key\(\d+\)|Field)] public (?:override )?(.*?) (\w+) { get; }')
 
@@ -73,12 +72,14 @@ using = [
     "Nighthollow.Triggers"
 ]
 
+namespace = sys.argv[1].split("/Assets/")[1].rstrip("/").replace("/", ".")
+
 out_file = open(os.path.join(sys.argv[1], "Generated.cs"), 'w')
 out_file.write("// Generated Code - Do not Edit!\n\n")
 for use in using:
     out_file.write(f'using {use};\n')
 out_file.write("\n#nullable enable\n\n")
-out_file.write("namespace Nighthollow.Data\n")
+out_file.write(f'namespace {namespace}\n')
 out_file.write("{\n")
 for target in targets:
     generate(out_file, target)

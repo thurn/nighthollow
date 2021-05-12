@@ -36,12 +36,13 @@ namespace Nighthollow.Triggers
       }
 
       IFormatterResolver formatterResolver = options.Resolver;
-      writer.WriteArrayHeader(4);
+      writer.WriteArrayHeader(5);
       formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name!, options);
       formatterResolver.GetFormatterWithVerify<ImmutableList<ICondition>>()
         .Serialize(ref writer, value.Conditions.Cast<ICondition>().ToImmutableList(), options);
       formatterResolver.GetFormatterWithVerify<ImmutableList<IEffect>>()
         .Serialize(ref writer, value.Effects.Cast<IEffect>().ToImmutableList(), options);
+      writer.Write(value.Looping);
       writer.Write(value.Disabled);
     }
 
@@ -58,6 +59,7 @@ namespace Nighthollow.Triggers
       string? name = null;
       ImmutableList<ICondition>? conditions = null;
       ImmutableList<IEffect>? effects = null;
+      var looping = false;
       var disabled = false;
 
       for (int i = 0; i < length; i++)
@@ -76,6 +78,9 @@ namespace Nighthollow.Triggers
               .Deserialize(ref reader, options);
             break;
           case 3:
+            looping = reader.ReadBoolean();
+            break;
+          case 4:
             disabled = reader.ReadBoolean();
             break;
           default:
@@ -88,6 +93,7 @@ namespace Nighthollow.Triggers
         name,
         conditions?.Cast<ICondition<TEvent>>().ToImmutableList(),
         effects?.Cast<IEffect<TEvent>>().ToImmutableList(),
+        looping,
         disabled);
       reader.Depth--;
       return result;

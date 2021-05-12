@@ -31,6 +31,7 @@ namespace Nighthollow.Triggers
     [NestedSheet] string EventDescription { get; }
     [NestedSheet] string ConditionsDescription { get; }
     [NestedSheet] string EffectsDescription { get; }
+    bool Looping { get; }
     bool Disabled { get; }
 
     public ITrigger WithDisabled(bool disabled);
@@ -43,17 +44,20 @@ namespace Nighthollow.Triggers
       string? name = null,
       ImmutableList<ICondition<TEvent>>? conditions = null,
       ImmutableList<IEffect<TEvent>>? effects = null,
+      bool looping = false,
       bool disabled = false)
     {
       Name = name;
       Conditions = conditions ?? ImmutableList<ICondition<TEvent>>.Empty;
       Effects = effects ?? ImmutableList<IEffect<TEvent>>.Empty;
+      Looping = looping;
       Disabled = disabled;
     }
 
     public string? Name { get; }
     public ImmutableList<ICondition<TEvent>> Conditions { get; }
     public ImmutableList<IEffect<TEvent>> Effects { get; }
+    public bool Looping { get; }
     public bool Disabled { get; }
 
     public string EventDescription => Description.Snippet("When", typeof(TEvent));
@@ -85,19 +89,22 @@ namespace Nighthollow.Triggers
 
     public ITrigger WithName(string? name) => ReferenceEquals(name, Name)
       ? this
-      : new TriggerData<TEvent>(name, Conditions, Effects, Disabled);
+      : new TriggerData<TEvent>(name, Conditions, Effects, Looping, Disabled);
 
     public ITrigger WithConditions(ImmutableList<ICondition<TEvent>> conditions) =>
       ReferenceEquals(conditions, Conditions)
         ? this
-        : new TriggerData<TEvent>(Name, conditions, Effects, Disabled);
+        : new TriggerData<TEvent>(Name, conditions, Effects, Looping, Disabled);
 
     public ITrigger WithEffects(ImmutableList<IEffect<TEvent>> effects) =>
       ReferenceEquals(effects, Effects)
         ? this
-        : new TriggerData<TEvent>(Name, Conditions, effects, Disabled);
+        : new TriggerData<TEvent>(Name, Conditions, effects, Looping, Disabled);
+
+    public ITrigger WithLooping(bool looping) =>
+      looping == Looping ? this : new TriggerData<TEvent>(Name, Conditions, Effects, looping, Disabled);
 
     public ITrigger WithDisabled(bool disabled) =>
-      disabled == Disabled ? this : new TriggerData<TEvent>(Name, Conditions, Effects, disabled);
+      disabled == Disabled ? this : new TriggerData<TEvent>(Name, Conditions, Effects, Looping, disabled);
   }
 }

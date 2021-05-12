@@ -49,7 +49,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(78)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(77)
             {
                 { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Data.DamageType, global::Nighthollow.Stats.IntRangeValue>), 0 },
                 { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Data.DamageType, global::Nighthollow.Stats.PercentageValue>), 1 },
@@ -128,7 +128,6 @@ namespace MessagePack.Resolvers
                 { typeof(global::Nighthollow.Triggers.Conditions.SceneNameCondition), 74 },
                 { typeof(global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition), 75 },
                 { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect), 76 },
-                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition), 77 },
             };
         }
 
@@ -219,7 +218,6 @@ namespace MessagePack.Resolvers
                 case 74: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.SceneNameConditionFormatter();
                 case 75: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.UserDeckSizeConditionFormatter();
                 case 76: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffectFormatter();
-                case 77: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffect_ArrowPositionFormatter();
                 default: return null;
             }
         }
@@ -3007,10 +3005,11 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(3);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition>().Serialize(ref writer, value.Position, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction>().Serialize(ref writer, value.ArrowDirection, options);
+            writer.WriteArrayHeader(4);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Text, options);
+            writer.Write(value.XPosition);
+            writer.Write(value.YPosition);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction>().Serialize(ref writer, value.ArrowDirection, options);
         }
 
         public global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -3023,66 +3022,26 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __Position__ = default(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition);
-            var __ArrowDirection__ = default(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction);
             var __Text__ = default(string);
+            var __XPosition__ = default(int);
+            var __YPosition__ = default(int);
+            var __ArrowDirection__ = default(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction);
 
             for (int i = 0; i < length; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        __Position__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition>().Deserialize(ref reader, options);
-                        break;
-                    case 1:
-                        __ArrowDirection__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction>().Deserialize(ref reader, options);
-                        break;
-                    case 2:
                         __Text__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
                         break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect(__Position__, __ArrowDirection__, __Text__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class DisplayHelpTextEffect_ArrowPositionFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.WriteArrayHeader(2);
-            writer.Write(value.X);
-            writer.Write(value.Y);
-        }
-
-        public global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                throw new InvalidOperationException("typecode is null, struct not supported");
-            }
-
-            options.Security.DepthStep(ref reader);
-            var length = reader.ReadArrayHeader();
-            var __X__ = default(int);
-            var __Y__ = default(int);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __X__ = reader.ReadInt32();
-                        break;
                     case 1:
-                        __Y__ = reader.ReadInt32();
+                        __XPosition__ = reader.ReadInt32();
+                        break;
+                    case 2:
+                        __YPosition__ = reader.ReadInt32();
+                        break;
+                    case 3:
+                        __ArrowDirection__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -3090,7 +3049,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
                 }
             }
 
-            var ____result = new global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.ArrowPosition(__X__, __Y__);
+            var ____result = new global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect(__Text__, __XPosition__, __YPosition__, __ArrowDirection__);
             reader.Depth--;
             return ____result;
         }
