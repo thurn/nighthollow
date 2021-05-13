@@ -14,19 +14,32 @@
 
 using System;
 using Nighthollow.Triggers.Effects;
-using Nighthollow.Triggers.Events;
 using UnityEngine.UIElements;
 
 #nullable enable
 
 namespace Nighthollow.Interface
 {
-  public sealed class CharacterDialogue : HideableElement<CharacterDialogueEffect>
+  public sealed class CharacterDialogue : HideableElement<CharacterDialogue.Args>
   {
     VisualElement _portrait = null!;
     Label _text = null!;
     VisualElement _continueButton = null!;
-    int? _onContinueTriggerId;
+    Action? _onContinue;
+
+    public sealed class Args
+    {
+      public Args(CharacterName characterName, string text, Action? onContinue = null)
+      {
+        CharacterName = characterName;
+        Text = text;
+        OnContinue = onContinue;
+      }
+
+      public CharacterName CharacterName { get; }
+      public string Text { get; }
+      public Action? OnContinue { get; }
+    }
 
     public new sealed class UxmlFactory : UxmlFactory<CharacterDialogue, UxmlTraits>
     {
@@ -43,25 +56,21 @@ namespace Nighthollow.Interface
     void OnContinueClicked(ClickEvent evt)
     {
       Hide();
-      
-      if (_onContinueTriggerId != null)
-      {
-        Registry.TriggerService.InvokeTriggerId(new TriggerInvokedEvent(Registry), _onContinueTriggerId.Value);
-      }
+      _onContinue?.Invoke();
     }
 
-    protected override void OnShow(CharacterDialogueEffect argument)
+    protected override void OnShow(Args args)
     {
       _portrait.ClearClassList();
       _portrait.AddToClassList("portrait");
-      _portrait.AddToClassList(argument.CharacterName switch
+      _portrait.AddToClassList(args.CharacterName switch
       {
         CharacterName.Ocerak => "ocerak",
         CharacterName.You => "you",
         _ => throw new ArgumentOutOfRangeException()
       });
-      _text.text = argument.Text;
-      _onContinueTriggerId = argument.OnContinueTriggerId;
+      _text.text = args.Text;
+      _onContinue = args.OnContinue;
     }
   }
 }

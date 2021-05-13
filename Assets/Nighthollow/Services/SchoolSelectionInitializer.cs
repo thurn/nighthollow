@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Interface;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -20,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Services
 {
-  public sealed class ServiceRegistryInitializer : MonoBehaviour
+  public sealed class SchoolSelectionInitializer : MonoBehaviour
   {
     [SerializeField] Camera _mainCamera = null!;
     [SerializeField] DataService _dataService = null!;
@@ -46,6 +47,7 @@ namespace Nighthollow.Services
         _document,
         _mainCamera,
         _objectPoolService);
+      _registry.ScreenController.Show(ScreenController.SchoolSelectionScreen);
     }
   }
 }

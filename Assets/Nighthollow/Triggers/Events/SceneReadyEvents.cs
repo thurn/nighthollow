@@ -35,4 +35,11 @@ namespace Nighthollow.Triggers.Events
 
     public static Description Describe => new Description("the battle scene is loaded");
   }
+
+  public sealed class SchoolSelectionSceneReadyEvent : TriggerEvent
+  {
+    public SchoolSelectionSceneReadyEvent(ServiceRegistry registry) : base(registry)
+    {
+    }
+  }
 }

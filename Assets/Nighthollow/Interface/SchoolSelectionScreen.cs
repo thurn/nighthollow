@@ -15,9 +15,8 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
-using Nighthollow.Services;
+using Nighthollow.Triggers.Effects;
 using Nighthollow.Utils;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -25,13 +24,13 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class SchoolSelectionScreen : VisualElement
+  public sealed class SchoolSelectionScreen : DefaultHideableElement
   {
     static readonly string InitialDescription =
       "Magic courses through the world of Nighthollow, granting great power to those who wield it. To begin your journey, you must select one of the six Schools of magic to focus on. Later on you'll be able to pick secondary Schools to supplement your arsenal.";
 
     readonly Dictionary<School, VisualElement> _buttons = new Dictionary<School, VisualElement>();
-    VisualElement? _confirmButton;
+    VisualElement _confirmButton = null!;
     Label? _description;
     KeyValuePair<School, VisualElement>? _selected;
 
@@ -90,26 +89,18 @@ namespace Nighthollow.Interface
         });
       }
 
-      _confirmButton.RegisterCallback<ClickEvent>(e =>
-      {
-        // Database.Instance.UserData.TutorialState = UserDataService.Tutorial.Starting;
-        Runner.Instance.StartCoroutine(ShowDialog());
-      });
+      _confirmButton.RegisterCallback<ClickEvent>(Continue);
 
       UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 
-    IEnumerator<YieldInstruction> ShowDialog()
+    void Continue(ClickEvent _)
     {
       this.Q("Schools").style.display = DisplayStyle.None;
-      _confirmButton!.style.display = DisplayStyle.None;
-      var dialog = this.Q("Dialog");
-      dialog.style.display = DisplayStyle.Flex;
-      InterfaceUtils.FadeIn(dialog);
-      yield return new WaitForSeconds(seconds: 4f);
-      InterfaceUtils.FadeOut(dialog);
-      yield return new WaitForSeconds(seconds: 1f);
-      SceneManager.LoadScene("World");
+      _confirmButton.style.display = DisplayStyle.None;
+      Controller.Get(ScreenController.CharacterDialogue)
+        .Show(new CharacterDialogue.Args(CharacterName.You, "I shall be the doom of all life.",
+          () => { SceneManager.LoadScene("World"); }), animate: true);
     }
 
     static string DescriptionForSchool(School school)

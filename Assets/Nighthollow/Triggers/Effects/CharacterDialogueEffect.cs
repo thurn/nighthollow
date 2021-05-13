@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using MessagePack;
 using Nighthollow.Interface;
+using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -50,7 +52,18 @@ namespace Nighthollow.Triggers.Effects
 
     public void Execute(TriggerEvent trigger)
     {
-      trigger.Registry.ScreenController.Get(ScreenController.CharacterDialogue).Show(this, animate: true);
+      Action? action = null;
+      if (OnContinueTriggerId.HasValue)
+      {
+        action = () =>
+        {
+          trigger.Registry.TriggerService.InvokeTriggerId(new TriggerInvokedEvent(trigger.Registry),
+            OnContinueTriggerId.Value);
+        };
+      }
+
+      trigger.Registry.ScreenController.Get(ScreenController.CharacterDialogue).Show(
+        new CharacterDialogue.Args(CharacterName, Text, action), animate: true);
     }
   }
 }

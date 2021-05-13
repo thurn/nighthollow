@@ -89,6 +89,12 @@ namespace Nighthollow.Interface
     public static ElementKey<GameDataEditor> GameDataEditor =
       new ElementKey<GameDataEditor>("GameDataEditor", createAtRuntime: true);
 
+    public static ElementKey<SchoolSelectionScreen> SchoolSelectionScreen =
+      new ElementKey<SchoolSelectionScreen>("SchoolSelectionScreen");
+
+    public static ElementKey<BlackoutWindow> LoadingBlackout =
+      new ElementKey<BlackoutWindow>("LoadingBlackout");
+
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
     readonly List<IElementKey> _keys = new List<IElementKey>
@@ -102,6 +108,8 @@ namespace Nighthollow.Interface
       RewardsWindow,
       RewardChoiceWindow,
       GameDataEditor,
+      SchoolSelectionScreen,
+      LoadingBlackout
     };
 
     readonly ServiceRegistry _registry;
@@ -138,6 +146,8 @@ namespace Nighthollow.Interface
 
       _screen.RegisterCallback<MouseMoveEvent>(MouseMove);
       _screen.RegisterCallback<MouseUpEvent>(MouseUp);
+
+      Get(LoadingBlackout).Hide();
     }
 
     public void OnUpdate()
