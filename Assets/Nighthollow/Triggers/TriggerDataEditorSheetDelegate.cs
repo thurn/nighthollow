@@ -109,7 +109,7 @@ namespace Nighthollow.Triggers
 
       Description.GetDescription(condition.GetType()).Iterate(condition,
         s => { result.Add(new LabelCellContent(s)); },
-        p => { result.Add(new ReflectivePathCellContent(conditionPath.Property(p))); },
+        p => { result.Add(PropertyCellContent(conditionPath, p)); },
         index == 0 ? "If" : "And");
 
       return result;
@@ -152,7 +152,7 @@ namespace Nighthollow.Triggers
 
       Description.GetDescription(effect.GetType()).Iterate(effect,
         s => { result.Add(new LabelCellContent(s)); },
-        p => { result.Add(new ReflectivePathCellContent(effectPath.Property(p))); },
+        p => { result.Add(PropertyCellContent(effectPath, p)); },
         index == 0 ? "Then" : "And");
 
       return result;
@@ -174,6 +174,40 @@ namespace Nighthollow.Triggers
           },
           "Add Effect...")
       };
+    }
+
+    ICellContent PropertyCellContent(ReflectivePath path, PropertyInfo property)
+    {
+      var attribute = property.GetCustomAttribute<TriggerId>();
+      if (attribute != null)
+      {
+        var childPath = path.Property(property);
+        var currentValue = (int?) childPath.Read();
+        var invokedTriggers = new List<KeyValuePair<int, ITrigger>>();
+        int? selectedIndex = null;
+        var index = 0;
+
+        foreach (var pair in path.Database.Snapshot().Triggers
+          .Where(pair => pair.Value is TriggerData<TriggerInvokedEvent>))
+        {
+          invokedTriggers.Add(pair);
+          if (currentValue == pair.Key)
+          {
+            selectedIndex = index;
+          }
+
+          index++;
+        }
+
+        return new DropdownCellContent(
+          invokedTriggers.Select(pair => pair.Value.Name ?? $"Trigger {pair.Key}").ToList(),
+          selectedIndex,
+          selected => { childPath.Write(invokedTriggers[selected].Key); });
+      }
+      else
+      {
+        return new ReflectivePathCellContent(path.Property(property));
+      }
     }
   }
 }

@@ -125,6 +125,7 @@ namespace Nighthollow.Interface
       {
         var element = key.FindByNameIn(_screen);
         element.Controller = this;
+        element.Registry = _registry;
         _elements[key.Name] = element;
       }
 

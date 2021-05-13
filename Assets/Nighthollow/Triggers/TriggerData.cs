@@ -22,12 +22,21 @@ using Nighthollow.Triggers.Events;
 
 namespace Nighthollow.Triggers
 {
+  /// <summary>
+  /// Represents a Trigger. Triggers contain code to run in response to an event -- the conditions are evaluated and
+  /// then, if they all pass, the effects are applied.
+  ///
+  /// NOTE: This type must contain Union tags for every possible type of Trigger, which must then be synced via the
+  /// ./scripts/data.sh script. Failing to run the script after adding a tag here will cause triggers to silently
+  /// serialize to null!
+  /// </summary>
   [Union(0, typeof(TriggerData<WorldSceneReadyEvent>))]
   [Union(1, typeof(TriggerData<BattleSceneReadyEvent>))]
   [Union(2, typeof(TriggerData<BattleStartedEvent>))]
   [Union(3, typeof(TriggerData<DrewOpeningHandEvent>))]
   [Union(4, typeof(TriggerData<EnemyCreatureSpawnedEvent>))]
   [Union(5, typeof(TriggerData<UserCreaturePlayedEvent>))]
+  [Union(6, typeof(TriggerData<TriggerInvokedEvent>))]
   public interface ITrigger
   {
     public string? Name { get; }

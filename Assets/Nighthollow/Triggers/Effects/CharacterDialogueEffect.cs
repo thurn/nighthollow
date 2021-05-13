@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using MessagePack;
-using Nighthollow.Data;
 using Nighthollow.Interface;
 
 #nullable enable
@@ -47,9 +46,7 @@ namespace Nighthollow.Triggers.Effects
 
     [Key(0)] public CharacterName CharacterName { get; }
     [Key(1)] public string Text { get; }
-
-    [ForeignKey(typeof(ITrigger))]
-    [Key(2)] public int? OnContinueTriggerId { get; }
+    [TriggerId] [Key(2)] public int? OnContinueTriggerId { get; }
 
     public void Execute(TriggerEvent trigger)
     {

@@ -1001,7 +1001,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
 
         public ITriggerFormatter()
         {
-            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(6, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
+            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(7, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
             {
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.WorldSceneReadyEvent>).TypeHandle, new KeyValuePair<int, int>(0, 0) },
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.BattleSceneReadyEvent>).TypeHandle, new KeyValuePair<int, int>(1, 1) },
@@ -1009,8 +1009,9 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.DrewOpeningHandEvent>).TypeHandle, new KeyValuePair<int, int>(3, 3) },
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.EnemyCreatureSpawnedEvent>).TypeHandle, new KeyValuePair<int, int>(4, 4) },
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.UserCreaturePlayedEvent>).TypeHandle, new KeyValuePair<int, int>(5, 5) },
+                { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.TriggerInvokedEvent>).TypeHandle, new KeyValuePair<int, int>(6, 6) },
             };
-            this.keyToJumpMap = new Dictionary<int, int>(6)
+            this.keyToJumpMap = new Dictionary<int, int>(7)
             {
                 { 0, 0 },
                 { 1, 1 },
@@ -1018,6 +1019,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                 { 3, 3 },
                 { 4, 4 },
                 { 5, 5 },
+                { 6, 6 },
             };
         }
 
@@ -1047,6 +1049,9 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                         break;
                     case 5:
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.UserCreaturePlayedEvent>>().Serialize(ref writer, (global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.UserCreaturePlayedEvent>)value, options);
+                        break;
+                    case 6:
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.TriggerInvokedEvent>>().Serialize(ref writer, (global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.TriggerInvokedEvent>)value, options);
                         break;
                     default:
                         break;
@@ -1098,6 +1103,9 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                     break;
                 case 5:
                     result = (global::Nighthollow.Triggers.ITrigger)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.UserCreaturePlayedEvent>>().Deserialize(ref reader, options);
+                    break;
+                case 6:
+                    result = (global::Nighthollow.Triggers.ITrigger)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.TriggerInvokedEvent>>().Deserialize(ref reader, options);
                     break;
                 default:
                     reader.Skip();

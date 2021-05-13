@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.ComponentModel;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Services;
+using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -62,6 +64,25 @@ namespace Nighthollow.Triggers
           {
             _database.Update(TableId.Triggers, pair.Key, t => t.WithDisabled(true));
           }
+        }
+      }
+    }
+
+    public void InvokeTriggerId(TriggerInvokedEvent triggerEvent, int triggerId)
+    {
+      var trigger = _database.Snapshot().Triggers[triggerId] as TriggerData<TriggerInvokedEvent>;
+      if (trigger == null)
+      {
+        throw new InvalidEnumArgumentException(
+          $"Attempted to manually invoke a trigger {trigger} which was not of type TriggerInvokedEvent");
+      }
+
+      if (!trigger.Disabled)
+      {
+        var fired = trigger.Invoke(triggerEvent);
+        if (fired && !trigger.Looping)
+        {
+          _database.Update(TableId.Triggers, triggerId, t => t.WithDisabled(true));
         }
       }
     }

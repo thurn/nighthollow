@@ -1,3 +1,4 @@
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine.UIElements;
 
@@ -7,6 +8,7 @@ namespace Nighthollow.Interface
 {
   public abstract class AbstractHideableElement : VisualElement
   {
+    public ServiceRegistry Registry { get; set; } = null!;
     public ScreenController Controller { get; set; } = null!;
     public bool Visible { get; protected set; }
   }

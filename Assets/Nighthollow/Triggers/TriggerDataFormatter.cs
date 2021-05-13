@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
 using MessagePack.Formatters;
-using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -32,8 +32,7 @@ namespace Nighthollow.Triggers
     {
       if (value == null)
       {
-        writer.WriteNil();
-        return;
+        throw new InvalidOperationException($"Got null while serializing for type {typeof(TEvent)}");
       }
 
       IFormatterResolver formatterResolver = options.Resolver;
@@ -52,7 +51,7 @@ namespace Nighthollow.Triggers
     {
       if (reader.TryReadNil())
       {
-        return null!;
+        throw new InvalidOperationException($"Got null while deserializing for type {typeof(TEvent)}");
       }
 
       options.Security.DepthStep(ref reader);

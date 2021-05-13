@@ -14,6 +14,7 @@
 
 using System;
 using Nighthollow.Triggers.Effects;
+using Nighthollow.Triggers.Events;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -25,6 +26,7 @@ namespace Nighthollow.Interface
     VisualElement _portrait = null!;
     Label _text = null!;
     VisualElement _continueButton = null!;
+    int? _onContinueTriggerId;
 
     public new sealed class UxmlFactory : UxmlFactory<CharacterDialogue, UxmlTraits>
     {
@@ -35,6 +37,17 @@ namespace Nighthollow.Interface
       _portrait = FindElement("DialoguePortrait");
       _text = Find<Label>("DialogueText");
       _continueButton = FindElement("DialogueContinueButton");
+      _continueButton.RegisterCallback<ClickEvent>(OnContinueClicked);
+    }
+
+    void OnContinueClicked(ClickEvent evt)
+    {
+      Hide();
+      
+      if (_onContinueTriggerId != null)
+      {
+        Registry.TriggerService.InvokeTriggerId(new TriggerInvokedEvent(Registry), _onContinueTriggerId.Value);
+      }
     }
 
     protected override void OnShow(CharacterDialogueEffect argument)
@@ -48,6 +61,7 @@ namespace Nighthollow.Interface
         _ => throw new ArgumentOutOfRangeException()
       });
       _text.text = argument.Text;
+      _onContinueTriggerId = argument.OnContinueTriggerId;
     }
   }
 }
