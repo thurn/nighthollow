@@ -18,6 +18,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Utils;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Object = UnityEngine.Object;
 
 #nullable enable
@@ -37,6 +38,12 @@ namespace Nighthollow.Data
     {
       Errors.CheckArgument(_assets.ContainsKey(address), $"Asset not found: {address}");
       return (Sprite) _assets[address];
+    }
+
+    public Tile GetTile(string address)
+    {
+      Errors.CheckArgument(_assets.ContainsKey(address), $"Asset not found: {address}");
+      return (Tile) _assets[address];
     }
 
     public T InstantiatePrefab<T>(string address, Transform? parent = null) where T : Component

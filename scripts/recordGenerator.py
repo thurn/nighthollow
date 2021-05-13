@@ -69,7 +69,8 @@ using = [
     "Nighthollow.Services",
     "Nighthollow.Stats",
     "Nighthollow.State",
-    "Nighthollow.Triggers"
+    "Nighthollow.Triggers",
+    "Nighthollow.World.Data"
 ]
 
 namespace = sys.argv[1].split("/Assets/")[1].rstrip("/").replace("/", ".")

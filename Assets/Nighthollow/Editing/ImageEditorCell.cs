@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -36,9 +37,16 @@ namespace Nighthollow.Editing
         }
         else
         {
-          var image = new Image {sprite = Resources.Load<Sprite>(address)};
+          var sprite = Resources.Load<Sprite>(address);
+          if (sprite == null)
+          {
+            sprite = Resources.Load<Tile>(address).sprite;
+          }
+
+          var image = new Image {sprite = sprite};
           image.style.width = ImageSize;
           image.style.height = ImageSize;
+          image.scaleMode = ScaleMode.ScaleToFit;
           style.backgroundColor = new StyleColor(Color.black);
           Add(image);
         }

@@ -108,10 +108,6 @@ namespace Nighthollow.Editing
         cellDelegate = new PrimitiveTextFieldCellDelegate<IValueData>(reflectivePath,
           (string s, out IValueData d) => TryParseValueData(reflectivePath, s, out d));
       }
-      else if (type.GetInterface("IList") != null)
-      {
-        cellDelegate = new NestedSheetTextFieldCellDelegate(screenController, reflectivePath);
-      }
       else
       {
         cellDelegate = new NestedSheetTextFieldCellDelegate(screenController, reflectivePath);

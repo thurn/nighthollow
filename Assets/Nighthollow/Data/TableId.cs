@@ -16,8 +16,10 @@ using System;
 using System.Collections;
 using System.Collections.Immutable;
 using System.IO;
+using JetBrains.Annotations;
 using MessagePack;
 using Nighthollow.Triggers;
+using Nighthollow.World.Data;
 
 #nullable enable
 
@@ -130,6 +132,12 @@ namespace Nighthollow.Data
     public static readonly TableId<GlobalData> Globals =
       new GlobalsTableId(12, "Globals");
 
+    public static readonly TableId<HexData> Hexes =
+      new HexesTableId(13, "Hexes");
+
+    public static readonly TableId<KingdomData> Kingdoms =
+      new KingdomsTableId(14, "Kingdoms");
+
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
       TableMetadata,
       CreatureTypes,
@@ -143,7 +151,9 @@ namespace Nighthollow.Data
       StatusEffectTypes,
       BattleData,
       Triggers,
-      Globals
+      Globals,
+      Hexes,
+      Kingdoms
     );
 
     sealed class TableMetadataTableId : TableId<TableMetadata>
@@ -313,6 +323,32 @@ namespace Nighthollow.Data
 
       public override GameData Write(GameData gameData, ImmutableDictionary<int, GlobalData> newValue) =>
         gameData.WithGlobals(newValue);
+    }
+
+    sealed class HexesTableId : TableId<HexData>
+    {
+      public HexesTableId(int id, string tableName) : base(id, tableName)
+      {
+      }
+
+      public override ImmutableDictionary<int, HexData> GetIn(GameData gameData) =>
+        gameData.Hexes;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, HexData> newValue) =>
+        gameData.WithHexes(newValue);
+    }
+
+    sealed class KingdomsTableId : TableId<KingdomData>
+    {
+      public KingdomsTableId(int id, [NotNull] string tableName) : base(id, tableName)
+      {
+      }
+
+      public override ImmutableDictionary<int, KingdomData> GetIn(GameData gameData) =>
+        gameData.Kingdoms;
+
+      public override GameData Write(GameData gameData, ImmutableDictionary<int, KingdomData> newValue) =>
+        gameData.WithKingdoms(newValue);
     }
   }
 }

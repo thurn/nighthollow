@@ -6,6 +6,7 @@ using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.State;
 using Nighthollow.Triggers;
+using Nighthollow.World.Data;
 
 #nullable enable
 
@@ -406,7 +407,9 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithTableMetadata(ImmutableDictionary<int, TableMetadata> tableMetadata) =>
       Equals(tableMetadata, TableMetadata)
@@ -424,7 +427,9 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithCreatureTypes(ImmutableDictionary<int, CreatureTypeData> creatureTypes) =>
       Equals(creatureTypes, CreatureTypes)
@@ -442,7 +447,9 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithAffixTypes(ImmutableDictionary<int, AffixTypeData> affixTypes) =>
       Equals(affixTypes, AffixTypes)
@@ -460,7 +467,9 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithSkillTypes(ImmutableDictionary<int, SkillTypeData> skillTypes) =>
       Equals(skillTypes, SkillTypes)
@@ -478,7 +487,9 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithStatData(ImmutableDictionary<int, StatData> statData) =>
       Equals(statData, StatData)
@@ -496,7 +507,9 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithItemLists(ImmutableDictionary<int, StaticItemListData> itemLists) =>
       Equals(itemLists, ItemLists)
@@ -514,7 +527,9 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithUserModifiers(ImmutableDictionary<int, ModifierData> userModifiers) =>
       Equals(userModifiers, UserModifiers)
@@ -532,7 +547,9 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithCollection(ImmutableDictionary<int, CreatureItemData> collection) =>
       Equals(collection, Collection)
@@ -550,7 +567,9 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithDeck(ImmutableDictionary<int, CreatureItemData> deck) =>
       Equals(deck, Deck)
@@ -568,7 +587,9 @@ namespace Nighthollow.Data
           deck,
           StatusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithStatusEffects(ImmutableDictionary<int, StatusEffectTypeData> statusEffects) =>
       Equals(statusEffects, StatusEffects)
@@ -586,7 +607,9 @@ namespace Nighthollow.Data
           Deck,
           statusEffects,
           Triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithTriggers(ImmutableDictionary<int, ITrigger> triggers) =>
       Equals(triggers, Triggers)
@@ -604,7 +627,9 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           triggers,
-          Globals);
+          Globals,
+          Hexes,
+          Kingdoms);
 
     public GameData WithGlobals(ImmutableDictionary<int, GlobalData> globals) =>
       Equals(globals, Globals)
@@ -622,7 +647,49 @@ namespace Nighthollow.Data
           Deck,
           StatusEffects,
           Triggers,
-          globals);
+          globals,
+          Hexes,
+          Kingdoms);
+
+    public GameData WithHexes(ImmutableDictionary<int, HexData> hexes) =>
+      Equals(hexes, Hexes)
+        ? this
+        : new GameData(
+          BattleData,
+          TableMetadata,
+          CreatureTypes,
+          AffixTypes,
+          SkillTypes,
+          StatData,
+          ItemLists,
+          UserModifiers,
+          Collection,
+          Deck,
+          StatusEffects,
+          Triggers,
+          Globals,
+          hexes,
+          Kingdoms);
+
+    public GameData WithKingdoms(ImmutableDictionary<int, KingdomData> kingdoms) =>
+      Equals(kingdoms, Kingdoms)
+        ? this
+        : new GameData(
+          BattleData,
+          TableMetadata,
+          CreatureTypes,
+          AffixTypes,
+          SkillTypes,
+          StatData,
+          ItemLists,
+          UserModifiers,
+          Collection,
+          Deck,
+          StatusEffects,
+          Triggers,
+          Globals,
+          Hexes,
+          kingdoms);
 
   }
 

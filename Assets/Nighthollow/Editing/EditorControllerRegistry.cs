@@ -313,7 +313,7 @@ namespace Nighthollow.Editing
     {
       if (parentValue == null)
       {
-        return "Null Parent";
+        return "ERROR: Null Parent";
       }
 
       var value = property.GetValue(parentValue);

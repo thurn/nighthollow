@@ -14,6 +14,7 @@
 
 using System.Collections.Immutable;
 using Nighthollow.Triggers;
+using Nighthollow.World.Data;
 
 #nullable enable
 
@@ -34,7 +35,9 @@ namespace Nighthollow.Data
       ImmutableDictionary<int, CreatureItemData>? deck = null,
       ImmutableDictionary<int, StatusEffectTypeData>? statusEffects = null,
       ImmutableDictionary<int, ITrigger>? triggers = null,
-      ImmutableDictionary<int, GlobalData>? globals = null)
+      ImmutableDictionary<int, GlobalData>? globals = null,
+      ImmutableDictionary<int, HexData>? hexes = null,
+      ImmutableDictionary<int, KingdomData>? kingdoms = null)
     {
       BattleData = battleData ?? new BattleData();
       TableMetadata = tableMetadata ?? ImmutableDictionary<int, TableMetadata>.Empty;
@@ -49,6 +52,8 @@ namespace Nighthollow.Data
       StatusEffects = statusEffects ?? ImmutableDictionary<int, StatusEffectTypeData>.Empty;
       Triggers = triggers ?? ImmutableDictionary<int, ITrigger>.Empty;
       Globals = globals ?? ImmutableDictionary<int, GlobalData>.Empty;
+      Hexes = hexes ?? ImmutableDictionary<int, HexData>.Empty;
+      Kingdoms = kingdoms ?? ImmutableDictionary<int, KingdomData>.Empty;
     }
 
     [Field] public BattleData BattleData { get; }
@@ -64,5 +69,7 @@ namespace Nighthollow.Data
     [Field] public ImmutableDictionary<int, StatusEffectTypeData> StatusEffects { get; }
     [Field] public ImmutableDictionary<int, ITrigger> Triggers { get; }
     [Field] public ImmutableDictionary<int, GlobalData> Globals { get; }
+    [Field] public ImmutableDictionary<int, HexData> Hexes { get; }
+    [Field] public ImmutableDictionary<int, KingdomData> Kingdoms { get; }
   }
 }

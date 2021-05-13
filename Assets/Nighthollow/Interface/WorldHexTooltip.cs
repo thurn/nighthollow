@@ -28,7 +28,6 @@ namespace Nighthollow.Interface
       ("necrocastle", "The Citadel"),
       ("ocean", "Ocean"),
       ("ruins", "Ruins"),
-
       ("village", "Village"),
       ("inn", "Inn"),
       ("smithy", "Smithy"),
@@ -37,11 +36,9 @@ namespace Nighthollow.Interface
       ("henge", "Henge"),
       ("castle", "Castle"),
       ("farm", "Farmland"),
-
       ("snowfield", "Snowfield"),
       ("bog", "Swamp"),
       ("swamp", "Swamp"),
-
       ("desert", "Desert"),
       ("sand", "Desert"),
       ("dirt", "Plains"),

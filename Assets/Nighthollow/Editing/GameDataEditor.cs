@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -80,9 +81,13 @@ namespace Nighthollow.Editing
       {
         sheetDelegate = new ForeignKeyListEditorSheetDelegate(reflectivePath, foreignKeyList.TableType);
       }
-      else
+      else if (reflectivePath.GetUnderlyingType().GetInterface("IList") != null)
       {
         sheetDelegate = new NestedListEditorSheetDelegate(reflectivePath);
+      }
+      else
+      {
+        sheetDelegate = new NestedObjectEditorSheetDelegate(reflectivePath);
       }
 
       ClearCurrentSheet();
