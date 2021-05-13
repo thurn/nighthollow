@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
-using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Items;
 using Nighthollow.Triggers;
@@ -29,6 +28,13 @@ namespace Nighthollow.Editing
 {
   public abstract class EditorController
   {
+    public virtual TableEditorSheetDelegate? GetTableDelegate(
+      ReflectivePath reflectivePath,
+      EditorSheetDelegate.DropdownCellContent tableSelector)
+    {
+      return null;
+    }
+
     public abstract string Preview(GameData gameData, object container, string propertyName, object? propertyValue);
 
     public virtual void WriteForeignKey(int id, ReflectivePath reflectivePath)
@@ -40,11 +46,6 @@ namespace Nighthollow.Editing
     {
       return EditorSheet.DefaultCellWidth;
     }
-
-    public virtual EditorSheetDelegate? GetCustomSheetDelegate(ReflectivePath reflectivePath, string propertyName)
-      => null;
-
-    public virtual List<EditorSheetDelegate.ICellContent>? GetAddButtonRow(ReflectivePath reflectivePath) => null;
   }
 
   abstract class EditorController<T> : EditorController
@@ -233,53 +234,11 @@ namespace Nighthollow.Editing
 
   sealed class TriggerDataController : EditorController<ITrigger>
   {
-    public override int GetColumnWidth(string propertyName) => propertyName switch
+    public override TableEditorSheetDelegate GetTableDelegate(
+      ReflectivePath reflectivePath,
+      EditorSheetDelegate.DropdownCellContent tableSelector)
     {
-      nameof(ITrigger.Name) => 400,
-      nameof(ITrigger.EventDescription) => 400,
-      nameof(ITrigger.ConditionsDescription) => 600,
-      nameof(ITrigger.EffectsDescription) => 600,
-      _ => base.GetColumnWidth(propertyName)
-    };
-
-    public override EditorSheetDelegate? GetCustomSheetDelegate(ReflectivePath reflectivePath, string propertyName)
-    {
-      return propertyName switch
-      {
-        nameof(ITrigger.EventDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
-        nameof(ITrigger.ConditionsDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
-        nameof(ITrigger.EffectsDescription) => new TriggerDataEditorSheetDelegate(reflectivePath),
-        _ => null
-      };
-    }
-
-    static List<Type> EventTypes() =>
-      typeof(ITrigger).GetCustomAttributes<UnionAttribute>()
-        .Select(attribute => attribute.SubType.GetGenericArguments()[0])
-        .ToList();
-
-    void AddNewTrigger<TEvent>(ReflectivePath path) where TEvent : TriggerEvent
-    {
-      path.Database.Insert(TableId.Triggers, new TriggerData<TEvent>("New Trigger"));
-    }
-
-    public override List<EditorSheetDelegate.ICellContent> GetAddButtonRow(ReflectivePath reflectivePath)
-    {
-      var eventTypes = EventTypes();
-      return new List<EditorSheetDelegate.ICellContent>
-      {
-        new EditorSheetDelegate.DropdownCellContent(
-          eventTypes.Select(t => Description.Snippet("When", t)).ToList(),
-          currentlySelected: null,
-          i =>
-          {
-            GetType()
-              .GetMethod(nameof(AddNewTrigger), BindingFlags.Instance | BindingFlags.NonPublic)!
-              .MakeGenericMethod(eventTypes[i])
-              .Invoke(this, new object[] {reflectivePath});
-          },
-          "Add Trigger...")
-      };
+      return new TriggerTableEditorSheetDelegate(reflectivePath, tableSelector);
     }
   }
 
@@ -308,6 +267,16 @@ namespace Nighthollow.Editing
         {typeof(ITrigger), new TriggerDataController()},
         {typeof(GlobalData), new GlobalDataController()}
       };
+
+    public static TableEditorSheetDelegate GetTableDelegate(
+      ReflectivePath reflectivePath,
+      EditorSheetDelegate.DropdownCellContent tableSelector)
+    {
+      var tableDelegate = Controllers.ContainsKey(reflectivePath.GetUnderlyingType())
+        ? Controllers[reflectivePath.GetUnderlyingType()].GetTableDelegate(reflectivePath, tableSelector)
+        : null;
+      return tableDelegate ?? new TableEditorSheetDelegate(reflectivePath, tableSelector);
+    }
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)
     {
@@ -357,25 +326,5 @@ namespace Nighthollow.Editing
       Controllers.ContainsKey(type)
         ? Controllers[type].GetColumnWidth(propertyInfo.Name)
         : EditorSheet.DefaultCellWidth;
-
-    public static EditorSheetDelegate? GetCustomSheetDelegate(ReflectivePath reflectivePath)
-    {
-      var propertyName = reflectivePath.AsPropertyInfo()?.Name;
-      var parent = reflectivePath.Parent();
-      var type = parent?.GetUnderlyingType();
-      if (parent != null && type != null && Controllers.ContainsKey(type) && propertyName != null)
-      {
-        return Controllers[type].GetCustomSheetDelegate(reflectivePath, propertyName);
-      }
-      else
-      {
-        return null;
-      }
-    }
-
-    public static List<EditorSheetDelegate.ICellContent>? GetAddButtonRow(ReflectivePath reflectivePath) =>
-      Controllers.ContainsKey(reflectivePath.GetUnderlyingType())
-        ? Controllers[reflectivePath.GetUnderlyingType()].GetAddButtonRow(reflectivePath)
-        : null;
   }
 }

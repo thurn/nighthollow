@@ -18,9 +18,10 @@ namespace Nighthollow.Triggers
 {
   public enum TriggerCategory
   {
-    Uncategorized = 0,
+    NoCategory = 0,
     Tutorial = 1,
     MainDialogue = 2,
-    Utilities = 3
+    Utilities = 3,
+    Debug = 4
   }
 }

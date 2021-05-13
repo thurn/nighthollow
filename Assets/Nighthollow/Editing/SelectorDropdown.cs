@@ -133,7 +133,8 @@ namespace Nighthollow.Editing
       // reflectivePath.OnEntityUpdated(() => { SetTextFieldValue(reflectivePath.Read()?.ToString()); });
     }
 
-    static EditorSheetDelegate.DropdownCellContent BuildContent(ReflectivePath reflectivePath, Type type)
+    public static EditorSheetDelegate.DropdownCellContent CreateEnumContent(
+      string? current, Type type, Action<object> onSelected)
     {
       var values = Enum.GetValues(type)!;
       var options = new List<string>();
@@ -148,15 +149,19 @@ namespace Nighthollow.Editing
         options.Add(value.ToString());
       }
 
-      var current = reflectivePath.Read()?.ToString();
       var currentlySelected = options.FindIndex(o => o.Equals(current));
       return new EditorSheetDelegate.DropdownCellContent(options,
         currentlySelected == -1 ? (int?) null : currentlySelected,
         selected =>
         {
           var value = Enum.Parse(type, options[selected]);
-          reflectivePath.Write(value);
+          onSelected(value);
         });
+    }
+
+    static EditorSheetDelegate.DropdownCellContent BuildContent(ReflectivePath reflectivePath, Type type)
+    {
+      return CreateEnumContent(reflectivePath.Read()?.ToString(), type, reflectivePath.Write);
     }
   }
 

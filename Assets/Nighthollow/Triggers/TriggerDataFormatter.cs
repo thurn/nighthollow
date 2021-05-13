@@ -58,7 +58,7 @@ namespace Nighthollow.Triggers
       IFormatterResolver formatterResolver = options.Resolver;
       var length = reader.ReadArrayHeader();
       string? name = null;
-      var category = TriggerCategory.Uncategorized;
+      var category = TriggerCategory.NoCategory;
       ImmutableList<ICondition>? conditions = null;
       ImmutableList<IEffect>? effects = null;
       var looping = false;

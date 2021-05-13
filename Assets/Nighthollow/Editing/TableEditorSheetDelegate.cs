@@ -23,13 +23,16 @@ using Nighthollow.Utils;
 
 namespace Nighthollow.Editing
 {
-  public sealed class TableEditorSheetDelegate : EditorSheetDelegate
+  public class TableEditorSheetDelegate : EditorSheetDelegate
   {
     const int AddButtonKey = 1;
 
     readonly ReflectivePath _reflectivePath;
     readonly Type _underlyingType;
     readonly DropdownCellContent _tableSelector;
+
+    // this is probably a bad idea but yolo
+    protected Action? OnModified;
 
     public TableEditorSheetDelegate(ReflectivePath path, DropdownCellContent tableSelector)
     {
@@ -42,11 +45,13 @@ namespace Nighthollow.Editing
 
     public override void Initialize(Action onModified)
     {
-      GetType().GetMethod(nameof(InitializeInternal), BindingFlags.Instance | BindingFlags.NonPublic)!
+      GetType().GetMethod(nameof(InitializeInternal),
+          BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)!
         .MakeGenericMethod(_reflectivePath.GetUnderlyingType()).Invoke(this, new object[] {onModified});
+      OnModified = onModified;
     }
 
-    void InitializeInternal<T>(Action onModified) where T : class
+    protected void InitializeInternal<T>(Action onModified) where T : class
     {
       // We can eventually consider more fine-grained update logic to improve performance, but you can have problems
       // with stored ReflectivePath instances becoming invalid (e.g. when a trigger changes to a different subtype the
@@ -54,7 +59,9 @@ namespace Nighthollow.Editing
       _reflectivePath.Database.OnTableUpdated((TableId<T>) _reflectivePath.TableId, onModified);
     }
 
-    public override TableContent GetCells()
+    public sealed override TableContent GetCells() => RenderTable(_reflectivePath, _tableSelector);
+
+    protected virtual TableContent RenderTable(ReflectivePath reflectivePath, DropdownCellContent tableSelector)
     {
       var properties = _underlyingType.GetProperties();
       var imageProperty = properties.FirstOrDefault(p => p.Name.Contains("ImageAddress"));
@@ -66,42 +73,34 @@ namespace Nighthollow.Editing
 
       var result = new List<List<ICellContent>>
       {
-        new List<ICellContent> {_tableSelector},
+        new List<ICellContent> {tableSelector},
         staticHeadings
           .Concat(properties.Select(p => new LabelCellContent(TypeUtils.NameWithSpaces(p.Name))))
           .ToList()
       };
 
-      foreach (int entityId in _reflectivePath.GetTable().Keys)
+      foreach (int entityId in reflectivePath.GetTable().Keys)
       {
         var staticColumns = new List<ICellContent>
         {
-          new ButtonCellContent("x", () => DatabaseDelete(entityId)),
+          RowDeleteButton(entityId),
         };
         if (imageProperty != null)
         {
-          staticColumns.Add(new ImageCellContent(_reflectivePath.EntityId(entityId).Property(imageProperty)));
+          staticColumns.Add(new ImageCellContent(reflectivePath.EntityId(entityId).Property(imageProperty)));
         }
 
         result.Add(staticColumns.Concat(properties
-            .Select(property => new ReflectivePathCellContent(_reflectivePath.EntityId(entityId).Property(property))))
+            .Select(property => new ReflectivePathCellContent(reflectivePath.EntityId(entityId).Property(property))))
           .ToList());
       }
 
-      var addRow = EditorControllerRegistry.GetAddButtonRow(_reflectivePath);
-      if (addRow != null)
-      {
-        result.Add(addRow);
-      }
-      else
-      {
-        result.Add(CollectionUtils
-          .Single(new ButtonCellContent(
-            $"Add {TypeUtils.NameWithSpaces(_underlyingType.Name).Replace("Data", "")}",
-            () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(_underlyingType)); },
-            (AddButtonKey, 0)))
-          .ToList<ICellContent>());
-      }
+      result.Add(CollectionUtils
+        .Single(new ButtonCellContent(
+          $"Add {TypeUtils.NameWithSpaces(_underlyingType.Name).Replace("Data", "")}",
+          () => { DatabaseInsert(TypeUtils.InstantiateWithDefaults(_underlyingType)); },
+          (AddButtonKey, 0)))
+        .ToList<ICellContent>());
 
       var columnWidths = new List<int> {50};
       if (imageProperty != null)
@@ -117,14 +116,19 @@ namespace Nighthollow.Editing
       return new TableContent(result, columnWidths);
     }
 
-    void DatabaseDelete(int entityId)
+    protected ButtonCellContent RowDeleteButton(int entityId)
+    {
+      return new ButtonCellContent("x", () => DatabaseDelete(entityId));
+    }
+
+    protected void DatabaseDelete(int entityId)
     {
       typeof(Database).GetMethod(nameof(Database.Delete))!
         .MakeGenericMethod(_underlyingType)
         .Invoke(_reflectivePath.Database, new object[] {_reflectivePath.TableId, entityId});
     }
 
-    void DatabaseInsert(object value)
+    protected void DatabaseInsert(object value)
     {
       typeof(Database).GetMethod(nameof(Database.Insert))!
         .MakeGenericMethod(_reflectivePath.GetUnderlyingType())

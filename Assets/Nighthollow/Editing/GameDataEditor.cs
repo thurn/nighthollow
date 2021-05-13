@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -72,12 +71,7 @@ namespace Nighthollow.Editing
 
       EditorSheetDelegate sheetDelegate;
       var foreignKeyList = reflectivePath.AsPropertyInfo()?.GetCustomAttribute<ForeignKeyList>();
-      var customDelegate = EditorControllerRegistry.GetCustomSheetDelegate(reflectivePath);
-      if (customDelegate != null)
-      {
-        sheetDelegate = customDelegate;
-      }
-      else if (foreignKeyList != null)
+      if (foreignKeyList != null)
       {
         sheetDelegate = new ForeignKeyListEditorSheetDelegate(reflectivePath, foreignKeyList.TableType);
       }
@@ -124,23 +118,30 @@ namespace Nighthollow.Editing
       RenderTableId(_tables[index]);
     }
 
-    void RenderTableId(ITableId tableId, Vector2Int? initiallySelected = null)
+    void RenderTableId(ITableId currentTableId, Vector2Int? initiallySelected = null)
     {
       _selectionStack.Clear();
 
       ClearCurrentSheet();
       _database.Upsert(TableId.TableMetadata,
-        tableId.Id,
+        currentTableId.Id,
         new TableMetadata(),
         metadata => metadata.WithLastAccessedTime(DateTime.UtcNow.Ticks));
 
-      var path = new ReflectivePath(_database, tableId);
+      var path = new ReflectivePath(_database, currentTableId);
+      var tableNames = _tables.Select(tid => TypeUtils.NameWithSpaces(tid.TableName)).ToList();
+      var currentTableIndex = _tables.FindIndex(t => t.Id == currentTableId.Id);
+
       var tableSelector = new EditorSheetDelegate.DropdownCellContent(
-        _tables.Select(tid => TypeUtils.NameWithSpaces(tid.TableName)).ToList(),
-        _tables.FindIndex(t => t.Id == tableId.Id),
+        tableNames,
+        currentTableIndex,
         RenderTableIndex,
         "Select Table");
-      _sheet = new EditorSheet(Controller, new TableEditorSheetDelegate(path, tableSelector), initiallySelected);
+
+      _sheet = new EditorSheet(
+        Controller,
+        EditorControllerRegistry.GetTableDelegate(path, tableSelector),
+        initiallySelected);
       Add(_sheet);
     }
 

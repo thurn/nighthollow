@@ -48,6 +48,8 @@ namespace Nighthollow.Triggers
     bool Looping { get; }
     bool Disabled { get; }
 
+    public string Describe();
+
     public ITrigger WithDisabled(bool disabled);
   }
 
@@ -56,7 +58,7 @@ namespace Nighthollow.Triggers
   {
     public TriggerData(
       string? name = null,
-      TriggerCategory category = TriggerCategory.Uncategorized,
+      TriggerCategory category = TriggerCategory.NoCategory,
       ImmutableList<ICondition<TEvent>>? conditions = null,
       ImmutableList<IEffect<TEvent>>? effects = null,
       bool looping = false,
@@ -80,12 +82,14 @@ namespace Nighthollow.Triggers
     public string EventDescription => Description.Snippet("When", typeof(TEvent));
 
     public string ConditionsDescription => Conditions.IsEmpty
-      ? "No Conditions"
+      ? ""
       : $"If {string.Join("\nAnd ", Conditions.Select(Description.Describe))}";
 
     public string EffectsDescription => Effects.IsEmpty
-      ? "No Effects"
+      ? ""
       : $"Then {string.Join("\nAnd ", Effects.Select(Description.Describe))}";
+
+    public string Describe() => string.Join(" ", EventDescription, ConditionsDescription, EffectsDescription);
 
     /// <summary>
     /// Check trigger conditions and then fire effects if they all pass -- returns true if effects fired.
@@ -105,7 +109,11 @@ namespace Nighthollow.Triggers
       return true;
     }
 
-    public override string ToString() => Name ?? "<Unnamed>";
+    public override string ToString()
+    {
+      var description = Describe();
+      return description.Length < 100 ? description : $"{description.Substring(0, 100)}...";
+    }
 
     public ITrigger WithName(string? name) => ReferenceEquals(name, Name)
       ? this
