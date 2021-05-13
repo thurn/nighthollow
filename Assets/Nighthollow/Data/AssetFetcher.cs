@@ -89,6 +89,11 @@ namespace Nighthollow.Data
         }
       }
 
+      foreach (var kingdom in gameData.Kingdoms.Values)
+      {
+        Load<Tile>(requests, result, synchronous, kingdom.TileImageAddress);
+      }
+
       if (synchronous)
       {
         onComplete(new AssetService(result.ToImmutable()));

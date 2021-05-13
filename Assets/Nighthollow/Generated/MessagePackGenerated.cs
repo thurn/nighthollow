@@ -3471,8 +3471,8 @@ namespace MessagePack.Formatters.Nighthollow.World.Data
             }
 
             writer.WriteArrayHeader(2);
-            writer.Write(value.XPosition);
-            writer.Write(value.YPosition);
+            writer.Write(value.X);
+            writer.Write(value.Y);
         }
 
         public global::Nighthollow.World.Data.HexPosition Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -3524,7 +3524,7 @@ namespace MessagePack.Formatters.Nighthollow.World.Data
             writer.WriteArrayHeader(4);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.KingdomName>().Serialize(ref writer, value.Name, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.HexPosition>().Serialize(ref writer, value.StartingPosition, options);
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.ImageAddress, options);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.TileImageAddress, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.ColorData>().Serialize(ref writer, value.Color, options);
         }
 

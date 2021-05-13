@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 #nullable enable
 
@@ -20,5 +21,28 @@ namespace Nighthollow.World
 {
   public sealed class WorldStaticAssets : MonoBehaviour
   {
+    [SerializeField] Tile _bottomLeftSelection = null!;
+    public Tile CreateBottomLeftSelection() => Instantiate(_bottomLeftSelection);
+
+    [SerializeField] Tile _bottomRightSelection = null!;
+    public Tile CreateBottomRightSelection() => Instantiate(_bottomRightSelection);
+
+    [SerializeField] Tile _rightSelection = null!;
+    public Tile CreateRightSelection() => Instantiate(_rightSelection);
+
+    [SerializeField] Tile _leftSelection = null!;
+    public Tile CreateLeftSelection() => Instantiate(_leftSelection);
+
+    [SerializeField] GameObject _worldTilemapContainer = null!;
+    public GameObject WorldTilemapContainer => _worldTilemapContainer;
+
+    [SerializeField] Tilemap _overlayTilemap = null!;
+    public Tilemap OverlayTilemap => _overlayTilemap;
+
+    [SerializeField] Grid _grid = null!;
+    public Grid Grid => _grid;
+
+    [SerializeField] Tile _selectedTileIcon = null!;
+    public Tile CreateSelectedTileIcon() => Instantiate(_selectedTileIcon);
   }
 }

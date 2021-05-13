@@ -14,6 +14,7 @@
 
 
 using Nighthollow.Utils;
+using Nighthollow.World.Data;
 using UnityEngine;
 
 #nullable enable
@@ -32,21 +33,21 @@ namespace Nighthollow.World
       DownRight
     }
 
-    public static Vector2Int GetInDirection(Vector2Int hex, Direction direction)
+    public static HexPosition GetInDirection(HexPosition hex, Direction direction)
     {
       // This is an offset coordinate system
       // See: https://www.redblobgames.com/grids/hexagons/#coordinates
 
-      if (hex.y % 2 == 0)
+      if (hex.Y % 2 == 0)
       {
         return hex + direction switch
         {
-          Direction.Right => new Vector2Int(x: 1, y: 0),
-          Direction.UpRight => new Vector2Int(x: 0, y: 1),
-          Direction.UpLeft => new Vector2Int(x: -1, y: 1),
-          Direction.Left => new Vector2Int(x: -1, y: 0),
-          Direction.DownLeft => new Vector2Int(x: -1, y: -1),
-          Direction.DownRight => new Vector2Int(x: 0, y: -1),
+          Direction.Right => new HexPosition(x: 1, y: 0),
+          Direction.UpRight => new HexPosition(x: 0, y: 1),
+          Direction.UpLeft => new HexPosition(x: -1, y: 1),
+          Direction.Left => new HexPosition(x: -1, y: 0),
+          Direction.DownLeft => new HexPosition(x: -1, y: -1),
+          Direction.DownRight => new HexPosition(x: 0, y: -1),
           _ => throw Errors.UnknownEnumValue(direction)
         };
       }
@@ -54,12 +55,12 @@ namespace Nighthollow.World
       {
         return hex + direction switch
         {
-          Direction.Right => new Vector2Int(x: 1, y: 0),
-          Direction.UpRight => new Vector2Int(x: 1, y: 1),
-          Direction.UpLeft => new Vector2Int(x: 0, y: 1),
-          Direction.Left => new Vector2Int(x: -1, y: 0),
-          Direction.DownLeft => new Vector2Int(x: 0, y: -1),
-          Direction.DownRight => new Vector2Int(x: 1, y: -1),
+          Direction.Right => new HexPosition(x: 1, y: 0),
+          Direction.UpRight => new HexPosition(x: 1, y: 1),
+          Direction.UpLeft => new HexPosition(x: 0, y: 1),
+          Direction.Left => new HexPosition(x: -1, y: 0),
+          Direction.DownLeft => new HexPosition(x: 0, y: -1),
+          Direction.DownRight => new HexPosition(x: 1, y: -1),
           _ => throw Errors.UnknownEnumValue(direction)
         };
       }

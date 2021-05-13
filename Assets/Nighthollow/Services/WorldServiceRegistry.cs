@@ -28,14 +28,19 @@ namespace Nighthollow.Services
       AssetService assetService,
       UIDocument document,
       Camera mainCamera,
-      WorldMap worldMap,
       WorldStaticAssets staticAssets) : base(database, assetService, document.rootVisualElement, mainCamera)
     {
-      WorldMap = worldMap;
       StaticAssets = staticAssets;
     }
 
-    public WorldMap WorldMap { get; }
+    WorldMap? _worldMap;
+    public WorldMap WorldMap => _worldMap ??= new WorldMap(this);
     public WorldStaticAssets StaticAssets { get; }
+
+    public override void OnUpdate()
+    {
+      base.OnUpdate();
+      WorldMap.OnUpdate();
+    }
   }
 }

@@ -57,7 +57,7 @@ namespace Nighthollow.Editing
     public override TableContent GetCells()
     {
       var properties = _underlyingType.GetProperties();
-      var imageProperty = properties.FirstOrDefault(p => p.Name.Equals("ImageAddress"));
+      var imageProperty = properties.FirstOrDefault(p => p.Name.Contains("ImageAddress"));
       var staticHeadings = new List<ICellContent> {new LabelCellContent("x")};
       if (imageProperty != null)
       {

@@ -21,15 +21,48 @@ namespace Nighthollow.World.Data
   [MessagePackObject]
   public sealed partial class HexPosition
   {
-    public HexPosition(int xPosition, int yPosition)
+    public HexPosition(int x, int y)
     {
-      XPosition = xPosition;
-      YPosition = yPosition;
+      X = x;
+      Y = y;
     }
 
-    [Key(0)] public int XPosition { get; }
-    [Key(1)] public int YPosition { get; }
+    [Key(0)] public int X { get; }
+    [Key(1)] public int Y { get; }
 
-    public override string ToString() => $"{XPosition}, {YPosition}";
+    public override string ToString() => $"{X}, {Y}";
+
+    public static HexPosition operator +(HexPosition a) => a;
+    public static HexPosition operator -(HexPosition a) => new HexPosition(-a.X, -a.Y);
+    public static HexPosition operator +(HexPosition a, HexPosition b) => new HexPosition(a.X + b.X, a.Y + b.Y);
+    public static HexPosition operator -(HexPosition a, HexPosition b) => new HexPosition(a.X - b.X, a.Y - b.Y);
+
+    bool Equals(HexPosition other)
+    {
+      return X == other.X && Y == other.Y;
+    }
+
+    public override bool Equals(object? obj)
+    {
+      return ReferenceEquals(this, obj) || obj is HexPosition other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      unchecked
+      {
+        return (X * 397) ^ Y;
+      }
+    }
+
+    public static bool operator ==(HexPosition? left, HexPosition? right)
+    {
+      return Equals(left, right);
+    }
+
+    public static bool operator !=(HexPosition? left, HexPosition? right)
+    {
+      return !Equals(left, right);
+    }
   }
 }

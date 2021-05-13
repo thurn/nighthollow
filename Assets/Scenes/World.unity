@@ -298,6 +298,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5400b632064d43a3b6964fc5ad5441dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bottomLeftSelection: {fileID: 11400000, guid: 3915bde71dc0e42128d8b3e8f0e028c7,
+    type: 2}
+  _bottomRightSelection: {fileID: 11400000, guid: 3690dbd57296843bcb6025790e1db178,
+    type: 2}
+  _rightSelection: {fileID: 11400000, guid: 13c656795d9584940a64f1977840f5c5, type: 2}
+  _leftSelection: {fileID: 11400000, guid: f4563d3b0f2d14039b09a9c273eacb6a, type: 2}
+  _worldTilemapContainer: {fileID: 1143359792}
+  _overlayTilemap: {fileID: 2073374813}
+  _grid: {fileID: 2068825406}
+  _selectedTileIcon: {fileID: 11400000, guid: e4a83aa02d07b461d8e795415feddc01, type: 2}
 --- !u!114 &178308610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,7 +336,6 @@ MonoBehaviour:
   _mainCamera: {fileID: 817099575}
   _dataService: {fileID: 178308610}
   _document: {fileID: 178308607}
-  _worldMap: {fileID: 1143359796}
   _staticAssets: {fileID: 178308608}
   _cameraMover: {fileID: 817099577}
 --- !u!1 &817099573
@@ -618,7 +627,6 @@ GameObject:
   - component: {fileID: 1143359793}
   - component: {fileID: 1143359794}
   - component: {fileID: 1143359795}
-  - component: {fileID: 1143359796}
   m_Layer: 0
   m_Name: WorldMap
   m_TagString: Untagged
@@ -39180,53 +39188,6 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
---- !u!114 &1143359796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1143359792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09ee9327c6cd4b1a9f8092d1342b4001, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bottomLeftSelection: {fileID: 11400000, guid: 3915bde71dc0e42128d8b3e8f0e028c7,
-    type: 2}
-  _bottomRightSelection: {fileID: 11400000, guid: 3690dbd57296843bcb6025790e1db178,
-    type: 2}
-  _rightSelection: {fileID: 11400000, guid: 13c656795d9584940a64f1977840f5c5, type: 2}
-  _leftSelection: {fileID: 11400000, guid: f4563d3b0f2d14039b09a9c273eacb6a, type: 2}
-  _overlayTilemap: {fileID: 2073374813}
-  _mainCamera: {fileID: 817099575}
-  _grid: {fileID: 2068825406}
-  _kingdoms:
-  - _name: Nighthollow
-    _startingLocation: {x: -12, y: 7}
-    _borderColor: {r: 0.49803922, g: 0, b: 0, a: 1}
-    _icon: {fileID: 11400000, guid: 94b6c5bab4f6d4df69d591c452215266, type: 2}
-  - _name: Ivywood
-    _startingLocation: {x: 24, y: 12}
-    _borderColor: {r: 0, g: 0.3019608, b: 0.2509804, a: 1}
-    _icon: {fileID: 11400000, guid: ad4b1b4deba234555ba7a6407a446ade, type: 2}
-  - _name: Frostford
-    _startingLocation: {x: -3, y: 19}
-    _borderColor: {r: 0.050980393, g: 0.2784314, b: 0.6313726, a: 1}
-    _icon: {fileID: 11400000, guid: fc3d25c678a0645a6b9ce42f063db148, type: 2}
-  - _name: Uldreyin
-    _startingLocation: {x: -12, y: -5}
-    _borderColor: {r: 0.2, g: 0.4117647, b: 0.11764706, a: 1}
-    _icon: {fileID: 11400000, guid: 650d8a97ff1b74ce2b51e1068278a729, type: 2}
-  - _name: Dawnhaven
-    _startingLocation: {x: 22, y: 0}
-    _borderColor: {r: 1, g: 0.43529412, b: 0, a: 1}
-    _icon: {fileID: 11400000, guid: 8634778b6278648049c82c2ee0415290, type: 2}
-  - _name: Istu
-    _startingLocation: {x: -1, y: -21}
-    _borderColor: {r: 0.2901961, g: 0.078431375, b: 0.54901963, a: 1}
-    _icon: {fileID: 11400000, guid: f9715253066634d748026d029dd85647, type: 2}
-  _selectedTileIcon: {fileID: 11400000, guid: e4a83aa02d07b461d8e795415feddc01, type: 2}
 --- !u!1 &2068825404
 GameObject:
   m_ObjectHideFlags: 0

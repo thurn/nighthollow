@@ -28,7 +28,6 @@ namespace Nighthollow.World
     [SerializeField] Camera _mainCamera = null!;
     [SerializeField] DataService _dataService = null!;
     [SerializeField] UIDocument _document = null!;
-    [SerializeField] WorldMap _worldMap = null!;
     [SerializeField] WorldStaticAssets _staticAssets = null!;
     [SerializeField] CameraMover _cameraMover = null!;
     WorldServiceRegistry? _registry;
@@ -50,10 +49,8 @@ namespace Nighthollow.World
         result.AssetService,
         _document,
         _mainCamera,
-        _worldMap,
         _staticAssets);
 
-      _worldMap.Initialize(_registry);
       _registry.ScreenController.Show(ScreenController.AdvisorBar);
       _registry.TriggerService.Invoke(new WorldSceneReadyEvent(_registry));
       _cameraMover.Initialize(_registry);

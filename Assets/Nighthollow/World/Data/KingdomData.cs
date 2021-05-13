@@ -44,17 +44,17 @@ namespace Nighthollow.World.Data
   [MessagePackObject]
   public sealed partial class KingdomData
   {
-    public KingdomData(KingdomName name, HexPosition startingPosition, string imageAddress, ColorData color)
+    public KingdomData(KingdomName name, HexPosition startingPosition, string tileImageAddress, ColorData color)
     {
       Name = name;
       StartingPosition = startingPosition;
-      ImageAddress = imageAddress;
+      TileImageAddress = tileImageAddress;
       Color = color;
     }
 
     [Key(0)] public KingdomName Name { get; }
     [Key(1)] public HexPosition StartingPosition { get; }
-    [Key(2)] public string ImageAddress { get; }
+    [Key(2)] public string TileImageAddress { get; }
     [Key(3)] public ColorData Color { get; }
   }
 }
