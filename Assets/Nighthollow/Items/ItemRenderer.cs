@@ -13,8 +13,11 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Nighthollow.Interface;
 using Nighthollow.Data;
+using Nighthollow.Services;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -23,39 +26,61 @@ namespace Nighthollow.Items
 {
   public static class ItemRenderer
   {
-    public readonly struct Config
+    public sealed class Config
     {
-      public readonly int? Count;
-      public readonly ItemSlot.Size Size;
-      public readonly bool ShouldAddTooltip;
+      /// <summary>
+      /// Fixed number of slots to render -- additional empty slots will be added if insufficient items are provided,
+      /// and excess items will not be rendered.
+      /// </summary>
+      public int Count { get; }
 
-      public Config(int? count = null, ItemSlot.Size size = ItemSlot.Size.Large, bool shouldAddTooltip = true)
+      public ItemSlot.Size Size { get; }
+      public bool ShouldAddTooltip { get; }
+
+      /// <summary>
+      /// If provided, the item will be draggable using this DragManager
+      /// </summary>
+      public IDragManager<ItemImage, ItemSlot>? DragManager { get; }
+
+      public Config(
+        int count,
+        ItemSlot.Size size = ItemSlot.Size.Large,
+        bool shouldAddTooltip = true,
+        IDragManager<ItemImage, ItemSlot>? dragManager = null)
       {
         Count = count;
         Size = size;
         ShouldAddTooltip = shouldAddTooltip;
+        DragManager = dragManager;
       }
     }
 
-    public static void AddItems(
-      ScreenController controller,
+    public static ImmutableList<ItemSlot> AddItems(
+      ServiceRegistry registry,
       VisualElement parentElement,
       IEnumerable<IItemData> items,
       Config config)
     {
+      var result = ImmutableList.CreateBuilder<ItemSlot>();
       parentElement.Clear();
-
-      foreach (var item in items)
+      var itemList = items.ToList();
+      foreach (var item in itemList.Take(config.Count))
       {
         var slot = new ItemSlot(config.Size);
-        slot.SetItem(controller, item, config.ShouldAddTooltip);
+        slot.SetItem(registry, item, config);
         parentElement.Add(slot);
+        result.Add(slot);
       }
 
-      for (var index = 0; index < (config.Count ?? 0); ++index)
+      // Add extra empty slots to get to Count
+      for (var index = 0; index < config.Count - itemList.Count; ++index)
       {
-        parentElement.Add(new ItemSlot(config.Size));
+        var slot = new ItemSlot(config.Size);
+        parentElement.Add(slot);
+        result.Add(slot);
       }
+
+      return result.ToImmutable();
     }
   }
 }

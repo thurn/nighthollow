@@ -13,9 +13,9 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Items;
 using Nighthollow.Services;
 using Nighthollow.Utils;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -33,7 +33,6 @@ namespace Nighthollow.Interface
     IItemData? _item;
 
     public IItemData? Item => _item;
-    Image? _nullStateImage;
 
     public new sealed class UxmlFactory : UxmlFactory<ItemSlot, UxmlTraits>
     {
@@ -49,31 +48,15 @@ namespace Nighthollow.Interface
       AddToClassList(SizeClass(size));
     }
 
-    public void SetNullStateImage(string address)
-    {
-      if (_nullStateImage == null)
-      {
-        _nullStateImage = new Image {tintColor = new Color(0.5f, 0.5f, 0.5f)};
-        Add(_nullStateImage);
-      }
-
-      // _nullStateImage.sprite = Database.Instance.Assets.GetImage(address);
-    }
-
-    public void ClearNullStateImage()
-    {
-      if (_nullStateImage != null)
-      {
-        _nullStateImage.RemoveFromHierarchy();
-        _nullStateImage = null;
-      }
-    }
-
-    public void SetItem(ScreenController controller, IItemData item, bool shouldAddTooltip = true)
+    public void SetItem(ServiceRegistry registry, IItemData item, ItemRenderer.Config config)
     {
       _item = item;
-      Add(new ItemImage(controller, this, item, shouldAddTooltip));
-      ClearNullStateImage();
+      var image = new ItemImage(registry, this, item, config.ShouldAddTooltip);
+      Add(image);
+      if (config.DragManager != null)
+      {
+        image.MakeDraggable(config.DragManager);
+      }
     }
 
     static string SizeClass(Size size)

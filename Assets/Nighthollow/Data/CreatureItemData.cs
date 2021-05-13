@@ -67,6 +67,8 @@ namespace Nighthollow.Data
 
     public override string ToString() => Name;
 
+    public string? GetImageAddress(GameData gameData) => gameData.CreatureTypes[CreatureTypeId].ImageAddress;
+
     public T Switch<T>(
       Func<CreatureItemData, T> onCreature,
       Func<ResourceItemData, T> onResource) => onCreature(this);

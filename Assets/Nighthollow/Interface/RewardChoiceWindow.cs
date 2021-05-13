@@ -15,9 +15,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
-using Nighthollow.Items;
 using Nighthollow.Data;
-using Nighthollow.Services;
+using Nighthollow.Items;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -67,10 +66,10 @@ namespace Nighthollow.Interface
 
     protected override void OnShow(Args argument)
     {
-      ItemRenderer.AddItems(Controller,
+      ItemRenderer.AddItems(Registry,
         _optionsContainer,
         argument.Items,
-        new ItemRenderer.Config(shouldAddTooltip: false));
+        new ItemRenderer.Config(argument.Items.Count, shouldAddTooltip: false));
       RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 
@@ -208,14 +207,6 @@ namespace Nighthollow.Interface
       var pickCount = _pickedItemSlots.Count(slot => slot.Item != null);
       foreach (var slot in _pickedItemSlots)
       {
-        if (pickCount > 0 && slot.Item == null)
-        {
-          // slot.SetNullStateImage(Database.Instance.GameData.GetResource(1).ImageAddress);
-        }
-        else
-        {
-          slot.ClearNullStateImage();
-        }
       }
 
       if (pickCount > 0)

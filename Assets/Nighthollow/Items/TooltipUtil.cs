@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
@@ -22,9 +24,9 @@ namespace Nighthollow.Items
 {
   public static class TooltipUtil
   {
-    public static TooltipBuilder CreateTooltip(StatTable ownerStats, IItemData item) =>
+    public static TooltipBuilder CreateTooltip(GameData gameData, IItemData item) =>
       item.Switch(
-        creature => CreateCreatureTooltip(ownerStats, creature),
+        creature => CreateUserCreatureTooltip(gameData, creature),
         CreateResourceTooltip);
 
     public static TooltipBuilder CreateResourceTooltip(ResourceItemData data)
@@ -34,11 +36,12 @@ namespace Nighthollow.Items
       return builder;
     }
 
-    public static TooltipBuilder CreateCreatureTooltip(StatTable ownerStats, CreatureItemData data)
+    public static TooltipBuilder CreateUserCreatureTooltip(GameData gameData, CreatureItemData data)
     {
+      var userState = UserState.BuildUserState(gameData);
+      var ownerStats = userState.Stats;
       var builder = new TooltipBuilder(data.Name);
-      // var built = CreatureUtil.Build(ownerStats, data);
-      CreatureData built = null!;
+      var built = data.BuildCreature(gameData, userState);
       builder.AppendText($"Health: {built.GetInt(Stat.Health)}");
 
       var baseDamage = built.Stats.Get(Stat.BaseDamage);
@@ -72,42 +75,42 @@ namespace Nighthollow.Items
       }
 
       builder.AppendDivider();
+      RenderModifierGroup(gameData, builder, data.ImplicitModifiers);
 
-      // foreach (var affix in data.Affixes.Where(affix => affix.BaseType.Id == data.BaseType.ImplicitAffix?.Id))
-      // {
-      //   RenderAffix(builder, built, affix);
-      // }
-      //
-      // foreach (var skill in data.Skills.Where(skill => skill.BaseType.Id != 1))
-      // {
-      //   builder.AppendText($"Skill: {skill.BaseType.Name}");
-      // }
-      //
-      // builder.AppendDivider();
-      //
-      // foreach (var affix in data.Affixes.Where(affix => affix.BaseType.Id != data.BaseType.ImplicitAffix?.Id))
-      // {
-      //   RenderAffix(builder, built, affix);
-      // }
+      foreach (var skill in data.Skills)
+      {
+        RenderModifierGroup(
+          gameData,
+          builder,
+          skill.ImplicitModifiers.Concat(skill.Affixes.SelectMany(a => a.Modifiers)).ToImmutableList(),
+          $"Skill: {skill.Name}");
+      }
+
+      builder.AppendDivider();
+
+      foreach (var affix in data.Affixes)
+      {
+        RenderModifierGroup(gameData, builder, affix.Modifiers);
+      }
 
       return builder;
     }
 
-    static void RenderAffix(TooltipBuilder builder, StatEntity built, AffixData affix)
+    static void RenderModifierGroup(
+      GameData gameData,
+      TooltipBuilder builder,
+      ImmutableList<ModifierData> modifiers,
+      string? initialLine = null)
     {
       builder.StartGroup();
-
-      foreach (var modifier in affix.Modifiers)
+      if (initialLine != null)
       {
-        if (modifier.DelegateId.HasValue)
-        {
-          // builder.AppendNullable(DelegateMap.Get(modifier.DelegateId.Value).Describe(built));
-        }
+        builder.AppendText(initialLine);
+      }
 
-        // if (modifier.StatModifier != null)
-        // {
-        //   builder.AppendNullable(modifier.StatModifier.Describe());
-        // }
+      foreach (var modifier in ModifierDescriptionUtil.RenderModifiers(gameData, modifiers))
+      {
+        builder.AppendText(modifier);
       }
     }
   }

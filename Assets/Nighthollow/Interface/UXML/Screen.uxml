@@ -73,7 +73,7 @@ limitations under the License.
 
         <nh:BlackoutWindow name="BlackoutWindow" class="screen-background" style="display: none;"/>
 
-        <nh:CardsWindow name="CardsWindow" class="window" style="visibility: hidden;">
+        <nh:CardsWindow name="CardsWindow" class="window" style="display: none;">
             <ui:VisualElement class="window-title">
                 <ui:VisualElement class="ocerak portrait small"/>
                 <ui:Label text="Ocerak, Master of Cards"/>

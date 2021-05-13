@@ -12,68 +12,71 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Items;
-using Nighthollow.Services;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
 
 namespace Nighthollow.Interface
 {
-  public sealed class CardsWindow : AbstractWindow
+  public sealed class CardsWindow : DefaultHideableElement, IDragManager<ItemImage, ItemSlot>
   {
     VisualElement _collection = null!;
     VisualElement _mainDeck = null!;
     VisualElement _manaDeck = null!;
 
+    ImmutableList<ItemSlot> _collectionSlots = ImmutableList<ItemSlot>.Empty;
+    ImmutableList<ItemSlot> _mainDeckSlots = ImmutableList<ItemSlot>.Empty;
+    ImmutableList<ItemSlot> _manaSlots = ImmutableList<ItemSlot>.Empty;
+
+    public override bool ExclusiveFocus => true;
+
     public new sealed class UxmlFactory : UxmlFactory<CardsWindow, UxmlTraits>
     {
     }
 
-    public new sealed class UxmlTraits : VisualElement.UxmlTraits
+    protected override void Initialize()
     {
-    }
-
-    public CardsWindow()
-    {
-      if (Application.isPlaying)
-      {
-        RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
-      }
-    }
-
-    public ScreenController Controller { get; set; } = null!;
-
-    void OnGeometryChange(GeometryChangedEvent evt)
-    {
-      this.Q("CloseButton").RegisterCallback<ClickEvent>(e => { Controller.HideCurrentWindow(); });
-
+      this.Q("CloseButton").RegisterCallback<ClickEvent>(e => { Hide(); });
       _collection = this.Q("Collection");
       _mainDeck = this.Q("MainDeck");
       _manaDeck = this.Q("ManaDeck");
-
-      UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 
-    protected override void Render()
+    protected override void OnShow()
     {
-      // ItemRenderer.AddItems(
-      //   Controller,
-      //   _collection,
-      //   Database.Instance.UserData.Collection,
-      //   new ItemRenderer.Config(count: 20));
-      // ItemRenderer.AddItems(
-      //   Controller,
-      //   _mainDeck,
-      //   Database.Instance.UserData.Deck.Where(i => !i.BaseType.IsManaCreature).ToList(),
-      //   new ItemRenderer.Config(count: 9));
-      // ItemRenderer.AddItems(
-      //   Controller,
-      //   _manaDeck,
-      //   Database.Instance.UserData.Deck.Where(i => i.BaseType.IsManaCreature).ToList(),
-      //   new ItemRenderer.Config(count: 6, ItemSlot.Size.Small));
+      var gameData = Registry.Database.Snapshot();
+      _collectionSlots = ItemRenderer.AddItems(
+        Registry,
+        _collection,
+        gameData.Collection.Values,
+        new ItemRenderer.Config(count: 20, dragManager: this));
+      _mainDeckSlots = ItemRenderer.AddItems(
+        Registry,
+        _mainDeck,
+        gameData.Deck.Values
+          .Where(creature => !gameData.CreatureTypes[creature.CreatureTypeId].IsManaCreature)
+          .ToList(),
+        new ItemRenderer.Config(count: 9, dragManager: this));
+      _manaSlots = ItemRenderer.AddItems(
+        Registry,
+        _manaDeck,
+        gameData.Deck.Values
+          .Where(creature => gameData.CreatureTypes[creature.CreatureTypeId].IsManaCreature)
+          .ToList(),
+        new ItemRenderer.Config(count: 6, ItemSlot.Size.Small));
+    }
+
+    public IEnumerable<ItemSlot> GetDragTargets(ItemImage element)
+    {
+      return _collectionSlots.Concat(_mainDeckSlots);
+    }
+
+    public void OnDragReceived(ItemSlot target, ItemImage element)
+    {
     }
   }
 }

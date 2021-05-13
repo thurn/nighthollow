@@ -68,6 +68,8 @@ namespace Nighthollow.Interface
     public Vector2 DragStartElementPosition { get; }
     public StyleLength OriginalLeft { get; }
     public StyleLength OriginalTop { get; }
+    public StyleLength OriginalWidth { get; }
+    public StyleLength OriginalHeight { get; }
     public StyleEnum<Position> OriginalPosition { get; }
 
     protected DragInfo(IMouseEvent e, VisualElement element)
@@ -77,6 +79,8 @@ namespace Nighthollow.Interface
       DragStartElementPosition = element.worldBound.position;
       OriginalLeft = element.style.left;
       OriginalTop = element.style.top;
+      OriginalWidth = element.style.width;
+      OriginalHeight = element.style.height;
       OriginalPosition = element.style.position;
     }
 

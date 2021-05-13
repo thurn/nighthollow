@@ -95,6 +95,9 @@ namespace Nighthollow.Interface
     public static ElementKey<BlackoutWindow> LoadingBlackout =
       new ElementKey<BlackoutWindow>("LoadingBlackout");
 
+    public static ElementKey<CardsWindow> CardsWindow =
+      new ElementKey<CardsWindow>("CardsWindow");
+
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
     readonly List<IElementKey> _keys = new List<IElementKey>
@@ -109,17 +112,16 @@ namespace Nighthollow.Interface
       RewardChoiceWindow,
       GameDataEditor,
       SchoolSelectionScreen,
-      LoadingBlackout
+      LoadingBlackout,
+      CardsWindow
     };
 
     readonly ServiceRegistry _registry;
     readonly VisualElement _screen;
     public VisualElement Screen => _screen;
-    readonly CardsWindow _cardsWindow;
     readonly ItemTooltip _itemTooltip;
 
     DragInfo? _currentlyDragging;
-    AbstractWindow? _currentWindow;
     int? _currentlyWithinDragTarget;
     public bool IsCurrentlyDragging => _currentlyDragging != null;
 
@@ -131,13 +133,11 @@ namespace Nighthollow.Interface
       foreach (var key in _keys)
       {
         var element = key.FindByNameIn(_screen);
-        element.Controller = this;
         element.Registry = _registry;
+        element.Controller = this;
         _elements[key.Name] = element;
       }
 
-      _cardsWindow = InterfaceUtils.FindByName<CardsWindow>(_screen, "CardsWindow");
-      _cardsWindow.Controller = this;
       _itemTooltip = InterfaceUtils.FindByName<ItemTooltip>(_screen, "ItemTooltip");
       _itemTooltip.Controller = this;
 
@@ -193,13 +193,20 @@ namespace Nighthollow.Interface
 
     public bool ConsumesMousePosition(Vector3 mousePosition)
     {
-      return _currentWindow != null ||
-             _elements.Values
+      return _elements.Values
                .Any(element => element.Visible && InterfaceUtils.ContainsScreenPoint(element, mousePosition)) ||
              _itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition);
     }
 
     public bool HasExclusiveFocus() => _elements.Values.Any(e => e.Visible && e.ExclusiveFocus);
+
+    public void HideExclusiveElements()
+    {
+      foreach (var element in _elements.Values.Where(e => e.ExclusiveFocus))
+      {
+        element.Hide();
+      }
+    }
 
     public void ShowTooltip(TooltipBuilder builder, Vector2 anchor)
     {
@@ -215,24 +222,6 @@ namespace Nighthollow.Interface
       _itemTooltip.Hide();
     }
 
-    public void ShowCardsWindow()
-    {
-      ShowWindow(_cardsWindow);
-    }
-
-    public void HideCurrentWindow()
-    {
-      _currentWindow?.Hide();
-      _currentWindow = null;
-    }
-
-    void ShowWindow(AbstractWindow window)
-    {
-      _currentWindow?.Hide();
-      _currentWindow = window;
-      _currentWindow.Show();
-    }
-
     public void StartDrag(DragInfo dragInfo)
     {
       _currentlyDragging = dragInfo;
@@ -242,8 +231,10 @@ namespace Nighthollow.Interface
 
       element.style.position = new StyleEnum<Position>(Position.Absolute);
       _screen.Add(element);
-      element.style.left = new StyleLength(_currentlyDragging.DragStartElementPosition.x);
-      element.style.top = new StyleLength(_currentlyDragging.DragStartElementPosition.y);
+      element.style.left = _currentlyDragging.DragStartElementPosition.x;
+      element.style.top = _currentlyDragging.DragStartElementPosition.y;
+      element.style.width = element.contentRect.width;
+      element.style.height = element.contentRect.height;
     }
 
     void MouseMove(MouseMoveEvent e)
@@ -296,46 +287,25 @@ namespace Nighthollow.Interface
         var droppedOverTargetIndex = FindWithinDragTarget(currentlyDragging, e);
 
         var targetParent = currentlyDragging.OriginalParent;
-        var targetPosition = currentlyDragging.DragStartElementPosition;
         if (droppedOverTargetIndex != null)
         {
           targetParent = currentlyDragging.GetTarget(droppedOverTargetIndex.Value);
-          targetPosition = targetParent.worldBound.position +
-                           new Vector2(
-                             currentlyDragging.OriginalLeft.value.value,
-                             currentlyDragging.OriginalTop.value.value);
         }
 
-        var currentPosition = new Vector2(element.style.left.value.value, element.style.top.value.value);
-        var distance = Vector2.Distance(currentPosition, targetPosition);
-        var animationDuration = distance < 100 ? 0.1f : 0.3f;
+        element.RemoveFromHierarchy();
+        targetParent.Add(element);
+        element.style.position = currentlyDragging.OriginalPosition;
+        element.style.left = currentlyDragging.OriginalLeft;
+        element.style.top = currentlyDragging.OriginalTop;
+        element.style.width = currentlyDragging.OriginalWidth;
+        element.style.height = currentlyDragging.OriginalHeight;
 
-        DOTween.Sequence()
-          .Insert(0, DOTween.To(
-            () => currentPosition.x,
-            left => element.style.left = left,
-            targetPosition.x,
-            animationDuration))
-          .Insert(0, DOTween.To(
-            () => currentPosition.y,
-            left => element.style.top = left,
-            targetPosition.y,
-            animationDuration))
-          .AppendCallback(() =>
-          {
-            element.RemoveFromHierarchy();
-            targetParent.Add(element);
-            element.style.position = currentlyDragging.OriginalPosition;
-            element.style.left = currentlyDragging.OriginalLeft;
-            element.style.top = currentlyDragging.OriginalTop;
+        if (droppedOverTargetIndex != null)
+        {
+          currentlyDragging.OnDropped(droppedOverTargetIndex.Value);
+        }
 
-            if (droppedOverTargetIndex != null)
-            {
-              currentlyDragging.OnDropped(droppedOverTargetIndex.Value);
-            }
-
-            currentlyDragging.EnableDragging = true;
-          });
+        currentlyDragging.EnableDragging = true;
       }
     }
   }

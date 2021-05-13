@@ -22,6 +22,10 @@
   margin: 8px;
 }
 
+.item-image {
+  -unity-background-scale-mode: scale-to-fit;
+}
+
 .item-slot.large {
   width: 128px;
   height: 128px;
@@ -32,21 +36,14 @@
   }
 }
 
-.item-slot.large Image {
-  width: 96px;
-  height: 96px;
-  -unity-background-scale-mode: scale-to-fit;
-}
-
 .item-slot.small {
   width: 96px;
   height: 96px;
-}
 
-.item-slot.small Image {
-  width: 80px;
-  height: 80px;
-  -unity-background-scale-mode: scale-to-fit;
+  .item-image {
+    width: 80px;
+    height: 80px;
+  }
 }
 
 .card-grid {
@@ -57,11 +54,11 @@
 
 #CardsWindow {
   .deck {
-    .card.large {
-      margin: 8px 32px;
+    .item-slot.large {
+      margin: 4px 32px;
     }
 
-    .card.small {
+    .item-slot.small {
       margin: 4px 8px;
     }
   }

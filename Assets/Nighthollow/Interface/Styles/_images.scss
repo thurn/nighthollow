@@ -92,6 +92,7 @@
 .portrait.small {
   width: dimensions.$portrait-small-size;
   height: dimensions.$portrait-small-size;
+  flex-basis: dimensions.$portrait-small-size;
 }
 
 .portrait.ocerak {

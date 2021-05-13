@@ -14,6 +14,8 @@
 
 using Nighthollow.Data;
 using Nighthollow.Items;
+using Nighthollow.Services;
+using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -27,20 +29,16 @@ namespace Nighthollow.Interface
 
     readonly IItemData _item;
     public IItemData Item => _item;
-
-    readonly ScreenController _screenController;
-
+    readonly ServiceRegistry _registry;
     IDragManager<ItemImage, ItemSlot>? _dragManager;
-
     public bool HasTooltip { private get; set; }
-
     public bool EnableDragging { get; set; }
     public ItemSlot CurrentDragParent { get; set; }
 
-    public ItemImage(ScreenController screenController, ItemSlot itemSlot, IItemData item, bool addTooltip = true)
+    public ItemImage(ServiceRegistry registry, ItemSlot itemSlot, IItemData item, bool addTooltip = true)
     {
       CurrentDragParent = itemSlot;
-      _screenController = screenController;
+      _registry = registry;
       _item = item;
       HasTooltip = addTooltip;
 
@@ -49,7 +47,9 @@ namespace Nighthollow.Interface
       RegisterCallback<MouseOutEvent>(OnMouseOut);
 
       AddToClassList("item-image");
-      // style.backgroundImage = new StyleBackground(Database.Instance.Assets.GetImage(_item.ImageAddress));
+      var imageAddress = _item.GetImageAddress(registry.Database.Snapshot());
+      style.backgroundImage =
+        new StyleBackground(registry.AssetService.GetImage(Errors.CheckNotNull(imageAddress, "Item has no image!")));
     }
 
     public void MakeDraggable(IDragManager<ItemImage, ItemSlot> dragManager)
@@ -62,7 +62,7 @@ namespace Nighthollow.Interface
     {
       if (EnableDragging && _dragManager != null)
       {
-        _screenController.StartDrag(new DragInfo<ItemImage, ItemSlot>(e, this, _dragManager));
+        _registry.ScreenController.StartDrag(new DragInfo<ItemImage, ItemSlot>(e, this, _dragManager));
       }
     }
 
@@ -70,10 +70,9 @@ namespace Nighthollow.Interface
     {
       if (HasTooltip)
       {
-        // var tooltipBuilder = TooltipUtil.CreateTooltip(Database.Instance.UserData.Stats, _item);
-        TooltipBuilder tooltipBuilder = null!;
+        var tooltipBuilder = TooltipUtil.CreateTooltip(_registry.Database.Snapshot(), _item);
         tooltipBuilder.XOffset = ContainerSize;
-        _screenController.ShowTooltip(tooltipBuilder, new Vector2(worldBound.x, worldBound.y));
+        _registry.ScreenController.ShowTooltip(tooltipBuilder, new Vector2(worldBound.x, worldBound.y));
       }
     }
 
@@ -81,7 +80,7 @@ namespace Nighthollow.Interface
     {
       if (HasTooltip)
       {
-        _screenController.HideTooltip();
+        _registry.ScreenController.HideTooltip();
       }
     }
   }

@@ -26,7 +26,7 @@ namespace Nighthollow.Interface
 
     protected override void Initialize()
     {
-      this.Q("CardsButton").RegisterCallback<ClickEvent>(e => Controller.ShowCardsWindow());
+      this.Q("CardsButton").RegisterCallback<ClickEvent>(e => Controller.Show(ScreenController.CardsWindow));
     }
   }
 }

@@ -23,7 +23,6 @@ namespace Nighthollow.Interface
 {
   public sealed class RewardsWindow : HideableElement<RewardsWindow.Args>
   {
-
     VisualElement _content = null!;
 
     public readonly struct Args
@@ -47,7 +46,7 @@ namespace Nighthollow.Interface
 
     protected override void OnShow(Args argument)
     {
-      ItemRenderer.AddItems(Controller, _content, argument.Items,
+      ItemRenderer.AddItems(Registry, _content, argument.Items,
         new ItemRenderer.Config(count: 20, shouldAddTooltip: false));
     }
   }
