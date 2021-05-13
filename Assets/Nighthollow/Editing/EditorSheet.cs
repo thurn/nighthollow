@@ -268,16 +268,17 @@ namespace Nighthollow.Editing
 
     void Scroll(Vector2Int position)
     {
-      _scrollView.ScrollTo(InterfaceUtils.FirstLeaf(_cells[position]));
+      var leaf = InterfaceUtils.FirstLeaf(_cells[position]);
+      _scrollView.ScrollTo(leaf);
 
-      // Fix unity refusing to scroll all the way to the edge, triggering me endlessly.
-      if (position.y == 0)
+      // This is just sort of a crazy hack on top of unity's scrolling behavior, feel free to change randomly.
+      if (position.y == 0 || leaf.worldBound.y < 500)
       {
         _scrollView.scrollOffset =
           IsFullScreen(position) ? new Vector2(0, 0) : new Vector2(_scrollView.scrollOffset.x, 0);
       }
 
-      if (position.x == 0)
+      if (position.x == 0 || leaf.worldBound.x < 500)
       {
         _scrollView.scrollOffset = new Vector2(0, _scrollView.scrollOffset.y);
       }

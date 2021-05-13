@@ -36,7 +36,6 @@ namespace Nighthollow.Services
     [SerializeField] RectTransform _mainCanvas = null!;
     [SerializeField] Prefabs _prefabs = null!;
     [SerializeField] DataService _dataService = null!;
-    [SerializeField] ObjectPoolService _objectPoolService = null!;
     [SerializeField] UIDocument _document = null!;
     [SerializeField] Hand _hand = null!;
     [SerializeField] DamageTextService _damageTextService = null!;
@@ -50,7 +49,6 @@ namespace Nighthollow.Services
       Errors.CheckNotNull(_mainCanvas);
       Errors.CheckNotNull(_prefabs);
       Errors.CheckNotNull(_dataService);
-      Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_document);
       Errors.CheckNotNull(_hand);
       Errors.CheckNotNull(_damageTextService);
@@ -71,7 +69,6 @@ namespace Nighthollow.Services
         fetchResult.AssetService,
         _document,
         _mainCamera,
-        _objectPoolService,
         _prefabs,
         _mainCanvas,
         _hand,

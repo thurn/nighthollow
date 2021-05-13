@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Nighthollow.Data;
 using Nighthollow.Editing;
 using Nighthollow.Interface;
+using Nighthollow.Services;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -27,17 +27,16 @@ namespace Nighthollow.Editor.Data
   public sealed class GameDataEditorWindow : EditorWindow
   {
     Database? _database;
-    GameObject? _editorDocument;
+    AssetService? _assetService;
+    bool _open;
 
-    [MenuItem("Tools/Show Game Data Editor %#^d")]
+    [MenuItem("Tools/Show Game Data Editor %#^e")]
     public static void ToggleWindow()
     {
       var window = GetWindow<GameDataEditorWindow>();
-      if (window._editorDocument)
+      if (window._open)
       {
         window.rootVisualElement.Clear();
-        DestroyImmediate(window._editorDocument);
-        window._editorDocument = null;
         window.Close();
       }
       else
@@ -54,36 +53,39 @@ namespace Nighthollow.Editor.Data
     {
       window.titleContent = new GUIContent("Game Data Editor");
       window.minSize = new Vector2(250, 50);
-      window.Initialize(fetchResult.Database);
+      window.Initialize(fetchResult.Database, fetchResult.AssetService);
     }
 
     void OnEnable()
     {
-      if (_database != null)
+      if (_database != null && _assetService != null)
       {
-        Initialize(_database);
+        Initialize(_database, _assetService);
       }
     }
 
-    void Initialize(Database database)
+    void Initialize(Database database, AssetService assetService)
     {
-      throw new NotImplementedException("fix screen controller");
+      _database = database;
+      _assetService = assetService;
+      rootVisualElement.Clear();
+      rootVisualElement.styleSheets.Clear();
+      rootVisualElement.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+      _open = true;
 
-      // if (_editorDocument)
-      // {
-      //   DestroyImmediate(_editorDocument);
-      // }
-      //
-      // _database = database;
-      // rootVisualElement.Clear();
-      // rootVisualElement.styleSheets.Clear();
-      //
-      // var tree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Nighthollow/Interface/UXML/Screen.uxml");
-      // tree.CloneTree(rootVisualElement);
-      // _editorDocument = new GameObject("EditorDocument");
-      // var controller = _editorDocument.AddComponent<OldScreenController>();
-      // controller.Initialize(rootVisualElement);
-      // controller.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(database));
+      var tree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Nighthollow/Interface/UXML/Screen.uxml");
+      tree.CloneTree(rootVisualElement);
+      var registry = new ServiceRegistry(database, assetService, rootVisualElement, Camera.main!);
+      registry.ScreenController.Screen.AddToClassList("rendered-in-editor");
+      registry.ScreenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(database));
+    }
+
+    void OnGeometryChanged(GeometryChangedEvent evt)
+    {
+      rootVisualElement.transform.scale = new Vector3(0.5f, 0.5f, 1);
+      rootVisualElement.style.width = evt.newRect.width * 2;
+      rootVisualElement.style.height = evt.newRect.height * 2;
+      rootVisualElement.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
     }
   }
 }

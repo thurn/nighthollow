@@ -123,9 +123,9 @@ namespace Nighthollow.Interface
     int? _currentlyWithinDragTarget;
     public bool IsCurrentlyDragging => _currentlyDragging != null;
 
-    public ScreenController(UIDocument document, ServiceRegistry registry)
+    public ScreenController(VisualElement rootVisualElement, ServiceRegistry registry)
     {
-      _screen = InterfaceUtils.FindByName<VisualElement>(document.rootVisualElement, "Screen");
+      _screen = InterfaceUtils.FindByName<VisualElement>(rootVisualElement, "Screen");
       _registry = registry;
 
       foreach (var key in _keys)

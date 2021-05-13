@@ -326,7 +326,6 @@ GameObject:
   - component: {fileID: 169299294}
   - component: {fileID: 169299297}
   - component: {fileID: 169299299}
-  - component: {fileID: 169299296}
   - component: {fileID: 169299298}
   m_Layer: 0
   m_Name: Root
@@ -349,18 +348,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &169299296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 169299293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c54158539184f2f9682aea4fb8ae46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &169299297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,7 +364,7 @@ MonoBehaviour:
   _mainCanvas: {fileID: 1736363420}
   _prefabs: {fileID: 169299299}
   _dataService: {fileID: 307991781}
-  _objectPoolService: {fileID: 169299296}
+  _objectPoolService: {fileID: 0}
   _document: {fileID: 2115052128}
   _hand: {fileID: 1841190611970440670}
   _damageTextService: {fileID: 169299298}
@@ -410,7 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00874a7b8e524617b84cdde2a6fe1e46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectPoolService: {fileID: 169299296}
+  _objectPoolService: {fileID: 0}
   _mainCanvasTransform: {fileID: 1736363420}
   _cardPrefab: {fileID: 8201078851043189447, guid: b10a80a90394244668d5089010634cd3,
     type: 3}

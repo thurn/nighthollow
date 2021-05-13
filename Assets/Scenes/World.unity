@@ -229,7 +229,6 @@ GameObject:
   - component: {fileID: 178308606}
   - component: {fileID: 178308610}
   - component: {fileID: 178308611}
-  - component: {fileID: 178308609}
   - component: {fileID: 178308608}
   m_Layer: 0
   m_Name: Root
@@ -299,18 +298,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5400b632064d43a3b6964fc5ad5441dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &178308609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 178308604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c54158539184f2f9682aea4fb8ae46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &178308610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,7 +325,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mainCamera: {fileID: 817099575}
   _dataService: {fileID: 178308610}
-  _objectPoolService: {fileID: 178308609}
   _document: {fileID: 178308607}
   _worldMap: {fileID: 1143359796}
   _staticAssets: {fileID: 178308608}

@@ -24,7 +24,6 @@ namespace Nighthollow.Services
 {
   public sealed class Prefabs : MonoBehaviour
   {
-    [SerializeField] ObjectPoolService _objectPoolService = null!;
     [SerializeField] Transform _mainCanvasTransform = null!;
 
     [SerializeField] Card _cardPrefab = null!;
@@ -46,11 +45,16 @@ namespace Nighthollow.Services
     [SerializeField] DamageText _hitMedium = null!;
     [SerializeField] DamageText _hitBig = null!;
     [SerializeField] Sprite _stunIcon = null!;
+    ObjectPoolService _objectPoolService = null!;
 
     void Awake()
     {
-      Errors.CheckNotNull(_objectPoolService);
       Errors.CheckNotNull(_mainCanvasTransform);
+    }
+
+    public void Initialize(ObjectPoolService objectPoolService)
+    {
+      _objectPoolService = objectPoolService;
     }
 
     public Card CreateCard() => ComponentUtils.Instantiate(_cardPrefab, _mainCanvasTransform);

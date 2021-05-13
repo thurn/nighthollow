@@ -25,7 +25,6 @@ namespace Nighthollow.Services
   {
     [SerializeField] Camera _mainCamera = null!;
     [SerializeField] DataService _dataService = null!;
-    [SerializeField] ObjectPoolService _objectPoolService = null!;
     [SerializeField] UIDocument _document = null!;
     ServiceRegistry? _registry;
 
@@ -44,9 +43,8 @@ namespace Nighthollow.Services
       _registry = new ServiceRegistry(
         result.Database,
         result.AssetService,
-        _document,
-        _mainCamera,
-        _objectPoolService);
+        _document.rootVisualElement,
+        _mainCamera);
       _registry.ScreenController.Show(ScreenController.SchoolSelectionScreen);
     }
   }

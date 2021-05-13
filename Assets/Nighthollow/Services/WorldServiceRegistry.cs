@@ -28,9 +28,8 @@ namespace Nighthollow.Services
       AssetService assetService,
       UIDocument document,
       Camera mainCamera,
-      ObjectPoolService objectPoolService,
       WorldMap worldMap,
-      WorldStaticAssets staticAssets) : base(database, assetService, document, mainCamera, objectPoolService)
+      WorldStaticAssets staticAssets) : base(database, assetService, document.rootVisualElement, mainCamera)
     {
       WorldMap = worldMap;
       StaticAssets = staticAssets;

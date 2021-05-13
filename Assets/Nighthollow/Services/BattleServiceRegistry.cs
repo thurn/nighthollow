@@ -33,7 +33,6 @@ namespace Nighthollow.Services
       AssetService assetService,
       UIDocument document,
       Camera mainCamera,
-      ObjectPoolService objectPoolService,
       Prefabs prefabs,
       RectTransform mainCanvas,
       Hand hand,
@@ -41,11 +40,11 @@ namespace Nighthollow.Services
       base(
         database,
         assetService,
-        document,
-        mainCamera,
-        objectPoolService)
+        document.rootVisualElement,
+        mainCamera)
     {
       Prefabs = prefabs;
+      Prefabs.Initialize(ObjectPoolService);
       CoroutineRunner = coroutineRunner;
       Creatures = new CreatureService();
       var gameData = database.Snapshot();

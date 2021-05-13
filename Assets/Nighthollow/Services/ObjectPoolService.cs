@@ -21,7 +21,7 @@ using UnityEngine;
 
 namespace Nighthollow.Services
 {
-  public sealed class ObjectPoolService : MonoBehaviour
+  public sealed class ObjectPoolService
   {
     readonly Dictionary<int, List<GameObject>> _pools = new Dictionary<int, List<GameObject>>();
 
@@ -50,7 +50,7 @@ namespace Nighthollow.Services
         _pools[instanceId] = new List<GameObject>();
       }
 
-      var result = Instantiate(prefab, parent, worldPositionStays: false);
+      var result = Object.Instantiate(prefab, parent, worldPositionStays: false);
       result.transform.position = position;
       _pools[instanceId].Add(result.gameObject);
       return result;

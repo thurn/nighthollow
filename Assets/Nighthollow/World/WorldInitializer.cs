@@ -27,7 +27,6 @@ namespace Nighthollow.World
   {
     [SerializeField] Camera _mainCamera = null!;
     [SerializeField] DataService _dataService = null!;
-    [SerializeField] ObjectPoolService _objectPoolService = null!;
     [SerializeField] UIDocument _document = null!;
     [SerializeField] WorldMap _worldMap = null!;
     [SerializeField] WorldStaticAssets _staticAssets = null!;
@@ -51,7 +50,6 @@ namespace Nighthollow.World
         result.AssetService,
         _document,
         _mainCamera,
-        _objectPoolService,
         _worldMap,
         _staticAssets);
 

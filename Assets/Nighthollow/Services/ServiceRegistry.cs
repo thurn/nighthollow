@@ -24,20 +24,19 @@ namespace Nighthollow.Services
 {
   public class ServiceRegistry
   {
-    readonly UIDocument _document;
+    readonly VisualElement _rootVisualElement;
 
     public ServiceRegistry(
       Database database,
       AssetService assetService,
-      UIDocument document,
-      Camera mainCamera,
-      ObjectPoolService objectPoolService)
+      VisualElement rootVisualElement,
+      Camera mainCamera)
     {
       Database = database;
       AssetService = assetService;
-      _document = document;
+      _rootVisualElement = rootVisualElement;
       MainCamera = mainCamera;
-      ObjectPoolService = objectPoolService;
+      ObjectPoolService = new ObjectPoolService();
       Globals = new GlobalsService(database);
       TriggerService = new TriggerService(Database, Globals);
     }
@@ -50,7 +49,10 @@ namespace Nighthollow.Services
     public Database Database { get; }
     public AssetService AssetService { get; }
     ScreenController? _screenController;
-    public ScreenController ScreenController => _screenController ??= new ScreenController(_document, this);
+
+    public ScreenController ScreenController =>
+      _screenController ??= new ScreenController(_rootVisualElement, this);
+
     public Camera MainCamera { get; }
     public ObjectPoolService ObjectPoolService { get; }
     public GlobalsService Globals { get; }
