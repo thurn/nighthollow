@@ -85,6 +85,7 @@ namespace Nighthollow.Editor.Data
       rootVisualElement.transform.scale = new Vector3(0.5f, 0.5f, 1);
       rootVisualElement.style.width = evt.newRect.width * 2;
       rootVisualElement.style.height = evt.newRect.height * 2;
+
       rootVisualElement.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
     }
   }

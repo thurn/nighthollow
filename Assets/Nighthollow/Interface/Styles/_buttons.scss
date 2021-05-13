@@ -43,7 +43,7 @@
   @include images.long-button-on;
 }
 
-.button:active {
+.button.button-down {
   -unity-background-image-tint-color: colors.$pressed-tint;
 }
 

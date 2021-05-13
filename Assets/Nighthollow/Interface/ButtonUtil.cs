@@ -48,6 +48,13 @@ namespace Nighthollow.Interface
       }
 
       result.RegisterCallback<ClickEvent>(e => button.OnClick());
+
+      // Hack: The Unity :active selector is not working. This is not a great solution either, because we only
+      // get MouseUpEvent if you release the mouse *over* the element... check if this is fixed in a future version
+      // or report a bug.
+      result.RegisterCallback<MouseDownEvent>(e => { result.AddToClassList("button-down"); });
+      result.RegisterCallback<MouseUpEvent>(e => { result.RemoveFromClassList("button-down"); });
+
       var label = new Label {text = button.Text};
       result.Add(label);
       return result;
