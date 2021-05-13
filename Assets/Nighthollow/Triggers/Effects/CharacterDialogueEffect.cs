@@ -50,7 +50,7 @@ namespace Nighthollow.Triggers.Effects
     [Key(1)] public string Text { get; }
     [TriggerId] [Key(2)] public int? OnContinueTriggerId { get; }
 
-    public void Execute(TriggerEvent trigger)
+    public void Execute(TriggerEvent trigger, TriggerOutput? output)
     {
       Action? action = null;
       if (OnContinueTriggerId.HasValue)

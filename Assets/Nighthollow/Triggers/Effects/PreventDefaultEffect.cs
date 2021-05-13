@@ -12,15 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using MessagePack;
+
 #nullable enable
 
-namespace Nighthollow.Triggers
+namespace Nighthollow.Triggers.Effects
 {
-  public enum TriggerCategory
+  [MessagePackObject]
+  public sealed class PreventDefaultEffect : IEffect<TriggerEvent>
   {
-    Uncategorized = 0,
-    Tutorial = 1,
-    MainDialogue = 2,
-    Utilities = 3
+    public static Description Describe => new Description("request to prevent the default behavior for this event");
+
+    public void Execute(TriggerEvent trigger, TriggerOutput? output)
+    {
+      output?.SetPreventDefault();
+    }
   }
 }

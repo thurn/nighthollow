@@ -47,7 +47,7 @@ namespace Nighthollow.Triggers
       _initialized = true;
     }
 
-    public void Invoke<TEvent>(TEvent triggerEvent) where TEvent : TriggerEvent
+    public void Invoke<TEvent>(TEvent triggerEvent, TriggerOutput? result = null) where TEvent : TriggerEvent
     {
       if (!_initialized)
       {
@@ -59,7 +59,7 @@ namespace Nighthollow.Triggers
       {
         if (!pair.Value.Disabled && pair.Value is TriggerData<TEvent> trigger)
         {
-          var fired = trigger.Invoke(triggerEvent);
+          var fired = trigger.Invoke(triggerEvent, result!);
           if (fired && !trigger.Looping)
           {
             _database.Update(TableId.Triggers, pair.Key, t => t.WithDisabled(true));
@@ -68,7 +68,7 @@ namespace Nighthollow.Triggers
       }
     }
 
-    public void InvokeTriggerId(TriggerInvokedEvent triggerEvent, int triggerId)
+    public void InvokeTriggerId(TriggerInvokedEvent triggerEvent, int triggerId, TriggerOutput? output = null)
     {
       var trigger = _database.Snapshot().Triggers[triggerId] as TriggerData<TriggerInvokedEvent>;
       if (trigger == null)
@@ -79,7 +79,7 @@ namespace Nighthollow.Triggers
 
       if (!trigger.Disabled)
       {
-        var fired = trigger.Invoke(triggerEvent);
+        var fired = trigger.Invoke(triggerEvent, output);
         if (fired && !trigger.Looping)
         {
           _database.Update(TableId.Triggers, triggerId, t => t.WithDisabled(true));

@@ -12,15 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Services;
+
 #nullable enable
 
-namespace Nighthollow.Triggers
+namespace Nighthollow.Triggers.Events
 {
-  public enum TriggerCategory
+  /// <summary>
+  /// Fired when the user initiates an attack on a hex
+  /// </summary>
+  public sealed class HexAttackedEvent : WorldEvent
   {
-    Uncategorized = 0,
-    Tutorial = 1,
-    MainDialogue = 2,
-    Utilities = 3
+    public static Description Describe => new Description("the user attacks a hex");
+
+    public HexAttackedEvent(WorldServiceRegistry registry, int hexId) : base(registry)
+    {
+      HexId = hexId;
+    }
+
+    public int HexId { get; }
   }
 }

@@ -170,7 +170,7 @@ namespace Nighthollow.Interface
         SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
       }
 
-      if (Input.GetMouseButtonDown(0))
+      if (Input.anyKeyDown)
       {
         InterfaceUtils.FindByName<VisualElement>(Screen, "HelperTextContainer").Clear();
       }

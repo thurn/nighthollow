@@ -37,6 +37,7 @@ namespace Nighthollow.Triggers
   [Union(4, typeof(TriggerData<EnemyCreatureSpawnedEvent>))]
   [Union(5, typeof(TriggerData<UserCreaturePlayedEvent>))]
   [Union(6, typeof(TriggerData<TriggerInvokedEvent>))]
+  [Union(7, typeof(TriggerData<HexAttackedEvent>))]
   public interface ITrigger
   {
     public string? Name { get; }
@@ -89,7 +90,7 @@ namespace Nighthollow.Triggers
     /// <summary>
     /// Check trigger conditions and then fire effects if they all pass -- returns true if effects fired.
     /// </summary>
-    public bool Invoke(TEvent triggerEvent)
+    public bool Invoke(TEvent triggerEvent, TriggerOutput? output)
     {
       if (Conditions.Any(condition => !condition.Satisfied(triggerEvent)))
       {
@@ -98,7 +99,7 @@ namespace Nighthollow.Triggers
 
       foreach (var effect in Effects)
       {
-        effect.Execute(triggerEvent);
+        effect.Execute(triggerEvent, output);
       }
 
       return true;

@@ -16,6 +16,8 @@
 using System.Collections.Generic;
 using Nighthollow.Interface;
 using Nighthollow.Services;
+using Nighthollow.Triggers;
+using Nighthollow.Triggers.Events;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -212,20 +214,13 @@ namespace Nighthollow.World
 
     public void AttackHex()
     {
-      StartCoroutine(LoadGame());
-    }
-
-    IEnumerator<YieldInstruction> LoadGame()
-    {
       _registry.ScreenController.HideTooltip();
-      _registry.ScreenController.Get(ScreenController.BlackoutWindow).Show(argument: 1.0f);
-      _registry.ScreenController.ShowDialog("you", "Surrender to the night!", hideCloseButton: true);
-      yield return new WaitForSeconds(seconds: 3.5f);
-      _registry.ScreenController.HideDialog();
-      yield return new WaitForSeconds(seconds: 0.5f);
-
-      // Database.Instance.UserData.TutorialState = UserDataService.Tutorial.GameOne;
-      SceneManager.LoadScene("Battle");
+      var triggerOutput = new TriggerOutput();
+      _registry.TriggerService.Invoke(new HexAttackedEvent(_registry, 12), triggerOutput);
+      if (!triggerOutput.PreventDefault)
+      {
+        SceneManager.LoadScene("Battle");
+      }
     }
   }
 }

@@ -16,11 +16,19 @@
 
 namespace Nighthollow.Triggers
 {
-  public enum TriggerCategory
+  /** <summary>
+   * Mutable object representing the output of invoking one or more triggers. Can be passed to TriggerService when
+   * an interesting result value may be obtained from a trigger.
+   * </summary>
+   */
+  public sealed class TriggerOutput
   {
-    Uncategorized = 0,
-    Tutorial = 1,
-    MainDialogue = 2,
-    Utilities = 3
+    /// <summary>
+    /// Allows triggers to request that the default behavior for the current event be prevented -- e.g. because they
+    /// are going to supply their own behavior.
+    /// </summary>
+    public bool PreventDefault { get; private set; }
+
+    public void SetPreventDefault() => PreventDefault = true;
   }
 }

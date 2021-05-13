@@ -58,9 +58,8 @@ namespace Nighthollow.Triggers.Effects
     [Key(2)] public int YPosition { get; }
     [Key(3)] public Direction ArrowDirection { get; }
 
-    public void Execute(TriggerEvent trigger)
+    public void Execute(TriggerEvent trigger, TriggerOutput? output)
     {
-      Debug.Log($"DisplayHelpTextEffect::Execute");
       var element = new VisualElement();
       element.AddToClassList("helper-text");
       element.AddToClassList(ArrowDirection switch

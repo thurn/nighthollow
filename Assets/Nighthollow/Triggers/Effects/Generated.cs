@@ -79,4 +79,14 @@ namespace Nighthollow.Triggers.Effects
           arrowDirection);
 
   }
+
+  public sealed partial class LoadSceneEffect
+  {
+    public LoadSceneEffect WithSceneName(SceneName sceneName) =>
+      Equals(sceneName, SceneName)
+        ? this
+        : new LoadSceneEffect(
+          sceneName);
+
+  }
 }

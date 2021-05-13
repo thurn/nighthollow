@@ -14,7 +14,6 @@
 
 using MessagePack;
 using Nighthollow.Triggers.Effects;
-using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -22,12 +21,14 @@ namespace Nighthollow.Triggers
 {
   [Union(0, typeof(DisplayHelpTextEffect))]
   [Union(1, typeof(CharacterDialogueEffect))]
+  [Union(2, typeof(PreventDefaultEffect))]
+  [Union(3, typeof(LoadSceneEffect))]
   public interface IEffect
   {
   }
 
   public interface IEffect<in TEvent> : IEffect where TEvent : TriggerEvent
   {
-    void Execute(TEvent trigger);
+    void Execute(TEvent trigger, TriggerOutput? output);
   }
 }
