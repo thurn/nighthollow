@@ -32,6 +32,8 @@ namespace Nighthollow.World
     const int RightZ = 3;
     const int LeftZ = 4;
     const int IconZ = 5;
+    static readonly Vector2Int StartingHex = new Vector2Int(x: -12, y: 7);
+    static readonly Vector2Int TutorialAttackHex = new Vector2Int(x: -11, y: 7);
 
     [SerializeField] Tile _bottomLeftSelection = null!;
     [SerializeField] Tile _bottomRightSelection = null!;
@@ -112,8 +114,8 @@ namespace Nighthollow.World
         _registry.ScreenController.ShowTooltip(WorldHexTooltip.Create(
             this,
             tile.name,
-            hex == WorldTutorial.StartingHex ? "Kingdom of Nighthollow" : "None",
-            hex == WorldTutorial.TutorialAttackHex),
+            hex == StartingHex ? "Kingdom of Nighthollow" : "None",
+            hex == TutorialAttackHex),
           InterfaceUtils.ScreenPointToInterfacePoint(screenPoint));
       }
     }

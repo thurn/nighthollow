@@ -13,25 +13,20 @@
 // limitations under the License.
 
 using Nighthollow.Data;
-using Nighthollow.Interface;
-using Nighthollow.Services;
-using Nighthollow.Triggers.Events;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.World
+namespace Nighthollow.Services
 {
-  public sealed class WorldInitializer : MonoBehaviour
+  public sealed class ServiceRegistryInitializer : MonoBehaviour
   {
     [SerializeField] Camera _mainCamera = null!;
     [SerializeField] DataService _dataService = null!;
     [SerializeField] ObjectPoolService _objectPoolService = null!;
     [SerializeField] UIDocument _document = null!;
-    [SerializeField] WorldMap _worldMap = null!;
-    [SerializeField] WorldStaticAssets _staticAssets = null!;
-    WorldServiceRegistry? _registry;
+    ServiceRegistry? _registry;
 
     void Start()
     {
@@ -45,18 +40,12 @@ namespace Nighthollow.World
 
     void OnDataFetched(FetchResult result)
     {
-      _registry = new WorldServiceRegistry(
+      _registry = new ServiceRegistry(
         result.Database,
         result.AssetService,
         _document,
         _mainCamera,
-        _objectPoolService,
-        _worldMap,
-        _staticAssets);
-
-      _worldMap.Initialize(_registry);
-      _registry.ScreenController.Show(ScreenController.AdvisorBar);
-      _registry.TriggerService.Invoke(new WorldSceneReadyEvent(_registry));
+        _objectPoolService);
     }
   }
 }

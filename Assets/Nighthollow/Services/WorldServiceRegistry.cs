@@ -12,29 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
+using Nighthollow.Data;
+using Nighthollow.World;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.World
+namespace Nighthollow.Services
 {
-  public sealed class WorldTutorial
+  public sealed class WorldServiceRegistry : ServiceRegistry
   {
-    public static readonly Vector2Int StartingHex = new Vector2Int(x: -12, y: 7);
-    public static readonly Vector2Int TutorialAttackHex = new Vector2Int(x: -11, y: 7);
-
-    readonly WorldServiceRegistry _registry;
-
-    public WorldTutorial(WorldServiceRegistry registry)
+    public WorldServiceRegistry(
+      Database database,
+      AssetService assetService,
+      UIDocument document,
+      Camera mainCamera,
+      ObjectPoolService objectPoolService,
+      WorldMap worldMap,
+      WorldStaticAssets staticAssets) : base(database, assetService, document, mainCamera, objectPoolService)
     {
-      _registry = registry;
+      WorldMap = worldMap;
+      StaticAssets = staticAssets;
     }
 
-    public void OnWorldSceneLoaded()
-    {
-      // _registry.ScreenController.ShowDialog("ocerak", IntroText);
-      // _registry.WorldMap.ShowIcon(TutorialAttackHex, _registry.StaticAssets.FightIcon);
-    }
+    public WorldMap WorldMap { get; }
+    public WorldStaticAssets StaticAssets { get; }
   }
 }
