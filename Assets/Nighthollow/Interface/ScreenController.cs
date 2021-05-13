@@ -116,7 +116,6 @@ namespace Nighthollow.Interface
     readonly VisualElement _screen;
     public VisualElement Screen => _screen;
     readonly CardsWindow _cardsWindow;
-    readonly Dialog _dialog;
     readonly ItemTooltip _itemTooltip;
 
     DragInfo? _currentlyDragging;
@@ -141,8 +140,6 @@ namespace Nighthollow.Interface
       _cardsWindow.Controller = this;
       _itemTooltip = InterfaceUtils.FindByName<ItemTooltip>(_screen, "ItemTooltip");
       _itemTooltip.Controller = this;
-      _dialog = InterfaceUtils.FindByName<Dialog>(_screen, "Dialog");
-      _dialog.Initialize();
 
       _screen.RegisterCallback<MouseMoveEvent>(MouseMove);
       _screen.RegisterCallback<MouseUpEvent>(MouseUp);
@@ -199,9 +196,10 @@ namespace Nighthollow.Interface
       return _currentWindow != null ||
              _elements.Values
                .Any(element => element.Visible && InterfaceUtils.ContainsScreenPoint(element, mousePosition)) ||
-             _dialog.Visible ||
              _itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition);
     }
+
+    public bool HasExclusiveFocus() => _elements.Values.Any(e => e.Visible && e.ExclusiveFocus);
 
     public void ShowTooltip(TooltipBuilder builder, Vector2 anchor)
     {
@@ -215,16 +213,6 @@ namespace Nighthollow.Interface
     public void HideTooltip()
     {
       _itemTooltip.Hide();
-    }
-
-    public void ShowDialog(string portraitName, string text, bool hideCloseButton = false)
-    {
-      _dialog.Show(portraitName, text, hideCloseButton);
-    }
-
-    public void HideDialog()
-    {
-      _dialog.Hide();
     }
 
     public void ShowCardsWindow()

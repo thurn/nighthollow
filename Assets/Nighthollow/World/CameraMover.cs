@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -23,7 +24,6 @@ namespace Nighthollow.World
   {
     [SerializeField] Camera _camera = null!;
     [SerializeField] float _zoomDelta;
-    [SerializeField] WorldMap _worldMap = null!;
     [SerializeField] float _keyboardMovementSpeed;
     [SerializeField] float _scrollWheelZoomSpeed;
     [SerializeField] float _keyboardZoomSpeed;
@@ -33,8 +33,14 @@ namespace Nighthollow.World
     [SerializeField] float _maxXZoomedOut;
     [SerializeField] float _maxYZoomedIn;
     [SerializeField] float _maxYZoomedOut;
+    WorldServiceRegistry? _registry;
 
     public Camera Camera => _camera;
+
+    public void Initialize(WorldServiceRegistry registry)
+    {
+      _registry = registry;
+    }
 
     void Awake()
     {
@@ -43,12 +49,17 @@ namespace Nighthollow.World
 
     void Update()
     {
+      if (_registry?.ScreenController.HasExclusiveFocus() == true)
+      {
+        return;
+      }
+
       var translation = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), z: 0) *
                         (_keyboardMovementSpeed * Time.deltaTime);
       if (translation != Vector3.zero)
       {
         transform.Translate(translation, Space.Self);
-        _worldMap.ClearSelection();
+        _registry?.WorldMap.ClearSelection();
       }
 
       _zoomDelta += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * _scrollWheelZoomSpeed;

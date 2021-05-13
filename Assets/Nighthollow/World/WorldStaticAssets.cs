@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 #nullable enable
 
@@ -21,7 +20,5 @@ namespace Nighthollow.World
 {
   public sealed class WorldStaticAssets : MonoBehaviour
   {
-    [SerializeField] Tile _fightIcon = null!;
-    public Tile FightIcon => _fightIcon;
   }
 }

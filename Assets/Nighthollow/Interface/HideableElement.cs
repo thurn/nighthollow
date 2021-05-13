@@ -11,6 +11,7 @@ namespace Nighthollow.Interface
     public ServiceRegistry Registry { get; set; } = null!;
     public ScreenController Controller { get; set; } = null!;
     public bool Visible { get; protected set; }
+    public virtual bool ExclusiveFocus { get; } = false;
   }
 
   public abstract class HideableElement<TShowArgument> : AbstractHideableElement

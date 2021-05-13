@@ -299,7 +299,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5400b632064d43a3b6964fc5ad5441dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fightIcon: {fileID: 11400000, guid: fee0ceca865fc41bcbba700f3654ca47, type: 2}
 --- !u!114 &178308609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,7 +324,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _disablePersistence: 0
-  _autoresetTriggers: 1
 --- !u!114 &178308611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,6 +342,7 @@ MonoBehaviour:
   _document: {fileID: 178308607}
   _worldMap: {fileID: 1143359796}
   _staticAssets: {fileID: 178308608}
+  _cameraMover: {fileID: 817099577}
 --- !u!1 &817099573
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,7 +441,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camera: {fileID: 817099575}
   _zoomDelta: 0
-  _worldMap: {fileID: 1143359796}
   _keyboardMovementSpeed: 25
   _scrollWheelZoomSpeed: -10
   _keyboardZoomSpeed: 3

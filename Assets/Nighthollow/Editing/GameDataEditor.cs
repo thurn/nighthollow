@@ -31,6 +31,7 @@ namespace Nighthollow.Editing
     Database _database = null!;
     EditorSheet? _sheet;
     readonly List<Vector2Int?> _selectionStack = new List<Vector2Int?>();
+    public override bool ExclusiveFocus { get; } = true;
 
     public sealed class Args
     {

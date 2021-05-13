@@ -145,14 +145,6 @@ limitations under the License.
             <ui:Label name="Title" class="tooltip-title" text="Blackguard"/>
         </nh:ItemTooltip>
 
-        <ui:VisualElement class="dialog-container">
-            <nh:Dialog name="Dialog" class="dialog" style="display: none; opacity: 0;">
-                <ui:Button name="CloseButton" class="close"/>
-                <ui:VisualElement name="Portrait" class="portrait you"/>
-                <ui:Label name="Text" class="dialog-text" text="Text"/>
-            </nh:Dialog>
-        </ui:VisualElement>
-
         <ui:VisualElement class="character-dialogue-container">
             <nh:CharacterDialogue name="CharacterDialogue" class="character-dialogue" style="display: none;">
                 <ui:VisualElement name="DialoguePortrait" class="portrait you"/>

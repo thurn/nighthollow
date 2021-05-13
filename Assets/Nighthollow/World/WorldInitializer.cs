@@ -31,6 +31,7 @@ namespace Nighthollow.World
     [SerializeField] UIDocument _document = null!;
     [SerializeField] WorldMap _worldMap = null!;
     [SerializeField] WorldStaticAssets _staticAssets = null!;
+    [SerializeField] CameraMover _cameraMover = null!;
     WorldServiceRegistry? _registry;
 
     void Start()
@@ -57,6 +58,7 @@ namespace Nighthollow.World
       _worldMap.Initialize(_registry);
       _registry.ScreenController.Show(ScreenController.AdvisorBar);
       _registry.TriggerService.Invoke(new WorldSceneReadyEvent(_registry));
+      _cameraMover.Initialize(_registry);
     }
   }
 }

@@ -25,39 +25,37 @@
   width: 100%;
   align-items: center;
   justify-content: center;
+}
 
-  .character-dialogue {
-    @include images.basic-bar;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 32px;
+.character-dialogue {
+  @include images.basic-bar;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px;
 
-    .portrait {
-      margin-right: 32px;
-    }
+  .button {
+    margin-left: 16px;
+  }
 
-    .button {
-      margin-left: 16px;
-    }
+  .text-container {
+    flex-basis: 900px;
+    margin-left: 32px;
+    margin-right: 32px;
 
-    .text-container {
-      flex-basis: 900px;
-
-      .dialogue-text {
-        @include fonts.text;
-        font-size: font-sizes.$title;
-        -unity-text-align: middle-left;
-        white-space: normal;
-      }
-    }
-
-    .dialogue-text.right {
-      -unity-text-align: middle-right;
+    .dialogue-text {
+      @include fonts.text;
+      font-size: font-sizes.$title;
+      -unity-text-align: middle-left;
+      white-space: normal;
     }
   }
 
-  .character-dialogue.no-background {
-    background-image: none;
+  .dialogue-text.right {
+    -unity-text-align: middle-right;
   }
+}
+
+.character-dialogue.no-background {
+  background-image: none;
 }
