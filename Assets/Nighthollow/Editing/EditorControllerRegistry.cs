@@ -35,6 +35,11 @@ namespace Nighthollow.Editing
       return null;
     }
 
+    public virtual EditorSheetDelegate? GetCustomChildSheetDelegate(ReflectivePath reflectivePath)
+    {
+      return null;
+    }
+
     public abstract string Preview(GameData gameData, object container, string propertyName, object? propertyValue);
 
     public virtual void WriteForeignKey(int id, ReflectivePath reflectivePath)
@@ -234,6 +239,11 @@ namespace Nighthollow.Editing
 
   sealed class TriggerDataController : EditorController<ITrigger>
   {
+    public override EditorSheetDelegate GetCustomChildSheetDelegate(ReflectivePath reflectivePath)
+    {
+      return new TriggerDataEditorSheetDelegate(reflectivePath);
+    }
+
     public override TableEditorSheetDelegate GetTableDelegate(
       ReflectivePath reflectivePath,
       EditorSheetDelegate.DropdownCellContent tableSelector)
@@ -326,5 +336,12 @@ namespace Nighthollow.Editing
       Controllers.ContainsKey(type)
         ? Controllers[type].GetColumnWidth(propertyInfo.Name)
         : EditorSheet.DefaultCellWidth;
+
+    public static EditorSheetDelegate? GetCustomChildSheetDelegate(ReflectivePath reflectivePath)
+    {
+      return Controllers.ContainsKey(reflectivePath.GetUnderlyingType())
+        ? Controllers[reflectivePath.GetUnderlyingType()].GetCustomChildSheetDelegate(reflectivePath)
+        : null;
+    }
   }
 }

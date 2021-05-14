@@ -31,7 +31,7 @@ namespace Nighthollow.Triggers
 
     public TriggerDataEditorSheetDelegate(ReflectivePath reflectivePath)
     {
-      _reflectivePath = Errors.CheckNotNull(reflectivePath.Parent());
+      _reflectivePath = reflectivePath;
     }
 
     public override string SheetName() => "Trigger Data";
@@ -133,10 +133,9 @@ namespace Nighthollow.Triggers
       };
     }
 
-    static List<Type> EffectTypes() => typeof(IEffect)
+    static IEnumerable<Type> EffectTypes() => typeof(IEffect)
       .GetCustomAttributes<UnionAttribute>()
-      .Select(attribute => attribute.SubType)
-      .ToList();
+      .Select(attribute => attribute.SubType);
 
     List<ICellContent> EffectRow<TEvent>(TriggerData<TEvent> triggerData, int index, IEffect<TEvent> effect)
       where TEvent : TriggerEvent
@@ -160,7 +159,7 @@ namespace Nighthollow.Triggers
 
     List<ICellContent> AddEffectRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : TriggerEvent
     {
-      var types = EffectTypes();
+      var types = EffectTypes().Where(t => typeof(IEffect<TEvent>).IsAssignableFrom(t)).ToList();
       return new List<ICellContent>
       {
         new DropdownCellContent(
@@ -188,7 +187,7 @@ namespace Nighthollow.Triggers
         var index = 0;
 
         foreach (var pair in path.Database.Snapshot().Triggers
-          .Where(pair => pair.Value is TriggerData<TriggerInvokedEvent>))
+          .Where(pair => pair.Value is TriggerData<GlobalTriggerInvokedEvent>))
         {
           invokedTriggers.Add(pair);
           if (currentValue == pair.Key)

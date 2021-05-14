@@ -57,8 +57,7 @@ namespace Nighthollow.Triggers.Effects
       {
         action = () =>
         {
-          trigger.Registry.TriggerService.InvokeTriggerId(new TriggerInvokedEvent(trigger.Registry),
-            OnContinueTriggerId.Value);
+          trigger.Registry.TriggerService.InvokeTriggerId(trigger.Registry, OnContinueTriggerId.Value);
         };
       }
 

@@ -41,8 +41,4 @@ namespace Nighthollow.Data
   public sealed class FieldAttribute : Attribute
   {
   }
-
-  public sealed class NestedSheet : Attribute
-  {
-  }
 }

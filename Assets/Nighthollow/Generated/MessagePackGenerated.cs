@@ -49,7 +49,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(86)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(87)
             {
                 { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Data.DamageType, global::Nighthollow.Stats.IntRangeValue>), 0 },
                 { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Data.DamageType, global::Nighthollow.Stats.PercentageValue>), 1 },
@@ -131,12 +131,13 @@ namespace MessagePack.Resolvers
                 { typeof(global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition), 77 },
                 { typeof(global::Nighthollow.Triggers.Effects.CharacterDialogueEffect), 78 },
                 { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect), 79 },
-                { typeof(global::Nighthollow.Triggers.Effects.LoadSceneEffect), 80 },
-                { typeof(global::Nighthollow.Triggers.Effects.PreventDefaultEffect), 81 },
-                { typeof(global::Nighthollow.World.Data.ColorData), 82 },
-                { typeof(global::Nighthollow.World.Data.HexData), 83 },
-                { typeof(global::Nighthollow.World.Data.HexPosition), 84 },
-                { typeof(global::Nighthollow.World.Data.KingdomData), 85 },
+                { typeof(global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect), 80 },
+                { typeof(global::Nighthollow.Triggers.Effects.LoadSceneEffect), 81 },
+                { typeof(global::Nighthollow.Triggers.Effects.PreventDefaultEffect), 82 },
+                { typeof(global::Nighthollow.World.Data.ColorData), 83 },
+                { typeof(global::Nighthollow.World.Data.HexData), 84 },
+                { typeof(global::Nighthollow.World.Data.HexPosition), 85 },
+                { typeof(global::Nighthollow.World.Data.KingdomData), 86 },
             };
         }
 
@@ -230,12 +231,13 @@ namespace MessagePack.Resolvers
                 case 77: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.UserDeckSizeConditionFormatter();
                 case 78: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.CharacterDialogueEffectFormatter();
                 case 79: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffectFormatter();
-                case 80: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.LoadSceneEffectFormatter();
-                case 81: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.PreventDefaultEffectFormatter();
-                case 82: return new MessagePack.Formatters.Nighthollow.World.Data.ColorDataFormatter();
-                case 83: return new MessagePack.Formatters.Nighthollow.World.Data.HexDataFormatter();
-                case 84: return new MessagePack.Formatters.Nighthollow.World.Data.HexPositionFormatter();
-                case 85: return new MessagePack.Formatters.Nighthollow.World.Data.KingdomDataFormatter();
+                case 80: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.InitializeWorldMapEffectFormatter();
+                case 81: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.LoadSceneEffectFormatter();
+                case 82: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.PreventDefaultEffectFormatter();
+                case 83: return new MessagePack.Formatters.Nighthollow.World.Data.ColorDataFormatter();
+                case 84: return new MessagePack.Formatters.Nighthollow.World.Data.HexDataFormatter();
+                case 85: return new MessagePack.Formatters.Nighthollow.World.Data.HexPositionFormatter();
+                case 86: return new MessagePack.Formatters.Nighthollow.World.Data.KingdomDataFormatter();
                 default: return null;
             }
         }
@@ -1004,19 +1006,21 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
 
         public IEffectFormatter()
         {
-            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(4, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
+            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(5, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
             {
                 { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect).TypeHandle, new KeyValuePair<int, int>(0, 0) },
                 { typeof(global::Nighthollow.Triggers.Effects.CharacterDialogueEffect).TypeHandle, new KeyValuePair<int, int>(1, 1) },
                 { typeof(global::Nighthollow.Triggers.Effects.PreventDefaultEffect).TypeHandle, new KeyValuePair<int, int>(2, 2) },
                 { typeof(global::Nighthollow.Triggers.Effects.LoadSceneEffect).TypeHandle, new KeyValuePair<int, int>(3, 3) },
+                { typeof(global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect).TypeHandle, new KeyValuePair<int, int>(4, 4) },
             };
-            this.keyToJumpMap = new Dictionary<int, int>(4)
+            this.keyToJumpMap = new Dictionary<int, int>(5)
             {
                 { 0, 0 },
                 { 1, 1 },
                 { 2, 2 },
                 { 3, 3 },
+                { 4, 4 },
             };
         }
 
@@ -1040,6 +1044,9 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                         break;
                     case 3:
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.LoadSceneEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.LoadSceneEffect)value, options);
+                        break;
+                    case 4:
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect)value, options);
                         break;
                     default:
                         break;
@@ -1086,6 +1093,9 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                 case 3:
                     result = (global::Nighthollow.Triggers.IEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.LoadSceneEffect>().Deserialize(ref reader, options);
                     break;
+                case 4:
+                    result = (global::Nighthollow.Triggers.IEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect>().Deserialize(ref reader, options);
+                    break;
                 default:
                     reader.Skip();
                     break;
@@ -1103,7 +1113,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
 
         public ITriggerFormatter()
         {
-            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(8, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
+            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(10, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
             {
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.WorldSceneReadyEvent>).TypeHandle, new KeyValuePair<int, int>(0, 0) },
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.BattleSceneReadyEvent>).TypeHandle, new KeyValuePair<int, int>(1, 1) },
@@ -1111,10 +1121,12 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.DrewOpeningHandEvent>).TypeHandle, new KeyValuePair<int, int>(3, 3) },
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.EnemyCreatureSpawnedEvent>).TypeHandle, new KeyValuePair<int, int>(4, 4) },
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.UserCreaturePlayedEvent>).TypeHandle, new KeyValuePair<int, int>(5, 5) },
-                { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.TriggerInvokedEvent>).TypeHandle, new KeyValuePair<int, int>(6, 6) },
+                { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.GlobalTriggerInvokedEvent>).TypeHandle, new KeyValuePair<int, int>(6, 6) },
                 { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.HexAttackedEvent>).TypeHandle, new KeyValuePair<int, int>(7, 7) },
+                { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.WorldTriggerInvokedEvent>).TypeHandle, new KeyValuePair<int, int>(8, 8) },
+                { typeof(global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.BattleTriggerInvokedEvent>).TypeHandle, new KeyValuePair<int, int>(9, 9) },
             };
-            this.keyToJumpMap = new Dictionary<int, int>(8)
+            this.keyToJumpMap = new Dictionary<int, int>(10)
             {
                 { 0, 0 },
                 { 1, 1 },
@@ -1124,6 +1136,8 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                 { 5, 5 },
                 { 6, 6 },
                 { 7, 7 },
+                { 8, 8 },
+                { 9, 9 },
             };
         }
 
@@ -1155,10 +1169,16 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.UserCreaturePlayedEvent>>().Serialize(ref writer, (global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.UserCreaturePlayedEvent>)value, options);
                         break;
                     case 6:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.TriggerInvokedEvent>>().Serialize(ref writer, (global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.TriggerInvokedEvent>)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.GlobalTriggerInvokedEvent>>().Serialize(ref writer, (global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.GlobalTriggerInvokedEvent>)value, options);
                         break;
                     case 7:
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.HexAttackedEvent>>().Serialize(ref writer, (global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.HexAttackedEvent>)value, options);
+                        break;
+                    case 8:
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.WorldTriggerInvokedEvent>>().Serialize(ref writer, (global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.WorldTriggerInvokedEvent>)value, options);
+                        break;
+                    case 9:
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.BattleTriggerInvokedEvent>>().Serialize(ref writer, (global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.BattleTriggerInvokedEvent>)value, options);
                         break;
                     default:
                         break;
@@ -1212,10 +1232,16 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                     result = (global::Nighthollow.Triggers.ITrigger)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.UserCreaturePlayedEvent>>().Deserialize(ref reader, options);
                     break;
                 case 6:
-                    result = (global::Nighthollow.Triggers.ITrigger)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.TriggerInvokedEvent>>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Triggers.ITrigger)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.GlobalTriggerInvokedEvent>>().Deserialize(ref reader, options);
                     break;
                 case 7:
                     result = (global::Nighthollow.Triggers.ITrigger)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.HexAttackedEvent>>().Deserialize(ref reader, options);
+                    break;
+                case 8:
+                    result = (global::Nighthollow.Triggers.ITrigger)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.WorldTriggerInvokedEvent>>().Deserialize(ref reader, options);
+                    break;
+                case 9:
+                    result = (global::Nighthollow.Triggers.ITrigger)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerData<global::Nighthollow.Triggers.Events.BattleTriggerInvokedEvent>>().Deserialize(ref reader, options);
                     break;
                 default:
                     reader.Skip();
@@ -3225,6 +3251,46 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
         }
     }
 
+    public sealed class InitializeWorldMapEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            writer.WriteArrayHeader(0);
+        }
+
+        public global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadArrayHeader();
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect();
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
     public sealed class LoadSceneEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.LoadSceneEffect>
     {
 
@@ -3484,18 +3550,18 @@ namespace MessagePack.Formatters.Nighthollow.World.Data
 
             options.Security.DepthStep(ref reader);
             var length = reader.ReadArrayHeader();
-            var __XPosition__ = default(int);
-            var __YPosition__ = default(int);
+            var __X__ = default(int);
+            var __Y__ = default(int);
 
             for (int i = 0; i < length; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        __XPosition__ = reader.ReadInt32();
+                        __X__ = reader.ReadInt32();
                         break;
                     case 1:
-                        __YPosition__ = reader.ReadInt32();
+                        __Y__ = reader.ReadInt32();
                         break;
                     default:
                         reader.Skip();
@@ -3503,7 +3569,7 @@ namespace MessagePack.Formatters.Nighthollow.World.Data
                 }
             }
 
-            var ____result = new global::Nighthollow.World.Data.HexPosition(__XPosition__, __YPosition__);
+            var ____result = new global::Nighthollow.World.Data.HexPosition(__X__, __Y__);
             reader.Depth--;
             return ____result;
         }
@@ -3540,7 +3606,7 @@ namespace MessagePack.Formatters.Nighthollow.World.Data
             var length = reader.ReadArrayHeader();
             var __Name__ = default(global::Nighthollow.World.Data.KingdomName);
             var __StartingPosition__ = default(global::Nighthollow.World.Data.HexPosition);
-            var __ImageAddress__ = default(string);
+            var __TileImageAddress__ = default(string);
             var __Color__ = default(global::Nighthollow.World.Data.ColorData);
 
             for (int i = 0; i < length; i++)
@@ -3554,7 +3620,7 @@ namespace MessagePack.Formatters.Nighthollow.World.Data
                         __StartingPosition__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.HexPosition>().Deserialize(ref reader, options);
                         break;
                     case 2:
-                        __ImageAddress__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        __TileImageAddress__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
                         break;
                     case 3:
                         __Color__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.ColorData>().Deserialize(ref reader, options);
@@ -3565,7 +3631,7 @@ namespace MessagePack.Formatters.Nighthollow.World.Data
                 }
             }
 
-            var ____result = new global::Nighthollow.World.Data.KingdomData(__Name__, __StartingPosition__, __ImageAddress__, __Color__);
+            var ____result = new global::Nighthollow.World.Data.KingdomData(__Name__, __StartingPosition__, __TileImageAddress__, __Color__);
             reader.Depth--;
             return ____result;
         }

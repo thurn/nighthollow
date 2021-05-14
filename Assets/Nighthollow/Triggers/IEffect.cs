@@ -23,6 +23,7 @@ namespace Nighthollow.Triggers
   [Union(1, typeof(CharacterDialogueEffect))]
   [Union(2, typeof(PreventDefaultEffect))]
   [Union(3, typeof(LoadSceneEffect))]
+  [Union(4, typeof(InitializeWorldMapEffect))]
   public interface IEffect
   {
   }

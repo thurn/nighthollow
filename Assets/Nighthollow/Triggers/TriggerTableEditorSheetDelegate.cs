@@ -27,7 +27,8 @@ namespace Nighthollow.Triggers
 {
   public sealed class TriggerTableEditorSheetDelegate : TableEditorSheetDelegate
   {
-    TriggerCategory? _category;
+    // who needs proper persistence mechanisms when you can randomly make stuff static?
+    static TriggerCategory? _category;
 
     public TriggerTableEditorSheetDelegate(
       ReflectivePath path,
@@ -35,13 +36,14 @@ namespace Nighthollow.Triggers
     {
     }
 
-    protected override TableContent RenderTable(ReflectivePath reflectivePath, DropdownCellContent tableSelector)
+    protected override TableContent RenderTable(ReflectivePath databasePath, DropdownCellContent tableSelector)
     {
       var result = new List<List<ICellContent>>
       {
         new List<ICellContent> {tableSelector},
         new List<ICellContent?>
         {
+          new LabelCellContent("v"),
           new LabelCellContent("x"),
           _category == TriggerCategory.Debug ? new LabelCellContent(">") : null,
           new LabelCellContent("Filter Category"),
@@ -54,6 +56,7 @@ namespace Nighthollow.Triggers
         }.WhereNotNull().ToList(),
         new List<ICellContent?>
         {
+          new LabelCellContent("v"),
           new LabelCellContent("x"),
           _category == TriggerCategory.Debug ? new LabelCellContent(">") : null,
           new LabelCellContent("Name"),
@@ -64,17 +67,19 @@ namespace Nighthollow.Triggers
         }.WhereNotNull().ToList()
       };
 
-      foreach (int entityId in reflectivePath.GetTable().Keys)
+      foreach (int entityId in databasePath.GetTable().Keys)
       {
-        var trigger = (ITrigger) reflectivePath.GetTable()[entityId];
+        var trigger = (ITrigger) databasePath.GetTable()[entityId];
+        Errors.CheckNotNull(trigger);
         if (_category != null && _category != TriggerCategory.NoCategory && trigger.Category != _category)
         {
           continue;
         }
 
-        var path = reflectivePath.EntityId(entityId);
+        var path = databasePath.EntityId(entityId);
         result.Add(new List<ICellContent?>
         {
+          new ViewChildButtonCellContent(path),
           RowDeleteButton(entityId),
           _category == TriggerCategory.Debug ? new ButtonCellContent(">", () => { }) : null,
           new ReflectivePathCellContent(path.Property(trigger.GetType().GetProperty("Name")!)),
@@ -85,10 +90,11 @@ namespace Nighthollow.Triggers
         }.WhereNotNull().ToList());
       }
 
-      result.Add(GetAddButtonRow(reflectivePath));
+      result.Add(GetAddButtonRow(databasePath));
 
       return new TableContent(result, new List<int?>
       {
+        50,
         50,
         _category == TriggerCategory.Debug ? 50 : (int?) null,
         400,

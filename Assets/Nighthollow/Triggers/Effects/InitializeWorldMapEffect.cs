@@ -12,17 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
+using MessagePack;
 
 #nullable enable
 
-namespace Nighthollow.Triggers.Events
+namespace Nighthollow.Triggers.Effects
 {
-  public sealed class TriggerInvokedEvent : TriggerEvent
+  /// <summary>
+  /// Debug command -- imports tilemap data into the database, updating tiles to match their tilemap &
+  /// initial game states.
+  /// </summary>
+  [MessagePackObject]
+  public sealed class InitializeWorldMapEffect : IEffect<WorldEvent>
   {
-    public static Description Describe => new Description("this trigger is manually invoked");
+    public static Description Describe => new Description("initialize the world map");
 
-    public TriggerInvokedEvent(ServiceRegistry registry) : base(registry)
+    public void Execute(WorldEvent trigger, TriggerOutput? output)
     {
     }
   }

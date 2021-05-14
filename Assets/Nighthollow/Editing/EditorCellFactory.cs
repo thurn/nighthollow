@@ -37,7 +37,18 @@ namespace Nighthollow.Editing
         dropdown => new SelectorDropdownEditorCell(screenController, dropdown, parent),
         cell => new ImageEditorCell(cell.ImagePath),
         foreignKey => new ForeignKeyDropdownEditorCell(
-          screenController, foreignKey.ReflectivePath, foreignKey.ForeignType, parent));
+          screenController, foreignKey.ReflectivePath, foreignKey.ForeignType, parent),
+        viewChildButton =>
+          ViewChildButtonEditorCell(screenController, parent, viewChildButton));
+
+    static ButtonEditorCell ViewChildButtonEditorCell(ScreenController screenController, IEditor parent,
+      EditorSheetDelegate.ViewChildButtonCellContent viewChildButton) =>
+      new ButtonEditorCell(
+        new EditorSheetDelegate.ButtonCellContent("v",
+          () =>
+          {
+            screenController.Get(ScreenController.GameDataEditor).RenderChildSheet(viewChildButton.ReflectivePath);
+          }), parent);
 
     static EditorCell CreateTextFieldEditorCell(
       ScreenController screenController,
@@ -51,13 +62,6 @@ namespace Nighthollow.Editing
       {
         return new ForeignKeyDropdownEditorCell(
           screenController, reflectivePath, foreignKey.TableType, parent);
-      }
-
-      var nestedSheet = reflectivePath.AsPropertyInfo()?.GetCustomAttribute<NestedSheet>();
-      if (nestedSheet != null)
-      {
-        return new TextFieldEditorCell(reflectivePath, parent,
-          new NestedSheetTextFieldCellDelegate(screenController, reflectivePath));
       }
 
       if (type.IsSubclassOf(typeof(Enum)))

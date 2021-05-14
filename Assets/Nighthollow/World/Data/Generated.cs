@@ -15,19 +15,19 @@ namespace Nighthollow.World.Data
 
   public sealed partial class HexPosition
   {
-    public HexPosition WithXPosition(int xPosition) =>
-      Equals(xPosition, X)
+    public HexPosition WithX(int x) =>
+      Equals(x, X)
         ? this
         : new HexPosition(
-          xPosition,
+          x,
           Y);
 
-    public HexPosition WithYPosition(int yPosition) =>
-      Equals(yPosition, Y)
+    public HexPosition WithY(int y) =>
+      Equals(y, Y)
         ? this
         : new HexPosition(
           X,
-          yPosition);
+          y);
 
   }
 
@@ -79,13 +79,13 @@ namespace Nighthollow.World.Data
           TileImageAddress,
           Color);
 
-    public KingdomData WithImageAddress(string imageAddress) =>
-      Equals(imageAddress, TileImageAddress)
+    public KingdomData WithTileImageAddress(string tileImageAddress) =>
+      Equals(tileImageAddress, TileImageAddress)
         ? this
         : new KingdomData(
           Name,
           StartingPosition,
-          imageAddress,
+          tileImageAddress,
           Color);
 
     public KingdomData WithColor(ColorData color) =>

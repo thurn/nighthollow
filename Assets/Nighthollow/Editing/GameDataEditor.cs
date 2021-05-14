@@ -71,7 +71,13 @@ namespace Nighthollow.Editing
 
       EditorSheetDelegate sheetDelegate;
       var foreignKeyList = reflectivePath.AsPropertyInfo()?.GetCustomAttribute<ForeignKeyList>();
-      if (foreignKeyList != null)
+
+      var customDelegate = EditorControllerRegistry.GetCustomChildSheetDelegate(reflectivePath);
+      if (customDelegate != null)
+      {
+        sheetDelegate = customDelegate;
+      }
+      else if (foreignKeyList != null)
       {
         sheetDelegate = new ForeignKeyListEditorSheetDelegate(reflectivePath, foreignKeyList.TableType);
       }

@@ -47,7 +47,8 @@ namespace Nighthollow.Editing
         Func<ButtonCellContent, T> onButton,
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
-        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown);
+        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
+        Func<ViewChildButtonCellContent, T> onViewChildButton);
     }
 
     protected sealed class ReflectivePathCellContent : ICellContent
@@ -65,7 +66,8 @@ namespace Nighthollow.Editing
         Func<ButtonCellContent, T> onButton,
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
-        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown) =>
+        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
+        Func<ViewChildButtonCellContent, T> onViewChildButton) =>
         onReflectivePath(ReflectivePath);
     }
 
@@ -84,7 +86,8 @@ namespace Nighthollow.Editing
         Func<ButtonCellContent, T> onButton,
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
-        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown) =>
+        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
+        Func<ViewChildButtonCellContent, T> onViewChildButton) =>
         onLabel(Text);
     }
 
@@ -107,7 +110,8 @@ namespace Nighthollow.Editing
         Func<ButtonCellContent, T> onButton,
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
-        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown) => onButton(this);
+        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
+        Func<ViewChildButtonCellContent, T> onViewChildButton) => onButton(this);
     }
 
     public sealed class DropdownCellContent : ICellContent
@@ -135,7 +139,8 @@ namespace Nighthollow.Editing
         Func<ButtonCellContent, T> onButton,
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
-        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown) => onDropdown(this);
+        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
+        Func<ViewChildButtonCellContent, T> onViewChildButton) => onDropdown(this);
     }
 
     public sealed class ImageCellContent : ICellContent
@@ -153,7 +158,8 @@ namespace Nighthollow.Editing
         Func<ButtonCellContent, T> onButton,
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
-        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown) => onImage(this);
+        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
+        Func<ViewChildButtonCellContent, T> onViewChildButton) => onImage(this);
     }
 
     public sealed class ForeignKeyDropdownCellContent : ICellContent
@@ -173,7 +179,27 @@ namespace Nighthollow.Editing
         Func<ButtonCellContent, T> onButton,
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
-        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown) => onForeignKeyDropdown(this);
+        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
+        Func<ViewChildButtonCellContent, T> onViewChildButton) => onForeignKeyDropdown(this);
+    }
+
+    public sealed class ViewChildButtonCellContent : ICellContent
+    {
+      public ViewChildButtonCellContent(ReflectivePath reflectivePath)
+      {
+        ReflectivePath = reflectivePath;
+      }
+
+      public ReflectivePath ReflectivePath { get; }
+
+      public T Switch<T>(
+        Func<ReflectivePath, T> onReflectivePath,
+        Func<string?, T> onLabel,
+        Func<ButtonCellContent, T> onButton,
+        Func<DropdownCellContent, T> onDropdown,
+        Func<ImageCellContent, T> onImage,
+        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
+        Func<ViewChildButtonCellContent, T> onViewChildButton) => onViewChildButton(this);
     }
   }
 }
