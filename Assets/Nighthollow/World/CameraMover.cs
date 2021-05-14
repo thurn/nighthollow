@@ -59,7 +59,7 @@ namespace Nighthollow.World
       if (translation != Vector3.zero)
       {
         transform.Translate(translation, Space.Self);
-        _registry?.WorldMap.ClearSelection();
+        _registry?.WorldMapRenderer.ClearSelection();
       }
 
       _zoomDelta += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * _scrollWheelZoomSpeed;

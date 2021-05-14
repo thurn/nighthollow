@@ -33,14 +33,21 @@ namespace Nighthollow.Services
       StaticAssets = staticAssets;
     }
 
-    WorldMap? _worldMap;
-    public WorldMap WorldMap => _worldMap ??= new WorldMap(this);
+    WorldMapRenderer? _worldMap;
+
+    public WorldMapRenderer WorldMapRenderer =>
+      _worldMap ??= new WorldMapRenderer(this);
+
     public WorldStaticAssets StaticAssets { get; }
+
+    WorldMapController? _worldMapController;
+    public WorldMapController WorldMapController => _worldMapController ??= new WorldMapController(this);
 
     public override void OnUpdate()
     {
       base.OnUpdate();
-      WorldMap.OnUpdate();
+      WorldMapRenderer.OnUpdate();
+      WorldMapController.OnUpdate();
     }
   }
 }

@@ -43,7 +43,7 @@ namespace Nighthollow.Triggers.Effects
         Errors.CheckState(pair.Value.HexType != HexType.Unknown, "unknown hex type");
       }
 
-      var tiles = trigger.Registry.WorldMap.AllTiles().ToList();
+      var tiles = trigger.Registry.WorldMapRenderer.AllTiles().ToList();
       Debug.Log($"Found {hexLookup.Count} hexes, updating from {tiles.Count} tiles.");
 
       foreach (var (tile, position) in tiles)

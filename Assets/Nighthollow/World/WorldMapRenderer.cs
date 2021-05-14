@@ -15,19 +15,16 @@
 using System.Collections.Generic;
 using Nighthollow.Interface;
 using Nighthollow.Services;
-using Nighthollow.Triggers;
-using Nighthollow.Triggers.Events;
 using Nighthollow.Utils;
 using Nighthollow.World.Data;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 #nullable enable
 
 namespace Nighthollow.World
 {
-  public sealed class WorldMap
+  public sealed class WorldMapRenderer
   {
     const int MinX = -30;
     const int MaxX = 30;
@@ -41,22 +38,27 @@ namespace Nighthollow.World
     static readonly HexPosition StartingHex = new HexPosition(x: -12, y: 7);
     static readonly HexPosition TutorialAttackHex = new HexPosition(x: -11, y: 7);
 
-    readonly WorldServiceRegistry _registry;
     readonly Dictionary<int, Tilemap> _children = new Dictionary<int, Tilemap>();
     HexPosition? _currentlySelected;
     TileBase _previousIconOnSelectedTile = null!;
+    readonly WorldServiceRegistry _registry;
+    readonly ScreenController _screenController;
+    readonly WorldStaticAssets _assets;
 
-    public WorldMap(WorldServiceRegistry registry)
+    public WorldMapRenderer(WorldServiceRegistry registry)
     {
       _registry = registry;
-      var worldMapRoot = registry.StaticAssets.WorldTilemapContainer;
+      _screenController = registry.ScreenController;
+      _assets = registry.StaticAssets;
+
+      var worldMapRoot = _assets.WorldTilemapContainer;
       var map = ComponentUtils.GetComponent<Tilemap>(worldMapRoot);
 
       // Unity is supposed to be able to handle overlapping by y coordinate correctly in a single chunked tilemap, but
       // it's currently very buggy. So I just make each row into a separate tilemap.
       for (var yCoordinate = MinY; yCoordinate <= MaxY; ++yCoordinate)
       {
-        var childMap = Object.Instantiate(worldMapRoot, registry.StaticAssets.Grid.transform);
+        var childMap = Object.Instantiate(worldMapRoot, _assets.Grid.transform);
         childMap.name = $"Row {yCoordinate}";
         var tilemap = ComponentUtils.GetComponent<Tilemap>(childMap);
         tilemap.ClearAllTiles();
@@ -74,49 +76,37 @@ namespace Nighthollow.World
       map.ClearAllTiles();
       Object.Destroy(worldMapRoot.GetComponent<TilemapRenderer>());
       Object.Destroy(worldMapRoot.GetComponent<Tilemap>());
-
-      foreach (var kingdom in registry.Database.Snapshot().Kingdoms.Values)
-      {
-        OutlineHexes(kingdom.Color.AsUnityColor(), new HashSet<HexPosition> {kingdom.StartingPosition});
-        ShowIcon(kingdom.StartingPosition, registry.AssetService.GetTile(kingdom.TileImageAddress));
-      }
     }
 
     public void OnUpdate()
     {
       if (Input.GetMouseButtonDown(button: 0) &&
-          !_registry.ScreenController.ConsumesMousePosition(Input.mousePosition))
+          !_screenController.ConsumesMousePosition(Input.mousePosition))
       {
         var ray = _registry.MainCamera.ScreenPointToRay(Input.mousePosition);
         var worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);
-        var position = _registry.StaticAssets.Grid.WorldToCell(worldPoint);
+        var position = _assets.Grid.WorldToCell(worldPoint);
         var hex = new HexPosition(position.x, position.y);
 
         ClearPreviousSelection();
 
         _previousIconOnSelectedTile = GetIcon(hex);
-        ShowIcon(hex, _registry.StaticAssets.CreateSelectedTileIcon());
+        ShowIcon(hex, _assets.CreateSelectedTileIcon());
         _currentlySelected = hex;
+        var screenPosition = _registry.MainCamera.WorldToScreenPoint(_assets.Grid.CellToWorld(position));
 
-        var tile = _children[hex.Y].GetTile(new Vector3Int(hex.X, hex.Y, z: 0));
-        var screenPoint = _registry.MainCamera.WorldToScreenPoint(_registry.StaticAssets.Grid.CellToWorld(position));
-        _registry.ScreenController.ShowTooltip(WorldHexTooltip.Create(
-            this,
-            tile.name,
-            hex == StartingHex ? "Kingdom of Nighthollow" : "None",
-            hex == TutorialAttackHex),
-          InterfaceUtils.ScreenPointToInterfacePoint(screenPoint));
+        _registry.WorldMapController.OnHexSelected(hex, screenPosition, ClearSelection);
       }
     }
 
     public void ShowIcon(HexPosition hex, TileBase tile)
     {
-      _registry.StaticAssets.OverlayTilemap.SetTile(new Vector3Int(hex.X, hex.Y, IconZ), tile);
+      _assets.OverlayTilemap.SetTile(new Vector3Int(hex.X, hex.Y, IconZ), tile);
     }
 
     public void RemoveIcon(HexPosition hex)
     {
-      _registry.StaticAssets.OverlayTilemap.SetTile(new Vector3Int(hex.X, hex.Y, IconZ), tile: null);
+      _assets.OverlayTilemap.SetTile(new Vector3Int(hex.X, hex.Y, IconZ), tile: null);
     }
 
     public IEnumerable<(TileBase, HexPosition)> AllTiles()
@@ -132,17 +122,17 @@ namespace Nighthollow.World
     }
 
     public TileBase GetIcon(HexPosition hex) =>
-      _registry.StaticAssets.OverlayTilemap.GetTile(new Vector3Int(hex.X, hex.Y, IconZ));
+      _assets.OverlayTilemap.GetTile(new Vector3Int(hex.X, hex.Y, IconZ));
 
     public TileBase GetTile(HexPosition hex) =>
       _children[hex.Y].GetTile(new Vector3Int(hex.X, hex.Y, z: 0));
 
-    void OutlineHexes(Color color, ISet<HexPosition> hexes)
+    public void OutlineHexes(Color color, ISet<HexPosition> hexes)
     {
-      var bottomLeftSelection = _registry.StaticAssets.CreateBottomLeftSelection();
-      var bottomRightSelection = _registry.StaticAssets.CreateBottomRightSelection();
-      var rightSelection = _registry.StaticAssets.CreateRightSelection();
-      var leftSelection = _registry.StaticAssets.CreateLeftSelection();
+      var bottomLeftSelection = _assets.CreateBottomLeftSelection();
+      var bottomRightSelection = _assets.CreateBottomRightSelection();
+      var rightSelection = _assets.CreateRightSelection();
+      var leftSelection = _assets.CreateLeftSelection();
       bottomLeftSelection.color = color;
       bottomRightSelection.color = color;
       rightSelection.color = color;
@@ -188,7 +178,7 @@ namespace Nighthollow.World
     {
       if (toOverlay)
       {
-        _registry.StaticAssets.OverlayTilemap.SetTile(new Vector3Int(hex.X, hex.Y, zPosition), tile);
+        _assets.OverlayTilemap.SetTile(new Vector3Int(hex.X, hex.Y, zPosition), tile);
       }
       else
       {
@@ -199,7 +189,7 @@ namespace Nighthollow.World
     public void ClearSelection()
     {
       ClearPreviousSelection();
-      _registry.ScreenController.HideTooltip();
+      _screenController.HideTooltip();
       _currentlySelected = null;
     }
 
@@ -217,13 +207,13 @@ namespace Nighthollow.World
 
     public void AttackHex()
     {
-      _registry.ScreenController.HideTooltip();
-      var triggerOutput = new TriggerOutput();
-      _registry.TriggerService.Invoke(new HexAttackedEvent(_registry, 12), triggerOutput);
-      if (!triggerOutput.PreventDefault)
-      {
-        SceneManager.LoadScene("Battle");
-      }
+      // _screenController.HideTooltip();
+      // var triggerOutput = new TriggerOutput();
+      // _registry.TriggerService.Invoke(new HexAttackedEvent(_registry, 12), triggerOutput);
+      // if (!triggerOutput.PreventDefault)
+      // {
+      //   SceneManager.LoadScene("Battle");
+      // }
     }
   }
 }

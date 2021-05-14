@@ -33,6 +33,16 @@ namespace Nighthollow.World
       DownRight
     }
 
+    public static bool AreAdjacent(HexPosition a, HexPosition b)
+    {
+      return GetInDirection(a, Direction.UpLeft) == b ||
+             GetInDirection(a, Direction.UpRight) == b ||
+             GetInDirection(a, Direction.Left) == b ||
+             GetInDirection(a, Direction.Right) == b ||
+             GetInDirection(a, Direction.DownLeft) == b ||
+             GetInDirection(a, Direction.DownRight) == b;
+    }
+
     public static HexPosition GetInDirection(HexPosition hex, Direction direction)
     {
       // This is an offset coordinate system
