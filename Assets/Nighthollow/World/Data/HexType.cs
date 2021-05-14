@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Utils;
+using UnityEngine;
 
 #nullable enable
 
@@ -45,7 +46,8 @@ namespace Nighthollow.World.Data
     Hills = 20,
     Mountain = 21,
     Volcano = 22,
-    Field = 23
+    Field = 23,
+    Jungle = 24
   }
 
   public static class HexTypeUtil
@@ -81,7 +83,9 @@ namespace Nighthollow.World.Data
       ("woodland", HexType.Forest),
       ("mountain", HexType.Mountain),
       ("volcano", HexType.Volcano),
-      ("plains", HexType.Field)
+      ("plains", HexType.Field),
+      ("jungle", HexType.Jungle),
+      ("highlands", HexType.Plains)
     };
 
     public static HexType HexTypeForTileName(string tileName)
@@ -90,7 +94,10 @@ namespace Nighthollow.World.Data
         .Where(pair => tileName.ToLowerInvariant().Contains(pair.Item1))
         .Select(pair => pair.Item2)
         .FirstOrDefault();
-      Errors.CheckState(result != HexType.Unknown, "Unrecognized tile name");
+      if (result == HexType.Unknown)
+      {
+        Debug.LogError($"Unrecognized tile name {tileName}");
+      }
       return result;
     }
   }

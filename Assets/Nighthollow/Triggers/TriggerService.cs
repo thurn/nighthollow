@@ -70,13 +70,13 @@ namespace Nighthollow.Triggers
       switch (t)
       {
         case TriggerData<WorldTriggerInvokedEvent> worldTrigger when registry is WorldServiceRegistry worldRegistry:
-          InvokeInternal(triggerId, worldTrigger, new WorldTriggerInvokedEvent(worldRegistry), output);
+          InvokeInternal(triggerId, worldTrigger, new WorldTriggerInvokedEvent(worldRegistry), output, true);
           break;
         case TriggerData<BattleTriggerInvokedEvent> battleTrigger when registry is BattleServiceRegistry battleRegistry:
-          InvokeInternal(triggerId, battleTrigger, new BattleTriggerInvokedEvent(battleRegistry), output);
+          InvokeInternal(triggerId, battleTrigger, new BattleTriggerInvokedEvent(battleRegistry), output, true);
           break;
         case TriggerData<GlobalTriggerInvokedEvent> globalTrigger:
-          InvokeInternal(triggerId, globalTrigger, new GlobalTriggerInvokedEvent(registry), output);
+          InvokeInternal(triggerId, globalTrigger, new GlobalTriggerInvokedEvent(registry), output, true);
           break;
         default:
           throw new InvalidEnumArgumentException(
@@ -88,9 +88,10 @@ namespace Nighthollow.Triggers
       int triggerId,
       TriggerData<TEvent> trigger,
       TEvent triggerEvent,
-      TriggerOutput? output = null) where TEvent : TriggerEvent
+      TriggerOutput? output = null,
+      bool bypassEnabledCheck = false) where TEvent : TriggerEvent
     {
-      if (!trigger.Disabled)
+      if (bypassEnabledCheck || !trigger.Disabled)
       {
         var fired = trigger.Invoke(triggerEvent, output);
         if (fired && !trigger.Looping)

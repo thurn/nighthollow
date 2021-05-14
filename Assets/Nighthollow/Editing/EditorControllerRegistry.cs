@@ -20,6 +20,7 @@ using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Items;
+using Nighthollow.Services;
 using Nighthollow.Triggers;
 
 #nullable enable
@@ -29,6 +30,7 @@ namespace Nighthollow.Editing
   public abstract class EditorController
   {
     public virtual TableEditorSheetDelegate? GetTableDelegate(
+      ServiceRegistry registry,
       ReflectivePath reflectivePath,
       EditorSheetDelegate.DropdownCellContent tableSelector)
     {
@@ -245,10 +247,11 @@ namespace Nighthollow.Editing
     }
 
     public override TableEditorSheetDelegate GetTableDelegate(
+      ServiceRegistry registry,
       ReflectivePath reflectivePath,
       EditorSheetDelegate.DropdownCellContent tableSelector)
     {
-      return new TriggerTableEditorSheetDelegate(reflectivePath, tableSelector);
+      return new TriggerTableEditorSheetDelegate(registry, reflectivePath, tableSelector);
     }
   }
 
@@ -279,11 +282,12 @@ namespace Nighthollow.Editing
       };
 
     public static TableEditorSheetDelegate GetTableDelegate(
+      ServiceRegistry registry,
       ReflectivePath reflectivePath,
       EditorSheetDelegate.DropdownCellContent tableSelector)
     {
       var tableDelegate = Controllers.ContainsKey(reflectivePath.GetUnderlyingType())
-        ? Controllers[reflectivePath.GetUnderlyingType()].GetTableDelegate(reflectivePath, tableSelector)
+        ? Controllers[reflectivePath.GetUnderlyingType()].GetTableDelegate(registry, reflectivePath, tableSelector)
         : null;
       return tableDelegate ?? new TableEditorSheetDelegate(reflectivePath, tableSelector);
     }

@@ -22,7 +22,7 @@ namespace Nighthollow.World.Data
   [MessagePackObject]
   public sealed partial class HexData
   {
-    public HexData(HexType hexType, HexPosition position, int? owningKingdom)
+    public HexData(HexType hexType, HexPosition position, int? owningKingdom = null)
     {
       HexType = hexType;
       Position = position;

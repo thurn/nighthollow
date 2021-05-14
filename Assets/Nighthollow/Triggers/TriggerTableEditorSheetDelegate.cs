@@ -19,7 +19,9 @@ using System.Reflection;
 using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Editing;
+using Nighthollow.Services;
 using Nighthollow.Utils;
+using UnityEngine;
 
 #nullable enable
 
@@ -29,11 +31,14 @@ namespace Nighthollow.Triggers
   {
     // who needs proper persistence mechanisms when you can randomly make stuff static?
     static TriggerCategory? _category;
+    readonly ServiceRegistry _registry;
 
     public TriggerTableEditorSheetDelegate(
+      ServiceRegistry registry,
       ReflectivePath path,
       DropdownCellContent tableSelector) : base(path, tableSelector)
     {
+      _registry = registry;
     }
 
     protected override TableContent RenderTable(ReflectivePath databasePath, DropdownCellContent tableSelector)
@@ -81,7 +86,9 @@ namespace Nighthollow.Triggers
         {
           new ViewChildButtonCellContent(path),
           RowDeleteButton(entityId),
-          _category == TriggerCategory.Debug ? new ButtonCellContent(">", () => { }) : null,
+          _category == TriggerCategory.Debug
+            ? new ButtonCellContent(">", () => { _registry.TriggerService.InvokeTriggerId(_registry, entityId); })
+            : null,
           new ReflectivePathCellContent(path.Property(trigger.GetType().GetProperty("Name")!)),
           new ReflectivePathCellContent(path.Property(trigger.GetType().GetProperty("Category")!)),
           new ReflectivePathCellContent(path),

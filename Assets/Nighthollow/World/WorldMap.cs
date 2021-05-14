@@ -29,6 +29,10 @@ namespace Nighthollow.World
 {
   public sealed class WorldMap
   {
+    const int MinX = -30;
+    const int MaxX = 30;
+    const int MinY = -30;
+    const int MaxY = 30;
     const int BottomLeftZ = 1;
     const int BottomRightZ = 2;
     const int RightZ = 3;
@@ -50,7 +54,7 @@ namespace Nighthollow.World
 
       // Unity is supposed to be able to handle overlapping by y coordinate correctly in a single chunked tilemap, but
       // it's currently very buggy. So I just make each row into a separate tilemap.
-      for (var yCoordinate = -30; yCoordinate <= 30; ++yCoordinate)
+      for (var yCoordinate = MinY; yCoordinate <= MaxY; ++yCoordinate)
       {
         var childMap = Object.Instantiate(worldMapRoot, registry.StaticAssets.Grid.transform);
         childMap.name = $"Row {yCoordinate}";
@@ -58,7 +62,7 @@ namespace Nighthollow.World
         tilemap.ClearAllTiles();
         ComponentUtils.GetComponent<TilemapRenderer>(childMap).sortingOrder = -yCoordinate;
 
-        for (var xCoordinate = -30; xCoordinate <= 30; ++xCoordinate)
+        for (var xCoordinate = MinX; xCoordinate <= MaxX; ++xCoordinate)
         {
           tilemap.SetTile(new Vector3Int(xCoordinate, yCoordinate, z: 0),
             map.GetTile(new Vector3Int(xCoordinate, yCoordinate, z: 0)));
@@ -115,8 +119,23 @@ namespace Nighthollow.World
       _registry.StaticAssets.OverlayTilemap.SetTile(new Vector3Int(hex.X, hex.Y, IconZ), tile: null);
     }
 
+    public IEnumerable<(TileBase, HexPosition)> AllTiles()
+    {
+      for (var yCoordinate = MinY; yCoordinate <= MaxY; ++yCoordinate)
+      {
+        for (var xCoordinate = MinX; xCoordinate <= MaxX; ++xCoordinate)
+        {
+          var position = new HexPosition(xCoordinate, yCoordinate);
+          yield return (GetTile(position), position);
+        }
+      }
+    }
+
     public TileBase GetIcon(HexPosition hex) =>
       _registry.StaticAssets.OverlayTilemap.GetTile(new Vector3Int(hex.X, hex.Y, IconZ));
+
+    public TileBase GetTile(HexPosition hex) =>
+      _children[hex.Y].GetTile(new Vector3Int(hex.X, hex.Y, z: 0));
 
     void OutlineHexes(Color color, ISet<HexPosition> hexes)
     {

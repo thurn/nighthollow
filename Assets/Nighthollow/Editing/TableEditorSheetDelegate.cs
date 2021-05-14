@@ -79,7 +79,7 @@ namespace Nighthollow.Editing
           .ToList()
       };
 
-      foreach (int entityId in reflectivePath.GetTable().Keys)
+      foreach (var entityId in reflectivePath.GetTable().Keys.OfType<int>().Take(100))
       {
         var staticColumns = new List<ICellContent>
         {
