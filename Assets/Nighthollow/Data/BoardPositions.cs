@@ -15,6 +15,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Utils;
+using UnityEditor;
 using UnityEngine;
 
 #nullable enable
@@ -23,6 +24,10 @@ namespace Nighthollow.Data
 {
   public static class BoardPositions
   {
+    const float TopY = 5f;
+    const float CellSpacing = 2.5f;
+    const float RightX = 5f;
+
     public static readonly IEnumerable<RankValue> AllRanks = new List<RankValue>
     {
       RankValue.Rank1,
@@ -44,21 +49,38 @@ namespace Nighthollow.Data
       FileValue.File5
     };
 
+    // public static float ToXPosition(this RankValue rank)
+    // {
+    //   switch (rank)
+    //   {
+    //     case RankValue.Rank1: return -8.8f;
+    //     case RankValue.Rank2: return -6.3f;
+    //     case RankValue.Rank3: return -3.8f;
+    //     case RankValue.Rank4: return -1.3f;
+    //     case RankValue.Rank5: return 1.2f;
+    //     case RankValue.Rank6: return 3.7f;
+    //     case RankValue.Rank7: return 6.2f;
+    //     case RankValue.Rank8: return 8.7f;
+    //     default: throw Errors.UnknownEnumValue(rank);
+    //   }
+    // }
+
     public static float ToXPosition(this RankValue rank)
     {
-      switch (rank)
+      return rank switch
       {
-        case RankValue.Rank1: return -8.8f;
-        case RankValue.Rank2: return -6.3f;
-        case RankValue.Rank3: return -3.8f;
-        case RankValue.Rank4: return -1.3f;
-        case RankValue.Rank5: return 1.2f;
-        case RankValue.Rank6: return 3.7f;
-        case RankValue.Rank7: return 6.2f;
-        case RankValue.Rank8: return 8.7f;
-        default: throw Errors.UnknownEnumValue(rank);
-      }
+        RankValue.Rank1 => RightX - (CellSpacing * 7),
+        RankValue.Rank2 => RightX - (CellSpacing * 6),
+        RankValue.Rank3 => RightX - (CellSpacing * 5),
+        RankValue.Rank4 => RightX - (CellSpacing * 4),
+        RankValue.Rank5 => RightX - (CellSpacing * 3),
+        RankValue.Rank6 => RightX - (CellSpacing * 2),
+        RankValue.Rank7 => RightX - (CellSpacing * 1),
+        RankValue.Rank8 => RightX - (CellSpacing * 0),
+        _ => throw Errors.UnknownEnumValue(rank)
+      };
     }
+
 
     public static float ToCenterXPosition(this RankValue rank) => ToXPosition(rank);
 
@@ -110,17 +132,30 @@ namespace Nighthollow.Data
       }
     }
 
+    // public static float ToYPosition(this FileValue file)
+    // {
+    //   switch (file)
+    //   {
+    //     case FileValue.File1: return -9.8f;
+    //     case FileValue.File2: return -7.3f;
+    //     case FileValue.File3: return -4.8f;
+    //     case FileValue.File4: return -2.3f;
+    //     case FileValue.File5: return 0.2f;
+    //     default: throw Errors.UnknownEnumValue(file);
+    //   }
+    // }
+
     public static float ToYPosition(this FileValue file)
     {
-      switch (file)
+      return file switch
       {
-        case FileValue.File1: return -9.8f;
-        case FileValue.File2: return -7.3f;
-        case FileValue.File3: return -4.8f;
-        case FileValue.File4: return -2.3f;
-        case FileValue.File5: return 0.2f;
-        default: throw Errors.UnknownEnumValue(file);
-      }
+        FileValue.File1 => TopY - (CellSpacing * 4),
+        FileValue.File2 => TopY - (CellSpacing * 3),
+        FileValue.File3 => TopY - (CellSpacing * 2),
+        FileValue.File4 => TopY - (CellSpacing * 1),
+        FileValue.File5 => TopY - (CellSpacing * 0),
+        _ => throw Errors.UnknownEnumValue(file)
+      };
     }
 
     public static float ToCenterYPosition(this FileValue file) => ToYPosition(file) + 1.25f;

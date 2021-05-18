@@ -22,13 +22,13 @@ namespace Nighthollow.Utils
 {
   public static class Constants
   {
-    public const int IndicatorBottomY = -10;
-    public const int IndicatorRightX = 14;
-    public const float EnemyCreatureStartingX = 25.0f;
-    public const float EnemyCreatureEndingX = -15.0f;
-    public const float CreatureDespawnLeftX = -20.0f;
-    public const float CreatureDespawnRightX = 25.0f;
-    public const float EnemyCreatureEndzoneX = -11.0f;
+    public const int IndicatorBottomY = -6;
+    public const int IndicatorRightX = 10;
+    public const float EnemyCreatureStartingX = 21.0f;
+    public const float EnemyCreatureEndingX = -19.0f;
+    public const float CreatureDespawnLeftX = -24.0f;
+    public const float CreatureDespawnRightX = 29.0f;
+    public const float EnemyCreatureEndzoneX = -15.0f;
 
     public const int UserCreaturesLayer = 8;
     public const int EnemyCreaturesLayer = 9;
