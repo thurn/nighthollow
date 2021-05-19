@@ -57,6 +57,13 @@ namespace Nighthollow.Editing
         .ToList();
 
       RenderTableIndex(0);
+
+      Time.timeScale = 0f;
+    }
+
+    protected override void OnHide()
+    {
+      Time.timeScale = 1f;
     }
 
     public void RenderChildSheet(

@@ -86,8 +86,7 @@ namespace Nighthollow.Components
         {
           if (rank != _rank || file != _file)
           {
-            var position = new Vector3(rank.ToXPosition(), file.ToYPosition(), z: 0);
-            _cursor.transform.position = position + new Vector3(x: 0, y: 1, z: 0);
+            _cursor.transform.position = new Vector3(rank.ToXPosition(), file.ToYPosition(), z: 0);
             _rank = rank;
             _file = file;
           }

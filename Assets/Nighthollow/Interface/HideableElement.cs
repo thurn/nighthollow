@@ -58,11 +58,15 @@ namespace Nighthollow.Interface
         style.opacity = new StyleFloat(v: 1f);
         InterfaceUtils.FadeOut(this, duration: 0.3f);
       }
+
+      OnHide();
     }
 
     protected virtual void Initialize() {}
 
     protected abstract void OnShow(TShowArgument argument);
+
+    protected virtual void OnHide() {}
 
     protected VisualElement FindElement(string elementName) => Find<VisualElement>(elementName);
 

@@ -24,6 +24,7 @@ using Nighthollow.Delegates.Handlers;
 using Nighthollow.Stats;
 using Nighthollow.Triggers.Events;
 using Nighthollow.Utils;
+using Unity.Profiling;
 using UnityEngine;
 
 #nullable enable
@@ -77,6 +78,9 @@ namespace Nighthollow.Services
     {
       readonly BattleServiceRegistry _registry;
       readonly BattleServiceRegistry.ICreatureServiceMutator _mutator;
+      static readonly ProfilerMarker UpdateCreatures = new ProfilerMarker("UpdateCreatures");
+      static readonly ProfilerMarker UpdateCreatureStats = new ProfilerMarker("UpdateStats");
+      static readonly ProfilerMarker UpdateCreatureAction = new ProfilerMarker("UpdateActions");
 
       public Controller(BattleServiceRegistry registry, BattleServiceRegistry.ICreatureServiceMutator mutator)
       {
@@ -347,18 +351,26 @@ namespace Nighthollow.Services
       static ImmutableDictionary<CreatureId, CreatureState> RunUpdate(
         IGameContext c, out ImmutableList<IEventData> events)
       {
+        UpdateCreatures.Begin();
         var states = ImmutableDictionary.CreateBuilder<CreatureId, CreatureState>();
         events = ImmutableList<IEventData>.Empty;
         foreach (var pair in c.Creatures.CreatureState)
         {
           var creatureId = pair.Key;
           var state = pair.Value;
+          UpdateCreatureStats.Begin();
           state = state.WithData(state.Data.OnTick(c));
+          UpdateCreatureStats.End();
+          UpdateCreatureAction.Begin();
           state = UpdateCreature(c, c.Creatures._components[creatureId], state, ref events);
+          UpdateCreatureAction.End();
           states[creatureId] = state;
         }
 
-        return states.ToImmutable();
+        var result = states.ToImmutable();
+
+        UpdateCreatures.End();
+        return result;
       }
 
       static CreatureState UpdateCreature(

@@ -29,8 +29,10 @@ namespace Nighthollow.Interface
     public static void FadeIn(VisualElement ve, float duration = 2f, Action? onComplete = null)
     {
       ve.style.opacity = 0f;
-      var sequence = DOTween.Sequence()
-        .Append(DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, endValue: 1f, duration));
+      var sequence = DOTween.Sequence().SetUpdate(isIndependentUpdate: true)
+        .Append(DOTween
+          .To(() => ve.style.opacity.value, x => ve.style.opacity = x, endValue: 1f, duration)
+          .SetUpdate(isIndependentUpdate: true));
       if (onComplete != null)
       {
         sequence.AppendCallback(() => onComplete());
@@ -40,8 +42,10 @@ namespace Nighthollow.Interface
     public static void FadeOut(VisualElement ve, float duration = 2f, Action? onComplete = null)
     {
       ve.style.opacity = 1f;
-      var sequence = DOTween.Sequence()
-        .Append(DOTween.To(() => ve.style.opacity.value, x => ve.style.opacity = x, endValue: 0f, duration));
+      var sequence = DOTween.Sequence().SetUpdate(true)
+        .Append(DOTween
+          .To(() => ve.style.opacity.value, x => ve.style.opacity = x, endValue: 0f, duration)
+          .SetUpdate(isIndependentUpdate: true));
       if (onComplete != null)
       {
         sequence.AppendCallback(() => onComplete());
@@ -76,7 +80,7 @@ namespace Nighthollow.Interface
     {
       if (Application.isPlaying)
       {
-        DOTween.Sequence().InsertCallback(seconds, () => action()).Play();
+        DOTween.Sequence().SetUpdate(isIndependentUpdate: true).InsertCallback(seconds, () => action()).Play();
       }
       else
       {
