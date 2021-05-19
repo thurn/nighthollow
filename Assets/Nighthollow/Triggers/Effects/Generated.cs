@@ -41,6 +41,16 @@ namespace Nighthollow.Triggers.Effects
 
   }
 
+  public sealed partial class CenterCameraOnHexEffect
+  {
+    public CenterCameraOnHexEffect WithPosition(HexPosition position) =>
+      Equals(position, Position)
+        ? this
+        : new CenterCameraOnHexEffect(
+          position);
+
+  }
+
   public sealed partial class DisplayHelpTextEffect
   {
     public DisplayHelpTextEffect WithText(string text) =>

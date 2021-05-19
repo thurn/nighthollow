@@ -24,6 +24,7 @@ namespace Nighthollow.Triggers
   [Union(2, typeof(PreventDefaultEffect))]
   [Union(3, typeof(LoadSceneEffect))]
   [Union(4, typeof(InitializeWorldMapEffect))]
+  [Union(5, typeof(CenterCameraOnHexEffect))]
   public interface IEffect
   {
   }

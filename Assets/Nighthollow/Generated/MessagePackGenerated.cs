@@ -49,7 +49,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(87)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(88)
             {
                 { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Data.DamageType, global::Nighthollow.Stats.IntRangeValue>), 0 },
                 { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Data.DamageType, global::Nighthollow.Stats.PercentageValue>), 1 },
@@ -129,15 +129,16 @@ namespace MessagePack.Resolvers
                 { typeof(global::Nighthollow.Stats.IntRangeValue), 75 },
                 { typeof(global::Nighthollow.Stats.PercentageValue), 76 },
                 { typeof(global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition), 77 },
-                { typeof(global::Nighthollow.Triggers.Effects.CharacterDialogueEffect), 78 },
-                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect), 79 },
-                { typeof(global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect), 80 },
-                { typeof(global::Nighthollow.Triggers.Effects.LoadSceneEffect), 81 },
-                { typeof(global::Nighthollow.Triggers.Effects.PreventDefaultEffect), 82 },
-                { typeof(global::Nighthollow.World.Data.ColorData), 83 },
-                { typeof(global::Nighthollow.World.Data.HexData), 84 },
-                { typeof(global::Nighthollow.World.Data.HexPosition), 85 },
-                { typeof(global::Nighthollow.World.Data.KingdomData), 86 },
+                { typeof(global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect), 78 },
+                { typeof(global::Nighthollow.Triggers.Effects.CharacterDialogueEffect), 79 },
+                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect), 80 },
+                { typeof(global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect), 81 },
+                { typeof(global::Nighthollow.Triggers.Effects.LoadSceneEffect), 82 },
+                { typeof(global::Nighthollow.Triggers.Effects.PreventDefaultEffect), 83 },
+                { typeof(global::Nighthollow.World.Data.ColorData), 84 },
+                { typeof(global::Nighthollow.World.Data.HexData), 85 },
+                { typeof(global::Nighthollow.World.Data.HexPosition), 86 },
+                { typeof(global::Nighthollow.World.Data.KingdomData), 87 },
             };
         }
 
@@ -229,15 +230,16 @@ namespace MessagePack.Resolvers
                 case 75: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
                 case 76: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
                 case 77: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.UserDeckSizeConditionFormatter();
-                case 78: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.CharacterDialogueEffectFormatter();
-                case 79: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffectFormatter();
-                case 80: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.InitializeWorldMapEffectFormatter();
-                case 81: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.LoadSceneEffectFormatter();
-                case 82: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.PreventDefaultEffectFormatter();
-                case 83: return new MessagePack.Formatters.Nighthollow.World.Data.ColorDataFormatter();
-                case 84: return new MessagePack.Formatters.Nighthollow.World.Data.HexDataFormatter();
-                case 85: return new MessagePack.Formatters.Nighthollow.World.Data.HexPositionFormatter();
-                case 86: return new MessagePack.Formatters.Nighthollow.World.Data.KingdomDataFormatter();
+                case 78: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.CenterCameraOnHexEffectFormatter();
+                case 79: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.CharacterDialogueEffectFormatter();
+                case 80: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffectFormatter();
+                case 81: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.InitializeWorldMapEffectFormatter();
+                case 82: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.LoadSceneEffectFormatter();
+                case 83: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.PreventDefaultEffectFormatter();
+                case 84: return new MessagePack.Formatters.Nighthollow.World.Data.ColorDataFormatter();
+                case 85: return new MessagePack.Formatters.Nighthollow.World.Data.HexDataFormatter();
+                case 86: return new MessagePack.Formatters.Nighthollow.World.Data.HexPositionFormatter();
+                case 87: return new MessagePack.Formatters.Nighthollow.World.Data.KingdomDataFormatter();
                 default: return null;
             }
         }
@@ -1006,21 +1008,23 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
 
         public IEffectFormatter()
         {
-            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(5, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
+            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(6, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
             {
                 { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect).TypeHandle, new KeyValuePair<int, int>(0, 0) },
                 { typeof(global::Nighthollow.Triggers.Effects.CharacterDialogueEffect).TypeHandle, new KeyValuePair<int, int>(1, 1) },
                 { typeof(global::Nighthollow.Triggers.Effects.PreventDefaultEffect).TypeHandle, new KeyValuePair<int, int>(2, 2) },
                 { typeof(global::Nighthollow.Triggers.Effects.LoadSceneEffect).TypeHandle, new KeyValuePair<int, int>(3, 3) },
                 { typeof(global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect).TypeHandle, new KeyValuePair<int, int>(4, 4) },
+                { typeof(global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect).TypeHandle, new KeyValuePair<int, int>(5, 5) },
             };
-            this.keyToJumpMap = new Dictionary<int, int>(5)
+            this.keyToJumpMap = new Dictionary<int, int>(6)
             {
                 { 0, 0 },
                 { 1, 1 },
                 { 2, 2 },
                 { 3, 3 },
                 { 4, 4 },
+                { 5, 5 },
             };
         }
 
@@ -1047,6 +1051,9 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                         break;
                     case 4:
                         options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect)value, options);
+                        break;
+                    case 5:
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect)value, options);
                         break;
                     default:
                         break;
@@ -1095,6 +1102,9 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                     break;
                 case 4:
                     result = (global::Nighthollow.Triggers.IEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect>().Deserialize(ref reader, options);
+                    break;
+                case 5:
+                    result = (global::Nighthollow.Triggers.IEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect>().Deserialize(ref reader, options);
                     break;
                 default:
                     reader.Skip();
@@ -3131,6 +3141,53 @@ namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
     using System;
     using System.Buffers;
     using MessagePack;
+
+    public sealed class CenterCameraOnHexEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(1);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.HexPosition>().Serialize(ref writer, value.Position, options);
+        }
+
+        public global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Position__ = default(global::Nighthollow.World.Data.HexPosition);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Position__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.HexPosition>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect(__Position__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
 
     public sealed class CharacterDialogueEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.CharacterDialogueEffect>
     {

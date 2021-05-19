@@ -99,6 +99,9 @@ namespace Nighthollow.World
       }
     }
 
+    public Vector3 GetWorldPosition(HexPosition hexPosition) =>
+      _assets.Grid.CellToWorld(new Vector3Int(hexPosition.X, hexPosition.Y, 0));
+
     public void ShowIcon(HexPosition hex, TileBase tile)
     {
       _assets.OverlayTilemap.SetTile(new Vector3Int(hex.X, hex.Y, IconZ), tile);

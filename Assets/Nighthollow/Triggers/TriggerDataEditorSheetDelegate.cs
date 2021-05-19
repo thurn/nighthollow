@@ -187,7 +187,9 @@ namespace Nighthollow.Triggers
         var index = 0;
 
         foreach (var pair in path.Database.Snapshot().Triggers
-          .Where(pair => pair.Value is TriggerData<GlobalTriggerInvokedEvent>))
+          .Where(pair => pair.Value is TriggerData<GlobalTriggerInvokedEvent> ||
+                         pair.Value is TriggerData<WorldTriggerInvokedEvent> ||
+                         pair.Value is TriggerData<BattleTriggerInvokedEvent>))
         {
           invokedTriggers.Add(pair);
           if (currentValue == pair.Key)
