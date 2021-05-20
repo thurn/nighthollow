@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Utils;
@@ -88,6 +89,14 @@ namespace Nighthollow.World.Data
       ("highlands", HexType.Plains)
     };
 
+    public static string GetName(this HexType hexType) => hexType switch
+    {
+      HexType.TheCitadel => "The Citadel",
+      HexType.AshPlains => "Ash Plains",
+      HexType.VolcanicPlains => "Volcanic Plains",
+      _ => hexType.ToString()
+    };
+
     public static HexType HexTypeForTileName(string tileName)
     {
       var result = TypesMap
@@ -98,6 +107,7 @@ namespace Nighthollow.World.Data
       {
         Debug.LogError($"Unrecognized tile name {tileName}");
       }
+
       return result;
     }
   }

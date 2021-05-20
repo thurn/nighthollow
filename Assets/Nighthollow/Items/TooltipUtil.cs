@@ -17,6 +17,7 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Stats;
 using Nighthollow.Utils;
+using UnityEngine;
 
 #nullable enable
 
@@ -24,23 +25,28 @@ namespace Nighthollow.Items
 {
   public static class TooltipUtil
   {
-    public static TooltipBuilder CreateTooltip(GameData gameData, IItemData item) =>
+    public static TooltipBuilder CreateTooltip(GameData gameData, Vector2 anchorPosition, IItemData item) =>
       item.Switch(
-        creature => CreateUserCreatureTooltip(gameData, creature),
-        CreateResourceTooltip);
+        creature => CreateUserCreatureTooltip(gameData, anchorPosition, creature),
+        resource => CreateResourceTooltip(anchorPosition, resource));
 
-    public static TooltipBuilder CreateResourceTooltip(ResourceItemData data)
+    public static TooltipBuilder CreateResourceTooltip(
+      Vector2 anchorPosition,
+      ResourceItemData data)
     {
-      var builder = new TooltipBuilder(data.Name);
+      var builder = new TooltipBuilder(data.Name, anchorPosition);
       builder.AppendText(data.Description);
       return builder;
     }
 
-    public static TooltipBuilder CreateUserCreatureTooltip(GameData gameData, CreatureItemData data)
+    public static TooltipBuilder CreateUserCreatureTooltip(
+      GameData gameData,
+      Vector2 anchorPosition,
+      CreatureItemData data)
     {
       var userState = UserState.BuildUserState(gameData);
       var ownerStats = userState.Stats;
-      var builder = new TooltipBuilder(data.Name);
+      var builder = new TooltipBuilder(data.Name, anchorPosition);
       var built = data.BuildCreature(gameData, userState);
       builder.AppendText($"Health: {built.GetInt(Stat.Health)}");
 

@@ -35,8 +35,6 @@ namespace Nighthollow.World
     const int RightZ = 3;
     const int LeftZ = 4;
     const int IconZ = 5;
-    static readonly HexPosition StartingHex = new HexPosition(x: -12, y: 7);
-    static readonly HexPosition TutorialAttackHex = new HexPosition(x: -11, y: 7);
 
     readonly Dictionary<int, Tilemap> _children = new Dictionary<int, Tilemap>();
     HexPosition? _currentlySelected;
@@ -192,7 +190,7 @@ namespace Nighthollow.World
     public void ClearSelection()
     {
       ClearPreviousSelection();
-      _screenController.HideTooltip();
+      _screenController.Get(ScreenController.Tooltip).Hide();
       _currentlySelected = null;
     }
 
@@ -206,17 +204,6 @@ namespace Nighthollow.World
           ShowIcon(_currentlySelected, _previousIconOnSelectedTile);
         }
       }
-    }
-
-    public void AttackHex()
-    {
-      // _screenController.HideTooltip();
-      // var triggerOutput = new TriggerOutput();
-      // _registry.TriggerService.Invoke(new HexAttackedEvent(_registry, 12), triggerOutput);
-      // if (!triggerOutput.PreventDefault)
-      // {
-      //   SceneManager.LoadScene("Battle");
-      // }
     }
   }
 }

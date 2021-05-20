@@ -68,11 +68,15 @@ namespace Nighthollow.Interface
 
     void OnMouseOver(MouseOverEvent e)
     {
-      if (HasTooltip)
+      if (HasTooltip && !_registry.ScreenController.IsCurrentlyDragging)
       {
-        var tooltipBuilder = TooltipUtil.CreateTooltip(_registry.Database.Snapshot(), _item);
+        var tooltipBuilder = TooltipUtil.CreateTooltip(
+          _registry.Database.Snapshot(),
+          new Vector2(worldBound.x, worldBound.y),
+          _item);
         tooltipBuilder.XOffset = ContainerSize;
-        _registry.ScreenController.ShowTooltip(tooltipBuilder, new Vector2(worldBound.x, worldBound.y));
+        //_registry.ScreenController.ShowTooltip(tooltipBuilder, new Vector2(worldBound.x, worldBound.y));
+        _registry.ScreenController.Get(ScreenController.Tooltip).Show(tooltipBuilder);
       }
     }
 
@@ -80,7 +84,7 @@ namespace Nighthollow.Interface
     {
       if (HasTooltip)
       {
-        _registry.ScreenController.HideTooltip();
+        _registry.ScreenController.Get(ScreenController.Tooltip).Hide();
       }
     }
   }

@@ -17,6 +17,7 @@ using System;
 using System.Text;
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -30,18 +31,19 @@ namespace Nighthollow.Items
 
     StringBuilder? _currentText;
 
-    public TooltipBuilder(string name)
+    public TooltipBuilder(string name, Vector2 anchorPoint)
     {
+      AnchorPoint = anchorPoint;
       Name = name;
-
       _result.AddToClassList("tooltip-content");
     }
 
+    public Vector2 AnchorPoint { get; }
     public string Name { get; }
     public Rarity Rarity { get; set; } = Rarity.Common;
     public int XOffset { get; set; } = 16;
     public bool CloseButton { get; set; }
-    public Action? OnClose { get; set; }
+    public Action? OnHide { get; set; }
 
     public TooltipBuilder StartGroup()
     {

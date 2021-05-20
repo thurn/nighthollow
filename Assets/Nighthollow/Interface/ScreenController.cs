@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Editing;
-using Nighthollow.Items;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -97,6 +96,9 @@ namespace Nighthollow.Interface
     public static ElementKey<CardsWindow> CardsWindow =
       new ElementKey<CardsWindow>("CardsWindow");
 
+    public static ElementKey<Tooltip> Tooltip =
+      new ElementKey<Tooltip>("Tooltip");
+
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
     readonly List<IElementKey> _keys = new List<IElementKey>
@@ -112,13 +114,13 @@ namespace Nighthollow.Interface
       GameDataEditor,
       SchoolSelectionScreen,
       LoadingBlackout,
-      CardsWindow
+      CardsWindow,
+      Tooltip
     };
 
     readonly ServiceRegistry _registry;
     readonly VisualElement _screen;
     public VisualElement Screen => _screen;
-    readonly ItemTooltip _itemTooltip;
 
     DragInfo? _currentlyDragging;
     int? _currentlyWithinDragTarget;
@@ -137,13 +139,10 @@ namespace Nighthollow.Interface
         _elements[key.Name] = element;
       }
 
-      _itemTooltip = InterfaceUtils.FindByName<ItemTooltip>(_screen, "ItemTooltip");
-      _itemTooltip.Controller = this;
-
       _screen.RegisterCallback<MouseMoveEvent>(MouseMove);
       _screen.RegisterCallback<MouseUpEvent>(MouseUp);
 
-      Get(LoadingBlackout).Hide();
+      Get(LoadingBlackout).Hide(forceWhenInvisible: true);
     }
 
     public void OnUpdate()
@@ -193,8 +192,7 @@ namespace Nighthollow.Interface
     public bool ConsumesMousePosition(Vector3 mousePosition)
     {
       return _elements.Values
-               .Any(element => element.Visible && InterfaceUtils.ContainsScreenPoint(element, mousePosition)) ||
-             _itemTooltip.Visible && InterfaceUtils.ContainsScreenPoint(_itemTooltip, mousePosition);
+        .Any(element => element.Visible && InterfaceUtils.ContainsScreenPoint(element, mousePosition));
     }
 
     public bool HasExclusiveFocus() => _elements.Values.Any(e => e.Visible && e.ExclusiveFocus);
@@ -207,25 +205,11 @@ namespace Nighthollow.Interface
       }
     }
 
-    public void ShowTooltip(TooltipBuilder builder, Vector2 anchor)
-    {
-      if (!IsCurrentlyDragging)
-      {
-        _itemTooltip.Hide();
-        _itemTooltip.Show(builder, anchor);
-      }
-    }
-
-    public void HideTooltip()
-    {
-      _itemTooltip.Hide();
-    }
-
     public void StartDrag(DragInfo dragInfo)
     {
       _currentlyDragging = dragInfo;
       var element = dragInfo.Element;
-      HideTooltip();
+      Get(Tooltip).Hide();
       element.RemoveFromHierarchy();
 
       element.style.position = new StyleEnum<Position>(Position.Absolute);

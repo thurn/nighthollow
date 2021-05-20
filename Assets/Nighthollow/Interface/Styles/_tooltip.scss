@@ -18,7 +18,7 @@
 @use "font-sizes";
 @use "fonts";
 
-.item-tooltip {
+.tooltip {
   @include images.basic-bar;
   width: 512px;
   justify-content: flex-start;

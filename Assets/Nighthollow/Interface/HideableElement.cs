@@ -11,8 +11,8 @@ namespace Nighthollow.Interface
     public ScreenController Controller { protected get; set; } = null!;
     public ServiceRegistry Registry { protected get; set; } = null!;
     public bool Visible { get; protected set; }
-    public virtual bool ExclusiveFocus { get; } = false;
-    public abstract void Hide(bool animate = false);
+    public virtual bool ExclusiveFocus => false;
+    public abstract void Hide(bool animate = false, bool forceWhenInvisible = false);
   }
 
   public abstract class HideableElement<TShowArgument> : AbstractHideableElement
@@ -48,25 +48,32 @@ namespace Nighthollow.Interface
       OnShow(argument);
     }
 
-    public override void Hide(bool animate = false)
+    public override void Hide(bool animate = false, bool forceWhenInvisible = false)
     {
-      Visible = false;
-      style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
-
-      if (animate)
+      if (Visible || forceWhenInvisible)
       {
-        style.opacity = new StyleFloat(v: 1f);
-        InterfaceUtils.FadeOut(this, duration: 0.3f);
-      }
+        Visible = false;
+        style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
 
-      OnHide();
+        if (animate)
+        {
+          style.opacity = new StyleFloat(v: 1f);
+          InterfaceUtils.FadeOut(this, duration: 0.3f);
+        }
+
+        OnHide();
+      }
     }
 
-    protected virtual void Initialize() {}
+    protected virtual void Initialize()
+    {
+    }
 
     protected abstract void OnShow(TShowArgument argument);
 
-    protected virtual void OnHide() {}
+    protected virtual void OnHide()
+    {
+    }
 
     protected VisualElement FindElement(string elementName) => Find<VisualElement>(elementName);
 

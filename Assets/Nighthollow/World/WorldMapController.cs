@@ -76,11 +76,13 @@ namespace Nighthollow.World
     {
       var gameData = _registry.Database.Snapshot();
       var hexData = gameData.Hexes[_hexIndex[hexPosition]];
-      var builder = new TooltipBuilder(hexData.HexType.ToString())
+      var builder = new TooltipBuilder(
+        hexData.HexType.GetName(),
+        InterfaceUtils.ScreenPointToInterfacePoint(screenPosition))
       {
         XOffset = 128,
         CloseButton = true,
-        OnClose = onComplete
+        OnHide = onComplete
       };
 
       if (hexData.HexType == HexType.Ocean)
@@ -104,8 +106,7 @@ namespace Nighthollow.World
         builder.AppendButton("Attack!", AttackHex);
       }
 
-      _registry.ScreenController.ShowTooltip(
-        builder, InterfaceUtils.ScreenPointToInterfacePoint(screenPosition));
+      _registry.ScreenController.Get(ScreenController.Tooltip).Show(builder);
     }
 
     bool CanAttack(HexPosition hexPosition, HexData hexData, GameData gameData)
@@ -118,7 +119,7 @@ namespace Nighthollow.World
 
     public void AttackHex()
     {
-      _registry.ScreenController.HideTooltip();
+      _registry.ScreenController.Get(ScreenController.Tooltip).Hide();
       var triggerOutput = new TriggerOutput();
       _registry.TriggerService.Invoke(new HexAttackedEvent(_registry, 12), triggerOutput);
       if (!triggerOutput.PreventDefault)
