@@ -284,12 +284,13 @@ namespace Nighthollow.Editing
     public static TableEditorSheetDelegate GetTableDelegate(
       ServiceRegistry registry,
       ReflectivePath reflectivePath,
-      EditorSheetDelegate.DropdownCellContent tableSelector)
+      EditorSheetDelegate.DropdownCellContent tableSelector,
+      string tableName)
     {
       var tableDelegate = Controllers.ContainsKey(reflectivePath.GetUnderlyingType())
         ? Controllers[reflectivePath.GetUnderlyingType()].GetTableDelegate(registry, reflectivePath, tableSelector)
         : null;
-      return tableDelegate ?? new TableEditorSheetDelegate(reflectivePath, tableSelector);
+      return tableDelegate ?? new TableEditorSheetDelegate(reflectivePath, tableSelector, tableName);
     }
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)

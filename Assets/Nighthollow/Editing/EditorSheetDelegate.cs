@@ -48,7 +48,8 @@ namespace Nighthollow.Editing
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
         Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
-        Func<ViewChildButtonCellContent, T> onViewChildButton);
+        Func<ViewChildButtonCellContent, T> onViewChildButton,
+        Func<FilterInputCellContent, T> onFilterInput);
     }
 
     protected sealed class ReflectivePathCellContent : ICellContent
@@ -67,7 +68,8 @@ namespace Nighthollow.Editing
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
         Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
-        Func<ViewChildButtonCellContent, T> onViewChildButton) =>
+        Func<ViewChildButtonCellContent, T> onViewChildButton,
+        Func<FilterInputCellContent, T> onFilterInput) =>
         onReflectivePath(ReflectivePath);
     }
 
@@ -87,7 +89,8 @@ namespace Nighthollow.Editing
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
         Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
-        Func<ViewChildButtonCellContent, T> onViewChildButton) =>
+        Func<ViewChildButtonCellContent, T> onViewChildButton,
+        Func<FilterInputCellContent, T> onFilterInput) =>
         onLabel(Text);
     }
 
@@ -111,7 +114,8 @@ namespace Nighthollow.Editing
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
         Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
-        Func<ViewChildButtonCellContent, T> onViewChildButton) => onButton(this);
+        Func<ViewChildButtonCellContent, T> onViewChildButton,
+        Func<FilterInputCellContent, T> onFilterInput) => onButton(this);
     }
 
     public sealed class DropdownCellContent : ICellContent
@@ -140,7 +144,8 @@ namespace Nighthollow.Editing
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
         Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
-        Func<ViewChildButtonCellContent, T> onViewChildButton) => onDropdown(this);
+        Func<ViewChildButtonCellContent, T> onViewChildButton,
+        Func<FilterInputCellContent, T> onFilterInput) => onDropdown(this);
     }
 
     public sealed class ImageCellContent : ICellContent
@@ -159,7 +164,8 @@ namespace Nighthollow.Editing
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
         Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
-        Func<ViewChildButtonCellContent, T> onViewChildButton) => onImage(this);
+        Func<ViewChildButtonCellContent, T> onViewChildButton,
+        Func<FilterInputCellContent, T> onFilterInput) => onImage(this);
     }
 
     public sealed class ForeignKeyDropdownCellContent : ICellContent
@@ -180,7 +186,8 @@ namespace Nighthollow.Editing
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
         Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
-        Func<ViewChildButtonCellContent, T> onViewChildButton) => onForeignKeyDropdown(this);
+        Func<ViewChildButtonCellContent, T> onViewChildButton,
+        Func<FilterInputCellContent, T> onFilterInput) => onForeignKeyDropdown(this);
     }
 
     public sealed class ViewChildButtonCellContent : ICellContent
@@ -199,7 +206,30 @@ namespace Nighthollow.Editing
         Func<DropdownCellContent, T> onDropdown,
         Func<ImageCellContent, T> onImage,
         Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
-        Func<ViewChildButtonCellContent, T> onViewChildButton) => onViewChildButton(this);
+        Func<ViewChildButtonCellContent, T> onViewChildButton,
+        Func<FilterInputCellContent, T> onFilterInput) => onViewChildButton(this);
+    }
+
+    public sealed class FilterInputCellContent : ICellContent
+    {
+      public FilterInputCellContent(string text, string preferenceKey)
+      {
+        Text = text;
+        PreferenceKey = preferenceKey;
+      }
+
+      public string Text { get; }
+      public string PreferenceKey { get; }
+
+      public T Switch<T>(
+        Func<ReflectivePath, T> onReflectivePath,
+        Func<string?, T> onLabel,
+        Func<ButtonCellContent, T> onButton,
+        Func<DropdownCellContent, T> onDropdown,
+        Func<ImageCellContent, T> onImage,
+        Func<ForeignKeyDropdownCellContent, T> onForeignKeyDropdown,
+        Func<ViewChildButtonCellContent, T> onViewChildButton,
+        Func<FilterInputCellContent, T> onFilterInput) => onFilterInput(this);
     }
   }
 }

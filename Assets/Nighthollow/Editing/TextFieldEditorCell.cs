@@ -26,7 +26,7 @@ namespace Nighthollow.Editing
     readonly TextFieldEditorCellDelegate _cellDelegate;
     bool _active;
 
-    public TextFieldEditorCell(ReflectivePath reflectivePath, IEditor parent, TextFieldEditorCellDelegate cellDelegate)
+    public TextFieldEditorCell(string initialContent, IEditor parent, TextFieldEditorCellDelegate cellDelegate)
     {
       _parent = parent;
       _cellDelegate = cellDelegate;
@@ -44,7 +44,7 @@ namespace Nighthollow.Editing
       _field.RegisterCallback<KeyDownEvent>(OnKeyDownInternal);
       _cellDelegate.Initialize(_field, this);
 
-      _field.value = reflectivePath.RenderPreview();
+      _field.value = initialContent;
 
       // TODO: This causes crashes when we change subtypes -- is it needed?
       // reflectivePath.OnEntityUpdated(() => { _field.value = reflectivePath.RenderPreview(); });
@@ -76,6 +76,11 @@ namespace Nighthollow.Editing
     public void OnChildEditingComplete()
     {
       Deactivate();
+    }
+
+    public void OnDataChanged()
+    {
+      _parent.OnDataChanged();
     }
 
     // Unity just sort of randomly gives KeyDown events to whoever it feels like, so we need this method to detect

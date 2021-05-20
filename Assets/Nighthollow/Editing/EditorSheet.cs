@@ -33,6 +33,8 @@ namespace Nighthollow.Editing
     void FocusRoot();
 
     void OnChildEditingComplete();
+
+    void OnDataChanged();
   }
 
   public sealed class EditorSheet : VisualElement, IEditor
@@ -152,7 +154,7 @@ namespace Nighthollow.Editing
       return result;
     }
 
-    void OnDataChanged()
+    public void OnDataChanged()
     {
       var previouslySelected = CurrentlySelected;
       var key = CurrentlySelected.HasValue ? _cells[CurrentlySelected.Value].Key : null;

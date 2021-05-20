@@ -39,7 +39,11 @@ namespace Nighthollow.Editing
         foreignKey => new ForeignKeyDropdownEditorCell(
           screenController, foreignKey.ReflectivePath, foreignKey.ForeignType, parent),
         viewChildButton =>
-          ViewChildButtonEditorCell(screenController, parent, viewChildButton));
+          ViewChildButtonEditorCell(screenController, parent, viewChildButton),
+        filterInput => new TextFieldEditorCell(
+          filterInput.Text,
+          parent,
+          new FilterInputTextFieldCellDelegate(filterInput.PreferenceKey)));
 
     static ButtonEditorCell ViewChildButtonEditorCell(ScreenController screenController, IEditor parent,
       EditorSheetDelegate.ViewChildButtonCellContent viewChildButton) =>
@@ -117,7 +121,7 @@ namespace Nighthollow.Editing
         cellDelegate = new NestedSheetTextFieldCellDelegate(screenController, reflectivePath);
       }
 
-      return new TextFieldEditorCell(reflectivePath, parent, cellDelegate);
+      return new TextFieldEditorCell(reflectivePath.RenderPreview(), parent, cellDelegate);
     }
 
     static bool Identity(string input, out string output)

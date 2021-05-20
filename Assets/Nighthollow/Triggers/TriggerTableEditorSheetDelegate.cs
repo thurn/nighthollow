@@ -35,7 +35,7 @@ namespace Nighthollow.Triggers
     public TriggerTableEditorSheetDelegate(
       ServiceRegistry registry,
       ReflectivePath path,
-      DropdownCellContent tableSelector) : base(path, tableSelector)
+      DropdownCellContent tableSelector) : base(path, tableSelector, "Triggers")
     {
       _registry = registry;
     }

@@ -18,6 +18,7 @@ using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Utils;
+using UnityEngine;
 
 #nullable enable
 
@@ -30,15 +31,17 @@ namespace Nighthollow.Editing
     readonly ReflectivePath _reflectivePath;
     readonly Type _underlyingType;
     readonly DropdownCellContent _tableSelector;
+    readonly string _tableName;
 
     // this is probably a bad idea but yolo
     protected Action? OnModified;
 
-    public TableEditorSheetDelegate(ReflectivePath path, DropdownCellContent tableSelector)
+    public TableEditorSheetDelegate(ReflectivePath path, DropdownCellContent tableSelector, string tableName)
     {
       _reflectivePath = path;
       _underlyingType = _reflectivePath.GetUnderlyingType();
       _tableSelector = tableSelector;
+      _tableName = tableName;
     }
 
     public override string SheetName() => TypeUtils.NameWithSpaces(_reflectivePath.GetUnderlyingType().Name);
@@ -66,9 +69,11 @@ namespace Nighthollow.Editing
       var properties = _underlyingType.GetProperties();
       var imageProperty = properties.FirstOrDefault(p => p.Name.Contains("ImageAddress"));
       var staticHeadings = new List<ICellContent> {new LabelCellContent("x")};
+      var filters = new List<ICellContent> {new LabelCellContent("x")};
       if (imageProperty != null)
       {
         staticHeadings.Add(new LabelCellContent("Image"));
+        filters.Add(new LabelCellContent("-"));
       }
 
       var result = new List<List<ICellContent>>
@@ -76,11 +81,25 @@ namespace Nighthollow.Editing
         new List<ICellContent> {tableSelector},
         staticHeadings
           .Concat(properties.Select(p => new LabelCellContent(TypeUtils.NameWithSpaces(p.Name))))
-          .ToList()
+          .ToList(),
+        filters.Concat(properties.Select(PropertyFilterCell)).ToList()
       };
 
-      foreach (var entityId in reflectivePath.GetTable().Keys.OfType<int>().Take(100))
+      var rowCount = 0;
+      foreach (var entityId in reflectivePath.GetTable().Keys.OfType<int>())
       {
+        var filterFailed = (
+          from property in properties
+          let filter = PlayerPrefs.GetString(FilterKey(property), "")
+          where !string.IsNullOrWhiteSpace(filter) &&
+                !reflectivePath.EntityId(entityId).Property(property).RenderPreview().Contains(filter)
+          select property).Any();
+
+        if (filterFailed)
+        {
+          continue;
+        }
+
         var staticColumns = new List<ICellContent>
         {
           RowDeleteButton(entityId),
@@ -93,6 +112,13 @@ namespace Nighthollow.Editing
         result.Add(staticColumns.Concat(properties
             .Select(property => new ReflectivePathCellContent(reflectivePath.EntityId(entityId).Property(property))))
           .ToList());
+
+        rowCount++;
+        if (rowCount > 50)
+        {
+          result.Add(new List<ICellContent> {new LabelCellContent("Content Truncated...")});
+          break;
+        }
       }
 
       result.Add(CollectionUtils
@@ -114,6 +140,14 @@ namespace Nighthollow.Editing
           .Select(property => EditorControllerRegistry.GetColumnWidth(_underlyingType, property)));
 
       return new TableContent(result, columnWidths);
+    }
+
+    string FilterKey(PropertyInfo info) => $"Filters/{_tableName}/{info.Name}";
+
+    ICellContent PropertyFilterCell(PropertyInfo arg)
+    {
+      var key = FilterKey(arg);
+      return new FilterInputCellContent(PlayerPrefs.GetString(key, ""), key);
     }
 
     protected ButtonCellContent RowDeleteButton(int entityId)

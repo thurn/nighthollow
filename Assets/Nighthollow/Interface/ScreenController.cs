@@ -147,7 +147,7 @@ namespace Nighthollow.Interface
 
     public void OnUpdate()
     {
-      if (Input.GetKeyDown(KeyCode.E) && CtrlOrCmdDown() && ShiftDown())
+      if (Input.GetKeyDown(KeyCode.E) && CtrlDown() && CmdDown())
       {
         var editor = Get(GameDataEditor);
         if (editor.Visible)
@@ -160,7 +160,7 @@ namespace Nighthollow.Interface
         }
       }
 
-      if (Input.GetKeyDown(KeyCode.R) && CtrlOrCmdDown())
+      if (Input.GetKeyDown(KeyCode.R) && CtrlDown() && CmdDown())
       {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
       }
@@ -171,10 +171,9 @@ namespace Nighthollow.Interface
       }
     }
 
-    static bool CtrlOrCmdDown() => Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) ||
-                                   Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
+    static bool CtrlDown() => Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
 
-    static bool ShiftDown() => Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+    static bool CmdDown() => Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
 
     public T Get<T>(ElementKey<T> key) where T : AbstractHideableElement, new() => (T) GetElement(key);
 
