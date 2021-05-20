@@ -93,7 +93,7 @@ namespace Nighthollow.World
       else
       {
         var owner = hexData.OwningKingdom.HasValue
-          ? gameData.Kingdoms[hexData.OwningKingdom.Value].Name.ToString()
+          ? gameData.Kingdoms[hexData.OwningKingdom.Value].Name.GetName()
           : "None";
 
         builder

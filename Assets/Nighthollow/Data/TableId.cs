@@ -16,7 +16,6 @@ using System;
 using System.Collections;
 using System.Collections.Immutable;
 using System.IO;
-using JetBrains.Annotations;
 using MessagePack;
 using Nighthollow.Triggers;
 using Nighthollow.World.Data;
@@ -42,9 +41,9 @@ namespace Nighthollow.Data
     GameData Deserialize(GameData gameData, ReadOnlyMemory<byte> bytes, MessagePackSerializerOptions options);
   }
 
-  public abstract class TableId<T> : ITableId where T : class
+  public class TableId<T> : ITableId where T : class
   {
-    protected TableId(int id, string tableName)
+    public TableId(int id, string tableName)
     {
       Id = id;
       TableName = tableName;
@@ -54,9 +53,10 @@ namespace Nighthollow.Data
 
     public string TableName { get; }
 
-    public abstract ImmutableDictionary<int, T> GetIn(GameData gameData);
+    public ImmutableDictionary<int, T> GetIn(GameData gameData) => gameData.GetTable(this);
 
-    public abstract GameData Write(GameData gameData, ImmutableDictionary<int, T> newValue);
+    public GameData Write(GameData gameData, ImmutableDictionary<int, T> newValue) =>
+      gameData.WithTable(this, newValue);
 
     public void Serialize(GameData gameData, FileStream fileStream, MessagePackSerializerOptions options)
     {
@@ -74,69 +74,66 @@ namespace Nighthollow.Data
     public IDictionary GetInUnchecked(GameData gameData) => GetIn(gameData);
   }
 
-  public abstract class SingletonTableId<T> : TableId<T> where T : class
+  public sealed class SingletonTableId<T> : TableId<T> where T : class
   {
-    protected SingletonTableId(int id, string tableName) : base(id, tableName)
+    const int SingletonEntityId = 1;
+
+    public SingletonTableId(int id, string tableName) : base(id, tableName)
     {
     }
 
-    protected abstract T GetSingleton(GameData gameData);
+    public T GetSingleton(GameData gameData) => gameData.GetTable(this)[SingletonEntityId];
 
-    protected abstract GameData WriteSingleton(GameData gameData, T newValue);
-
-    public sealed override ImmutableDictionary<int, T> GetIn(GameData gameData) =>
-      ImmutableDictionary<int, T>.Empty.SetItem(1, GetSingleton(gameData));
-
-    public sealed override GameData Write(GameData gameData, ImmutableDictionary<int, T> newValue) =>
-      WriteSingleton(gameData, newValue[1]);
+    public GameData WriteSingleton(GameData gameData, T newValue) =>
+      gameData.WithTable(this, ImmutableDictionary<int, T>.Empty.Add(SingletonEntityId, newValue));
   }
 
   public static class TableId
   {
     public static readonly TableId<TableMetadata> TableMetadata =
-      new TableMetadataTableId(0, "TableMetadata");
+      new TableId<TableMetadata>(0, "TableMetadata");
 
     public static readonly TableId<CreatureTypeData> CreatureTypes =
-      new CreatureTypesTableId(1, "CreatureTypes");
+      new TableId<CreatureTypeData>(1, "CreatureTypes");
 
     public static readonly TableId<AffixTypeData> AffixTypes =
-      new AffixTypesTableId(2, "AffixTypes");
+      new TableId<AffixTypeData>(2, "AffixTypes");
 
     public static readonly TableId<SkillTypeData> SkillTypes =
-      new SkillTypesTableId(3, "SkillTypes");
+      new TableId<SkillTypeData>(3, "SkillTypes");
 
     public static readonly TableId<StatData> Stats =
-      new StatDataTableId(4, "Stats");
+      new TableId<StatData>(4, "Stats");
 
     public static readonly TableId<StaticItemListData> ItemLists =
-      new ItemListsTableId(5, "ItemLists");
+      new TableId<StaticItemListData>(5, "ItemLists");
 
     public static readonly TableId<ModifierData> UserModifiers =
-      new UserModifiersTableId(6, "UserModifiers");
+      new TableId<ModifierData>(6, "UserModifiers");
 
     public static readonly TableId<CreatureItemData> Collection =
-      new CollectionTableId(7, "Collection");
+      new TableId<CreatureItemData>(7, "Collection");
 
     public static readonly TableId<CreatureItemData> Deck =
-      new DeckTableId(8, "Deck");
+      new TableId<CreatureItemData>(8, "Deck");
 
     public static readonly TableId<StatusEffectTypeData> StatusEffectTypes =
-      new StatusEffectsTypesTableId(9, "StatusEffectTypes");
+      new TableId<StatusEffectTypeData>(9, "StatusEffectTypes");
 
-    public static readonly TableId<BattleData> BattleData =
-      new BattleDataTableId(10, "BattleData");
+    public static readonly SingletonTableId<BattleData> BattleData =
+      new SingletonTableId<BattleData>(10, "BattleData");
 
     public static readonly TableId<ITrigger> Triggers =
-      new TriggersTableId(11, "Triggers");
+      new TableId<ITrigger>(11, "Triggers");
 
     public static readonly TableId<GlobalData> Globals =
-      new GlobalsTableId(12, "Globals");
+      new TableId<GlobalData>(12, "Globals");
 
     public static readonly TableId<HexData> Hexes =
-      new HexesTableId(13, "Hexes");
+      new TableId<HexData>(13, "Hexes");
 
     public static readonly TableId<KingdomData> Kingdoms =
-      new KingdomsTableId(14, "Kingdoms");
+      new TableId<KingdomData>(14, "Kingdoms");
 
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
       TableMetadata,
@@ -155,200 +152,5 @@ namespace Nighthollow.Data
       Hexes,
       Kingdoms
     );
-
-    sealed class TableMetadataTableId : TableId<TableMetadata>
-    {
-      public TableMetadataTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, TableMetadata> GetIn(GameData gameData) =>
-        gameData.TableMetadata;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, TableMetadata> newValue) =>
-        gameData.WithTableMetadata(newValue);
-    }
-
-    sealed class CreatureTypesTableId : TableId<CreatureTypeData>
-    {
-      public CreatureTypesTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, CreatureTypeData> GetIn(GameData gameData) =>
-        gameData.CreatureTypes;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, CreatureTypeData> newValue) =>
-        gameData.WithCreatureTypes(newValue);
-    }
-
-    sealed class AffixTypesTableId : TableId<AffixTypeData>
-    {
-      public AffixTypesTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, AffixTypeData> GetIn(GameData gameData) =>
-        gameData.AffixTypes;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, AffixTypeData> newValue) =>
-        gameData.WithAffixTypes(newValue);
-    }
-
-    sealed class SkillTypesTableId : TableId<SkillTypeData>
-    {
-      public SkillTypesTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, SkillTypeData> GetIn(GameData gameData) =>
-        gameData.SkillTypes;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, SkillTypeData> newValue) =>
-        gameData.WithSkillTypes(newValue);
-    }
-
-    sealed class StatDataTableId : TableId<StatData>
-    {
-      public StatDataTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, StatData> GetIn(GameData gameData) =>
-        gameData.StatData;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, StatData> newValue) =>
-        gameData.WithStatData(newValue);
-    }
-
-    sealed class ItemListsTableId : TableId<StaticItemListData>
-    {
-      public ItemListsTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, StaticItemListData> GetIn(GameData gameData) =>
-        gameData.ItemLists;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, StaticItemListData> newValue) =>
-        gameData.WithItemLists(newValue);
-    }
-
-    sealed class UserModifiersTableId : TableId<ModifierData>
-    {
-      public UserModifiersTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, ModifierData> GetIn(GameData gameData) =>
-        gameData.UserModifiers;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, ModifierData> newValue) =>
-        gameData.WithUserModifiers(newValue);
-    }
-
-    sealed class CollectionTableId : TableId<CreatureItemData>
-    {
-      public CollectionTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, CreatureItemData> GetIn(GameData gameData) =>
-        gameData.Collection;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, CreatureItemData> newValue) =>
-        gameData.WithCollection(newValue);
-    }
-
-    sealed class DeckTableId : TableId<CreatureItemData>
-    {
-      public DeckTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, CreatureItemData> GetIn(GameData gameData) =>
-        gameData.Deck;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, CreatureItemData> newValue) =>
-        gameData.WithDeck(newValue);
-    }
-
-    sealed class StatusEffectsTypesTableId : TableId<StatusEffectTypeData>
-    {
-      public StatusEffectsTypesTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, StatusEffectTypeData> GetIn(GameData gameData) =>
-        gameData.StatusEffects;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, StatusEffectTypeData> newValue) =>
-        gameData.WithStatusEffects(newValue);
-    }
-
-    sealed class BattleDataTableId : SingletonTableId<BattleData>
-    {
-      public BattleDataTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      protected override BattleData GetSingleton(GameData gameData) =>
-        gameData.BattleData;
-
-      protected override GameData WriteSingleton(GameData gameData, BattleData newValue) =>
-        gameData.WithBattleData(newValue);
-    }
-
-    sealed class TriggersTableId : TableId<ITrigger>
-    {
-      public TriggersTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, ITrigger> GetIn(GameData gameData) =>
-        gameData.Triggers;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, ITrigger> newValue) =>
-        gameData.WithTriggers(newValue);
-    }
-
-    sealed class GlobalsTableId : TableId<GlobalData>
-    {
-      public GlobalsTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, GlobalData> GetIn(GameData gameData) =>
-        gameData.Globals;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, GlobalData> newValue) =>
-        gameData.WithGlobals(newValue);
-    }
-
-    sealed class HexesTableId : TableId<HexData>
-    {
-      public HexesTableId(int id, string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, HexData> GetIn(GameData gameData) =>
-        gameData.Hexes;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, HexData> newValue) =>
-        gameData.WithHexes(newValue);
-    }
-
-    sealed class KingdomsTableId : TableId<KingdomData>
-    {
-      public KingdomsTableId(int id, [NotNull] string tableName) : base(id, tableName)
-      {
-      }
-
-      public override ImmutableDictionary<int, KingdomData> GetIn(GameData gameData) =>
-        gameData.Kingdoms;
-
-      public override GameData Write(GameData gameData, ImmutableDictionary<int, KingdomData> newValue) =>
-        gameData.WithKingdoms(newValue);
-    }
   }
 }

@@ -118,7 +118,9 @@ namespace Nighthollow.Data
       _events = _events.Add(new EntityEvent(EntityEventType.Added, tableId, newId));
       _events = _events.Add(new EntityEvent(EntityEventType.Updated, TableId.TableMetadata, tableId.Id));
       _gameData = tableId.Write(
-        _gameData.WithTableMetadata(_gameData.TableMetadata.SetItem(tableId.Id, metadata.WithNextId(newId + 1))),
+        _gameData.WithTable(
+          TableId.TableMetadata,
+          _gameData.TableMetadata.SetItem(tableId.Id, metadata.WithNextId(newId + 1))),
         tableId.GetIn(_gameData).SetItem(newId, value));
       _writeRequired = true;
     }
@@ -133,7 +135,9 @@ namespace Nighthollow.Data
         events.Add(new EntityEvent(EntityEventType.Added, tableId, newId));
         events.Add(new EntityEvent(EntityEventType.Updated, TableId.TableMetadata, tableId.Id));
         _gameData = tableId.Write(
-          _gameData.WithTableMetadata(_gameData.TableMetadata.SetItem(tableId.Id, metadata.WithNextId(newId + 1))),
+          _gameData.WithTable(
+            TableId.TableMetadata,
+            _gameData.TableMetadata.SetItem(tableId.Id, metadata.WithNextId(newId + 1))),
           tableId.GetIn(_gameData).SetItem(newId, value));
       }
 

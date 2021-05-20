@@ -20,56 +20,41 @@ using Nighthollow.World.Data;
 
 namespace Nighthollow.Data
 {
-  public sealed partial class GameData
+  public sealed class GameData
   {
-    public GameData(
-      BattleData? battleData = null,
-      ImmutableDictionary<int, TableMetadata>? tableMetadata = null,
-      ImmutableDictionary<int, CreatureTypeData>? creatureTypes = null,
-      ImmutableDictionary<int, AffixTypeData>? affixTypes = null,
-      ImmutableDictionary<int, SkillTypeData>? skillTypes = null,
-      ImmutableDictionary<int, StatData>? statData = null,
-      ImmutableDictionary<int, StaticItemListData>? creatureLists = null,
-      ImmutableDictionary<int, ModifierData>? userModifiers = null,
-      ImmutableDictionary<int, CreatureItemData>? collection = null,
-      ImmutableDictionary<int, CreatureItemData>? deck = null,
-      ImmutableDictionary<int, StatusEffectTypeData>? statusEffects = null,
-      ImmutableDictionary<int, ITrigger>? triggers = null,
-      ImmutableDictionary<int, GlobalData>? globals = null,
-      ImmutableDictionary<int, HexData>? hexes = null,
-      ImmutableDictionary<int, KingdomData>? kingdoms = null)
+    readonly ImmutableDictionary<int, object> _data;
+
+    public GameData() : this(ImmutableDictionary<int, object>.Empty)
     {
-      BattleData = battleData ?? new BattleData();
-      TableMetadata = tableMetadata ?? ImmutableDictionary<int, TableMetadata>.Empty;
-      CreatureTypes = creatureTypes ?? ImmutableDictionary<int, CreatureTypeData>.Empty;
-      AffixTypes = affixTypes ?? ImmutableDictionary<int, AffixTypeData>.Empty;
-      SkillTypes = skillTypes ?? ImmutableDictionary<int, SkillTypeData>.Empty;
-      StatData = statData ?? ImmutableDictionary<int, StatData>.Empty;
-      ItemLists = creatureLists ?? ImmutableDictionary<int, StaticItemListData>.Empty;
-      UserModifiers = userModifiers ?? ImmutableDictionary<int, ModifierData>.Empty;
-      Collection = collection ?? ImmutableDictionary<int, CreatureItemData>.Empty;
-      Deck = deck ?? ImmutableDictionary<int, CreatureItemData>.Empty;
-      StatusEffects = statusEffects ?? ImmutableDictionary<int, StatusEffectTypeData>.Empty;
-      Triggers = triggers ?? ImmutableDictionary<int, ITrigger>.Empty;
-      Globals = globals ?? ImmutableDictionary<int, GlobalData>.Empty;
-      Hexes = hexes ?? ImmutableDictionary<int, HexData>.Empty;
-      Kingdoms = kingdoms ?? ImmutableDictionary<int, KingdomData>.Empty;
     }
 
-    [Field] public BattleData BattleData { get; }
-    [Field] public ImmutableDictionary<int, TableMetadata> TableMetadata { get; }
-    [Field] public ImmutableDictionary<int, CreatureTypeData> CreatureTypes { get; }
-    [Field] public ImmutableDictionary<int, AffixTypeData> AffixTypes { get; }
-    [Field] public ImmutableDictionary<int, SkillTypeData> SkillTypes { get; }
-    [Field] public ImmutableDictionary<int, StatData> StatData { get; }
-    [Field] public ImmutableDictionary<int, StaticItemListData> ItemLists { get; }
-    [Field] public ImmutableDictionary<int, ModifierData> UserModifiers { get; }
-    [Field] public ImmutableDictionary<int, CreatureItemData> Collection { get; }
-    [Field] public ImmutableDictionary<int, CreatureItemData> Deck { get; }
-    [Field] public ImmutableDictionary<int, StatusEffectTypeData> StatusEffects { get; }
-    [Field] public ImmutableDictionary<int, ITrigger> Triggers { get; }
-    [Field] public ImmutableDictionary<int, GlobalData> Globals { get; }
-    [Field] public ImmutableDictionary<int, HexData> Hexes { get; }
-    [Field] public ImmutableDictionary<int, KingdomData> Kingdoms { get; }
+    GameData(ImmutableDictionary<int, object> data)
+    {
+      _data = data;
+    }
+
+    public ImmutableDictionary<int, T> GetTable<T>(TableId<T> tableId) where T : class =>
+      _data.ContainsKey(tableId.Id)
+        ? (ImmutableDictionary<int, T>) _data[tableId.Id]
+        : ImmutableDictionary<int, T>.Empty;
+
+    public GameData WithTable<T>(TableId<T> tableId, ImmutableDictionary<int, T> table) where T : class =>
+      new GameData(_data.SetItem(tableId.Id, table));
+
+    public BattleData BattleData => TableId.BattleData.GetSingleton(this);
+    public ImmutableDictionary<int, TableMetadata> TableMetadata => GetTable(TableId.TableMetadata);
+    public ImmutableDictionary<int, CreatureTypeData> CreatureTypes => GetTable(TableId.CreatureTypes);
+    public ImmutableDictionary<int, AffixTypeData> AffixTypes => GetTable(TableId.AffixTypes);
+    public ImmutableDictionary<int, SkillTypeData> SkillTypes => GetTable(TableId.SkillTypes);
+    public ImmutableDictionary<int, StatData> StatData => GetTable(TableId.Stats);
+    public ImmutableDictionary<int, StaticItemListData> ItemLists => GetTable(TableId.ItemLists);
+    public ImmutableDictionary<int, ModifierData> UserModifiers => GetTable(TableId.UserModifiers);
+    public ImmutableDictionary<int, CreatureItemData> Collection => GetTable(TableId.Collection);
+    public ImmutableDictionary<int, CreatureItemData> Deck => GetTable(TableId.Deck);
+    public ImmutableDictionary<int, StatusEffectTypeData> StatusEffects => GetTable(TableId.StatusEffectTypes);
+    public ImmutableDictionary<int, ITrigger> Triggers => GetTable(TableId.Triggers);
+    public ImmutableDictionary<int, GlobalData> Globals => GetTable(TableId.Globals);
+    public ImmutableDictionary<int, HexData> Hexes => GetTable(TableId.Hexes);
+    public ImmutableDictionary<int, KingdomData> Kingdoms => GetTable(TableId.Kingdoms);
   }
 }

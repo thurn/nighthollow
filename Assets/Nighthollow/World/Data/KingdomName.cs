@@ -33,7 +33,7 @@ namespace Nighthollow.World.Data
   {
     public static string GetName(this KingdomName name) => name switch
     {
-      KingdomName.Nighthollow => "Nighthollow",
+      KingdomName.Nighthollow => "Cursed Kingdom of Nighthollow",
       KingdomName.Ivywood => "Ivywood",
       KingdomName.Frostford => "Frostford",
       KingdomName.Uldreyin => "Uldreyin",
