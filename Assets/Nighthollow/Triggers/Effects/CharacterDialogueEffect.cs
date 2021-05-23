@@ -29,7 +29,7 @@ namespace Nighthollow.Triggers.Effects
   }
 
   [MessagePackObject]
-  public sealed partial class CharacterDialogueEffect : IEffect<TriggerEvent>
+  public sealed partial class CharacterDialogueEffect : IEffect<IEvent>
   {
     public static Description Describe => new Description(
       "display the dialogue",
@@ -62,7 +62,7 @@ namespace Nighthollow.Triggers.Effects
       {
         action = () =>
         {
-          scope.Get(Key.TriggerService).InvokeTriggerId(scope.ClearDependencies(), OnContinueTriggerId.Value);
+          scope.Get(Key.TriggerService).InvokeTriggerId(OnContinueTriggerId.Value, scope.ClearDependencies());
         };
       }
 

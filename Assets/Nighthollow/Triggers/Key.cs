@@ -17,6 +17,7 @@ using Nighthollow.Interface;
 using Nighthollow.Services;
 using Nighthollow.World;
 using UnityEngine;
+// ReSharper disable UnusedTypeParameter
 
 #nullable enable
 
@@ -37,15 +38,26 @@ namespace Nighthollow.Triggers
   public static class Key
   {
     public static readonly MutatorKey<Database> Database = new MutatorKey<Database>();
+
     public static readonly Key<GameData> GameData = new Key<GameData>();
+
     public static readonly MutatorKey<AssetService> AssetService = new MutatorKey<AssetService>();
+
     public static readonly MutatorKey<WorldMapRenderer> WorldMapRenderer = new MutatorKey<WorldMapRenderer>();
+
     public static readonly MutatorKey<WorldMapController> WorldMapController = new MutatorKey<WorldMapController>();
+
     public static readonly MutatorKey<Camera> MainCamera = new MutatorKey<Camera>();
+
     public static readonly MutatorKey<ScreenController> ScreenController = new MutatorKey<ScreenController>();
+
     public static readonly MutatorKey<TriggerService> TriggerService = new MutatorKey<TriggerService>();
 
     public static readonly MutatorKey<CreatureService.Controller> CreatureController =
       new MutatorKey<CreatureService.Controller>();
+
+    public static readonly Key<CreatureId> Creature = new Key<CreatureId>();
+
+    public static readonly Key<int> Hex = new Key<int>();
   }
 }

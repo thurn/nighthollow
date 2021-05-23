@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
-
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
@@ -21,12 +19,12 @@ namespace Nighthollow.Triggers.Events
   /// <summary>
   /// Fired after the user accepts their opening hand and clicks the button to start a battle.
   /// </summary>
-  public sealed class BattleStartedEvent : BattleEvent
+  public sealed class BattleStartedEvent : IEvent
   {
     public static Description Describe => new Description("a battle is started");
 
-    public BattleStartedEvent(BattleServiceRegistry registry) : base(registry)
-    {
-    }
+    public EventType Type => EventType.BattleStarted;
+
+    public Scope AddBindings(Scope.Builder builder) => builder.Build();
   }
 }

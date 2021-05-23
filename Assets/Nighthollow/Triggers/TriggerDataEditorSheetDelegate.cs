@@ -54,7 +54,7 @@ namespace Nighthollow.Triggers
           .Concat(Enumerable.Repeat(300, content!.Max(l => l.Count) - 1)).ToList());
     }
 
-    List<List<ICellContent>> GetContent<TEvent>(TriggerData<TEvent> triggerData) where TEvent : TriggerEvent
+    List<List<ICellContent>> GetContent<TEvent>(TriggerData<TEvent> triggerData) where TEvent : IEvent
     {
       var result = new List<List<ICellContent>>
       {
@@ -70,7 +70,7 @@ namespace Nighthollow.Triggers
       return result;
     }
 
-    List<ICellContent> HeaderRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : TriggerEvent
+    List<ICellContent> HeaderRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : IEvent
     {
       return new List<ICellContent>
       {
@@ -82,7 +82,7 @@ namespace Nighthollow.Triggers
       };
     }
 
-    List<ICellContent> EventRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : TriggerEvent
+    List<ICellContent> EventRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : IEvent
     {
       return new List<ICellContent>
       {
@@ -96,7 +96,7 @@ namespace Nighthollow.Triggers
       .ToList();
 
     List<ICellContent> ConditionRow<TEvent>(TriggerData<TEvent> triggerData, int index, ICondition<TEvent> condition)
-      where TEvent : TriggerEvent
+      where TEvent : IEvent
     {
       var conditionPath =
         _reflectivePath.Property(triggerData.GetType().GetProperty(nameof(TriggerData<TEvent>.Conditions))!)
@@ -115,7 +115,7 @@ namespace Nighthollow.Triggers
       return result;
     }
 
-    List<ICellContent> AddConditionRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : TriggerEvent
+    List<ICellContent> AddConditionRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : IEvent
     {
       var types = ConditionTypes().ToList();
       return new List<ICellContent>
@@ -138,7 +138,7 @@ namespace Nighthollow.Triggers
       .Select(attribute => attribute.SubType);
 
     List<ICellContent> EffectRow<TEvent>(TriggerData<TEvent> triggerData, int index, IEffect<TEvent> effect)
-      where TEvent : TriggerEvent
+      where TEvent : IEvent
     {
       var effectPath =
         _reflectivePath.Property(triggerData.GetType().GetProperty(nameof(TriggerData<TEvent>.Effects))!)
@@ -157,7 +157,7 @@ namespace Nighthollow.Triggers
       return result;
     }
 
-    List<ICellContent> AddEffectRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : TriggerEvent
+    List<ICellContent> AddEffectRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : IEvent
     {
       var types = EffectTypes().Where(t => typeof(IEffect<TEvent>).IsAssignableFrom(t)).ToList();
       return new List<ICellContent>

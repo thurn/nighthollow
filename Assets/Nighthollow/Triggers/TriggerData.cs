@@ -47,7 +47,7 @@ namespace Nighthollow.Triggers
   }
 
   [MessagePackFormatter(typeof(TriggerDataFormatter<>))]
-  public sealed class TriggerData<TEvent> : ITrigger where TEvent : TriggerEvent
+  public sealed class TriggerData<TEvent> : ITrigger where TEvent : IEvent
   {
     public TriggerData(
       string? name = null,

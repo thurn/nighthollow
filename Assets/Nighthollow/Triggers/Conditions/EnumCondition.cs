@@ -33,7 +33,7 @@ namespace Nighthollow.Triggers.Conditions
   /// Parent class for standard operations on enum values
   /// </summary>
   public abstract class EnumCondition<TEvent, TEnum> : ICondition<TEvent>
-    where TEvent : TriggerEvent where TEnum : struct, Enum
+    where TEvent : IEvent where TEnum : struct, Enum
   {
     protected EnumCondition(TEnum target, EnumOperator op)
     {

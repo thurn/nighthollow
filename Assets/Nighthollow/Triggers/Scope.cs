@@ -68,15 +68,21 @@ namespace Nighthollow.Triggers
         _builder = parent?._bindings.ToBuilder() ?? ImmutableDictionary.CreateBuilder<IKey, object>();
       }
 
-      public Builder AddBinding<T>(Key<T> key, T value) where T : class
-      {
-        _builder[key] = Errors.CheckNotNull(value);
-        return this;
-      }
+      public Builder AddBinding<T>(Key<T> key, T value) where T : class =>
+        AddBindingInternal(key, Errors.CheckNotNull(value));
 
-      public Builder AddBinding<T>(MutatorKey<T> key, T value) where T : class
+      public Builder AddValueBinding<T>(Key<T> key, T value) where T : struct =>
+        AddBindingInternal(key, value);
+
+      public Builder AddBinding<T>(MutatorKey<T> key, T value) where T : class =>
+        AddBindingInternal(key, Errors.CheckNotNull(value));
+
+      public Builder AddValueBinding<T>(MutatorKey<T> key, T value) where T : struct =>
+        AddBindingInternal(key, value);
+
+      Builder AddBindingInternal(IKey key, object value)
       {
-        _builder[key] = Errors.CheckNotNull(value);
+        _builder[key] = value;
         return this;
       }
 

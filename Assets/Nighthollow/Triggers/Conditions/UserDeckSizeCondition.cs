@@ -23,7 +23,7 @@ namespace Nighthollow.Triggers.Conditions
   /// Integer condition based on the number of cards in the user's deck.
   /// </summary>
   [MessagePackObject]
-  public sealed class UserDeckSizeCondition : IntegerCondition<TriggerEvent>
+  public sealed class UserDeckSizeCondition : IntegerCondition<IEvent>
   {
     public UserDeckSizeCondition(int target, IntegerOperator op) : base(target, op)
     {
@@ -35,7 +35,7 @@ namespace Nighthollow.Triggers.Conditions
 
     public override int GetSource(IScope scope) => scope.Get(Key.GameData).Deck.Count;
 
-    protected override IntegerCondition<TriggerEvent> Clone(int target, IntegerOperator op) =>
+    protected override IntegerCondition<IEvent> Clone(int target, IntegerOperator op) =>
       new UserDeckSizeCondition(target, op);
 
     public static Description Describe => new Description("the user's deck size", nameof(Operator), nameof(Target));

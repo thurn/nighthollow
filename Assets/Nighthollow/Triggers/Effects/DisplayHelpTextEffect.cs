@@ -26,7 +26,7 @@ namespace Nighthollow.Triggers.Effects
   /// Displays a tooltip with gameplay tutorial information
   /// </summary>
   [MessagePackObject]
-  public sealed partial class DisplayHelpTextEffect : IEffect<TriggerEvent>
+  public sealed partial class DisplayHelpTextEffect : IEffect<IEvent>
   {
     public static Description Describe => new Description(
       "display the helper text",

@@ -20,7 +20,7 @@ using MessagePack;
 namespace Nighthollow.Triggers.Effects
 {
   [MessagePackObject]
-  public sealed class PreventDefaultEffect : IEffect<TriggerEvent>
+  public sealed class PreventDefaultEffect : IEffect<IEvent>
   {
     public static Description Describe => new Description("request to prevent the default behavior for this event");
 

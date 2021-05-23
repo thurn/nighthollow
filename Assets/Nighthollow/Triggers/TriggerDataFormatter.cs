@@ -23,7 +23,7 @@ using MessagePack.Formatters;
 namespace Nighthollow.Triggers
 {
   public sealed class TriggerDataFormatter<TEvent> : IMessagePackFormatter<TriggerData<TEvent>>
-    where TEvent : TriggerEvent
+    where TEvent : IEvent
   {
     public void Serialize(
       ref MessagePackWriter writer,

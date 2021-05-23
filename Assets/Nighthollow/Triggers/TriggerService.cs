@@ -24,59 +24,60 @@ namespace Nighthollow.Triggers
 {
   public sealed class TriggerService
   {
-    readonly Database _database;
-    readonly GlobalsService _globals;
+    readonly ServiceRegistry _registry;
     bool _initialized;
 
-    public TriggerService(Database database, GlobalsService globals)
+    public TriggerService(ServiceRegistry registry)
     {
-      _database = database;
-      _globals = globals;
+      _registry = registry;
     }
 
     void Initialize()
     {
-      if (_globals.GetBool(GlobalId.ShouldAutoenableTriggers))
+      var database = _registry.Database;
+      if (_registry.Globals.GetBool(GlobalId.ShouldAutoenableTriggers))
       {
-        foreach (var pair in _database.Snapshot().Triggers.Where(pair => pair.Value?.Disabled == true))
+        foreach (var pair in database.Snapshot().Triggers.Where(pair => pair.Value?.Disabled == true))
         {
-          _database.Update(TableId.Triggers, pair.Key, t => t.WithDisabled(false));
+          database.Update(TableId.Triggers, pair.Key, t => t.WithDisabled(false));
         }
       }
 
       _initialized = true;
     }
 
-    public void Invoke<TEvent>(Scope scope, TriggerOutput? output = null) where TEvent : TriggerEvent
+    public void Invoke<TEvent>(TEvent triggerEvent, TriggerOutput? output = null) where TEvent : IEvent
     {
       if (!_initialized)
       {
         Initialize();
       }
 
-      var gameData = _database.Snapshot();
+      var gameData = _registry.Database.Snapshot();
+      var scope = triggerEvent.AddBindings(Scope.CreateBuilder(_registry.Scope));
+
       foreach (var pair in gameData.Triggers)
       {
         if (pair.Value is TriggerData<TEvent> trigger)
         {
-          InvokeInternal(pair.Key, trigger, scope, output);
+          InvokeInternal(pair.Key, scope, trigger, output);
         }
       }
     }
 
-    public void InvokeTriggerId(Scope scope, int triggerId, TriggerOutput? output = null)
+    public void InvokeTriggerId(int triggerId, Scope scope, TriggerOutput? output = null)
     {
-      var t = _database.Snapshot().Triggers[triggerId];
+      var t = _registry.Database.Snapshot().Triggers[triggerId];
       switch (t)
       {
         case TriggerData<WorldTriggerInvokedEvent> worldTrigger:
-          InvokeInternal(triggerId, worldTrigger, scope, output, true);
+          InvokeInternal(triggerId, scope, worldTrigger, output, true);
           break;
         case TriggerData<BattleTriggerInvokedEvent> battleTrigger:
-          InvokeInternal(triggerId, battleTrigger, scope, output, true);
+          InvokeInternal(triggerId, scope, battleTrigger, output, true);
           break;
         case TriggerData<GlobalTriggerInvokedEvent> globalTrigger:
-          InvokeInternal(triggerId, globalTrigger, scope, output, true);
+          InvokeInternal(triggerId, scope, globalTrigger, output, true);
           break;
         default:
           throw new InvalidEnumArgumentException(
@@ -86,17 +87,17 @@ namespace Nighthollow.Triggers
 
     void InvokeInternal<TEvent>(
       int triggerId,
-      TriggerData<TEvent> trigger,
       Scope scope,
+      TriggerData<TEvent> trigger,
       TriggerOutput? output = null,
-      bool bypassEnabledCheck = false) where TEvent : TriggerEvent
+      bool bypassEnabledCheck = false) where TEvent : IEvent
     {
       if (bypassEnabledCheck || !trigger.Disabled)
       {
         var fired = trigger.Invoke(scope, output);
         if (fired && !trigger.Looping)
         {
-          _database.Update(TableId.Triggers, triggerId, t => t.WithDisabled(true));
+          _registry.Database.Update(TableId.Triggers, triggerId, t => t.WithDisabled(true));
         }
       }
     }

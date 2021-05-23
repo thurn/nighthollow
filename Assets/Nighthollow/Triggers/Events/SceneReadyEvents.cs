@@ -12,34 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
-
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
 {
-  public sealed class WorldSceneReadyEvent : WorldEvent
+  public sealed class WorldSceneReadyEvent : IEvent
   {
-    public WorldSceneReadyEvent(WorldServiceRegistry registry) : base(registry)
-    {
-    }
-
     public static Description Describe => new Description("the world scene is loaded");
+
+    public EventType Type => EventType.WorldSceneReady;
+
+    public Scope AddBindings(Scope.Builder builder) => builder.Build();
   }
 
-  public sealed class BattleSceneReadyEvent : BattleEvent
+  public sealed class BattleSceneReadyEvent : IEvent
   {
-    public BattleSceneReadyEvent(BattleServiceRegistry registry) : base(registry)
-    {
-    }
-
     public static Description Describe => new Description("the battle scene is loaded");
+
+    public EventType Type => EventType.BattleSceneReady;
+
+    public Scope AddBindings(Scope.Builder builder) => builder.Build();
   }
 
-  public sealed class SchoolSelectionSceneReadyEvent : TriggerEvent
+  public sealed class SchoolSelectionSceneReadyEvent : IEvent
   {
-    public SchoolSelectionSceneReadyEvent(ServiceRegistry registry) : base(registry)
-    {
-    }
+    public static Description Describe => new Description("the school selection scene is loaded");
+
+    public EventType Type => EventType.SchoolSelectionSceneReady;
+
+    public Scope AddBindings(Scope.Builder builder) => builder.Build();
   }
 }

@@ -33,7 +33,7 @@ namespace Nighthollow.Triggers.Conditions
     IsGreaterThanOrEqualTo = 6
   }
 
-  public abstract class IntegerCondition<TEvent> : ICondition<TEvent> where TEvent : TriggerEvent
+  public abstract class IntegerCondition<TEvent> : ICondition<TEvent> where TEvent : IEvent
   {
     protected IntegerCondition(int target, IntegerOperator op)
     {

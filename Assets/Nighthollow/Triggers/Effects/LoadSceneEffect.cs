@@ -32,7 +32,7 @@ namespace Nighthollow.Triggers.Effects
   }
 
   [MessagePackObject]
-  public sealed partial class LoadSceneEffect : IEffect<TriggerEvent>
+  public sealed partial class LoadSceneEffect : IEffect<IEvent>
   {
     public static Description Describe => new Description("load the scene", nameof(SceneName));
 

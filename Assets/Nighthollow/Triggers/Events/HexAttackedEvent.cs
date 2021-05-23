@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
-
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
@@ -21,15 +19,19 @@ namespace Nighthollow.Triggers.Events
   /// <summary>
   /// Fired when the user initiates an attack on a hex
   /// </summary>
-  public sealed class HexAttackedEvent : WorldEvent
+  public sealed class HexAttackedEvent : IEvent
   {
     public static Description Describe => new Description("the user attacks a hex");
 
-    public HexAttackedEvent(WorldServiceRegistry registry, int hexId) : base(registry)
+    public HexAttackedEvent(int hexId)
     {
       HexId = hexId;
     }
 
     public int HexId { get; }
+
+    public EventType Type => EventType.HexAttacked;
+
+    public Scope AddBindings(Scope.Builder builder) => builder.AddValueBinding(Key.Hex, HexId).Build();
   }
 }

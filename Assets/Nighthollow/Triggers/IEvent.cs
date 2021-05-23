@@ -14,14 +14,12 @@
 
 #nullable enable
 
-namespace Nighthollow.Triggers.Events
+namespace Nighthollow.Triggers
 {
-  public sealed class DrewOpeningHandEvent : IEvent
+  public interface IEvent
   {
-    public static Description Describe => new Description("an opening hand is drawn");
+    EventType Type { get; }
 
-    public EventType Type => EventType.DrewOpeningHand;
-
-    public Scope AddBindings(Scope.Builder builder) => builder.Build();
+    Scope AddBindings(Scope.Builder builder);
   }
 }

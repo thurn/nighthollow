@@ -18,12 +18,19 @@ using Nighthollow.Services;
 
 namespace Nighthollow.Triggers.Events
 {
-  public sealed class UserCreaturePlayedEvent : CreatureEvent
+  public sealed class UserCreaturePlayedEvent : IEvent
   {
     public static Description Describe => new Description("the user plays a creature");
 
-    public UserCreaturePlayedEvent(BattleServiceRegistry registry, CreatureId creatureId) : base(registry, creatureId)
+    public UserCreaturePlayedEvent(CreatureId creatureId)
     {
+      Self = creatureId;
     }
+
+    public CreatureId Self { get; }
+
+    public EventType Type => EventType.UserCreaturePlayed;
+
+    public Scope AddBindings(Scope.Builder builder) => builder.AddValueBinding(Key.Creature, Self).Build();
   }
 }

@@ -30,7 +30,7 @@ namespace Nighthollow.Triggers
   {
   }
 
-  public interface IEffect<in TEvent> : IEffect where TEvent : TriggerEvent
+  public interface IEffect<in TEvent> : IEffect where TEvent : IEvent
   {
     ImmutableHashSet<IKey> Dependencies { get; }
 

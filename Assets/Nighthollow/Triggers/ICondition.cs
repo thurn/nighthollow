@@ -25,7 +25,7 @@ namespace Nighthollow.Triggers
   {
   }
 
-  public interface ICondition<in TEvent> : ICondition where TEvent : TriggerEvent
+  public interface ICondition<in TEvent> : ICondition where TEvent : IEvent
   {
     ImmutableHashSet<IKey> Dependencies { get; }
 

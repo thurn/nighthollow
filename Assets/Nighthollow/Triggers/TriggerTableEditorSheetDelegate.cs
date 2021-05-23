@@ -86,7 +86,7 @@ namespace Nighthollow.Triggers
           new ViewChildButtonCellContent(path),
           RowDeleteButton(entityId),
           _category == TriggerCategory.Debug
-            ? new ButtonCellContent(">", () => { _registry.TriggerService.InvokeTriggerId(_registry.Scope, entityId); })
+            ? new ButtonCellContent(">", () => { _registry.TriggerService.InvokeTriggerId(entityId, _registry.Scope); })
             : null,
           new ReflectivePathCellContent(path.Property(trigger.GetType().GetProperty("Name")!)),
           new ReflectivePathCellContent(path.Property(trigger.GetType().GetProperty("Category")!)),
@@ -116,7 +116,7 @@ namespace Nighthollow.Triggers
         .Select(attribute => attribute.SubType.GetGenericArguments()[0])
         .ToList();
 
-    void AddNewTrigger<TEvent>(ReflectivePath path) where TEvent : TriggerEvent
+    void AddNewTrigger<TEvent>(ReflectivePath path) where TEvent : IEvent
     {
       path.Database.Insert(TableId.Triggers, new TriggerData<TEvent>(
         "New Trigger",

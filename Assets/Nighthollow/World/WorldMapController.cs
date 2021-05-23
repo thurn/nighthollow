@@ -75,7 +75,8 @@ namespace Nighthollow.World
     public void OnHexSelected(HexPosition hexPosition, Vector3 screenPosition, Action onComplete)
     {
       var gameData = _registry.Database.Snapshot();
-      var hexData = gameData.Hexes[_hexIndex[hexPosition]];
+      var hexId = _hexIndex[hexPosition];
+      var hexData = gameData.Hexes[hexId];
       var builder = new TooltipBuilder(
         hexData.HexType.GetName(),
         InterfaceUtils.ScreenPointToInterfacePoint(screenPosition))
@@ -103,7 +104,7 @@ namespace Nighthollow.World
 
       if (CanAttack(hexPosition, hexData, gameData))
       {
-        builder.AppendButton("Attack!", AttackHex);
+        builder.AppendButton("Attack!", () => AttackHex(hexId));
       }
 
       _registry.ScreenController.Get(ScreenController.Tooltip).Show(builder);
@@ -117,11 +118,11 @@ namespace Nighthollow.World
                hex.OwningKingdom == _nighthollowKingdomId && HexUtils.AreAdjacent(hex.Position, hexPosition));
     }
 
-    public void AttackHex()
+    public void AttackHex(int hexId)
     {
       _registry.ScreenController.Get(ScreenController.Tooltip).Hide();
       var triggerOutput = new TriggerOutput();
-      _registry.TriggerService.Invoke<HexAttackedEvent>(_registry.Scope, triggerOutput);
+      _registry.TriggerService.Invoke(new HexAttackedEvent(hexId), triggerOutput);
       if (!triggerOutput.PreventDefault)
       {
         SceneManager.LoadScene("Battle");

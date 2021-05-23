@@ -22,7 +22,7 @@ using UnityEngine;
 namespace Nighthollow.Triggers.Effects
 {
   [MessagePackObject]
-  public sealed partial class CenterCameraOnHexEffect : IEffect<WorldEvent>
+  public sealed partial class CenterCameraOnHexEffect : IEffect<IEvent>
   {
     public static Description Describe => new Description(
       "center the camera on the hex",

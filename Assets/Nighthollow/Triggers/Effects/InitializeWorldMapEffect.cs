@@ -30,7 +30,7 @@ namespace Nighthollow.Triggers.Effects
   /// initial game states.
   /// </summary>
   [MessagePackObject]
-  public sealed class InitializeWorldMapEffect : IEffect<WorldEvent>
+  public sealed class InitializeWorldMapEffect : IEffect<IEvent>
   {
     public static Description Describe => new Description("initialize the world map");
 

@@ -38,7 +38,6 @@ namespace Nighthollow.Services
       MainCamera = mainCamera;
       ObjectPoolService = new ObjectPoolService();
       Globals = new GlobalsService(database);
-      TriggerService = new TriggerService(Database, Globals);
     }
 
     Scope? _scope;
@@ -57,6 +56,7 @@ namespace Nighthollow.Services
     }
 
     public Database Database { get; }
+
     public AssetService AssetService { get; }
 
     ScreenController? _screenController;
@@ -67,6 +67,8 @@ namespace Nighthollow.Services
     public Camera MainCamera { get; }
     public ObjectPoolService ObjectPoolService { get; }
     public GlobalsService Globals { get; }
-    public TriggerService TriggerService { get; }
+
+    TriggerService? _triggerService;
+    public TriggerService TriggerService => _triggerService ??= new TriggerService(this);
   }
 }

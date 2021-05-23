@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Services;
-
 #nullable enable
 
-namespace Nighthollow.Triggers.Events
+namespace Nighthollow.Triggers
 {
-  public abstract class CreatureEvent : BattleEvent
+  public enum EventType
   {
-    protected CreatureEvent(BattleServiceRegistry registry, CreatureId creatureId) : base(registry)
-    {
-      CreatureId = creatureId;
-    }
-
-    public CreatureId CreatureId { get; }
+    Unknown = 0,
+    BattleStarted = 1,
+    DrewOpeningHand = 2,
+    EnemyCreatureSpawned = 3,
+    HexAttacked = 4,
+    WorldSceneReady = 5,
+    BattleSceneReady = 6,
+    SchoolSelectionSceneReady = 7,
+    TriggerInvoked = 8,
+    UserCreaturePlayed = 9
   }
 }
