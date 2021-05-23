@@ -52,7 +52,7 @@ namespace Nighthollow.World
         _staticAssets);
 
       _registry.ScreenController.Show(ScreenController.AdvisorBar);
-      _registry.TriggerService.Invoke(new WorldSceneReadyEvent(_registry));
+      _registry.TriggerService.Invoke<WorldSceneReadyEvent>(_registry.Scope);
       _cameraMover.Initialize(_registry);
     }
   }

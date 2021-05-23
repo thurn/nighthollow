@@ -41,6 +41,16 @@ namespace Nighthollow.Services
       TriggerService = new TriggerService(Database, Globals);
     }
 
+    Scope? _scope;
+
+    public virtual Scope Scope => _scope ??= Scope.CreateBuilder()
+      .AddBinding(Key.Database, Database)
+      .AddBinding(Key.AssetService, AssetService)
+      .AddBinding(Key.ScreenController, ScreenController)
+      .AddBinding(Key.MainCamera, MainCamera)
+      .AddBinding(Key.TriggerService, TriggerService)
+      .Build();
+
     public virtual void OnUpdate()
     {
       ScreenController.OnUpdate();
@@ -48,6 +58,7 @@ namespace Nighthollow.Services
 
     public Database Database { get; }
     public AssetService AssetService { get; }
+
     ScreenController? _screenController;
 
     public ScreenController ScreenController =>

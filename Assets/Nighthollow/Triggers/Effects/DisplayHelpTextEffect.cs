@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Interface;
 using Nighthollow.Utils;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -58,7 +58,11 @@ namespace Nighthollow.Triggers.Effects
     [Key(2)] public int YPosition { get; }
     [Key(3)] public Direction ArrowDirection { get; }
 
-    public void Execute(TriggerEvent trigger, TriggerOutput? output)
+    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+      Key.ScreenController
+    );
+
+    public void Execute(IEffectScope scope, TriggerOutput? output)
     {
       var element = new VisualElement();
       element.AddToClassList("helper-text");
@@ -83,7 +87,7 @@ namespace Nighthollow.Triggers.Effects
       InterfaceUtils.FadeIn(element, duration: 0.3f);
 
       InterfaceUtils
-        .FindByName<VisualElement>(trigger.Registry.ScreenController.Screen, "HelperTextContainer")
+        .FindByName<VisualElement>(scope.Get(Key.ScreenController).Screen, "HelperTextContainer")
         .Add(element);
     }
   }

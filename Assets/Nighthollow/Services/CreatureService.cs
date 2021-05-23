@@ -181,7 +181,7 @@ namespace Nighthollow.Services
         result.ActivateCreature(_registry.Creatures[creatureId], startingX: startingX);
         if (creatureState.Owner == PlayerName.Enemy)
         {
-          _registry.TriggerService.Invoke(new EnemyCreatureSpawnedEvent(_registry, creatureId));
+          _registry.TriggerService.Invoke<EnemyCreatureSpawnedEvent>(_registry.Scope);
         }
 
         _registry.Invoke(new IOnCreatureActivated.Data(creatureId));
@@ -197,7 +197,7 @@ namespace Nighthollow.Services
           self.MovingCreatures,
           self.PlacedCreatures.SetItem((rank, file), creatureId)));
         _registry.Creatures._components[creatureId].ActivateCreature(_registry.Creatures[creatureId]);
-        _registry.TriggerService.Invoke(new UserCreaturePlayedEvent(_registry, creatureId));
+        _registry.TriggerService.Invoke<UserCreaturePlayedEvent>(_registry.Scope);
         _registry.Invoke(new IOnCreatureActivated.Data(creatureId));
       }
 

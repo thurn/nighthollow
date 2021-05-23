@@ -47,7 +47,7 @@ namespace Nighthollow.Triggers
       _initialized = true;
     }
 
-    public void Invoke<TEvent>(TEvent triggerEvent, TriggerOutput? output = null) where TEvent : TriggerEvent
+    public void Invoke<TEvent>(Scope scope, TriggerOutput? output = null) where TEvent : TriggerEvent
     {
       if (!_initialized)
       {
@@ -59,24 +59,24 @@ namespace Nighthollow.Triggers
       {
         if (pair.Value is TriggerData<TEvent> trigger)
         {
-          InvokeInternal(pair.Key, trigger, triggerEvent, output);
+          InvokeInternal(pair.Key, trigger, scope, output);
         }
       }
     }
 
-    public void InvokeTriggerId(ServiceRegistry registry, int triggerId, TriggerOutput? output = null)
+    public void InvokeTriggerId(Scope scope, int triggerId, TriggerOutput? output = null)
     {
       var t = _database.Snapshot().Triggers[triggerId];
       switch (t)
       {
-        case TriggerData<WorldTriggerInvokedEvent> worldTrigger when registry is WorldServiceRegistry worldRegistry:
-          InvokeInternal(triggerId, worldTrigger, new WorldTriggerInvokedEvent(worldRegistry), output, true);
+        case TriggerData<WorldTriggerInvokedEvent> worldTrigger:
+          InvokeInternal(triggerId, worldTrigger, scope, output, true);
           break;
-        case TriggerData<BattleTriggerInvokedEvent> battleTrigger when registry is BattleServiceRegistry battleRegistry:
-          InvokeInternal(triggerId, battleTrigger, new BattleTriggerInvokedEvent(battleRegistry), output, true);
+        case TriggerData<BattleTriggerInvokedEvent> battleTrigger:
+          InvokeInternal(triggerId, battleTrigger, scope, output, true);
           break;
         case TriggerData<GlobalTriggerInvokedEvent> globalTrigger:
-          InvokeInternal(triggerId, globalTrigger, new GlobalTriggerInvokedEvent(registry), output, true);
+          InvokeInternal(triggerId, globalTrigger, scope, output, true);
           break;
         default:
           throw new InvalidEnumArgumentException(
@@ -87,13 +87,13 @@ namespace Nighthollow.Triggers
     void InvokeInternal<TEvent>(
       int triggerId,
       TriggerData<TEvent> trigger,
-      TEvent triggerEvent,
+      Scope scope,
       TriggerOutput? output = null,
       bool bypassEnabledCheck = false) where TEvent : TriggerEvent
     {
       if (bypassEnabledCheck || !trigger.Disabled)
       {
-        var fired = trigger.Invoke(triggerEvent, output);
+        var fired = trigger.Invoke(scope, output);
         if (fired && !trigger.Looping)
         {
           _database.Update(TableId.Triggers, triggerId, t => t.WithDisabled(true));

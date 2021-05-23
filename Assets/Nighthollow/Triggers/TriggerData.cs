@@ -42,11 +42,7 @@ namespace Nighthollow.Triggers
   {
     public string? Name { get; }
     TriggerCategory Category { get; }
-    bool Looping { get; }
     bool Disabled { get; }
-
-    public string Describe();
-
     public ITrigger WithDisabled(bool disabled);
   }
 
@@ -91,16 +87,16 @@ namespace Nighthollow.Triggers
     /// <summary>
     /// Check trigger conditions and then fire effects if they all pass -- returns true if effects fired.
     /// </summary>
-    public bool Invoke(TEvent triggerEvent, TriggerOutput? output)
+    public bool Invoke(Scope scope, TriggerOutput? output)
     {
-      if (Conditions.Any(condition => !condition.Satisfied(triggerEvent)))
+      if (Conditions.Any(condition => !condition.Satisfied(scope.WithDependencies(condition.Dependencies))))
       {
         return false;
       }
 
       foreach (var effect in Effects)
       {
-        effect.Execute(triggerEvent, output);
+        effect.Execute(scope.WithDependencies(effect.Dependencies), output);
       }
 
       return true;

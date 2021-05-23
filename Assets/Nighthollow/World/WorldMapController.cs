@@ -121,7 +121,7 @@ namespace Nighthollow.World
     {
       _registry.ScreenController.Get(ScreenController.Tooltip).Hide();
       var triggerOutput = new TriggerOutput();
-      _registry.TriggerService.Invoke(new HexAttackedEvent(_registry, 12), triggerOutput);
+      _registry.TriggerService.Invoke<HexAttackedEvent>(_registry.Scope, triggerOutput);
       if (!triggerOutput.PreventDefault)
       {
         SceneManager.LoadScene("Battle");

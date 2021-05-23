@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Triggers.Conditions;
-using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -27,6 +27,8 @@ namespace Nighthollow.Triggers
 
   public interface ICondition<in TEvent> : ICondition where TEvent : TriggerEvent
   {
-    bool Satisfied(TEvent trigger);
+    ImmutableHashSet<IKey> Dependencies { get; }
+
+    bool Satisfied(IScope scope);
   }
 }

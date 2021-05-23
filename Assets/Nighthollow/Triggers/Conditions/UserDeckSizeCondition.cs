@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
 
 #nullable enable
@@ -28,7 +29,11 @@ namespace Nighthollow.Triggers.Conditions
     {
     }
 
-    public override int GetSource(TriggerEvent trigger) => trigger.Data.Deck.Count;
+    public override ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+      Key.GameData
+    );
+
+    public override int GetSource(IScope scope) => scope.Get(Key.GameData).Deck.Count;
 
     protected override IntegerCondition<TriggerEvent> Clone(int target, IntegerOperator op) =>
       new UserDeckSizeCondition(target, op);

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Utils;
 using UnityEngine.SceneManagement;
@@ -42,7 +43,10 @@ namespace Nighthollow.Triggers.Effects
 
     [Key(0)] public SceneName SceneName { get; }
 
-    public void Execute(TriggerEvent trigger, TriggerOutput? output)
+    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    );
+
+    public void Execute(IEffectScope scope, TriggerOutput? output)
     {
       SceneManager.LoadScene(SceneName switch
       {

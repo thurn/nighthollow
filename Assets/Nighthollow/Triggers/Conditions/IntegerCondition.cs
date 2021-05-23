@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Triggers.Events;
@@ -43,9 +44,11 @@ namespace Nighthollow.Triggers.Conditions
     [Key(0)] public int Target { get; }
     [Key(1)] public IntegerOperator Operator { get; }
 
-    public bool Satisfied(TEvent triggerEvent)
+    public abstract ImmutableHashSet<IKey> Dependencies { get; }
+
+    public bool Satisfied(IScope scope)
     {
-      var source = GetSource(triggerEvent);
+      var source = GetSource(scope);
       return Operator switch
       {
         IntegerOperator.Is => source == Target,
@@ -58,7 +61,7 @@ namespace Nighthollow.Triggers.Conditions
       };
     }
 
-    public abstract int GetSource(TEvent triggerEvent);
+    public abstract int GetSource(IScope scope);
 
     protected abstract IntegerCondition<TEvent> Clone(int target, IntegerOperator op);
 

@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates;
+using Nighthollow.Triggers;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -53,6 +54,12 @@ namespace Nighthollow.Services
       MainCanvas = mainCanvas;
       DamageTextService = damageTextService;
     }
+
+    Scope? _scope;
+
+    public override Scope Scope => _scope ??= Scope.CreateBuilder(base.Scope)
+      .AddBinding(Key.CreatureController, CreatureController)
+      .Build();
 
     public Prefabs Prefabs { get; }
     public IStartCoroutine CoroutineRunner { get; }

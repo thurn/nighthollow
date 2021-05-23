@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Data;
+using Nighthollow.Triggers;
 using Nighthollow.World;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -32,6 +33,13 @@ namespace Nighthollow.Services
     {
       StaticAssets = staticAssets;
     }
+
+    Scope? _scope;
+
+    public override Scope Scope => _scope ??= Scope.CreateBuilder(base.Scope)
+      .AddBinding(Key.WorldMapRenderer, WorldMapRenderer)
+      .AddBinding(Key.WorldMapController, WorldMapController)
+      .Build();
 
     WorldMapRenderer? _worldMap;
 

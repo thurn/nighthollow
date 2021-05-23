@@ -13,9 +13,9 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Interface;
-using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -50,18 +50,23 @@ namespace Nighthollow.Triggers.Effects
     [Key(1)] public string Text { get; }
     [TriggerId] [Key(2)] public int? OnContinueTriggerId { get; }
 
-    public void Execute(TriggerEvent trigger, TriggerOutput? output)
+    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+      Key.TriggerService,
+      Key.ScreenController
+    );
+
+    public void Execute(IEffectScope scope, TriggerOutput? output)
     {
       Action? action = null;
       if (OnContinueTriggerId.HasValue)
       {
         action = () =>
         {
-          trigger.Registry.TriggerService.InvokeTriggerId(trigger.Registry, OnContinueTriggerId.Value);
+          scope.Get(Key.TriggerService).InvokeTriggerId(scope.ClearDependencies(), OnContinueTriggerId.Value);
         };
       }
 
-      trigger.Registry.ScreenController.Get(ScreenController.CharacterDialogue).Show(
+      scope.Get(Key.ScreenController).Get(ScreenController.CharacterDialogue).Show(
         new CharacterDialogue.Args(CharacterName, Text, action), animate: true);
     }
   }

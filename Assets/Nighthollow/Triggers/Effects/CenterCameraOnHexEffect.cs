@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.World.Data;
 using UnityEngine;
@@ -34,10 +35,15 @@ namespace Nighthollow.Triggers.Effects
 
     [Key(0)] public HexPosition Position { get; }
 
-    public void Execute(WorldEvent trigger, TriggerOutput? output)
+    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+      Key.WorldMapRenderer,
+      Key.MainCamera
+    );
+
+    public void Execute(IEffectScope scope, TriggerOutput? output)
     {
-      var position = trigger.Registry.WorldMapRenderer.GetWorldPosition(Position);
-      var t = trigger.Registry.MainCamera.transform;
+      var position = scope.Get(Key.WorldMapRenderer).GetWorldPosition(Position);
+      var t = scope.Get(Key.MainCamera).transform;
       t.position = new Vector3(position.x, position.y, t.position.z);
     }
   }

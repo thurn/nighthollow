@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
 using Nighthollow.Data;
@@ -33,9 +34,14 @@ namespace Nighthollow.Triggers.Effects
   {
     public static Description Describe => new Description("initialize the world map");
 
-    public void Execute(WorldEvent trigger, TriggerOutput? output)
+    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+      Key.Database,
+      Key.WorldMapRenderer
+    );
+
+    public void Execute(IEffectScope scope, TriggerOutput? output)
     {
-      var database = trigger.Registry.Database;
+      var database = scope.Get(Key.Database);
       var hexLookup = new Dictionary<HexPosition, int>();
       foreach (var pair in database.Snapshot().Hexes)
       {
@@ -43,7 +49,7 @@ namespace Nighthollow.Triggers.Effects
         Errors.CheckState(pair.Value.HexType != HexType.Unknown, "unknown hex type");
       }
 
-      var tiles = trigger.Registry.WorldMapRenderer.AllTiles().ToList();
+      var tiles = scope.Get(Key.WorldMapRenderer).AllTiles().ToList();
       Debug.Log($"Found {hexLookup.Count} hexes, updating from {tiles.Count} tiles.");
 
       foreach (var (tile, position) in tiles)

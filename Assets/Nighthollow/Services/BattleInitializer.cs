@@ -75,7 +75,7 @@ namespace Nighthollow.Services
         _damageTextService);
 
       _registry.Invoke(new IOnBattleSceneLoaded.Data());
-      _registry.TriggerService.Invoke(new BattleSceneReadyEvent(_registry));
+      _registry.TriggerService.Invoke<BattleSceneReadyEvent>(_registry.Scope);
     }
   }
 }

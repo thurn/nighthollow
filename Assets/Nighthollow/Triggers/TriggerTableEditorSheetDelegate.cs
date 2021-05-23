@@ -86,7 +86,7 @@ namespace Nighthollow.Triggers
           new ViewChildButtonCellContent(path),
           RowDeleteButton(entityId),
           _category == TriggerCategory.Debug
-            ? new ButtonCellContent(">", () => { _registry.TriggerService.InvokeTriggerId(_registry, entityId); })
+            ? new ButtonCellContent(">", () => { _registry.TriggerService.InvokeTriggerId(_registry.Scope, entityId); })
             : null,
           new ReflectivePathCellContent(path.Property(trigger.GetType().GetProperty("Name")!)),
           new ReflectivePathCellContent(path.Property(trigger.GetType().GetProperty("Category")!)),

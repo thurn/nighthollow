@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
 
 #nullable enable
@@ -23,9 +24,15 @@ namespace Nighthollow.Triggers.Effects
   {
     public static Description Describe => new Description("request to prevent the default behavior for this event");
 
-    public void Execute(TriggerEvent trigger, TriggerOutput? output)
+    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    );
+
+    public void Execute(IEffectScope scope, TriggerOutput? output)
     {
-      output?.SetPreventDefault();
+      if (output != null)
+      {
+        output.PreventDefault = true;
+      }
     }
   }
 }

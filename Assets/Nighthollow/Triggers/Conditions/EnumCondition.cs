@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Data;
 using Nighthollow.Triggers.Events;
@@ -43,9 +44,11 @@ namespace Nighthollow.Triggers.Conditions
     [Key(0)] public TEnum Target { get; }
     [Key(1)] public EnumOperator Operator { get; }
 
-    public bool Satisfied(TEvent triggerEvent)
+    public abstract ImmutableHashSet<IKey> Dependencies { get; }
+
+    public bool Satisfied(IScope scope)
     {
-      var source = GetSource(triggerEvent);
+      var source = GetSource(scope);
       return Operator switch
       {
         EnumOperator.Is => Equals(source, Target),
@@ -54,7 +57,7 @@ namespace Nighthollow.Triggers.Conditions
       };
     }
 
-    protected abstract TEnum GetSource(TEvent triggerEvent);
+    protected abstract TEnum GetSource(IScope scope);
 
     protected abstract EnumCondition<TEvent, TEnum> Clone(TEnum target, EnumOperator op);
 

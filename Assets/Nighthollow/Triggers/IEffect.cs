@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Triggers.Effects;
 
@@ -31,6 +32,8 @@ namespace Nighthollow.Triggers
 
   public interface IEffect<in TEvent> : IEffect where TEvent : TriggerEvent
   {
-    void Execute(TEvent trigger, TriggerOutput? output);
+    ImmutableHashSet<IKey> Dependencies { get; }
+
+    void Execute(IEffectScope scope, TriggerOutput? output);
   }
 }
