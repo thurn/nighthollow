@@ -15,7 +15,6 @@
 using System;
 using MessagePack;
 using Nighthollow.Interface;
-using Nighthollow.Triggers.Events;
 
 #nullable enable
 

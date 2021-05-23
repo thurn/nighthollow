@@ -48,7 +48,7 @@ namespace Nighthollow.Delegates.Implementations
     /// <summary>
     ///   Returns the first open rank position in front of this (rank, file) if one exists
     /// </summary>
-    public static RankValue? GetOpenForwardRank(CreatureService service, RankValue rank, FileValue file)
+    static RankValue? GetOpenForwardRank(CreatureService service, RankValue rank, FileValue file)
     {
       while (true)
       {
