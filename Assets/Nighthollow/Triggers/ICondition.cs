@@ -23,12 +23,11 @@ namespace Nighthollow.Triggers
   [Union(0, typeof(UserDeckSizeCondition))]
   public interface ICondition
   {
+    ImmutableHashSet<IKey> Dependencies { get; }
+    bool Satisfied(IScope scope);
   }
 
   public interface ICondition<in TEvent> : ICondition where TEvent : IEvent
   {
-    ImmutableHashSet<IKey> Dependencies { get; }
-
-    bool Satisfied(IScope scope);
   }
 }

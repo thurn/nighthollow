@@ -123,8 +123,8 @@ namespace Nighthollow.Data
     public static readonly SingletonTableId<BattleData> BattleData =
       new SingletonTableId<BattleData>(10, "BattleData");
 
-    public static readonly TableId<ITrigger> Triggers =
-      new TableId<ITrigger>(11, "Triggers");
+    public static readonly TableId<Rule> Triggers =
+      new TableId<Rule>(11, "Triggers");
 
     public static readonly TableId<GlobalData> Globals =
       new TableId<GlobalData>(12, "Globals");

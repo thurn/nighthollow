@@ -182,14 +182,12 @@ namespace Nighthollow.Triggers
       {
         var childPath = path.Property(property);
         var currentValue = (int?) childPath.Read();
-        var invokedTriggers = new List<KeyValuePair<int, ITrigger>>();
+        var invokedTriggers = new List<KeyValuePair<int, Rule>>();
         int? selectedIndex = null;
         var index = 0;
 
         foreach (var pair in path.Database.Snapshot().Triggers
-          .Where(pair => pair.Value is TriggerData<GlobalTriggerInvokedEvent> ||
-                         pair.Value is TriggerData<WorldTriggerInvokedEvent> ||
-                         pair.Value is TriggerData<BattleTriggerInvokedEvent>))
+          .Where(pair => pair.Value.TriggerEvent == EventType.TriggerInvoked))
         {
           invokedTriggers.Add(pair);
           if (currentValue == pair.Key)

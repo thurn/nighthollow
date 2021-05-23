@@ -24,7 +24,7 @@ namespace Nighthollow.Triggers.Effects
   {
     public static Description Describe => new Description("request to prevent the default behavior for this event");
 
-    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
     );
 
     public void Execute(IEffectScope scope, TriggerOutput? output)

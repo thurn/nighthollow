@@ -18,8 +18,11 @@ using System.Collections.Immutable;
 using System.IO;
 using MessagePack;
 using MessagePack.Resolvers;
+using Nighthollow.Triggers;
+using Nighthollow.Triggers.Events;
 using Nighthollow.Utils;
 using UnityEngine;
+using EventType = Nighthollow.Triggers.EventType;
 
 #nullable enable
 
@@ -106,8 +109,35 @@ namespace Nighthollow.Data
       }));
 
       // Uncomment these lines to perform a data migration.
-      // yield return new WaitForSeconds(1);
-      // Migrate(_database, TableId.CreatureTypes, c => new Value());
+      // yield return new WaitForSeconds(5);
+      // Migrate(database, TableId.Triggers, MigrateRule);
+    }
+
+    Rule MigrateRule(ITrigger trigger)
+    {
+      var eventType = trigger switch
+      {
+        TriggerData<WorldSceneReadyEvent> _ => EventType.WorldSceneReady,
+        TriggerData<BattleSceneReadyEvent> _ => EventType.BattleSceneReady,
+        TriggerData<BattleStartedEvent> _ => EventType.BattleStarted,
+        TriggerData<DrewOpeningHandEvent> _ => EventType.DrewOpeningHand,
+        TriggerData<EnemyCreatureSpawnedEvent> _ => EventType.EnemyCreatureSpawned,
+        TriggerData<UserCreaturePlayedEvent> _ => EventType.UserCreaturePlayed,
+        TriggerData<GlobalTriggerInvokedEvent> _ => EventType.TriggerInvoked,
+        TriggerData<HexAttackedEvent> _ => EventType.HexAttacked,
+        TriggerData<WorldTriggerInvokedEvent> _ => EventType.TriggerInvoked,
+        TriggerData<BattleTriggerInvokedEvent> _ => EventType.TriggerInvoked,
+        _ => throw Errors.UnknownIntEnumValue(12, 13, 15)
+      };
+
+      return new Rule(
+        eventType,
+        trigger.Name,
+        trigger.Category,
+        trigger.ConditionsList,
+        trigger.EffectsList,
+        !trigger.Looping,
+        trigger.Disabled);
     }
 
     void Update()
@@ -146,6 +176,7 @@ namespace Nighthollow.Data
       var transformed = dictionary.ToImmutableDictionary(p => p.Key, p => transformation(p.Value));
       using var editorStream = File.OpenWrite(EditorFilePath(tableId));
       MessagePackSerializer.Serialize(editorStream, transformed, _serializerOptions);
+      Debug.Log("Migrated");
     }
   }
 }

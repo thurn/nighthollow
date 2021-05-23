@@ -50,7 +50,7 @@ namespace Nighthollow.Triggers.Effects
     [Key(1)] public string Text { get; }
     [TriggerId] [Key(2)] public int? OnContinueTriggerId { get; }
 
-    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
       Key.TriggerService,
       Key.ScreenController
     );

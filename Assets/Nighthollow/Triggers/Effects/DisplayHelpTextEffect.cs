@@ -58,7 +58,7 @@ namespace Nighthollow.Triggers.Effects
     [Key(2)] public int YPosition { get; }
     [Key(3)] public Direction ArrowDirection { get; }
 
-    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
       Key.ScreenController
     );
 

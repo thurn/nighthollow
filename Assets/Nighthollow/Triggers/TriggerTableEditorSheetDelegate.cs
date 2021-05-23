@@ -116,12 +116,12 @@ namespace Nighthollow.Triggers
         .Select(attribute => attribute.SubType.GetGenericArguments()[0])
         .ToList();
 
-    void AddNewTrigger<TEvent>(ReflectivePath path) where TEvent : IEvent
-    {
-      path.Database.Insert(TableId.Triggers, new TriggerData<TEvent>(
-        "New Trigger",
-        _category ?? TriggerCategory.NoCategory));
-    }
+    // void AddNewTrigger(ReflectivePath path)
+    // {
+    //   path.Database.Insert(TableId.Triggers, new Rule(
+    //     "New Trigger",
+    //     _category ?? TriggerCategory.NoCategory));
+    // }
 
     List<ICellContent> GetAddButtonRow(ReflectivePath reflectivePath)
     {
@@ -133,10 +133,10 @@ namespace Nighthollow.Triggers
           currentlySelected: null,
           i =>
           {
-            GetType()
-              .GetMethod(nameof(AddNewTrigger), BindingFlags.Instance | BindingFlags.NonPublic)!
-              .MakeGenericMethod(eventTypes[i])
-              .Invoke(this, new object[] {reflectivePath});
+            // GetType()
+            //   .GetMethod(nameof(AddNewTrigger), BindingFlags.Instance | BindingFlags.NonPublic)!
+            //   .MakeGenericMethod(eventTypes[i])
+            //   .Invoke(this, new object[] {reflectivePath});
           },
           "Add Trigger...")
       };

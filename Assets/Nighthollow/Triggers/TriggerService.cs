@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.ComponentModel;
+using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Services;
-using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -26,10 +25,22 @@ namespace Nighthollow.Triggers
   {
     readonly ServiceRegistry _registry;
     bool _initialized;
+    ImmutableDictionary<int, Rule>? _triggers;
+    ImmutableDictionary<EventType, Rule> _triggerMap;
 
     public TriggerService(ServiceRegistry registry)
     {
       _registry = registry;
+      _triggerMap = ImmutableDictionary<EventType, Rule>.Empty;
+    }
+
+    public void OnUpdate()
+    {
+      var triggers = _registry.Database.Snapshot().Triggers;
+      if (!ReferenceEquals(_triggers, triggers))
+      {
+        _triggers = triggers;
+      }
     }
 
     void Initialize()
@@ -58,44 +69,30 @@ namespace Nighthollow.Triggers
 
       foreach (var pair in gameData.Triggers)
       {
-        if (pair.Value is TriggerData<TEvent> trigger)
+        if (pair.Value.TriggerEvent == triggerEvent.Type)
         {
-          InvokeInternal(pair.Key, scope, trigger, output);
+          InvokeInternal(pair.Key, scope, pair.Value, output);
         }
       }
     }
 
     public void InvokeTriggerId(int triggerId, Scope scope, TriggerOutput? output = null)
     {
-      var t = _registry.Database.Snapshot().Triggers[triggerId];
-      switch (t)
-      {
-        case TriggerData<WorldTriggerInvokedEvent> worldTrigger:
-          InvokeInternal(triggerId, scope, worldTrigger, output, true);
-          break;
-        case TriggerData<BattleTriggerInvokedEvent> battleTrigger:
-          InvokeInternal(triggerId, scope, battleTrigger, output, true);
-          break;
-        case TriggerData<GlobalTriggerInvokedEvent> globalTrigger:
-          InvokeInternal(triggerId, scope, globalTrigger, output, true);
-          break;
-        default:
-          throw new InvalidEnumArgumentException(
-            $"Attempted to manually invoke a trigger {t} which was not a valid TriggerInvokedEvent");
-      }
+      var rule = _registry.Database.Snapshot().Triggers[triggerId];
+      InvokeInternal(triggerId, scope, rule, output, true);
     }
 
-    void InvokeInternal<TEvent>(
+    void InvokeInternal(
       int triggerId,
       Scope scope,
-      TriggerData<TEvent> trigger,
+      Rule trigger,
       TriggerOutput? output = null,
-      bool bypassEnabledCheck = false) where TEvent : IEvent
+      bool bypassEnabledCheck = false)
     {
       if (bypassEnabledCheck || !trigger.Disabled)
       {
         var fired = trigger.Invoke(scope, output);
-        if (fired && !trigger.Looping)
+        if (fired && trigger.OneTime)
         {
           _registry.Database.Update(TableId.Triggers, triggerId, t => t.WithDisabled(true));
         }

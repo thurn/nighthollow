@@ -44,6 +44,10 @@ namespace Nighthollow.Triggers
     TriggerCategory Category { get; }
     bool Disabled { get; }
     public ITrigger WithDisabled(bool disabled);
+
+    ImmutableList<ICondition> ConditionsList { get; }
+    ImmutableList<IEffect> EffectsList { get; }
+    bool Looping { get; }
   }
 
   [MessagePackFormatter(typeof(TriggerDataFormatter<>))]
@@ -68,7 +72,11 @@ namespace Nighthollow.Triggers
     public string? Name { get; }
     public TriggerCategory Category { get; }
     public ImmutableList<ICondition<TEvent>> Conditions { get; }
+    public ImmutableList<ICondition> ConditionsList => Conditions.Cast<ICondition>().ToImmutableList();
+
     public ImmutableList<IEffect<TEvent>> Effects { get; }
+    public ImmutableList<IEffect> EffectsList => Effects.Cast<IEffect>().ToImmutableList();
+
     public bool Looping { get; }
     public bool Disabled { get; }
 

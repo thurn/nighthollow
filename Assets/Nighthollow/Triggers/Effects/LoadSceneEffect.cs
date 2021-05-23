@@ -43,7 +43,7 @@ namespace Nighthollow.Triggers.Effects
 
     [Key(0)] public SceneName SceneName { get; }
 
-    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
     );
 
     public void Execute(IEffectScope scope, TriggerOutput? output)

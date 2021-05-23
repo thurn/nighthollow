@@ -28,12 +28,12 @@ namespace Nighthollow.Triggers
   [Union(5, typeof(CenterCameraOnHexEffect))]
   public interface IEffect
   {
+    ImmutableHashSet<IKey> Dependencies { get; }
+
+    void Execute(IEffectScope scope, TriggerOutput? output);
   }
 
   public interface IEffect<in TEvent> : IEffect where TEvent : IEvent
   {
-    ImmutableHashSet<IKey> Dependencies { get; }
-
-    void Execute(IEffectScope scope, TriggerOutput? output);
   }
 }

@@ -44,7 +44,7 @@ namespace Nighthollow.Triggers.Conditions
     [Key(0)] public int Target { get; }
     [Key(1)] public IntegerOperator Operator { get; }
 
-    public abstract ImmutableHashSet<IKey> Dependencies { get; }
+    [IgnoreMember] public abstract ImmutableHashSet<IKey> Dependencies { get; }
 
     public bool Satisfied(IScope scope)
     {

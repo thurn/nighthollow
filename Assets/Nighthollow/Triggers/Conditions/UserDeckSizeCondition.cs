@@ -29,7 +29,7 @@ namespace Nighthollow.Triggers.Conditions
     {
     }
 
-    public override ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    [IgnoreMember] public override ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
       Key.GameData
     );
 

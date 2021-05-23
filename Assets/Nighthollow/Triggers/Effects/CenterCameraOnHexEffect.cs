@@ -35,7 +35,7 @@ namespace Nighthollow.Triggers.Effects
 
     [Key(0)] public HexPosition Position { get; }
 
-    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
       Key.WorldMapRenderer,
       Key.MainCamera
     );

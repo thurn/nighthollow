@@ -34,7 +34,7 @@ namespace Nighthollow.Triggers.Effects
   {
     public static Description Describe => new Description("initialize the world map");
 
-    public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
       Key.Database,
       Key.WorldMapRenderer
     );
