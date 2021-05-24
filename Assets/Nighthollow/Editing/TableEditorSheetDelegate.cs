@@ -68,8 +68,24 @@ namespace Nighthollow.Editing
     {
       var properties = _underlyingType.GetProperties();
       var imageProperty = properties.FirstOrDefault(p => p.Name.Contains("ImageAddress"));
-      var staticHeadings = new List<ICellContent> {new LabelCellContent("x")};
-      var filters = new List<ICellContent> {new LabelCellContent("x")};
+      var showEditButton = EditorControllerRegistry.ShowEditButton(reflectivePath.GetUnderlyingType());
+
+      var staticHeadings = new List<ICellContent>();
+
+      if (showEditButton)
+      {
+        staticHeadings.Add(new LabelCellContent("Edit"));
+      }
+
+      staticHeadings.Add(new LabelCellContent("x"));
+
+      var filters = new List<ICellContent>();
+      if (showEditButton)
+      {
+        filters.Add(new LabelCellContent("-"));
+      }
+
+      filters.Add(new LabelCellContent("-"));
       if (imageProperty != null)
       {
         staticHeadings.Add(new LabelCellContent("Image"));
@@ -100,10 +116,15 @@ namespace Nighthollow.Editing
           continue;
         }
 
-        var staticColumns = new List<ICellContent>
+        var staticColumns = new List<ICellContent>();
+
+        if (showEditButton)
         {
-          RowDeleteButton(entityId),
-        };
+          staticColumns.Add(new ViewChildButtonCellContent(reflectivePath.EntityId(entityId)));
+        }
+
+        staticColumns.Add(RowDeleteButton(entityId));
+
         if (imageProperty != null)
         {
           staticColumns.Add(new ImageCellContent(reflectivePath.EntityId(entityId).Property(imageProperty)));
@@ -128,7 +149,14 @@ namespace Nighthollow.Editing
           (AddButtonKey, 0)))
         .ToList<ICellContent>());
 
-      var columnWidths = new List<int> {50};
+      var columnWidths = new List<int>();
+
+      if (showEditButton)
+      {
+        columnWidths.Add(115);
+      }
+
+      columnWidths.Add(50);
       if (imageProperty != null)
       {
         columnWidths.Add(ImageEditorCell.ImageSize);

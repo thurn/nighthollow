@@ -34,7 +34,8 @@ namespace Nighthollow.Triggers
     }
 
     public void Iterate(
-      object instance, Action<string> onString,
+      object instance,
+      Action<string> onString,
       Action<PropertyInfo> onProperty,
       string? prefix = null)
     {
@@ -76,6 +77,8 @@ namespace Nighthollow.Triggers
     }
 
     public static string Describe(object instance) => GetDescription(instance.GetType()).Render(instance);
+
+    public string First() => _tokens.First();
 
     public static string Snippet(string prefix, Type type) => $"{prefix} {GetDescription(type)._tokens.First()}";
 

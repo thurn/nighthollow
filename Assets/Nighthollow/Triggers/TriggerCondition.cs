@@ -12,21 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+using MessagePack;
+using Nighthollow.Triggers.Conditions;
+
 #nullable enable
 
 namespace Nighthollow.Triggers
 {
-  public enum EventType
+  [Union(0, typeof(UserDeckSizeCondition))]
+  public abstract class TriggerCondition
   {
-    Unknown = 0,
-    BattleStarted = 1,
-    DrewOpeningHand = 2,
-    EnemyCreatureSpawned = 3,
-    HexAttacked = 4,
-    WorldSceneReady = 5,
-    BattleSceneReady = 6,
-    SchoolSelectionSceneReady = 7,
-    TriggerInvoked = 8,
-    UserCreaturePlayed = 9
+    public abstract ImmutableHashSet<IKey> GetDependencies();
+
+    public abstract bool Satisfied(IScope scope);
+
+    public override string ToString()
+    {
+      var description = Description.Describe(this);
+      return description.Length < 100 ? description : $"{description.Substring(0, 100)}...";
+    }
   }
 }

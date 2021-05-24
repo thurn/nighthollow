@@ -53,7 +53,6 @@ namespace Nighthollow.Services
     public virtual void OnUpdate()
     {
       ScreenController.OnUpdate();
-      TriggerService.OnUpdate();
     }
 
     public Database Database { get; }

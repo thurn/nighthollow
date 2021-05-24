@@ -20,14 +20,14 @@ using MessagePack;
 namespace Nighthollow.Triggers.Effects
 {
   [MessagePackObject]
-  public sealed class PreventDefaultEffect : IEffect<IEvent>
+  public sealed class PreventDefaultEffect : TriggerEffect
   {
     public static Description Describe => new Description("request to prevent the default behavior for this event");
 
-    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
     );
 
-    public void Execute(IEffectScope scope, TriggerOutput? output)
+    public override void Execute(IEffectScope scope, TriggerOutput? output)
     {
       if (output != null)
       {

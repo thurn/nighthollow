@@ -8,11 +8,11 @@ namespace Nighthollow.Triggers
 {
   public sealed partial class Rule
   {
-    public Rule WithTriggerEvent(EventType triggerEvent) =>
-      Equals(triggerEvent, TriggerEvent)
+    public Rule WithTriggerEvent(TriggerEvent triggerTriggerEvent) =>
+      Equals(triggerTriggerEvent, TriggerEvent)
         ? this
         : new Rule(
-          triggerEvent,
+          triggerTriggerEvent,
           Name,
           Category,
           Conditions,
@@ -44,7 +44,7 @@ namespace Nighthollow.Triggers
           OneTime,
           Disabled);
 
-    public Rule WithConditions(ImmutableList<ICondition> conditions) =>
+    public Rule WithConditions(ImmutableList<TriggerCondition> conditions) =>
       Equals(conditions, Conditions)
         ? this
         : new Rule(
@@ -56,7 +56,7 @@ namespace Nighthollow.Triggers
           OneTime,
           Disabled);
 
-    public Rule WithEffects(ImmutableList<IEffect> effects) =>
+    public Rule WithEffects(ImmutableList<TriggerEffect> effects) =>
       Equals(effects, Effects)
         ? this
         : new Rule(

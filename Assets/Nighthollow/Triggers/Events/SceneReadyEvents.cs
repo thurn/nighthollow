@@ -12,33 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
 {
   public sealed class WorldSceneReadyEvent : IEvent
   {
-    public static Description Describe => new Description("the world scene is loaded");
+    public static readonly Spec Specification = new Spec();
 
-    public EventType Type => EventType.WorldSceneReady;
+    public sealed class Spec : EventSpec
+    {
+      public override TriggerEvent Trigger => TriggerEvent.WorldSceneReady;
+
+      public override Description Describe() => new Description("the world scene is loaded");
+
+      public override ImmutableHashSet<IKey> Bindings() => ImmutableHashSet<IKey>.Empty;
+    }
+
+    public EventSpec GetSpec() => Specification;
 
     public Scope AddBindings(Scope.Builder builder) => builder.Build();
   }
 
   public sealed class BattleSceneReadyEvent : IEvent
   {
-    public static Description Describe => new Description("the battle scene is loaded");
+    public static readonly Spec Specification = new Spec();
 
-    public EventType Type => EventType.BattleSceneReady;
+    public sealed class Spec : EventSpec
+    {
+      public override TriggerEvent Trigger => TriggerEvent.BattleSceneReady;
+
+      public override Description Describe() => new Description("the battle scene is loaded");
+
+      public override ImmutableHashSet<IKey> Bindings() => ImmutableHashSet<IKey>.Empty;
+    }
+
+    public EventSpec GetSpec() => Specification;
 
     public Scope AddBindings(Scope.Builder builder) => builder.Build();
   }
 
   public sealed class SchoolSelectionSceneReadyEvent : IEvent
   {
-    public static Description Describe => new Description("the school selection scene is loaded");
+    public static readonly Spec Specification = new Spec();
 
-    public EventType Type => EventType.SchoolSelectionSceneReady;
+    public sealed class Spec : EventSpec
+    {
+      public override TriggerEvent Trigger => TriggerEvent.SchoolSelectionSceneReady;
+
+      public override Description Describe() => new Description("the school selection scene is loaded");
+
+      public override ImmutableHashSet<IKey> Bindings() => ImmutableHashSet<IKey>.Empty;
+    }
+
+    public EventSpec GetSpec() => Specification;
 
     public Scope AddBindings(Scope.Builder builder) => builder.Build();
   }

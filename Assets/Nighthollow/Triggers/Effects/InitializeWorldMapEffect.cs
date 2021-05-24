@@ -30,16 +30,16 @@ namespace Nighthollow.Triggers.Effects
   /// initial game states.
   /// </summary>
   [MessagePackObject]
-  public sealed class InitializeWorldMapEffect : IEffect<IEvent>
+  public sealed class InitializeWorldMapEffect : TriggerEffect
   {
     public static Description Describe => new Description("initialize the world map");
 
-    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
       Key.Database,
       Key.WorldMapRenderer
     );
 
-    public void Execute(IEffectScope scope, TriggerOutput? output)
+    public override void Execute(IEffectScope scope, TriggerOutput? output)
     {
       var database = scope.Get(Key.Database);
       var hexLookup = new Dictionary<HexPosition, int>();

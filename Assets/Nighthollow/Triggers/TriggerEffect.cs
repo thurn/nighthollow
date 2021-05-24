@@ -26,14 +26,16 @@ namespace Nighthollow.Triggers
   [Union(3, typeof(LoadSceneEffect))]
   [Union(4, typeof(InitializeWorldMapEffect))]
   [Union(5, typeof(CenterCameraOnHexEffect))]
-  public interface IEffect
+  public abstract class TriggerEffect
   {
-    ImmutableHashSet<IKey> Dependencies { get; }
+    public abstract ImmutableHashSet<IKey> GetDependencies();
 
-    void Execute(IEffectScope scope, TriggerOutput? output);
-  }
+    public abstract void Execute(IEffectScope scope, TriggerOutput? output);
 
-  public interface IEffect<in TEvent> : IEffect where TEvent : IEvent
-  {
+    public override string ToString()
+    {
+      var description = Description.Describe(this);
+      return description.Length < 100 ? description : $"{description.Substring(0, 100)}...";
+    }
   }
 }

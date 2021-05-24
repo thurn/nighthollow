@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
@@ -21,9 +23,18 @@ namespace Nighthollow.Triggers.Events
   /// </summary>
   public sealed class BattleStartedEvent : IEvent
   {
-    public static Description Describe => new Description("a battle is started");
+    public static readonly Spec Specification = new Spec();
 
-    public EventType Type => EventType.BattleStarted;
+    public sealed class Spec : EventSpec
+    {
+      public override TriggerEvent Trigger => TriggerEvent.BattleStarted;
+
+      public override Description Describe() => new Description("a battle is started");
+
+      public override ImmutableHashSet<IKey> Bindings() => ImmutableHashSet<IKey>.Empty;
+    }
+
+    public EventSpec GetSpec() => Specification;
 
     public Scope AddBindings(Scope.Builder builder) => builder.Build();
   }

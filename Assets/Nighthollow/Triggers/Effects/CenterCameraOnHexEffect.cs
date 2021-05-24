@@ -22,7 +22,7 @@ using UnityEngine;
 namespace Nighthollow.Triggers.Effects
 {
   [MessagePackObject]
-  public sealed partial class CenterCameraOnHexEffect : IEffect<IEvent>
+  public sealed partial class CenterCameraOnHexEffect : TriggerEffect
   {
     public static Description Describe => new Description(
       "center the camera on the hex",
@@ -35,12 +35,12 @@ namespace Nighthollow.Triggers.Effects
 
     [Key(0)] public HexPosition Position { get; }
 
-    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
       Key.WorldMapRenderer,
       Key.MainCamera
     );
 
-    public void Execute(IEffectScope scope, TriggerOutput? output)
+    public override void Execute(IEffectScope scope, TriggerOutput? output)
     {
       var position = scope.Get(Key.WorldMapRenderer).GetWorldPosition(Position);
       var t = scope.Get(Key.MainCamera).transform;

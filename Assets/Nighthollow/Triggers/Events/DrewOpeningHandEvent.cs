@@ -12,15 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
 {
   public sealed class DrewOpeningHandEvent : IEvent
   {
-    public static Description Describe => new Description("an opening hand is drawn");
+    public static readonly Spec Specification = new Spec();
 
-    public EventType Type => EventType.DrewOpeningHand;
+    public sealed class Spec : EventSpec
+    {
+      public override TriggerEvent Trigger => TriggerEvent.DrewOpeningHand;
+
+      public override Description Describe() => new Description("an opening hand is drawn");
+
+      public override ImmutableHashSet<IKey> Bindings() => ImmutableHashSet<IKey>.Empty;
+    }
+
+    public EventSpec GetSpec() => Specification;
 
     public Scope AddBindings(Scope.Builder builder) => builder.Build();
   }

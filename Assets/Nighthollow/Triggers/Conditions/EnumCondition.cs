@@ -13,10 +13,7 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Immutable;
 using MessagePack;
-using Nighthollow.Data;
-using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -32,7 +29,7 @@ namespace Nighthollow.Triggers.Conditions
   /// <summary>
   /// Parent class for standard operations on enum values
   /// </summary>
-  public abstract class EnumCondition<TEvent, TEnum> : ICondition<TEvent>
+  public abstract class EnumCondition<TEvent, TEnum> : TriggerCondition
     where TEvent : IEvent where TEnum : struct, Enum
   {
     protected EnumCondition(TEnum target, EnumOperator op)
@@ -44,9 +41,7 @@ namespace Nighthollow.Triggers.Conditions
     [Key(0)] public TEnum Target { get; }
     [Key(1)] public EnumOperator Operator { get; }
 
-    [IgnoreMember] public abstract ImmutableHashSet<IKey> Dependencies { get; }
-
-    public bool Satisfied(IScope scope)
+    public override bool Satisfied(IScope scope)
     {
       var source = GetSource(scope);
       return Operator switch

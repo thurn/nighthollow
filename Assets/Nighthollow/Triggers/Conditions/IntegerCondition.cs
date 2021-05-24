@@ -13,10 +13,7 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Immutable;
 using MessagePack;
-using Nighthollow.Data;
-using Nighthollow.Triggers.Events;
 
 #nullable enable
 
@@ -33,7 +30,7 @@ namespace Nighthollow.Triggers.Conditions
     IsGreaterThanOrEqualTo = 6
   }
 
-  public abstract class IntegerCondition<TEvent> : ICondition<TEvent> where TEvent : IEvent
+  public abstract class IntegerCondition<TEvent> : TriggerCondition
   {
     protected IntegerCondition(int target, IntegerOperator op)
     {
@@ -44,9 +41,7 @@ namespace Nighthollow.Triggers.Conditions
     [Key(0)] public int Target { get; }
     [Key(1)] public IntegerOperator Operator { get; }
 
-    [IgnoreMember] public abstract ImmutableHashSet<IKey> Dependencies { get; }
-
-    public bool Satisfied(IScope scope)
+    public override bool Satisfied(IScope scope)
     {
       var source = GetSource(scope);
       return Operator switch

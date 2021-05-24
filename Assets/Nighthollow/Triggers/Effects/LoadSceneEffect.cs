@@ -32,7 +32,7 @@ namespace Nighthollow.Triggers.Effects
   }
 
   [MessagePackObject]
-  public sealed partial class LoadSceneEffect : IEffect<IEvent>
+  public sealed partial class LoadSceneEffect : TriggerEffect
   {
     public static Description Describe => new Description("load the scene", nameof(SceneName));
 
@@ -43,10 +43,10 @@ namespace Nighthollow.Triggers.Effects
 
     [Key(0)] public SceneName SceneName { get; }
 
-    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
     );
 
-    public void Execute(IEffectScope scope, TriggerOutput? output)
+    public override void Execute(IEffectScope scope, TriggerOutput? output)
     {
       SceneManager.LoadScene(SceneName switch
       {

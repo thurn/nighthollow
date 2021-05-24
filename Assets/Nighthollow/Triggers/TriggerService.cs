@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Services;
@@ -25,22 +24,10 @@ namespace Nighthollow.Triggers
   {
     readonly ServiceRegistry _registry;
     bool _initialized;
-    ImmutableDictionary<int, Rule>? _triggers;
-    ImmutableDictionary<EventType, Rule> _triggerMap;
 
     public TriggerService(ServiceRegistry registry)
     {
       _registry = registry;
-      _triggerMap = ImmutableDictionary<EventType, Rule>.Empty;
-    }
-
-    public void OnUpdate()
-    {
-      var triggers = _registry.Database.Snapshot().Triggers;
-      if (!ReferenceEquals(_triggers, triggers))
-      {
-        _triggers = triggers;
-      }
     }
 
     void Initialize()
@@ -67,12 +54,9 @@ namespace Nighthollow.Triggers
       var gameData = _registry.Database.Snapshot();
       var scope = triggerEvent.AddBindings(Scope.CreateBuilder(_registry.Scope));
 
-      foreach (var pair in gameData.Triggers)
+      foreach (var pair in gameData.Triggers.Where(pair => pair.Value.TriggerEvent == triggerEvent.GetSpec().Trigger))
       {
-        if (pair.Value.TriggerEvent == triggerEvent.Type)
-        {
-          InvokeInternal(pair.Key, scope, pair.Value, output);
-        }
+        InvokeInternal(pair.Key, scope, pair.Value, output);
       }
     }
 

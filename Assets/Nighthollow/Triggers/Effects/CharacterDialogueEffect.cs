@@ -29,7 +29,7 @@ namespace Nighthollow.Triggers.Effects
   }
 
   [MessagePackObject]
-  public sealed partial class CharacterDialogueEffect : IEffect<IEvent>
+  public sealed partial class CharacterDialogueEffect : TriggerEffect
   {
     public static Description Describe => new Description(
       "display the dialogue",
@@ -50,12 +50,12 @@ namespace Nighthollow.Triggers.Effects
     [Key(1)] public string Text { get; }
     [TriggerId] [Key(2)] public int? OnContinueTriggerId { get; }
 
-    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
       Key.TriggerService,
       Key.ScreenController
     );
 
-    public void Execute(IEffectScope scope, TriggerOutput? output)
+    public override void Execute(IEffectScope scope, TriggerOutput? output)
     {
       Action? action = null;
       if (OnContinueTriggerId.HasValue)

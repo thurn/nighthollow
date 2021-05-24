@@ -28,11 +28,11 @@ namespace Nighthollow.Triggers
   public sealed partial class Rule
   {
     public Rule(
-      EventType triggerEvent,
+      TriggerEvent triggerEvent,
       string? name,
       TriggerCategory category,
-      ImmutableList<ICondition> conditions,
-      ImmutableList<IEffect> effects,
+      ImmutableList<TriggerCondition> conditions,
+      ImmutableList<TriggerEffect> effects,
       bool oneTime,
       bool disabled)
     {
@@ -46,7 +46,7 @@ namespace Nighthollow.Triggers
     }
 
     /// <summary>Identifies the event which causes this rule to run.</summary>
-    [Key(0)] public EventType TriggerEvent { get; }
+    [Key(0)] public TriggerEvent TriggerEvent { get; }
 
     /// <summary>Human-readable name for this rule.</summary>
     [Key(1)] public string? Name { get; }
@@ -55,10 +55,10 @@ namespace Nighthollow.Triggers
     [Key(2)] public TriggerCategory Category { get; }
 
     /// <summary>Predicates to determine whether to run this rule when its event occurs.</summary>
-    [Key(3)] public ImmutableList<ICondition> Conditions { get; }
+    [Key(3)] public ImmutableList<TriggerCondition> Conditions { get; }
 
     /// <summary>Mutations to apply to the world when the event occurs & the rule runs.</summary>
-    [Key(4)] public ImmutableList<IEffect> Effects { get; }
+    [Key(4)] public ImmutableList<TriggerEffect> Effects { get; }
 
     /// <summary>If true, the rule will disable itself after running.</summary>
     [Key(5)] public bool OneTime { get; }
@@ -89,14 +89,14 @@ namespace Nighthollow.Triggers
     /// </summary>
     public bool Invoke(Scope scope, TriggerOutput? output)
     {
-      if (Conditions.Any(condition => !condition.Satisfied(scope.WithDependencies(condition.Dependencies))))
+      if (Conditions.Any(condition => !condition.Satisfied(scope.WithDependencies(condition.GetDependencies()))))
       {
         return false;
       }
 
       foreach (var effect in Effects)
       {
-        effect.Execute(scope.WithDependencies(effect.Dependencies), output);
+        effect.Execute(scope.WithDependencies(effect.GetDependencies()), output);
       }
 
       return true;

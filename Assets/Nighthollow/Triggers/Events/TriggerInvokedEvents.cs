@@ -12,33 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
 {
-  public sealed class GlobalTriggerInvokedEvent : IEvent
+  public sealed class TriggerInvokedEvent : IEvent
   {
-    public static Description Describe => new Description("this trigger is manually invoked");
+    public static readonly Spec Specification = new Spec();
 
-    public EventType Type => EventType.TriggerInvoked;
+    public sealed class Spec : EventSpec
+    {
+      public override TriggerEvent Trigger => TriggerEvent.TriggerInvoked;
 
-    public Scope AddBindings(Scope.Builder builder) => builder.Build();
-  }
+      public override Description Describe() => new Description("this trigger is manually invoked");
 
-  public sealed class WorldTriggerInvokedEvent : IEvent
-  {
-    public static Description Describe => new Description("this world trigger is manually invoked");
+      public override ImmutableHashSet<IKey> Bindings() => ImmutableHashSet<IKey>.Empty;
+    }
 
-    public EventType Type => EventType.TriggerInvoked;
-
-    public Scope AddBindings(Scope.Builder builder) => builder.Build();
-  }
-
-  public sealed class BattleTriggerInvokedEvent : IEvent
-  {
-    public static Description Describe => new Description("this battle trigger is manually invoked");
-
-    public EventType Type => EventType.TriggerInvoked;
+    public EventSpec GetSpec() => Specification;
 
     public Scope AddBindings(Scope.Builder builder) => builder.Build();
   }

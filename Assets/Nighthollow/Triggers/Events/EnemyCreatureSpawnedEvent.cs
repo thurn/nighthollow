@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using Nighthollow.Services;
 
 #nullable enable
@@ -20,16 +21,25 @@ namespace Nighthollow.Triggers.Events
 {
   public sealed class EnemyCreatureSpawnedEvent : IEvent
   {
-    public static Description Describe => new Description("an enemy creature is spawned");
+    public static readonly Spec Specification = new Spec();
+
+    public sealed class Spec : EventSpec
+    {
+      public override TriggerEvent Trigger => TriggerEvent.EnemyCreatureSpawned;
+
+      public override Description Describe() => new Description("an enemy creature is spawned");
+
+      public override ImmutableHashSet<IKey> Bindings() => ImmutableHashSet.Create<IKey>(Key.Creature);
+    }
 
     public EnemyCreatureSpawnedEvent(CreatureId creatureId)
     {
       Self = creatureId;
     }
 
-    public CreatureId Self { get; }
+    public EventSpec GetSpec() => Specification;
 
-    public EventType Type => EventType.EnemyCreatureSpawned;
+    public CreatureId Self { get; }
 
     public Scope AddBindings(Scope.Builder builder) => builder.AddValueBinding(Key.Creature, Self).Build();
   }

@@ -162,7 +162,13 @@ namespace Nighthollow.Editing
       CurrentlyActive = null;
       _cells = RenderCells();
 
-      SelectPosition(key != null ? _cells.FirstOrDefault(p => p.Value.Key == key).Key : previouslySelected);
+      InterfaceUtils.After(0.1f,
+        () =>
+        {
+          // Cell bounds aren't available immediately after re-rendering, but we don't seem to get OnGeometryChanged
+          // again?
+          SelectPosition(key != null ? _cells.FirstOrDefault(p => p.Value.Key == key).Key : previouslySelected);
+        });
     }
 
     public void OnKeyDown(KeyDownEvent evt)

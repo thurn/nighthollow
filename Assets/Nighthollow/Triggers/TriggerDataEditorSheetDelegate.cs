@@ -18,7 +18,6 @@ using System.Linq;
 using System.Reflection;
 using MessagePack;
 using Nighthollow.Editing;
-using Nighthollow.Triggers.Events;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -43,18 +42,14 @@ namespace Nighthollow.Triggers
 
     public override TableContent GetCells()
     {
-      var triggerData = _reflectivePath.Read() as ITrigger;
-      var content = GetType()
-        .GetMethod(nameof(GetContent), BindingFlags.NonPublic | BindingFlags.Instance)
-        !.MakeGenericMethod(triggerData?.GetType().GetGenericArguments()[0])
-        .Invoke(this, new object[] {triggerData!}) as List<List<ICellContent>>;
-
+      var triggerData = _reflectivePath.Read() as Rule;
+      var content = GetContent(Errors.CheckNotNull(triggerData));
       return new TableContent(content!,
         CollectionUtils.Single(50)
           .Concat(Enumerable.Repeat(300, content!.Max(l => l.Count) - 1)).ToList());
     }
 
-    List<List<ICellContent>> GetContent<TEvent>(TriggerData<TEvent> triggerData) where TEvent : IEvent
+    List<List<ICellContent>> GetContent(Rule triggerData)
     {
       var result = new List<List<ICellContent>>
       {
@@ -70,37 +65,36 @@ namespace Nighthollow.Triggers
       return result;
     }
 
-    List<ICellContent> HeaderRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : IEvent
+    List<ICellContent> HeaderRow(Rule triggerData)
     {
       return new List<ICellContent>
       {
         new LabelCellContent("x"),
         new LabelCellContent("Trigger Name"),
         new ReflectivePathCellContent(
-          _reflectivePath.Property(triggerData.GetType().GetProperty(nameof(TriggerData<TEvent>.Name))!)
+          _reflectivePath.Property(triggerData.GetType().GetProperty(nameof(Rule.Name))!)
         )
       };
     }
 
-    List<ICellContent> EventRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : IEvent
+    List<ICellContent> EventRow(Rule triggerData)
     {
       return new List<ICellContent>
       {
-        new LabelCellContent(Description.Snippet("When", typeof(TEvent)))
+        new LabelCellContent(triggerData.TriggerEvent.GetSpec().Snippet())
       };
     }
 
-    static List<Type> ConditionTypes() => typeof(ICondition)
+    static List<Type> ConditionTypes() => typeof(TriggerCondition)
       .GetCustomAttributes<UnionAttribute>()
       .Select(attribute => attribute.SubType)
       .ToList();
 
-    List<ICellContent> ConditionRow<TEvent>(TriggerData<TEvent> triggerData, int index, ICondition<TEvent> condition)
-      where TEvent : IEvent
+    List<ICellContent> ConditionRow(Rule triggerData, int index, TriggerCondition condition)
     {
       var conditionPath =
-        _reflectivePath.Property(triggerData.GetType().GetProperty(nameof(TriggerData<TEvent>.Conditions))!)
-          .ListIndex(typeof(ICondition<TEvent>), index);
+        _reflectivePath.Property(triggerData.GetType().GetProperty(nameof(Rule.Conditions))!)
+          .ListIndex(typeof(TriggerCondition), index);
       var result = new List<ICellContent>
       {
         new ButtonCellContent("x",
@@ -115,7 +109,7 @@ namespace Nighthollow.Triggers
       return result;
     }
 
-    List<ICellContent> AddConditionRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : IEvent
+    List<ICellContent> AddConditionRow(Rule triggerData)
     {
       var types = ConditionTypes().ToList();
       return new List<ICellContent>
@@ -127,22 +121,21 @@ namespace Nighthollow.Triggers
           {
             _reflectivePath.Write(
               triggerData.WithConditions(
-                triggerData.Conditions.Add((ICondition<TEvent>) TypeUtils.InstantiateWithDefaults(types[i]))));
+                triggerData.Conditions.Add((TriggerCondition) TypeUtils.InstantiateWithDefaults(types[i]))));
           },
           "Add Condition...")
       };
     }
 
-    static IEnumerable<Type> EffectTypes() => typeof(IEffect)
+    static IEnumerable<Type> EffectTypes() => typeof(TriggerEffect)
       .GetCustomAttributes<UnionAttribute>()
       .Select(attribute => attribute.SubType);
 
-    List<ICellContent> EffectRow<TEvent>(TriggerData<TEvent> triggerData, int index, IEffect<TEvent> effect)
-      where TEvent : IEvent
+    List<ICellContent> EffectRow(Rule triggerData, int index, TriggerEffect effect)
     {
       var effectPath =
-        _reflectivePath.Property(triggerData.GetType().GetProperty(nameof(TriggerData<TEvent>.Effects))!)
-          .ListIndex(typeof(IEffect<TEvent>), index);
+        _reflectivePath.Property(triggerData.GetType().GetProperty(nameof(Rule.Effects))!)
+          .ListIndex(typeof(TriggerEffect), index);
       var result = new List<ICellContent>
       {
         new ButtonCellContent("x",
@@ -157,9 +150,9 @@ namespace Nighthollow.Triggers
       return result;
     }
 
-    List<ICellContent> AddEffectRow<TEvent>(TriggerData<TEvent> triggerData) where TEvent : IEvent
+    List<ICellContent> AddEffectRow(Rule triggerData)
     {
-      var types = EffectTypes().Where(t => typeof(IEffect<TEvent>).IsAssignableFrom(t)).ToList();
+      var types = EffectTypes().Where(t => typeof(TriggerEffect).IsAssignableFrom(t)).ToList();
       return new List<ICellContent>
       {
         new DropdownCellContent(
@@ -169,7 +162,7 @@ namespace Nighthollow.Triggers
           {
             _reflectivePath.Write(
               triggerData.WithEffects(
-                triggerData.Effects.Add((IEffect<TEvent>) TypeUtils.InstantiateWithDefaults(types[i]))));
+                triggerData.Effects.Add((TriggerEffect) TypeUtils.InstantiateWithDefaults(types[i]))));
           },
           "Add Effect...")
       };
@@ -187,7 +180,7 @@ namespace Nighthollow.Triggers
         var index = 0;
 
         foreach (var pair in path.Database.Snapshot().Triggers
-          .Where(pair => pair.Value.TriggerEvent == EventType.TriggerInvoked))
+          .Where(pair => pair.Value.TriggerEvent == TriggerEvent.TriggerInvoked))
         {
           invokedTriggers.Add(pair);
           if (currentValue == pair.Key)

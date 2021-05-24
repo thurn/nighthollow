@@ -53,6 +53,8 @@ namespace Nighthollow.Editing
     {
       return EditorSheet.DefaultCellWidth;
     }
+
+    public virtual bool ShowEditButton() => false;
   }
 
   abstract class EditorController<T> : EditorController
@@ -239,20 +241,14 @@ namespace Nighthollow.Editing
     };
   }
 
-  sealed class TriggerDataController : EditorController<ITrigger>
+  sealed class TriggerDataController : EditorController<Rule>
   {
     public override EditorSheetDelegate GetCustomChildSheetDelegate(ReflectivePath reflectivePath)
     {
       return new TriggerDataEditorSheetDelegate(reflectivePath);
     }
 
-    public override TableEditorSheetDelegate GetTableDelegate(
-      ServiceRegistry registry,
-      ReflectivePath reflectivePath,
-      EditorSheetDelegate.DropdownCellContent tableSelector)
-    {
-      return new TriggerTableEditorSheetDelegate(registry, reflectivePath, tableSelector);
-    }
+    public override bool ShowEditButton() => true;
   }
 
   sealed class GlobalDataController : EditorController<GlobalData>
@@ -277,7 +273,7 @@ namespace Nighthollow.Editing
         {typeof(SkillItemData), new SkillItemController()},
         {typeof(StatusEffectTypeData), new StatusEffectTypeController()},
         {typeof(StatusEffectItemData), new StatusEffectItemController()},
-        {typeof(ITrigger), new TriggerDataController()},
+        {typeof(Rule), new TriggerDataController()},
         {typeof(GlobalData), new GlobalDataController()}
       };
 
@@ -348,5 +344,8 @@ namespace Nighthollow.Editing
         ? Controllers[reflectivePath.GetUnderlyingType()].GetCustomChildSheetDelegate(reflectivePath)
         : null;
     }
+
+    public static bool ShowEditButton(Type type) =>
+      Controllers.ContainsKey(type) ? Controllers[type].ShowEditButton() : false;
   }
 }

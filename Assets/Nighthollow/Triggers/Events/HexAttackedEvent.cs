@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+
 #nullable enable
 
 namespace Nighthollow.Triggers.Events
@@ -21,16 +23,25 @@ namespace Nighthollow.Triggers.Events
   /// </summary>
   public sealed class HexAttackedEvent : IEvent
   {
-    public static Description Describe => new Description("the user attacks a hex");
+    public static readonly Spec Specification = new Spec();
+
+    public sealed class Spec : EventSpec
+    {
+      public override TriggerEvent Trigger => TriggerEvent.HexAttacked;
+
+      public override Description Describe() => new Description("the user attacks a hex");
+
+      public override ImmutableHashSet<IKey> Bindings() => ImmutableHashSet.Create<IKey>(Key.Hex);
+    }
 
     public HexAttackedEvent(int hexId)
     {
       HexId = hexId;
     }
 
-    public int HexId { get; }
+    public EventSpec GetSpec() => Specification;
 
-    public EventType Type => EventType.HexAttacked;
+    public int HexId { get; }
 
     public Scope AddBindings(Scope.Builder builder) => builder.AddValueBinding(Key.Hex, HexId).Build();
   }

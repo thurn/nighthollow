@@ -26,7 +26,7 @@ namespace Nighthollow.Triggers.Effects
   /// Displays a tooltip with gameplay tutorial information
   /// </summary>
   [MessagePackObject]
-  public sealed partial class DisplayHelpTextEffect : IEffect<IEvent>
+  public sealed partial class DisplayHelpTextEffect : TriggerEffect
   {
     public static Description Describe => new Description(
       "display the helper text",
@@ -58,11 +58,11 @@ namespace Nighthollow.Triggers.Effects
     [Key(2)] public int YPosition { get; }
     [Key(3)] public Direction ArrowDirection { get; }
 
-    [IgnoreMember] public ImmutableHashSet<IKey> Dependencies => ImmutableHashSet.Create<IKey>(
+    public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
       Key.ScreenController
     );
 
-    public void Execute(IEffectScope scope, TriggerOutput? output)
+    public override void Execute(IEffectScope scope, TriggerOutput? output)
     {
       var element = new VisualElement();
       element.AddToClassList("helper-text");

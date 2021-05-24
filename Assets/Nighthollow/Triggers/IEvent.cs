@@ -12,13 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+
 #nullable enable
 
 namespace Nighthollow.Triggers
 {
+  public abstract class EventSpec
+  {
+    public abstract TriggerEvent Trigger { get; }
+    public abstract Description Describe();
+    public abstract ImmutableHashSet<IKey> Bindings();
+
+    public string Snippet() => $"When {Describe().First()}";
+  }
+
   public interface IEvent
   {
-    EventType Type { get; }
+    EventSpec GetSpec();
 
     Scope AddBindings(Scope.Builder builder);
   }

@@ -48,7 +48,7 @@ namespace Nighthollow.Editing
     static ButtonEditorCell ViewChildButtonEditorCell(ScreenController screenController, IEditor parent,
       EditorSheetDelegate.ViewChildButtonCellContent viewChildButton) =>
       new ButtonEditorCell(
-        new EditorSheetDelegate.ButtonCellContent("v",
+        new EditorSheetDelegate.ButtonCellContent("Edit",
           () =>
           {
             screenController.Get(ScreenController.GameDataEditor).RenderChildSheet(viewChildButton.ReflectivePath);

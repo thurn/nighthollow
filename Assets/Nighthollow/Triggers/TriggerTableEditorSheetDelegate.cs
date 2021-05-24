@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using MessagePack;
-using Nighthollow.Data;
 using Nighthollow.Editing;
 using Nighthollow.Services;
 using Nighthollow.Utils;
@@ -73,7 +72,7 @@ namespace Nighthollow.Triggers
 
       foreach (int entityId in databasePath.GetTable().Keys)
       {
-        var trigger = (ITrigger) databasePath.GetTable()[entityId];
+        var trigger = (Rule) databasePath.GetTable()[entityId];
         Errors.CheckNotNull(trigger);
         if (_category != null && _category != TriggerCategory.NoCategory && trigger.Category != _category)
         {
@@ -112,7 +111,7 @@ namespace Nighthollow.Triggers
     }
 
     static List<Type> EventTypes() =>
-      typeof(ITrigger).GetCustomAttributes<UnionAttribute>()
+      typeof(Rule).GetCustomAttributes<UnionAttribute>()
         .Select(attribute => attribute.SubType.GetGenericArguments()[0])
         .ToList();
 
