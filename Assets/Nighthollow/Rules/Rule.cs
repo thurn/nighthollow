@@ -46,11 +46,11 @@ namespace Nighthollow.Rules
       Disabled = disabled;
     }
 
-    /// <summary>Identifies the event which causes this rule to run.</summary>
-    [Key(0)] public EventName EventName { get; }
-
     /// <summary>Human-readable name for this rule.</summary>
     [Key(1)] public string? Name { get; }
+
+    /// <summary>Identifies the event which causes this rule to run.</summary>
+    [Key(0)] public EventName EventName { get; }
 
     /// <summary>Organizational category for this rule.</summary>
     [Key(2)] public RuleCategory Category { get; }

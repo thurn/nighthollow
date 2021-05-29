@@ -150,7 +150,6 @@ namespace Nighthollow.Interface
     {
       if (HotkeyPressedEvent.ShouldFire() is { } hotkeyPressedEvent)
       {
-        Debug.Log($"ScreenController::OnUpdate Invoking {hotkeyPressedEvent.Hotkey}");
         _registry.RulesEngine.Invoke(hotkeyPressedEvent);
       }
 

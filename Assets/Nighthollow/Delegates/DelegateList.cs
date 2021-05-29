@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Services;
+using UnityEngine;
 
 #nullable enable
 
@@ -71,9 +72,8 @@ namespace Nighthollow.Delegates
       AllHandlers<THandler>().Aggregate(initialValue, (current, pair) =>
         queryData.Invoke(c, pair.Item1, pair.Item2, current));
 
-    IEnumerable<(int, THandler)> AllHandlers<THandler>() where THandler : IHandler
+    IEnumerable<(int, THandler)> AllHandlers<THandler>(int index = 1) where THandler : IHandler
     {
-      var index = 1;
       foreach (var handler in _delegates)
       {
         if (handler is THandler h)
@@ -84,9 +84,9 @@ namespace Nighthollow.Delegates
 
       if (_parent != null)
       {
-        foreach (var (_, handler) in _parent.AllHandlers<THandler>())
+        foreach (var p in _parent.AllHandlers<THandler>(index))
         {
-          yield return (index++, handler);
+          yield return p;
         }
       }
     }

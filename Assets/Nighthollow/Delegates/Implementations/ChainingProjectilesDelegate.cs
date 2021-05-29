@@ -72,7 +72,7 @@ namespace Nighthollow.Delegates.Implementations
           yield return new FireProjectileEffect(
             d.Self,
             d.Skill,
-            delegateIndex,
+            DelegateId.ChainingProjectilesDelegate,
             d.Projectile.transform.position,
             direction,
             values: d.Projectile.KeyValueStore

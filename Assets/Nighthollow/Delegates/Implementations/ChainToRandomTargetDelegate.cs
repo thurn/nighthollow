@@ -48,7 +48,7 @@ namespace Nighthollow.Delegates.Implementations
           yield return new FireProjectileEffect(
             d.Self,
             d.Skill,
-            delegateIndex,
+            DelegateId.ChainToRandomTargetDelegate,
             d.Projectile.transform.position,
             trackCreature: enemy,
             values: d.Projectile.KeyValueStore

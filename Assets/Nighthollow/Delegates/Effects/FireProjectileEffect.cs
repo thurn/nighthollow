@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Effects
     public FireProjectileEffect(
       CreatureId firedBy,
       SkillData skill,
-      int delegateIndex,
+      DelegateId createdBy,
       Vector2 firingPoint,
       Vector2? firingDirectionOffset = null,
       CreatureId? trackCreature = null,
@@ -40,7 +40,7 @@ namespace Nighthollow.Delegates.Effects
     {
       FiredBy = firedBy;
       Skill = skill;
-      DelegateIndex = delegateIndex;
+      CreatedBy = createdBy;
       FiringPoint = firingPoint;
       FiringDirectionOffset = firingDirectionOffset;
       TrackCreature = trackCreature;
@@ -50,7 +50,7 @@ namespace Nighthollow.Delegates.Effects
 
     public CreatureId FiredBy { get; }
     public SkillData Skill { get; }
-    public int DelegateIndex { get; }
+    public DelegateId CreatedBy { get; }
     public Vector2 FiringPoint { get; }
     public Vector2? FiringDirectionOffset { get; }
     public CreatureId? TrackCreature { get; }

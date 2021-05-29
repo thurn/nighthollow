@@ -31,6 +31,8 @@ namespace Nighthollow.Delegates.Implementations
     protected override int GetProjectileCount(IGameContext c, CreatureState creature, SkillData skill) =>
       skill.GetInt(Stat.ProjectileAdjacentsCount) + 1;
 
+    protected override DelegateId DelegateId => DelegateId.AdjacentFileProjectilesDelegate;
+
     protected override Vector2 GetOrigin(IGameContext c, CreatureState self, SkillData skill, int projectileNumber) =>
       c.Creatures.GetProjectileSourcePosition(self.CreatureId) +
       projectileNumber * new Vector2(x: 0, self.Data.GetInt(Stat.ProjectileAdjacentsOffset) / 1000f);

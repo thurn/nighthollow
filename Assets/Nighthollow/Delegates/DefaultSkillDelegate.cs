@@ -46,7 +46,7 @@ namespace Nighthollow.Delegates
           yield return new FireProjectileEffect(
             d.Self,
             d.Skill,
-            delegateIndex,
+            DelegateId.DefaultSkillDelegate,
             c.Creatures.GetProjectileSourcePosition(d.Self),
             Vector2.zero);
           break;

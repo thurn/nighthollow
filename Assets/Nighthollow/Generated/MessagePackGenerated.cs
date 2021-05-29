@@ -3412,8 +3412,8 @@ namespace MessagePack.Formatters.Nighthollow.Rules
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __EventName__ = default(global::Nighthollow.Rules.EventName);
             var __Name__ = default(string);
+            var __EventName__ = default(global::Nighthollow.Rules.EventName);
             var __Category__ = default(global::Nighthollow.Rules.RuleCategory);
             var __Conditions__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Rules.RuleCondition>);
             var __Effects__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Rules.RuleEffect>);
@@ -3424,11 +3424,11 @@ namespace MessagePack.Formatters.Nighthollow.Rules
             {
                 switch (i)
                 {
-                    case 0:
-                        __EventName__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.EventName>().Deserialize(ref reader, options);
-                        break;
                     case 1:
                         __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 0:
+                        __EventName__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.EventName>().Deserialize(ref reader, options);
                         break;
                     case 2:
                         __Category__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.RuleCategory>().Deserialize(ref reader, options);

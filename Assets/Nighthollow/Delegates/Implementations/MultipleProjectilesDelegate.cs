@@ -31,8 +31,8 @@ namespace Nighthollow.Delegates.Implementations
 
     public IEnumerable<Effect> OnFiredProjectile(IGameContext c, int delegateIndex, IOnFiredProjectile.Data d)
     {
-      if (d.Effect.DelegateIndex <= delegateIndex)
-        // Only process projectiles fired by *later* creature delegates in order to avoid infinite loops and such.
+      // Skip effect created by this delegate to avoid infinite loops
+      if (d.Effect.CreatedBy == DelegateId.MultipleProjectilesDelegate)
       {
         yield break;
       }
@@ -43,7 +43,7 @@ namespace Nighthollow.Delegates.Implementations
         yield return new FireProjectileEffect(
           d.Self,
           d.Skill,
-          delegateIndex,
+          DelegateId.MultipleProjectilesDelegate,
           c.Creatures.GetProjectileSourcePosition(d.Self),
           Vector2.zero,
           firingDelayMs: i * d.Skill.Get(Stat.ProjectileSequenceDelay).AsMilliseconds());
