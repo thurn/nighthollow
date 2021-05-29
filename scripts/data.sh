@@ -6,8 +6,8 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 echo python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/Data/"
 python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/Data/"
 
-echo python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/Triggers/Effects"
-python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/Triggers/Effects"
+echo python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/Rules/Effects"
+python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/Rules/Effects"
 
 echo python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/World/Data"
 python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/World/Data"

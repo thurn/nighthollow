@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Handlers;
-using Nighthollow.Triggers.Events;
+using Nighthollow.Rules.Events;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -75,7 +75,7 @@ namespace Nighthollow.Services
         _damageTextService);
 
       _registry.Invoke(new IOnBattleSceneLoaded.Data());
-      _registry.TriggerService.Invoke(new BattleSceneReadyEvent());
+      _registry.RulesEngine.Invoke(new BattleSceneReadyEvent());
     }
   }
 }

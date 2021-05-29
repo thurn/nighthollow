@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System;
-using Nighthollow.Triggers.Effects;
+using Nighthollow.Rules.Effects;
 using UnityEngine.UIElements;
 
 #nullable enable

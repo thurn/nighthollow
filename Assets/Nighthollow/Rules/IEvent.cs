@@ -12,12 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Generated Code - Do Not Modify!
-namespace Nighthollow.Data
+using System.Collections.Immutable;
+
+#nullable enable
+
+namespace Nighthollow.Rules
 {
-  public enum GlobalId
+  public abstract class EventSpec
   {
-    Unknown = 0,
-    ShouldAutoenableRules = 1,
+    public abstract EventName Game { get; }
+    public abstract Description Describe();
+    public abstract ImmutableHashSet<IKey> Bindings();
+
+    public string Snippet() => $"When {Describe().First()}";
+  }
+
+  public interface IEvent
+  {
+    EventSpec GetSpec();
+
+    Scope AddBindings(Scope.Builder builder);
   }
 }

@@ -69,7 +69,7 @@ using = [
     "Nighthollow.Services",
     "Nighthollow.Stats",
     "Nighthollow.State",
-    "Nighthollow.Triggers",
+    "Nighthollow.Rules",
     "Nighthollow.World.Data"
 ]
 

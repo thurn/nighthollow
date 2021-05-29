@@ -57,7 +57,7 @@ namespace Nighthollow.Editing
     protected void InitializeInternal<T>(Action onModified) where T : class
     {
       // We can eventually consider more fine-grained update logic to improve performance, but you can have problems
-      // with stored ReflectivePath instances becoming invalid (e.g. when a trigger changes to a different subtype the
+      // with stored ReflectivePath instances becoming invalid (e.g. when a rule changes to a different subtype the
       // PropertyInfo references it stores become invalid).
       _reflectivePath.Database.OnTableUpdated((TableId<T>) _reflectivePath.TableId, onModified);
     }

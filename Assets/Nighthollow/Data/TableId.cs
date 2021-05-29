@@ -17,7 +17,7 @@ using System.Collections;
 using System.Collections.Immutable;
 using System.IO;
 using MessagePack;
-using Nighthollow.Triggers;
+using Nighthollow.Rules;
 using Nighthollow.World.Data;
 
 #nullable enable
@@ -123,8 +123,8 @@ namespace Nighthollow.Data
     public static readonly SingletonTableId<BattleData> BattleData =
       new SingletonTableId<BattleData>(10, "BattleData");
 
-    public static readonly TableId<Rule> Triggers =
-      new TableId<Rule>(11, "Triggers");
+    public static readonly TableId<Rule> Rules =
+      new TableId<Rule>(11, "Rules");
 
     public static readonly TableId<GlobalData> Globals =
       new TableId<GlobalData>(12, "Globals");
@@ -147,7 +147,7 @@ namespace Nighthollow.Data
       Deck,
       StatusEffectTypes,
       BattleData,
-      Triggers,
+      Rules,
       Globals,
       Hexes,
       Kingdoms

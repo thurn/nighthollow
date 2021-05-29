@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Generated Code - Do Not Modify!
-namespace Nighthollow.Data
+#nullable enable
+
+namespace Nighthollow.Rules
 {
-  public enum GlobalId
+  public enum RuleCategory
   {
-    Unknown = 0,
-    ShouldAutoenableRules = 1,
+    NoCategory = 0,
+    Tutorial = 1,
+    MainDialogue = 2,
+    Utilities = 3,
+    Debug = 4
   }
 }

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
-using Nighthollow.Triggers;
+using Nighthollow.Rules;
 using Nighthollow.World.Data;
 
 #nullable enable
@@ -52,7 +52,7 @@ namespace Nighthollow.Data
     public ImmutableDictionary<int, CreatureItemData> Collection => GetTable(TableId.Collection);
     public ImmutableDictionary<int, CreatureItemData> Deck => GetTable(TableId.Deck);
     public ImmutableDictionary<int, StatusEffectTypeData> StatusEffects => GetTable(TableId.StatusEffectTypes);
-    public ImmutableDictionary<int, Rule> Triggers => GetTable(TableId.Triggers);
+    public ImmutableDictionary<int, Rule> Rules => GetTable(TableId.Rules);
     public ImmutableDictionary<int, GlobalData> Globals => GetTable(TableId.Globals);
     public ImmutableDictionary<int, HexData> Hexes => GetTable(TableId.Hexes);
     public ImmutableDictionary<int, KingdomData> Kingdoms => GetTable(TableId.Kingdoms);

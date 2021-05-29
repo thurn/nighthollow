@@ -19,9 +19,9 @@ using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Items;
+using Nighthollow.Rules;
+using Nighthollow.Rules.Events;
 using Nighthollow.Services;
-using Nighthollow.Triggers;
-using Nighthollow.Triggers.Events;
 using Nighthollow.World.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -121,9 +121,9 @@ namespace Nighthollow.World
     public void AttackHex(int hexId)
     {
       _registry.ScreenController.Get(ScreenController.Tooltip).Hide();
-      var triggerOutput = new TriggerOutput();
-      _registry.TriggerService.Invoke(new HexAttackedEvent(hexId), triggerOutput);
-      if (!triggerOutput.PreventDefault)
+      var ruleOutput = new RuleOutput();
+      _registry.RulesEngine.Invoke(new HexAttackedEvent(hexId), ruleOutput);
+      if (!ruleOutput.PreventDefault)
       {
         SceneManager.LoadScene("Battle");
       }

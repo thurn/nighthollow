@@ -12,12 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Generated Code - Do Not Modify!
-namespace Nighthollow.Data
+#nullable enable
+
+namespace Nighthollow.Rules
 {
-  public enum GlobalId
+  /** <summary>
+   * Mutable object representing the output of invoking one or more rules. Can be passed to a RulesEngine when
+   * an interesting result value may be obtained from a rule.
+   * </summary>
+   */
+  public sealed class RuleOutput
   {
-    Unknown = 0,
-    ShouldAutoenableRules = 1,
+    /// <summary>
+    /// Allows rules to request that the default behavior for the current event be prevented -- e.g. because they
+    /// are going to supply their own behavior.
+    /// </summary>
+    public bool PreventDefault { get; set; }
   }
 }

@@ -14,8 +14,8 @@
 
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using Nighthollow.Rules.Events;
 using Nighthollow.Services;
-using Nighthollow.Triggers.Events;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -52,7 +52,7 @@ namespace Nighthollow.World
         _staticAssets);
 
       _registry.ScreenController.Show(ScreenController.AdvisorBar);
-      _registry.TriggerService.Invoke(new WorldSceneReadyEvent());
+      _registry.RulesEngine.Invoke(new WorldSceneReadyEvent());
       _cameraMover.Initialize(_registry);
     }
   }

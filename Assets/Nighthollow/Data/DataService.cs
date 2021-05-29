@@ -107,7 +107,7 @@ namespace Nighthollow.Data
 
       // Uncomment these lines to perform a data migration.
       // yield return new WaitForSeconds(5);
-      // Migrate(database, TableId.Triggers, MigrateRule);
+      // Migrate(database, TableId.Rules, MigrateRule);
     }
 
     void Update()

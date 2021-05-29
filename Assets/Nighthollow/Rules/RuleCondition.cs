@@ -12,12 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Generated Code - Do Not Modify!
-namespace Nighthollow.Data
+using System.Collections.Immutable;
+using MessagePack;
+using Nighthollow.Rules.Conditions;
+
+#nullable enable
+
+namespace Nighthollow.Rules
 {
-  public enum GlobalId
+  [Union(0, typeof(UserDeckSizeCondition))]
+  public abstract class RuleCondition
   {
-    Unknown = 0,
-    ShouldAutoenableRules = 1,
+    public abstract ImmutableHashSet<IKey> GetDependencies();
+
+    public abstract bool Satisfied(IScope scope);
+
+    public override string ToString()
+    {
+      var description = Description.Describe(this);
+      return description.Length < 100 ? description : $"{description.Substring(0, 100)}...";
+    }
   }
 }

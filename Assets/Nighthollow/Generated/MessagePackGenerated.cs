@@ -82,8 +82,8 @@ namespace MessagePack.Resolvers
                 { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ResourceItemData>), 28 },
                 { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.SkillItemData>), 29 },
                 { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.StatusEffectItemData>), 30 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.TriggerCondition>), 31 },
-                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.TriggerEffect>), 32 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Rules.RuleCondition>), 31 },
+                { typeof(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Rules.RuleEffect>), 32 },
                 { typeof(global::System.Collections.Immutable.ImmutableList<int>), 33 },
                 { typeof(global::Nighthollow.Data.DamageType), 34 },
                 { typeof(global::Nighthollow.Data.PlayerName), 35 },
@@ -94,20 +94,20 @@ namespace MessagePack.Resolvers
                 { typeof(global::Nighthollow.Data.StatTagType), 40 },
                 { typeof(global::Nighthollow.Data.StatType), 41 },
                 { typeof(global::Nighthollow.Delegates.DelegateId), 42 },
-                { typeof(global::Nighthollow.Stats.ModifierType), 43 },
-                { typeof(global::Nighthollow.Stats.StatId), 44 },
-                { typeof(global::Nighthollow.Triggers.Conditions.IntegerOperator), 45 },
-                { typeof(global::Nighthollow.Triggers.Effects.CharacterName), 46 },
-                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction), 47 },
-                { typeof(global::Nighthollow.Triggers.Effects.SceneName), 48 },
-                { typeof(global::Nighthollow.Triggers.TriggerCategory), 49 },
-                { typeof(global::Nighthollow.Triggers.TriggerEvent), 50 },
+                { typeof(global::Nighthollow.Rules.Conditions.IntegerOperator), 43 },
+                { typeof(global::Nighthollow.Rules.Effects.CharacterName), 44 },
+                { typeof(global::Nighthollow.Rules.Effects.DisplayHelpTextEffect.Direction), 45 },
+                { typeof(global::Nighthollow.Rules.Effects.SceneName), 46 },
+                { typeof(global::Nighthollow.Rules.EventName), 47 },
+                { typeof(global::Nighthollow.Rules.RuleCategory), 48 },
+                { typeof(global::Nighthollow.Stats.ModifierType), 49 },
+                { typeof(global::Nighthollow.Stats.StatId), 50 },
                 { typeof(global::Nighthollow.World.Data.HexType), 51 },
                 { typeof(global::Nighthollow.World.Data.KingdomName), 52 },
                 { typeof(global::Nighthollow.Data.IItemData), 53 },
                 { typeof(global::Nighthollow.Data.IValueData), 54 },
-                { typeof(global::Nighthollow.Triggers.TriggerCondition), 55 },
-                { typeof(global::Nighthollow.Triggers.TriggerEffect), 56 },
+                { typeof(global::Nighthollow.Rules.RuleCondition), 55 },
+                { typeof(global::Nighthollow.Rules.RuleEffect), 56 },
                 { typeof(global::Nighthollow.Components.GameDataHolder), 57 },
                 { typeof(global::Nighthollow.Data.AffixData), 58 },
                 { typeof(global::Nighthollow.Data.AffixTypeData), 59 },
@@ -128,17 +128,17 @@ namespace MessagePack.Resolvers
                 { typeof(global::Nighthollow.Data.StatusEffectItemData), 74 },
                 { typeof(global::Nighthollow.Data.StatusEffectTypeData), 75 },
                 { typeof(global::Nighthollow.Data.TableMetadata), 76 },
-                { typeof(global::Nighthollow.Stats.DurationValue), 77 },
-                { typeof(global::Nighthollow.Stats.IntRangeValue), 78 },
-                { typeof(global::Nighthollow.Stats.PercentageValue), 79 },
-                { typeof(global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition), 80 },
-                { typeof(global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect), 81 },
-                { typeof(global::Nighthollow.Triggers.Effects.CharacterDialogueEffect), 82 },
-                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect), 83 },
-                { typeof(global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect), 84 },
-                { typeof(global::Nighthollow.Triggers.Effects.LoadSceneEffect), 85 },
-                { typeof(global::Nighthollow.Triggers.Effects.PreventDefaultEffect), 86 },
-                { typeof(global::Nighthollow.Triggers.Rule), 87 },
+                { typeof(global::Nighthollow.Rules.Conditions.UserDeckSizeCondition), 77 },
+                { typeof(global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect), 78 },
+                { typeof(global::Nighthollow.Rules.Effects.CharacterDialogueEffect), 79 },
+                { typeof(global::Nighthollow.Rules.Effects.DisplayHelpTextEffect), 80 },
+                { typeof(global::Nighthollow.Rules.Effects.InitializeWorldMapEffect), 81 },
+                { typeof(global::Nighthollow.Rules.Effects.LoadSceneEffect), 82 },
+                { typeof(global::Nighthollow.Rules.Effects.PreventDefaultEffect), 83 },
+                { typeof(global::Nighthollow.Rules.Rule), 84 },
+                { typeof(global::Nighthollow.Stats.DurationValue), 85 },
+                { typeof(global::Nighthollow.Stats.IntRangeValue), 86 },
+                { typeof(global::Nighthollow.Stats.PercentageValue), 87 },
                 { typeof(global::Nighthollow.World.Data.ColorData), 88 },
                 { typeof(global::Nighthollow.World.Data.HexData), 89 },
                 { typeof(global::Nighthollow.World.Data.HexPosition), 90 },
@@ -187,8 +187,8 @@ namespace MessagePack.Resolvers
                 case 28: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.ResourceItemData>();
                 case 29: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.SkillItemData>();
                 case 30: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Data.StatusEffectItemData>();
-                case 31: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Triggers.TriggerCondition>();
-                case 32: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Triggers.TriggerEffect>();
+                case 31: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Rules.RuleCondition>();
+                case 32: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<global::Nighthollow.Rules.RuleEffect>();
                 case 33: return new global::MessagePack.ImmutableCollection.ImmutableListFormatter<int>();
                 case 34: return new MessagePack.Formatters.Nighthollow.Data.DamageTypeFormatter();
                 case 35: return new MessagePack.Formatters.Nighthollow.Data.PlayerNameFormatter();
@@ -199,20 +199,20 @@ namespace MessagePack.Resolvers
                 case 40: return new MessagePack.Formatters.Nighthollow.Data.StatTagTypeFormatter();
                 case 41: return new MessagePack.Formatters.Nighthollow.Data.StatTypeFormatter();
                 case 42: return new MessagePack.Formatters.Nighthollow.Delegates.DelegateIdFormatter();
-                case 43: return new MessagePack.Formatters.Nighthollow.Stats.ModifierTypeFormatter();
-                case 44: return new MessagePack.Formatters.Nighthollow.Stats.StatIdFormatter();
-                case 45: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.IntegerOperatorFormatter();
-                case 46: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.CharacterNameFormatter();
-                case 47: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffect_DirectionFormatter();
-                case 48: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.SceneNameFormatter();
-                case 49: return new MessagePack.Formatters.Nighthollow.Triggers.TriggerCategoryFormatter();
-                case 50: return new MessagePack.Formatters.Nighthollow.Triggers.TriggerEventFormatter();
+                case 43: return new MessagePack.Formatters.Nighthollow.Rules.Conditions.IntegerOperatorFormatter();
+                case 44: return new MessagePack.Formatters.Nighthollow.Rules.Effects.CharacterNameFormatter();
+                case 45: return new MessagePack.Formatters.Nighthollow.Rules.Effects.DisplayHelpTextEffect_DirectionFormatter();
+                case 46: return new MessagePack.Formatters.Nighthollow.Rules.Effects.SceneNameFormatter();
+                case 47: return new MessagePack.Formatters.Nighthollow.Rules.EventNameFormatter();
+                case 48: return new MessagePack.Formatters.Nighthollow.Rules.RuleCategoryFormatter();
+                case 49: return new MessagePack.Formatters.Nighthollow.Stats.ModifierTypeFormatter();
+                case 50: return new MessagePack.Formatters.Nighthollow.Stats.StatIdFormatter();
                 case 51: return new MessagePack.Formatters.Nighthollow.World.Data.HexTypeFormatter();
                 case 52: return new MessagePack.Formatters.Nighthollow.World.Data.KingdomNameFormatter();
                 case 53: return new MessagePack.Formatters.Nighthollow.Data.IItemDataFormatter();
                 case 54: return new MessagePack.Formatters.Nighthollow.Data.IValueDataFormatter();
-                case 55: return new MessagePack.Formatters.Nighthollow.Triggers.IConditionFormatter();
-                case 56: return new MessagePack.Formatters.Nighthollow.Triggers.TriggerEffectFormatter();
+                case 55: return new MessagePack.Formatters.Nighthollow.Rules.RuleConditionFormatter();
+                case 56: return new MessagePack.Formatters.Nighthollow.Rules.RuleEffectFormatter();
                 case 57: return new MessagePack.Formatters.Nighthollow.Components.GameDataHolderFormatter();
                 case 58: return new MessagePack.Formatters.Nighthollow.Data.AffixDataFormatter();
                 case 59: return new MessagePack.Formatters.Nighthollow.Data.AffixTypeDataFormatter();
@@ -233,17 +233,17 @@ namespace MessagePack.Resolvers
                 case 74: return new MessagePack.Formatters.Nighthollow.Data.StatusEffectItemDataFormatter();
                 case 75: return new MessagePack.Formatters.Nighthollow.Data.StatusEffectTypeDataFormatter();
                 case 76: return new MessagePack.Formatters.Nighthollow.Data.TableMetadataFormatter();
-                case 77: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
-                case 78: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
-                case 79: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
-                case 80: return new MessagePack.Formatters.Nighthollow.Triggers.Conditions.UserDeckSizeConditionFormatter();
-                case 81: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.CenterCameraOnHexEffectFormatter();
-                case 82: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.CharacterDialogueEffectFormatter();
-                case 83: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.DisplayHelpTextEffectFormatter();
-                case 84: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.InitializeWorldMapEffectFormatter();
-                case 85: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.LoadSceneEffectFormatter();
-                case 86: return new MessagePack.Formatters.Nighthollow.Triggers.Effects.PreventDefaultEffectFormatter();
-                case 87: return new MessagePack.Formatters.Nighthollow.Triggers.RuleFormatter();
+                case 77: return new MessagePack.Formatters.Nighthollow.Rules.Conditions.UserDeckSizeConditionFormatter();
+                case 78: return new MessagePack.Formatters.Nighthollow.Rules.Effects.CenterCameraOnHexEffectFormatter();
+                case 79: return new MessagePack.Formatters.Nighthollow.Rules.Effects.CharacterDialogueEffectFormatter();
+                case 80: return new MessagePack.Formatters.Nighthollow.Rules.Effects.DisplayHelpTextEffectFormatter();
+                case 81: return new MessagePack.Formatters.Nighthollow.Rules.Effects.InitializeWorldMapEffectFormatter();
+                case 82: return new MessagePack.Formatters.Nighthollow.Rules.Effects.LoadSceneEffectFormatter();
+                case 83: return new MessagePack.Formatters.Nighthollow.Rules.Effects.PreventDefaultEffectFormatter();
+                case 84: return new MessagePack.Formatters.Nighthollow.Rules.RuleFormatter();
+                case 85: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
+                case 86: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
+                case 87: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
                 case 88: return new MessagePack.Formatters.Nighthollow.World.Data.ColorDataFormatter();
                 case 89: return new MessagePack.Formatters.Nighthollow.World.Data.HexDataFormatter();
                 case 90: return new MessagePack.Formatters.Nighthollow.World.Data.HexPositionFormatter();
@@ -452,6 +452,171 @@ namespace MessagePack.Formatters.Nighthollow.Delegates
 #pragma warning disable SA1403 // File may only contain a single namespace
 #pragma warning disable SA1649 // File name should match first type name
 
+namespace MessagePack.Formatters.Nighthollow.Rules.Conditions
+{
+    using System;
+    using System.Buffers;
+    using MessagePack;
+
+    public sealed class IntegerOperatorFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Conditions.IntegerOperator>
+    {
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Conditions.IntegerOperator value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.Write((Int32)value);
+        }
+
+        public global::Nighthollow.Rules.Conditions.IntegerOperator Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            return (global::Nighthollow.Rules.Conditions.IntegerOperator)reader.ReadInt32();
+        }
+    }
+}
+
+#pragma warning restore 168
+#pragma warning restore 414
+#pragma warning restore 618
+#pragma warning restore 612
+
+#pragma warning restore SA1200 // Using directives should be placed correctly
+#pragma warning restore SA1403 // File may only contain a single namespace
+#pragma warning restore SA1649 // File name should match first type name
+
+// <auto-generated>
+// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
+// </auto-generated>
+
+#pragma warning disable 618
+#pragma warning disable 612
+#pragma warning disable 414
+#pragma warning disable 168
+
+#pragma warning disable SA1200 // Using directives should be placed correctly
+#pragma warning disable SA1403 // File may only contain a single namespace
+#pragma warning disable SA1649 // File name should match first type name
+
+namespace MessagePack.Formatters.Nighthollow.Rules.Effects
+{
+    using System;
+    using System.Buffers;
+    using MessagePack;
+
+    public sealed class CharacterNameFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Effects.CharacterName>
+    {
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Effects.CharacterName value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.Write((Int32)value);
+        }
+
+        public global::Nighthollow.Rules.Effects.CharacterName Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            return (global::Nighthollow.Rules.Effects.CharacterName)reader.ReadInt32();
+        }
+    }
+
+    public sealed class DisplayHelpTextEffect_DirectionFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Effects.DisplayHelpTextEffect.Direction>
+    {
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Effects.DisplayHelpTextEffect.Direction value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.Write((Int32)value);
+        }
+
+        public global::Nighthollow.Rules.Effects.DisplayHelpTextEffect.Direction Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            return (global::Nighthollow.Rules.Effects.DisplayHelpTextEffect.Direction)reader.ReadInt32();
+        }
+    }
+
+    public sealed class SceneNameFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Effects.SceneName>
+    {
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Effects.SceneName value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.Write((Int32)value);
+        }
+
+        public global::Nighthollow.Rules.Effects.SceneName Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            return (global::Nighthollow.Rules.Effects.SceneName)reader.ReadInt32();
+        }
+    }
+}
+
+#pragma warning restore 168
+#pragma warning restore 414
+#pragma warning restore 618
+#pragma warning restore 612
+
+#pragma warning restore SA1200 // Using directives should be placed correctly
+#pragma warning restore SA1403 // File may only contain a single namespace
+#pragma warning restore SA1649 // File name should match first type name
+
+// <auto-generated>
+// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
+// </auto-generated>
+
+#pragma warning disable 618
+#pragma warning disable 612
+#pragma warning disable 414
+#pragma warning disable 168
+
+#pragma warning disable SA1200 // Using directives should be placed correctly
+#pragma warning disable SA1403 // File may only contain a single namespace
+#pragma warning disable SA1649 // File name should match first type name
+
+namespace MessagePack.Formatters.Nighthollow.Rules
+{
+    using System;
+    using System.Buffers;
+    using MessagePack;
+
+    public sealed class EventNameFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.EventName>
+    {
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.EventName value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.Write((Int32)value);
+        }
+
+        public global::Nighthollow.Rules.EventName Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            return (global::Nighthollow.Rules.EventName)reader.ReadInt32();
+        }
+    }
+
+    public sealed class RuleCategoryFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.RuleCategory>
+    {
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.RuleCategory value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.Write((Int32)value);
+        }
+
+        public global::Nighthollow.Rules.RuleCategory Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            return (global::Nighthollow.Rules.RuleCategory)reader.ReadInt32();
+        }
+    }
+}
+
+#pragma warning restore 168
+#pragma warning restore 414
+#pragma warning restore 618
+#pragma warning restore 612
+
+#pragma warning restore SA1200 // Using directives should be placed correctly
+#pragma warning restore SA1403 // File may only contain a single namespace
+#pragma warning restore SA1649 // File name should match first type name
+
+// <auto-generated>
+// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
+// </auto-generated>
+
+#pragma warning disable 618
+#pragma warning disable 612
+#pragma warning disable 414
+#pragma warning disable 168
+
+#pragma warning disable SA1200 // Using directives should be placed correctly
+#pragma warning disable SA1403 // File may only contain a single namespace
+#pragma warning disable SA1649 // File name should match first type name
+
 namespace MessagePack.Formatters.Nighthollow.Stats
 {
     using System;
@@ -481,171 +646,6 @@ namespace MessagePack.Formatters.Nighthollow.Stats
         public global::Nighthollow.Stats.StatId Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             return (global::Nighthollow.Stats.StatId)reader.ReadInt32();
-        }
-    }
-}
-
-#pragma warning restore 168
-#pragma warning restore 414
-#pragma warning restore 618
-#pragma warning restore 612
-
-#pragma warning restore SA1200 // Using directives should be placed correctly
-#pragma warning restore SA1403 // File may only contain a single namespace
-#pragma warning restore SA1649 // File name should match first type name
-
-// <auto-generated>
-// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
-// </auto-generated>
-
-#pragma warning disable 618
-#pragma warning disable 612
-#pragma warning disable 414
-#pragma warning disable 168
-
-#pragma warning disable SA1200 // Using directives should be placed correctly
-#pragma warning disable SA1403 // File may only contain a single namespace
-#pragma warning disable SA1649 // File name should match first type name
-
-namespace MessagePack.Formatters.Nighthollow.Triggers.Conditions
-{
-    using System;
-    using System.Buffers;
-    using MessagePack;
-
-    public sealed class IntegerOperatorFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.IntegerOperator>
-    {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Conditions.IntegerOperator value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((Int32)value);
-        }
-
-        public global::Nighthollow.Triggers.Conditions.IntegerOperator Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::Nighthollow.Triggers.Conditions.IntegerOperator)reader.ReadInt32();
-        }
-    }
-}
-
-#pragma warning restore 168
-#pragma warning restore 414
-#pragma warning restore 618
-#pragma warning restore 612
-
-#pragma warning restore SA1200 // Using directives should be placed correctly
-#pragma warning restore SA1403 // File may only contain a single namespace
-#pragma warning restore SA1649 // File name should match first type name
-
-// <auto-generated>
-// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
-// </auto-generated>
-
-#pragma warning disable 618
-#pragma warning disable 612
-#pragma warning disable 414
-#pragma warning disable 168
-
-#pragma warning disable SA1200 // Using directives should be placed correctly
-#pragma warning disable SA1403 // File may only contain a single namespace
-#pragma warning disable SA1649 // File name should match first type name
-
-namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
-{
-    using System;
-    using System.Buffers;
-    using MessagePack;
-
-    public sealed class CharacterNameFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.CharacterName>
-    {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.CharacterName value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((Int32)value);
-        }
-
-        public global::Nighthollow.Triggers.Effects.CharacterName Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::Nighthollow.Triggers.Effects.CharacterName)reader.ReadInt32();
-        }
-    }
-
-    public sealed class DisplayHelpTextEffect_DirectionFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction>
-    {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((Int32)value);
-        }
-
-        public global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction)reader.ReadInt32();
-        }
-    }
-
-    public sealed class SceneNameFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.SceneName>
-    {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.SceneName value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((Int32)value);
-        }
-
-        public global::Nighthollow.Triggers.Effects.SceneName Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::Nighthollow.Triggers.Effects.SceneName)reader.ReadInt32();
-        }
-    }
-}
-
-#pragma warning restore 168
-#pragma warning restore 414
-#pragma warning restore 618
-#pragma warning restore 612
-
-#pragma warning restore SA1200 // Using directives should be placed correctly
-#pragma warning restore SA1403 // File may only contain a single namespace
-#pragma warning restore SA1649 // File name should match first type name
-
-// <auto-generated>
-// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
-// </auto-generated>
-
-#pragma warning disable 618
-#pragma warning disable 612
-#pragma warning disable 414
-#pragma warning disable 168
-
-#pragma warning disable SA1200 // Using directives should be placed correctly
-#pragma warning disable SA1403 // File may only contain a single namespace
-#pragma warning disable SA1649 // File name should match first type name
-
-namespace MessagePack.Formatters.Nighthollow.Triggers
-{
-    using System;
-    using System.Buffers;
-    using MessagePack;
-
-    public sealed class TriggerCategoryFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.TriggerCategory>
-    {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.TriggerCategory value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((Int32)value);
-        }
-
-        public global::Nighthollow.Triggers.TriggerCategory Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::Nighthollow.Triggers.TriggerCategory)reader.ReadInt32();
-        }
-    }
-
-    public sealed class TriggerEventFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.TriggerEvent>
-    {
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.TriggerEvent value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((Int32)value);
-        }
-
-        public global::Nighthollow.Triggers.TriggerEvent Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::Nighthollow.Triggers.TriggerEvent)reader.ReadInt32();
         }
     }
 }
@@ -982,23 +982,23 @@ namespace MessagePack.Formatters.Nighthollow.Data
 #pragma warning disable SA1403 // File may only contain a single namespace
 #pragma warning disable SA1649 // File name should match first type name
 
-namespace MessagePack.Formatters.Nighthollow.Triggers
+namespace MessagePack.Formatters.Nighthollow.Rules
 {
     using System;
     using System.Buffers;
     using System.Collections.Generic;
     using MessagePack;
 
-    public sealed class IConditionFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.TriggerCondition>
+    public sealed class RuleConditionFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.RuleCondition>
     {
         private readonly Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>> typeToKeyAndJumpMap;
         private readonly Dictionary<int, int> keyToJumpMap;
 
-        public IConditionFormatter()
+        public RuleConditionFormatter()
         {
             this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(1, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
             {
-                { typeof(global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition).TypeHandle, new KeyValuePair<int, int>(0, 0) },
+                { typeof(global::Nighthollow.Rules.Conditions.UserDeckSizeCondition).TypeHandle, new KeyValuePair<int, int>(0, 0) },
             };
             this.keyToJumpMap = new Dictionary<int, int>(1)
             {
@@ -1006,7 +1006,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
             };
         }
 
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.TriggerCondition value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.RuleCondition value, global::MessagePack.MessagePackSerializerOptions options)
         {
             KeyValuePair<int, int> keyValuePair;
             if (value != null && this.typeToKeyAndJumpMap.TryGetValue(value.GetType().TypeHandle, out keyValuePair))
@@ -1016,7 +1016,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                 switch (keyValuePair.Value)
                 {
                     case 0:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition>().Serialize(ref writer, (global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Conditions.UserDeckSizeCondition>().Serialize(ref writer, (global::Nighthollow.Rules.Conditions.UserDeckSizeCondition)value, options);
                         break;
                     default:
                         break;
@@ -1028,7 +1028,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
             writer.WriteNil();
         }
 
-        public global::Nighthollow.Triggers.TriggerCondition Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Rules.RuleCondition Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -1037,7 +1037,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
 
             if (reader.ReadArrayHeader() != 2)
             {
-                throw new InvalidOperationException("Invalid Union data was detected. Type:global::Nighthollow.Triggers.ICondition");
+                throw new InvalidOperationException("Invalid Union data was detected. Type:global::Nighthollow.Rules.RuleCondition");
             }
 
             options.Security.DepthStep(ref reader);
@@ -1048,11 +1048,11 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                 key = -1;
             }
 
-            global::Nighthollow.Triggers.TriggerCondition result = null;
+            global::Nighthollow.Rules.RuleCondition result = null;
             switch (key)
             {
                 case 0:
-                    result = (global::Nighthollow.Triggers.TriggerCondition)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Rules.RuleCondition)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Conditions.UserDeckSizeCondition>().Deserialize(ref reader, options);
                     break;
                 default:
                     reader.Skip();
@@ -1064,21 +1064,21 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
         }
     }
 
-    public sealed class TriggerEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.TriggerEffect>
+    public sealed class RuleEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.RuleEffect>
     {
         private readonly Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>> typeToKeyAndJumpMap;
         private readonly Dictionary<int, int> keyToJumpMap;
 
-        public TriggerEffectFormatter()
+        public RuleEffectFormatter()
         {
             this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(6, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
             {
-                { typeof(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect).TypeHandle, new KeyValuePair<int, int>(0, 0) },
-                { typeof(global::Nighthollow.Triggers.Effects.CharacterDialogueEffect).TypeHandle, new KeyValuePair<int, int>(1, 1) },
-                { typeof(global::Nighthollow.Triggers.Effects.PreventDefaultEffect).TypeHandle, new KeyValuePair<int, int>(2, 2) },
-                { typeof(global::Nighthollow.Triggers.Effects.LoadSceneEffect).TypeHandle, new KeyValuePair<int, int>(3, 3) },
-                { typeof(global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect).TypeHandle, new KeyValuePair<int, int>(4, 4) },
-                { typeof(global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect).TypeHandle, new KeyValuePair<int, int>(5, 5) },
+                { typeof(global::Nighthollow.Rules.Effects.DisplayHelpTextEffect).TypeHandle, new KeyValuePair<int, int>(0, 0) },
+                { typeof(global::Nighthollow.Rules.Effects.CharacterDialogueEffect).TypeHandle, new KeyValuePair<int, int>(1, 1) },
+                { typeof(global::Nighthollow.Rules.Effects.PreventDefaultEffect).TypeHandle, new KeyValuePair<int, int>(2, 2) },
+                { typeof(global::Nighthollow.Rules.Effects.LoadSceneEffect).TypeHandle, new KeyValuePair<int, int>(3, 3) },
+                { typeof(global::Nighthollow.Rules.Effects.InitializeWorldMapEffect).TypeHandle, new KeyValuePair<int, int>(4, 4) },
+                { typeof(global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect).TypeHandle, new KeyValuePair<int, int>(5, 5) },
             };
             this.keyToJumpMap = new Dictionary<int, int>(6)
             {
@@ -1091,7 +1091,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
             };
         }
 
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.TriggerEffect value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.RuleEffect value, global::MessagePack.MessagePackSerializerOptions options)
         {
             KeyValuePair<int, int> keyValuePair;
             if (value != null && this.typeToKeyAndJumpMap.TryGetValue(value.GetType().TypeHandle, out keyValuePair))
@@ -1101,22 +1101,22 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                 switch (keyValuePair.Value)
                 {
                     case 0:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.DisplayHelpTextEffect>().Serialize(ref writer, (global::Nighthollow.Rules.Effects.DisplayHelpTextEffect)value, options);
                         break;
                     case 1:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.CharacterDialogueEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.CharacterDialogueEffect)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.CharacterDialogueEffect>().Serialize(ref writer, (global::Nighthollow.Rules.Effects.CharacterDialogueEffect)value, options);
                         break;
                     case 2:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.PreventDefaultEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.PreventDefaultEffect)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.PreventDefaultEffect>().Serialize(ref writer, (global::Nighthollow.Rules.Effects.PreventDefaultEffect)value, options);
                         break;
                     case 3:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.LoadSceneEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.LoadSceneEffect)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.LoadSceneEffect>().Serialize(ref writer, (global::Nighthollow.Rules.Effects.LoadSceneEffect)value, options);
                         break;
                     case 4:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.InitializeWorldMapEffect>().Serialize(ref writer, (global::Nighthollow.Rules.Effects.InitializeWorldMapEffect)value, options);
                         break;
                     case 5:
-                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect>().Serialize(ref writer, (global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect)value, options);
+                        options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect>().Serialize(ref writer, (global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect)value, options);
                         break;
                     default:
                         break;
@@ -1128,7 +1128,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
             writer.WriteNil();
         }
 
-        public global::Nighthollow.Triggers.TriggerEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Rules.RuleEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -1137,7 +1137,7 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
 
             if (reader.ReadArrayHeader() != 2)
             {
-                throw new InvalidOperationException("Invalid Union data was detected. Type:global::Nighthollow.Triggers.TriggerEffect");
+                throw new InvalidOperationException("Invalid Union data was detected. Type:global::Nighthollow.Rules.RuleEffect");
             }
 
             options.Security.DepthStep(ref reader);
@@ -1148,26 +1148,26 @@ namespace MessagePack.Formatters.Nighthollow.Triggers
                 key = -1;
             }
 
-            global::Nighthollow.Triggers.TriggerEffect result = null;
+            global::Nighthollow.Rules.RuleEffect result = null;
             switch (key)
             {
                 case 0:
-                    result = (global::Nighthollow.Triggers.TriggerEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Rules.RuleEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.DisplayHelpTextEffect>().Deserialize(ref reader, options);
                     break;
                 case 1:
-                    result = (global::Nighthollow.Triggers.TriggerEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.CharacterDialogueEffect>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Rules.RuleEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.CharacterDialogueEffect>().Deserialize(ref reader, options);
                     break;
                 case 2:
-                    result = (global::Nighthollow.Triggers.TriggerEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.PreventDefaultEffect>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Rules.RuleEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.PreventDefaultEffect>().Deserialize(ref reader, options);
                     break;
                 case 3:
-                    result = (global::Nighthollow.Triggers.TriggerEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.LoadSceneEffect>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Rules.RuleEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.LoadSceneEffect>().Deserialize(ref reader, options);
                     break;
                 case 4:
-                    result = (global::Nighthollow.Triggers.TriggerEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Rules.RuleEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.InitializeWorldMapEffect>().Deserialize(ref reader, options);
                     break;
                 case 5:
-                    result = (global::Nighthollow.Triggers.TriggerEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect>().Deserialize(ref reader, options);
+                    result = (global::Nighthollow.Rules.RuleEffect)options.Resolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect>().Deserialize(ref reader, options);
                     break;
                 default:
                     reader.Skip();
@@ -2808,6 +2808,533 @@ namespace MessagePack.Formatters.Nighthollow.Data
 #pragma warning disable SA1403 // File may only contain a single namespace
 #pragma warning disable SA1649 // File name should match first type name
 
+namespace MessagePack.Formatters.Nighthollow.Rules.Conditions
+{
+    using System;
+    using System.Buffers;
+    using MessagePack;
+
+    public sealed class UserDeckSizeConditionFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Conditions.UserDeckSizeCondition>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Conditions.UserDeckSizeCondition value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(2);
+            writer.Write(value.Target);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.Conditions.IntegerOperator>().Serialize(ref writer, value.Operator, options);
+        }
+
+        public global::Nighthollow.Rules.Conditions.UserDeckSizeCondition Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Target__ = default(int);
+            var __Operator__ = default(global::Nighthollow.Rules.Conditions.IntegerOperator);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Target__ = reader.ReadInt32();
+                        break;
+                    case 1:
+                        __Operator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.Conditions.IntegerOperator>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Rules.Conditions.UserDeckSizeCondition(__Target__, __Operator__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+}
+
+#pragma warning restore 168
+#pragma warning restore 414
+#pragma warning restore 618
+#pragma warning restore 612
+
+#pragma warning restore SA1129 // Do not use default value type constructor
+#pragma warning restore SA1200 // Using directives should be placed correctly
+#pragma warning restore SA1309 // Field names should not begin with underscore
+#pragma warning restore SA1312 // Variable names should begin with lower-case letter
+#pragma warning restore SA1403 // File may only contain a single namespace
+#pragma warning restore SA1649 // File name should match first type name
+
+// <auto-generated>
+// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
+// </auto-generated>
+
+#pragma warning disable 618
+#pragma warning disable 612
+#pragma warning disable 414
+#pragma warning disable 168
+
+#pragma warning disable SA1129 // Do not use default value type constructor
+#pragma warning disable SA1200 // Using directives should be placed correctly
+#pragma warning disable SA1309 // Field names should not begin with underscore
+#pragma warning disable SA1312 // Variable names should begin with lower-case letter
+#pragma warning disable SA1403 // File may only contain a single namespace
+#pragma warning disable SA1649 // File name should match first type name
+
+namespace MessagePack.Formatters.Nighthollow.Rules.Effects
+{
+    using System;
+    using System.Buffers;
+    using MessagePack;
+
+    public sealed class CenterCameraOnHexEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(1);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.HexPosition>().Serialize(ref writer, value.Position, options);
+        }
+
+        public global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Position__ = default(global::Nighthollow.World.Data.HexPosition);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Position__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.HexPosition>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect(__Position__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class CharacterDialogueEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Effects.CharacterDialogueEffect>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Effects.CharacterDialogueEffect value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(3);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.CharacterName>().Serialize(ref writer, value.CharacterName, options);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Text, options);
+            formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.OnContinueRuleId, options);
+        }
+
+        public global::Nighthollow.Rules.Effects.CharacterDialogueEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __CharacterName__ = default(global::Nighthollow.Rules.Effects.CharacterName);
+            var __Text__ = default(string);
+            var __OnContinueRuleId__ = default(int?);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __CharacterName__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.CharacterName>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __Text__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __OnContinueRuleId__ = formatterResolver.GetFormatterWithVerify<int?>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Rules.Effects.CharacterDialogueEffect(__CharacterName__, __Text__, __OnContinueRuleId__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class DisplayHelpTextEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Effects.DisplayHelpTextEffect>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Effects.DisplayHelpTextEffect value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(4);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Text, options);
+            writer.Write(value.XPosition);
+            writer.Write(value.YPosition);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.DisplayHelpTextEffect.Direction>().Serialize(ref writer, value.ArrowDirection, options);
+        }
+
+        public global::Nighthollow.Rules.Effects.DisplayHelpTextEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Text__ = default(string);
+            var __XPosition__ = default(int);
+            var __YPosition__ = default(int);
+            var __ArrowDirection__ = default(global::Nighthollow.Rules.Effects.DisplayHelpTextEffect.Direction);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Text__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __XPosition__ = reader.ReadInt32();
+                        break;
+                    case 2:
+                        __YPosition__ = reader.ReadInt32();
+                        break;
+                    case 3:
+                        __ArrowDirection__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.DisplayHelpTextEffect.Direction>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Rules.Effects.DisplayHelpTextEffect(__Text__, __XPosition__, __YPosition__, __ArrowDirection__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class InitializeWorldMapEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Effects.InitializeWorldMapEffect>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Effects.InitializeWorldMapEffect value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            writer.WriteArrayHeader(0);
+        }
+
+        public global::Nighthollow.Rules.Effects.InitializeWorldMapEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadArrayHeader();
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Rules.Effects.InitializeWorldMapEffect();
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class LoadSceneEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Effects.LoadSceneEffect>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Effects.LoadSceneEffect value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(1);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.SceneName>().Serialize(ref writer, value.SceneName, options);
+        }
+
+        public global::Nighthollow.Rules.Effects.LoadSceneEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __SceneName__ = default(global::Nighthollow.Rules.Effects.SceneName);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __SceneName__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.Effects.SceneName>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Rules.Effects.LoadSceneEffect(__SceneName__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class PreventDefaultEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Effects.PreventDefaultEffect>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Effects.PreventDefaultEffect value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            writer.WriteArrayHeader(0);
+        }
+
+        public global::Nighthollow.Rules.Effects.PreventDefaultEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadArrayHeader();
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Rules.Effects.PreventDefaultEffect();
+            reader.Depth--;
+            return ____result;
+        }
+    }
+}
+
+#pragma warning restore 168
+#pragma warning restore 414
+#pragma warning restore 618
+#pragma warning restore 612
+
+#pragma warning restore SA1129 // Do not use default value type constructor
+#pragma warning restore SA1200 // Using directives should be placed correctly
+#pragma warning restore SA1309 // Field names should not begin with underscore
+#pragma warning restore SA1312 // Variable names should begin with lower-case letter
+#pragma warning restore SA1403 // File may only contain a single namespace
+#pragma warning restore SA1649 // File name should match first type name
+
+// <auto-generated>
+// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
+// </auto-generated>
+
+#pragma warning disable 618
+#pragma warning disable 612
+#pragma warning disable 414
+#pragma warning disable 168
+
+#pragma warning disable SA1129 // Do not use default value type constructor
+#pragma warning disable SA1200 // Using directives should be placed correctly
+#pragma warning disable SA1309 // Field names should not begin with underscore
+#pragma warning disable SA1312 // Variable names should begin with lower-case letter
+#pragma warning disable SA1403 // File may only contain a single namespace
+#pragma warning disable SA1649 // File name should match first type name
+
+namespace MessagePack.Formatters.Nighthollow.Rules
+{
+    using System;
+    using System.Buffers;
+    using MessagePack;
+
+    public sealed class RuleFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Rules.Rule>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Rules.Rule value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(7);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.EventName>().Serialize(ref writer, value.EventName, options);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.RuleCategory>().Serialize(ref writer, value.Category, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Rules.RuleCondition>>().Serialize(ref writer, value.Conditions, options);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Rules.RuleEffect>>().Serialize(ref writer, value.Effects, options);
+            writer.Write(value.OneTime);
+            writer.Write(value.Disabled);
+        }
+
+        public global::Nighthollow.Rules.Rule Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __EventName__ = default(global::Nighthollow.Rules.EventName);
+            var __Name__ = default(string);
+            var __Category__ = default(global::Nighthollow.Rules.RuleCategory);
+            var __Conditions__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Rules.RuleCondition>);
+            var __Effects__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Rules.RuleEffect>);
+            var __OneTime__ = default(bool);
+            var __Disabled__ = default(bool);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __EventName__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.EventName>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __Category__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Rules.RuleCategory>().Deserialize(ref reader, options);
+                        break;
+                    case 3:
+                        __Conditions__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Rules.RuleCondition>>().Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        __Effects__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Rules.RuleEffect>>().Deserialize(ref reader, options);
+                        break;
+                    case 5:
+                        __OneTime__ = reader.ReadBoolean();
+                        break;
+                    case 6:
+                        __Disabled__ = reader.ReadBoolean();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Rules.Rule(__EventName__, __Name__, __Category__, __Conditions__, __Effects__, __OneTime__, __Disabled__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+}
+
+#pragma warning restore 168
+#pragma warning restore 414
+#pragma warning restore 618
+#pragma warning restore 612
+
+#pragma warning restore SA1129 // Do not use default value type constructor
+#pragma warning restore SA1200 // Using directives should be placed correctly
+#pragma warning restore SA1309 // Field names should not begin with underscore
+#pragma warning restore SA1312 // Variable names should begin with lower-case letter
+#pragma warning restore SA1403 // File may only contain a single namespace
+#pragma warning restore SA1649 // File name should match first type name
+
+// <auto-generated>
+// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
+// </auto-generated>
+
+#pragma warning disable 618
+#pragma warning disable 612
+#pragma warning disable 414
+#pragma warning disable 168
+
+#pragma warning disable SA1129 // Do not use default value type constructor
+#pragma warning disable SA1200 // Using directives should be placed correctly
+#pragma warning disable SA1309 // Field names should not begin with underscore
+#pragma warning disable SA1312 // Variable names should begin with lower-case letter
+#pragma warning disable SA1403 // File may only contain a single namespace
+#pragma warning disable SA1649 // File name should match first type name
+
 namespace MessagePack.Formatters.Nighthollow.Stats
 {
     using System;
@@ -2931,533 +3458,6 @@ namespace MessagePack.Formatters.Nighthollow.Stats
             }
 
             var ____result = new global::Nighthollow.Stats.PercentageValue(__BasisPoints__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-}
-
-#pragma warning restore 168
-#pragma warning restore 414
-#pragma warning restore 618
-#pragma warning restore 612
-
-#pragma warning restore SA1129 // Do not use default value type constructor
-#pragma warning restore SA1200 // Using directives should be placed correctly
-#pragma warning restore SA1309 // Field names should not begin with underscore
-#pragma warning restore SA1312 // Variable names should begin with lower-case letter
-#pragma warning restore SA1403 // File may only contain a single namespace
-#pragma warning restore SA1649 // File name should match first type name
-
-// <auto-generated>
-// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
-// </auto-generated>
-
-#pragma warning disable 618
-#pragma warning disable 612
-#pragma warning disable 414
-#pragma warning disable 168
-
-#pragma warning disable SA1129 // Do not use default value type constructor
-#pragma warning disable SA1200 // Using directives should be placed correctly
-#pragma warning disable SA1309 // Field names should not begin with underscore
-#pragma warning disable SA1312 // Variable names should begin with lower-case letter
-#pragma warning disable SA1403 // File may only contain a single namespace
-#pragma warning disable SA1649 // File name should match first type name
-
-namespace MessagePack.Formatters.Nighthollow.Triggers.Conditions
-{
-    using System;
-    using System.Buffers;
-    using MessagePack;
-
-    public sealed class UserDeckSizeConditionFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
-            writer.Write(value.Target);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.IntegerOperator>().Serialize(ref writer, value.Operator, options);
-        }
-
-        public global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __Target__ = default(int);
-            var __Operator__ = default(global::Nighthollow.Triggers.Conditions.IntegerOperator);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __Target__ = reader.ReadInt32();
-                        break;
-                    case 1:
-                        __Operator__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Conditions.IntegerOperator>().Deserialize(ref reader, options);
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Conditions.UserDeckSizeCondition(__Target__, __Operator__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-}
-
-#pragma warning restore 168
-#pragma warning restore 414
-#pragma warning restore 618
-#pragma warning restore 612
-
-#pragma warning restore SA1129 // Do not use default value type constructor
-#pragma warning restore SA1200 // Using directives should be placed correctly
-#pragma warning restore SA1309 // Field names should not begin with underscore
-#pragma warning restore SA1312 // Variable names should begin with lower-case letter
-#pragma warning restore SA1403 // File may only contain a single namespace
-#pragma warning restore SA1649 // File name should match first type name
-
-// <auto-generated>
-// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
-// </auto-generated>
-
-#pragma warning disable 618
-#pragma warning disable 612
-#pragma warning disable 414
-#pragma warning disable 168
-
-#pragma warning disable SA1129 // Do not use default value type constructor
-#pragma warning disable SA1200 // Using directives should be placed correctly
-#pragma warning disable SA1309 // Field names should not begin with underscore
-#pragma warning disable SA1312 // Variable names should begin with lower-case letter
-#pragma warning disable SA1403 // File may only contain a single namespace
-#pragma warning disable SA1649 // File name should match first type name
-
-namespace MessagePack.Formatters.Nighthollow.Triggers.Effects
-{
-    using System;
-    using System.Buffers;
-    using MessagePack;
-
-    public sealed class CenterCameraOnHexEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(1);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.HexPosition>().Serialize(ref writer, value.Position, options);
-        }
-
-        public global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __Position__ = default(global::Nighthollow.World.Data.HexPosition);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __Position__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.HexPosition>().Deserialize(ref reader, options);
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Effects.CenterCameraOnHexEffect(__Position__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class CharacterDialogueEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.CharacterDialogueEffect>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.CharacterDialogueEffect value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(3);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.CharacterName>().Serialize(ref writer, value.CharacterName, options);
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Text, options);
-            formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.OnContinueTriggerId, options);
-        }
-
-        public global::Nighthollow.Triggers.Effects.CharacterDialogueEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __CharacterName__ = default(global::Nighthollow.Triggers.Effects.CharacterName);
-            var __Text__ = default(string);
-            var __OnContinueTriggerId__ = default(int?);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __CharacterName__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.CharacterName>().Deserialize(ref reader, options);
-                        break;
-                    case 1:
-                        __Text__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        break;
-                    case 2:
-                        __OnContinueTriggerId__ = formatterResolver.GetFormatterWithVerify<int?>().Deserialize(ref reader, options);
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Effects.CharacterDialogueEffect(__CharacterName__, __Text__, __OnContinueTriggerId__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class DisplayHelpTextEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(4);
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Text, options);
-            writer.Write(value.XPosition);
-            writer.Write(value.YPosition);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction>().Serialize(ref writer, value.ArrowDirection, options);
-        }
-
-        public global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __Text__ = default(string);
-            var __XPosition__ = default(int);
-            var __YPosition__ = default(int);
-            var __ArrowDirection__ = default(global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __Text__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        break;
-                    case 1:
-                        __XPosition__ = reader.ReadInt32();
-                        break;
-                    case 2:
-                        __YPosition__ = reader.ReadInt32();
-                        break;
-                    case 3:
-                        __ArrowDirection__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect.Direction>().Deserialize(ref reader, options);
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Effects.DisplayHelpTextEffect(__Text__, __XPosition__, __YPosition__, __ArrowDirection__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class InitializeWorldMapEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            writer.WriteArrayHeader(0);
-        }
-
-        public global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            var length = reader.ReadArrayHeader();
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Effects.InitializeWorldMapEffect();
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class LoadSceneEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.LoadSceneEffect>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.LoadSceneEffect value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(1);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.SceneName>().Serialize(ref writer, value.SceneName, options);
-        }
-
-        public global::Nighthollow.Triggers.Effects.LoadSceneEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __SceneName__ = default(global::Nighthollow.Triggers.Effects.SceneName);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __SceneName__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.Effects.SceneName>().Deserialize(ref reader, options);
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Effects.LoadSceneEffect(__SceneName__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class PreventDefaultEffectFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Effects.PreventDefaultEffect>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Effects.PreventDefaultEffect value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            writer.WriteArrayHeader(0);
-        }
-
-        public global::Nighthollow.Triggers.Effects.PreventDefaultEffect Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            var length = reader.ReadArrayHeader();
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Effects.PreventDefaultEffect();
-            reader.Depth--;
-            return ____result;
-        }
-    }
-}
-
-#pragma warning restore 168
-#pragma warning restore 414
-#pragma warning restore 618
-#pragma warning restore 612
-
-#pragma warning restore SA1129 // Do not use default value type constructor
-#pragma warning restore SA1200 // Using directives should be placed correctly
-#pragma warning restore SA1309 // Field names should not begin with underscore
-#pragma warning restore SA1312 // Variable names should begin with lower-case letter
-#pragma warning restore SA1403 // File may only contain a single namespace
-#pragma warning restore SA1649 // File name should match first type name
-
-// <auto-generated>
-// THIS (.cs) FILE IS GENERATED BY MPC(MessagePack-CSharp). DO NOT CHANGE IT.
-// </auto-generated>
-
-#pragma warning disable 618
-#pragma warning disable 612
-#pragma warning disable 414
-#pragma warning disable 168
-
-#pragma warning disable SA1129 // Do not use default value type constructor
-#pragma warning disable SA1200 // Using directives should be placed correctly
-#pragma warning disable SA1309 // Field names should not begin with underscore
-#pragma warning disable SA1312 // Variable names should begin with lower-case letter
-#pragma warning disable SA1403 // File may only contain a single namespace
-#pragma warning disable SA1649 // File name should match first type name
-
-namespace MessagePack.Formatters.Nighthollow.Triggers
-{
-    using System;
-    using System.Buffers;
-    using MessagePack;
-
-    public sealed class RuleFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Triggers.Rule>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Triggers.Rule value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (value == null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(7);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerEvent>().Serialize(ref writer, value.TriggerEvent, options);
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerCategory>().Serialize(ref writer, value.Category, options);
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.TriggerCondition>>().Serialize(ref writer, value.Conditions, options);
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.TriggerEffect>>().Serialize(ref writer, value.Effects, options);
-            writer.Write(value.OneTime);
-            writer.Write(value.Disabled);
-        }
-
-        public global::Nighthollow.Triggers.Rule Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                return null;
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __TriggerEvent__ = default(global::Nighthollow.Triggers.TriggerEvent);
-            var __Name__ = default(string);
-            var __Category__ = default(global::Nighthollow.Triggers.TriggerCategory);
-            var __Conditions__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.TriggerCondition>);
-            var __Effects__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.TriggerEffect>);
-            var __OneTime__ = default(bool);
-            var __Disabled__ = default(bool);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __TriggerEvent__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerEvent>().Deserialize(ref reader, options);
-                        break;
-                    case 1:
-                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        break;
-                    case 2:
-                        __Category__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.Triggers.TriggerCategory>().Deserialize(ref reader, options);
-                        break;
-                    case 3:
-                        __Conditions__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.TriggerCondition>>().Deserialize(ref reader, options);
-                        break;
-                    case 4:
-                        __Effects__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Triggers.TriggerEffect>>().Deserialize(ref reader, options);
-                        break;
-                    case 5:
-                        __OneTime__ = reader.ReadBoolean();
-                        break;
-                    case 6:
-                        __Disabled__ = reader.ReadBoolean();
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::Nighthollow.Triggers.Rule(__TriggerEvent__, __Name__, __Category__, __Conditions__, __Effects__, __OneTime__, __Disabled__);
             reader.Depth--;
             return ____result;
         }

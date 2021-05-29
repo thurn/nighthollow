@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Data;
-using Nighthollow.Triggers;
+using Nighthollow.Rules;
 using Nighthollow.World;
 using UnityEngine;
 using UnityEngine.UIElements;

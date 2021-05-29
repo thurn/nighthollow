@@ -20,8 +20,8 @@ using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Items;
+using Nighthollow.Rules;
 using Nighthollow.Services;
-using Nighthollow.Triggers;
 
 #nullable enable
 
@@ -241,11 +241,11 @@ namespace Nighthollow.Editing
     };
   }
 
-  sealed class TriggerDataController : EditorController<Rule>
+  sealed class RuleDataController : EditorController<Rule>
   {
     public override EditorSheetDelegate GetCustomChildSheetDelegate(ReflectivePath reflectivePath)
     {
-      return new TriggerDataEditorSheetDelegate(reflectivePath);
+      return new RuleEditorSheetDelegate(reflectivePath);
     }
 
     public override bool ShowEditButton() => true;
@@ -273,7 +273,7 @@ namespace Nighthollow.Editing
         {typeof(SkillItemData), new SkillItemController()},
         {typeof(StatusEffectTypeData), new StatusEffectTypeController()},
         {typeof(StatusEffectItemData), new StatusEffectItemController()},
-        {typeof(Rule), new TriggerDataController()},
+        {typeof(Rule), new RuleDataController()},
         {typeof(GlobalData), new GlobalDataController()}
       };
 

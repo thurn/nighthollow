@@ -12,12 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Generated Code - Do Not Modify!
-namespace Nighthollow.Data
+using System.Collections.Immutable;
+using MessagePack;
+
+#nullable enable
+
+namespace Nighthollow.Rules.Effects
 {
-  public enum GlobalId
+  [MessagePackObject]
+  public sealed class PreventDefaultEffect : RuleEffect
   {
-    Unknown = 0,
-    ShouldAutoenableRules = 1,
+    public static Description Describe => new Description("request to prevent the default behavior for this event");
+
+    public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
+    );
+
+    public override void Execute(IEffectScope scope, RuleOutput? output)
+    {
+      if (output != null)
+      {
+        output.PreventDefault = true;
+      }
+    }
   }
 }

@@ -15,7 +15,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Data;
-using Nighthollow.Triggers.Effects;
+using Nighthollow.Rules.Effects;
 using Nighthollow.Utils;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;

@@ -44,7 +44,7 @@ namespace Nighthollow.Editor
       method!.Invoke(new object(), null);
     }
 
-    [MenuItem("Tools/Run Build Helper &#^b")]
+    [MenuItem("Tools/Set IL2CPP Flags")]
     public static void Run()
     {
       // The default limit on nested generics in IL2CPP is 7, but microsoft loves nesting, so we need to increase it

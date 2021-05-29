@@ -14,7 +14,7 @@
 
 using Nighthollow.Data;
 using Nighthollow.Interface;
-using Nighthollow.Triggers;
+using Nighthollow.Rules;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -47,7 +47,7 @@ namespace Nighthollow.Services
       .AddBinding(Key.AssetService, AssetService)
       .AddBinding(Key.ScreenController, ScreenController)
       .AddBinding(Key.MainCamera, MainCamera)
-      .AddBinding(Key.TriggerService, TriggerService)
+      .AddBinding(Key.RulesEngine, RulesEngine)
       .Build();
 
     public virtual void OnUpdate()
@@ -68,7 +68,7 @@ namespace Nighthollow.Services
     public ObjectPoolService ObjectPoolService { get; }
     public GlobalsService Globals { get; }
 
-    TriggerService? _triggerService;
-    public TriggerService TriggerService => _triggerService ??= new TriggerService(this);
+    RulesEngine? _rulesEngine;
+    public RulesEngine RulesEngine => _rulesEngine ??= new RulesEngine(this);
   }
 }
