@@ -221,10 +221,13 @@ namespace Nighthollow.Data
           Debug.Log($"Wrote game data to {DataService.PersistentFilePath(tableId)}");
         }
 
+        if (!Application.isEditor)
+        {
 #pragma warning disable 618
-        // See https://forum.unity.com/threads/how-does-saving-work-in-webgl.390385/
-        Application.ExternalEval("_JS_FileSystem_Sync();");
+          // See https://forum.unity.com/threads/how-does-saving-work-in-webgl.390385/
+          Application.ExternalEval("_JS_FileSystem_Sync();");
 #pragma warning restore 618
+        }
       }
 
 #if UNITY_EDITOR

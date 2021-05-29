@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Editing;
+using Nighthollow.Rules.Events;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -147,6 +148,12 @@ namespace Nighthollow.Interface
 
     public void OnUpdate()
     {
+      if (HotkeyPressedEvent.ShouldFire() is { } hotkeyPressedEvent)
+      {
+        Debug.Log($"ScreenController::OnUpdate Invoking {hotkeyPressedEvent.Hotkey}");
+        _registry.RulesEngine.Invoke(hotkeyPressedEvent);
+      }
+
       if (Input.GetKeyDown(KeyCode.E) && ModifiersDown())
       {
         var editor = Get(GameDataEditor);

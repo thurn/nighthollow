@@ -26,6 +26,7 @@ namespace Nighthollow.Rules
   [Union(3, typeof(LoadSceneEffect))]
   [Union(4, typeof(InitializeWorldMapEffect))]
   [Union(5, typeof(CenterCameraOnHexEffect))]
+  [Union(6, typeof(EnableAllRulesEffect))]
   public abstract class RuleEffect
   {
     public abstract ImmutableHashSet<IKey> GetDependencies();

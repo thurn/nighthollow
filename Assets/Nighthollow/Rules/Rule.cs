@@ -29,19 +29,19 @@ namespace Nighthollow.Rules
   public sealed partial class Rule
   {
     public Rule(
-      EventName eventName,
-      string? name,
-      RuleCategory category,
-      ImmutableList<RuleCondition> conditions,
-      ImmutableList<RuleEffect> effects,
-      bool oneTime,
-      bool disabled)
+      EventName eventName = EventName.Unknown,
+      string? name = null,
+      RuleCategory category = RuleCategory.NoCategory,
+      ImmutableList<RuleCondition>? conditions = null,
+      ImmutableList<RuleEffect>? effects = null,
+      bool oneTime = false,
+      bool disabled = false)
     {
       EventName = eventName;
       Name = name;
       Category = category;
-      Conditions = conditions;
-      Effects = effects;
+      Conditions = conditions ?? ImmutableList<RuleCondition>.Empty;
+      Effects = effects ?? ImmutableList<RuleEffect>.Empty;
       OneTime = oneTime;
       Disabled = disabled;
     }

@@ -14,6 +14,7 @@
 
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using Nighthollow.Rules.Events;
 using Nighthollow.Services;
 using Nighthollow.World;
 using UnityEngine;
@@ -76,5 +77,7 @@ namespace Nighthollow.Rules
     public static readonly ReaderKey<CreatureId> Creature = new ReaderKey<CreatureId>("Creature");
 
     public static readonly ReaderKey<int> Hex = new ReaderKey<int>("Hex");
+
+    public static readonly ReaderKey<HotkeyPressedEvent.KeyName> Hotkey = new ReaderKey<HotkeyPressedEvent.KeyName>("Hotkey");
   }
 }

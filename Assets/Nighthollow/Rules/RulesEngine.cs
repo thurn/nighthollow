@@ -24,7 +24,6 @@ namespace Nighthollow.Rules
   public sealed class RulesEngine
   {
     readonly ServiceRegistry _registry;
-    bool _initialized;
 
     public RulesEngine(ServiceRegistry registry)
     {
@@ -41,27 +40,8 @@ namespace Nighthollow.Rules
       }
     }
 
-    void Initialize()
-    {
-      var database = _registry.Database;
-      if (_registry.Globals.GetBool(GlobalId.ShouldAutoenableRules))
-      {
-        foreach (var pair in database.Snapshot().Rules.Where(pair => pair.Value?.Disabled == true))
-        {
-          database.Update(TableId.Rules, pair.Key, t => t.WithDisabled(false));
-        }
-      }
-
-      _initialized = true;
-    }
-
     public void Invoke<TEvent>(TEvent ruleEvent, RuleOutput? output = null) where TEvent : IEvent
     {
-      if (!_initialized)
-      {
-        Initialize();
-      }
-
       var gameData = _registry.Database.Snapshot();
       var scope = ruleEvent.AddBindings(Scope.CreateBuilder(ruleEvent.GetSpec().Bindings(), _registry.Scope));
 

@@ -58,8 +58,8 @@ namespace Nighthollow.Rules
 
     object GetInternal(IKey key)
     {
-      Errors.CheckState(_dependencies.Contains(key), $"Key {key} was not registered as a dependency");
-      Errors.CheckState(_bindings.ContainsKey(key), $"Binding not found for {key}");
+      Errors.CheckState(_dependencies.Contains(key), $"Key {key.Name} was not registered as a dependency");
+      Errors.CheckState(_bindings.ContainsKey(key), $"Binding not found for {key.Name}");
       return _bindings[key];
     }
 

@@ -14,24 +14,26 @@
 
 using System.Collections.Immutable;
 using MessagePack;
-using Nighthollow.Rules.Conditions;
+using Nighthollow.Rules.Events;
 
 #nullable enable
 
-namespace Nighthollow.Rules
+namespace Nighthollow.Rules.Conditions
 {
-  [Union(0, typeof(UserDeckSizeCondition))]
-  [Union(1, typeof(HotkeyEqualsCondition))]
-  public abstract class RuleCondition
+  [MessagePackObject]
+  public sealed partial class HotkeyEqualsCondition : RuleCondition
   {
-    public abstract ImmutableHashSet<IKey> GetDependencies();
+    public static Description Describe => new Description("that hotkey is", nameof(Hotkey));
 
-    public abstract bool Satisfied(IScope scope);
-
-    public override string ToString()
+    public HotkeyEqualsCondition(HotkeyPressedEvent.KeyName hotkey)
     {
-      var description = Description.Describe(this);
-      return description.Length < 100 ? description : $"{description.Substring(0, 100)}...";
+      Hotkey = hotkey;
     }
+
+    [Key(0)] public HotkeyPressedEvent.KeyName Hotkey { get; }
+
+    public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(Key.Hotkey);
+
+    public override bool Satisfied(IScope scope) => scope.Get(Key.Hotkey) == Hotkey;
   }
 }

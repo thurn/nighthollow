@@ -69,6 +69,8 @@ namespace Nighthollow.Rules.Effects
       {
         database.Update(TableId.Hexes, hexLookup[pair.Value.StartingPosition], hex => hex.WithOwningKingdom(pair.Key));
       }
+
+      Debug.Log("World Map Initialized");
     }
   }
 }

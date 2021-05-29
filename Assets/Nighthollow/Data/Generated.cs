@@ -6,6 +6,7 @@ using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.State;
 using Nighthollow.Rules;
+using Nighthollow.Rules.Events;
 using Nighthollow.World.Data;
 
 #nullable enable

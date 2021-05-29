@@ -70,6 +70,7 @@ using = [
     "Nighthollow.Stats",
     "Nighthollow.State",
     "Nighthollow.Rules",
+    "Nighthollow.Rules.Events",
     "Nighthollow.World.Data"
 ]
 

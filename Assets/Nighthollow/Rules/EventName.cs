@@ -30,7 +30,8 @@ namespace Nighthollow.Rules
     BattleSceneReady = 6,
     SchoolSelectionSceneReady = 7,
     RuleInvoked = 8,
-    UserCreaturePlayed = 9
+    UserCreaturePlayed = 9,
+    HotkeyPressed = 10
   }
 
   public static class EventNameUtil
@@ -46,6 +47,7 @@ namespace Nighthollow.Rules
       EventName.SchoolSelectionSceneReady => SchoolSelectionSceneReadyEvent.Specification,
       EventName.RuleInvoked => RuleInvokedEvent.Specification,
       EventName.UserCreaturePlayed => UserCreaturePlayedEvent.Specification,
+      EventName.HotkeyPressed => HotkeyPressedEvent.Specification,
       _ => throw Errors.UnknownEnumValue(eventName)
     };
   }
