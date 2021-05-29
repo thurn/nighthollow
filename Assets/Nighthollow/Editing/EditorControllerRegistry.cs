@@ -29,12 +29,11 @@ namespace Nighthollow.Editing
 {
   public abstract class EditorController
   {
-    public virtual TableEditorSheetDelegate? GetTableDelegate(
-      ServiceRegistry registry,
-      ReflectivePath reflectivePath,
-      EditorSheetDelegate.DropdownCellContent tableSelector)
+    public interface ICustomColumn
     {
-      return null;
+      string Heading { get; }
+      int Width { get; }
+      EditorSheetDelegate.ICellContent GetContent(ServiceRegistry registry, int entityId, ReflectivePath path);
     }
 
     public virtual EditorSheetDelegate? GetCustomChildSheetDelegate(ReflectivePath reflectivePath)
@@ -55,6 +54,8 @@ namespace Nighthollow.Editing
     }
 
     public virtual bool ShowEditButton() => false;
+
+    public virtual ICustomColumn? GetCustomColumn() => null;
   }
 
   abstract class EditorController<T> : EditorController
@@ -241,7 +242,7 @@ namespace Nighthollow.Editing
     };
   }
 
-  sealed class RuleDataController : EditorController<Rule>
+  sealed class RuleDataController : EditorController<Rule>, EditorController.ICustomColumn
   {
     public override EditorSheetDelegate GetCustomChildSheetDelegate(ReflectivePath reflectivePath)
     {
@@ -249,6 +250,16 @@ namespace Nighthollow.Editing
     }
 
     public override bool ShowEditButton() => true;
+
+    public override ICustomColumn GetCustomColumn() => this;
+
+    public string Heading => ">";
+
+    public int Width => 50;
+
+    public EditorSheetDelegate.ICellContent GetContent(ServiceRegistry registry, int entityId, ReflectivePath path) =>
+      new EditorSheetDelegate.ButtonCellContent(">",
+        () => { registry.RulesEngine.InvokeRuleId(entityId, registry.Scope); });
   }
 
   sealed class GlobalDataController : EditorController<GlobalData>
@@ -276,18 +287,6 @@ namespace Nighthollow.Editing
         {typeof(Rule), new RuleDataController()},
         {typeof(GlobalData), new GlobalDataController()}
       };
-
-    public static TableEditorSheetDelegate GetTableDelegate(
-      ServiceRegistry registry,
-      ReflectivePath reflectivePath,
-      EditorSheetDelegate.DropdownCellContent tableSelector,
-      string tableName)
-    {
-      var tableDelegate = Controllers.ContainsKey(reflectivePath.GetUnderlyingType())
-        ? Controllers[reflectivePath.GetUnderlyingType()].GetTableDelegate(registry, reflectivePath, tableSelector)
-        : null;
-      return tableDelegate ?? new TableEditorSheetDelegate(reflectivePath, tableSelector, tableName);
-    }
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)
     {
@@ -346,6 +345,9 @@ namespace Nighthollow.Editing
     }
 
     public static bool ShowEditButton(Type type) =>
-      Controllers.ContainsKey(type) ? Controllers[type].ShowEditButton() : false;
+      Controllers.ContainsKey(type) && Controllers[type].ShowEditButton();
+
+    public static EditorController.ICustomColumn? GetCustomColumn(Type type) =>
+      Controllers.ContainsKey(type) ? Controllers[type].GetCustomColumn() : null;
   }
 }

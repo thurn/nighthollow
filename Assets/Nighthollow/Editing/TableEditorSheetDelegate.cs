@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 
@@ -24,20 +25,19 @@ using UnityEngine;
 
 namespace Nighthollow.Editing
 {
-  public class TableEditorSheetDelegate : EditorSheetDelegate
+  public sealed class TableEditorSheetDelegate : EditorSheetDelegate
   {
     const int AddButtonKey = 1;
 
+    readonly ServiceRegistry _registry;
     readonly ReflectivePath _reflectivePath;
     readonly Type _underlyingType;
     readonly DropdownCellContent _tableSelector;
     readonly string _tableName;
 
-    // this is probably a bad idea but yolo
-    protected Action? OnModified;
-
-    public TableEditorSheetDelegate(ReflectivePath path, DropdownCellContent tableSelector, string tableName)
+    public TableEditorSheetDelegate(ServiceRegistry registry, ReflectivePath path, DropdownCellContent tableSelector, string tableName)
     {
+      _registry = registry;
       _reflectivePath = path;
       _underlyingType = _reflectivePath.GetUnderlyingType();
       _tableSelector = tableSelector;
@@ -51,10 +51,9 @@ namespace Nighthollow.Editing
       GetType().GetMethod(nameof(InitializeInternal),
           BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)!
         .MakeGenericMethod(_reflectivePath.GetUnderlyingType()).Invoke(this, new object[] {onModified});
-      OnModified = onModified;
     }
 
-    protected void InitializeInternal<T>(Action onModified) where T : class
+    void InitializeInternal<T>(Action onModified) where T : class
     {
       // We can eventually consider more fine-grained update logic to improve performance, but you can have problems
       // with stored ReflectivePath instances becoming invalid (e.g. when a rule changes to a different subtype the
@@ -62,13 +61,14 @@ namespace Nighthollow.Editing
       _reflectivePath.Database.OnTableUpdated((TableId<T>) _reflectivePath.TableId, onModified);
     }
 
-    public sealed override TableContent GetCells() => RenderTable(_reflectivePath, _tableSelector);
+    public override TableContent GetCells() => RenderTable(_reflectivePath, _tableSelector);
 
-    protected virtual TableContent RenderTable(ReflectivePath reflectivePath, DropdownCellContent tableSelector)
+    TableContent RenderTable(ReflectivePath reflectivePath, DropdownCellContent tableSelector)
     {
       var properties = _underlyingType.GetProperties();
       var imageProperty = properties.FirstOrDefault(p => p.Name.Contains("ImageAddress"));
       var showEditButton = EditorControllerRegistry.ShowEditButton(reflectivePath.GetUnderlyingType());
+      var customColumn = EditorControllerRegistry.GetCustomColumn(reflectivePath.GetUnderlyingType());
 
       var staticHeadings = new List<ICellContent>();
 
@@ -77,10 +77,20 @@ namespace Nighthollow.Editing
         staticHeadings.Add(new LabelCellContent("Edit"));
       }
 
+      if (customColumn != null)
+      {
+        staticHeadings.Add(new LabelCellContent(customColumn.Heading));
+      }
+
       staticHeadings.Add(new LabelCellContent("x"));
 
       var filters = new List<ICellContent>();
       if (showEditButton)
+      {
+        filters.Add(new LabelCellContent("-"));
+      }
+
+      if (customColumn != null)
       {
         filters.Add(new LabelCellContent("-"));
       }
@@ -104,11 +114,12 @@ namespace Nighthollow.Editing
       var rowCount = 0;
       foreach (var entityId in reflectivePath.GetTable().Keys.OfType<int>())
       {
+        var childPath = reflectivePath.EntityId(entityId);
         var filterFailed = (
           from property in properties
           let filter = PlayerPrefs.GetString(FilterKey(property), "")
           where !string.IsNullOrWhiteSpace(filter) &&
-                !reflectivePath.EntityId(entityId).Property(property).RenderPreview().Contains(filter)
+                !childPath.Property(property).RenderPreview().Contains(filter)
           select property).Any();
 
         if (filterFailed)
@@ -120,18 +131,23 @@ namespace Nighthollow.Editing
 
         if (showEditButton)
         {
-          staticColumns.Add(new ViewChildButtonCellContent(reflectivePath.EntityId(entityId)));
+          staticColumns.Add(new ViewChildButtonCellContent(childPath));
+        }
+
+        if (customColumn != null)
+        {
+          staticColumns.Add(customColumn.GetContent(_registry, entityId, childPath));
         }
 
         staticColumns.Add(RowDeleteButton(entityId));
 
         if (imageProperty != null)
         {
-          staticColumns.Add(new ImageCellContent(reflectivePath.EntityId(entityId).Property(imageProperty)));
+          staticColumns.Add(new ImageCellContent(childPath.Property(imageProperty)));
         }
 
         result.Add(staticColumns.Concat(properties
-            .Select(property => new ReflectivePathCellContent(reflectivePath.EntityId(entityId).Property(property))))
+            .Select(property => new ReflectivePathCellContent(childPath.Property(property))))
           .ToList());
 
         rowCount++;
@@ -156,6 +172,11 @@ namespace Nighthollow.Editing
         columnWidths.Add(115);
       }
 
+      if (customColumn != null)
+      {
+        columnWidths.Add(customColumn.Width);
+      }
+
       columnWidths.Add(50);
       if (imageProperty != null)
       {
@@ -178,19 +199,19 @@ namespace Nighthollow.Editing
       return new FilterInputCellContent(PlayerPrefs.GetString(key, ""), key);
     }
 
-    protected ButtonCellContent RowDeleteButton(int entityId)
+    ButtonCellContent RowDeleteButton(int entityId)
     {
       return new ButtonCellContent("x", () => DatabaseDelete(entityId));
     }
 
-    protected void DatabaseDelete(int entityId)
+    void DatabaseDelete(int entityId)
     {
       typeof(Database).GetMethod(nameof(Database.Delete))!
         .MakeGenericMethod(_underlyingType)
         .Invoke(_reflectivePath.Database, new object[] {_reflectivePath.TableId, entityId});
     }
 
-    protected void DatabaseInsert(object value)
+    void DatabaseInsert(object value)
     {
       typeof(Database).GetMethod(nameof(Database.Insert))!
         .MakeGenericMethod(_reflectivePath.GetUnderlyingType())

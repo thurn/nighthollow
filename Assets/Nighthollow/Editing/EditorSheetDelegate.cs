@@ -73,7 +73,7 @@ namespace Nighthollow.Editing
         onReflectivePath(ReflectivePath);
     }
 
-    protected sealed class LabelCellContent : ICellContent
+    public sealed class LabelCellContent : ICellContent
     {
       public LabelCellContent(string? text)
       {

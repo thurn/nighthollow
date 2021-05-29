@@ -153,7 +153,7 @@ namespace Nighthollow.Editing
 
       _sheet = new EditorSheet(
         Controller,
-        EditorControllerRegistry.GetTableDelegate(Registry, path, tableSelector, currentTableId.TableName),
+        new TableEditorSheetDelegate(Registry, path, tableSelector, currentTableId.TableName),
         initiallySelected);
       Add(_sheet);
     }
