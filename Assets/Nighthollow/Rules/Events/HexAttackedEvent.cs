@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -27,7 +28,9 @@ namespace Nighthollow.Rules.Events
 
     public sealed class Spec : EventSpec
     {
-      public override EventName Game => EventName.HexAttacked;
+      public override EventName Name => EventName.HexAttacked;
+
+      public override ServiceRegistryName? ParentRegistry => ServiceRegistryName.World;
 
       public override Description Describe() => new Description("the user attacks a hex");
 

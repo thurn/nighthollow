@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -24,7 +25,9 @@ namespace Nighthollow.Rules.Events
 
     public sealed class Spec : EventSpec
     {
-      public override EventName Game => EventName.WorldSceneReady;
+      public override EventName Name => EventName.WorldSceneReady;
+
+      public override ServiceRegistryName? ParentRegistry => ServiceRegistryName.World;
 
       public override Description Describe() => new Description("the world scene is loaded");
 
@@ -42,7 +45,9 @@ namespace Nighthollow.Rules.Events
 
     public sealed class Spec : EventSpec
     {
-      public override EventName Game => EventName.BattleSceneReady;
+      public override EventName Name => EventName.BattleSceneReady;
+
+      public override ServiceRegistryName? ParentRegistry => ServiceRegistryName.Battle;
 
       public override Description Describe() => new Description("the battle scene is loaded");
 
@@ -60,7 +65,9 @@ namespace Nighthollow.Rules.Events
 
     public sealed class Spec : EventSpec
     {
-      public override EventName Game => EventName.SchoolSelectionSceneReady;
+      public override EventName Name => EventName.SchoolSelectionSceneReady;
+
+      public override ServiceRegistryName? ParentRegistry => ServiceRegistryName.SchoolSelection;
 
       public override Description Describe() => new Description("the school selection scene is loaded");
 

@@ -40,7 +40,7 @@ namespace Nighthollow.Services
 
     void OnDataFetched(FetchResult result)
     {
-      _registry = new ServiceRegistry(
+      _registry = new SchoolSelectionServiceRegistry(
         result.Database,
         result.AssetService,
         _document.rootVisualElement,

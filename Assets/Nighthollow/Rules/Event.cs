@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -20,7 +21,13 @@ namespace Nighthollow.Rules
 {
   public abstract class EventSpec
   {
-    public abstract EventName Game { get; }
+    public abstract EventName Name { get; }
+
+    /// <summary>
+    /// Defines the scope for this event. If null, no scope-checking will be performed for rules using this event.
+    /// </summary>
+    public abstract ServiceRegistryName? ParentRegistry { get; }
+
     public abstract Description Describe();
     public abstract ImmutableHashSet<IKey> Bindings();
 

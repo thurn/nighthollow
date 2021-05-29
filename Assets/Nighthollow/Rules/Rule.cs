@@ -15,6 +15,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -100,6 +101,27 @@ namespace Nighthollow.Rules
       }
 
       return true;
+    }
+
+    public ImmutableHashSet<IKey> MissingBindings()
+    {
+      var spec = EventName.GetSpec();
+      if (spec.ParentRegistry is { } parentRegistry)
+      {
+        var bindings = spec.Bindings()
+          .Concat(ServiceRegistryBindings.Get(parentRegistry))
+          .Concat(ServiceRegistry.Keys)
+          .ToImmutableHashSet();
+        var required = Conditions.SelectMany(c => c.GetDependencies())
+          .Concat(Effects.SelectMany(e => e.GetDependencies()))
+          .ToImmutableHashSet();
+
+        return required.Except(bindings);
+      }
+      else
+      {
+        return ImmutableHashSet<IKey>.Empty;
+      }
     }
   }
 }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections.Immutable;
 using Nighthollow.Data;
 using Nighthollow.Interface;
 using Nighthollow.Rules;
@@ -22,11 +24,31 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Services
 {
-  public class ServiceRegistry
+  public enum ServiceRegistryName
+  {
+    Unknown = 0,
+    Battle = 1,
+    World = 2,
+    SchoolSelection = 3,
+    Editor = 4
+  }
+
+  public static class ServiceRegistryBindings
+  {
+    public static ImmutableHashSet<IKey> Get(ServiceRegistryName name) => name switch
+    {
+      ServiceRegistryName.Battle => BattleServiceRegistry.Keys,
+      ServiceRegistryName.World => WorldServiceRegistry.Keys,
+      ServiceRegistryName.SchoolSelection => SchoolSelectionServiceRegistry.Keys,
+      _ => throw new ArgumentOutOfRangeException(nameof(name), name, null)
+    };
+  }
+
+  public abstract class ServiceRegistry
   {
     readonly VisualElement _rootVisualElement;
 
-    public ServiceRegistry(
+    protected ServiceRegistry(
       Database database,
       AssetService assetService,
       VisualElement rootVisualElement,
@@ -40,9 +62,19 @@ namespace Nighthollow.Services
       Globals = new GlobalsService(database);
     }
 
+    public abstract ServiceRegistryName Name { get; }
+
     Scope? _scope;
 
-    public virtual Scope Scope => _scope ??= Scope.CreateBuilder()
+    public static ImmutableHashSet<IKey> Keys => ImmutableHashSet.Create<IKey>(
+      Key.Database,
+      Key.AssetService,
+      Key.ScreenController,
+      Key.MainCamera,
+      Key.RulesEngine
+    );
+
+    public virtual Scope Scope => _scope ??= Scope.CreateBuilder(Keys)
       .AddBinding(Key.Database, Database)
       .AddBinding(Key.AssetService, AssetService)
       .AddBinding(Key.ScreenController, ScreenController)
@@ -70,5 +102,35 @@ namespace Nighthollow.Services
 
     RulesEngine? _rulesEngine;
     public RulesEngine RulesEngine => _rulesEngine ??= new RulesEngine(this);
+  }
+
+  public sealed class EditorServiceRegistry : ServiceRegistry
+  {
+    public EditorServiceRegistry(
+      Database database,
+      AssetService assetService,
+      VisualElement rootVisualElement,
+      Camera mainCamera) : base(database, assetService, rootVisualElement, mainCamera)
+    {
+    }
+
+    public override ServiceRegistryName Name => ServiceRegistryName.Editor;
+
+    public new static ImmutableHashSet<IKey> Keys => ImmutableHashSet<IKey>.Empty;
+  }
+
+  public sealed class SchoolSelectionServiceRegistry : ServiceRegistry
+  {
+    public SchoolSelectionServiceRegistry(
+      Database database,
+      AssetService assetService,
+      VisualElement rootVisualElement,
+      Camera mainCamera) : base(database, assetService, rootVisualElement, mainCamera)
+    {
+    }
+
+    public override ServiceRegistryName Name => ServiceRegistryName.SchoolSelection;
+
+    public new static ImmutableHashSet<IKey> Keys => ImmutableHashSet<IKey>.Empty;
   }
 }

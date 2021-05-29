@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using Nighthollow.Data;
 using Nighthollow.Rules;
 using Nighthollow.World;
@@ -34,9 +35,16 @@ namespace Nighthollow.Services
       StaticAssets = staticAssets;
     }
 
+    public override ServiceRegistryName Name => ServiceRegistryName.World;
+
     Scope? _scope;
 
-    public override Scope Scope => _scope ??= Scope.CreateBuilder(base.Scope)
+    public new static ImmutableHashSet<IKey> Keys => ImmutableHashSet.Create<IKey>(
+      Key.WorldMapRenderer,
+      Key.WorldMapController
+    );
+
+    public override Scope Scope => _scope ??= Scope.CreateBuilder(Keys, base.Scope)
       .AddBinding(Key.WorldMapRenderer, WorldMapRenderer)
       .AddBinding(Key.WorldMapController, WorldMapController)
       .Build();

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -24,7 +25,9 @@ namespace Nighthollow.Rules.Events
 
     public sealed class Spec : EventSpec
     {
-      public override EventName Game => EventName.DrewOpeningHand;
+      public override EventName Name => EventName.DrewOpeningHand;
+
+      public override ServiceRegistryName? ParentRegistry => ServiceRegistryName.Battle;
 
       public override Description Describe() => new Description("an opening hand is drawn");
 

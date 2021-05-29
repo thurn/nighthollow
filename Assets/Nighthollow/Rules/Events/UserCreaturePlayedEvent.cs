@@ -25,7 +25,9 @@ namespace Nighthollow.Rules.Events
 
     public sealed class Spec : EventSpec
     {
-      public override EventName Game => EventName.UserCreaturePlayed;
+      public override EventName Name => EventName.UserCreaturePlayed;
+
+      public override ServiceRegistryName? ParentRegistry => ServiceRegistryName.Battle;
 
       public override Description Describe() => new Description("the user plays a creature");
 

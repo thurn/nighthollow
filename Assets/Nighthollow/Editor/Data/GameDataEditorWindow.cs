@@ -75,7 +75,7 @@ namespace Nighthollow.Editor.Data
 
       var tree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Nighthollow/Interface/UXML/Screen.uxml");
       tree.CloneTree(rootVisualElement);
-      var registry = new ServiceRegistry(database, assetService, rootVisualElement, Camera.main!);
+      var registry = new EditorServiceRegistry(database, assetService, rootVisualElement, Camera.main!);
       registry.ScreenController.Screen.AddToClassList("rendered-in-editor");
       registry.ScreenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(database));
     }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -24,7 +25,9 @@ namespace Nighthollow.Rules.Events
 
     public sealed class Spec : EventSpec
     {
-      public override EventName Game => EventName.RuleInvoked;
+      public override EventName Name => EventName.RuleInvoked;
+
+      public override ServiceRegistryName? ParentRegistry => null;
 
       public override Description Describe() => new Description("this rule is manually invoked");
 

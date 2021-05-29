@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -21,7 +24,7 @@ namespace Nighthollow.Rules
 {
   public interface IScope
   {
-    T Get<T>(Key<T> key);
+    T Get<T>(ReaderKey<T> key);
   }
 
   public interface IEffectScope : IScope
@@ -33,7 +36,8 @@ namespace Nighthollow.Rules
 
   public sealed class Scope : IEffectScope
   {
-    public static Builder CreateBuilder(Scope? parent = null) => new Builder(parent);
+    public static Builder CreateBuilder(ImmutableHashSet<IKey> expectedKeys, Scope? parent = null) =>
+      new Builder(expectedKeys, parent);
 
     readonly ImmutableHashSet<IKey> _dependencies;
     readonly ImmutableDictionary<IKey, object> _bindings;
@@ -44,7 +48,7 @@ namespace Nighthollow.Rules
       _bindings = bindings;
     }
 
-    public T Get<T>(Key<T> key) => (T) GetInternal(key);
+    public T Get<T>(ReaderKey<T> key) => (T) GetInternal(key);
 
     public T Get<T>(MutatorKey<T> key) => (T) GetInternal(key);
 
@@ -61,17 +65,19 @@ namespace Nighthollow.Rules
 
     public sealed class Builder
     {
+      readonly HashSet<IKey> _expectedKeys;
       readonly ImmutableDictionary<IKey, object>.Builder _builder;
 
-      public Builder(Scope? parent = null)
+      public Builder(ImmutableHashSet<IKey> expectedKeys, Scope? parent = null)
       {
+        _expectedKeys = new HashSet<IKey>(expectedKeys);
         _builder = parent?._bindings.ToBuilder() ?? ImmutableDictionary.CreateBuilder<IKey, object>();
       }
 
-      public Builder AddBinding<T>(Key<T> key, T value) where T : class =>
+      public Builder AddBinding<T>(ReaderKey<T> key, T value) where T : class =>
         AddBindingInternal(key, Errors.CheckNotNull(value));
 
-      public Builder AddValueBinding<T>(Key<T> key, T value) where T : struct =>
+      public Builder AddValueBinding<T>(ReaderKey<T> key, T value) where T : struct =>
         AddBindingInternal(key, value);
 
       public Builder AddBinding<T>(MutatorKey<T> key, T value) where T : class =>
@@ -82,11 +88,22 @@ namespace Nighthollow.Rules
 
       Builder AddBindingInternal(IKey key, object value)
       {
+        Errors.CheckArgument(_expectedKeys.Contains(key), $"Unexpected key bound: {key.Name}");
         _builder[key] = value;
+        _expectedKeys.Remove(key);
         return this;
       }
 
-      public Scope Build() => new Scope(ImmutableHashSet<IKey>.Empty, _builder.ToImmutable());
+      public Scope Build()
+      {
+        if (_expectedKeys.Count != 0)
+        {
+          throw new InvalidOperationException(
+            $"Scope builder did not bind keys: [{string.Join(", ", _expectedKeys.Select(k => k.Name))}]");
+        }
+
+        return new Scope(ImmutableHashSet<IKey>.Empty, _builder.ToImmutable());
+      }
     }
   }
 }

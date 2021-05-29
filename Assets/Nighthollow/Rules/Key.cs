@@ -26,39 +26,55 @@ namespace Nighthollow.Rules
 {
   public interface IKey
   {
+    string Name { get; }
   }
 
-  public sealed class Key<T> : IKey
+  public sealed class ReaderKey<T> : IKey
   {
+    public string Name { get; }
+
+    public ReaderKey(string name)
+    {
+      Name = name;
+    }
   }
 
   public sealed class MutatorKey<T> : IKey
   {
+    public string Name { get; }
+
+    public MutatorKey(string name)
+    {
+      Name = name;
+    }
   }
 
   public static class Key
   {
-    public static readonly MutatorKey<Database> Database = new MutatorKey<Database>();
+    public static readonly MutatorKey<Database> Database = new MutatorKey<Database>("Database");
 
-    public static readonly Key<GameData> GameData = new Key<GameData>();
+    public static readonly ReaderKey<GameData> GameData = new ReaderKey<GameData>("GameData");
 
-    public static readonly MutatorKey<AssetService> AssetService = new MutatorKey<AssetService>();
+    public static readonly MutatorKey<AssetService> AssetService = new MutatorKey<AssetService>("AssetService");
 
-    public static readonly MutatorKey<WorldMapRenderer> WorldMapRenderer = new MutatorKey<WorldMapRenderer>();
+    public static readonly MutatorKey<WorldMapRenderer> WorldMapRenderer =
+      new MutatorKey<WorldMapRenderer>("WorldMapRenderer");
 
-    public static readonly MutatorKey<WorldMapController> WorldMapController = new MutatorKey<WorldMapController>();
+    public static readonly MutatorKey<WorldMapController> WorldMapController =
+      new MutatorKey<WorldMapController>("WorldMapController");
 
-    public static readonly MutatorKey<Camera> MainCamera = new MutatorKey<Camera>();
+    public static readonly MutatorKey<Camera> MainCamera = new MutatorKey<Camera>("MainCamera");
 
-    public static readonly MutatorKey<ScreenController> ScreenController = new MutatorKey<ScreenController>();
+    public static readonly MutatorKey<ScreenController> ScreenController =
+      new MutatorKey<ScreenController>("ScreenController");
 
-    public static readonly MutatorKey<RulesEngine> RulesEngine = new MutatorKey<RulesEngine>();
+    public static readonly MutatorKey<RulesEngine> RulesEngine = new MutatorKey<RulesEngine>("RulesEngine");
 
     public static readonly MutatorKey<CreatureService.Controller> CreatureController =
-      new MutatorKey<CreatureService.Controller>();
+      new MutatorKey<CreatureService.Controller>("CreatureController");
 
-    public static readonly Key<CreatureId> Creature = new Key<CreatureId>();
+    public static readonly ReaderKey<CreatureId> Creature = new ReaderKey<CreatureId>("Creature");
 
-    public static readonly Key<int> Hex = new Key<int>();
+    public static readonly ReaderKey<int> Hex = new ReaderKey<int>("Hex");
   }
 }

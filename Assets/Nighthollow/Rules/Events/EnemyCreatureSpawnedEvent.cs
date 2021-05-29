@@ -25,7 +25,9 @@ namespace Nighthollow.Rules.Events
 
     public sealed class Spec : EventSpec
     {
-      public override EventName Game => EventName.EnemyCreatureSpawned;
+      public override EventName Name => EventName.EnemyCreatureSpawned;
+
+      public override ServiceRegistryName? ParentRegistry => ServiceRegistryName.Battle;
 
       public override Description Describe() => new Description("an enemy creature is spawned");
 

@@ -15,6 +15,7 @@
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Services;
+using UnityEngine;
 
 #nullable enable
 
@@ -28,6 +29,16 @@ namespace Nighthollow.Rules
     public RulesEngine(ServiceRegistry registry)
     {
       _registry = registry;
+
+      foreach (var rule in _registry.Database.Snapshot().Rules.Values)
+      {
+        var missingBindings = rule.MissingBindings();
+        if (!missingBindings.IsEmpty)
+        {
+          var missing = string.Join(", ", missingBindings.Select(k => k.Name));
+          Debug.LogError($"Rule {rule.Name} is invalid, missing bindings for [{missing}]");
+        }
+      }
     }
 
     void Initialize()
@@ -52,9 +63,9 @@ namespace Nighthollow.Rules
       }
 
       var gameData = _registry.Database.Snapshot();
-      var scope = ruleEvent.AddBindings(Scope.CreateBuilder(_registry.Scope));
+      var scope = ruleEvent.AddBindings(Scope.CreateBuilder(ruleEvent.GetSpec().Bindings(), _registry.Scope));
 
-      foreach (var pair in gameData.Rules.Where(pair => pair.Value.EventName == ruleEvent.GetSpec().Game))
+      foreach (var pair in gameData.Rules.Where(pair => pair.Value.EventName == ruleEvent.GetSpec().Name))
       {
         InvokeInternal(pair.Key, scope, pair.Value, output);
       }

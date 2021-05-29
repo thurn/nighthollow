@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -27,7 +28,9 @@ namespace Nighthollow.Rules.Events
 
     public sealed class Spec : EventSpec
     {
-      public override EventName Game => EventName.BattleStarted;
+      public override EventName Name => EventName.BattleStarted;
+
+      public override ServiceRegistryName? ParentRegistry => ServiceRegistryName.Battle;
 
       public override Description Describe() => new Description("a battle is started");
 

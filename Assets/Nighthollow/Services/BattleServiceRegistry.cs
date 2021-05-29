@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates;
@@ -55,9 +56,15 @@ namespace Nighthollow.Services
       DamageTextService = damageTextService;
     }
 
+    public override ServiceRegistryName Name => ServiceRegistryName.Battle;
+
     Scope? _scope;
 
-    public override Scope Scope => _scope ??= Scope.CreateBuilder(base.Scope)
+    public new static ImmutableHashSet<IKey> Keys => ImmutableHashSet.Create<IKey>(
+      Key.CreatureController
+    );
+
+    public override Scope Scope => _scope ??= Scope.CreateBuilder(Keys, base.Scope)
       .AddBinding(Key.CreatureController, CreatureController)
       .Build();
 
