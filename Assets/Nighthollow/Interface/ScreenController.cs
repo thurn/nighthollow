@@ -121,16 +121,13 @@ namespace Nighthollow.Interface
 
     readonly ServiceRegistry _registry;
     readonly VisualElement _screen;
-    public VisualElement Screen => _screen;
-
-    DragInfo? _currentlyDragging;
-    int? _currentlyWithinDragTarget;
-    public bool IsCurrentlyDragging => _currentlyDragging != null;
+    readonly DragController _dragController;
 
     public ScreenController(VisualElement rootVisualElement, ServiceRegistry registry)
     {
       _screen = InterfaceUtils.FindByName<VisualElement>(rootVisualElement, "Screen");
       _registry = registry;
+      _dragController = new DragController();
 
       foreach (var key in _keys)
       {
@@ -140,11 +137,15 @@ namespace Nighthollow.Interface
         _elements[key.Name] = element;
       }
 
-      _screen.RegisterCallback<MouseMoveEvent>(MouseMove);
-      _screen.RegisterCallback<MouseUpEvent>(MouseUp);
+      _screen.RegisterCallback<MouseMoveEvent>(_dragController.OnMouseMove);
+      _screen.RegisterCallback<MouseUpEvent>(_dragController.OnMouseUp);
 
       Get(LoadingBlackout).Hide(forceWhenInvisible: true);
     }
+
+    public VisualElement Screen => _screen;
+
+    public bool IsCurrentlyDragging => _dragController.IsCurrentlyDragging;
 
     public void OnUpdate()
     {
@@ -217,89 +218,7 @@ namespace Nighthollow.Interface
 
     public void StartDrag(DragInfo dragInfo)
     {
-      _currentlyDragging = dragInfo;
-      var element = dragInfo.Element;
-      Get(Tooltip).Hide();
-      element.RemoveFromHierarchy();
-
-      element.style.position = new StyleEnum<Position>(Position.Absolute);
-      _screen.Add(element);
-      element.style.left = _currentlyDragging.DragStartElementPosition.x;
-      element.style.top = _currentlyDragging.DragStartElementPosition.y;
-      element.style.width = element.contentRect.width;
-      element.style.height = element.contentRect.height;
-    }
-
-    void MouseMove(MouseMoveEvent e)
-    {
-      if (_currentlyDragging != null)
-      {
-        var diff = e.mousePosition - _currentlyDragging.DragStartMousePosition;
-        _currentlyDragging.Element.style.left = new StyleLength(_currentlyDragging.DragStartElementPosition.x + diff.x);
-        _currentlyDragging.Element.style.top = new StyleLength(_currentlyDragging.DragStartElementPosition.y + diff.y);
-
-        var withinDragTarget = FindWithinDragTarget(_currentlyDragging, e);
-        if (_currentlyWithinDragTarget == null && withinDragTarget != null)
-        {
-          _currentlyWithinDragTarget = withinDragTarget;
-          _currentlyDragging.OnDragEnter(withinDragTarget.Value);
-        }
-        else if (_currentlyWithinDragTarget != null && withinDragTarget == null)
-        {
-          _currentlyDragging.OnDragExit(_currentlyWithinDragTarget.Value);
-          _currentlyWithinDragTarget = null;
-        }
-      }
-    }
-
-    static int? FindWithinDragTarget(DragInfo currentlyDragging, IMouseEvent e)
-    {
-      for (var i = 0; i < currentlyDragging.TargetElements.Count; ++i)
-      {
-        var target = currentlyDragging.TargetElements[i];
-        if (target.worldBound.Contains(e.mousePosition))
-        {
-          return i;
-        }
-      }
-
-      return null;
-    }
-
-    void MouseUp(MouseUpEvent e)
-    {
-      if (_currentlyDragging != null)
-      {
-        var currentlyDragging = _currentlyDragging;
-        _currentlyDragging = null;
-        _currentlyWithinDragTarget = null;
-
-        var element = currentlyDragging.Element;
-        currentlyDragging.EnableDragging = false;
-
-        var droppedOverTargetIndex = FindWithinDragTarget(currentlyDragging, e);
-
-        var targetParent = currentlyDragging.OriginalParent;
-        if (droppedOverTargetIndex != null)
-        {
-          targetParent = currentlyDragging.GetTarget(droppedOverTargetIndex.Value);
-        }
-
-        element.RemoveFromHierarchy();
-        targetParent.Add(element);
-        element.style.position = currentlyDragging.OriginalPosition;
-        element.style.left = currentlyDragging.OriginalLeft;
-        element.style.top = currentlyDragging.OriginalTop;
-        element.style.width = currentlyDragging.OriginalWidth;
-        element.style.height = currentlyDragging.OriginalHeight;
-
-        if (droppedOverTargetIndex != null)
-        {
-          currentlyDragging.OnDropped(droppedOverTargetIndex.Value);
-        }
-
-        currentlyDragging.EnableDragging = true;
-      }
+      _dragController.StartDrag(this, dragInfo);
     }
   }
 }
