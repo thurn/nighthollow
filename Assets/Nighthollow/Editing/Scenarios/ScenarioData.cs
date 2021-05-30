@@ -31,8 +31,6 @@ namespace Nighthollow.Editing.Scenarios
   [MessagePackObject]
   public sealed partial class ScenarioData : IHasEffects
   {
-    const string LoadScenarioKey = "Scenarios/LoadScenario";
-
     public ScenarioData(
       string? name = null,
       string? description = null,
@@ -67,7 +65,7 @@ namespace Nighthollow.Editing.Scenarios
     /// </summary>
     public static void Start(ServiceRegistry registry, int entityId)
     {
-      PlayerPrefs.SetInt(LoadScenarioKey, entityId);
+      registry.PlayerPrefs.SetInt(PlayerPrefsService.LoadScenarioKey, entityId);
       LoadSceneEffect.LoadAsync(registry.Database.Snapshot().Scenarios[entityId].Scene);
     }
 
@@ -76,7 +74,7 @@ namespace Nighthollow.Editing.Scenarios
     /// </summary>
     public static bool Invoke(ServiceRegistry registry)
     {
-      var scenarioId = PlayerPrefs.GetInt(LoadScenarioKey, 0);
+      var scenarioId = registry.PlayerPrefs.GetInt(PlayerPrefsService.LoadScenarioKey);
       if (scenarioId != 0)
       {
         var scenario = registry.Database.Snapshot().Scenarios[scenarioId];
@@ -87,9 +85,9 @@ namespace Nighthollow.Editing.Scenarios
       return false;
     }
 
-    public static void ClearPreference()
+    public static void ClearPreference(PlayerPrefsService service)
     {
-      PlayerPrefs.SetInt(LoadScenarioKey, 0);
+      service.SetInt(PlayerPrefsService.LoadScenarioKey, 0);
     }
 
     IEnumerator<YieldInstruction> InvokeAsync(ServiceRegistry registry)
@@ -98,7 +96,7 @@ namespace Nighthollow.Editing.Scenarios
 
       if (!Repeating)
       {
-        PlayerPrefs.SetInt(LoadScenarioKey, 0);
+        registry.PlayerPrefs.SetInt(PlayerPrefsService.LoadScenarioKey, 0);
       }
 
       foreach (var effect in Effects)

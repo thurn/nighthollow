@@ -19,7 +19,6 @@ using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Services;
 using Nighthollow.Utils;
-using UnityEngine;
 
 #nullable enable
 
@@ -35,7 +34,8 @@ namespace Nighthollow.Editing
     readonly DropdownCellContent _tableSelector;
     readonly string _tableName;
 
-    public TableEditorSheetDelegate(ServiceRegistry registry, ReflectivePath path, DropdownCellContent tableSelector, string tableName)
+    public TableEditorSheetDelegate(ServiceRegistry registry, ReflectivePath path, DropdownCellContent tableSelector,
+      string tableName)
     {
       _registry = registry;
       _reflectivePath = path;
@@ -117,7 +117,7 @@ namespace Nighthollow.Editing
         var childPath = reflectivePath.EntityId(entityId);
         var filterFailed = (
           from property in properties
-          let filter = PlayerPrefs.GetString(FilterKey(property), "")
+          let filter = _registry.PlayerPrefs.GetString(new PlayerPrefsService.Filter(_tableName, property))
           where !string.IsNullOrWhiteSpace(filter) &&
                 !childPath.Property(property).RenderPreview().Contains(filter)
           select property).Any();
@@ -191,12 +191,10 @@ namespace Nighthollow.Editing
       return new TableContent(result, columnWidths);
     }
 
-    string FilterKey(PropertyInfo info) => $"Filters/{_tableName}/{info.Name}";
-
     ICellContent PropertyFilterCell(PropertyInfo arg)
     {
-      var key = FilterKey(arg);
-      return new FilterInputCellContent(PlayerPrefs.GetString(key, ""), key);
+      var key = new PlayerPrefsService.Filter(_tableName, arg);
+      return new FilterInputCellContent(_registry.PlayerPrefs.GetString(key), key);
     }
 
     ButtonCellContent RowDeleteButton(int entityId)

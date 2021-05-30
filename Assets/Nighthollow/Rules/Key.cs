@@ -62,5 +62,8 @@ namespace Nighthollow.Rules
 
     public static readonly DerivedKey<BattleServiceRegistry, UserService> User =
       new DerivedKey<BattleServiceRegistry, UserService>("User", BattleServiceRegistry, r => r.UserService);
+
+    public static readonly MutatorKey<PlayerPrefsService> PlayerPrefs =
+      new MutatorKey<PlayerPrefsService>("PlayerPrefs");
   }
 }

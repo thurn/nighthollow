@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Nighthollow.Interface;
+using Nighthollow.Services;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,10 +23,12 @@ namespace Nighthollow.Editing
 {
   public sealed class FilterInputTextFieldCellDelegate : TextFieldEditorCellDelegate
   {
-    readonly string _preferenceKey;
+    readonly ServiceRegistry _registry;
+    readonly PlayerPrefsService.Key _preferenceKey;
 
-    public FilterInputTextFieldCellDelegate(string preferenceKey)
+    public FilterInputTextFieldCellDelegate(ServiceRegistry registry, PlayerPrefsService.Key preferenceKey)
     {
+      _registry = registry;
       _preferenceKey = preferenceKey;
     }
 
@@ -33,7 +36,7 @@ namespace Nighthollow.Editing
     {
       field.RegisterCallback<ChangeEvent<string>>(e =>
       {
-        PlayerPrefs.SetString(_preferenceKey, e.newValue);
+        _registry.PlayerPrefs.SetString(_preferenceKey, e.newValue);
         parent.OnDataChanged();
       });
     }

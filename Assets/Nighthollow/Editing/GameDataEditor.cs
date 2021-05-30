@@ -99,7 +99,7 @@ namespace Nighthollow.Editing
 
       ClearCurrentSheet();
       _sheet = new EditorSheet(
-        Controller,
+        Registry,
         sheetDelegate,
         initiallySelected,
         () => { PreviousSheet(reflectivePath); });
@@ -152,7 +152,7 @@ namespace Nighthollow.Editing
         "Select Table");
 
       _sheet = new EditorSheet(
-        Controller,
+        Registry,
         new TableEditorSheetDelegate(Registry, path, tableSelector, currentTableId.TableName),
         initiallySelected);
       Add(_sheet);

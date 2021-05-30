@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using Nighthollow.Services;
 
 #nullable enable
 
@@ -212,14 +213,14 @@ namespace Nighthollow.Editing
 
     public sealed class FilterInputCellContent : ICellContent
     {
-      public FilterInputCellContent(string text, string preferenceKey)
+      public FilterInputCellContent(string text, PlayerPrefsService.Key preferenceKey)
       {
         Text = text;
         PreferenceKey = preferenceKey;
       }
 
       public string Text { get; }
-      public string PreferenceKey { get; }
+      public PlayerPrefsService.Key PreferenceKey { get; }
 
       public T Switch<T>(
         Func<ReflectivePath, T> onReflectivePath,

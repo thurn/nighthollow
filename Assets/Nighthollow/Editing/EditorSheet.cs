@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nighthollow.Interface;
+using Nighthollow.Services;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -42,7 +43,7 @@ namespace Nighthollow.Editing
     public const int DefaultCellWidth = 250;
     const int ContentPadding = 32;
 
-    readonly ScreenController _screenController;
+    readonly ServiceRegistry _registry;
     readonly EditorSheetDelegate _sheetDelegate;
     readonly Action? _onEscape;
     readonly ScrollView _scrollView;
@@ -57,12 +58,12 @@ namespace Nighthollow.Editing
     Vector2Int? CurrentlyActive { get; set; }
 
     public EditorSheet(
-      ScreenController controller,
+      ServiceRegistry registry,
       EditorSheetDelegate sheetDelegate,
       Vector2Int? selected,
       Action? onEscape = null)
     {
-      _screenController = controller;
+      _registry = registry;
       _sheetDelegate = sheetDelegate;
       _onEscape = onEscape;
       _initiallySelected = selected;
@@ -120,7 +121,7 @@ namespace Nighthollow.Editing
 
           var cell = columnIndex >= list.Count
             ? EditorCellFactory.CreateBlank()
-            : EditorCellFactory.Create(_screenController, this, list[columnIndex]);
+            : EditorCellFactory.Create(_registry, this, list[columnIndex]);
           cell.RegisterCallback<ClickEvent>(e =>
           {
             if (position == CurrentlySelected)

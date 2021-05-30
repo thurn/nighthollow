@@ -62,6 +62,7 @@ namespace Nighthollow.Services
       ObjectPoolService = new ObjectPoolService();
       Globals = new GlobalsService(database);
       CoroutineRunner = coroutineRunner;
+      PlayerPrefs = new PlayerPrefsService();
     }
 
     public abstract ServiceRegistryName Name { get; }
@@ -73,7 +74,8 @@ namespace Nighthollow.Services
       Key.AssetService,
       Key.ScreenController,
       Key.MainCamera,
-      Key.RulesEngine
+      Key.RulesEngine,
+      Key.PlayerPrefs
     );
 
     public virtual Scope Scope => _scope ??= Scope.CreateBuilder(Keys)
@@ -82,6 +84,7 @@ namespace Nighthollow.Services
       .AddBinding(Key.ScreenController, ScreenController)
       .AddBinding(Key.MainCamera, MainCamera)
       .AddBinding(Key.RulesEngine, RulesEngine)
+      .AddBinding(Key.PlayerPrefs, PlayerPrefs)
       .Build();
 
     public virtual void OnUpdate()
@@ -108,6 +111,8 @@ namespace Nighthollow.Services
     public RulesEngine RulesEngine => _rulesEngine ??= new RulesEngine(this);
 
     public IStartCoroutine CoroutineRunner { get; }
+
+    public PlayerPrefsService PlayerPrefs { get; }
   }
 
   public sealed class EditorServiceRegistry : ServiceRegistry

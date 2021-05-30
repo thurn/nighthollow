@@ -16,6 +16,7 @@ using System;
 using System.Reflection;
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using Nighthollow.Services;
 using Nighthollow.Stats;
 
 #nullable enable
@@ -27,23 +28,23 @@ namespace Nighthollow.Editing
     public static EditorCell CreateBlank() => new LabelEditorCell(null);
 
     public static EditorCell Create(
-      ScreenController screenController,
+      ServiceRegistry registry,
       IEditor parent,
       EditorSheetDelegate.ICellContent cellContent) =>
       cellContent.Switch(
-        reflectivePath => CreateTextFieldEditorCell(screenController, parent, reflectivePath),
+        reflectivePath => CreateTextFieldEditorCell(registry.ScreenController, parent, reflectivePath),
         text => new LabelEditorCell(text),
         button => new ButtonEditorCell(button, parent),
-        dropdown => new SelectorDropdownEditorCell(screenController, dropdown, parent),
+        dropdown => new SelectorDropdownEditorCell(registry.ScreenController, dropdown, parent),
         cell => new ImageEditorCell(cell.ImagePath),
         foreignKey => new ForeignKeyDropdownEditorCell(
-          screenController, foreignKey.ReflectivePath, foreignKey.ForeignType, parent),
+          registry.ScreenController, foreignKey.ReflectivePath, foreignKey.ForeignType, parent),
         viewChildButton =>
-          ViewChildButtonEditorCell(screenController, parent, viewChildButton),
+          ViewChildButtonEditorCell(registry.ScreenController, parent, viewChildButton),
         filterInput => new TextFieldEditorCell(
           filterInput.Text,
           parent,
-          new FilterInputTextFieldCellDelegate(filterInput.PreferenceKey)));
+          new FilterInputTextFieldCellDelegate(registry, filterInput.PreferenceKey)));
 
     static ButtonEditorCell ViewChildButtonEditorCell(ScreenController screenController, IEditor parent,
       EditorSheetDelegate.ViewChildButtonCellContent viewChildButton) =>

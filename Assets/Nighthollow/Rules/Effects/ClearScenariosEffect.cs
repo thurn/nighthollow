@@ -28,7 +28,10 @@ namespace Nighthollow.Rules.Effects
   {
     public override Description Describe() => new Description("clear repeating scenarios");
 
-    public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(Key.Database);
+    public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
+      Key.Database,
+      Key.PlayerPrefs
+    );
 
     public override void Execute(IEffectScope scope, RuleOutput? output)
     {
@@ -39,7 +42,7 @@ namespace Nighthollow.Rules.Effects
         database.Update(TableId.Scenarios, pair.Key, t => t.WithRepeating(false));
       }
 
-      ScenarioData.ClearPreference();
+      ScenarioData.ClearPreference(scope.Get(Key.PlayerPrefs));
 
       Debug.Log("Scenarios Cleared");
     }
