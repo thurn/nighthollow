@@ -627,7 +627,8 @@ namespace Nighthollow.Data
         : new StaticItemListData(
           name,
           Creatures,
-          Resources);
+          Resources,
+          Tag);
 
     public StaticItemListData WithCreatures(ImmutableList<CreatureItemData> creatures) =>
       Equals(creatures, Creatures)
@@ -635,7 +636,8 @@ namespace Nighthollow.Data
         : new StaticItemListData(
           Name,
           creatures,
-          Resources);
+          Resources,
+          Tag);
 
     public StaticItemListData WithResources(ImmutableList<ResourceItemData> resources) =>
       Equals(resources, Resources)
@@ -643,7 +645,17 @@ namespace Nighthollow.Data
         : new StaticItemListData(
           Name,
           Creatures,
-          resources);
+          resources,
+          Tag);
+
+    public StaticItemListData WithTag(IdentifierTag tag) =>
+      Equals(tag, Tag)
+        ? this
+        : new StaticItemListData(
+          Name,
+          Creatures,
+          Resources,
+          tag);
 
   }
 
@@ -1562,6 +1574,16 @@ namespace Nighthollow.Data
           KeyValueStore,
           SpawnCount,
           deathCount);
+
+  }
+
+  public sealed partial class UserData
+  {
+    public UserData WithPrimarySchool(School primarySchool) =>
+      Equals(primarySchool, PrimarySchool)
+        ? this
+        : new UserData(
+          primarySchool);
 
   }
 }

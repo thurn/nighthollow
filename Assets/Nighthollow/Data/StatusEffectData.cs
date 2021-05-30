@@ -80,7 +80,7 @@ namespace Nighthollow.Data
 
     public static StatusEffectItemData DefaultItem(int statusEffectTypeId, GameData gameData)
     {
-      var value = gameData.StatusEffects[statusEffectTypeId];
+      var value = gameData.StatusEffectTypes[statusEffectTypeId];
       return new StatusEffectItemData(
         statusEffectTypeId,
         value.ImplicitModifiers.Select(m => m.Value != null ? m : m.WithValue(m.ValueLow)).ToImmutableList(),
@@ -108,7 +108,7 @@ namespace Nighthollow.Data
     [Key(2)] public DurationValue? Duration { get; }
 
     public StatusEffectData BuildStatusEffect(GameData gameData) =>
-      new StatusEffectData(StatusEffectTypeId, gameData.StatusEffects[StatusEffectTypeId], this);
+      new StatusEffectData(StatusEffectTypeId, gameData.StatusEffectTypes[StatusEffectTypeId], this);
   }
 
   public sealed class StatusEffectData

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Immutable;
 using MessagePack;
 
 #nullable enable
@@ -20,23 +19,19 @@ using MessagePack;
 namespace Nighthollow.Data
 {
   /// <summary>
-  /// Configuration and state for a single battle (individual game/match), describing things like the set of
-  /// enemies which will be be faced.
+  /// Stores global information about the user, such as their chosen school & available resources.
   /// </summary>
   [MessagePackObject]
-  public sealed partial class BattleData
+  public sealed partial class UserData
   {
-    [SerializationConstructor]
-    public BattleData(
-      ImmutableList<CreatureItemData>? enemies = null,
-      ImmutableList<ModifierData>? enemyModifiers = null)
+    public UserData(School primarySchool = School.Unknown)
     {
-      Enemies = enemies ?? ImmutableList<CreatureItemData>.Empty;
-      EnemyModifiers = enemyModifiers ?? ImmutableList<ModifierData>.Empty;
+      PrimarySchool = primarySchool;
     }
 
-    [Key(0)] public ImmutableList<CreatureItemData> Enemies { get; }
-
-    [Key(1)] public ImmutableList<ModifierData> EnemyModifiers { get; }
+    /// <summary>
+    /// School selected by the user at game start.
+    /// </summary>
+    [Key(0)] public School PrimarySchool { get; }
   }
 }

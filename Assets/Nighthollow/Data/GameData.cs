@@ -43,6 +43,7 @@ namespace Nighthollow.Data
       new GameData(_data.SetItem(tableId.Id, table));
 
     public BattleData BattleData => TableId.BattleData.GetSingleton(this);
+    public UserData UserData => TableId.UserData.GetSingleton(this);
     public ImmutableDictionary<int, TableMetadata> TableMetadata => GetTable(TableId.TableMetadata);
     public ImmutableDictionary<int, CreatureTypeData> CreatureTypes => GetTable(TableId.CreatureTypes);
     public ImmutableDictionary<int, AffixTypeData> AffixTypes => GetTable(TableId.AffixTypes);
@@ -52,7 +53,7 @@ namespace Nighthollow.Data
     public ImmutableDictionary<int, ModifierData> UserModifiers => GetTable(TableId.UserModifiers);
     public ImmutableDictionary<int, CreatureItemData> Collection => GetTable(TableId.Collection);
     public ImmutableDictionary<int, CreatureItemData> Deck => GetTable(TableId.Deck);
-    public ImmutableDictionary<int, StatusEffectTypeData> StatusEffects => GetTable(TableId.StatusEffectTypes);
+    public ImmutableDictionary<int, StatusEffectTypeData> StatusEffectTypes => GetTable(TableId.StatusEffectTypes);
     public ImmutableDictionary<int, Rule> Rules => GetTable(TableId.Rules);
     public ImmutableDictionary<int, GlobalData> Globals => GetTable(TableId.Globals);
     public ImmutableDictionary<int, HexData> Hexes => GetTable(TableId.Hexes);

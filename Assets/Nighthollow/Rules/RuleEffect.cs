@@ -36,6 +36,7 @@ namespace Nighthollow.Rules
   [Union(6, typeof(EnableAllRulesEffect))]
   [Union(7, typeof(PlaceCreaturesFromListEffect))]
   [Union(8, typeof(ClearScenariosEffect))]
+  [Union(9, typeof(ResetToNewGameStateEffect))]
   public abstract class RuleEffect
   {
     public abstract ImmutableHashSet<IKey> GetDependencies();

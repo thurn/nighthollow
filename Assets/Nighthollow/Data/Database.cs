@@ -33,7 +33,7 @@ namespace Nighthollow.Data
     ImmutableDictionary<(ITableId, int), ImmutableList<IListener>> _updatedListeners;
     ImmutableDictionary<ITableId, ImmutableList<IListener>> _addedListeners;
     ImmutableDictionary<ITableId, ImmutableList<IListener>> _removedListeners;
-    ImmutableList<EntityEvent> _events;
+    ImmutableList<IInternalEvent> _events;
     GameData _gameData;
     bool _writeRequired;
 
@@ -45,7 +45,7 @@ namespace Nighthollow.Data
       _updatedListeners = ImmutableDictionary<(ITableId, int), ImmutableList<IListener>>.Empty;
       _addedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
       _removedListeners = ImmutableDictionary<ITableId, ImmutableList<IListener>>.Empty;
-      _events = ImmutableList<EntityEvent>.Empty;
+      _events = ImmutableList<IInternalEvent>.Empty;
     }
 
     /// <summary>
@@ -146,6 +146,32 @@ namespace Nighthollow.Data
     }
 
     /// <summary>
+    /// Remove all values from the identified table and replace with the values in <paramref name="table"/>
+    /// </summary>
+    public void OverwriteTable<T>(TableId<T> tableId, ImmutableDictionary<int, T> table) where T : class
+    {
+      _events = _events.Add(new TableEvent(tableId));
+      _gameData = tableId.Write(_gameData, table);
+      _writeRequired = true;
+    }
+
+    /// <summary>
+    /// Overwrites the value of a singleton table.
+    /// </summary>
+    public void OverwriteSingleton<T>(SingletonTableId<T> tableId, T value) where T : class
+    {
+      OverwriteTable(tableId, ImmutableDictionary<int, T>.Empty.SetItem(SingletonTableId<T>.SingletonEntityId, value));
+    }
+
+    /// <summary>
+    /// Remove all values from a table.
+    /// </summary>
+    public void ClearTable<T>(TableId<T> tableId) where T : class
+    {
+      OverwriteTable(tableId, ImmutableDictionary<int, T>.Empty);
+    }
+
+    /// <summary>
     /// Mutates an entity within a table by applying the provided mutation function to it. If no entity with the
     /// provided ID exists, it will be silently ignored.
     /// </summary>
@@ -161,6 +187,14 @@ namespace Nighthollow.Data
     public void Upsert<T>(TableId<T> tableId, int entityId, T defaultValue, Func<T, T> mutation) where T : class
     {
       UpdateInternal(tableId, entityId, defaultValue, mutation);
+    }
+
+    /// <summary>
+    /// Updates the value contained in a singleton table.
+    /// </summary>
+    public void UpdateSingleton<T>(SingletonTableId<T> tableId, T defaultValue, Func<T, T> mutation) where T : class
+    {
+      Upsert(tableId, SingletonTableId<T>.SingletonEntityId, defaultValue, mutation);
     }
 
     void UpdateInternal<T>(TableId<T> tableId, int entityId, T? defaultValue, Func<T, T> update) where T : class
@@ -203,7 +237,7 @@ namespace Nighthollow.Data
     }
 
     /// <summary>Should only be invoked from <see cref="DataService"/>.</summary>
-    public void PerformWritesInternal(bool disablePersistence)
+    public void PerformWritesInternal()
     {
       if (!_writeRequired)
       {
@@ -212,22 +246,18 @@ namespace Nighthollow.Data
 
       var tableIds = _events.Select(e => e.TableId).ToImmutableHashSet();
 
-      if (!disablePersistence)
+      foreach (var tableId in tableIds)
       {
-        foreach (var tableId in tableIds)
-        {
-          using var stream = File.OpenWrite(DataService.PersistentFilePath(tableId));
-          tableId.Serialize(_gameData, stream, _serializationOptions);
-          Debug.Log($"Wrote game data to {DataService.PersistentFilePath(tableId)}");
-        }
+        using var stream = File.OpenWrite(DataService.PersistentFilePath(tableId));
+        tableId.Serialize(_gameData, stream, _serializationOptions);
+      }
 
-        if (!Application.isEditor)
-        {
+      if (!Application.isEditor)
+      {
 #pragma warning disable 618
-          // See https://forum.unity.com/threads/how-does-saving-work-in-webgl.390385/
-          Application.ExternalEval("_JS_FileSystem_Sync();");
+        // See https://forum.unity.com/threads/how-does-saving-work-in-webgl.390385/
+        Application.ExternalEval("_JS_FileSystem_Sync();");
 #pragma warning restore 618
-        }
       }
 
 #if UNITY_EDITOR
@@ -236,19 +266,18 @@ namespace Nighthollow.Data
       {
         using var editorStream = File.OpenWrite(DataService.EditorFilePath(tableId));
         tableId.Serialize(_gameData, editorStream, _serializationOptions);
-        Debug.Log($"Wrote game data to {DataService.EditorFilePath(tableId)}");
       }
 #endif
 
       var events = _events;
-      _events = ImmutableList<EntityEvent>.Empty;
+      _events = ImmutableList<IInternalEvent>.Empty;
       FireEvents(events, tableIds, _gameData);
       _writeRequired = false;
     }
 
-    void FireEvents(ImmutableList<EntityEvent> events, ImmutableHashSet<ITableId> tableIds, GameData gameData)
+    void FireEvents(ImmutableList<IInternalEvent> events, ImmutableHashSet<ITableId> tableIds, GameData gameData)
     {
-      foreach (var entityEvent in events)
+      foreach (var entityEvent in events.Select(e => e as EntityEvent).WhereNotNull())
       {
         switch (entityEvent.EventType)
         {
@@ -303,7 +332,22 @@ namespace Nighthollow.Data
       Removed
     }
 
-    sealed class EntityEvent
+    interface IInternalEvent
+    {
+      ITableId TableId { get; }
+    }
+
+    sealed class TableEvent : IInternalEvent
+    {
+      public TableEvent(ITableId tableId)
+      {
+        TableId = tableId;
+      }
+
+      public ITableId TableId { get; }
+    }
+
+    sealed class EntityEvent : IInternalEvent
     {
       public EntityEvent(EntityEventType eventType, ITableId tableId, int entityId)
       {

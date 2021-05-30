@@ -25,7 +25,7 @@ namespace Nighthollow.Rules.Effects
   [MessagePackObject]
   public sealed class EnableAllRulesEffect : RuleEffect
   {
-    public static Description Describe => new Description("enable all disabled rules");
+    public static Description Describe => new Description("set all rules to 'enabled'");
 
     public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(Key.Database);
 

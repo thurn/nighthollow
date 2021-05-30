@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using Nighthollow.Data;
 using Nighthollow.Rules.Effects;
 using Nighthollow.Utils;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -96,6 +97,10 @@ namespace Nighthollow.Interface
 
     void Continue(ClickEvent _)
     {
+      var selectedSchool = Errors.CheckNotNull(_selected).Key;
+      Debug.Log($"SchoolSelectionScreen::Continue selected {selectedSchool}");
+      Registry.Database.UpdateSingleton(TableId.UserData, new UserData(),
+        data => data.WithPrimarySchool(selectedSchool));
       this.Q("Schools").style.display = DisplayStyle.None;
       _confirmButton.style.display = DisplayStyle.None;
       Controller.Get(ScreenController.CharacterDialogue)

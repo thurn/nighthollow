@@ -22,19 +22,28 @@ namespace Nighthollow.Data
   [MessagePackObject]
   public sealed partial class StaticItemListData
   {
+    public enum IdentifierTag
+    {
+      Unknown = 0,
+      StartingDeck = 1
+    }
+
     public StaticItemListData(
       string name,
       ImmutableList<CreatureItemData>? creatures = null,
-      ImmutableList<ResourceItemData>? resources = null)
+      ImmutableList<ResourceItemData>? resources = null,
+      IdentifierTag tag = IdentifierTag.Unknown)
     {
       Name = name;
       Creatures = creatures ?? ImmutableList<CreatureItemData>.Empty;
       Resources = resources ?? ImmutableList<ResourceItemData>.Empty;
+      Tag = tag;
     }
 
     [Key(0)] public string Name { get; }
     [Key(1)] public ImmutableList<CreatureItemData> Creatures { get; }
     [Key(2)] public ImmutableList<ResourceItemData> Resources { get; }
+    [Key(3)] public IdentifierTag Tag { get; }
 
     public override string ToString() => Name;
   }

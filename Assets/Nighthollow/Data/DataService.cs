@@ -41,7 +41,6 @@ namespace Nighthollow.Data
   {
     FetchResult? _fetchResult;
     readonly List<Action<FetchResult>> _listeners = new List<Action<FetchResult>>();
-    [SerializeField] bool _disablePersistence;
     MessagePackSerializerOptions _serializerOptions = null!;
 
     void Start()
@@ -70,9 +69,8 @@ namespace Nighthollow.Data
       foreach (var tableId in TableId.AllTableIds.Reverse())
       {
         var persistentFilePath = PersistentFilePath(tableId);
-        File.Delete(persistentFilePath);
 
-        if (File.Exists(persistentFilePath) && !_disablePersistence)
+        if (File.Exists(persistentFilePath))
         {
           using var file = File.OpenRead(persistentFilePath!);
           gameData = tableId.Deserialize(gameData, file, _serializerOptions);
@@ -112,7 +110,7 @@ namespace Nighthollow.Data
 
     void Update()
     {
-      _fetchResult?.Database.PerformWritesInternal(_disablePersistence);
+      _fetchResult?.Database.PerformWritesInternal();
     }
 
     public void OnReady(Action<FetchResult> action)

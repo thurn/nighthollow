@@ -178,7 +178,7 @@ namespace Nighthollow.Editing
     }
 
     static string RenderStatusEffects(GameData gameData, ImmutableList<StatusEffectItemData> statusEffects) =>
-      string.Join(",", statusEffects.Select(effect => gameData.StatusEffects[effect.StatusEffectTypeId].Name));
+      string.Join(",", statusEffects.Select(effect => gameData.StatusEffectTypes[effect.StatusEffectTypeId].Name));
 
     public override void WriteForeignKey(int id, ReflectivePath reflectivePath)
     {

@@ -141,11 +141,6 @@ namespace Nighthollow.Editing
       for (var i = 0; i < values.Length; ++i)
       {
         var value = values.GetValue(i);
-        if (value.ToString().Equals("Unknown"))
-        {
-          continue;
-        }
-
         options.Add(value.ToString());
       }
 

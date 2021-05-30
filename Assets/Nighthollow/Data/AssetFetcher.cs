@@ -81,7 +81,7 @@ namespace Nighthollow.Data
         }
       }
 
-      foreach (var statusEffect in gameData.StatusEffects.Values)
+      foreach (var statusEffect in gameData.StatusEffectTypes.Values)
       {
         if (statusEffect.ImageAddress != null)
         {

@@ -77,7 +77,7 @@ namespace Nighthollow.Data
 
   public sealed class SingletonTableId<T> : TableId<T> where T : class
   {
-    const int SingletonEntityId = 1;
+    public const int SingletonEntityId = 1;
 
     public SingletonTableId(int id, string tableName) : base(id, tableName)
     {
@@ -139,6 +139,9 @@ namespace Nighthollow.Data
     public static readonly TableId<ScenarioData> Scenarios =
       new TableId<ScenarioData>(15, "Scenarios");
 
+    public static readonly SingletonTableId<UserData> UserData =
+      new SingletonTableId<UserData>(16, "UserData");
+
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
       TableMetadata,
       CreatureTypes,
@@ -155,7 +158,8 @@ namespace Nighthollow.Data
       Globals,
       Hexes,
       Kingdoms,
-      Scenarios
+      Scenarios,
+      UserData
     );
   }
 }
