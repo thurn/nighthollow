@@ -24,7 +24,7 @@ namespace Nighthollow.Rules.Effects
   [MessagePackObject]
   public sealed partial class PlaceCreaturesFromListEffect : RuleEffect
   {
-    public static Description Describe => new Description("place creatures from the list", nameof(ItemList));
+    public override Description Describe() => new Description("place creatures from the list", nameof(ItemList));
 
     public PlaceCreaturesFromListEffect(int itemList)
     {

@@ -28,7 +28,7 @@ namespace Nighthollow.Rules.Effects
   [MessagePackObject]
   public sealed partial class DisplayHelpTextEffect : RuleEffect
   {
-    public static Description Describe => new Description(
+    public override Description Describe() => new Description(
       "display the helper text",
       nameof(Text),
       "at position",

@@ -29,6 +29,8 @@ namespace Nighthollow.Rules.Conditions
     {
     }
 
+    public override Description Describe() => new Description("the user's deck size", nameof(Operator), nameof(Target));
+
     public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
       Key.GameData
     );
@@ -37,7 +39,5 @@ namespace Nighthollow.Rules.Conditions
 
     protected override IntegerCondition<IEvent> Clone(int target, IntegerOperator op) =>
       new UserDeckSizeCondition(target, op);
-
-    public static Description Describe => new Description("the user's deck size", nameof(Operator), nameof(Target));
   }
 }

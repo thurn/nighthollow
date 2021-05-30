@@ -23,7 +23,7 @@ namespace Nighthollow.Rules.Conditions
   [MessagePackObject]
   public sealed partial class HotkeyEqualsCondition : RuleCondition
   {
-    public static Description Describe => new Description("that hotkey is", nameof(Hotkey));
+    public override Description Describe() => new Description("that hotkey is", nameof(Hotkey));
 
     public HotkeyEqualsCondition(HotkeyPressedEvent.KeyName hotkey)
     {

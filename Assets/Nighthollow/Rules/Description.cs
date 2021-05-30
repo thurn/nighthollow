@@ -17,12 +17,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Nighthollow.Editing;
 using Nighthollow.Utils;
 
 #nullable enable
 
 namespace Nighthollow.Rules
 {
+  public interface IHasDescription
+  {
+    Description Describe();
+  }
+
   public sealed class Description
   {
     readonly List<string> _tokens;
@@ -84,14 +90,8 @@ namespace Nighthollow.Rules
 
     public static Description GetDescription(Type type)
     {
-      var property = Errors.CheckNotNull(type)
-        .GetProperty("Describe", BindingFlags.Static | BindingFlags.Public);
-      if (property == null)
-      {
-        throw new ArgumentException($"Type {type.Name} has not implemented the Describe property!");
-      }
-
-      return (Description) property.GetValue(type);
+      var value = (IHasDescription) TypeUtils.InstantiateWithDefaults(type);
+      return value.Describe();
     }
   }
 }

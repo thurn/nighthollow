@@ -22,8 +22,10 @@ namespace Nighthollow.Rules
 {
   [Union(0, typeof(UserDeckSizeCondition))]
   [Union(1, typeof(HotkeyEqualsCondition))]
-  public abstract class RuleCondition
+  public abstract class RuleCondition : IHasDescription
   {
+    public abstract Description Describe();
+
     public abstract ImmutableHashSet<IKey> GetDependencies();
 
     public abstract bool Satisfied(IScope scope);

@@ -37,8 +37,10 @@ namespace Nighthollow.Rules
   [Union(7, typeof(PlaceCreaturesFromListEffect))]
   [Union(8, typeof(ClearScenariosEffect))]
   [Union(9, typeof(ResetToNewGameStateEffect))]
-  public abstract class RuleEffect
+  public abstract class RuleEffect : IHasDescription
   {
+    public abstract Description Describe();
+
     public abstract ImmutableHashSet<IKey> GetDependencies();
 
     public abstract void Execute(IEffectScope scope, RuleOutput? output);

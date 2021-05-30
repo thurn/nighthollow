@@ -26,7 +26,7 @@ namespace Nighthollow.Rules.Effects
   [MessagePackObject]
   public sealed class ClearScenariosEffect : RuleEffect
   {
-    public static Description Describe => new Description("clear repeating scenarios");
+    public override Description Describe() => new Description("clear repeating scenarios");
 
     public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(Key.Database);
 

@@ -25,7 +25,7 @@ namespace Nighthollow.Rules.Effects
   [MessagePackObject]
   public sealed class ResetToNewGameStateEffect : RuleEffect
   {
-    public static Description Describe => new Description("reset to the 'new game' database state");
+    public override Description Describe() => new Description("reset to the 'new game' database state");
 
     public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(Key.Database);
 

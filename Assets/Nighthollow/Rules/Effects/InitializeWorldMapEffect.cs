@@ -32,7 +32,7 @@ namespace Nighthollow.Rules.Effects
   [MessagePackObject]
   public sealed class InitializeWorldMapEffect : RuleEffect
   {
-    public static Description Describe => new Description("initialize the world map");
+    public override Description Describe() => new Description("initialize the world map");
 
     public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
       Key.Database,

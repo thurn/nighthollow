@@ -22,7 +22,7 @@ namespace Nighthollow.Rules.Effects
   [MessagePackObject]
   public sealed class PreventDefaultEffect : RuleEffect
   {
-    public static Description Describe => new Description("request to prevent the default behavior for this event");
+    public override Description Describe() => new Description("request to prevent the default behavior for this event");
 
     public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
     );

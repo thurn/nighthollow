@@ -31,7 +31,7 @@ namespace Nighthollow.Rules.Effects
   [MessagePackObject]
   public sealed partial class CharacterDialogueEffect : RuleEffect
   {
-    public static Description Describe => new Description(
+    public override Description Describe() => new Description(
       "display the dialogue",
       nameof(Text),
       "from character",

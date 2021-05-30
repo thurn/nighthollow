@@ -35,7 +35,7 @@ namespace Nighthollow.Rules.Effects
   [MessagePackObject]
   public sealed partial class LoadSceneEffect : RuleEffect
   {
-    public static Description Describe => new Description("load the scene", nameof(SceneName));
+    public override Description Describe() => new Description("load the scene", nameof(SceneName));
 
     public LoadSceneEffect(SceneName sceneName)
     {
