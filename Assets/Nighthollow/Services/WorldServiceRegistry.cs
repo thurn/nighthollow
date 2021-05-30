@@ -30,7 +30,13 @@ namespace Nighthollow.Services
       AssetService assetService,
       UIDocument document,
       Camera mainCamera,
-      WorldStaticAssets staticAssets) : base(database, assetService, document.rootVisualElement, mainCamera)
+      IStartCoroutine coroutineRunner,
+      WorldStaticAssets staticAssets) : base(
+      database,
+      assetService,
+      document.rootVisualElement,
+      mainCamera,
+      coroutineRunner)
     {
       StaticAssets = staticAssets;
     }

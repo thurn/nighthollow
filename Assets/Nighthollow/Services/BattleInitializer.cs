@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Handlers;
+using Nighthollow.Editing.Scenarios;
 using Nighthollow.Rules.Events;
 using Nighthollow.Utils;
 using UnityEngine;
@@ -25,12 +26,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Services
 {
-  public interface IStartCoroutine
-  {
-    Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine);
-  }
-
-  public sealed class BattleInitializer : MonoBehaviour, IStartCoroutine
+  public sealed class BattleInitializer : AbstractInitializer
   {
     [SerializeField] Camera _mainCamera = null!;
     [SerializeField] RectTransform _mainCanvas = null!;
@@ -40,8 +36,6 @@ namespace Nighthollow.Services
     [SerializeField] Hand _hand = null!;
     [SerializeField] DamageTextService _damageTextService = null!;
     BattleServiceRegistry? _registry;
-
-    public Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine) => base.StartCoroutine(routine);
 
     void Start()
     {
@@ -74,8 +68,12 @@ namespace Nighthollow.Services
         _hand,
         _damageTextService);
 
-      _registry.Invoke(new IOnBattleSceneLoaded.Data());
-      _registry.RulesEngine.Invoke(new BattleSceneReadyEvent());
+      // Run a scenario if one has been requested -- takes precedence over normal load events.
+      if (!ScenarioData.Invoke(_registry))
+      {
+        _registry.Invoke(new IOnBattleSceneLoaded.Data());
+        _registry.RulesEngine.Invoke(new BattleSceneReadyEvent());
+      }
     }
   }
 }

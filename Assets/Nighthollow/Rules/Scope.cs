@@ -25,6 +25,8 @@ namespace Nighthollow.Rules
   public interface IScope
   {
     T Get<T>(ReaderKey<T> key);
+
+    TChild Get<TParent, TChild>(DerivedKey<TParent, TChild> key);
   }
 
   public interface IEffectScope : IScope
@@ -52,13 +54,16 @@ namespace Nighthollow.Rules
 
     public T Get<T>(MutatorKey<T> key) => (T) GetInternal(key);
 
-    public IEffectScope WithDependencies(ImmutableHashSet<IKey> dependencies) => new Scope(dependencies, _bindings);
+    public TChild Get<TParent, TChild>(DerivedKey<TParent, TChild> key) => key.Function(Get(key.Parent));
+
+    public IEffectScope WithDependencies(ImmutableHashSet<IKey> dependencies) =>
+      new Scope(dependencies.Select(k => k.Root).ToImmutableHashSet(), _bindings);
 
     public Scope ClearDependencies() => new Scope(ImmutableHashSet<IKey>.Empty, _bindings);
 
     object GetInternal(IKey key)
     {
-      Errors.CheckState(_dependencies.Contains(key), $"Key {key.Name} was not registered as a dependency");
+        Errors.CheckState(_dependencies.Contains(key), $"Key {key.Name} was not registered as a dependency");
       Errors.CheckState(_bindings.ContainsKey(key), $"Binding not found for {key.Name}");
       return _bindings[key];
     }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Immutable;
+using Nighthollow.Editing.Scenarios;
 using Nighthollow.Rules;
 using Nighthollow.World.Data;
 
@@ -56,5 +57,6 @@ namespace Nighthollow.Data
     public ImmutableDictionary<int, GlobalData> Globals => GetTable(TableId.Globals);
     public ImmutableDictionary<int, HexData> Hexes => GetTable(TableId.Hexes);
     public ImmutableDictionary<int, KingdomData> Kingdoms => GetTable(TableId.Kingdoms);
+    public ImmutableDictionary<int, ScenarioData> Scenarios => GetTable(TableId.Scenarios);
   }
 }

@@ -52,7 +52,8 @@ namespace Nighthollow.Services
       Database database,
       AssetService assetService,
       VisualElement rootVisualElement,
-      Camera mainCamera)
+      Camera mainCamera,
+      IStartCoroutine coroutineRunner)
     {
       Database = database;
       AssetService = assetService;
@@ -60,6 +61,7 @@ namespace Nighthollow.Services
       MainCamera = mainCamera;
       ObjectPoolService = new ObjectPoolService();
       Globals = new GlobalsService(database);
+      CoroutineRunner = coroutineRunner;
     }
 
     public abstract ServiceRegistryName Name { get; }
@@ -97,11 +99,15 @@ namespace Nighthollow.Services
       _screenController ??= new ScreenController(_rootVisualElement, this);
 
     public Camera MainCamera { get; }
+
     public ObjectPoolService ObjectPoolService { get; }
+
     public GlobalsService Globals { get; }
 
     RulesEngine? _rulesEngine;
     public RulesEngine RulesEngine => _rulesEngine ??= new RulesEngine(this);
+
+    public IStartCoroutine CoroutineRunner { get; }
   }
 
   public sealed class EditorServiceRegistry : ServiceRegistry
@@ -110,7 +116,8 @@ namespace Nighthollow.Services
       Database database,
       AssetService assetService,
       VisualElement rootVisualElement,
-      Camera mainCamera) : base(database, assetService, rootVisualElement, mainCamera)
+      Camera mainCamera,
+      IStartCoroutine coroutineRunner) : base(database, assetService, rootVisualElement, mainCamera, coroutineRunner)
     {
     }
 
@@ -125,7 +132,8 @@ namespace Nighthollow.Services
       Database database,
       AssetService assetService,
       VisualElement rootVisualElement,
-      Camera mainCamera) : base(database, assetService, rootVisualElement, mainCamera)
+      Camera mainCamera,
+      IStartCoroutine coroutineRunner) : base(database, assetService, rootVisualElement, mainCamera, coroutineRunner)
     {
     }
 

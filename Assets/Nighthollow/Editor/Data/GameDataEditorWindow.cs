@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using Nighthollow.Data;
 using Nighthollow.Editing;
 using Nighthollow.Interface;
@@ -24,7 +25,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Editor.Data
 {
-  public sealed class GameDataEditorWindow : EditorWindow
+  public sealed class GameDataEditorWindow : EditorWindow, IStartCoroutine
   {
     Database? _database;
     AssetService? _assetService;
@@ -75,7 +76,7 @@ namespace Nighthollow.Editor.Data
 
       var tree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Nighthollow/Interface/UXML/Screen.uxml");
       tree.CloneTree(rootVisualElement);
-      var registry = new EditorServiceRegistry(database, assetService, rootVisualElement, Camera.main!);
+      var registry = new EditorServiceRegistry(database, assetService, rootVisualElement, Camera.main!, this);
       registry.ScreenController.Screen.AddToClassList("rendered-in-editor");
       registry.ScreenController.Get(ScreenController.GameDataEditor).Show(new GameDataEditor.Args(database));
     }
@@ -87,6 +88,11 @@ namespace Nighthollow.Editor.Data
       rootVisualElement.style.height = evt.newRect.height * 2;
 
       rootVisualElement.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+    }
+
+    public Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine)
+    {
+      throw new System.NotImplementedException();
     }
   }
 }

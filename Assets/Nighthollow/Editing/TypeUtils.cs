@@ -15,6 +15,7 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Nighthollow.Utils;
 
 #nullable enable
 
@@ -34,7 +35,9 @@ namespace Nighthollow.Editing
       var arguments = constructor.GetParameters()
         .Select(parameter =>
           parameter.ParameterType.IsValueType ? Activator.CreateInstance(parameter.ParameterType) : null!);
-      return constructor.Invoke(arguments.ToArray());
+      var result = constructor.Invoke(arguments.ToArray());
+      Errors.CheckNotNull(result, $"Unable to instantiate object of type {type}");
+      return result;
     }
 
     public static string NameWithSpaces(string name) =>

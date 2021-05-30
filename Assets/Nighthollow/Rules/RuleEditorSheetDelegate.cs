@@ -59,8 +59,8 @@ namespace Nighthollow.Rules
 
       result.AddRange(rule.Conditions.Select((c, i) => ConditionRow(rule, i, c)));
       result.Add(AddConditionRow(rule));
-      result.AddRange(rule.Effects.Select((e, i) => EffectRow(rule, i, e)));
-      result.Add(AddEffectRow(rule));
+      result.AddRange(rule.Effects.Select((e, i) => EffectRow(_reflectivePath, rule, i, e)));
+      result.Add(AddEffectRow(_reflectivePath, rule));
 
       return result;
     }
@@ -131,15 +131,16 @@ namespace Nighthollow.Rules
       .GetCustomAttributes<UnionAttribute>()
       .Select(attribute => attribute.SubType);
 
-    List<ICellContent> EffectRow(Rule rule, int index, RuleEffect effect)
+    public static List<ICellContent> EffectRow(ReflectivePath reflectivePath, IHasEffects input, int index,
+      RuleEffect effect)
     {
       var effectPath =
-        _reflectivePath.Property(rule.GetType().GetProperty(nameof(Rule.Effects))!)
+        reflectivePath.Property(input.GetType().GetProperty(nameof(IHasEffects.Effects))!)
           .ListIndex(typeof(RuleEffect), index);
       var result = new List<ICellContent>
       {
         new ButtonCellContent("x",
-          () => { _reflectivePath.Write(rule.WithEffects(rule.Effects.RemoveAt(index))); }),
+          () => { reflectivePath.Write(input.WithNewEffects(input.Effects.RemoveAt(index))); }),
       };
 
       Description.GetDescription(effect.GetType()).Iterate(effect,
@@ -150,25 +151,25 @@ namespace Nighthollow.Rules
       return result;
     }
 
-    List<ICellContent> AddEffectRow(Rule rule)
+    public static List<ICellContent> AddEffectRow(ReflectivePath reflectivePath, IHasEffects input)
     {
       var types = EffectTypes().Where(t => typeof(RuleEffect).IsAssignableFrom(t)).ToList();
       return new List<ICellContent>
       {
         new DropdownCellContent(
-          types.Select(c => Description.Snippet(rule.Effects.IsEmpty ? "Then" : "And", c)).ToList(),
+          types.Select(c => Description.Snippet(input.Effects.IsEmpty ? "Then" : "And", c)).ToList(),
           currentlySelected: null,
           i =>
           {
-            _reflectivePath.Write(
-              rule.WithEffects(
-                rule.Effects.Add((RuleEffect) TypeUtils.InstantiateWithDefaults(types[i]))));
+            reflectivePath.Write(
+              input.WithNewEffects(
+                input.Effects.Add((RuleEffect) TypeUtils.InstantiateWithDefaults(types[i]))));
           },
           "Add Effect...")
       };
     }
 
-    ICellContent PropertyCellContent(ReflectivePath path, PropertyInfo property)
+    static ICellContent PropertyCellContent(ReflectivePath path, PropertyInfo property)
     {
       var attribute = property.GetCustomAttribute<RuleId>();
       if (attribute != null)

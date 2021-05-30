@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Services
 {
-  public sealed class SchoolSelectionInitializer : MonoBehaviour
+  public sealed class SchoolSelectionInitializer : AbstractInitializer
   {
     [SerializeField] Camera _mainCamera = null!;
     [SerializeField] DataService _dataService = null!;
@@ -44,7 +44,8 @@ namespace Nighthollow.Services
         result.Database,
         result.AssetService,
         _document.rootVisualElement,
-        _mainCamera);
+        _mainCamera,
+        this);
       _registry.ScreenController.Show(ScreenController.SchoolSelectionScreen);
     }
   }

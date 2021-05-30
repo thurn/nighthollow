@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Immutable;
 using System.IO;
 using MessagePack;
+using Nighthollow.Editing.Scenarios;
 using Nighthollow.Rules;
 using Nighthollow.World.Data;
 
@@ -135,6 +136,9 @@ namespace Nighthollow.Data
     public static readonly TableId<KingdomData> Kingdoms =
       new TableId<KingdomData>(14, "Kingdoms");
 
+    public static readonly TableId<ScenarioData> Scenarios =
+      new TableId<ScenarioData>(15, "Scenarios");
+
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
       TableMetadata,
       CreatureTypes,
@@ -150,7 +154,8 @@ namespace Nighthollow.Data
       Rules,
       Globals,
       Hexes,
-      Kingdoms
+      Kingdoms,
+      Scenarios
     );
   }
 }

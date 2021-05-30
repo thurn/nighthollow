@@ -23,7 +23,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.World
 {
-  public sealed class WorldInitializer : MonoBehaviour
+  public sealed class WorldInitializer : AbstractInitializer
   {
     [SerializeField] Camera _mainCamera = null!;
     [SerializeField] DataService _dataService = null!;
@@ -49,6 +49,7 @@ namespace Nighthollow.World
         result.AssetService,
         _document,
         _mainCamera,
+        this,
         _staticAssets);
 
       _registry.ScreenController.Show(ScreenController.AdvisorBar);

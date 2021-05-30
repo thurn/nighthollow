@@ -20,6 +20,13 @@ using Nighthollow.Rules.Effects;
 
 namespace Nighthollow.Rules
 {
+  public interface IHasEffects
+  {
+    public ImmutableList<RuleEffect> Effects { get; }
+
+    public IHasEffects WithNewEffects(ImmutableList<RuleEffect> effects);
+  }
+
   [Union(0, typeof(DisplayHelpTextEffect))]
   [Union(1, typeof(CharacterDialogueEffect))]
   [Union(2, typeof(PreventDefaultEffect))]
@@ -27,6 +34,8 @@ namespace Nighthollow.Rules
   [Union(4, typeof(InitializeWorldMapEffect))]
   [Union(5, typeof(CenterCameraOnHexEffect))]
   [Union(6, typeof(EnableAllRulesEffect))]
+  [Union(7, typeof(PlaceCreaturesFromListEffect))]
+  [Union(8, typeof(ClearScenariosEffect))]
   public abstract class RuleEffect
   {
     public abstract ImmutableHashSet<IKey> GetDependencies();

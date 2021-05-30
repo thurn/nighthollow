@@ -19,42 +19,16 @@ using Nighthollow.Services;
 using Nighthollow.World;
 using UnityEngine;
 
-// ReSharper disable UnusedTypeParameter
-
 #nullable enable
 
 namespace Nighthollow.Rules
 {
-  public interface IKey
-  {
-    string Name { get; }
-  }
-
-  public sealed class ReaderKey<T> : IKey
-  {
-    public string Name { get; }
-
-    public ReaderKey(string name)
-    {
-      Name = name;
-    }
-  }
-
-  public sealed class MutatorKey<T> : IKey
-  {
-    public string Name { get; }
-
-    public MutatorKey(string name)
-    {
-      Name = name;
-    }
-  }
-
   public static class Key
   {
     public static readonly MutatorKey<Database> Database = new MutatorKey<Database>("Database");
 
-    public static readonly ReaderKey<GameData> GameData = new ReaderKey<GameData>("GameData");
+    public static readonly DerivedKey<Database, GameData> GameData =
+      new DerivedKey<Database, GameData>("GameData", Database, db => db.Snapshot());
 
     public static readonly MutatorKey<AssetService> AssetService = new MutatorKey<AssetService>("AssetService");
 
@@ -78,6 +52,15 @@ namespace Nighthollow.Rules
 
     public static readonly ReaderKey<int> Hex = new ReaderKey<int>("Hex");
 
-    public static readonly ReaderKey<HotkeyPressedEvent.KeyName> Hotkey = new ReaderKey<HotkeyPressedEvent.KeyName>("Hotkey");
+    public static readonly ReaderKey<HotkeyPressedEvent.KeyName> Hotkey =
+      new ReaderKey<HotkeyPressedEvent.KeyName>("Hotkey");
+
+    public static readonly ReaderKey<int> ItemList = new ReaderKey<int>("ItemList");
+
+    public static readonly MutatorKey<BattleServiceRegistry> BattleServiceRegistry =
+      new MutatorKey<BattleServiceRegistry>("BattleServiceRegistry");
+
+    public static readonly DerivedKey<BattleServiceRegistry, UserService> User =
+      new DerivedKey<BattleServiceRegistry, UserService>("User", BattleServiceRegistry, r => r.UserService);
   }
 }

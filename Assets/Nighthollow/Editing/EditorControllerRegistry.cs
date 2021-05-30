@@ -19,6 +19,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Nighthollow.Data;
+using Nighthollow.Editing.Scenarios;
 using Nighthollow.Items;
 using Nighthollow.Rules;
 using Nighthollow.Services;
@@ -262,6 +263,26 @@ namespace Nighthollow.Editing
         () => { registry.RulesEngine.InvokeRuleId(entityId, registry.Scope); });
   }
 
+  sealed class ScenarioDataController : EditorController<ScenarioData>, EditorController.ICustomColumn
+  {
+    public override EditorSheetDelegate GetCustomChildSheetDelegate(ReflectivePath reflectivePath)
+    {
+      return new ScenarioEditorSheetDelegate(reflectivePath);
+    }
+
+    public override bool ShowEditButton() => true;
+
+    public override ICustomColumn GetCustomColumn() => this;
+
+    public string Heading => ">";
+
+    public int Width => 50;
+
+    public EditorSheetDelegate.ICellContent GetContent(ServiceRegistry registry, int entityId, ReflectivePath path) =>
+      new EditorSheetDelegate.ButtonCellContent(">",
+        () => { ScenarioData.Start(registry, entityId); });
+  }
+
   sealed class GlobalDataController : EditorController<GlobalData>
   {
     public override int GetColumnWidth(string propertyName) => propertyName switch
@@ -285,7 +306,8 @@ namespace Nighthollow.Editing
         {typeof(StatusEffectTypeData), new StatusEffectTypeController()},
         {typeof(StatusEffectItemData), new StatusEffectItemController()},
         {typeof(Rule), new RuleDataController()},
-        {typeof(GlobalData), new GlobalDataController()}
+        {typeof(GlobalData), new GlobalDataController()},
+        {typeof(ScenarioData), new ScenarioDataController()}
       };
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)
@@ -325,7 +347,9 @@ namespace Nighthollow.Editing
     {
       return value switch
       {
-        IList list when list.Count > 0 => string.Join("\n", list.Cast<object>().Take(3).Select(o => o.ToString())) +
+        IList list when list.Count > 0 => string.Join("\n",
+                                            list.Cast<object>().Take(3)
+                                              .Select(o => o?.ToString() ?? ">> ERROR: Null <<")) +
                                           (list.Count > 3 ? $"\n(+ {list.Count - 3} more)" : ""),
         IList _ => "[]",
         _ => value?.ToString() ?? "None"

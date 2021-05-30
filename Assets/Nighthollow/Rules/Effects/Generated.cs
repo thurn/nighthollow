@@ -6,6 +6,7 @@ using Nighthollow.Services;
 using Nighthollow.Stats;
 using Nighthollow.State;
 using Nighthollow.Rules;
+using Nighthollow.Rules.Effects;
 using Nighthollow.Rules.Events;
 using Nighthollow.World.Data;
 
@@ -89,6 +90,16 @@ namespace Nighthollow.Rules.Effects
           XPosition,
           YPosition,
           arrowDirection);
+
+  }
+
+  public sealed partial class PlaceCreaturesFromListEffect
+  {
+    public PlaceCreaturesFromListEffect WithItemList(int itemList) =>
+      Equals(itemList, ItemList)
+        ? this
+        : new PlaceCreaturesFromListEffect(
+          itemList);
 
   }
 

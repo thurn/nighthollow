@@ -26,7 +26,7 @@ namespace Nighthollow.Rules
   /// all of the rule's conditions are satisfied, its effects are applied to change the state of the game.
   /// </summary>
   [MessagePackObject]
-  public sealed partial class Rule
+  public sealed partial class Rule : IHasEffects
   {
     public Rule(
       EventName eventName = EventName.Unknown,
@@ -123,5 +123,7 @@ namespace Nighthollow.Rules
         return ImmutableHashSet<IKey>.Empty;
       }
     }
+
+    public IHasEffects WithNewEffects(ImmutableList<RuleEffect> effects) => WithEffects(effects);
   }
 }

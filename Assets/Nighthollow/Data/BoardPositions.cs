@@ -14,8 +14,8 @@
 
 
 using System.Collections.Generic;
+using System.Linq;
 using Nighthollow.Utils;
-using UnityEditor;
 using UnityEngine;
 
 #nullable enable
@@ -48,22 +48,6 @@ namespace Nighthollow.Data
       FileValue.File4,
       FileValue.File5
     };
-
-    // public static float ToXPosition(this RankValue rank)
-    // {
-    //   switch (rank)
-    //   {
-    //     case RankValue.Rank1: return -8.8f;
-    //     case RankValue.Rank2: return -6.3f;
-    //     case RankValue.Rank3: return -3.8f;
-    //     case RankValue.Rank4: return -1.3f;
-    //     case RankValue.Rank5: return 1.2f;
-    //     case RankValue.Rank6: return 3.7f;
-    //     case RankValue.Rank7: return 6.2f;
-    //     case RankValue.Rank8: return 8.7f;
-    //     default: throw Errors.UnknownEnumValue(rank);
-    //   }
-    // }
 
     public static float ToXPosition(this RankValue rank)
     {
@@ -132,19 +116,6 @@ namespace Nighthollow.Data
       }
     }
 
-    // public static float ToYPosition(this FileValue file)
-    // {
-    //   switch (file)
-    //   {
-    //     case FileValue.File1: return -9.8f;
-    //     case FileValue.File2: return -7.3f;
-    //     case FileValue.File3: return -4.8f;
-    //     case FileValue.File4: return -2.3f;
-    //     case FileValue.File5: return 0.2f;
-    //     default: throw Errors.UnknownEnumValue(file);
-    //   }
-    // }
-
     public static float ToYPosition(this FileValue file)
     {
       return file switch
@@ -191,5 +162,10 @@ namespace Nighthollow.Data
         yield return fileValue + 1;
       }
     }
+
+    public static IEnumerable<(RankValue, FileValue)> AllPositions() =>
+      from rank in AllRanks
+      from file in AllFiles
+      select (rank, file);
   }
 }

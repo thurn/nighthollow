@@ -15,6 +15,9 @@ python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/Rule
 echo python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/World/Data"
 python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/World/Data"
 
+echo python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/Editing/Scenarios"
+python3 "$script_dir/recordGenerator.py" "$script_dir/../Assets/Nighthollow/Editing/Scenarios"
+
 echo dotnet mpc -i "$script_dir/../Assets/" -o "$script_dir/../Assets/Nighthollow/Generated/MessagePackGenerated.cs"
 dotnet mpc -i "$script_dir/../Assets/" -o "$script_dir/../Assets/Nighthollow/Generated/MessagePackGenerated.cs"
 

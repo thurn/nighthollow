@@ -43,11 +43,11 @@ namespace Nighthollow.Services
         database,
         assetService,
         document.rootVisualElement,
-        mainCamera)
+        mainCamera,
+        coroutineRunner)
     {
       Prefabs = prefabs;
       Prefabs.Initialize(ObjectPoolService);
-      CoroutineRunner = coroutineRunner;
       Creatures = new CreatureService();
       var gameData = database.Snapshot();
       UserService = new UserService(hand, gameData);
@@ -61,16 +61,19 @@ namespace Nighthollow.Services
     Scope? _scope;
 
     public new static ImmutableHashSet<IKey> Keys => ImmutableHashSet.Create<IKey>(
+      Key.BattleServiceRegistry,
       Key.CreatureController
     );
 
     public override Scope Scope => _scope ??= Scope.CreateBuilder(Keys, base.Scope)
+      .AddBinding(Key.BattleServiceRegistry, this)
       .AddBinding(Key.CreatureController, CreatureController)
       .Build();
 
     public Prefabs Prefabs { get; }
-    public IStartCoroutine CoroutineRunner { get; }
+
     public RectTransform MainCanvas { get; }
+
     public DamageTextService DamageTextService { get; }
 
     public UserService UserService { get; private set; }

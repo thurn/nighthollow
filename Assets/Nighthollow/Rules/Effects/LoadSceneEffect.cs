@@ -15,6 +15,7 @@
 using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Utils;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 #nullable enable
@@ -46,17 +47,20 @@ namespace Nighthollow.Rules.Effects
     public override ImmutableHashSet<IKey> GetDependencies() => ImmutableHashSet.Create<IKey>(
     );
 
-    public override void Execute(IEffectScope scope, RuleOutput? output)
-    {
-      SceneManager.LoadScene(SceneName switch
+    public static AsyncOperation LoadAsync(SceneName sceneName) =>
+      SceneManager.LoadSceneAsync(sceneName switch
       {
         SceneName.MainMenu => "MainMenu",
         SceneName.Introduction => "Introduction",
         SceneName.SchoolSelection => "SchoolSelection",
         SceneName.World => "World",
         SceneName.Battle => "Battle",
-        _ => throw Errors.UnknownEnumValue(SceneName)
+        _ => throw Errors.UnknownEnumValue(sceneName)
       });
+
+    public override void Execute(IEffectScope scope, RuleOutput? output)
+    {
+      LoadAsync(SceneName);
     }
   }
 }
