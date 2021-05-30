@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Reflection;
+using Nighthollow.Data;
 using UnityEngine;
 
 #nullable enable
@@ -43,6 +45,25 @@ namespace Nighthollow.Services
       public LoadScenario() : base("Scenarios/LoadScenario")
       {
       }
+    }
+
+    public sealed class TablePreference : Key
+    {
+      public enum Field
+      {
+        LastAccessTime
+      }
+
+      public TablePreference(ITableId tableId, Field field) : base(
+        $"TablePreferences/{tableId.TableName}/{KeyForField(field)}")
+      {
+      }
+
+      static string KeyForField(Field field) => field switch
+      {
+        Field.LastAccessTime => "LastAccessTime",
+        _ => throw new ArgumentOutOfRangeException(nameof(field), field, null)
+      };
     }
 
     public static readonly Key LoadScenarioKey = new LoadScenario();

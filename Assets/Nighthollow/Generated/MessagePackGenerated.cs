@@ -2848,9 +2848,8 @@ namespace MessagePack.Formatters.Nighthollow.Data
                 return;
             }
 
-            writer.WriteArrayHeader(2);
+            writer.WriteArrayHeader(1);
             writer.Write(value.NextId);
-            writer.Write(value.LastAccessedTime);
         }
 
         public global::Nighthollow.Data.TableMetadata Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -2863,7 +2862,6 @@ namespace MessagePack.Formatters.Nighthollow.Data
             options.Security.DepthStep(ref reader);
             var length = reader.ReadArrayHeader();
             var __NextId__ = default(int);
-            var __LastAccessedTime__ = default(long);
 
             for (int i = 0; i < length; i++)
             {
@@ -2872,16 +2870,13 @@ namespace MessagePack.Formatters.Nighthollow.Data
                     case 0:
                         __NextId__ = reader.ReadInt32();
                         break;
-                    case 1:
-                        __LastAccessedTime__ = reader.ReadInt64();
-                        break;
                     default:
                         reader.Skip();
                         break;
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.TableMetadata(__NextId__, __LastAccessedTime__);
+            var ____result = new global::Nighthollow.Data.TableMetadata(__NextId__);
             reader.Depth--;
             return ____result;
         }

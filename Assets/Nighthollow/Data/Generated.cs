@@ -1357,15 +1357,7 @@ namespace Nighthollow.Data
       Equals(nextId, NextId)
         ? this
         : new TableMetadata(
-          nextId,
-          LastAccessedTime);
-
-    public TableMetadata WithLastAccessedTime(long lastAccessedTime) =>
-      Equals(lastAccessedTime, LastAccessedTime)
-        ? this
-        : new TableMetadata(
-          NextId,
-          lastAccessedTime);
+          nextId);
 
   }
 
