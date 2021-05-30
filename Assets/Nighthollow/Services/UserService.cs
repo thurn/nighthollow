@@ -73,13 +73,10 @@ namespace Nighthollow.Services
 
     static DeckService BuildStartingDeck(GameData gameData, UserState state)
     {
-      var cards =
-        gameData.BattleData.UserDeckOverride.HasValue
-          ? gameData.ItemLists[gameData.BattleData.UserDeckOverride.Value].Creatures
-          : gameData.Deck.Values.ToImmutableList();
+      var cards = gameData.Deck.Values.ToImmutableList();
       return new DeckService(
         cards.Select(card => card.BuildCreature(gameData, state)).ToImmutableList(),
-        orderedDraws: gameData.BattleData.UserDeckOverride.HasValue);
+        orderedDraws: false);
     }
 
     public sealed class Controller : ICardCallbacks
@@ -132,7 +129,7 @@ namespace Nighthollow.Services
       public void DrawOpeningHand()
       {
         _registry.UserService._handComponent.OverrideHandPosition(true);
-        DrawCards(_registry.UserService.GetInt(Stat.StartingHandSize), OnDrewHand);
+        DrawCards(_registry.UserService.GetInt(Stat.StartingHandSize), OnDrewHand, openingHand: true);
       }
 
       void OnDrewHand()
@@ -196,17 +193,37 @@ namespace Nighthollow.Services
           self._nextCardId));
       }
 
-      public void DrawCards(int count, Action? onComplete = null)
+      public void DrawCards(int count, Action? onComplete = null, bool openingHand = false)
       {
         var userService = _registry.UserService;
-        var deck = userService.Deck;
-        var cardId = userService._nextCardId;
-        var hand = userService.Hand.ToBuilder();
-        for (var i = 0; i < Errors.CheckPositive(count); ++i)
+        DeckService deck;
+        ImmutableDictionary<int, CreatureData>.Builder hand;
+        int cardId;
+
+        while (true)
         {
-          deck = deck.DrawCard(out var card);
-          hand[cardId] = card;
-          cardId += 1;
+          deck = userService.Deck;
+          cardId = userService._nextCardId;
+          hand = userService.Hand.ToBuilder();
+
+          for (var i = 0; i < Errors.CheckPositive(count); ++i)
+          {
+            deck = deck.DrawCard(out var card);
+            hand[cardId] = card;
+            cardId += 1;
+          }
+
+          if (openingHand)
+          {
+            // For the opening hand, we re-draw hands with no mana creatures or all mana creatures
+            var manaCount = hand.Values.Count(c => c.BaseType.IsManaCreature);
+            if (manaCount == 0 || manaCount == count)
+            {
+              continue;
+            }
+          }
+
+          break;
         }
 
         _mutator.SetUserService(new UserService(

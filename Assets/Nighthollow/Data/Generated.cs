@@ -76,36 +76,14 @@ namespace Nighthollow.Data
         ? this
         : new BattleData(
           enemies,
-          EnemyModifiers,
-          UserDeckOverride,
-          EnemyListOverride);
+          EnemyModifiers);
 
     public BattleData WithEnemyModifiers(ImmutableList<ModifierData> enemyModifiers) =>
       Equals(enemyModifiers, EnemyModifiers)
         ? this
         : new BattleData(
           Enemies,
-          enemyModifiers,
-          UserDeckOverride,
-          EnemyListOverride);
-
-    public BattleData WithUserDeckOverride(int? userDeckOverride) =>
-      Equals(userDeckOverride, UserDeckOverride)
-        ? this
-        : new BattleData(
-          Enemies,
-          EnemyModifiers,
-          userDeckOverride,
-          EnemyListOverride);
-
-    public BattleData WithEnemyListOverride(int? enemyListOverride) =>
-      Equals(enemyListOverride, EnemyListOverride)
-        ? this
-        : new BattleData(
-          Enemies,
-          EnemyModifiers,
-          UserDeckOverride,
-          enemyListOverride);
+          enemyModifiers);
 
   }
 

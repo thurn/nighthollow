@@ -33,24 +33,14 @@ namespace Nighthollow.Data
     [SerializationConstructor]
     public BattleData(
       ImmutableList<CreatureItemData>? enemies = null,
-      ImmutableList<ModifierData>? enemyModifiers = null,
-      int? userDeckOverride = null,
-      int? enemyListOverride = null)
+      ImmutableList<ModifierData>? enemyModifiers = null)
     {
       Enemies = enemies ?? ImmutableList<CreatureItemData>.Empty;
       EnemyModifiers = enemyModifiers ?? ImmutableList<ModifierData>.Empty;
-      UserDeckOverride = userDeckOverride;
-      EnemyListOverride = enemyListOverride;
     }
 
     [Key(0)] public ImmutableList<CreatureItemData> Enemies { get; }
 
     [Key(1)] public ImmutableList<ModifierData> EnemyModifiers { get; }
-
-    [ForeignKey(typeof(StaticItemListData))]
-    [Key(2)] public int? UserDeckOverride { get; }
-
-    [ForeignKey(typeof(StaticItemListData))]
-    [Key(3)] public int? EnemyListOverride { get; }
   }
 }

@@ -1513,11 +1513,9 @@ namespace MessagePack.Formatters.Nighthollow.Data
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(4);
+            writer.WriteArrayHeader(2);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>>().Serialize(ref writer, value.Enemies, options);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>>().Serialize(ref writer, value.EnemyModifiers, options);
-            formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.UserDeckOverride, options);
-            formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.EnemyListOverride, options);
         }
 
         public global::Nighthollow.Data.BattleData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -1532,8 +1530,6 @@ namespace MessagePack.Formatters.Nighthollow.Data
             var length = reader.ReadArrayHeader();
             var __Enemies__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.CreatureItemData>);
             var __EnemyModifiers__ = default(global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>);
-            var __UserDeckOverride__ = default(int?);
-            var __EnemyListOverride__ = default(int?);
 
             for (int i = 0; i < length; i++)
             {
@@ -1545,19 +1541,13 @@ namespace MessagePack.Formatters.Nighthollow.Data
                     case 1:
                         __EnemyModifiers__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Immutable.ImmutableList<global::Nighthollow.Data.ModifierData>>().Deserialize(ref reader, options);
                         break;
-                    case 2:
-                        __UserDeckOverride__ = formatterResolver.GetFormatterWithVerify<int?>().Deserialize(ref reader, options);
-                        break;
-                    case 3:
-                        __EnemyListOverride__ = formatterResolver.GetFormatterWithVerify<int?>().Deserialize(ref reader, options);
-                        break;
                     default:
                         reader.Skip();
                         break;
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.BattleData(__Enemies__, __EnemyModifiers__, __UserDeckOverride__, __EnemyListOverride__);
+            var ____result = new global::Nighthollow.Data.BattleData(__Enemies__, __EnemyModifiers__);
             reader.Depth--;
             return ____result;
         }

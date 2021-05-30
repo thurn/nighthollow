@@ -47,13 +47,10 @@ namespace Nighthollow.Services
 
     static DeckService BuildStartingDeck(GameData gameData, EnemyState state)
     {
-      var cards =
-        gameData.BattleData.EnemyListOverride.HasValue
-          ? gameData.ItemLists[gameData.BattleData.EnemyListOverride.Value].Creatures
-          : gameData.BattleData.Enemies;
+      var cards = gameData.BattleData.Enemies;
       return new DeckService(
         cards.Select(card => card.BuildCreature(gameData, state)).ToImmutableList(),
-        orderedDraws: gameData.BattleData.UserDeckOverride.HasValue);
+        orderedDraws: false);
     }
 
     public sealed class Controller
