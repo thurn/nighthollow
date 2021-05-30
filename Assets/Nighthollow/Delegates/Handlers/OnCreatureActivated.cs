@@ -27,11 +27,11 @@ namespace Nighthollow.Delegates.Handlers
       {
       }
 
-      public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnCreatureActivated handler) =>
-        handler.OnCreatureActivated(c, delegateIndex, this);
+      public override IEnumerable<Effect> Invoke(IGameContext c, IOnCreatureActivated handler) =>
+        handler.OnCreatureActivated(c, this);
     }
 
     /// <summary>Called when a creature is first placed.</summary>
-    IEnumerable<Effect> OnCreatureActivated(IGameContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnCreatureActivated(IGameContext context, Data data);
   }
 }

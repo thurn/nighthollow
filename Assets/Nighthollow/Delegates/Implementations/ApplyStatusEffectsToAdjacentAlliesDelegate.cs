@@ -29,7 +29,7 @@ namespace Nighthollow.Delegates.Implementations
   {
     public string Describe(IStatDescriptionProvider provider) => "Buffs Adjacent Allies With:";
 
-    public IEnumerable<Effect> OnSkillUsed(IGameContext c, int delegateIndex, IOnSkillUsed.Data d)
+    public IEnumerable<Effect> OnSkillUsed(IGameContext c, IOnSkillUsed.Data d)
     {
       var adjacent = GetAdjacentUserCreatures(c.Creatures,
         Errors.CheckNotNull(c[d.Self].RankPosition),

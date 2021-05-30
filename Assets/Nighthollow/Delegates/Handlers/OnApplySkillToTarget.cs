@@ -32,8 +32,8 @@ namespace Nighthollow.Delegates.Handlers
         Projectile = projectile;
       }
 
-      public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnApplySkillToTarget handler) =>
-        handler.OnApplySkillToTarget(c, delegateIndex, this);
+      public override IEnumerable<Effect> Invoke(IGameContext c, IOnApplySkillToTarget handler) =>
+        handler.OnApplySkillToTarget(c, this);
 
       public SkillData Skill { get; }
       public CreatureId Target { get; }
@@ -48,6 +48,6 @@ namespace Nighthollow.Delegates.Handlers
     /// returned from <see cref="IFindTargets" /> for a skill. The default implementation implements the standard
     /// algorithm for applying the skill's BaseDamage, including things like checking for hit, checking for critical
     /// hit, applying damage, applying health drain, and applying stun.
-    IEnumerable<Effect> OnApplySkillToTarget(IGameContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnApplySkillToTarget(IGameContext context, Data data);
   }
 }

@@ -33,8 +33,8 @@ namespace Nighthollow.Delegates.Handlers
       }
 
       public override ImmutableDictionary<DamageType, int> Invoke(
-        IGameContext c, int delegateIndex, IApplyDamageResistance handler) =>
-        handler.ApplyDamageResistance(c, delegateIndex, this);
+        IGameContext c, IApplyDamageResistance handler) =>
+        handler.ApplyDamageResistance(c, this);
 
       public CreatureId Self { get; }
       public SkillData Skill { get; }
@@ -46,6 +46,6 @@ namespace Nighthollow.Delegates.Handlers
     /// Should apply damage resistance for this skill, reducing the damage value based on the target's resistance.
     /// Typically called by <see cref="IComputeFinalDamage" />.
     /// </summary>
-    ImmutableDictionary<DamageType, int> ApplyDamageResistance(IGameContext context, int delegateIndex, Data data);
+    ImmutableDictionary<DamageType, int> ApplyDamageResistance(IGameContext context, Data data);
   }
 }

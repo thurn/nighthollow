@@ -41,7 +41,7 @@ namespace Nighthollow.Delegates.Implementations
 
     protected abstract DelegateId DelegateId { get; }
 
-    public bool ProjectileSkillCouldHit(IGameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
+    public bool ProjectileSkillCouldHit(IGameContext c, IProjectileSkillCouldHit.Data d)
     {
       return CollectionUtils.AlternatingIntegers()
         .Take(GetProjectileCount(c, c[d.Self], d.Skill) - 1)
@@ -54,7 +54,7 @@ namespace Nighthollow.Delegates.Implementations
         .Any(hit => hit.collider);
     }
 
-    public IEnumerable<Effect> OnFiredProjectile(IGameContext c, int delegateIndex, IOnFiredProjectile.Data d)
+    public IEnumerable<Effect> OnFiredProjectile(IGameContext c, IOnFiredProjectile.Data d)
     {
       // Skip effect created by this delegate to avoid infinite loops
       if (d.Effect.CreatedBy == DelegateId)
@@ -64,11 +64,11 @@ namespace Nighthollow.Delegates.Implementations
 
       return CollectionUtils.AlternatingIntegers()
         .Take(GetProjectileCount(c, c[d.Self], d.Skill) - 1)
-        .Select(i => Result(c, delegateIndex, c[d.Self], d.Skill, i));
+        .Select(i => Result(c, c[d.Self], d.Skill, i));
     }
 
     FireProjectileEffect Result(
-      IGameContext c, int delegateIndex, CreatureState self, SkillData skill, int offsetCount) =>
+      IGameContext c, CreatureState self, SkillData skill, int offsetCount) =>
       new FireProjectileEffect(
         self.CreatureId,
         skill,

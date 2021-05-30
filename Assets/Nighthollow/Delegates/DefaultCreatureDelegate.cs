@@ -32,7 +32,7 @@ namespace Nighthollow.Delegates
   {
     public string Describe(IStatDescriptionProvider provider) => "Default Creature Delegate";
 
-    public IEnumerable<Effect> OnCreatureDeath(IGameContext c, int delegateIndex, IOnCreatureDeath.Data d)
+    public IEnumerable<Effect> OnCreatureDeath(IGameContext c, IOnCreatureDeath.Data d)
     {
       if (c[d.Self].Owner == PlayerName.Enemy)
       {
@@ -41,7 +41,7 @@ namespace Nighthollow.Delegates
       }
     }
 
-    public SkillData? SelectSkill(IGameContext c, int delegateIndex, ISelectSkill.Data d)
+    public SkillData? SelectSkill(IGameContext c, ISelectSkill.Data d)
     {
       if (AnyMeleeSkillCouldHit(c, c[d.Self]))
       {
@@ -99,11 +99,11 @@ namespace Nighthollow.Delegates
       return !lastUsed.HasValue || skill.GetDurationSeconds(Stat.Cooldown) <= Time.time - lastUsed.Value;
     }
 
-    public bool MeleeSkillCouldHit(IGameContext c, int delegateIndex, IMeleeSkillCouldHit.Data d) =>
+    public bool MeleeSkillCouldHit(IGameContext c, IMeleeSkillCouldHit.Data d) =>
       c.Creatures.GetCollider(d.Self).IsTouchingLayers(
         Constants.LayerMaskForCreatures(c[d.Self].Owner.GetOpponent()));
 
-    public bool ProjectileSkillCouldHit(IGameContext c, int delegateIndex, IProjectileSkillCouldHit.Data d)
+    public bool ProjectileSkillCouldHit(IGameContext c, IProjectileSkillCouldHit.Data d)
     {
       var hit = Physics2D.Raycast(
         c.Creatures.GetProjectileSourcePosition(d.Self),

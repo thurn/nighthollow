@@ -29,7 +29,7 @@ namespace Nighthollow.Delegates.Implementations
     public string Describe(IStatDescriptionProvider provider) =>
       $"Fires {provider.Get(Stat.ProjectileSequenceCount)} Projectiles in Sequence";
 
-    public IEnumerable<Effect> OnFiredProjectile(IGameContext c, int delegateIndex, IOnFiredProjectile.Data d)
+    public IEnumerable<Effect> OnFiredProjectile(IGameContext c, IOnFiredProjectile.Data d)
     {
       // Skip effect created by this delegate to avoid infinite loops
       if (d.Effect.CreatedBy == DelegateId.MultipleProjectilesDelegate)

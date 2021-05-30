@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Services;
-using UnityEngine;
 
 #nullable enable
 
@@ -38,16 +37,16 @@ namespace Nighthollow.Delegates
 
     public IEnumerable<Effect> Invoke<THandler>(IGameContext c, EventData<THandler> eventData)
       where THandler : IHandler =>
-      AllHandlers<THandler>().SelectMany(pair => eventData.Invoke(c, pair.Item1, pair.Item2));
+      AllHandlers<THandler>().SelectMany(handler => eventData.Invoke(c, handler));
 
     public TResult First<THandler, TResult>(
       IGameContext c,
       QueryData<THandler, TResult> queryData,
       TResult notFound) where THandler : IHandler
     {
-      foreach (var (index, handler) in AllHandlers<THandler>())
+      foreach (var handler in AllHandlers<THandler>())
       {
-        return queryData.Invoke(c, index, handler);
+        return queryData.Invoke(c, handler);
       }
 
       return notFound;
@@ -58,33 +57,33 @@ namespace Nighthollow.Delegates
       QueryData<THandler, TResult?> queryData) where THandler : IHandler where TResult : class
     {
       return AllHandlers<THandler>()
-        .Select(pair => queryData.Invoke(c, pair.Item1, pair.Item2))
+        .Select(handler => queryData.Invoke(c, handler))
         .FirstOrDefault(result => result != null);
     }
 
     public bool Any<THandler>(IGameContext c, QueryData<THandler, bool> queryData) where THandler : IHandler =>
-      AllHandlers<THandler>().Any(pair => queryData.Invoke(c, pair.Item1, pair.Item2));
+      AllHandlers<THandler>().Any(handler => queryData.Invoke(c, handler));
 
     public TResult Iterate<THandler, TResult>(
       IGameContext c,
       IteratedQueryData<THandler, TResult> queryData,
       TResult initialValue) where THandler : IHandler =>
-      AllHandlers<THandler>().Aggregate(initialValue, (current, pair) =>
-        queryData.Invoke(c, pair.Item1, pair.Item2, current));
+      AllHandlers<THandler>().Aggregate(initialValue, (current, handler) =>
+        queryData.Invoke(c, handler, current));
 
-    IEnumerable<(int, THandler)> AllHandlers<THandler>(int index = 1) where THandler : IHandler
+    IEnumerable<THandler> AllHandlers<THandler>() where THandler : IHandler
     {
       foreach (var handler in _delegates)
       {
         if (handler is THandler h)
         {
-          yield return (index++, h);
+          yield return h;
         }
       }
 
       if (_parent != null)
       {
-        foreach (var p in _parent.AllHandlers<THandler>(index))
+        foreach (var p in _parent.AllHandlers<THandler>())
         {
           yield return p;
         }

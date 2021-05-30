@@ -27,8 +27,7 @@ namespace Nighthollow.Delegates.Implementations
   {
     public string Describe(IStatDescriptionProvider provider) => "Curses Enemies on Hit With:";
 
-    public IEnumerable<Effect> OnApplySkillToTarget(
-      IGameContext c, int delegateIndex, IOnApplySkillToTarget.Data d) =>
+    public IEnumerable<Effect> OnApplySkillToTarget(IGameContext c, IOnApplySkillToTarget.Data d) =>
       d.Skill.ItemData.StatusEffects
         .Select(statusEffect => new ApplyStatusEffectEffect(d.Target, statusEffect));
   }

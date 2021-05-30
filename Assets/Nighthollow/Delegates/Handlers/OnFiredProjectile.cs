@@ -31,14 +31,14 @@ namespace Nighthollow.Delegates.Handlers
         Effect = effect;
       }
 
-      public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnFiredProjectile handler) =>
-        handler.OnFiredProjectile(c, delegateIndex, this);
+      public override IEnumerable<Effect> Invoke(IGameContext c, IOnFiredProjectile handler) =>
+        handler.OnFiredProjectile(c, this);
 
       public SkillData Skill { get; }
       public FireProjectileEffect Effect { get; }
     }
 
     /// <summary>Called when the creature fires a projectile.</summary>
-    IEnumerable<Effect> OnFiredProjectile(IGameContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnFiredProjectile(IGameContext context, Data data);
   }
 }

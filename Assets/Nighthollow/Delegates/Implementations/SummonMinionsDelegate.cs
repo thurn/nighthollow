@@ -29,7 +29,7 @@ namespace Nighthollow.Delegates.Implementations
   {
     public string Describe(IStatDescriptionProvider provider) => "Summons Minions";
 
-    public IEnumerable<Effect> OnSkillUsed(IGameContext c, int delegateIndex, IOnSkillUsed.Data d)
+    public IEnumerable<Effect> OnSkillUsed(IGameContext c, IOnSkillUsed.Data d)
     {
       var filePosition = Errors.CheckNotNull(c[d.Self].FilePosition);
       var rank = GetOpenForwardRank(c.Creatures, Errors.CheckNotNull(c[d.Self].RankPosition), filePosition);

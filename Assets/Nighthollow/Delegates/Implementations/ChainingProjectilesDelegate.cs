@@ -31,7 +31,7 @@ namespace Nighthollow.Delegates.Implementations
     public string Describe(IStatDescriptionProvider provider) =>
       $"Projectiles Chain {provider.Get(Stat.ProjectileChainCount)} Times on Hit";
 
-    public bool ShouldSkipProjectileImpact(IGameContext c, int delegateIndex, IShouldSkipProjectileImpact.Data d) =>
+    public bool ShouldSkipProjectileImpact(IGameContext c, IShouldSkipProjectileImpact.Data d) =>
       ShouldSkipChaininingImpacts(c, d);
 
     public static bool ShouldSkipChaininingImpacts(IGameContext c, IShouldSkipProjectileImpact.Data d)
@@ -55,7 +55,7 @@ namespace Nighthollow.Delegates.Implementations
       return false;
     }
 
-    public IEnumerable<Effect> OnHitTarget(IGameContext c, int delegateIndex, IOnHitTarget.Data d)
+    public IEnumerable<Effect> OnHitTarget(IGameContext c, IOnHitTarget.Data d)
     {
       Errors.CheckPositive(d.Skill.GetInt(Stat.ProjectileChainCount));
       if (d.Projectile &&

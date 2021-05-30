@@ -31,8 +31,8 @@ namespace Nighthollow.Delegates.Handlers
         Projectile = projectile;
       }
 
-      public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnSkillImpact handler) =>
-        handler.OnSkillImpact(c, delegateIndex, this);
+      public override IEnumerable<Effect> Invoke(IGameContext c, IOnSkillImpact handler) =>
+        handler.OnSkillImpact(c, this);
 
       public SkillData Skill { get; }
       public Projectile? Projectile { get; }
@@ -41,6 +41,6 @@ namespace Nighthollow.Delegates.Handlers
     /// <summary>
     /// Called to apply the effect of a skill on a melee hit or projectile impact.
     /// </summary>
-    IEnumerable<Effect> OnSkillImpact(IGameContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnSkillImpact(IGameContext context, Data data);
   }
 }

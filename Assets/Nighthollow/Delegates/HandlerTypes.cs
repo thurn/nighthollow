@@ -33,7 +33,7 @@ namespace Nighthollow.Delegates
   {
     public abstract IEnumerable<Effect> Raise(IGameContext c);
 
-    public abstract IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, THandler handler);
+    public abstract IEnumerable<Effect> Invoke(IGameContext c, THandler handler);
   }
 
   public abstract class CreatureEventData<THandler> : EventData<THandler> where THandler : IHandler
@@ -55,11 +55,11 @@ namespace Nighthollow.Delegates
 
   public abstract class QueryData<THandler, TResult>
   {
-    public abstract TResult Invoke(IGameContext c, int delegateIndex, THandler handler);
+    public abstract TResult Invoke(IGameContext c, THandler handler);
   }
 
   public abstract class IteratedQueryData<THandler, TResult>
   {
-    public abstract TResult Invoke(IGameContext c, int delegateIndex, THandler handler, TResult current);
+    public abstract TResult Invoke(IGameContext c, THandler handler, TResult current);
   }
 }

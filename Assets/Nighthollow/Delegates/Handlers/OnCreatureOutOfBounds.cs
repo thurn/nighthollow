@@ -28,11 +28,11 @@ namespace Nighthollow.Delegates.Handlers
       }
 
       public override IEnumerable<Effect> Invoke(
-        IGameContext c, int delegateIndex, IOnCreatureOutOfBounds handler) =>
-        handler.OnCreatureOutOfBounds(c, delegateIndex, this);
+        IGameContext c, IOnCreatureOutOfBounds handler) =>
+        handler.OnCreatureOutOfBounds(c, this);
     }
 
     /// <summary>Called when an enemy creature passes all defenders and reaches the end of the board.</summary>
-    IEnumerable<Effect> OnCreatureOutOfBounds(IGameContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnCreatureOutOfBounds(IGameContext context, Data data);
   }
 }

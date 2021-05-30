@@ -23,11 +23,11 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : GlobalEventData<IOnBattleSceneLoaded>
     {
-      public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnBattleSceneLoaded handler) =>
-        handler.OnBattleSceneLoaded(c, delegateIndex, this);
+      public override IEnumerable<Effect> Invoke(IGameContext c, IOnBattleSceneLoaded handler) =>
+        handler.OnBattleSceneLoaded(c, this);
     }
 
     /// <summary>Called when the Battle scene has been loaded and all configuration data is ready.</summary>
-    IEnumerable<Effect> OnBattleSceneLoaded(IGameContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnBattleSceneLoaded(IGameContext context, Data data);
   }
 }

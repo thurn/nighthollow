@@ -30,8 +30,8 @@ namespace Nighthollow.Delegates.Handlers
         Target = target;
       }
 
-      public override bool Invoke(IGameContext c, int delegateIndex, IRollForHit handler) =>
-        handler.RollForHit(c, delegateIndex, this);
+      public override bool Invoke(IGameContext c, IRollForHit handler) =>
+        handler.RollForHit(c, this);
 
       public CreatureId Self { get; }
       public SkillData Skill { get; }
@@ -41,6 +41,6 @@ namespace Nighthollow.Delegates.Handlers
     /// <summary>
     /// Should roll a random number to determine if the current skill will be treated as a hit.
     /// </summary>
-    bool RollForHit(IGameContext context, int delegateIndex, Data data);
+    bool RollForHit(IGameContext context, Data data);
   }
 }

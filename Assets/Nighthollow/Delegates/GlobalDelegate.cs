@@ -30,25 +30,22 @@ namespace Nighthollow.Delegates
   {
     public string Describe(IStatDescriptionProvider provider) => "Global Delegate";
 
-    public IEnumerable<Effect> OnBattleSceneLoaded(
-      IGameContext context, int delegateIndex, IOnBattleSceneLoaded.Data data)
+    public IEnumerable<Effect> OnBattleSceneLoaded(IGameContext context, IOnBattleSceneLoaded.Data data)
     {
       yield return new DrawOpeningHandEffect();
     }
 
-    public IEnumerable<Effect> OnStartBattle(IGameContext context, int delegateIndex, IOnStartBattle.Data data)
+    public IEnumerable<Effect> OnStartBattle(IGameContext context, IOnStartBattle.Data data)
     {
       yield return new StartBattleEffect();
     }
 
-    public IEnumerable<Effect> OnEnemyCreatureAtEndzone(
-      IGameContext c, int delegateIndex, IOnEnemyCreatureAtEndzone.Data d)
+    public IEnumerable<Effect> OnEnemyCreatureAtEndzone(IGameContext c, IOnEnemyCreatureAtEndzone.Data d)
     {
       yield return new GameOverEffect();
     }
 
-    public IEnumerable<Effect> OnCreatureOutOfBounds(
-      IGameContext context, int delegateIndex, IOnCreatureOutOfBounds.Data data)
+    public IEnumerable<Effect> OnCreatureOutOfBounds(IGameContext context, IOnCreatureOutOfBounds.Data data)
     {
       yield return new DespawnCreatureEffect(data.Self);
     }

@@ -28,7 +28,7 @@ namespace Nighthollow.Delegates.Implementations
     public string Describe(IStatDescriptionProvider provider) =>
       $"+{provider.Get(Stat.AddedManaGain)} Mana Generated";
 
-    public IEnumerable<Effect> OnCreatureActivated(IGameContext c, int delegateIndex, IOnCreatureActivated.Data d)
+    public IEnumerable<Effect> OnCreatureActivated(IGameContext c, IOnCreatureActivated.Data d)
     {
       yield return new ApplyModifierToOwnerEffect(d.Self,
         Stat.ManaGain.Add(c[d.Self].Get(Stat.AddedManaGain)).WithLifetime(

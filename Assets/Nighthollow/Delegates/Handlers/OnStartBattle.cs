@@ -23,11 +23,11 @@ namespace Nighthollow.Delegates.Handlers
   {
     public sealed class Data : GlobalEventData<IOnStartBattle>
     {
-      public override IEnumerable<Effect> Invoke(IGameContext c, int delegateIndex, IOnStartBattle handler) =>
-        handler.OnStartBattle(c, delegateIndex, this);
+      public override IEnumerable<Effect> Invoke(IGameContext c, IOnStartBattle handler) =>
+        handler.OnStartBattle(c, this);
     }
 
     /// <summary>Called when a battle starts, after opening hand is accepted.</summary>
-    IEnumerable<Effect> OnStartBattle(IGameContext context, int delegateIndex, Data data);
+    IEnumerable<Effect> OnStartBattle(IGameContext context, Data data);
   }
 }
