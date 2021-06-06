@@ -29,14 +29,26 @@ namespace Nighthollow.Data
     [SerializationConstructor]
     public BattleData(
       ImmutableList<CreatureItemData>? enemies = null,
-      ImmutableList<ModifierData>? enemyModifiers = null)
+      ImmutableList<ModifierData>? enemyModifiers = null,
+      int? rewardChoicesOverride = null,
+      int? fixedRewardsOverride = null)
     {
       Enemies = enemies ?? ImmutableList<CreatureItemData>.Empty;
       EnemyModifiers = enemyModifiers ?? ImmutableList<ModifierData>.Empty;
+      RewardChoicesOverride = rewardChoicesOverride;
+      FixedRewardsOverride = fixedRewardsOverride;
     }
 
     [Key(0)] public ImmutableList<CreatureItemData> Enemies { get; }
 
     [Key(1)] public ImmutableList<ModifierData> EnemyModifiers { get; }
+
+    /// <summary>Override list of reward choices for this battle.</summary>
+    [ForeignKey(typeof(StaticItemListData))]
+    [Key(2)] public int? RewardChoicesOverride { get; }
+
+    /// <summary>Override list of fixed rewards for this battle.</summary>
+    [ForeignKey(typeof(StaticItemListData))]
+    [Key(3)] public int? FixedRewardsOverride { get; }
   }
 }

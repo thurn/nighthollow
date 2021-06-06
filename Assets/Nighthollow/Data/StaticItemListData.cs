@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using MessagePack;
 
 #nullable enable
@@ -46,5 +48,8 @@ namespace Nighthollow.Data
     [Key(3)] public IdentifierTag Tag { get; }
 
     public override string ToString() => Name;
+
+    public ImmutableList<IItemData> AsItems() =>
+      ImmutableList<IItemData>.Empty.Concat(Creatures).Concat(Resources).ToImmutableList();
   }
 }

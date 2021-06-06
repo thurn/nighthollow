@@ -100,6 +100,9 @@ namespace Nighthollow.Interface
     public static ElementKey<Tooltip> Tooltip =
       new ElementKey<Tooltip>("Tooltip");
 
+    public static ElementKey<VictoryWindow> VictoryWindow =
+      new ElementKey<VictoryWindow>("VictoryWindow");
+
     readonly Dictionary<string, AbstractHideableElement> _elements = new Dictionary<string, AbstractHideableElement>();
 
     readonly List<IElementKey> _keys = new List<IElementKey>
@@ -116,7 +119,8 @@ namespace Nighthollow.Interface
       SchoolSelectionScreen,
       LoadingBlackout,
       CardsWindow,
-      Tooltip
+      Tooltip,
+      VictoryWindow
     };
 
     readonly ServiceRegistry _registry;

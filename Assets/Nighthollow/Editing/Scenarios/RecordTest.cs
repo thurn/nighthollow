@@ -12,30 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use "colors";
+#nullable enable
 
-Label.italic {
-  -unity-font-style: italic;
-}
-
-Label.bold {
-  -unity-font-style: bold;
-}
-
-@mixin headline-text {
-  -unity-font-definition: url('/Assets/ThirdParty/Fonts/BluuNext-Bold.otf');
-  white-space: normal;
-  color: colors.$primary-text;
-}
-
-@mixin text {
-  -unity-font-definition: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');
-  white-space: normal;
-  color: colors.$primary-text;
-}
-
-@mixin black-text {
-  -unity-font-definition: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');
-  white-space: normal;
-  color: black;
+namespace Nighthollow.Editing.Scenarios
+{
+  public sealed record RecordTest
+  {
+    public string? Name { get; init; }
+  }
 }

@@ -93,6 +93,17 @@ limitations under the License.
             </ui:VisualElement>
         </nh:CardsWindow>
 
+        <nh:VictoryWindow name="VictoryWindow" class="window" style="display: none;">
+            <ui:VisualElement class="window-title">
+                <ui:Label text="Victory!"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="column">
+                <ui:Label class="pane-title" text="Gained:"/>
+                <ui:VisualElement name="FixedRewards" class="card-grid" />
+                <ui:Label class="pane-title" text="Select a Reward:"/>
+            </ui:VisualElement>
+        </nh:VictoryWindow>
+
         <nh:SchoolSelectionScreen name="SchoolSelectionScreen" class="screen-background" style="display: none;">
             <ui:VisualElement name="Schools" class="schools">
                 <ui:VisualElement style="flex-direction: row; justify-content: space-between;">

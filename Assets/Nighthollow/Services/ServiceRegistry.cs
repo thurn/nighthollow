@@ -63,6 +63,7 @@ namespace Nighthollow.Services
       Globals = new GlobalsService(database);
       CoroutineRunner = coroutineRunner;
       PlayerPrefs = new PlayerPrefsService();
+      Rewards = new RewardsService(Database);
     }
 
     public abstract ServiceRegistryName Name { get; }
@@ -113,6 +114,8 @@ namespace Nighthollow.Services
     public IStartCoroutine CoroutineRunner { get; }
 
     public PlayerPrefsService PlayerPrefs { get; }
+
+    public RewardsService Rewards { get; }
   }
 
   public sealed class EditorServiceRegistry : ServiceRegistry

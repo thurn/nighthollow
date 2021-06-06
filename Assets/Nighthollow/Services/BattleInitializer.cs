@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Nighthollow.Components;
 using Nighthollow.Data;
 using Nighthollow.Delegates.Handlers;
 using Nighthollow.Editing.Scenarios;
+using Nighthollow.Interface;
 using Nighthollow.Rules.Events;
 using Nighthollow.Utils;
 using UnityEngine;

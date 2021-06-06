@@ -76,14 +76,36 @@ namespace Nighthollow.Data
         ? this
         : new BattleData(
           enemies,
-          EnemyModifiers);
+          EnemyModifiers,
+          RewardChoicesOverride,
+          FixedRewardsOverride);
 
     public BattleData WithEnemyModifiers(ImmutableList<ModifierData> enemyModifiers) =>
       Equals(enemyModifiers, EnemyModifiers)
         ? this
         : new BattleData(
           Enemies,
-          enemyModifiers);
+          enemyModifiers,
+          RewardChoicesOverride,
+          FixedRewardsOverride);
+
+    public BattleData WithRewardChoicesOverride(int? rewardChoicesOverride) =>
+      Equals(rewardChoicesOverride, RewardChoicesOverride)
+        ? this
+        : new BattleData(
+          Enemies,
+          EnemyModifiers,
+          rewardChoicesOverride,
+          FixedRewardsOverride);
+
+    public BattleData WithFixedRewardsOverride(int? fixedRewardsOverride) =>
+      Equals(fixedRewardsOverride, FixedRewardsOverride)
+        ? this
+        : new BattleData(
+          Enemies,
+          EnemyModifiers,
+          RewardChoicesOverride,
+          fixedRewardsOverride);
 
   }
 
@@ -231,6 +253,10 @@ namespace Nighthollow.Data
           AffixTypeId,
           modifiers);
 
+  }
+
+  public sealed partial class RewardChoiceData
+  {
   }
 
   public sealed partial class StatusEffectTypeData

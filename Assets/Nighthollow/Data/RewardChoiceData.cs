@@ -12,30 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use "colors";
+using System.Collections.Immutable;
 
-Label.italic {
-  -unity-font-style: italic;
-}
+#nullable enable
 
-Label.bold {
-  -unity-font-style: bold;
-}
+namespace Nighthollow.Data
+{
+  public sealed partial class RewardChoiceData
+  {
+    public RewardChoiceData(ImmutableList<IItemData> choices, ImmutableList<IItemData> fixedRewards)
+    {
+      Choices = choices;
+      FixedRewards = fixedRewards;
+    }
 
-@mixin headline-text {
-  -unity-font-definition: url('/Assets/ThirdParty/Fonts/BluuNext-Bold.otf');
-  white-space: normal;
-  color: colors.$primary-text;
-}
+    /// <summary>The user may select from among these items.</summary>
+    public ImmutableList<IItemData> Choices { get; }
 
-@mixin text {
-  -unity-font-definition: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');
-  white-space: normal;
-  color: colors.$primary-text;
-}
-
-@mixin black-text {
-  -unity-font-definition: url('/Assets/ThirdParty/Fonts/Roboto-Regular.ttf');
-  white-space: normal;
-  color: black;
+    /// <summary>The user receives all of these items.</summary>
+    public ImmutableList<IItemData> FixedRewards { get; }
+  }
 }
