@@ -12,31 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Nighthollow.Interface.Components;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.Interface
+namespace Nighthollow.Interface.Components
 {
-  public sealed class VictoryWindow : DefaultHideableElement
+  public sealed record TestButton : LayoutComponent
   {
-    VisualElement _fixedRewards = null!;
-
-    public new sealed class UxmlFactory : UxmlFactory<VictoryWindow, UxmlTraits>
+    protected override BaseComponent OnRender() => new Column
     {
+      Children = List(
+        new Button(),
+        new Button()
+      )
+    };
+  }
+
+  public sealed class ComponentExamples : MonoBehaviour
+  {
+    [SerializeField] UIDocument _document = null!;
+    ComponentRoot _componentRoot = null!;
+
+    void Start()
+    {
+      _componentRoot = new ComponentRoot(this, _document.rootVisualElement.Q("ComponentExamples"), new TestButton());
     }
 
-    protected override void Initialize()
+    void Update()
     {
-      _fixedRewards = FindElement("FixedRewards");
-    }
-
-    protected override void OnShow()
-    {
-      // var rewards = Registry.Rewards.CreateRewardsForCurrentBattle();
-      // ItemRenderer.AddItems(Registry, _fixedRewards, rewards.FixedRewards,
-      //   new ItemRenderer.Config(5, ItemSlot.Size.Small));
+      _componentRoot.OnUpdate();
     }
   }
 }

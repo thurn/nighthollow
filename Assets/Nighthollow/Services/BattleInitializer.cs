@@ -68,12 +68,14 @@ namespace Nighthollow.Services
         _hand,
         _damageTextService);
 
+      _registry.ScreenController.Get(ScreenController.VictoryWindow).Show();
+
       // Run a scenario if one has been requested -- takes precedence over normal load events.
-      if (!ScenarioData.Invoke(_registry))
-      {
-        _registry.Invoke(new IOnBattleSceneLoaded.Data());
-        _registry.RulesEngine.Invoke(new BattleSceneReadyEvent());
-      }
+      // if (!ScenarioData.Invoke(_registry))
+      // {
+      //   _registry.Invoke(new IOnBattleSceneLoaded.Data());
+      //   _registry.RulesEngine.Invoke(new BattleSceneReadyEvent());
+      // }
     }
   }
 }
