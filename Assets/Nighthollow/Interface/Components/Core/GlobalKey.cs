@@ -13,11 +13,10 @@
 // limitations under the License.
 
 using System;
-using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Interface.Components
+namespace Nighthollow.Interface.Components.Core
 {
   public sealed class GlobalKey
   {
@@ -33,14 +32,18 @@ namespace Nighthollow.Interface.Components
       _key = key;
     }
 
+    string GetKey() => $"{_key}:{_currentHook++}";
+
     public GlobalKey Child(string key) => new(_root, $"{_key}/{key}");
 
     public IState<T> UseState<T>(Type componentType, T initialValue) =>
-      _root.UseState((componentType, $"{_key}:{_currentHook++}"), initialValue);
+      _root.UseState((componentType, GetKey()), initialValue);
 
-    public Sprite? UseSprite(string? address)
+    public T? UseResource<T>(string address) where T : UnityEngine.Object
     {
-      return _root.UseSprite(address);
+      return _root.UseResource<T>(address);
     }
+
+    public override string ToString() => GetKey();
   }
 }

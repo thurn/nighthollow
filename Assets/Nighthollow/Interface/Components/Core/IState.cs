@@ -14,7 +14,7 @@
 
 #nullable enable
 
-namespace Nighthollow.Interface.Components
+namespace Nighthollow.Interface.Components.Core
 {
   public interface IState<T>
   {

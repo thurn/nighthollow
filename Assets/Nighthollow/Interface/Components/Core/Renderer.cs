@@ -17,7 +17,7 @@ using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.Interface.Components
+namespace Nighthollow.Interface.Components.Core
 {
   public static class Renderer
   {

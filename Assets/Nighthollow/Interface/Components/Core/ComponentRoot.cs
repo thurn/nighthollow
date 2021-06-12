@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.Interface.Components
+namespace Nighthollow.Interface.Components.Core
 {
   public sealed class ComponentRoot
   {
@@ -29,10 +29,10 @@ namespace Nighthollow.Interface.Components
     readonly VisualElement _parentElement;
     readonly BaseComponent _component;
     readonly Dictionary<(Type, string), object> _states = new();
-    readonly List<string> _toFetch = new();
-    readonly Dictionary<string, Sprite> _sprites = new();
+    readonly List<(Type, string)> _toFetch = new();
+    readonly Dictionary<string, object> _resources = new();
     VisualElement? _lastRenderedElement;
-    IMountComponent? _lastRenderedTree;
+    IMountComponent? _lastRenderedComponent;
     bool _updateRequired = true;
 
     public ComponentRoot(MonoBehaviour runner, VisualElement parentElement, BaseComponent component)
@@ -47,12 +47,13 @@ namespace Nighthollow.Interface.Components
       if (_updateRequired)
       {
         var tree = _component.Reduce(GlobalKey.Root(this));
-        var result = Renderer.Update(GlobalKey.Root(this), _lastRenderedElement, _lastRenderedTree, tree);
-        _lastRenderedTree = tree;
+        var result = Renderer.Update(GlobalKey.Root(this), _lastRenderedElement, _lastRenderedComponent, tree);
+        _lastRenderedComponent = tree;
 
         if (result != null)
         {
           _parentElement.Clear();
+
           _parentElement.Add(result);
           _lastRenderedElement = result;
         }
@@ -76,20 +77,15 @@ namespace Nighthollow.Interface.Components
       return new ComponentState<T>(this, key);
     }
 
-    public Sprite? UseSprite(string? address)
+    public T? UseResource<T>(string address) where T : UnityEngine.Object
     {
-      if (address == null)
+      if (_resources.ContainsKey(address))
       {
-        return null;
-      }
-
-      if (_sprites.ContainsKey(address))
-      {
-        return _sprites[address];
+        return (T) _resources[address];
       }
       else
       {
-        _toFetch.Add(address);
+        _toFetch.Add((typeof(T), address));
         return null;
       }
     }
@@ -97,16 +93,16 @@ namespace Nighthollow.Interface.Components
     IEnumerator<WaitUntil> FetchResources()
     {
       var requests = new Dictionary<string, ResourceRequest>();
-      foreach (var address in _toFetch)
+      foreach (var (resourceType, address) in _toFetch)
       {
-        requests[address] = Resources.LoadAsync<Sprite>(address);
+        requests[address] = Resources.LoadAsync(address, resourceType);
       }
 
       yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
 
       foreach (var pair in requests)
       {
-        _sprites[pair.Key] = (Sprite) pair.Value.asset;
+        _resources[pair.Key] = pair.Value.asset;
       }
 
       _toFetch.Clear();

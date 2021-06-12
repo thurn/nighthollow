@@ -17,12 +17,11 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Utils;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
 
-namespace Nighthollow.Interface.Components
+namespace Nighthollow.Interface.Components.Core
 {
   public abstract record BaseComponent
   {
@@ -32,7 +31,7 @@ namespace Nighthollow.Interface.Components
 
     public abstract IMountComponent Reduce(GlobalKey globalKey);
 
-    protected static IEnumerable<BaseComponent> List(params BaseComponent[] children) => children;
+    protected static IEnumerable<BaseComponent> List(params BaseComponent?[] children) => children.WhereNotNull();
 
     protected IState<T> UseState<T>(T initialValue)
     {
@@ -44,14 +43,19 @@ namespace Nighthollow.Interface.Components
       return GlobalKey.UseState(GetType(), initialValue);
     }
 
-    protected Sprite? UseSprite(string? address)
+    protected T? UseResource<T>(string? address) where T : UnityEngine.Object
     {
-      if (GlobalKey == null)
+      if (address == null)
       {
-        throw new NullReferenceException($"Error: Invoked {nameof(UseSprite)}() outside of OnRender()/OnMount()");
+        return null;
       }
 
-      return GlobalKey.UseSprite(address);
+      if (GlobalKey == null)
+      {
+        throw new NullReferenceException($"Error: Invoked {nameof(UseResource)}() outside of OnRender()/OnMount()");
+      }
+
+      return GlobalKey.UseResource<T>(address);
     }
   }
 
@@ -87,6 +91,21 @@ namespace Nighthollow.Interface.Components
   {
     protected abstract TElement OnCreateMountContent();
 
+    /// <summary>
+    /// Updates the provided VisualElement to match the current component.
+    /// </summary>
+    /// <remarks>
+    /// NOTE: because elements are reused across contexts, any kind of conditional logic inside OnMount is very
+    /// unsafe. For example, if you write code like:
+    /// <code>
+    /// if (BackgroundColor != null)
+    /// {
+    ///   element.style.backgroundColor = BackgroundColor;
+    /// }
+    /// </code>
+    /// then the previously-set background color will not be removed correctly!
+    /// </remarks>
+    /// <param name="element"></param>
     protected abstract void OnMount(TElement element);
 
     public abstract string Type { get; }
