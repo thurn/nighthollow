@@ -19,7 +19,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface.Components.Core
 {
-  public static class Renderer
+  public static class Reconciler
   {
     /// <summary>
     /// Runs the tree diff algorithm, updating the Visual Element hierarchy to match the new state.

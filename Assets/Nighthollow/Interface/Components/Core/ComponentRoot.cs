@@ -47,7 +47,7 @@ namespace Nighthollow.Interface.Components.Core
       if (_updateRequired)
       {
         var tree = _component.Reduce(GlobalKey.Root(this));
-        var result = Renderer.Update(GlobalKey.Root(this), _lastRenderedElement, _lastRenderedComponent, tree);
+        var result = Reconciler.Update(GlobalKey.Root(this), _lastRenderedElement, _lastRenderedComponent, tree);
         _lastRenderedComponent = tree;
 
         if (result != null)
