@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Nighthollow.Rules;
 using Nighthollow.Utils;
 using UnityEngine.UIElements;
 
@@ -27,7 +28,38 @@ namespace Nighthollow.Interface.Components.Core
   {
     protected GlobalKey? GlobalKey;
 
-    public string? Key { get; init; }
+    public string? LocalKey { get; init; }
+    public int MarginLeft { get; init; }
+    public int MarginTop { get; init; }
+    public int MarginRight { get; init; }
+    public int MarginBottom { get; init; }
+
+    public int MarginLeftRight
+    {
+      init
+      {
+        MarginLeft = value;
+        MarginRight = value;
+      }
+    }
+
+    public int MarginTopBottom
+    {
+      init
+      {
+        MarginTop = value;
+        MarginBottom = value;
+      }
+    }
+
+    public int MarginAll
+    {
+      init
+      {
+        MarginTopBottom = value;
+        MarginLeftRight = value;
+      }
+    }
 
     public abstract IMountComponent Reduce(GlobalKey globalKey);
 
@@ -57,24 +89,32 @@ namespace Nighthollow.Interface.Components.Core
 
       return GlobalKey.UseResource<T>(address);
     }
+
+    protected BaseComponent MergeCommonProps(BaseComponent other) => other with
+    {
+      MarginLeft = MarginLeft + other.MarginLeft,
+      MarginTop = MarginTop + other.MarginTop,
+      MarginRight = MarginRight + other.MarginRight,
+      MarginBottom = MarginBottom + other.MarginBottom
+    };
   }
 
   public abstract record LayoutComponent : BaseComponent
   {
-    protected abstract BaseComponent OnRender();
+    protected abstract BaseComponent OnRender(Scope scope);
 
     public override IMountComponent Reduce(GlobalKey globalKey)
     {
       GlobalKey = globalKey;
-      var child = OnRender();
+      var child = MergeCommonProps(OnRender(globalKey.Scope));
       GlobalKey = null;
-      return child.Reduce(globalKey.Child(child.Key ?? "0"));
+      return child.Reduce(globalKey.Child(child.LocalKey ?? "0"));
     }
   }
 
   public interface IMountComponent
   {
-    public string? Key { get; }
+    public string? LocalKey { get; }
 
     string Type { get; }
 
@@ -141,7 +181,7 @@ namespace Nighthollow.Interface.Components.Core
     public override void ReduceChildren(GlobalKey globalKey)
     {
       Errors.CheckState(_reduced is null, "Error: Already reduced!");
-      _reduced = _children.Select((c, i) => c.Reduce(globalKey.Child(c.Key ?? i.ToString()))).ToImmutableList();
+      _reduced = _children.Select((c, i) => c.Reduce(globalKey.Child(c.LocalKey ?? i.ToString()))).ToImmutableList();
     }
 
     public override ImmutableList<IMountComponent> GetReducedChildren() =>

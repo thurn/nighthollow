@@ -28,14 +28,15 @@ namespace Nighthollow.Items
     public static TooltipBuilder CreateTooltip(GameData gameData, Vector2 anchorPosition, IItemData item) =>
       item.Switch(
         creature => CreateUserCreatureTooltip(gameData, anchorPosition, creature),
-        resource => CreateResourceTooltip(anchorPosition, resource));
+        resource => CreateResourceTooltip(gameData, anchorPosition, resource));
 
     public static TooltipBuilder CreateResourceTooltip(
+      GameData gameData,
       Vector2 anchorPosition,
       ResourceItemData data)
     {
       var builder = new TooltipBuilder(data.Name, anchorPosition);
-      builder.AppendText(data.Description);
+      builder.AppendText(gameData.ResourceTypes[data.ResourceTypeId].Description ?? "");
       return builder;
     }
 

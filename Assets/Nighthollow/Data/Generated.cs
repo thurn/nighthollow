@@ -255,8 +255,60 @@ namespace Nighthollow.Data
 
   }
 
-  public sealed partial class RewardChoiceData
+  public sealed partial class ResourceTypeData
   {
+    public ResourceTypeData WithName(string name) =>
+      Equals(name, Name)
+        ? this
+        : new ResourceTypeData(
+          name,
+          ImageAddress,
+          Description);
+
+    public ResourceTypeData WithImageAddress(string? imageAddress) =>
+      Equals(imageAddress, ImageAddress)
+        ? this
+        : new ResourceTypeData(
+          Name,
+          imageAddress,
+          Description);
+
+    public ResourceTypeData WithDescription(string? description) =>
+      Equals(description, Description)
+        ? this
+        : new ResourceTypeData(
+          Name,
+          ImageAddress,
+          description);
+
+  }
+
+  public sealed partial class ResourceItemData
+  {
+    public ResourceItemData WithResourceTypeId(int resourceTypeId) =>
+      Equals(resourceTypeId, ResourceTypeId)
+        ? this
+        : new ResourceItemData(
+          resourceTypeId,
+          Name,
+          Quantity);
+
+    public ResourceItemData WithName(string name) =>
+      Equals(name, Name)
+        ? this
+        : new ResourceItemData(
+          ResourceTypeId,
+          name,
+          Quantity);
+
+    public ResourceItemData WithQuantity(int quantity) =>
+      Equals(quantity, Quantity)
+        ? this
+        : new ResourceItemData(
+          ResourceTypeId,
+          Name,
+          quantity);
+
   }
 
   public sealed partial class StatusEffectTypeData
@@ -586,34 +638,6 @@ namespace Nighthollow.Data
           ImplicitModifiers,
           SkillAnimations,
           isManaCreature);
-
-  }
-
-  public sealed partial class ResourceItemData
-  {
-    public ResourceItemData WithName(string name) =>
-      Equals(name, Name)
-        ? this
-        : new ResourceItemData(
-          name,
-          ImageAddress,
-          Description);
-
-    public ResourceItemData WithImageAddress(string imageAddress) =>
-      Equals(imageAddress, ImageAddress)
-        ? this
-        : new ResourceItemData(
-          Name,
-          imageAddress,
-          Description);
-
-    public ResourceItemData WithDescription(string description) =>
-      Equals(description, Description)
-        ? this
-        : new ResourceItemData(
-          Name,
-          ImageAddress,
-          description);
 
   }
 
@@ -1593,6 +1617,10 @@ namespace Nighthollow.Data
           SpawnCount,
           deathCount);
 
+  }
+
+  public sealed partial class RewardData
+  {
   }
 
   public sealed partial class UserData

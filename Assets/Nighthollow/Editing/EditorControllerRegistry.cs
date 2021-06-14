@@ -294,6 +294,22 @@ namespace Nighthollow.Editing
     };
   }
 
+  sealed class ResourceItemController : EditorController<CreatureItemData>
+  {
+    public override void WriteForeignKey(int id, ReflectivePath reflectivePath)
+    {
+      if (reflectivePath.Read() is ResourceItemData _)
+      {
+        var typeData = reflectivePath.Database.Snapshot().ResourceTypes[id];
+        reflectivePath.Write(new ResourceItemData(id, typeData.Name, 1));
+      }
+      else
+      {
+        base.WriteForeignKey(id, reflectivePath);
+      }
+    }
+  }
+
   public static class EditorControllerRegistry
   {
     static readonly IReadOnlyDictionary<Type, EditorController> Controllers =
@@ -307,7 +323,8 @@ namespace Nighthollow.Editing
         {typeof(StatusEffectItemData), new StatusEffectItemController()},
         {typeof(Rule), new RuleDataController()},
         {typeof(GlobalData), new GlobalDataController()},
-        {typeof(ScenarioData), new ScenarioDataController()}
+        {typeof(ScenarioData), new ScenarioDataController()},
+        {typeof(ResourceItemData), new ResourceItemController()}
       };
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)

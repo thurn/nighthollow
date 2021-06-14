@@ -49,7 +49,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(101)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(102)
             {
                 { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Data.DamageType, global::Nighthollow.Stats.IntRangeValue>), 0 },
                 { typeof(global::Nighthollow.Data.ImmutableDictionaryValue<global::Nighthollow.Data.DamageType, global::Nighthollow.Stats.PercentageValue>), 1 },
@@ -122,36 +122,37 @@ namespace MessagePack.Resolvers
                 { typeof(global::Nighthollow.Data.IntValueData), 68 },
                 { typeof(global::Nighthollow.Data.ModifierData), 69 },
                 { typeof(global::Nighthollow.Data.ResourceItemData), 70 },
-                { typeof(global::Nighthollow.Data.SerializationList), 71 },
-                { typeof(global::Nighthollow.Data.SkillItemData), 72 },
-                { typeof(global::Nighthollow.Data.SkillTypeData), 73 },
-                { typeof(global::Nighthollow.Data.StatData), 74 },
-                { typeof(global::Nighthollow.Data.StaticItemListData), 75 },
-                { typeof(global::Nighthollow.Data.StatusEffectItemData), 76 },
-                { typeof(global::Nighthollow.Data.StatusEffectTypeData), 77 },
-                { typeof(global::Nighthollow.Data.TableMetadata), 78 },
-                { typeof(global::Nighthollow.Data.UserData), 79 },
-                { typeof(global::Nighthollow.Editing.Scenarios.ScenarioData), 80 },
-                { typeof(global::Nighthollow.Rules.Conditions.HotkeyEqualsCondition), 81 },
-                { typeof(global::Nighthollow.Rules.Conditions.UserDeckSizeCondition), 82 },
-                { typeof(global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect), 83 },
-                { typeof(global::Nighthollow.Rules.Effects.CharacterDialogueEffect), 84 },
-                { typeof(global::Nighthollow.Rules.Effects.ClearScenariosEffect), 85 },
-                { typeof(global::Nighthollow.Rules.Effects.DisplayHelpTextEffect), 86 },
-                { typeof(global::Nighthollow.Rules.Effects.EnableAllRulesEffect), 87 },
-                { typeof(global::Nighthollow.Rules.Effects.InitializeWorldMapEffect), 88 },
-                { typeof(global::Nighthollow.Rules.Effects.LoadSceneEffect), 89 },
-                { typeof(global::Nighthollow.Rules.Effects.PlaceCreaturesFromListEffect), 90 },
-                { typeof(global::Nighthollow.Rules.Effects.PreventDefaultEffect), 91 },
-                { typeof(global::Nighthollow.Rules.Effects.ResetToNewGameStateEffect), 92 },
-                { typeof(global::Nighthollow.Rules.Rule), 93 },
-                { typeof(global::Nighthollow.Stats.DurationValue), 94 },
-                { typeof(global::Nighthollow.Stats.IntRangeValue), 95 },
-                { typeof(global::Nighthollow.Stats.PercentageValue), 96 },
-                { typeof(global::Nighthollow.World.Data.ColorData), 97 },
-                { typeof(global::Nighthollow.World.Data.HexData), 98 },
-                { typeof(global::Nighthollow.World.Data.HexPosition), 99 },
-                { typeof(global::Nighthollow.World.Data.KingdomData), 100 },
+                { typeof(global::Nighthollow.Data.ResourceTypeData), 71 },
+                { typeof(global::Nighthollow.Data.SerializationList), 72 },
+                { typeof(global::Nighthollow.Data.SkillItemData), 73 },
+                { typeof(global::Nighthollow.Data.SkillTypeData), 74 },
+                { typeof(global::Nighthollow.Data.StatData), 75 },
+                { typeof(global::Nighthollow.Data.StaticItemListData), 76 },
+                { typeof(global::Nighthollow.Data.StatusEffectItemData), 77 },
+                { typeof(global::Nighthollow.Data.StatusEffectTypeData), 78 },
+                { typeof(global::Nighthollow.Data.TableMetadata), 79 },
+                { typeof(global::Nighthollow.Data.UserData), 80 },
+                { typeof(global::Nighthollow.Editing.Scenarios.ScenarioData), 81 },
+                { typeof(global::Nighthollow.Rules.Conditions.HotkeyEqualsCondition), 82 },
+                { typeof(global::Nighthollow.Rules.Conditions.UserDeckSizeCondition), 83 },
+                { typeof(global::Nighthollow.Rules.Effects.CenterCameraOnHexEffect), 84 },
+                { typeof(global::Nighthollow.Rules.Effects.CharacterDialogueEffect), 85 },
+                { typeof(global::Nighthollow.Rules.Effects.ClearScenariosEffect), 86 },
+                { typeof(global::Nighthollow.Rules.Effects.DisplayHelpTextEffect), 87 },
+                { typeof(global::Nighthollow.Rules.Effects.EnableAllRulesEffect), 88 },
+                { typeof(global::Nighthollow.Rules.Effects.InitializeWorldMapEffect), 89 },
+                { typeof(global::Nighthollow.Rules.Effects.LoadSceneEffect), 90 },
+                { typeof(global::Nighthollow.Rules.Effects.PlaceCreaturesFromListEffect), 91 },
+                { typeof(global::Nighthollow.Rules.Effects.PreventDefaultEffect), 92 },
+                { typeof(global::Nighthollow.Rules.Effects.ResetToNewGameStateEffect), 93 },
+                { typeof(global::Nighthollow.Rules.Rule), 94 },
+                { typeof(global::Nighthollow.Stats.DurationValue), 95 },
+                { typeof(global::Nighthollow.Stats.IntRangeValue), 96 },
+                { typeof(global::Nighthollow.Stats.PercentageValue), 97 },
+                { typeof(global::Nighthollow.World.Data.ColorData), 98 },
+                { typeof(global::Nighthollow.World.Data.HexData), 99 },
+                { typeof(global::Nighthollow.World.Data.HexPosition), 100 },
+                { typeof(global::Nighthollow.World.Data.KingdomData), 101 },
             };
         }
 
@@ -236,36 +237,37 @@ namespace MessagePack.Resolvers
                 case 68: return new MessagePack.Formatters.Nighthollow.Data.IntValueDataFormatter();
                 case 69: return new MessagePack.Formatters.Nighthollow.Data.ModifierDataFormatter();
                 case 70: return new MessagePack.Formatters.Nighthollow.Data.ResourceItemDataFormatter();
-                case 71: return new MessagePack.Formatters.Nighthollow.Data.SerializationListFormatter();
-                case 72: return new MessagePack.Formatters.Nighthollow.Data.SkillItemDataFormatter();
-                case 73: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeDataFormatter();
-                case 74: return new MessagePack.Formatters.Nighthollow.Data.StatDataFormatter();
-                case 75: return new MessagePack.Formatters.Nighthollow.Data.StaticItemListDataFormatter();
-                case 76: return new MessagePack.Formatters.Nighthollow.Data.StatusEffectItemDataFormatter();
-                case 77: return new MessagePack.Formatters.Nighthollow.Data.StatusEffectTypeDataFormatter();
-                case 78: return new MessagePack.Formatters.Nighthollow.Data.TableMetadataFormatter();
-                case 79: return new MessagePack.Formatters.Nighthollow.Data.UserDataFormatter();
-                case 80: return new MessagePack.Formatters.Nighthollow.Editing.Scenarios.ScenarioDataFormatter();
-                case 81: return new MessagePack.Formatters.Nighthollow.Rules.Conditions.HotkeyEqualsConditionFormatter();
-                case 82: return new MessagePack.Formatters.Nighthollow.Rules.Conditions.UserDeckSizeConditionFormatter();
-                case 83: return new MessagePack.Formatters.Nighthollow.Rules.Effects.CenterCameraOnHexEffectFormatter();
-                case 84: return new MessagePack.Formatters.Nighthollow.Rules.Effects.CharacterDialogueEffectFormatter();
-                case 85: return new MessagePack.Formatters.Nighthollow.Rules.Effects.ClearScenariosEffectFormatter();
-                case 86: return new MessagePack.Formatters.Nighthollow.Rules.Effects.DisplayHelpTextEffectFormatter();
-                case 87: return new MessagePack.Formatters.Nighthollow.Rules.Effects.EnableAllRulesEffectFormatter();
-                case 88: return new MessagePack.Formatters.Nighthollow.Rules.Effects.InitializeWorldMapEffectFormatter();
-                case 89: return new MessagePack.Formatters.Nighthollow.Rules.Effects.LoadSceneEffectFormatter();
-                case 90: return new MessagePack.Formatters.Nighthollow.Rules.Effects.PlaceCreaturesFromListEffectFormatter();
-                case 91: return new MessagePack.Formatters.Nighthollow.Rules.Effects.PreventDefaultEffectFormatter();
-                case 92: return new MessagePack.Formatters.Nighthollow.Rules.Effects.ResetToNewGameStateEffectFormatter();
-                case 93: return new MessagePack.Formatters.Nighthollow.Rules.RuleFormatter();
-                case 94: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
-                case 95: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
-                case 96: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
-                case 97: return new MessagePack.Formatters.Nighthollow.World.Data.ColorDataFormatter();
-                case 98: return new MessagePack.Formatters.Nighthollow.World.Data.HexDataFormatter();
-                case 99: return new MessagePack.Formatters.Nighthollow.World.Data.HexPositionFormatter();
-                case 100: return new MessagePack.Formatters.Nighthollow.World.Data.KingdomDataFormatter();
+                case 71: return new MessagePack.Formatters.Nighthollow.Data.ResourceTypeDataFormatter();
+                case 72: return new MessagePack.Formatters.Nighthollow.Data.SerializationListFormatter();
+                case 73: return new MessagePack.Formatters.Nighthollow.Data.SkillItemDataFormatter();
+                case 74: return new MessagePack.Formatters.Nighthollow.Data.SkillTypeDataFormatter();
+                case 75: return new MessagePack.Formatters.Nighthollow.Data.StatDataFormatter();
+                case 76: return new MessagePack.Formatters.Nighthollow.Data.StaticItemListDataFormatter();
+                case 77: return new MessagePack.Formatters.Nighthollow.Data.StatusEffectItemDataFormatter();
+                case 78: return new MessagePack.Formatters.Nighthollow.Data.StatusEffectTypeDataFormatter();
+                case 79: return new MessagePack.Formatters.Nighthollow.Data.TableMetadataFormatter();
+                case 80: return new MessagePack.Formatters.Nighthollow.Data.UserDataFormatter();
+                case 81: return new MessagePack.Formatters.Nighthollow.Editing.Scenarios.ScenarioDataFormatter();
+                case 82: return new MessagePack.Formatters.Nighthollow.Rules.Conditions.HotkeyEqualsConditionFormatter();
+                case 83: return new MessagePack.Formatters.Nighthollow.Rules.Conditions.UserDeckSizeConditionFormatter();
+                case 84: return new MessagePack.Formatters.Nighthollow.Rules.Effects.CenterCameraOnHexEffectFormatter();
+                case 85: return new MessagePack.Formatters.Nighthollow.Rules.Effects.CharacterDialogueEffectFormatter();
+                case 86: return new MessagePack.Formatters.Nighthollow.Rules.Effects.ClearScenariosEffectFormatter();
+                case 87: return new MessagePack.Formatters.Nighthollow.Rules.Effects.DisplayHelpTextEffectFormatter();
+                case 88: return new MessagePack.Formatters.Nighthollow.Rules.Effects.EnableAllRulesEffectFormatter();
+                case 89: return new MessagePack.Formatters.Nighthollow.Rules.Effects.InitializeWorldMapEffectFormatter();
+                case 90: return new MessagePack.Formatters.Nighthollow.Rules.Effects.LoadSceneEffectFormatter();
+                case 91: return new MessagePack.Formatters.Nighthollow.Rules.Effects.PlaceCreaturesFromListEffectFormatter();
+                case 92: return new MessagePack.Formatters.Nighthollow.Rules.Effects.PreventDefaultEffectFormatter();
+                case 93: return new MessagePack.Formatters.Nighthollow.Rules.Effects.ResetToNewGameStateEffectFormatter();
+                case 94: return new MessagePack.Formatters.Nighthollow.Rules.RuleFormatter();
+                case 95: return new MessagePack.Formatters.Nighthollow.Stats.DurationValueFormatter();
+                case 96: return new MessagePack.Formatters.Nighthollow.Stats.IntRangeValueFormatter();
+                case 97: return new MessagePack.Formatters.Nighthollow.Stats.PercentageValueFormatter();
+                case 98: return new MessagePack.Formatters.Nighthollow.World.Data.ColorDataFormatter();
+                case 99: return new MessagePack.Formatters.Nighthollow.World.Data.HexDataFormatter();
+                case 100: return new MessagePack.Formatters.Nighthollow.World.Data.HexPositionFormatter();
+                case 101: return new MessagePack.Formatters.Nighthollow.World.Data.KingdomDataFormatter();
                 default: return null;
             }
         }
@@ -2109,12 +2111,69 @@ namespace MessagePack.Formatters.Nighthollow.Data
 
             IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(3);
+            writer.Write(value.ResourceTypeId);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            writer.Write(value.Quantity);
+        }
+
+        public global::Nighthollow.Data.ResourceItemData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __ResourceTypeId__ = default(int);
+            var __Name__ = default(string);
+            var __Quantity__ = default(int);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __ResourceTypeId__ = reader.ReadInt32();
+                        break;
+                    case 1:
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __Quantity__ = reader.ReadInt32();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::Nighthollow.Data.ResourceItemData(__ResourceTypeId__, __Name__, __Quantity__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class ResourceTypeDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Nighthollow.Data.ResourceTypeData>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::Nighthollow.Data.ResourceTypeData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(3);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.ImageAddress, options);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Description, options);
         }
 
-        public global::Nighthollow.Data.ResourceItemData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Nighthollow.Data.ResourceTypeData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -2147,7 +2206,7 @@ namespace MessagePack.Formatters.Nighthollow.Data
                 }
             }
 
-            var ____result = new global::Nighthollow.Data.ResourceItemData(__Name__, __ImageAddress__, __Description__);
+            var ____result = new global::Nighthollow.Data.ResourceTypeData(__Name__, __ImageAddress__, __Description__);
             reader.Depth--;
             return ____result;
         }

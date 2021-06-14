@@ -28,7 +28,7 @@ namespace Nighthollow.Services
       _database = database;
     }
 
-    public RewardChoiceData CreateRewardsForCurrentBattle()
+    public RewardData CreateRewardsForCurrentBattle()
     {
       var gameData = _database.Snapshot();
 
@@ -44,7 +44,7 @@ namespace Nighthollow.Services
         choices = gameData.ItemLists[fixedRewardsId].AsItems();
       }
 
-      return new RewardChoiceData(choices, fixedRewards);
+      return new RewardData(choices, fixedRewards);
     }
   }
 }

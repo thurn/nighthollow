@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 #nullable enable
@@ -21,7 +21,7 @@ namespace Nighthollow.Services
 {
   public interface IStartCoroutine
   {
-    Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine);
+    Coroutine StartCoroutine(IEnumerator routine);
   }
 
   public abstract class AbstractInitializer : MonoBehaviour, IStartCoroutine
@@ -31,7 +31,5 @@ namespace Nighthollow.Services
       // If you load into a scene from an editor window (e.g. by invoking a scenario), timeScale could be 0.
       Time.timeScale = 1f;
     }
-
-    public Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine) => base.StartCoroutine(routine);
   }
 }

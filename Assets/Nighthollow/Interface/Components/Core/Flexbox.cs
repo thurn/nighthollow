@@ -40,10 +40,6 @@ namespace Nighthollow.Interface.Components.Core
     public Length? Top { get; init; }
     public Length? Right { get; init; }
     public Length? Bottom { get; init; }
-    public int MarginLeft { get; init; }
-    public int MarginTop { get; init; }
-    public int MarginRight { get; init; }
-    public int MarginBottom { get; init; }
     public int PaddingLeft { get; init; }
     public int PaddingTop { get; init; }
     public int PaddingBottom { get; init; }
@@ -51,6 +47,7 @@ namespace Nighthollow.Interface.Components.Core
     public int FlexGrow { get; init; }
     public int FlexShrink { get; init; } = 1;
     public Translate? Translate { get; init; }
+    public ScaleMode BackgroundScaleMode { get; init; }
 
     public int PaddingLeftRight
     {
@@ -137,10 +134,6 @@ namespace Nighthollow.Interface.Components.Core
       container.style.unitySliceRight = BackgroundSliceLeftRight;
       container.style.unitySliceTop = BackgroundSliceTopBottom;
       container.style.unitySliceBottom = BackgroundSliceTopBottom;
-      container.style.marginLeft = MarginLeft;
-      container.style.marginTop = MarginTop;
-      container.style.marginRight = MarginRight;
-      container.style.marginBottom = MarginBottom;
       container.style.paddingLeft = PaddingLeft;
       container.style.paddingTop = PaddingTop;
       container.style.paddingBottom = PaddingBottom;
@@ -148,6 +141,11 @@ namespace Nighthollow.Interface.Components.Core
       container.style.flexGrow = FlexGrow;
       container.style.flexShrink = FlexShrink;
       container.style.translate = Translate ?? new StyleTranslate(StyleKeyword.Null);
+      container.style.unityBackgroundScaleMode = BackgroundScaleMode;
+      container.style.marginLeft = MarginLeft;
+      container.style.marginTop = MarginTop;
+      container.style.marginRight = MarginRight;
+      container.style.marginBottom = MarginBottom;
 
       CallbackTracker.MouseOver.SetCallback(container, OnMouseOver);
       CallbackTracker.MouseOut.SetCallback(container, OnMouseOut);

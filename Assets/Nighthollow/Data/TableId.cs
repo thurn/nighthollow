@@ -142,6 +142,9 @@ namespace Nighthollow.Data
     public static readonly SingletonTableId<UserData> UserData =
       new SingletonTableId<UserData>(16, "UserData");
 
+    public static readonly TableId<ResourceTypeData> ResourceTypes =
+      new TableId<ResourceTypeData>(17, "ResourceTypes");
+
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
       TableMetadata,
       CreatureTypes,
@@ -159,7 +162,8 @@ namespace Nighthollow.Data
       Hexes,
       Kingdoms,
       Scenarios,
-      UserData
+      UserData,
+      ResourceTypes
     );
   }
 }

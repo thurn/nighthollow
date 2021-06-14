@@ -24,6 +24,7 @@ namespace Nighthollow.Data
   public interface IItemData
   {
     string Name { get; }
+
     string? GetImageAddress(GameData gameData);
 
     T Switch<T>(

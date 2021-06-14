@@ -24,7 +24,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class RewardChoiceWindow : HideableElement<RewardChoiceWindow.Args>, IDragManager<ItemImage, ItemSlot>
+  public sealed class RewardChoiceWindow : HideableElement<RewardChoiceWindow.Args>, IDragManager<InterfaceItemImage, InterfaceItemSlot>
   {
     const float AnimationOneDuration = 0.1f;
     const float AnimationOnePause = 0.1f;
@@ -38,9 +38,9 @@ namespace Nighthollow.Interface
     VisualElement _confirmButton = null!;
     VisualElement _costText = null!;
 
-    List<ItemSlot> _optionSlots = null!;
-    List<ItemSlot> _pickedItemSlots = null!;
-    List<ItemImage> _images = null!;
+    List<InterfaceItemSlot> _optionSlots = null!;
+    List<InterfaceItemSlot> _pickedItemSlots = null!;
+    List<InterfaceItemImage> _images = null!;
 
     public readonly struct Args
     {
@@ -168,14 +168,14 @@ namespace Nighthollow.Interface
 
     void OnGeometryChange(GeometryChangedEvent evt)
     {
-      _optionSlots = new List<ItemSlot>();
-      _optionsContainer.Query().Children<ItemSlot>().ForEach(slot => _optionSlots.Add(slot));
+      _optionSlots = new List<InterfaceItemSlot>();
+      _optionsContainer.Query().Children<InterfaceItemSlot>().ForEach(slot => _optionSlots.Add(slot));
 
-      _pickedItemSlots = new List<ItemSlot>();
-      _pickedItemsContainer.Query().Children<ItemSlot>().ForEach(slot => _pickedItemSlots.Add(slot));
+      _pickedItemSlots = new List<InterfaceItemSlot>();
+      _pickedItemsContainer.Query().Children<InterfaceItemSlot>().ForEach(slot => _pickedItemSlots.Add(slot));
 
-      _images = new List<ItemImage>();
-      _optionsContainer.Query().Children<ItemSlot>().Children<ItemImage>().ForEach(image => _images.Add(image));
+      _images = new List<InterfaceItemImage>();
+      _optionsContainer.Query().Children<InterfaceItemSlot>().Children<InterfaceItemImage>().ForEach(image => _images.Add(image));
 
       Debug.Log($"Choice Slots: {_optionSlots.Count} Selection Slots: {_pickedItemSlots.Count}");
 
@@ -198,11 +198,11 @@ namespace Nighthollow.Interface
       element.style.visibility = new StyleEnum<Visibility>(Visibility.Hidden);
     }
 
-    public IEnumerable<ItemSlot> GetDragTargets(ItemImage element) =>
+    public IEnumerable<InterfaceItemSlot> GetDragTargets(InterfaceItemImage element) =>
       _optionSlots.Where(slot => slot.Item == null).Concat(
         _pickedItemSlots.Where(slot => slot.Item == null));
 
-    public void OnDragReceived(ItemSlot target, ItemImage element)
+    public void OnDragReceived(InterfaceItemSlot target, InterfaceItemImage element)
     {
       var pickCount = _pickedItemSlots.Count(slot => slot.Item != null);
       foreach (var slot in _pickedItemSlots)

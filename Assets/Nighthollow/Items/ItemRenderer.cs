@@ -34,19 +34,19 @@ namespace Nighthollow.Items
       /// </summary>
       public int Count { get; }
 
-      public ItemSlot.Size Size { get; }
+      public InterfaceItemSlot.Size Size { get; }
       public bool ShouldAddTooltip { get; }
 
       /// <summary>
       /// If provided, the item will be draggable using this DragManager
       /// </summary>
-      public IDragManager<ItemImage, ItemSlot>? DragManager { get; }
+      public IDragManager<InterfaceItemImage, InterfaceItemSlot>? DragManager { get; }
 
       public Config(
         int count,
-        ItemSlot.Size size = ItemSlot.Size.Large,
+        InterfaceItemSlot.Size size = InterfaceItemSlot.Size.Large,
         bool shouldAddTooltip = true,
-        IDragManager<ItemImage, ItemSlot>? dragManager = null)
+        IDragManager<InterfaceItemImage, InterfaceItemSlot>? dragManager = null)
       {
         Count = count;
         Size = size;
@@ -55,18 +55,18 @@ namespace Nighthollow.Items
       }
     }
 
-    public static ImmutableList<ItemSlot> AddItems(
+    public static ImmutableList<InterfaceItemSlot> AddItems(
       ServiceRegistry registry,
       VisualElement parentElement,
       IEnumerable<IItemData> items,
       Config config)
     {
-      var result = ImmutableList.CreateBuilder<ItemSlot>();
+      var result = ImmutableList.CreateBuilder<InterfaceItemSlot>();
       parentElement.Clear();
       var itemList = items.ToList();
       foreach (var item in itemList.Take(config.Count))
       {
-        var slot = new ItemSlot(config.Size);
+        var slot = new InterfaceItemSlot(config.Size);
         slot.SetItem(registry, item, config);
         parentElement.Add(slot);
         result.Add(slot);
@@ -75,7 +75,7 @@ namespace Nighthollow.Items
       // Add extra empty slots to get to Count
       for (var index = 0; index < config.Count - itemList.Count; ++index)
       {
-        var slot = new ItemSlot(config.Size);
+        var slot = new InterfaceItemSlot(config.Size);
         parentElement.Add(slot);
         result.Add(slot);
       }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using Nighthollow.Rules;
 
 #nullable enable
 
@@ -31,6 +32,8 @@ namespace Nighthollow.Interface.Components.Core
       _root = root;
       _key = key;
     }
+
+    public Scope Scope => _root.Scope;
 
     string GetKey() => $"{_key}:{_currentHook++}";
 

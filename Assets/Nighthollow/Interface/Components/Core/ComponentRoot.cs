@@ -15,6 +15,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nighthollow.Rules;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -25,7 +27,7 @@ namespace Nighthollow.Interface.Components.Core
 {
   public sealed class ComponentRoot
   {
-    readonly MonoBehaviour _runner;
+    readonly IStartCoroutine _runner;
     readonly VisualElement _parentElement;
     readonly BaseComponent _component;
     readonly Dictionary<(Type, string), object> _states = new();
@@ -35,12 +37,19 @@ namespace Nighthollow.Interface.Components.Core
     IMountComponent? _lastRenderedComponent;
     bool _updateRequired = true;
 
-    public ComponentRoot(MonoBehaviour runner, VisualElement parentElement, BaseComponent component)
+    public ComponentRoot(
+      IStartCoroutine runner,
+      Scope scope,
+      VisualElement parentElement,
+      BaseComponent component)
     {
       _runner = runner;
+      Scope = scope;
       _parentElement = parentElement;
       _component = component;
     }
+
+    public Scope Scope { get; }
 
     public void OnUpdate()
     {

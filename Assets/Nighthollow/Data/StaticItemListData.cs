@@ -50,6 +50,6 @@ namespace Nighthollow.Data
     public override string ToString() => Name;
 
     public ImmutableList<IItemData> AsItems() =>
-      ImmutableList<IItemData>.Empty.Concat(Creatures).Concat(Resources).ToImmutableList();
+      ImmutableList<IItemData>.Empty.Concat(Creatures).ToImmutableList();
   }
 }

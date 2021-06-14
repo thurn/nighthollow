@@ -59,5 +59,6 @@ namespace Nighthollow.Data
     public ImmutableDictionary<int, HexData> Hexes => GetTable(TableId.Hexes);
     public ImmutableDictionary<int, KingdomData> Kingdoms => GetTable(TableId.Kingdoms);
     public ImmutableDictionary<int, ScenarioData> Scenarios => GetTable(TableId.Scenarios);
+    public ImmutableDictionary<int, ResourceTypeData> ResourceTypes => GetTable(TableId.ResourceTypes);
   }
 }

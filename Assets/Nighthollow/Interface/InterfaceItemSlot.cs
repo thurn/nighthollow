@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class ItemSlot : VisualElement, IDragTarget<ItemImage, ItemSlot>
+  public sealed class InterfaceItemSlot : VisualElement, IDragTarget<InterfaceItemImage, InterfaceItemSlot>
   {
     public enum Size
     {
@@ -34,15 +34,15 @@ namespace Nighthollow.Interface
 
     public IItemData? Item => _item;
 
-    public new sealed class UxmlFactory : UxmlFactory<ItemSlot, UxmlTraits>
+    public new sealed class UxmlFactory : UxmlFactory<InterfaceItemSlot, UxmlTraits>
     {
     }
 
-    public ItemSlot()
+    public InterfaceItemSlot()
     {
     }
 
-    public ItemSlot(Size size = Size.Large)
+    public InterfaceItemSlot(Size size = Size.Large)
     {
       AddToClassList("item-slot");
       AddToClassList(SizeClass(size));
@@ -51,7 +51,7 @@ namespace Nighthollow.Interface
     public void SetItem(ServiceRegistry registry, IItemData item, ItemRenderer.Config config)
     {
       _item = item;
-      var image = new ItemImage(registry, this, item, config.ShouldAddTooltip);
+      var image = new InterfaceItemImage(registry, this, item, config.ShouldAddTooltip);
       Add(image);
       if (config.DragManager != null)
       {
@@ -69,16 +69,16 @@ namespace Nighthollow.Interface
       };
     }
 
-    public ItemSlot This() => this;
+    public InterfaceItemSlot This() => this;
 
     public VisualElement DragTargetElement => this;
 
-    public void OnDraggableElementReceived(ItemImage element)
+    public void OnDraggableElementReceived(InterfaceItemImage element)
     {
       _item = element.Item;
     }
 
-    public void OnDraggableElementRemoved(ItemImage element)
+    public void OnDraggableElementRemoved(InterfaceItemImage element)
     {
       _item = null;
     }

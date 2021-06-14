@@ -65,5 +65,7 @@ namespace Nighthollow.Rules
 
     public static readonly MutatorKey<PlayerPrefsService> PlayerPrefs =
       new MutatorKey<PlayerPrefsService>("PlayerPrefs");
+
+    public static readonly MutatorKey<RewardsService> RewardsService = new MutatorKey<RewardsService>("RewardsService");
   }
 }

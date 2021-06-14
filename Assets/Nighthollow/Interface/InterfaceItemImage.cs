@@ -23,21 +23,20 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class ItemImage : VisualElement, IDraggableElement<ItemImage, ItemSlot>
-  {
+  public sealed class InterfaceItemImage : VisualElement, IDraggableElement<InterfaceItemImage, InterfaceItemSlot> {
     const int ContainerSize = 128;
 
     readonly IItemData _item;
     public IItemData Item => _item;
     readonly ServiceRegistry _registry;
-    IDragManager<ItemImage, ItemSlot>? _dragManager;
+    IDragManager<InterfaceItemImage, InterfaceItemSlot>? _dragManager;
     public bool HasTooltip { private get; set; }
     public bool EnableDragging { get; set; }
-    public ItemSlot CurrentDragParent { get; set; }
+    public InterfaceItemSlot CurrentDragParent { get; set; }
 
-    public ItemImage(ServiceRegistry registry, ItemSlot itemSlot, IItemData item, bool addTooltip = true)
+    public InterfaceItemImage(ServiceRegistry registry, InterfaceItemSlot interfaceItemSlot, IItemData item, bool addTooltip = true)
     {
-      CurrentDragParent = itemSlot;
+      CurrentDragParent = interfaceItemSlot;
       _registry = registry;
       _item = item;
       HasTooltip = addTooltip;
@@ -52,7 +51,7 @@ namespace Nighthollow.Interface
         new StyleBackground(registry.AssetService.GetImage(Errors.CheckNotNull(imageAddress, "Item has no image!")));
     }
 
-    public void MakeDraggable(IDragManager<ItemImage, ItemSlot> dragManager)
+    public void MakeDraggable(IDragManager<InterfaceItemImage, InterfaceItemSlot> dragManager)
     {
       _dragManager = dragManager;
       EnableDragging = true;
@@ -62,7 +61,7 @@ namespace Nighthollow.Interface
     {
       if (EnableDragging && _dragManager != null)
       {
-        _registry.ScreenController.StartDrag(new DragInfo<ItemImage, ItemSlot>(e, this, _dragManager));
+        _registry.ScreenController.StartDrag(new DragInfo<InterfaceItemImage, InterfaceItemSlot>(e, this, _dragManager));
       }
     }
 

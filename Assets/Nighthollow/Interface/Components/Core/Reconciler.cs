@@ -56,7 +56,7 @@ namespace Nighthollow.Interface.Components.Core
             var child = newChildren[i];
             // Element exists in new tree, update it
             var updated = Update(
-              globalKey.Child(child.Key ?? i.ToString()),
+              globalKey.Child(child.LocalKey ?? i.ToString()),
               previousElement[i],
               i < prevChildren?.Count ? prevChildren[i] : null,
               child);
@@ -85,7 +85,7 @@ namespace Nighthollow.Interface.Components.Core
       for (var j = addedChildrenCount; j < newChildren.Count; ++j)
       {
         var child = newChildren[j];
-        var updated = Errors.CheckNotNull(Update(globalKey.Child(child.Key ?? j.ToString()), null, null, child),
+        var updated = Errors.CheckNotNull(Update(globalKey.Child(child.LocalKey ?? j.ToString()), null, null, child),
           $"Expected {nameof(Update)}() to return a value");
         result.Add(updated);
       }

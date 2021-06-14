@@ -22,15 +22,15 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class CardsWindow : DefaultHideableElement, IDragManager<ItemImage, ItemSlot>
+  public sealed class CardsWindow : DefaultHideableElement, IDragManager<InterfaceItemImage, InterfaceItemSlot>
   {
     VisualElement _collection = null!;
     VisualElement _mainDeck = null!;
     VisualElement _manaDeck = null!;
 
-    ImmutableList<ItemSlot> _collectionSlots = ImmutableList<ItemSlot>.Empty;
-    ImmutableList<ItemSlot> _mainDeckSlots = ImmutableList<ItemSlot>.Empty;
-    ImmutableList<ItemSlot> _manaSlots = ImmutableList<ItemSlot>.Empty;
+    ImmutableList<InterfaceItemSlot> _collectionSlots = ImmutableList<InterfaceItemSlot>.Empty;
+    ImmutableList<InterfaceItemSlot> _mainDeckSlots = ImmutableList<InterfaceItemSlot>.Empty;
+    ImmutableList<InterfaceItemSlot> _manaSlots = ImmutableList<InterfaceItemSlot>.Empty;
 
     public override bool ExclusiveFocus => true;
 
@@ -67,15 +67,15 @@ namespace Nighthollow.Interface
         gameData.Deck.Values
           .Where(creature => gameData.CreatureTypes[creature.CreatureTypeId].IsManaCreature)
           .ToList(),
-        new ItemRenderer.Config(count: 6, ItemSlot.Size.Small));
+        new ItemRenderer.Config(count: 6, InterfaceItemSlot.Size.Small));
     }
 
-    public IEnumerable<ItemSlot> GetDragTargets(ItemImage element)
+    public IEnumerable<InterfaceItemSlot> GetDragTargets(InterfaceItemImage element)
     {
       return _collectionSlots.Concat(_mainDeckSlots);
     }
 
-    public void OnDragReceived(ItemSlot target, ItemImage element)
+    public void OnDragReceived(InterfaceItemSlot target, InterfaceItemImage element)
     {
     }
   }

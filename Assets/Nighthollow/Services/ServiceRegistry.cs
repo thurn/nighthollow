@@ -63,7 +63,7 @@ namespace Nighthollow.Services
       Globals = new GlobalsService(database);
       CoroutineRunner = coroutineRunner;
       PlayerPrefs = new PlayerPrefsService();
-      Rewards = new RewardsService(Database);
+      RewardsService = new RewardsService(Database);
     }
 
     public abstract ServiceRegistryName Name { get; }
@@ -76,7 +76,8 @@ namespace Nighthollow.Services
       Key.ScreenController,
       Key.MainCamera,
       Key.RulesEngine,
-      Key.PlayerPrefs
+      Key.PlayerPrefs,
+      Key.RewardsService
     );
 
     public virtual Scope Scope => _scope ??= Scope.CreateBuilder(Keys)
@@ -86,6 +87,7 @@ namespace Nighthollow.Services
       .AddBinding(Key.MainCamera, MainCamera)
       .AddBinding(Key.RulesEngine, RulesEngine)
       .AddBinding(Key.PlayerPrefs, PlayerPrefs)
+      .AddBinding(Key.RewardsService, RewardsService)
       .Build();
 
     public virtual void OnUpdate()
@@ -115,7 +117,7 @@ namespace Nighthollow.Services
 
     public PlayerPrefsService PlayerPrefs { get; }
 
-    public RewardsService Rewards { get; }
+    public RewardsService RewardsService { get; }
   }
 
   public sealed class EditorServiceRegistry : ServiceRegistry

@@ -94,6 +94,14 @@ namespace Nighthollow.Data
         Load<Tile>(requests, result, synchronous, kingdom.TileImageAddress);
       }
 
+      foreach (var resourceType in gameData.ResourceTypes.Values)
+      {
+        if (resourceType.ImageAddress != null)
+        {
+          Load<Sprite>(requests, result, synchronous, resourceType.ImageAddress);
+        }
+      }
+
       if (synchronous)
       {
         onComplete(new AssetService(result.ToImmutable()));

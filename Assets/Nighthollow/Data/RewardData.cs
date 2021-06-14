@@ -12,31 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using MessagePack;
+using System.Collections.Immutable;
 
 #nullable enable
 
 namespace Nighthollow.Data
 {
-  [MessagePackObject]
-  public sealed partial class ResourceItemData : IItemData
+  public sealed partial class RewardData
   {
-    public ResourceItemData(string name, string imageAddress, string description)
+    public RewardData(ImmutableList<IItemData> choices, ImmutableList<IItemData> fixedRewards)
     {
-      Name = name;
-      ImageAddress = imageAddress;
-      Description = description;
+      Choices = choices;
+      FixedRewards = fixedRewards;
     }
 
-    [Key(0)] public string Name { get; }
-    [Key(1)] public string ImageAddress { get; }
-    [Key(2)] public string Description { get; }
+    /// <summary>The user may select from among these items.</summary>
+    public ImmutableList<IItemData> Choices { get; }
 
-    public string GetImageAddress(GameData gameData) => ImageAddress;
-
-    public T Switch<T>(
-      Func<CreatureItemData, T> onCreature,
-      Func<ResourceItemData, T> onResource) => onResource(this);
+    /// <summary>The user receives all of these items.</summary>
+    public ImmutableList<IItemData> FixedRewards { get; }
   }
 }

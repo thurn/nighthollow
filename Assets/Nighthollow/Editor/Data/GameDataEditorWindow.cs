@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections;
 using System.Collections.Generic;
 using Nighthollow.Data;
 using Nighthollow.Editing;
@@ -90,7 +91,7 @@ namespace Nighthollow.Editor.Data
       rootVisualElement.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
     }
 
-    public Coroutine StartCoroutine(IEnumerator<YieldInstruction> routine)
+    public Coroutine StartCoroutine(IEnumerator routine)
     {
       throw new System.NotImplementedException();
     }

@@ -41,10 +41,10 @@ namespace Nighthollow.Rules
     public static Builder CreateBuilder(ImmutableHashSet<IKey> expectedKeys, Scope? parent = null) =>
       new Builder(expectedKeys, parent);
 
-    readonly ImmutableHashSet<IKey> _dependencies;
+    readonly ImmutableHashSet<IKey>? _dependencies;
     readonly ImmutableDictionary<IKey, object> _bindings;
 
-    Scope(ImmutableHashSet<IKey> dependencies, ImmutableDictionary<IKey, object> bindings)
+    Scope(ImmutableHashSet<IKey>? dependencies, ImmutableDictionary<IKey, object> bindings)
     {
       _dependencies = dependencies;
       _bindings = bindings;
@@ -63,7 +63,8 @@ namespace Nighthollow.Rules
 
     object GetInternal(IKey key)
     {
-        Errors.CheckState(_dependencies.Contains(key), $"Key {key.Name} was not registered as a dependency");
+      Errors.CheckState(_dependencies == null || _dependencies.Contains(key),
+        $"Key {key.Name} was not registered as a dependency");
       Errors.CheckState(_bindings.ContainsKey(key), $"Binding not found for {key.Name}");
       return _bindings[key];
     }
@@ -107,7 +108,7 @@ namespace Nighthollow.Rules
             $"Scope builder did not bind keys: [{string.Join(", ", _expectedKeys.Select(k => k.Name))}]");
         }
 
-        return new Scope(ImmutableHashSet<IKey>.Empty, _builder.ToImmutable());
+        return new Scope(null, _builder.ToImmutable());
       }
     }
   }
