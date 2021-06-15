@@ -97,8 +97,8 @@ namespace Nighthollow.Interface
     public static ElementKey<CardsWindow> CardsWindow =
       new ElementKey<CardsWindow>("CardsWindow");
 
-    public static ElementKey<Tooltip> Tooltip =
-      new ElementKey<Tooltip>("Tooltip");
+    public static ElementKey<Tooltip2> Tooltip =
+      new ElementKey<Tooltip2>("Tooltip");
 
     public static ElementKey<VictoryWindow> VictoryWindow =
       new ElementKey<VictoryWindow>("VictoryWindow");

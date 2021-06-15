@@ -14,11 +14,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using Nighthollow.Rules;
 using Nighthollow.Utils;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 #nullable enable
 
@@ -33,6 +31,38 @@ namespace Nighthollow.Interface.Components.Core
     public int MarginTop { get; init; }
     public int MarginRight { get; init; }
     public int MarginBottom { get; init; }
+    public Position? FlexPosition { get; init; }
+    public Length? Left { get; init; }
+    public Length? Top { get; init; }
+    public Length? Right { get; init; }
+    public Length? Bottom { get; init; }
+
+    public Length? LeftRight
+    {
+      init
+      {
+        Left = value;
+        Right = value;
+      }
+    }
+
+    public Length? TopBottom
+    {
+      init
+      {
+        Top = value;
+        Bottom = value;
+      }
+    }
+
+    public Length? TopBottomLeftRight
+    {
+      init
+      {
+        LeftRight = value;
+        TopBottom = value;
+      }
+    }
 
     public int MarginLeftRight
     {
@@ -75,7 +105,7 @@ namespace Nighthollow.Interface.Components.Core
       return GlobalKey.UseState(GetType(), initialValue);
     }
 
-    protected T? UseResource<T>(string? address) where T : UnityEngine.Object
+    protected T? UseResource<T>(string? address) where T : Object
     {
       if (address == null)
       {
@@ -90,101 +120,26 @@ namespace Nighthollow.Interface.Components.Core
       return GlobalKey.UseResource<T>(address);
     }
 
-    protected BaseComponent MergeCommonProps(BaseComponent other) => other with
+    protected BaseComponent MergeCommonProps(BaseComponent child) => child with
     {
-      MarginLeft = MarginLeft + other.MarginLeft,
-      MarginTop = MarginTop + other.MarginTop,
-      MarginRight = MarginRight + other.MarginRight,
-      MarginBottom = MarginBottom + other.MarginBottom
+      MarginLeft = MarginLeft + child.MarginLeft,
+      MarginTop = MarginTop + child.MarginTop,
+      MarginRight = MarginRight + child.MarginRight,
+      MarginBottom = MarginBottom + child.MarginBottom,
+      Left = AddLengths(Left, child.Left),
+      Top = AddLengths(Top, child.Top),
+      Bottom = AddLengths(Bottom, child.Bottom),
+      Right = AddLengths(Right, child.Right),
+      FlexPosition = child.FlexPosition ?? FlexPosition
     };
-  }
 
-  public abstract record LayoutComponent : BaseComponent
-  {
-    protected abstract BaseComponent OnRender(Scope scope);
-
-    public override IMountComponent Reduce(GlobalKey globalKey)
+    static Length? AddLengths(Length? x, Length? y) => (x, y) switch
     {
-      GlobalKey = globalKey;
-      var child = MergeCommonProps(OnRender(globalKey.Scope));
-      GlobalKey = null;
-      return child.Reduce(globalKey.Child(child.LocalKey ?? "0"));
-    }
-  }
-
-  public interface IMountComponent
-  {
-    public string? LocalKey { get; }
-
-    string Type { get; }
-
-    VisualElement CreateMountContent();
-
-    void Mount(GlobalKey hooks, VisualElement element);
-
-    void ReduceChildren(GlobalKey hooks);
-
-    ImmutableList<IMountComponent> GetReducedChildren();
-  }
-
-  public abstract record MountComponent<TElement> : BaseComponent, IMountComponent where TElement : VisualElement
-  {
-    protected abstract TElement OnCreateMountContent();
-
-    /// <summary>
-    /// Updates the provided VisualElement to match the current component.
-    /// </summary>
-    /// <remarks>
-    /// NOTE: because elements are reused across contexts, any kind of conditional logic inside OnMount is very
-    /// unsafe. For example, if you write code like:
-    /// <code>
-    /// if (BackgroundColor != null)
-    /// {
-    ///   element.style.backgroundColor = BackgroundColor;
-    /// }
-    /// </code>
-    /// then the previously-set background color will not be removed correctly!
-    /// </remarks>
-    /// <param name="element"></param>
-    protected abstract void OnMount(TElement element);
-
-    public abstract string Type { get; }
-
-    public override IMountComponent Reduce(GlobalKey globalKey) => this;
-
-    public VisualElement CreateMountContent() => OnCreateMountContent();
-
-    public void Mount(GlobalKey globalKey, VisualElement element)
-    {
-      GlobalKey = globalKey;
-      OnMount((TElement) element);
-      GlobalKey = null;
-    }
-
-    public virtual void ReduceChildren(GlobalKey globalKey)
-    {
-    }
-
-    public virtual ImmutableList<IMountComponent> GetReducedChildren() => ImmutableList<IMountComponent>.Empty;
-  }
-
-  public abstract record ContainerComponent<TElement> : MountComponent<TElement> where TElement : VisualElement
-  {
-    readonly IEnumerable<BaseComponent> _children = Enumerable.Empty<BaseComponent>();
-    ImmutableList<IMountComponent>? _reduced;
-
-    public IEnumerable<BaseComponent> Children
-    {
-      init => _children = value;
-    }
-
-    public override void ReduceChildren(GlobalKey globalKey)
-    {
-      Errors.CheckState(_reduced is null, "Error: Already reduced!");
-      _reduced = _children.Select((c, i) => c.Reduce(globalKey.Child(c.LocalKey ?? i.ToString()))).ToImmutableList();
-    }
-
-    public override ImmutableList<IMountComponent> GetReducedChildren() =>
-      Errors.CheckNotNull(_reduced, "You must invoke ReduceChildren() first!");
+      (null, null) => null,
+      ({ } a, null) => a,
+      (null, { } b) => b,
+      ({ } a, { } b) when a.unit == b.unit => new Length(a.value + b.value, a.unit),
+      _ => throw new InvalidOperationException($"Attempting to add Lengths with non-matching units {x} + {y}")
+    };
   }
 }

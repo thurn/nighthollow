@@ -12,25 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using MessagePack;
+using Nighthollow.Rules;
 
 #nullable enable
 
-namespace Nighthollow.Data
+namespace Nighthollow.Interface.Components.Core
 {
-  [Union(0, typeof(CreatureItemData))]
-  [Union(1, typeof(ResourceItemData))]
-  public interface IItemData
+  public abstract record LayoutComponent : BaseComponent
   {
-    string Name { get; }
+    protected abstract BaseComponent OnRender(Scope scope);
 
-    int? GetQuantity();
-
-    string? GetImageAddress(GameData gameData);
-
-    T Switch<T>(
-      Func<CreatureItemData, T> onCreature,
-      Func<ResourceItemData, T> onResource);
+    public override IMountComponent Reduce(GlobalKey globalKey)
+    {
+      GlobalKey = globalKey;
+      var child = MergeCommonProps(OnRender(globalKey.Scope));
+      GlobalKey = null;
+      return child.Reduce(globalKey.Child(child.LocalKey ?? "0"));
+    }
   }
 }

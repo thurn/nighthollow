@@ -21,30 +21,30 @@ namespace Nighthollow.Interface.Components.Core
 {
   public sealed class GlobalKey
   {
-    readonly ComponentRoot _root;
+    readonly ComponentController _controller;
     readonly string _key;
     int _currentHook;
 
-    public static GlobalKey Root(ComponentRoot root) => new(root, "/");
+    public static GlobalKey Root(ComponentController controller) => new(controller, "/");
 
-    GlobalKey(ComponentRoot root, string key)
+    GlobalKey(ComponentController controller, string key)
     {
-      _root = root;
+      _controller = controller;
       _key = key;
     }
 
-    public Scope Scope => _root.Scope;
+    public Scope Scope => _controller.Scope;
 
     string GetKey() => $"{_key}:{_currentHook++}";
 
-    public GlobalKey Child(string key) => new(_root, $"{_key}/{key}");
+    public GlobalKey Child(string key) => new(_controller, $"{_key}/{key}");
 
     public IState<T> UseState<T>(Type componentType, T initialValue) =>
-      _root.UseState((componentType, GetKey()), initialValue);
+      _controller.UseState((componentType, GetKey()), initialValue);
 
     public T? UseResource<T>(string address) where T : UnityEngine.Object
     {
-      return _root.UseResource<T>(address);
+      return _controller.UseResource<T>(address);
     }
 
     public override string ToString() => GetKey();

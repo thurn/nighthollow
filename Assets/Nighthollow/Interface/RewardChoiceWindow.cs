@@ -66,10 +66,10 @@ namespace Nighthollow.Interface
 
     protected override void OnShow(Args argument)
     {
-      ItemRenderer.AddItems(Registry,
+      ItemRenderer2.AddItems(Registry,
         _optionsContainer,
         argument.Items,
-        new ItemRenderer.Config(argument.Items.Count, shouldAddTooltip: false));
+        new ItemRenderer2.Config(argument.Items.Count, shouldAddTooltip: false));
       RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 

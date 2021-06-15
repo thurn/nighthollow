@@ -35,11 +35,6 @@ namespace Nighthollow.Interface.Components.Core
     public Color? BackgroundImageTintColor { get; init; }
     public Length? Height { get; init; }
     public Length? Width { get; init; }
-    public Position Position { get; init; }
-    public Length? Left { get; init; }
-    public Length? Top { get; init; }
-    public Length? Right { get; init; }
-    public Length? Bottom { get; init; }
     public int PaddingLeft { get; init; }
     public int PaddingTop { get; init; }
     public int PaddingBottom { get; init; }
@@ -76,33 +71,6 @@ namespace Nighthollow.Interface.Components.Core
       }
     }
 
-    public Length? LeftRight
-    {
-      init
-      {
-        Left = value;
-        Right = value;
-      }
-    }
-
-    public Length? TopBottom
-    {
-      init
-      {
-        Top = value;
-        Bottom = value;
-      }
-    }
-
-    public Length? PositionAll
-    {
-      init
-      {
-        LeftRight = value;
-        TopBottom = value;
-      }
-    }
-
     public EventCallback<MouseOverEvent>? OnMouseOver { get; init; }
     public EventCallback<MouseOutEvent>? OnMouseOut { get; init; }
     public EventCallback<MouseDownEvent>? OnMouseDown { get; init; }
@@ -125,11 +93,6 @@ namespace Nighthollow.Interface.Components.Core
       container.style.unityBackgroundImageTintColor = BackgroundImageTintColor ?? Color.white;
       container.style.height = Height ?? new StyleLength(StyleKeyword.Null);
       container.style.width = Width ?? new StyleLength(StyleKeyword.Null);
-      container.style.position = Position;
-      container.style.left = Left ?? new StyleLength(StyleKeyword.Null);
-      container.style.top = Top ?? new StyleLength(StyleKeyword.Null);
-      container.style.right = Right ?? new StyleLength(StyleKeyword.Null);
-      container.style.bottom = Bottom ?? new StyleLength(StyleKeyword.Null);
       container.style.unitySliceLeft = BackgroundSliceLeftRight;
       container.style.unitySliceRight = BackgroundSliceLeftRight;
       container.style.unitySliceTop = BackgroundSliceTopBottom;
@@ -142,10 +105,6 @@ namespace Nighthollow.Interface.Components.Core
       container.style.flexShrink = FlexShrink;
       container.style.translate = Translate ?? new StyleTranslate(StyleKeyword.Null);
       container.style.unityBackgroundScaleMode = BackgroundScaleMode;
-      container.style.marginLeft = MarginLeft;
-      container.style.marginTop = MarginTop;
-      container.style.marginRight = MarginRight;
-      container.style.marginBottom = MarginBottom;
 
       CallbackTracker.MouseOver.SetCallback(container, OnMouseOver);
       CallbackTracker.MouseOut.SetCallback(container, OnMouseOut);

@@ -153,10 +153,10 @@ limitations under the License.
 
         <ui:VisualElement name="HelperTextContainer"/>
 
-        <nh:Tooltip name="Tooltip" class="tooltip" style="display: none;">
+        <nh:Tooltip2 name="Tooltip" class="tooltip" style="display: none;">
             <ui:Button name="TooltipCloseButton" class="close small"/>
             <ui:Label name="TooltipTitle" class="tooltip-title" text="Here is some tooltip text"/>
-        </nh:Tooltip>
+        </nh:Tooltip2>
 
         <ui:VisualElement class="character-dialogue-container">
             <nh:CharacterDialogue name="CharacterDialogue" class="character-dialogue" style="display: none;">

@@ -77,7 +77,7 @@ namespace Nighthollow.World
       var gameData = _registry.Database.Snapshot();
       var hexId = _hexIndex[hexPosition];
       var hexData = gameData.Hexes[hexId];
-      var builder = new TooltipBuilder(
+      var builder = new TooltipBuilder2(
         hexData.HexType.GetName(),
         InterfaceUtils.ScreenPointToInterfacePoint(screenPosition))
       {

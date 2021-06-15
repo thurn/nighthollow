@@ -23,31 +23,31 @@ using UnityEngine;
 
 namespace Nighthollow.Items
 {
-  public static class TooltipUtil
+  public static class TooltipUtil2
   {
-    public static TooltipBuilder CreateTooltip(GameData gameData, Vector2 anchorPosition, IItemData item) =>
+    public static TooltipBuilder2 CreateTooltip(GameData gameData, Vector2 anchorPosition, IItemData item) =>
       item.Switch(
         creature => CreateUserCreatureTooltip(gameData, anchorPosition, creature),
         resource => CreateResourceTooltip(gameData, anchorPosition, resource));
 
-    public static TooltipBuilder CreateResourceTooltip(
+    public static TooltipBuilder2 CreateResourceTooltip(
       GameData gameData,
       Vector2 anchorPosition,
       ResourceItemData data)
     {
-      var builder = new TooltipBuilder(data.Name, anchorPosition);
+      var builder = new TooltipBuilder2(data.Name, anchorPosition);
       builder.AppendText(gameData.ResourceTypes[data.ResourceTypeId].Description ?? "");
       return builder;
     }
 
-    public static TooltipBuilder CreateUserCreatureTooltip(
+    public static TooltipBuilder2 CreateUserCreatureTooltip(
       GameData gameData,
       Vector2 anchorPosition,
       CreatureItemData data)
     {
       var userState = UserState.BuildUserState(gameData);
       var ownerStats = userState.Stats;
-      var builder = new TooltipBuilder(data.Name, anchorPosition);
+      var builder = new TooltipBuilder2(data.Name, anchorPosition);
       var built = data.BuildCreature(gameData, userState);
       builder.AppendText($"Health: {built.GetInt(Stat.Health)}");
 
@@ -105,7 +105,7 @@ namespace Nighthollow.Items
 
     static void RenderModifierGroup(
       GameData gameData,
-      TooltipBuilder builder,
+      TooltipBuilder2 builder,
       ImmutableList<ModifierData> modifiers,
       string? initialLine = null)
     {

@@ -14,8 +14,6 @@
 
 using System.Collections.Immutable;
 using Nighthollow.Data;
-using Nighthollow.Interface.Components.Core;
-using Nighthollow.Interface.Components.Windows;
 using Nighthollow.Rules;
 using Nighthollow.World;
 using UnityEngine;
@@ -67,17 +65,11 @@ namespace Nighthollow.Services
     WorldMapController? _worldMapController;
     public WorldMapController WorldMapController => _worldMapController ??= new WorldMapController(this);
 
-    ComponentRoot? _componentRoot;
-
-    ComponentRoot ComponentRoot => _componentRoot ??= new ComponentRoot(CoroutineRunner, Scope,
-      ScreenController.Screen.Q("ComponentRoot"), new VictoryWindow());
-
     public override void OnUpdate()
     {
       base.OnUpdate();
       WorldMapRenderer.OnUpdate();
       WorldMapController.OnUpdate();
-      ComponentRoot.OnUpdate();
     }
   }
 }

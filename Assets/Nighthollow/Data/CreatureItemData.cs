@@ -69,6 +69,8 @@ namespace Nighthollow.Data
 
     public string? GetImageAddress(GameData gameData) => gameData.CreatureTypes[CreatureTypeId].ImageAddress;
 
+    public int? GetQuantity() => null;
+
     public T Switch<T>(
       Func<CreatureItemData, T> onCreature,
       Func<ResourceItemData, T> onResource) => onCreature(this);

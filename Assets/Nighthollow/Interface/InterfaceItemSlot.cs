@@ -48,7 +48,7 @@ namespace Nighthollow.Interface
       AddToClassList(SizeClass(size));
     }
 
-    public void SetItem(ServiceRegistry registry, IItemData item, ItemRenderer.Config config)
+    public void SetItem(ServiceRegistry registry, IItemData item, ItemRenderer2.Config config)
     {
       _item = item;
       var image = new InterfaceItemImage(registry, this, item, config.ShouldAddTooltip);

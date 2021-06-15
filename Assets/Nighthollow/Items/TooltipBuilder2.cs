@@ -24,14 +24,14 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Items
 {
-  public sealed class TooltipBuilder
+  public sealed class TooltipBuilder2
   {
     readonly VisualElement _result = new VisualElement();
     bool _appendDivider;
 
     StringBuilder? _currentText;
 
-    public TooltipBuilder(string name, Vector2 anchorPoint)
+    public TooltipBuilder2(string name, Vector2 anchorPoint)
     {
       AnchorPoint = anchorPoint;
       Name = name;
@@ -45,7 +45,7 @@ namespace Nighthollow.Items
     public bool CloseButton { get; set; }
     public Action? OnHide { get; set; }
 
-    public TooltipBuilder StartGroup()
+    public TooltipBuilder2 StartGroup()
     {
       if (_currentText != null)
       {
@@ -58,14 +58,14 @@ namespace Nighthollow.Items
       return this;
     }
 
-    public TooltipBuilder AppendDivider()
+    public TooltipBuilder2 AppendDivider()
     {
       StartGroup();
       _appendDivider = true;
       return this;
     }
 
-    public TooltipBuilder AppendNullable(string? text)
+    public TooltipBuilder2 AppendNullable(string? text)
     {
       if (text != null)
       {
@@ -75,7 +75,7 @@ namespace Nighthollow.Items
       return this;
     }
 
-    public TooltipBuilder AppendText(string text)
+    public TooltipBuilder2 AppendText(string text)
     {
       if (_appendDivider)
       {
@@ -97,7 +97,7 @@ namespace Nighthollow.Items
       return this;
     }
 
-    public TooltipBuilder AppendButton(string text, Action onClick)
+    public TooltipBuilder2 AppendButton(string text, Action onClick)
     {
       StartGroup();
       _result.Add(ButtonUtil.Create(new ButtonUtil.Button(text, onClick)));

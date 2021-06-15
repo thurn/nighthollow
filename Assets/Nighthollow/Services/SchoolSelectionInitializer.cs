@@ -14,6 +14,8 @@
 
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using Nighthollow.Interface.Components.Core;
+using Nighthollow.Rules;
 using UnityEngine;
 using UnityEngine.UIElements;
 

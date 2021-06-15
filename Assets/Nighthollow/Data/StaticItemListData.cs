@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using MessagePack;
@@ -50,6 +49,6 @@ namespace Nighthollow.Data
     public override string ToString() => Name;
 
     public ImmutableList<IItemData> AsItems() =>
-      ImmutableList<IItemData>.Empty.Concat(Creatures).ToImmutableList();
+      ImmutableList<IItemData>.Empty.Concat(Creatures).Concat(Resources).ToImmutableList();
   }
 }

@@ -26,6 +26,8 @@ namespace Nighthollow.Interface.Components.Core
     public int? FontSize { get; init; }
     public Color? FontColor { get; init; }
     public WhiteSpace? WhiteSpace { get; init; }
+    public Color? OutlineColor { get; init; }
+    public int? OutlineWidth { get; init; }
 
     public override string Type => "Text";
 
@@ -35,9 +37,12 @@ namespace Nighthollow.Interface.Components.Core
     {
       var font = UseResource<Font>(Font);
       element.text = Text;
-      element.style.unityFontDefinition = font ? new StyleFontDefinition(font) : new StyleFontDefinition(StyleKeyword.Null);
-      element.style.fontSize = FontSize is { } fs ? fs : new StyleLength(StyleKeyword.Undefined);
-      element.style.color = FontColor is { } c ? c : new StyleColor(StyleKeyword.Undefined);
+      element.style.unityFontDefinition =
+        font ? new StyleFontDefinition(font) : new StyleFontDefinition(StyleKeyword.Null);
+      element.style.fontSize = FontSize is { } fs ? fs : new StyleLength(StyleKeyword.Null);
+      element.style.color = FontColor is { } c ? c : new StyleColor(StyleKeyword.Null);
+      element.style.unityTextOutlineColor = OutlineColor ?? new StyleColor(StyleKeyword.Null);
+      element.style.unityTextOutlineWidth = OutlineWidth ?? new StyleFloat(StyleKeyword.Null);
       element.style.whiteSpace = WhiteSpace is { } ws ? ws : new StyleEnum<WhiteSpace>(StyleKeyword.Undefined);
     }
   }

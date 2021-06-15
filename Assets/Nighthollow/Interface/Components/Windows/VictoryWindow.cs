@@ -39,11 +39,12 @@ namespace Nighthollow.Interface.Components.Windows
             new Text("Gained Resources")
             {
               Type = TextType.Headline,
-              HierarchyLevel = HierarchyLevel.Three
+              HierarchyLevel = HierarchyLevel.Four
             },
             new Row
             {
-              Children = rewards.Choices.Select(choice => new ItemSlot
+              MarginBottom = 32,
+              Children = rewards.FixedRewards.Select(choice => new ItemSlot
               {
                 Size = ItemSlot.SlotSize.Small,
                 Image = new ItemImage(choice)

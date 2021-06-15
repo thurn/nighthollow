@@ -69,12 +69,11 @@ namespace Nighthollow.Interface
     {
       if (HasTooltip && !_registry.ScreenController.IsCurrentlyDragging)
       {
-        var tooltipBuilder = TooltipUtil.CreateTooltip(
+        var tooltipBuilder = TooltipUtil2.CreateTooltip(
           _registry.Database.Snapshot(),
           new Vector2(worldBound.x, worldBound.y),
           _item);
         tooltipBuilder.XOffset = ContainerSize;
-        //_registry.ScreenController.ShowTooltip(tooltipBuilder, new Vector2(worldBound.x, worldBound.y));
         _registry.ScreenController.Get(ScreenController.Tooltip).Show(tooltipBuilder);
       }
     }

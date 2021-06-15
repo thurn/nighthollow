@@ -14,6 +14,8 @@
 
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using Nighthollow.Interface.Components.Core;
+using Nighthollow.Interface.Components.Windows;
 using Nighthollow.Rules.Events;
 using Nighthollow.Services;
 using Nighthollow.World;
@@ -67,5 +69,8 @@ namespace Nighthollow.Rules
       new MutatorKey<PlayerPrefsService>("PlayerPrefs");
 
     public static readonly MutatorKey<RewardsService> RewardsService = new MutatorKey<RewardsService>("RewardsService");
+
+    public static readonly MutatorKey<IComponentController<RootComponent>> ComponentController =
+      new MutatorKey<IComponentController<RootComponent>>("ComponentController");
   }
 }

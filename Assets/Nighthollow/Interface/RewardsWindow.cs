@@ -46,8 +46,8 @@ namespace Nighthollow.Interface
 
     protected override void OnShow(Args argument)
     {
-      ItemRenderer.AddItems(Registry, _content, argument.Items,
-        new ItemRenderer.Config(count: 20, shouldAddTooltip: false));
+      ItemRenderer2.AddItems(Registry, _content, argument.Items,
+        new ItemRenderer2.Config(count: 20, shouldAddTooltip: false));
     }
   }
 }

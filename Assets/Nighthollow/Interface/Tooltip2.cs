@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface
 {
-  public sealed class Tooltip : HideableElement<TooltipBuilder>
+  public sealed class Tooltip2 : HideableElement<TooltipBuilder2>
   {
     Label _title = null!;
     VisualElement _closeButton = null!;
@@ -29,7 +29,7 @@ namespace Nighthollow.Interface
     Vector2 _anchorPoint;
     int _xOffset;
 
-    public new sealed class UxmlFactory : UxmlFactory<Tooltip, UxmlTraits>
+    public new sealed class UxmlFactory : UxmlFactory<Tooltip2, UxmlTraits>
     {
     }
 
@@ -41,7 +41,7 @@ namespace Nighthollow.Interface
       RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
     }
 
-    protected override void OnShow(TooltipBuilder builder)
+    protected override void OnShow(TooltipBuilder2 builder)
     {
       _anchorPoint = builder.AnchorPoint;
       _xOffset = builder.XOffset;

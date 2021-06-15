@@ -25,37 +25,45 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface.Components.Core
 {
-  public sealed class ComponentRoot
+  public interface IComponentController<TRoot> where TRoot : BaseComponent
+  {
+    void UpdateRoot(Func<TRoot, TRoot> function);
+
+    void OnUpdate();
+  }
+
+  public abstract class ComponentController
   {
     readonly IStartCoroutine _runner;
     readonly VisualElement _parentElement;
-    readonly BaseComponent _component;
     readonly Dictionary<(Type, string), object> _states = new();
     readonly List<(Type, string)> _toFetch = new();
     readonly Dictionary<string, object> _resources = new();
+    readonly ServiceRegistry _registry;
     VisualElement? _lastRenderedElement;
     IMountComponent? _lastRenderedComponent;
-    bool _updateRequired = true;
 
-    public ComponentRoot(
+    protected ComponentController(
       IStartCoroutine runner,
-      Scope scope,
-      VisualElement parentElement,
-      BaseComponent component)
+      ServiceRegistry registry,
+      VisualElement parentElement)
     {
       _runner = runner;
-      Scope = scope;
+      _registry = registry;
       _parentElement = parentElement;
-      _component = component;
     }
 
-    public Scope Scope { get; }
+    protected abstract BaseComponent CurrentComponent { get; }
+
+    protected bool UpdateRequired { get; set; } = true;
+
+    public Scope Scope => _registry.Scope;
 
     public void OnUpdate()
     {
-      if (_updateRequired)
+      if (UpdateRequired)
       {
-        var tree = _component.Reduce(GlobalKey.Root(this));
+        var tree = CurrentComponent.Reduce(GlobalKey.Root(this));
         var result = Reconciler.Update(GlobalKey.Root(this), _lastRenderedElement, _lastRenderedComponent, tree);
         _lastRenderedComponent = tree;
 
@@ -67,7 +75,7 @@ namespace Nighthollow.Interface.Components.Core
           _lastRenderedElement = result;
         }
 
-        _updateRequired = false;
+        UpdateRequired = false;
 
         if (_toFetch.Count > 0)
         {
@@ -115,7 +123,7 @@ namespace Nighthollow.Interface.Components.Core
       }
 
       _toFetch.Clear();
-      _updateRequired = true;
+      UpdateRequired = true;
     }
 
     T GetState<T>((Type, string) key)
@@ -131,27 +139,56 @@ namespace Nighthollow.Interface.Components.Core
         throw new NullReferenceException("Null state values are not allowed.");
       }
 
-      _updateRequired = true;
+      UpdateRequired = true;
       _states[key] = value;
     }
 
     sealed class ComponentState<T> : IState<T>
     {
-      readonly ComponentRoot _root;
+      readonly ComponentController _controller;
       readonly (Type, string) _key;
 
-      public ComponentState(ComponentRoot root, (Type, string) key)
+      public ComponentState(ComponentController controller, (Type, string) key)
       {
-        _root = root;
+        _controller = controller;
         _key = key;
       }
 
-      public T Value => _root.GetState<T>(_key);
+      public T Value => _controller.GetState<T>(_key);
 
       public void Set(T value)
       {
-        _root.SetState(_key, value);
+        _controller.SetState(_key, value);
       }
+    }
+  }
+
+  public sealed class ComponentController<TRoot> : ComponentController, IComponentController<TRoot>
+    where TRoot : BaseComponent
+  {
+    public static IComponentController<TRoot> Create(
+      IStartCoroutine runner,
+      ServiceRegistry registry,
+      VisualElement parentElement,
+      TRoot component) => new ComponentController<TRoot>(runner, registry, parentElement, component);
+
+    TRoot _component;
+
+    ComponentController(
+      IStartCoroutine runner,
+      ServiceRegistry registry,
+      VisualElement parentElement,
+      TRoot component) : base(runner, registry, parentElement)
+    {
+      _component = component;
+    }
+
+    protected override BaseComponent CurrentComponent => _component;
+
+    public void UpdateRoot(Func<TRoot, TRoot> function)
+    {
+      _component = function(_component);
+      UpdateRequired = true;
     }
   }
 }

@@ -24,7 +24,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Items
 {
-  public static class ItemRenderer
+  public static class ItemRenderer2
   {
     public sealed class Config
     {

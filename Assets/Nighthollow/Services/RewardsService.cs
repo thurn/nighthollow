@@ -41,7 +41,7 @@ namespace Nighthollow.Services
       var fixedRewards = ImmutableList<IItemData>.Empty;
       if (gameData.BattleData.FixedRewardsOverride is { } fixedRewardsId)
       {
-        choices = gameData.ItemLists[fixedRewardsId].AsItems();
+        fixedRewards = gameData.ItemLists[fixedRewardsId].AsItems();
       }
 
       return new RewardData(choices, fixedRewards);

@@ -16,6 +16,8 @@ using System;
 using System.Collections.Immutable;
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using Nighthollow.Interface.Components.Core;
+using Nighthollow.Interface.Components.Windows;
 using Nighthollow.Rules;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -149,6 +151,29 @@ namespace Nighthollow.Services
 
     public override ServiceRegistryName Name => ServiceRegistryName.SchoolSelection;
 
-    public new static ImmutableHashSet<IKey> Keys => ImmutableHashSet<IKey>.Empty;
+    public new static ImmutableHashSet<IKey> Keys => ImmutableHashSet.Create<IKey>(
+      Key.ComponentController
+    );
+
+    Scope? _scope;
+
+    public override Scope Scope => _scope ??= Scope.CreateBuilder(Keys, base.Scope)
+      .AddBinding(Key.ComponentController, ComponentController)
+      .Build();
+
+    IComponentController<RootComponent>? _componentController;
+
+    public IComponentController<RootComponent> ComponentController => _componentController ??=
+      ComponentController<RootComponent>.Create(
+        CoroutineRunner,
+        this,
+        ScreenController.Screen.Q("ComponentRoot"),
+        new RootComponent());
+
+    public override void OnUpdate()
+    {
+      base.OnUpdate();
+      ComponentController.OnUpdate();
+    }
   }
 }

@@ -49,25 +49,25 @@ namespace Nighthollow.Interface
     protected override void OnShow()
     {
       var gameData = Registry.Database.Snapshot();
-      _collectionSlots = ItemRenderer.AddItems(
+      _collectionSlots = ItemRenderer2.AddItems(
         Registry,
         _collection,
         gameData.Collection.Values,
-        new ItemRenderer.Config(count: 20, dragManager: this));
-      _mainDeckSlots = ItemRenderer.AddItems(
+        new ItemRenderer2.Config(count: 20, dragManager: this));
+      _mainDeckSlots = ItemRenderer2.AddItems(
         Registry,
         _mainDeck,
         gameData.Deck.Values
           .Where(creature => !gameData.CreatureTypes[creature.CreatureTypeId].IsManaCreature)
           .ToList(),
-        new ItemRenderer.Config(count: 9, dragManager: this));
-      _manaSlots = ItemRenderer.AddItems(
+        new ItemRenderer2.Config(count: 9, dragManager: this));
+      _manaSlots = ItemRenderer2.AddItems(
         Registry,
         _manaDeck,
         gameData.Deck.Values
           .Where(creature => gameData.CreatureTypes[creature.CreatureTypeId].IsManaCreature)
           .ToList(),
-        new ItemRenderer.Config(count: 6, InterfaceItemSlot.Size.Small));
+        new ItemRenderer2.Config(count: 6, InterfaceItemSlot.Size.Small));
     }
 
     public IEnumerable<InterfaceItemSlot> GetDragTargets(InterfaceItemImage element)
