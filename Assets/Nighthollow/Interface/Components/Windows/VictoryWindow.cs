@@ -47,7 +47,7 @@ namespace Nighthollow.Interface.Components.Windows
               Children = rewards.FixedRewards.Select(choice => new ItemSlot
               {
                 Size = ItemSlot.SlotSize.Small,
-                Image = new ItemImage(choice)
+                Item = choice
               })
             },
             new Text("Select Reward")
@@ -72,7 +72,7 @@ namespace Nighthollow.Interface.Components.Windows
       Children = List(
         new ItemSlot
         {
-          Image = new ItemImage(item),
+          Item = item,
           MarginBottom = 8
         },
         new LabelButton("Pick")

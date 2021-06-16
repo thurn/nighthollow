@@ -12,41 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+using Nighthollow.Data;
 using Nighthollow.Interface.Components.Core;
 using Nighthollow.Rules;
-using UnityEngine.UIElements;
+using UnityEngine;
 
 #nullable enable
 
-namespace Nighthollow.Interface.Components.Windows
+namespace Nighthollow.Interface.Components.Library
 {
-  public enum CurrentlyOpenWindow
+  public sealed record ResourceTooltip : LayoutComponent
   {
-    None,
-    VictoryWindow
-  }
+    public ResourceTooltip(ResourceItemData resource, Rect anchor)
+    {
+      Resource = resource;
+      Anchor = anchor;
+    }
 
-  public sealed record RootComponent : LayoutComponent
-  {
-    public CurrentlyOpenWindow CurrentlyOpenWindow { get; init; } = CurrentlyOpenWindow.VictoryWindow;
-    public BaseComponent? CurrentTooltip { get; init; }
+    public ResourceItemData Resource { get; }
+    public Rect Anchor { get; }
 
     protected override BaseComponent OnRender(Scope scope)
     {
-      return new Column
+      var gameData = scope.Get(Key.GameData);
+      return new Tooltip
       {
-        FlexPosition = Position.Absolute,
-        TopBottomLeftRight = 0,
-        AlignItems = Align.Center,
-        JustifyContent = Justify.Center,
-        Children = List(
-          CurrentlyOpenWindow switch
-          {
-            CurrentlyOpenWindow.VictoryWindow => new VictoryWindow(),
-            _ => null
-          },
-          CurrentTooltip
-        )
+        Title = Resource.Name,
+        Anchor = Anchor,
+        Content = ImmutableList.Create<Tooltip.ITooltipContent>(
+          new Tooltip.TextGroup(gameData.ResourceTypes[Resource.ResourceTypeId].Description ?? ""))
       };
     }
   }

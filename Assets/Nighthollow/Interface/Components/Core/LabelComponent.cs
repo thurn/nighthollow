@@ -28,6 +28,7 @@ namespace Nighthollow.Interface.Components.Core
     public WhiteSpace? WhiteSpace { get; init; }
     public Color? OutlineColor { get; init; }
     public int? OutlineWidth { get; init; }
+    public TextAnchor TextAlign { get; init; }
 
     public override string Type => "Text";
 
@@ -44,6 +45,7 @@ namespace Nighthollow.Interface.Components.Core
       element.style.unityTextOutlineColor = OutlineColor ?? new StyleColor(StyleKeyword.Null);
       element.style.unityTextOutlineWidth = OutlineWidth ?? new StyleFloat(StyleKeyword.Null);
       element.style.whiteSpace = WhiteSpace is { } ws ? ws : new StyleEnum<WhiteSpace>(StyleKeyword.Undefined);
+      element.style.unityTextAlign = TextAlign;
     }
   }
 }
