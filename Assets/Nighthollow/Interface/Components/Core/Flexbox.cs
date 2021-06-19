@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections.Immutable;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -131,20 +133,37 @@ namespace Nighthollow.Interface.Components.Core
 
   public abstract record FlexboxElement : Flexbox<ComponentVisualElement>
   {
+    public EventCallback<MouseDownEvent>? OnMouseDown { get; init; }
     public EventCallback<MouseOverEvent>? OnMouseOver { get; init; }
     public EventCallback<MouseOutEvent>? OnMouseOut { get; init; }
-    public EventCallback<MouseDownEvent>? OnMouseDown { get; init; }
     public EventCallback<MouseUpEvent>? OnMouseUp { get; init; }
     public EventCallback<ClickEvent>? OnClick { get; init; }
+    public IDraggable? Draggable { get; init; }
+    public IDragReceiver? DragReceiver { get; init; }
 
-    protected override void OnMount(ComponentVisualElement container)
+    protected override void OnMount(ComponentVisualElement element)
     {
-      base.OnMount(container);
-      container.RegisterExclusiveCallback(OnMouseOver);
-      container.RegisterExclusiveCallback(OnMouseOut);
-      container.RegisterExclusiveCallback(OnMouseDown);
-      container.RegisterExclusiveCallback(OnMouseUp);
-      container.RegisterExclusiveCallback(OnClick);
+      base.OnMount(element);
+      element.SetClassNames(ClassNames);
+      element.DragReceiver = DragReceiver;
+
+      var makeDraggable = UseDraggable();
+      if (Draggable != null)
+      {
+        element.RegisterExclusiveCallback<MouseDownEvent>(e =>
+        {
+          makeDraggable.OnMouseDown(element, e, Draggable);
+        });
+      }
+      else
+      {
+        element.RegisterExclusiveCallback(OnMouseDown);
+      }
+
+      element.RegisterExclusiveCallback(OnMouseOver);
+      element.RegisterExclusiveCallback(OnMouseOut);
+      element.RegisterExclusiveCallback(OnMouseUp);
+      element.RegisterExclusiveCallback(OnClick);
     }
   }
 

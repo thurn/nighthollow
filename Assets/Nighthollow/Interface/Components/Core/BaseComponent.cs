@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Nighthollow.Utils;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
@@ -36,6 +37,7 @@ namespace Nighthollow.Interface.Components.Core
     public Length? Top { get; init; }
     public Length? Right { get; init; }
     public Length? Bottom { get; init; }
+    public ImmutableHashSet<string> ClassNames { get; init; } = ImmutableHashSet<string>.Empty;
 
     public Length? InsetLeftRight
     {
@@ -120,6 +122,16 @@ namespace Nighthollow.Interface.Components.Core
       return GlobalKey.UseResource<T>(address);
     }
 
+    protected IMakeDraggable UseDraggable()
+    {
+      if (GlobalKey == null)
+      {
+        throw new NullReferenceException($"Error: Invoked {nameof(UseDraggable)}() outside of OnRender()/OnMount()");
+      }
+
+      return GlobalKey.UseDraggable();
+    }
+
     protected BaseComponent MergeCommonProps(BaseComponent child) => child with
     {
       MarginLeft = MarginLeft + child.MarginLeft,
@@ -130,7 +142,8 @@ namespace Nighthollow.Interface.Components.Core
       Top = AddLengths(Top, child.Top),
       Bottom = AddLengths(Bottom, child.Bottom),
       Right = AddLengths(Right, child.Right),
-      FlexPosition = child.FlexPosition ?? FlexPosition
+      FlexPosition = child.FlexPosition ?? FlexPosition,
+      ClassNames = ClassNames.Union(child.ClassNames)
     };
 
     static Length? AddLengths(Length? x, Length? y) => (x, y) switch

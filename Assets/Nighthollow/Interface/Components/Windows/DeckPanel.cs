@@ -19,7 +19,6 @@ using Nighthollow.Data;
 using Nighthollow.Interface.Components.Core;
 using Nighthollow.Interface.Components.Library;
 using Nighthollow.Rules;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,13 +28,16 @@ namespace Nighthollow.Interface.Components.Windows
 {
   public sealed record DeckPanel : LayoutComponent
   {
-    public ImmutableList<CreatureItemData> MainDeck { get; init; } = ImmutableList<CreatureItemData>.Empty;
-    public ImmutableList<CreatureItemData> ManaDeck { get; init; } = ImmutableList<CreatureItemData>.Empty;
+    public ImmutableList<KeyValuePair<int, CreatureItemData>> MainDeck { get; init; } =
+      ImmutableList<KeyValuePair<int, CreatureItemData>>.Empty;
+
+    public ImmutableList<KeyValuePair<int, CreatureItemData>> ManaDeck { get; init; } =
+      ImmutableList<KeyValuePair<int, CreatureItemData>>.Empty;
 
     protected override BaseComponent OnRender(Scope scope)
     {
-      var mainDeck = MainDeck.Concat(Enumerable.Repeat<CreatureItemData?>(null, 9 - MainDeck.Count)).ToImmutableList();
-      var manaDeck = ManaDeck.Concat(Enumerable.Repeat<CreatureItemData?>(null, 6 - ManaDeck.Count)).ToImmutableList();
+      var mainDeck = WithMinimumItems(MainDeck, 9);
+      var manaDeck = WithMinimumItems(ManaDeck, 6);
 
       return new Column
       {
@@ -48,7 +50,6 @@ namespace Nighthollow.Interface.Components.Windows
             AlignItems = Align.Stretch,
             JustifyContent = Justify.Center,
             FlexGrow = 1,
-            MarginTopBottom = 32,
             MarginLeftRight = 64,
             Children = List(
               MainDeckRow(mainDeck.Take(3)),
@@ -67,23 +68,46 @@ namespace Nighthollow.Interface.Components.Windows
             JustifyContent = Justify.Center,
             Children = manaDeck.Select(m => new ItemSlot
             {
-              Item = m,
-              Size = ItemSlot.SlotSize.Small
+              ItemLocation = ItemImage.Location.Deck,
+              ItemId = m?.Key,
+              Item = m?.Value,
+              Size = ItemSlot.SlotSize.Small,
+              Draggable = true
             })
           }
         )
       };
     }
 
-    static Row MainDeckRow(IEnumerable<CreatureItemData?> items) =>
+    static ImmutableList<KeyValuePair<int, CreatureItemData>?> WithMinimumItems(
+      ImmutableList<KeyValuePair<int, CreatureItemData>> items, int count)
+    {
+      var result = ImmutableList.CreateBuilder<KeyValuePair<int, CreatureItemData>?>();
+      foreach (var c in items)
+      {
+        result.Add(c);
+      }
+
+      for (var i = items.Count; i < count; ++i)
+      {
+        result.Add(null);
+      }
+
+      return result.ToImmutable();
+    }
+
+    static Row MainDeckRow(IEnumerable<KeyValuePair<int, CreatureItemData>?> items) =>
       new()
       {
         FlexGrow = 1,
         JustifyContent = Justify.SpaceAround,
         Children = items.Select(m => new ItemSlot
         {
-          Item = m,
-          Size = ItemSlot.SlotSize.Small
+          ItemLocation = ItemImage.Location.Deck,
+          ItemId = m?.Key,
+          Item = m?.Value,
+          Size = ItemSlot.SlotSize.Large,
+          Draggable = true
         })
       };
   }

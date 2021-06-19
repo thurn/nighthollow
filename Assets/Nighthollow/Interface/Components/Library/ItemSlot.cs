@@ -13,16 +13,18 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Immutable;
 using Nighthollow.Data;
 using Nighthollow.Interface.Components.Core;
 using Nighthollow.Rules;
+using Nighthollow.Utils;
 using UnityEngine.UIElements;
 
 #nullable enable
 
 namespace Nighthollow.Interface.Components.Library
 {
-  public sealed record ItemSlot : LayoutComponent
+  public sealed record ItemSlot : LayoutComponent, IDragReceiver<ItemImage>
   {
     public enum SlotSize
     {
@@ -31,8 +33,11 @@ namespace Nighthollow.Interface.Components.Library
     }
 
     public SlotSize Size { get; init; } = SlotSize.Large;
+    public int? ItemId { get; init; }
     public IItemData? Item { get; init; }
     public bool HasTooltip { get; init; } = true;
+    public ItemImage.Location ItemLocation { get; init; }
+    public bool Draggable { get; init; }
 
     protected override BaseComponent OnRender(Scope scope)
     {
@@ -54,10 +59,15 @@ namespace Nighthollow.Interface.Components.Library
         FlexBasis = size,
         OnMouseOver = e => MouseOver(scope, e),
         OnMouseOut = e => MouseOut(scope, e),
+        ClassNames = ImmutableHashSet.Create(ClassName.ItemSlot),
+        DragReceiver = this,
         Children = List(Item is null
           ? null
           : new ItemImage(Item)
           {
+            ItemId = ItemId,
+            ItemLocation = ItemLocation,
+            Draggable = Draggable,
             Size = Size
           })
       };
@@ -82,6 +92,44 @@ namespace Nighthollow.Interface.Components.Library
         {
           CurrentTooltip = null
         });
+      }
+    }
+
+    public bool CanReceiveDrag(ItemImage value)
+    {
+      return Item is null && ItemLocation switch
+      {
+        ItemImage.Location.Collection => value.ItemLocation is ItemImage.Location.Deck,
+        ItemImage.Location.Deck => value.ItemLocation is ItemImage.Location.Collection,
+        _ => false
+      };
+    }
+
+    public void OnDragReceived(Scope scope, ItemImage value)
+    {
+      var database = scope.Get(Key.Database);
+      switch (value.ItemLocation)
+      {
+        case ItemImage.Location.Collection:
+          database.Delete(TableId.Collection, Errors.CheckNotNull(value.ItemId));
+          break;
+        case ItemImage.Location.Deck:
+          database.Delete(TableId.Deck, Errors.CheckNotNull(value.ItemId));
+          break;
+        default:
+          throw new ArgumentOutOfRangeException();
+      }
+
+      switch (ItemLocation)
+      {
+        case ItemImage.Location.Collection:
+          database.Insert(TableId.Collection, (CreatureItemData) value.Item);
+          break;
+        case ItemImage.Location.Deck:
+          database.Insert(TableId.Deck, (CreatureItemData) value.Item);
+          break;
+        default:
+          throw new ArgumentOutOfRangeException();
       }
     }
   }

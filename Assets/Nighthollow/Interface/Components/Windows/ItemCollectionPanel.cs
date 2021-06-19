@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Interface.Components.Core;
 using Nighthollow.Interface.Components.Library;
 using Nighthollow.Rules;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -28,21 +26,28 @@ namespace Nighthollow.Interface.Components.Windows
 {
   public sealed record ItemCollectionPanel : LayoutComponent
   {
-    public IEnumerable<IItemData> Items { get; init; } = ImmutableList<IItemData>.Empty;
+    public ImmutableDictionary<int, CreatureItemData> Items { get; init; } =
+      ImmutableDictionary<int, CreatureItemData>.Empty;
 
     protected override BaseComponent OnRender(Scope scope)
     {
       var children = ImmutableList.CreateBuilder<BaseComponent>();
-      children.AddRange(Items.Select(item => new ItemSlot
+      children.AddRange(Items.Select(pair => new ItemSlot
       {
-        Item = item
+        ItemLocation = ItemImage.Location.Collection,
+        ItemId = pair.Key,
+        Item = pair.Value,
+        Draggable = true
       }));
 
       var i = children.Count;
       while (i < 20 || i % 5 != 0)
       {
         // Always add slots in multiples of 5 for visual symmetry
-        children.Add(new ItemSlot());
+        children.Add(new ItemSlot
+        {
+          ItemLocation = ItemImage.Location.Collection
+        });
         i++;
       }
 

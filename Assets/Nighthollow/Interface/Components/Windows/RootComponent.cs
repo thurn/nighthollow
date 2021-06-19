@@ -27,7 +27,7 @@ namespace Nighthollow.Interface.Components.Windows
     CardsWindow
   }
 
-  public sealed record RootComponent : LayoutComponent
+  public sealed record RootComponent : AbstractRootComponent<RootComponent>
   {
     public CurrentlyOpenWindow CurrentlyOpenWindow { get; init; } = CurrentlyOpenWindow.CardsWindow;
     public BaseComponent? CurrentTooltip { get; init; }
@@ -51,5 +51,9 @@ namespace Nighthollow.Interface.Components.Windows
         )
       };
     }
+
+    protected override RootComponent This => this;
+
+    public override RootComponent OnDragBegin() => this with {CurrentTooltip = null};
   }
 }

@@ -40,7 +40,7 @@ namespace Nighthollow.Interface.Components.Windows
             Title = "Collection",
             Content = new ItemCollectionPanel
             {
-              Items = gameData.Collection.Values
+              Items = gameData.Collection
             }
           },
           RightPanel = new SplitPanelLayout.Panel
@@ -48,12 +48,12 @@ namespace Nighthollow.Interface.Components.Windows
             Title = "Deck",
             Content = new DeckPanel
             {
-              MainDeck = gameData.Deck.Values
-                .Where(creature => !gameData.CreatureTypes[creature.CreatureTypeId].IsManaCreature)
+              MainDeck = gameData.Deck
+                .Where(pair => !gameData.CreatureTypes[pair.Value.CreatureTypeId].IsManaCreature)
                 .ToImmutableList(),
-              ManaDeck = gameData.Deck.Values
-                .Where(creature => gameData.CreatureTypes[creature.CreatureTypeId].IsManaCreature)
-                .ToImmutableList(),
+              ManaDeck = gameData.Deck
+                .Where(pair => gameData.CreatureTypes[pair.Value.CreatureTypeId].IsManaCreature)
+                .ToImmutableList()
             }
           }
         }

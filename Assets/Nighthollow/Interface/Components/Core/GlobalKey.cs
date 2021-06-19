@@ -47,6 +47,8 @@ namespace Nighthollow.Interface.Components.Core
       return _controller.UseResource<T>(address);
     }
 
+    public IMakeDraggable UseDraggable() => _controller.DragController;
+
     public override string ToString() => GetKey();
   }
 }

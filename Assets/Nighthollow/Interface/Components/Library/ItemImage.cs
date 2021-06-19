@@ -25,13 +25,23 @@ namespace Nighthollow.Interface.Components.Library
 {
   public sealed record ItemImage : LayoutComponent
   {
+    public enum Location
+    {
+      None,
+      Collection,
+      Deck,
+    }
+
     public ItemImage(IItemData item)
     {
       Item = item;
     }
 
     public IItemData Item { get; }
+    public int? ItemId { get; init; }
     public ItemSlot.SlotSize Size { get; init; } = ItemSlot.SlotSize.Large;
+    public bool Draggable { get; init; }
+    public Location ItemLocation { get; init; }
 
     protected override BaseComponent OnRender(Scope scope)
     {
@@ -48,6 +58,7 @@ namespace Nighthollow.Interface.Components.Library
         BackgroundScaleMode = ScaleMode.ScaleToFit,
         Width = size,
         Height = size,
+        Draggable = Draggable ? new Draggable<ItemImage>(this, ClassName.ItemSlot) : null,
         Children = List(
           Item.GetQuantity() is { } quantity and > 1
             ? new Text(quantity.ToString())

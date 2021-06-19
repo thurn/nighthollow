@@ -51,36 +51,49 @@ namespace Nighthollow.Interface.Components.Core
       _runner = runner;
       _registry = registry;
       _parentElement = parentElement;
+      DragController = new DragController(parentElement, this);
+
+      parentElement.RegisterCallback<MouseMoveEvent>(DragController.OnMouseMove);
+      parentElement.RegisterCallback<MouseUpEvent>(e => { DragController.OnMouseUp(_registry.Scope, e); });
     }
 
     protected abstract BaseComponent CurrentComponent { get; }
+
+    public abstract void OnDragBegin();
 
     protected bool UpdateRequired { get; set; } = true;
 
     public Scope Scope => _registry.Scope;
 
+    public DragController DragController { get; }
+
     public void OnUpdate()
     {
-      if (UpdateRequired)
+      if (UpdateRequired && !DragController.IsDragging)
       {
-        var tree = CurrentComponent.Reduce(GlobalKey.Root(this));
-        var result = Reconciler.Update(GlobalKey.Root(this), _lastRenderedElement, _lastRenderedComponent, tree);
-        _lastRenderedComponent = tree;
+        RunUpdateImmediately();
+      }
+    }
 
-        if (result != null)
-        {
-          _parentElement.Clear();
+    protected void RunUpdateImmediately()
+    {
+      var tree = CurrentComponent.Reduce(GlobalKey.Root(this));
+      var result = Reconciler.Update(GlobalKey.Root(this), _lastRenderedElement, _lastRenderedComponent, tree);
+      _lastRenderedComponent = tree;
 
-          _parentElement.Add(result);
-          _lastRenderedElement = result;
-        }
+      if (result != null)
+      {
+        _parentElement.Clear();
 
-        UpdateRequired = false;
+        _parentElement.Add(result);
+        _lastRenderedElement = result;
+      }
 
-        if (_toFetch.Count > 0)
-        {
-          _runner.StartCoroutine(FetchResources());
-        }
+      UpdateRequired = false;
+
+      if (_toFetch.Count > 0)
+      {
+        _runner.StartCoroutine(FetchResources());
       }
     }
 
@@ -107,6 +120,13 @@ namespace Nighthollow.Interface.Components.Core
       }
     }
 
+    public void OnDragCompleted()
+    {
+      _lastRenderedElement = null;
+      _lastRenderedComponent = null;
+      UpdateRequired = true;
+    }
+
     IEnumerator<WaitUntil> FetchResources()
     {
       var requests = new Dictionary<string, ResourceRequest>();
@@ -114,6 +134,7 @@ namespace Nighthollow.Interface.Components.Core
       {
         requests[pair.Key] = Resources.LoadAsync(pair.Key, pair.Value);
       }
+
       _toFetch.Clear();
 
       yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
@@ -166,7 +187,7 @@ namespace Nighthollow.Interface.Components.Core
   }
 
   public sealed class ComponentController<TRoot> : ComponentController, IComponentController<TRoot>
-    where TRoot : BaseComponent
+    where TRoot : AbstractRootComponent<TRoot>
   {
     public static IComponentController<TRoot> Create(
       IStartCoroutine runner,
@@ -186,6 +207,12 @@ namespace Nighthollow.Interface.Components.Core
     }
 
     protected override BaseComponent CurrentComponent => _component;
+
+    public override void OnDragBegin()
+    {
+      _component = _component.OnDragBegin();
+      RunUpdateImmediately();
+    }
 
     public void UpdateRoot(Func<TRoot, TRoot> function)
     {

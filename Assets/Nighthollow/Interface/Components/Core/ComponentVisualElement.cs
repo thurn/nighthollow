@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -23,6 +24,24 @@ namespace Nighthollow.Interface.Components.Core
   public sealed class ComponentVisualElement : VisualElement
   {
     readonly Dictionary<Type, object> _callbacks = new();
+    ImmutableHashSet<string> _classNames = ImmutableHashSet<string>.Empty;
+
+    public IDragReceiver? DragReceiver { get; set; }
+
+    public void SetClassNames(ImmutableHashSet<string> classNames)
+    {
+      foreach (var className in _classNames)
+      {
+        RemoveFromClassList(className);
+      }
+
+      foreach (var className in classNames)
+      {
+        AddToClassList(className);
+      }
+
+      _classNames = classNames;
+    }
 
     public void RegisterExclusiveCallback<TEventType>(
       EventCallback<TEventType>? callback,
