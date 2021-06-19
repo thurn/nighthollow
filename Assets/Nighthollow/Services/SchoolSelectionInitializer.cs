@@ -48,6 +48,7 @@ namespace Nighthollow.Services
         _document.rootVisualElement,
         _mainCamera,
         this);
+
       _registry.ScreenController.Show(ScreenController.SchoolSelectionScreen);
     }
   }

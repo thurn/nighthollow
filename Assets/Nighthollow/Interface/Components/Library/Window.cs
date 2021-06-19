@@ -15,6 +15,7 @@
 using System;
 using Nighthollow.Interface.Components.Core;
 using Nighthollow.Rules;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 #nullable enable
@@ -37,6 +38,7 @@ namespace Nighthollow.Interface.Components.Library
 
     public BaseComponent? Content { get; init; }
     public string Title { get; init; } = "";
+    public Portrait.CharacterName? TitlePortrait { get; init; }
     public WindowSize Size { get; init; } = WindowSize.FullScreen;
 
     protected override BaseComponent OnRender(Scope scope)
@@ -49,7 +51,7 @@ namespace Nighthollow.Interface.Components.Library
         Top = 0,
         AlignItems = Align.Center,
         JustifyContent = Justify.Center,
-        Translate = new Translate(0, Length.Percent(-50), 0),
+        Translate = new Translate(0, Length.Percent(-55), 0),
         Children = List(
           new Row
           {
@@ -60,6 +62,12 @@ namespace Nighthollow.Interface.Components.Library
             BackgroundImage = "GUI/NameFrame",
             BackgroundSliceLeftRight = 512,
             Children = List(
+              TitlePortrait is { } t
+                ? new Portrait(t)
+                {
+                  MarginRight = 16,
+                }
+                : null,
               new Text(Title)
               {
                 Type = TextType.Headline,
@@ -108,7 +116,7 @@ namespace Nighthollow.Interface.Components.Library
       size switch
       {
         WindowSize.FullScreen => new Positions(null, 128, 64, 128, 24),
-        WindowSize.WorldFullScreen => new Positions(null, 128, 64, 128, 220),
+        WindowSize.WorldFullScreen => new Positions(null, 64, 64, 64, 220),
         WindowSize.FitContent => new Positions(
           new Translate(Length.Percent(-50), Length.Percent(-50), 0),
           Length.Percent(50),

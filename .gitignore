@@ -3,12 +3,12 @@ history.txt
 state.json
 
 /[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-[Oo]ut/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Oo]ut/
 
 UIElementsSchema/
 HostedData/

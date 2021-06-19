@@ -51,6 +51,7 @@ namespace Nighthollow.Interface.Components.Library
         JustifyContent = Justify.Center,
         Width = size,
         Height = size,
+        FlexBasis = size,
         OnMouseOver = e => MouseOver(scope, e),
         OnMouseOut = e => MouseOut(scope, e),
         Children = List(Item is null

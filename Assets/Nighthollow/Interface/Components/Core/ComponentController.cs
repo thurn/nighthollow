@@ -37,7 +37,7 @@ namespace Nighthollow.Interface.Components.Core
     readonly IStartCoroutine _runner;
     readonly VisualElement _parentElement;
     readonly Dictionary<(Type, string), object> _states = new();
-    readonly List<(Type, string)> _toFetch = new();
+    readonly Dictionary<string, Type> _toFetch = new();
     readonly Dictionary<string, object> _resources = new();
     readonly ServiceRegistry _registry;
     VisualElement? _lastRenderedElement;
@@ -102,7 +102,7 @@ namespace Nighthollow.Interface.Components.Core
       }
       else
       {
-        _toFetch.Add((typeof(T), address));
+        _toFetch[address] = typeof(T);
         return null;
       }
     }
@@ -110,15 +110,17 @@ namespace Nighthollow.Interface.Components.Core
     IEnumerator<WaitUntil> FetchResources()
     {
       var requests = new Dictionary<string, ResourceRequest>();
-      foreach (var (resourceType, address) in _toFetch)
+      foreach (var pair in _toFetch)
       {
-        requests[address] = Resources.LoadAsync(address, resourceType);
+        requests[pair.Key] = Resources.LoadAsync(pair.Key, pair.Value);
       }
 
       yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
 
       foreach (var pair in requests)
       {
+        var asset = pair.Value.asset;
+        Errors.CheckNotNull(asset, $"No asset found for key {pair.Key} of type {_toFetch[pair.Key]}");
         _resources[pair.Key] = pair.Value.asset;
       }
 

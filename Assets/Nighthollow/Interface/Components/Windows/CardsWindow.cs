@@ -13,42 +13,41 @@
 // limitations under the License.
 
 using Nighthollow.Interface.Components.Core;
+using Nighthollow.Interface.Components.Library;
 using Nighthollow.Rules;
-using UnityEngine.UIElements;
+using UnityEngine;
 
 #nullable enable
 
 namespace Nighthollow.Interface.Components.Windows
 {
-  public enum CurrentlyOpenWindow
+  public sealed record CardsWindow : LayoutComponent
   {
-    None,
-    VictoryWindow,
-    CardsWindow
-  }
-
-  public sealed record RootComponent : LayoutComponent
-  {
-    public CurrentlyOpenWindow CurrentlyOpenWindow { get; init; } = CurrentlyOpenWindow.CardsWindow;
-    public BaseComponent? CurrentTooltip { get; init; }
-
     protected override BaseComponent OnRender(Scope scope)
     {
-      return new Column
+      return new Window
       {
-        FlexPosition = Position.Absolute,
-        InsetAll = 0,
-        AlignItems = Align.Center,
-        JustifyContent = Justify.Center,
-        Children = List(
-          CurrentlyOpenWindow switch
+        Title = "Ocerak, Master of Cards",
+        TitlePortrait = Portrait.CharacterName.Ocerak,
+        Size = Window.WindowSize.WorldFullScreen,
+        Content = new SplitPanelLayout
+        {
+          LeftPanel = new SplitPanelLayout.Panel
           {
-            CurrentlyOpenWindow.VictoryWindow => new VictoryWindow(),
-            CurrentlyOpenWindow.CardsWindow => new CardsWindow(),
-            _ => null
+            Title = "Collection",
+            Content = new ItemCollectionPanel
+            {
+              Items = scope.Get(Key.GameData).Collection.Values
+            }
           },
-          CurrentTooltip
-        )
+          RightPanel = new SplitPanelLayout.Panel
+          {
+            Title = "Deck",
+            Content = new Column
+            {
+            }
+          }
+        }
       };
     }
   }

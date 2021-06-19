@@ -37,7 +37,7 @@ namespace Nighthollow.Interface.Components.Core
     public Length? Right { get; init; }
     public Length? Bottom { get; init; }
 
-    public Length? LeftRight
+    public Length? InsetLeftRight
     {
       init
       {
@@ -46,7 +46,7 @@ namespace Nighthollow.Interface.Components.Core
       }
     }
 
-    public Length? TopBottom
+    public Length? InsetTopBottom
     {
       init
       {
@@ -55,12 +55,12 @@ namespace Nighthollow.Interface.Components.Core
       }
     }
 
-    public Length? TopBottomLeftRight
+    public Length? InsetAll
     {
       init
       {
-        LeftRight = value;
-        TopBottom = value;
+        InsetLeftRight = value;
+        InsetTopBottom = value;
       }
     }
 

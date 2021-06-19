@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface.Components.Core
 {
-  public abstract record Flexbox : ContainerComponent<VisualElement>
+  public abstract record Flexbox<TElement> : ContainerComponent<TElement> where TElement : VisualElement
   {
     static readonly Callbacks CallbackTracker = new();
 
@@ -41,8 +41,14 @@ namespace Nighthollow.Interface.Components.Core
     public int PaddingRight { get; init; }
     public int FlexGrow { get; init; }
     public int FlexShrink { get; init; } = 1;
+    public Length? FlexBasis { get; init; }
+    public Wrap FlexWrap { get; init; }
     public Translate? Translate { get; init; }
     public ScaleMode BackgroundScaleMode { get; init; }
+    public int BorderBottomLeftRadius { get; init; }
+    public int BorderBottomRightRadius { get; init; }
+    public int BorderTopLeftRadius { get; init; }
+    public int BorderTopRightRadius { get; init; }
 
     public int PaddingLeftRight
     {
@@ -71,6 +77,26 @@ namespace Nighthollow.Interface.Components.Core
       }
     }
 
+    public int BackgroundSliceAll
+    {
+      init
+      {
+        BackgroundSliceLeftRight = value;
+        BackgroundSliceTopBottom = value;
+      }
+    }
+
+    public int BorderRadiusAll
+    {
+      init
+      {
+        BorderBottomLeftRadius = value;
+        BorderBottomRightRadius = value;
+        BorderTopLeftRadius = value;
+        BorderTopRightRadius = value;
+      }
+    }
+
     public EventCallback<MouseOverEvent>? OnMouseOver { get; init; }
     public EventCallback<MouseOutEvent>? OnMouseOut { get; init; }
     public EventCallback<MouseDownEvent>? OnMouseDown { get; init; }
@@ -79,18 +105,16 @@ namespace Nighthollow.Interface.Components.Core
 
     protected abstract FlexDirection GetFlexDirection();
 
-    protected override VisualElement OnCreateMountContent() => new VisualElement();
-
-    protected override void OnMount(VisualElement container)
+    protected override void OnMount(TElement container)
     {
       container.style.flexDirection = GetFlexDirection();
       container.style.alignItems = AlignItems;
       container.style.justifyContent = JustifyContent;
       var sprite = UseResource<Sprite>(BackgroundImage);
       container.style.backgroundImage =
-        sprite is { } s ? new StyleBackground(s) : new StyleBackground(StyleKeyword.None);
-      container.style.backgroundColor = BackgroundColor ?? Color.clear;
-      container.style.unityBackgroundImageTintColor = BackgroundImageTintColor ?? Color.white;
+        sprite is { } s ? new StyleBackground(s) : new StyleBackground(StyleKeyword.Null);
+      container.style.backgroundColor = BackgroundColor ?? new StyleColor(StyleKeyword.Null);
+      container.style.unityBackgroundImageTintColor = BackgroundImageTintColor ?? new StyleColor(StyleKeyword.Null);
       container.style.height = Height ?? new StyleLength(StyleKeyword.Null);
       container.style.width = Width ?? new StyleLength(StyleKeyword.Null);
       container.style.unitySliceLeft = BackgroundSliceLeftRight;
@@ -105,6 +129,12 @@ namespace Nighthollow.Interface.Components.Core
       container.style.flexShrink = FlexShrink;
       container.style.translate = Translate ?? new StyleTranslate(StyleKeyword.Null);
       container.style.unityBackgroundScaleMode = BackgroundScaleMode;
+      container.style.borderBottomLeftRadius = BorderBottomLeftRadius;
+      container.style.borderBottomRightRadius = BorderBottomRightRadius;
+      container.style.borderTopLeftRadius = BorderTopLeftRadius;
+      container.style.borderTopRightRadius = BorderTopRightRadius;
+      container.style.flexBasis = FlexBasis ?? new StyleLength(StyleKeyword.Null);
+      container.style.flexWrap = FlexWrap;
 
       CallbackTracker.MouseOver.SetCallback(container, OnMouseOver);
       CallbackTracker.MouseOut.SetCallback(container, OnMouseOut);
@@ -143,13 +173,17 @@ namespace Nighthollow.Interface.Components.Core
     }
   }
 
-  public sealed record Row : Flexbox
+  public sealed record Row : Flexbox<VisualElement>
   {
+    protected override VisualElement OnCreateMountContent() => new();
+
     protected override FlexDirection GetFlexDirection() => FlexDirection.Row;
   }
 
-  public sealed record Column : Flexbox
+  public sealed record Column : Flexbox<VisualElement>
   {
+    protected override VisualElement OnCreateMountContent() => new();
+
     protected override FlexDirection GetFlexDirection() => FlexDirection.Column;
   }
 }
