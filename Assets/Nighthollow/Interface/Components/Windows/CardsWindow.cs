@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
+using System.Linq;
 using Nighthollow.Interface.Components.Core;
 using Nighthollow.Interface.Components.Library;
 using Nighthollow.Rules;
@@ -25,6 +27,7 @@ namespace Nighthollow.Interface.Components.Windows
   {
     protected override BaseComponent OnRender(Scope scope)
     {
+      var gameData = scope.Get(Key.GameData);
       return new Window
       {
         Title = "Ocerak, Master of Cards",
@@ -37,14 +40,20 @@ namespace Nighthollow.Interface.Components.Windows
             Title = "Collection",
             Content = new ItemCollectionPanel
             {
-              Items = scope.Get(Key.GameData).Collection.Values
+              Items = gameData.Collection.Values
             }
           },
           RightPanel = new SplitPanelLayout.Panel
           {
             Title = "Deck",
-            Content = new Column
+            Content = new DeckPanel
             {
+              MainDeck = gameData.Deck.Values
+                .Where(creature => !gameData.CreatureTypes[creature.CreatureTypeId].IsManaCreature)
+                .ToImmutableList(),
+              ManaDeck = gameData.Deck.Values
+                .Where(creature => gameData.CreatureTypes[creature.CreatureTypeId].IsManaCreature)
+                .ToImmutableList(),
             }
           }
         }

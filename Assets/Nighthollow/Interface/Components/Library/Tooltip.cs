@@ -83,7 +83,7 @@ namespace Nighthollow.Interface.Components.Library
         BackgroundImage = "GUI/BasicBar",
         BackgroundSliceLeftRight = 32,
         BackgroundSliceTopBottom = 32,
-        Width = 512,
+        Width = 600,
         FlexPosition = Position.Absolute,
         Left = position.Left,
         Top = position.Top,

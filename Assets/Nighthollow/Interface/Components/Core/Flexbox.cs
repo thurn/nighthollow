@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,8 +21,6 @@ namespace Nighthollow.Interface.Components.Core
 {
   public abstract record Flexbox<TElement> : ContainerComponent<TElement> where TElement : VisualElement
   {
-    static readonly Callbacks CallbackTracker = new();
-
     public override string Type => "Flexbox";
 
     public Align AlignItems { get; init; }
@@ -97,12 +94,6 @@ namespace Nighthollow.Interface.Components.Core
       }
     }
 
-    public EventCallback<MouseOverEvent>? OnMouseOver { get; init; }
-    public EventCallback<MouseOutEvent>? OnMouseOut { get; init; }
-    public EventCallback<MouseDownEvent>? OnMouseDown { get; init; }
-    public EventCallback<MouseUpEvent>? OnMouseUp { get; init; }
-    public EventCallback<ClickEvent>? OnClick { get; init; }
-
     protected abstract FlexDirection GetFlexDirection();
 
     protected override void OnMount(TElement container)
@@ -135,54 +126,38 @@ namespace Nighthollow.Interface.Components.Core
       container.style.borderTopRightRadius = BorderTopRightRadius;
       container.style.flexBasis = FlexBasis ?? new StyleLength(StyleKeyword.Null);
       container.style.flexWrap = FlexWrap;
-
-      CallbackTracker.MouseOver.SetCallback(container, OnMouseOver);
-      CallbackTracker.MouseOut.SetCallback(container, OnMouseOut);
-      CallbackTracker.MouseDown.SetCallback(container, OnMouseDown);
-      CallbackTracker.MouseUp.SetCallback(container, OnMouseUp);
-      CallbackTracker.Click.SetCallback(container, OnClick);
-    }
-
-    sealed class CallbackManager<T> where T : EventBase<T>, new()
-    {
-      readonly ConditionalWeakTable<VisualElement, EventCallback<T>> _callbacks = new();
-
-      public void SetCallback(VisualElement element, EventCallback<T>? eventCallback)
-      {
-        if (_callbacks.TryGetValue(element, out var previous))
-        {
-          element.UnregisterCallback(previous);
-          _callbacks.Remove(element);
-        }
-
-        if (eventCallback != null)
-        {
-          _callbacks.Add(element, eventCallback);
-          element.RegisterCallback(eventCallback);
-        }
-      }
-    }
-
-    sealed class Callbacks
-    {
-      public CallbackManager<MouseOverEvent> MouseOver { get; } = new();
-      public CallbackManager<MouseOutEvent> MouseOut { get; } = new();
-      public CallbackManager<MouseDownEvent> MouseDown { get; } = new();
-      public CallbackManager<MouseUpEvent> MouseUp { get; } = new();
-      public CallbackManager<ClickEvent> Click { get; } = new();
     }
   }
 
-  public sealed record Row : Flexbox<VisualElement>
+  public abstract record FlexboxElement : Flexbox<ComponentVisualElement>
   {
-    protected override VisualElement OnCreateMountContent() => new();
+    public EventCallback<MouseOverEvent>? OnMouseOver { get; init; }
+    public EventCallback<MouseOutEvent>? OnMouseOut { get; init; }
+    public EventCallback<MouseDownEvent>? OnMouseDown { get; init; }
+    public EventCallback<MouseUpEvent>? OnMouseUp { get; init; }
+    public EventCallback<ClickEvent>? OnClick { get; init; }
+
+    protected override void OnMount(ComponentVisualElement container)
+    {
+      base.OnMount(container);
+      container.RegisterExclusiveCallback(OnMouseOver);
+      container.RegisterExclusiveCallback(OnMouseOut);
+      container.RegisterExclusiveCallback(OnMouseDown);
+      container.RegisterExclusiveCallback(OnMouseUp);
+      container.RegisterExclusiveCallback(OnClick);
+    }
+  }
+
+  public sealed record Row : FlexboxElement
+  {
+    protected override ComponentVisualElement OnCreateMountContent() => new();
 
     protected override FlexDirection GetFlexDirection() => FlexDirection.Row;
   }
 
-  public sealed record Column : Flexbox<VisualElement>
+  public sealed record Column : FlexboxElement
   {
-    protected override VisualElement OnCreateMountContent() => new();
+    protected override ComponentVisualElement OnCreateMountContent() => new();
 
     protected override FlexDirection GetFlexDirection() => FlexDirection.Column;
   }

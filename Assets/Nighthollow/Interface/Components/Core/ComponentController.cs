@@ -114,17 +114,17 @@ namespace Nighthollow.Interface.Components.Core
       {
         requests[pair.Key] = Resources.LoadAsync(pair.Key, pair.Value);
       }
+      _toFetch.Clear();
 
       yield return new WaitUntil(() => requests.Values.All(r => r.isDone));
 
       foreach (var pair in requests)
       {
         var asset = pair.Value.asset;
-        Errors.CheckNotNull(asset, $"No asset found for key {pair.Key} of type {_toFetch[pair.Key]}");
+        Errors.CheckNotNull(asset, $"No asset found for key {pair.Key} of the expected type");
         _resources[pair.Key] = pair.Value.asset;
       }
 
-      _toFetch.Clear();
       UpdateRequired = true;
     }
 
