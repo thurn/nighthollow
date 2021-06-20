@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Immutable;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,11 +21,10 @@ namespace Nighthollow.Interface.Components.Core
 {
   public abstract record Flexbox<TElement> : ContainerComponent<TElement> where TElement : VisualElement
   {
-    public override string Type => "Flexbox";
-
     public Align AlignItems { get; init; }
     public Justify JustifyContent { get; init; }
     public string? BackgroundImage { get; init; }
+    public Sprite? BackgroundSprite { get; init; }
     public int BackgroundSliceLeftRight { get; init; }
     public int BackgroundSliceTopBottom { get; init; }
     public Color? BackgroundColor { get; init; }
@@ -103,9 +100,15 @@ namespace Nighthollow.Interface.Components.Core
       container.style.flexDirection = GetFlexDirection();
       container.style.alignItems = AlignItems;
       container.style.justifyContent = JustifyContent;
+
       var sprite = UseResource<Sprite>(BackgroundImage);
+      if (BackgroundSprite != null)
+      {
+        sprite = BackgroundSprite;
+      }
       container.style.backgroundImage =
         sprite is { } s ? new StyleBackground(s) : new StyleBackground(StyleKeyword.Null);
+
       container.style.backgroundColor = BackgroundColor ?? new StyleColor(StyleKeyword.Null);
       container.style.unityBackgroundImageTintColor = BackgroundImageTintColor ?? new StyleColor(StyleKeyword.Null);
       container.style.height = Height ?? new StyleLength(StyleKeyword.Null);
@@ -141,6 +144,8 @@ namespace Nighthollow.Interface.Components.Core
     public IDraggable? Draggable { get; init; }
     public IDragReceiver? DragReceiver { get; init; }
 
+    public override string Type => "Flexbox";
+
     protected override void OnMount(ComponentVisualElement element)
     {
       base.OnMount(element);
@@ -150,10 +155,7 @@ namespace Nighthollow.Interface.Components.Core
       var makeDraggable = UseDraggable();
       if (Draggable != null)
       {
-        element.RegisterExclusiveCallback<MouseDownEvent>(e =>
-        {
-          makeDraggable.OnMouseDown(element, e, Draggable);
-        });
+        element.RegisterExclusiveCallback<MouseDownEvent>(e => { makeDraggable.OnMouseDown(element, e, Draggable); });
       }
       else
       {

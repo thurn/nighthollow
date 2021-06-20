@@ -20,16 +20,9 @@ using UnityEngine.UIElements;
 
 namespace Nighthollow.Interface.Components.Windows
 {
-  public enum CurrentlyOpenWindow
-  {
-    None,
-    VictoryWindow,
-    CardsWindow
-  }
-
   public sealed record RootComponent : AbstractRootComponent<RootComponent>
   {
-    public CurrentlyOpenWindow CurrentlyOpenWindow { get; init; } = CurrentlyOpenWindow.CardsWindow;
+    public BaseComponent? CurrentlyOpenWindow { get; init; }
     public BaseComponent? CurrentTooltip { get; init; }
 
     protected override BaseComponent OnRender(Scope scope)
@@ -41,12 +34,7 @@ namespace Nighthollow.Interface.Components.Windows
         AlignItems = Align.Center,
         JustifyContent = Justify.Center,
         Children = List(
-          CurrentlyOpenWindow switch
-          {
-            CurrentlyOpenWindow.VictoryWindow => new VictoryWindow(),
-            CurrentlyOpenWindow.CardsWindow => new CardsWindow(),
-            _ => null
-          },
+          CurrentlyOpenWindow,
           CurrentTooltip
         )
       };

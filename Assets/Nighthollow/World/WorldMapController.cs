@@ -18,6 +18,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Nighthollow.Data;
 using Nighthollow.Interface;
+using Nighthollow.Interface.Components.Windows;
 using Nighthollow.Items;
 using Nighthollow.Rules;
 using Nighthollow.Rules.Events;
@@ -70,6 +71,17 @@ namespace Nighthollow.World
 
         _lastRendered = data.Kingdoms;
       }
+    }
+
+    public void OnHexSelected2(HexPosition hexPosition, Sprite hexSprite)
+    {
+      var gameData = _registry.Database.Snapshot();
+      var hexId = _hexIndex[hexPosition];
+      var hexData = gameData.Hexes[hexId];
+      _registry.ComponentController.UpdateRoot(root => root with
+      {
+        CurrentlyOpenWindow = new HexWindow(hexData, hexSprite)
+      });
     }
 
     public void OnHexSelected(HexPosition hexPosition, Vector3 screenPosition, Action onComplete)

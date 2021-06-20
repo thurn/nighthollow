@@ -86,6 +86,8 @@ namespace Nighthollow.Interface.Components.Core
       element.style.marginTop = MarginTop;
       element.style.marginRight = MarginRight;
       element.style.marginBottom = MarginBottom;
+      element.style.maxWidth = MaxWidth ?? new StyleLength(StyleKeyword.Null);
+      element.style.maxHeight = MaxHeight ?? new StyleLength(StyleKeyword.Null);
     }
   }
 }

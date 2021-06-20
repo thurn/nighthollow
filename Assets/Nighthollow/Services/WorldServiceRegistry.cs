@@ -14,6 +14,8 @@
 
 using System.Collections.Immutable;
 using Nighthollow.Data;
+using Nighthollow.Interface.Components.Core;
+using Nighthollow.Interface.Components.Windows;
 using Nighthollow.Rules;
 using Nighthollow.World;
 using UnityEngine;
@@ -39,6 +41,8 @@ namespace Nighthollow.Services
       coroutineRunner)
     {
       StaticAssets = staticAssets;
+      ComponentController = ComponentController<RootComponent>.Create(
+        coroutineRunner, this, document.rootVisualElement.Q("ComponentRoot"), new RootComponent());
     }
 
     public override ServiceRegistryName Name => ServiceRegistryName.World;
@@ -47,12 +51,14 @@ namespace Nighthollow.Services
 
     public new static ImmutableHashSet<IKey> Keys => ImmutableHashSet.Create<IKey>(
       Key.WorldMapRenderer,
-      Key.WorldMapController
+      Key.WorldMapController,
+      Key.ComponentController
     );
 
     public override Scope Scope => _scope ??= Scope.CreateBuilder(Keys, base.Scope)
       .AddBinding(Key.WorldMapRenderer, WorldMapRenderer)
       .AddBinding(Key.WorldMapController, WorldMapController)
+      .AddBinding(Key.ComponentController, ComponentController)
       .Build();
 
     WorldMapRenderer? _worldMap;
@@ -65,11 +71,14 @@ namespace Nighthollow.Services
     WorldMapController? _worldMapController;
     public WorldMapController WorldMapController => _worldMapController ??= new WorldMapController(this);
 
+    public IComponentController<RootComponent> ComponentController { get; }
+
     public override void OnUpdate()
     {
       base.OnUpdate();
       WorldMapRenderer.OnUpdate();
       WorldMapController.OnUpdate();
+      ComponentController.OnUpdate();
     }
   }
 }

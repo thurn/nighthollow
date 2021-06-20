@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using Nighthollow.Interface;
+using Nighthollow.Interface.Components.Windows;
 using Nighthollow.Services;
 using Nighthollow.Utils;
 using Nighthollow.World.Data;
@@ -91,9 +92,11 @@ namespace Nighthollow.World
         _previousIconOnSelectedTile = GetIcon(hex);
         ShowIcon(hex, _assets.CreateSelectedTileIcon());
         _currentlySelected = hex;
-        var screenPosition = _registry.MainCamera.WorldToScreenPoint(_assets.Grid.CellToWorld(position));
 
-        _registry.WorldMapController.OnHexSelected(hex, screenPosition, ClearSelection);
+        // var screenPosition = _registry.MainCamera.WorldToScreenPoint(_assets.Grid.CellToWorld(position));
+        // _registry.WorldMapController.OnHexSelected(hex, screenPosition, ClearSelection);
+
+        _registry.WorldMapController.OnHexSelected2(hex, GetTile(hex).sprite);
       }
     }
 
@@ -125,8 +128,8 @@ namespace Nighthollow.World
     public TileBase GetIcon(HexPosition hex) =>
       _assets.OverlayTilemap.GetTile(new Vector3Int(hex.X, hex.Y, IconZ));
 
-    public TileBase GetTile(HexPosition hex) =>
-      _children[hex.Y].GetTile(new Vector3Int(hex.X, hex.Y, z: 0));
+    public Tile GetTile(HexPosition hex) =>
+      (Tile) _children[hex.Y].GetTile(new Vector3Int(hex.X, hex.Y, z: 0));
 
     public void OutlineHexes(Color color, ISet<HexPosition> hexes)
     {

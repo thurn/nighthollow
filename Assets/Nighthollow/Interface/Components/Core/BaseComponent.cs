@@ -38,6 +38,8 @@ namespace Nighthollow.Interface.Components.Core
     public Length? Right { get; init; }
     public Length? Bottom { get; init; }
     public ImmutableHashSet<string> ClassNames { get; init; } = ImmutableHashSet<string>.Empty;
+    public Length? MaxWidth { get; init; }
+    public Length? MaxHeight { get; init; }
 
     public Length? InsetLeftRight
     {
@@ -143,7 +145,9 @@ namespace Nighthollow.Interface.Components.Core
       Bottom = AddLengths(Bottom, child.Bottom),
       Right = AddLengths(Right, child.Right),
       FlexPosition = child.FlexPosition ?? FlexPosition,
-      ClassNames = ClassNames.Union(child.ClassNames)
+      ClassNames = ClassNames.Union(child.ClassNames),
+      MaxWidth = child.MaxWidth ?? MaxWidth,
+      MaxHeight = child.MaxHeight ?? MaxHeight
     };
 
     static Length? AddLengths(Length? x, Length? y) => (x, y) switch

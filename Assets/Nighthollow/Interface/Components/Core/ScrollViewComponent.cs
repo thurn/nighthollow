@@ -49,6 +49,8 @@ namespace Nighthollow.Interface.Components.Core
     public ScrollBar VerticalScrollBar { get; init; } = new ScrollBar();
     public ScrollBar HorizontalScrollBar { get; init; } = new ScrollBar();
 
+    public override string Type => "ScrollView";
+
     protected override void OnMount(ScrollView scrollView)
     {
       base.OnMount(scrollView);
