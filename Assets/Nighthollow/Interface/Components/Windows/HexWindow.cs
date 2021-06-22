@@ -104,10 +104,7 @@ namespace Nighthollow.Interface.Components.Windows
                   )
                 })
             },
-            new Column
-            {
-              FlexGrow = 1
-            }
+            new FocusTree(HexData)
           )
         }
       };

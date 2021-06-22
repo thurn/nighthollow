@@ -40,11 +40,21 @@ namespace Nighthollow.Interface.Components.Core
     public Length? FlexBasis { get; init; }
     public Wrap FlexWrap { get; init; }
     public Translate? Translate { get; init; }
+    public Rotate? Rotate { get; init; }
+    public StyleTransformOrigin? TransformOrigin { get; init; }
     public ScaleMode BackgroundScaleMode { get; init; }
     public int BorderBottomLeftRadius { get; init; }
     public int BorderBottomRightRadius { get; init; }
     public int BorderTopLeftRadius { get; init; }
     public int BorderTopRightRadius { get; init; }
+    public Color? BorderLeftColor { get; init; }
+    public Color? BorderTopColor { get; init; }
+    public Color? BorderRightColor { get; init; }
+    public Color? BorderBottomColor { get; init; }
+    public int BorderLeftWidth { get; init; }
+    public int BorderTopWidth { get; init; }
+    public int BorderRightWidth { get; init; }
+    public int BorderBottomWidth { get; init; }
 
     public int PaddingLeftRight
     {
@@ -93,6 +103,28 @@ namespace Nighthollow.Interface.Components.Core
       }
     }
 
+    public Color? BorderColorAll
+    {
+      init
+      {
+        BorderLeftColor = value;
+        BorderTopColor = value;
+        BorderRightColor = value;
+        BorderBottomColor = value;
+      }
+    }
+
+    public int BorderWidthAll
+    {
+      init
+      {
+        BorderLeftWidth = value;
+        BorderTopWidth = value;
+        BorderRightWidth = value;
+        BorderBottomWidth = value;
+      }
+    }
+
     protected abstract FlexDirection GetFlexDirection();
 
     protected override void OnMount(TElement container)
@@ -106,6 +138,7 @@ namespace Nighthollow.Interface.Components.Core
       {
         sprite = BackgroundSprite;
       }
+
       container.style.backgroundImage =
         sprite is { } s ? new StyleBackground(s) : new StyleBackground(StyleKeyword.Null);
 
@@ -124,13 +157,23 @@ namespace Nighthollow.Interface.Components.Core
       container.style.flexGrow = FlexGrow;
       container.style.flexShrink = FlexShrink;
       container.style.translate = Translate ?? new StyleTranslate(StyleKeyword.Null);
+      container.style.rotate = Rotate ?? new StyleRotate(StyleKeyword.Null);
       container.style.unityBackgroundScaleMode = BackgroundScaleMode;
       container.style.borderBottomLeftRadius = BorderBottomLeftRadius;
       container.style.borderBottomRightRadius = BorderBottomRightRadius;
       container.style.borderTopLeftRadius = BorderTopLeftRadius;
       container.style.borderTopRightRadius = BorderTopRightRadius;
+      container.style.borderLeftColor = BorderLeftColor ?? new StyleColor(StyleKeyword.Null);
+      container.style.borderTopColor = BorderTopColor ?? new StyleColor(StyleKeyword.Null);
+      container.style.borderRightColor = BorderRightColor ?? new StyleColor(StyleKeyword.Null);
+      container.style.borderBottomColor = BorderBottomColor ?? new StyleColor(StyleKeyword.Null);
+      container.style.borderLeftWidth = BorderLeftWidth;
+      container.style.borderTopWidth = BorderTopWidth;
+      container.style.borderRightWidth = BorderRightWidth;
+      container.style.borderBottomWidth = BorderBottomWidth;
       container.style.flexBasis = FlexBasis ?? new StyleLength(StyleKeyword.Null);
       container.style.flexWrap = FlexWrap;
+      container.style.transformOrigin = TransformOrigin ?? new StyleTransformOrigin(StyleKeyword.Null);
     }
   }
 
