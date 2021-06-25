@@ -239,7 +239,7 @@ namespace Nighthollow.World.Data
           owningKingdom,
           FocusTree);
 
-    public HexData WithFocusTree(FocusTreeData? focusTree) =>
+    public HexData WithFocusTree(int? focusTree) =>
       Equals(focusTree, FocusTree)
         ? this
         : new HexData(

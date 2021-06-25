@@ -38,5 +38,7 @@ namespace Nighthollow.World.Data
     [Key(1)] public ImmutableList<FocusNodeData> Nodes { get; }
 
     [Key(2)] public ImmutableList<FocusTierData> Tiers { get; }
+
+    public override string ToString() => Name;
   }
 }

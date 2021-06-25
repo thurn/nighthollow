@@ -29,5 +29,7 @@ namespace Nighthollow.World.Data
     }
 
     [Key(0)] public ImmutableList<ResourceItemData> TierCost { get; }
+
+    public override string ToString() => string.Join(",", TierCost);
   }
 }

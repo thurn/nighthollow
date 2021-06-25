@@ -4288,7 +4288,7 @@ namespace MessagePack.Formatters.Nighthollow.World.Data
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.HexType>().Serialize(ref writer, value.HexType, options);
             formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.HexPosition>().Serialize(ref writer, value.Position, options);
             formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.OwningKingdom, options);
-            formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.FocusTreeData>().Serialize(ref writer, value.FocusTree, options);
+            formatterResolver.GetFormatterWithVerify<int?>().Serialize(ref writer, value.FocusTree, options);
         }
 
         public global::Nighthollow.World.Data.HexData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -4304,7 +4304,7 @@ namespace MessagePack.Formatters.Nighthollow.World.Data
             var __HexType__ = default(global::Nighthollow.World.Data.HexType);
             var __Position__ = default(global::Nighthollow.World.Data.HexPosition);
             var __OwningKingdom__ = default(int?);
-            var __FocusTree__ = default(global::Nighthollow.World.Data.FocusTreeData);
+            var __FocusTree__ = default(int?);
 
             for (int i = 0; i < length; i++)
             {
@@ -4320,7 +4320,7 @@ namespace MessagePack.Formatters.Nighthollow.World.Data
                         __OwningKingdom__ = formatterResolver.GetFormatterWithVerify<int?>().Deserialize(ref reader, options);
                         break;
                     case 3:
-                        __FocusTree__ = formatterResolver.GetFormatterWithVerify<global::Nighthollow.World.Data.FocusTreeData>().Deserialize(ref reader, options);
+                        __FocusTree__ = formatterResolver.GetFormatterWithVerify<int?>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();

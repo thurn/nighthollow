@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Nighthollow.Interface.Components.Core;
 using Nighthollow.Interface.Components.Library;
 using Nighthollow.Rules;
@@ -26,12 +25,12 @@ namespace Nighthollow.Interface.Components.Windows
 {
   public sealed record FocusTree : LayoutComponent
   {
-    public FocusTree(HexData hexData)
+    public FocusTree(FocusTreeData tree)
     {
-      HexData = hexData;
+      Tree = tree;
     }
 
-    public HexData HexData { get; }
+    public FocusTreeData Tree { get; }
 
     protected override BaseComponent OnRender(Scope scope)
     {

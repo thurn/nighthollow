@@ -56,5 +56,7 @@ namespace Nighthollow.World.Data
     [Key(1)] public HexPosition StartingPosition { get; }
     [Key(2)] public string TileImageAddress { get; }
     [Key(3)] public ColorData Color { get; }
+
+    public override string ToString() => Name.GetName();
   }
 }

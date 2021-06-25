@@ -25,7 +25,7 @@ namespace Nighthollow.World.Data
     public HexData(HexType hexType,
       HexPosition position,
       int? owningKingdom = null,
-      FocusTreeData? focusTree = null)
+      int? focusTree = null)
     {
       HexType = hexType;
       Position = position;
@@ -39,6 +39,7 @@ namespace Nighthollow.World.Data
     [ForeignKey(typeof(KingdomData))]
     [Key(2)] public int? OwningKingdom { get; }
 
-    [Key(3)] public FocusTreeData? FocusTree { get; }
+    [ForeignKey(typeof(FocusTreeData))]
+    [Key(3)] public int? FocusTree { get; }
   }
 }
