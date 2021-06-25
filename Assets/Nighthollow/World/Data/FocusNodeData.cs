@@ -28,15 +28,15 @@ namespace Nighthollow.World.Data
       string? imageAddress,
       int tier,
       int line,
-      ImmutableList<ModifierData> modifiers,
-      ImmutableList<int> connectionIndices)
+      ImmutableList<ModifierData>? modifiers = null,
+      ImmutableList<int>? connectionIndices = null)
     {
       Name = name;
       ImageAddress = imageAddress;
       Tier = tier;
       Line = line;
-      Modifiers = modifiers;
-      ConnectionIndices = connectionIndices;
+      Modifiers = modifiers ?? ImmutableList<ModifierData>.Empty;
+      ConnectionIndices = connectionIndices ?? ImmutableList<int>.Empty;
     }
 
     /// <summary>User-visible name for this node</summary>

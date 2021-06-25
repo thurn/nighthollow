@@ -104,7 +104,9 @@ namespace Nighthollow.Interface.Components.Windows
                   )
                 })
             },
-            HexData.FocusTree is { } t ? new FocusTree(gameData.FocusTrees[t]) : null
+            HexData.FocusTree is { } t
+              ? new FocusTree(gameData.FocusTrees[t])
+              : null
           )
         }
       };
