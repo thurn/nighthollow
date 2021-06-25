@@ -170,7 +170,10 @@ namespace Nighthollow.Editing
         }
       }
 
-      public Type GetUnderlyingType() => _property.PropertyType;
+      public Type GetUnderlyingType()
+      {
+        return _property.PropertyType;
+      }
     }
 
     sealed class TableEntitySegement : ISegment
@@ -188,7 +191,7 @@ namespace Nighthollow.Editing
 
       public object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue) =>
         typeof(TableEntitySegement)
-            .GetMethod(nameof(WriteInternal), BindingFlags.NonPublic | BindingFlags.Instance)!
+          .GetMethod(nameof(WriteInternal), BindingFlags.NonPublic | BindingFlags.Instance)!
           .MakeGenericMethod(_tableId.GetUnderlyingType())
           .Invoke(this, new[] {remainingSegments, parent, newValue});
 
@@ -216,7 +219,7 @@ namespace Nighthollow.Editing
       public void OnEntityUpdated(Database database, Action<object> action)
       {
         database.GetType()
-            .GetMethod(nameof(Database.OnEntityUpdated))!
+          .GetMethod(nameof(Database.OnEntityUpdated))!
           .MakeGenericMethod(_tableId.GetUnderlyingType())
           .Invoke(database, new object[] {_tableId, _entityId, action});
       }
@@ -238,7 +241,7 @@ namespace Nighthollow.Editing
       public object Write(ImmutableList<ISegment> remainingSegments, object parent, object? newValue)
       {
         return GetType()
-            .GetMethod(nameof(WriteInternal), BindingFlags.Instance | BindingFlags.NonPublic)!
+          .GetMethod(nameof(WriteInternal), BindingFlags.Instance | BindingFlags.NonPublic)!
           .MakeGenericMethod(_type)
           .Invoke(this, new[] {remainingSegments, parent, newValue});
       }

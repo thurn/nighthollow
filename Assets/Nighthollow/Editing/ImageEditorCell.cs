@@ -40,14 +40,14 @@ namespace Nighthollow.Editing
           var sprite = Resources.Load<Sprite>(address);
           if (sprite == null)
           {
-            sprite = Resources.Load<Tile>(address).sprite;
+            sprite = Resources.Load<Tile>(address)?.sprite;
           }
 
           var image = new Image {sprite = sprite};
           image.style.width = ImageSize;
           image.style.height = ImageSize;
           image.scaleMode = ScaleMode.ScaleToFit;
-          style.backgroundColor = new StyleColor(Color.black);
+          style.backgroundColor = new StyleColor(Color.white);
           Add(image);
         }
       });

@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+using Nighthollow.Services;
 using Nighthollow.Utils;
 
 #nullable enable
@@ -27,11 +28,13 @@ namespace Nighthollow.Editing
   public sealed class NestedListEditorSheetDelegate : EditorSheetDelegate
   {
     const int AddButtonKey = 2;
+    readonly ServiceRegistry _registry;
     readonly ReflectivePath _reflectivePath;
     readonly Type _contentType;
 
-    public NestedListEditorSheetDelegate(ReflectivePath path)
+    public NestedListEditorSheetDelegate(ServiceRegistry registry, ReflectivePath path)
     {
+      _registry = registry;
       _reflectivePath = path;
       _contentType = _reflectivePath.GetUnderlyingType().GetGenericArguments()[0];
     }
@@ -45,25 +48,71 @@ namespace Nighthollow.Editing
 
     public override TableContent GetCells()
     {
-      var result = new List<List<ICellContent>>
+      var isPrimitive = _contentType.IsPrimitive || _contentType == typeof(string);
+      var customColumn = EditorControllerRegistry.GetCustomColumn(_contentType);
+      var imageProperty = _contentType.GetProperties().FirstOrDefault(p => p.Name.Contains("ImageAddress"));
+
+      var headings = new List<ICellContent>
       {
-        CollectionUtils.Single(new LabelCellContent("x")).Concat(
-            _contentType.GetProperties()
-              .Select(p => new LabelCellContent(TypeUtils.NameWithSpaces(p.Name))))
-          .ToList<ICellContent>()
+        new LabelCellContent("x")
       };
+
+      if (customColumn != null)
+      {
+        headings.Add(new LabelCellContent(customColumn.Heading));
+      }
+
+      if (imageProperty != null)
+      {
+        headings.Add(new LabelCellContent("Image"));
+      }
+
+      if (isPrimitive)
+      {
+        headings.Add(new LabelCellContent("Value"));
+      }
+      else
+      {
+        headings.AddRange(_contentType.GetProperties()
+          .Select(p => new LabelCellContent(TypeUtils.NameWithSpaces(p.Name))));
+      }
+
+      var result = new List<List<ICellContent>> {headings};
+
       if (_reflectivePath.Read() is IList value)
       {
         for (var index = 0; index < value.Count; ++index)
         {
+          var childIndexPath = _reflectivePath.ListIndex(_contentType, index);
           var entityIndex = index;
-          result.Add(
-            CollectionUtils.Single<ICellContent>(new ButtonCellContent("x", () => Delete(entityIndex)))
-              .Concat(
-                _contentType.GetProperties()
-                  .Select(property =>
-                    new ReflectivePathCellContent(_reflectivePath.ListIndex(_contentType, index).Property(property))))
-              .ToList());
+
+          var cells = new List<ICellContent>
+          {
+            new ButtonCellContent("x", () => Delete(entityIndex))
+          };
+
+          if (customColumn != null)
+          {
+            cells.Add(customColumn.GetContent(_registry, index, childIndexPath));
+          }
+
+          if (imageProperty != null)
+          {
+            cells.Add(new ImageCellContent(childIndexPath.Property(imageProperty)));
+          }
+
+          if (isPrimitive)
+          {
+            cells.Add(new ReflectivePathCellContent(childIndexPath));
+          }
+          else
+          {
+            cells.AddRange(_contentType.GetProperties()
+              .Select(property =>
+                new ReflectivePathCellContent(childIndexPath.Property(property))));
+          }
+
+          result.Add(cells);
         }
       }
 
@@ -74,13 +123,30 @@ namespace Nighthollow.Editing
           (AddButtonKey, 0)))
         .ToList<ICellContent>());
 
-      var widths = new List<int> {50}
-        .Concat(Enumerable.Repeat(
-          EditorSheet.DefaultCellWidth,
-          _contentType.GetProperties().Length))
-        .ToList();
+      var columnWidths = new List<int> {50};
 
-      return new TableContent(result, widths);
+      if (customColumn != null)
+      {
+        columnWidths.Add(customColumn.Width);
+      }
+
+      if (imageProperty != null)
+      {
+        columnWidths.Add(ImageEditorCell.ImageSize);
+      }
+
+      if (isPrimitive)
+      {
+        columnWidths.Add(500);
+      }
+      else
+      {
+        columnWidths.AddRange(Enumerable.Repeat(
+          EditorSheet.DefaultCellWidth,
+          _contentType.GetProperties().Length));
+      }
+
+      return new TableContent(result, columnWidths);
     }
 
     void Insert(object value)

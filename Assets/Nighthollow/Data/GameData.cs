@@ -40,7 +40,7 @@ namespace Nighthollow.Data
         : ImmutableDictionary<int, T>.Empty;
 
     public GameData WithTable<T>(TableId<T> tableId, ImmutableDictionary<int, T> table) where T : class =>
-      new GameData(_data.SetItem(tableId.Id, table));
+      new(_data.SetItem(tableId.Id, table));
 
     public BattleData BattleData => TableId.BattleData.GetSingleton(this);
     public UserData UserData => TableId.UserData.GetSingleton(this);
@@ -60,5 +60,6 @@ namespace Nighthollow.Data
     public ImmutableDictionary<int, KingdomData> Kingdoms => GetTable(TableId.Kingdoms);
     public ImmutableDictionary<int, ScenarioData> Scenarios => GetTable(TableId.Scenarios);
     public ImmutableDictionary<int, ResourceTypeData> ResourceTypes => GetTable(TableId.ResourceTypes);
+    public ImmutableDictionary<int, FocusTreeData> FocusTrees => GetTable(TableId.FocusTrees);
   }
 }

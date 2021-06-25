@@ -91,7 +91,7 @@ namespace Nighthollow.Editing
       }
       else if (reflectivePath.GetUnderlyingType().GetInterface("IList") != null)
       {
-        sheetDelegate = new NestedListEditorSheetDelegate(reflectivePath);
+        sheetDelegate = new NestedListEditorSheetDelegate(Registry, reflectivePath);
       }
       else
       {

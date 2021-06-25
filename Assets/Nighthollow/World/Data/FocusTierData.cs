@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
 using Nighthollow.Data;
 
@@ -20,25 +21,13 @@ using Nighthollow.Data;
 namespace Nighthollow.World.Data
 {
   [MessagePackObject]
-  public sealed partial class HexData
+  public sealed partial class FocusTierData
   {
-    public HexData(HexType hexType,
-      HexPosition position,
-      int? owningKingdom = null,
-      FocusTreeData? focusTree = null)
+    public FocusTierData(ImmutableList<ResourceItemData>? tierCost = null)
     {
-      HexType = hexType;
-      Position = position;
-      OwningKingdom = owningKingdom;
-      FocusTree = focusTree;
+      TierCost = tierCost ?? ImmutableList<ResourceItemData>.Empty;
     }
 
-    [Key(0)] public HexType HexType { get; }
-    [Key(1)] public HexPosition Position { get; }
-
-    [ForeignKey(typeof(KingdomData))]
-    [Key(2)] public int? OwningKingdom { get; }
-
-    [Key(3)] public FocusTreeData? FocusTree { get; }
+    [Key(0)] public ImmutableList<ResourceItemData> TierCost { get; }
   }
 }

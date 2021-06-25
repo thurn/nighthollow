@@ -12,33 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Immutable;
 using MessagePack;
-using Nighthollow.Data;
 
 #nullable enable
 
 namespace Nighthollow.World.Data
 {
   [MessagePackObject]
-  public sealed partial class HexData
+  public sealed partial class FocusTreeData
   {
-    public HexData(HexType hexType,
-      HexPosition position,
-      int? owningKingdom = null,
-      FocusTreeData? focusTree = null)
+    public FocusTreeData(
+      string name,
+      ImmutableList<FocusNodeData>? nodes = null,
+      ImmutableList<FocusTierData>? tiers = null)
     {
-      HexType = hexType;
-      Position = position;
-      OwningKingdom = owningKingdom;
-      FocusTree = focusTree;
+      Name = name;
+      Nodes = nodes ?? ImmutableList<FocusNodeData>.Empty;
+      Tiers = tiers ?? ImmutableList<FocusTierData>.Empty;
     }
 
-    [Key(0)] public HexType HexType { get; }
-    [Key(1)] public HexPosition Position { get; }
+    /// <summary>Identifier for this tree, currently only used for debugging.</summary>
+    [Key(0)] public string Name { get; }
 
-    [ForeignKey(typeof(KingdomData))]
-    [Key(2)] public int? OwningKingdom { get; }
+    [Key(1)] public ImmutableList<FocusNodeData> Nodes { get; }
 
-    [Key(3)] public FocusTreeData? FocusTree { get; }
+    [Key(2)] public ImmutableList<FocusTierData> Tiers { get; }
   }
 }

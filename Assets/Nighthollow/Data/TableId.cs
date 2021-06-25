@@ -91,59 +91,43 @@ namespace Nighthollow.Data
 
   public static class TableId
   {
-    public static readonly TableId<TableMetadata> TableMetadata =
-      new TableId<TableMetadata>(0, "TableMetadata");
+    public static readonly TableId<TableMetadata> TableMetadata = new(0, "TableMetadata");
 
-    public static readonly TableId<CreatureTypeData> CreatureTypes =
-      new TableId<CreatureTypeData>(1, "CreatureTypes");
+    public static readonly TableId<CreatureTypeData> CreatureTypes = new(1, "CreatureTypes");
 
-    public static readonly TableId<AffixTypeData> AffixTypes =
-      new TableId<AffixTypeData>(2, "AffixTypes");
+    public static readonly TableId<AffixTypeData> AffixTypes = new(2, "AffixTypes");
 
-    public static readonly TableId<SkillTypeData> SkillTypes =
-      new TableId<SkillTypeData>(3, "SkillTypes");
+    public static readonly TableId<SkillTypeData> SkillTypes = new(3, "SkillTypes");
 
-    public static readonly TableId<StatData> Stats =
-      new TableId<StatData>(4, "Stats");
+    public static readonly TableId<StatData> Stats = new(4, "Stats");
 
-    public static readonly TableId<StaticItemListData> ItemLists =
-      new TableId<StaticItemListData>(5, "ItemLists");
+    public static readonly TableId<StaticItemListData> ItemLists = new(5, "ItemLists");
 
-    public static readonly TableId<ModifierData> UserModifiers =
-      new TableId<ModifierData>(6, "UserModifiers");
+    public static readonly TableId<ModifierData> UserModifiers = new(6, "UserModifiers");
 
-    public static readonly TableId<CreatureItemData> Collection =
-      new TableId<CreatureItemData>(7, "Collection");
+    public static readonly TableId<CreatureItemData> Collection = new(7, "Collection");
 
-    public static readonly TableId<CreatureItemData> Deck =
-      new TableId<CreatureItemData>(8, "Deck");
+    public static readonly TableId<CreatureItemData> Deck = new(8, "Deck");
 
-    public static readonly TableId<StatusEffectTypeData> StatusEffectTypes =
-      new TableId<StatusEffectTypeData>(9, "StatusEffectTypes");
+    public static readonly TableId<StatusEffectTypeData> StatusEffectTypes = new(9, "StatusEffectTypes");
 
-    public static readonly SingletonTableId<BattleData> BattleData =
-      new SingletonTableId<BattleData>(10, "BattleData");
+    public static readonly SingletonTableId<BattleData> BattleData = new(10, "BattleData");
 
-    public static readonly TableId<Rule> Rules =
-      new TableId<Rule>(11, "Rules");
+    public static readonly TableId<Rule> Rules = new(11, "Rules");
 
-    public static readonly TableId<GlobalData> Globals =
-      new TableId<GlobalData>(12, "Globals");
+    public static readonly TableId<GlobalData> Globals = new(12, "Globals");
 
-    public static readonly TableId<HexData> Hexes =
-      new TableId<HexData>(13, "Hexes");
+    public static readonly TableId<HexData> Hexes = new(13, "Hexes");
 
-    public static readonly TableId<KingdomData> Kingdoms =
-      new TableId<KingdomData>(14, "Kingdoms");
+    public static readonly TableId<KingdomData> Kingdoms = new(14, "Kingdoms");
 
-    public static readonly TableId<ScenarioData> Scenarios =
-      new TableId<ScenarioData>(15, "Scenarios");
+    public static readonly TableId<ScenarioData> Scenarios = new(15, "Scenarios");
 
-    public static readonly SingletonTableId<UserData> UserData =
-      new SingletonTableId<UserData>(16, "UserData");
+    public static readonly SingletonTableId<UserData> UserData = new(16, "UserData");
 
-    public static readonly TableId<ResourceTypeData> ResourceTypes =
-      new TableId<ResourceTypeData>(17, "ResourceTypes");
+    public static readonly TableId<ResourceTypeData> ResourceTypes = new(17, "ResourceTypes");
+
+    public static readonly TableId<FocusTreeData> FocusTrees = new(18, "FocusTrees");
 
     public static readonly ImmutableList<ITableId> AllTableIds = ImmutableList.Create<ITableId>(
       TableMetadata,
@@ -163,7 +147,8 @@ namespace Nighthollow.Data
       Kingdoms,
       Scenarios,
       UserData,
-      ResourceTypes
+      ResourceTypes,
+      FocusTrees
     );
   }
 }

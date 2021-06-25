@@ -1,6 +1,7 @@
 // Generated Code - Do not Edit!
 
 using System.Collections.Immutable;
+using Nighthollow.Data;
 using Nighthollow.Delegates;
 using Nighthollow.Services;
 using Nighthollow.Stats;

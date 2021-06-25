@@ -23,6 +23,7 @@ using Nighthollow.Editing.Scenarios;
 using Nighthollow.Items;
 using Nighthollow.Rules;
 using Nighthollow.Services;
+using Nighthollow.World.Data;
 
 #nullable enable
 
@@ -310,6 +311,25 @@ namespace Nighthollow.Editing
     }
   }
 
+  sealed class FocusNodeController : EditorController<FocusNodeData>, EditorController.ICustomColumn
+  {
+    public FocusNodeController() : base(new Dictionary<string, Func<GameData, FocusNodeData, string>>
+    {
+      {nameof(FocusNodeData.Modifiers), (g, node) => RenderModifiers(g, node.Modifiers)}
+    })
+    {
+    }
+
+    public override ICustomColumn GetCustomColumn() => this;
+
+    public string Heading => "*";
+
+    public int Width => 50;
+
+    public EditorSheetDelegate.ICellContent GetContent(ServiceRegistry registry, int entityId, ReflectivePath path) =>
+      new EditorSheetDelegate.LabelCellContent(entityId.ToString());
+  }
+
   public static class EditorControllerRegistry
   {
     static readonly IReadOnlyDictionary<Type, EditorController> Controllers =
@@ -324,7 +344,8 @@ namespace Nighthollow.Editing
         {typeof(Rule), new RuleDataController()},
         {typeof(GlobalData), new GlobalDataController()},
         {typeof(ScenarioData), new ScenarioDataController()},
-        {typeof(ResourceItemData), new ResourceItemController()}
+        {typeof(ResourceItemData), new ResourceItemController()},
+        {typeof(FocusNodeData), new FocusNodeController()}
       };
 
     public static string RenderPropertyPreview(GameData gameData, object? parentValue, PropertyInfo property)

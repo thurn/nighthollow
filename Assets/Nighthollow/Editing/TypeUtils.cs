@@ -31,6 +31,16 @@ namespace Nighthollow.Editing
 
     public static object InstantiateWithDefaults(Type type)
     {
+      if (type.IsPrimitive)
+      {
+        return Activator.CreateInstance(type);
+      }
+
+      if (type == typeof(string))
+      {
+        return "";
+      }
+
       var constructor = type.GetConstructors()[0];
       var arguments = constructor.GetParameters()
         .Select(parameter =>

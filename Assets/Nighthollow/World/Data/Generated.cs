@@ -1,6 +1,7 @@
 // Generated Code - Do not Edit!
 
 using System.Collections.Immutable;
+using Nighthollow.Data;
 using Nighthollow.Delegates;
 using Nighthollow.Services;
 using Nighthollow.Stats;
@@ -14,6 +15,114 @@ using Nighthollow.World.Data;
 
 namespace Nighthollow.World.Data
 {
+
+  public sealed partial class FocusNodeData
+  {
+    public FocusNodeData WithName(string? name) =>
+      Equals(name, Name)
+        ? this
+        : new FocusNodeData(
+          name,
+          ImageAddress,
+          Tier,
+          Line,
+          Modifiers,
+          ConnectionIndices);
+
+    public FocusNodeData WithImageAddress(string? imageAddress) =>
+      Equals(imageAddress, ImageAddress)
+        ? this
+        : new FocusNodeData(
+          Name,
+          imageAddress,
+          Tier,
+          Line,
+          Modifiers,
+          ConnectionIndices);
+
+    public FocusNodeData WithTier(int tier) =>
+      Equals(tier, Tier)
+        ? this
+        : new FocusNodeData(
+          Name,
+          ImageAddress,
+          tier,
+          Line,
+          Modifiers,
+          ConnectionIndices);
+
+    public FocusNodeData WithLine(int line) =>
+      Equals(line, Line)
+        ? this
+        : new FocusNodeData(
+          Name,
+          ImageAddress,
+          Tier,
+          line,
+          Modifiers,
+          ConnectionIndices);
+
+    public FocusNodeData WithModifiers(ImmutableList<ModifierData> modifiers) =>
+      Equals(modifiers, Modifiers)
+        ? this
+        : new FocusNodeData(
+          Name,
+          ImageAddress,
+          Tier,
+          Line,
+          modifiers,
+          ConnectionIndices);
+
+    public FocusNodeData WithConnectionIndices(ImmutableList<int> connectionIndices) =>
+      Equals(connectionIndices, ConnectionIndices)
+        ? this
+        : new FocusNodeData(
+          Name,
+          ImageAddress,
+          Tier,
+          Line,
+          Modifiers,
+          connectionIndices);
+
+  }
+
+  public sealed partial class FocusTreeData
+  {
+    public FocusTreeData WithName(string name) =>
+      Equals(name, Name)
+        ? this
+        : new FocusTreeData(
+          name,
+          Nodes,
+          Tiers);
+
+    public FocusTreeData WithNodes(ImmutableList<FocusNodeData> nodes) =>
+      Equals(nodes, Nodes)
+        ? this
+        : new FocusTreeData(
+          Name,
+          nodes,
+          Tiers);
+
+    public FocusTreeData WithTiers(ImmutableList<FocusTierData> tiers) =>
+      Equals(tiers, Tiers)
+        ? this
+        : new FocusTreeData(
+          Name,
+          Nodes,
+          tiers);
+
+  }
+
+  public sealed partial class FocusTierData
+  {
+    public FocusTierData WithTierCost(ImmutableList<ResourceItemData> tierCost) =>
+      Equals(tierCost, TierCost)
+        ? this
+        : new FocusTierData(
+          tierCost);
+
+  }
 
   public sealed partial class HexPosition
   {
@@ -109,7 +218,8 @@ namespace Nighthollow.World.Data
         : new HexData(
           hexType,
           Position,
-          OwningKingdom);
+          OwningKingdom,
+          FocusTree);
 
     public HexData WithPosition(HexPosition position) =>
       Equals(position, Position)
@@ -117,7 +227,8 @@ namespace Nighthollow.World.Data
         : new HexData(
           HexType,
           position,
-          OwningKingdom);
+          OwningKingdom,
+          FocusTree);
 
     public HexData WithOwningKingdom(int? owningKingdom) =>
       Equals(owningKingdom, OwningKingdom)
@@ -125,7 +236,17 @@ namespace Nighthollow.World.Data
         : new HexData(
           HexType,
           Position,
-          owningKingdom);
+          owningKingdom,
+          FocusTree);
+
+    public HexData WithFocusTree(FocusTreeData? focusTree) =>
+      Equals(focusTree, FocusTree)
+        ? this
+        : new HexData(
+          HexType,
+          Position,
+          OwningKingdom,
+          focusTree);
 
   }
 }

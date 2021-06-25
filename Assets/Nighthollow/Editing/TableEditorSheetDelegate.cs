@@ -104,7 +104,7 @@ namespace Nighthollow.Editing
 
       var result = new List<List<ICellContent>>
       {
-        new List<ICellContent> {tableSelector},
+        new() {tableSelector},
         staticHeadings
           .Concat(properties.Select(p => new LabelCellContent(TypeUtils.NameWithSpaces(p.Name))))
           .ToList(),
@@ -178,6 +178,7 @@ namespace Nighthollow.Editing
       }
 
       columnWidths.Add(50);
+
       if (imageProperty != null)
       {
         columnWidths.Add(ImageEditorCell.ImageSize);
